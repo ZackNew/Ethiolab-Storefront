@@ -1,0 +1,181 @@
+<template>
+  <SfModal id="qu-pop" v-on:close="toggleQuotationDialog()" title="Request A Quote" :visible="isQuoteModalOpen"
+           isOpen="Boolean(showQuotation)" :persistent='true' overlay> 
+    <div style="display:flex;flex-direction:column;justify-content:space-around;" >
+    <span class='block text-md'>This form will take objects from your cart</span>
+      <p style="justify-self:center;font-size: 2em;">Request a Quote</p>
+      <SfInput v-model="qTitle" placeholder='Subject' :valid='Boolean(isSubjectValid)' errorMessage="This is a required field"/>
+      <SfInput v-model="qPhone" placeholder='Your Phone number' :valid="Boolean(isPhoneValid)" errorMessage="Invalid Phone number"/>
+
+      <SfInput v-model="qEmail" placeholder='Your Email' :valid="Boolean(isEmailValid)" errorMessage="This is a required field"/>
+      <SfTextarea cols='120' rows="7" v-model="qBody" id="t-area" placeholder='message' :valid="Boolean(isMessageValid)" errorMessage="This is a required field"/>
+      <v-autocomplete  :items="cities" v-model="quoteCity" />
+      <span style='color: red;' class='text-red-500' v-if="!isLocationValid">Invalid location please make sure it's in Ethiopia</span>
+      <div style='display: flex; flex-direction: row; justify-content: space-around; margin-bottom: 2px;'>
+        <SfButton @click="sendQuote">Submit!</SfButton>
+        <SfButton @click="toggleQuotationDialog()">Close</SfButton>
+
+      </div>
+    </div>
+  </SfModal>
+</template>
+
+<script>
+import {useUiState} from "~/composables";
+import {computed, ref, watchEffect} from "@vue/composition-api";
+import {SfInput, SfModal, SfTextarea,SfButton} from "@storefront-ui/vue";
+import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
+import test from '~/composables/test'
+import axios from 'axios'
+import gql from 'graphql-tag';
+import { print } from 'graphql';
+
+import product from "~/tests/e2e/pages/product";
+export default {
+  name: "RequestAQuote",
+  components: {
+    SfModal,
+    SfTextarea,
+    SfInput,
+    SfButton,
+
+  },
+  setup(props, context) {
+
+    const validateEmail = (email) => {
+            return String(email)
+              .toLowerCase()
+              .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+              );
+   };
+  const isSubjectValid = ref(true);
+  const isPhoneValid =  ref(true);
+  const isMessageValid =  ref(true);
+  const isLocationValid =  ref(true);
+  const  isEmailValid =  ref(true);
+
+
+  
+    const { isQuoteModalOpen,toggleQuoteModal,toggleCartSidebar } = useUiState();
+    const qTitle=ref(""), qEmail=ref(""), qBody=ref(""), qPhone = ref('');
+    const cities = ['Addis Ababa', 'Adama', 'Mekele', 'Gondar', 'Bahir Dar']
+    const {cart} = useCart()
+    const  quoteCity =ref(cities[0])
+    let quoteShow=ref(false);
+    let showQuotations =computed(()=>quoteShow.value=props.showQuotation)
+
+    function telephoneCheck(str) {
+        return /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(str);
+        
+    }
+    const checkInputs = ()=>{
+       isEmailValid.value = validateEmail(qEmail.value);
+       isLocationValid.value =  cities.indexOf(quoteCity.value) != -1;
+       isPhoneValid.value = telephoneCheck(qPhone.value)
+       isMessageValid.value = qBody.value.length > 0
+       isSubjectValid.value = qTitle.value.length > 0
+      console.log(`%c City = ${quoteCity.value}`, "color: yellow;background: teal;")
+       return isEmailValid.value && isSubjectValid.value && isPhoneValid.value && isLocationValid.value && isEmailValid.value;
+    }
+  //  watchEffect(checkInputs);
+    const toggleQuotationDialog=() => {
+      toggleCartSidebar();
+    toggleQuoteModal();
+    }
+  //  watchEffect(()=> console.log("data: ",qTitle, " ", qEmail.value, " ", qBody.value, " ", qPhone.value, quoteCity.value))
+    const sendQuote = ()=>{
+      if(!checkInputs()) return;
+     
+      //console.log("clicked")
+      //fetch("data: ",qTitle.value, " ", qEmail.value, " ", qBody.value, " ", qPhone.value, quoteCity.value)
+     
+      const items = cartGetters.getItems(cart.value)
+      let descr = "Product Description:: ";
+       let pIds= "["
+       items.forEach(item =>{
+       //  productIds.push(item['id'])
+         pIds += items['id'] + ','
+          descr += "Product Name: "+ item['productVariant']['name'] + "<br />"
+          descr += "Unit Price: " + item['unitPrice'] + '<br />';
+          descr += "Unit Price With Tax "+ item['unitPriceWithTax'] + '<br /><br /><br />'
+       })
+       pIds += "]"
+        console.log("%c sent!", "color: red", pIds)
+       console.log("Title: ",qTitle.value, " Email:", qEmail.value, " Body:", qBody.value, " Phone", qPhone.value, " city:",quoteCity.value);
+       console.log( " Desc2 ", descr, "/");
+       const mutation = gql`
+ 
+                      mutation writeQuote($msg: String!, $subject: String!, $fromEmail: String!, $fromPhone: String!, $location:String!, $productDescr: String!, $productIds: [String]!){
+                        writeQuote(args:{msg:$msg,
+                          subject: $subject, 
+                          fromEmail: $fromEmail, 
+                          fromPhone: $fromPhone, 
+                          location: $location, 
+                          productDescr: $productDescr,
+                          productIds: $productIds  
+                        }){
+                          location,
+                          msg,
+                          id,
+                          subject,
+                          productDescr,
+                          forProducts{
+                            name
+                          }
+                        }
+                      }
+                      `;
+  
+
+     (
+       async () =>{
+         const data = await axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{
+           msg: qBody.value,
+           subject: qTitle.value,
+           fromEmail: qEmail.value,
+           fromPhone: qPhone.value,
+           location: quoteCity.value,
+           productDescr: descr,
+           productIds: pIds
+         }});
+         console.log(data);
+       }
+     )()
+     toggleQuoteModal();
+    }
+    return{
+      isSubjectValid,
+      isPhoneValid,
+      isEmailValid,
+      isMessageValid,
+      isLocationValid,
+      toggleCartSidebar,
+      toggleQuotationDialog,
+      isQuoteModalOpen,
+      showQuotations,
+      quoteCity,
+      quoteShow,
+      sendQuote,
+      qBody,
+      qEmail,
+      qTitle,
+      qPhone,
+      cities,
+    }
+
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+#qu-pop{
+  --modal-width: 50vw;
+  /* width: 70%; */
+  --modal-height: 50vh;
+  --modal-padding:0;
+  padding:0;
+
+
+
+}</style>
