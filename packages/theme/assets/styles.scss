@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --font-family--secondary:"Corben";
+  --font-family--primary:"Corben";
+  --c-primary:theme('colors.primary');
+  --c-secondary:theme('colors.secondary');
+  --c-bg-primary:theme('colors.primary');
+  --c-bg-secondary:theme('colors.secondary');
+  --c-bg:theme('colors.bg_light');
+  --c-accent:theme('colors.light_accent');
+  --c-footer:theme('colors.secondary');
+  --c-white:theme('colors.white');
+}
+.label{
+  color:var(--c-text)
+}
+.sf-header__wrapper{
+  background-color: var(--c-bg);
+}
+.collected-product {
+  margin: var(--spacer-base) 0;
+  z-index: 4;
+  &__properties {
+    margin: var(--spacer-sm) 0 0 0;
+  }
+
+}
+
+.sf-collected-product:hover{
+  --collected-product-title-color: black;
+  --price-regular-color: black;
+  --price-regular-font-weight:var(--font-weight-large)
+}
+.theme-light {
+  --c-primary:theme('colors.primary');
+  --c-secondary:theme('colors.secondary');
+  --c-bg-primary:theme('colors.primary');
+  --c-bg-secondary:theme('colors.secondary');
+  --c-bg:theme('colors.bg_light');
+  --c-accent:theme('colors.light_accent');
+  background-color: theme('colors.bg_light');
+  --c-link: theme('colors.faded_black');
+  --c-footer:theme('colors.secondary');
+  --c-dark:theme('colors.primary');
+  --c-white:theme('colors.white');
+  --modal-background:theme('colors.light_accent');
+}
+
+.theme-dark {
+  --c-primary:theme('colors.dark_primary');
+  --c-secondary:theme('colors.dark_secondary');
+  --c-bg-primary:theme('colors.bg_dark');
+  --c-bg-secondary:theme('colors.bg_dark');
+  --c-bg:theme('colors.bg_dark');
+  --c-accent:theme('colors.dark_accent');
+  background-color: theme('colors.bg_dark');
+  --c-text: white;
+  --c-link: theme('colors.faded_white');
+  --c-footer:theme('colors.dark_accent');
+  --c-white:theme('colors.light_accent');
+  --c-gray:theme('colors.light_accent');
+  --c-text-muted:theme('colors.light_accent');
+  --c-dark:theme('colors.dark_primary');
+  --icon-color:theme('colors.dark_primary');
+  --c-dark-variant:theme('colors.dark_primary');
+  --c-link-hover:theme('colors.white');
+  --modal-background: theme('colors.dark_accent');
+  --sidebar-background:theme('colors.dark_accent');
+  --banner-color:black;
+  --c-black:theme('colors.white');
+}
