@@ -2,7 +2,7 @@
 export { useBilling } from './composables/useBilling';
 export { useCart } from './composables/useCart';
 export { useCategory } from './composables/useCategory';
-export { useContent } from './composables/useContent';
+export { useCms } from './composables/useCms';
 export { useFacet } from './composables/useFacet';
 export { useMakeOrder } from './composables/useMakeOrder';
 export { useProduct } from './composables/useProduct';

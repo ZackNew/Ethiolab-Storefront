@@ -2,9 +2,18 @@ import { CustomQuery } from '@vue-storefront/core';
 import { ApolloQueryResult } from 'apollo-client';
 import { FetchResult } from 'apollo-link';
 
-import { Address, CreateAddressInput, CurrentUser, DeleteCustomerAddress, UpdateCustomerEmailAddressParams, UpdateCustomerInput } from '.';
+import {
+  Address,
+  Cms, CmsParams,
+  CreateAddressInput,
+  CurrentUser,
+  DeleteCustomerAddress,
+  UpdateCustomerEmailAddressParams,
+  UpdateCustomerInput
+} from '.';
 import { ActiveOrderResult, ApplyCouponCodeResult, CollectionList, CreateCustomerInput, Customer, NativeAuthenticationResult, Order, PaymentInput, PaymentMethodQuote, Product, RegisterCustomerAccountResult, RegisterCustomerInput, RemoveOrderItemsResult, SearchResponse, SetCustomerForOrderResult, ShippingMethodQuote, Success, UpdateAddressInput, UpdateOrderItemsResult, RequestPasswordResetResult, ResetPasswordResult } from './GraphQL';
 import { AddToCartParams, CartCouponParams, CollectionParams, LoginParams, ProductParams, RemoveFromCartParams, SearchParams, SetShippingMethodParams, TransitionOrderToStateParams, UpdateAddressDetailsParams, UpdateCartParams, UpdateCustomerPasswordParams, RequestPasswordResetParams, ResetPasswordParams } from './types';
+import cms from "../api/cms";
 
 export type QueryResponse<K extends string, V> = ApolloQueryResult<Record<K, V>>;
 export type MutationResponse<K extends string, V> = FetchResult<Record<K, V>>;
@@ -18,6 +27,7 @@ export type GetActiveCustomerResponse = QueryResponse<'activeCustomer', Customer
 export type GetShippingMethodsResponse = QueryResponse<'eligibleShippingMethods', ShippingMethodQuote[]>;
 export type GetPaymentMethodsResponse = QueryResponse<'eligiblePaymentMethods', PaymentMethodQuote[]>;
 export type GetMeResponse = QueryResponse<'me', CurrentUser>;
+export type GetCmsResponse = QueryResponse<'cms', Cms>;
 export type AddToCartResponse = MutationResponse<'addItemToOrder', UpdateOrderItemsResult>;
 export type RemoveFromCartResponse = MutationResponse<'removeOrderLine', RemoveOrderItemsResult>;
 export type UpdateCartQuantityResponse = MutationResponse<'adjustOrderLine', UpdateOrderItemsResult>;
@@ -49,6 +59,7 @@ export interface VendureApiMethods {
   getCategory(params: CollectionParams, customQuery?: CustomQuery): Promise<GetCategoryResponse>;
   getCart(customQuery?: CustomQuery): Promise<GetCartResponse>;
   getMe(customQuery?: CustomQuery): Promise<GetMeResponse>;
+  getCms(params:CmsParams):Promise<GetCmsResponse>;
   getActiveCustomer(customQuery?: CustomQuery): Promise<GetActiveCustomerResponse>;
   getShippingMethods(customQuery?: CustomQuery): Promise<GetShippingMethodsResponse>;
   getPaymentMethods(customQuery?: CustomQuery): Promise<GetPaymentMethodsResponse>;

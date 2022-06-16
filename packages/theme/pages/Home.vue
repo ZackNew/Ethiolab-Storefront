@@ -156,14 +156,13 @@ import {
   SfDivider,
   SfCard
 } from '@storefront-ui/vue';
-import { ref } from '@nuxtjs/composition-api';
 import LazyHydrate from 'vue-lazy-hydration';
 import Testimonial from '~/components/Testimonial.vue';
 import NewsletterModal from '~/components/NewsletterModal.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
 import { useUiState } from '../composables';
 import cacheControl from './../helpers/cacheControl';
-import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet} from "@vue-storefront/vendure";
+import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet,useCms} from "@vue-storefront/vendure";
 import CategoriesAccordion from "~/components/CategoriesAccordion";
 import {onSSR} from "@vue-storefront/core";
 import {computed} from "@vue/composition-api";
@@ -220,6 +219,8 @@ export default {
       })
     }
     const onSubscribe = (emailAddress) => {
+console.log(useCms)
+      // useCms().getCms('HERO_SECTION').then((r)=>console.log(r,'pp'))
       console.log(`Email ${emailAddress} was added to newsletter.`);
       toggleNewsletterModal();
     };

@@ -1,25 +1,15 @@
-Installation
 
-Node.js v12 or above, with support for even-numbered Node.js versions.
+### Requirements
 
-curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt-get install -y nodejs
+- NodeJS v14 or later
+- Vendure server running in localhost for GraphQL API or <https://demo.vendure.io/shop-api>
+- Set up auth options in Vendure server (This functionality is available for those who scaffold a local instance of Vendure)
 
-
-Install npx
-
-sudo npm install -g npx
-Generate a new project
-cd /home/{{user}}/etech-code/ecommerce/
-git clone https://github.com/e4076/eecommerce.web.git
-cd eecommerce
-
-Configure the project
-Add your eecommerce server GraphQL API uri to env file in packages/api-client and packages/theme
-cd packages/theme
-cp .env.example .env
-
-
-
-yarn build
-yarn dev
+```ts
+// vendure-config.ts
+...
+  authOptions: {
+    tokenMethod: 'bearer', // authorization header method
+    requireVerification: false, // disable register by email verification
+  },
+```

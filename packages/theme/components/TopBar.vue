@@ -44,7 +44,6 @@ export default {
         { name: 'About us', link: '/page/about'},
         { name: 'Contact us', link: '/pages/contact'},
         { name: 'Help center', link: '/pages/helpAndFAQ'},
-        {name: 'Request a quote', link:'',linkClass:'background p-1 text-lg',button:true}
       ];
     return{
       headerNavigation

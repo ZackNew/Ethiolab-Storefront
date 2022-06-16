@@ -15,29 +15,29 @@
       />
       <SfProperty
         :name="$t('Subtotal')"
-        :value="totals.subtotal.toLocaleString() + ' ETB'"
+        :value="$n(totals.subtotal, 'currency')"
         :class="['sf-property--full-width', 'sf-property--large property', { discounted: hasSpecialPrice }]"
       />
       <SfProperty
         v-for="discount in discounts"
         :key="discount.id"
         :name="`${discount.name} ${discount.description}`"
-        :value="'-' + discount.value + ' ETB'"
+        :value="'-' + $n(discount.value, 'currency')"
         class="sf-property--full-width sf-property--small"
       />
      <SfProperty
         v-if="hasSpecialPrice"
-        :value="totals.special.toLocaleString() + ' ETB'"
+        :value="$n(totals.special, 'currency')"
         class="sf-property--full-width sf-property--small property special-price"
       />
       <SfProperty
         :name="$t('Shipping')"
-        :value="shippingCost.toLocaleString() + ' ETB'"
+        :value="$n(shippingCost, 'currency')"
         class="sf-property--full-width sf-property--large property"
       />
       <SfProperty
         :name="$t('Total')"
-        :value="totals.total.toLocaleString() + ' ETB'"
+        :value="$n(totals.total, 'currency')"
         class="sf-property--full-width sf-property--large property-total"
       />
     </div>

@@ -49,6 +49,8 @@ type Query {
 
   # Search Products based on the criteria set by the `SearchInput`
   search(input: SearchInput!): SearchResponse!
+  #getCms
+  getCms(type:Type!):cms
 }
 
 type Mutation {
@@ -226,7 +228,16 @@ enum AssetType {
   VIDEO
   BINARY
 }
-
+enum Type {
+  POPUP
+  STATIC
+  CONTACT_INFO
+  HERO_SECTION
+  ADVERTISEMENT
+  POLICIES
+  FAQ
+  SOCIAL
+}
 type CurrentUser {
   id: ID!
   identifier: String!
@@ -3114,4 +3125,14 @@ input ProductSortParameter {
 input NativeAuthInput {
   username: String!
   password: String!
+}
+
+type cms{
+  id: ID!
+  cmsType:Type!
+  assets: [Asset]
+  featuredAsset:Asset
+  content:[String]
+  translations:[CmsTranslation]
+  languageCode: LanguageCode
 }

@@ -16,7 +16,7 @@
             :selected="selectedPaymentMethod.id"
             @input="selectPaymentMethod(method)"
             name="paymentMethod"
-            :description="''"
+            :description="method.description"
             class="form__radio payment__method"
           >
             <template #label="{ label }">
@@ -26,8 +26,7 @@
             </template>
             <template #description="{ description }">
               <div class="sf-radio__description payment__description">
-                <div class="payment__info">
-                  {{ description }}
+                <div class="payment__info" v-html='description'>
                 </div>
               </div>
             </template>
