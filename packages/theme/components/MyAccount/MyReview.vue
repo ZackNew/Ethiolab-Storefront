@@ -1,6 +1,14 @@
 <template>
-    <div class="review-component">
-        <v-col>
+    <div class="review-component" v-if="isEnabled">
+        <SfNotification
+          :visible= "this.showNotification"
+          persistent=""
+          title=""
+          message="Your review has been submitted and is awaiting admin approval"
+          action=""
+          type="info"
+        />
+        <div class="grid" v-if="!this.showNotification">
           <h4 class="font-weight-bold">
               {{ this.title}}
           </h4>
@@ -8,7 +16,7 @@
             class="
               form-control
               block
-              w-full
+              w-full/p/55/eba-200-small-centrifuge
               text-base
               font-normal
               text-gray-700
@@ -21,13 +29,14 @@
               focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
             "
             cols="30" rows="5"
+            v-model="summary"
             id="exampleFormControlTextarea1"
             placeholder="Your Review"
           ></textarea>
           <div class="grid grid-cols-2 gap-0">
             <div class="flex items-stretch">
               <MyRating value="2" @updateMyRating="updateMyRating"/>
-              <span class="align-middle my-auto ml-3">{{this.form.rating+'.0'}}</span>
+              <span class="align-middle my-auto ml-3">{{rating+'.0'}}</span>
             </div>
             <div class="col-span-1 justify-self-end">
               <SfButton
@@ -36,7 +45,7 @@
                v-if="!this.isSubmiting">{{prompt}}</SfButton>
             </div>
           </div>
-        </v-col>
+        </div>
     </div>
 </template>
 <script>
@@ -45,46 +54,42 @@
   //:link="null"
   import {
     SfButton,
+    SfNotification
   } from '@storefront-ui/vue';
-  import { ref } from '@vue/composition-api';
-import { integer, numeric } from 'vee-validate/dist/rules';
-import MyRating from './MyRating.vue';
-import { useUser,userGetters } from '@vue-storefront/vendure';
+  import { integer} from 'vee-validate/dist/rules';
+  import MyRating from './MyRating.vue';
+  import { useUser,userGetters } from '@vue-storefront/vendure';
 
 export default {
   name: 'Review',
   components:{
     SfButton,
-    MyRating
+    MyRating,
+    SfNotification
   },
   props: {
-    //lineItem: Object,
     productId: integer,
-    myReview: Object
+    currentUserHasNoReview: Boolean,
   },
   async created(){
     this.setValues();
   },
+  computed: {
+    isEnabled(){
+      return this.email !== '' && this.$props.currentUserHasNoReview;// && this.authorName !== '';
+    }
+  },
   setup(props){
     const { user, isAuthenticated } = useUser();
     var previousReviewId= -1;
-    var form= ref({
-      summary: '',
-      rating: '0',
-    });
     var title= "Add a Review";
     var prompt= "Submit";
-    var authorName= userGetters.getFullName(user.value);
-    var isSubmiting= false;
     return {
       user,
-      form,
       prompt,
-      isSubmiting,
       previousReviewId,
       title,
       isAuthenticated,
-      authorName,
     }
   },
   data() {
@@ -92,6 +97,10 @@ export default {
       count: 0,
       authorName: '',
       email: '',
+      showNotification: false,
+      isSubmiting: false,
+      summary: '',
+      rating: '0',
     }
   },
   watch: {
@@ -102,16 +111,19 @@ export default {
   methods:{
     setValues(){
       if(this.isAuthenticated){
+        // console.log(this.user.identifier);
         this.authorName= userGetters.getFullName(this.user.value);
-        this.email = userGetters.getEmailAddress(this.user.value);
+        // this.email = userGetters.getEmailAddress(this.user.value);
+        this.email= this.user.identifier;
+        console.log(`${this.email} this.email`);
         // console.log(this.$props.myReview);
-        if(this.$props.myReview["authorLocation"] === this.email){
-          this.form["summary"]= this.$props.myReview.summary;
-          this.form["rating"]= this.$props.myReview.rating;
-          this.previousReviewId= this.$props.myReview.id
-          this.title= "Edit Your review";
-          this.prompt= "Edit";
-        }
+        // if(this.$props.myReview["authorLocation"] === this.email){
+        //   this.form["summary"]= this.$props.myReview.summary;
+        //   this.form["rating"]= this.$props.myReview.rating;
+        //   this.previousReviewId= this.$props.myReview.id
+        //   this.title= "Edit Your review";
+        //   this.prompt= "Edit";
+        // }
       }
     },
     // async getReviewIfAny(){
@@ -191,8 +203,8 @@ export default {
           submitProductReview(input: {
             productId: ${this.$props.productId}
             body: ""
-            summary: "${this.form["summary"]}"
-            rating: ${this.form["rating"]}
+            summary: "${this.summary}"
+            rating: ${this.rating}
             authorLocation: "${this.email}"
             authorName: "${this.authorName}"
           }) {
@@ -210,7 +222,7 @@ export default {
       // authorLocation: "${this.lineItem.productVariant.id}"
       console.log(addReviewMutation);
       this.isSubmiting= true;
-      await fetch('http://10.10.20.55:3000/shop-api', {
+      await fetch('http://localhost:3000/shop-api', {
           method: 'post',
           body: addReviewMutation,
           headers: {
@@ -219,59 +231,57 @@ export default {
           }
         }).then(r => r.json())
           .then((data) => {
-            this.previousReviewId= data.data.submitProductReview["id"];
-            this.title= "Edit Your review";
-            this.prompt= "Edit";
-            data.data.submitProductReview["authorName"]= "You";
-            this.$emit('addNewReview', data.data.submitProductReview)
+            // this.previousReviewId= data.data.submitProductReview["id"];
+            // this.title= "Edit Your review";
+            // this.prompt= "Edit";
+            // data.data.submitProductReview["authorName"]= "You";
+            //this.$emit('addNewReview', data.data.submitProductReview)
+            this.showNotification= true;
           });
       this.isSubmiting= false;
     },
 
-    async updateReview(){
-      var updateReviewMutation= JSON.stringify({
-          query:`
-            mutation{
-              updateProductReview(input:{
-                id: ${this.previousReviewId},
-                rating: ${this.form["rating"]},
-                summary: "${this.form["summary"]}"
-              }){
-                summary
-                body
-                rating
-                authorName
-                authorLocation
-                createdAt
-                id
-              }
-            }
-          `});
-      console.log(updateReviewMutation);
-      this.isSubmiting= true;
-      const response = await fetch('http://10.10.20.55:3000/shop-api', {
-          method: 'post',
-          body: updateReviewMutation,
-          headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': updateReviewMutation.length
-          }
-        }).then(r => r.json())
-          .then((data) => {
-            //console.log(data);
-            data.data.updateProductReview["authorName"]= "You";
-            this.$emit('updateMyReview', data.data.updateProductReview);
-            // this.currentReview["summary"]= data["summary"];
-            // this.currentReview["rating"]= data["summary"];
-          });
-      this.isSubmiting= false;
-    },
+    // async updateReview(){
+    //   var updateReviewMutation= JSON.stringify({
+    //       query:`
+    //         mutation{
+    //           updateProductReview(input:{
+    //             id: ${this.previousReviewId},
+    //             rating: ${this.form["rating"]},
+    //             summary: "${this.form["summary"]}"
+    //           }){
+    //             summary
+    //             body
+    //             rating
+    //             authorName
+    //             authorLocation
+    //             createdAt
+    //             id
+    //           }
+    //         }
+    //       `});
+    //   console.log(updateReviewMutation);
+    //   this.isSubmiting= true;
+    //   const response = await fetch('http://10.10.20.55:3000/shop-api', {
+    //       method: 'post',
+    //       body: updateReviewMutation,
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'Content-Length': updateReviewMutation.length
+    //       }
+    //     }).then(r => r.json())
+    //       .then((data) => {
+    //         //console.log(data);
+    //         data.data.updateProductReview["authorName"]= "You";
+    //         this.$emit('updateMyReview', data.data.updateProductReview);
+    //         // this.currentReview["summary"]= data["summary"];
+    //         // this.currentReview["rating"]= data["summary"];
+    //       });
+    //   this.isSubmiting= false;
+    // },
     updateMyRating(rating){
-      this.form={
-        summary: this.form["summary"],
-        rating: ''+rating,
-      };
-      console.log(this.form);
+      this.rating= ''+rating;
+      console.log(this.rating);
     }
   }
 }
