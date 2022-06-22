@@ -72,7 +72,7 @@ export default {
     currentUserHasNoReview: Boolean,
   },
   async created(){
-    this.setValues();
+    await this.setValues();
   },
   computed: {
     isEnabled(){
@@ -109,10 +109,12 @@ export default {
     }
   },
   methods:{
-    setValues(){
+    async setValues(){
       if(this.isAuthenticated){
+        // await this.load();
         // console.log(this.user.identifier);
         this.authorName= userGetters.getFullName(this.user.value);
+        console.log(this.authorName);
         // this.email = userGetters.getEmailAddress(this.user.value);
         this.email= this.user.identifier;
         console.log(`${this.email} this.email`);
