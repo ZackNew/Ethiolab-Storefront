@@ -10,7 +10,7 @@
       @click:change="changeActivePage"
     >
       <SfContentPage
-        v-for="(page, key) in staticPages"
+        v-for="(page, key) in staticPages || pages"
         :key="key"
         :title="$t(page.name)"
       >
