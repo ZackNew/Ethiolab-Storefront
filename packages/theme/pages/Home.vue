@@ -5,6 +5,7 @@
 <!--        categories-->
       <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">
         <LazyHydrate when-visible>
+
      <CategoriesAccordion open-state="all"/>
         </LazyHydrate>
         <SfDivider/>
@@ -59,11 +60,11 @@
           <template>
             <SfBanner
                 class="banner"
-                title="BIG SALE"
-                subtitle="High Quality Lab Equipments"
-                description="Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical."
-                buttonText="Shop Now"
-                image="/homepage/bannerB.webp"
+                :title="heroSection.title"
+                :subtitle="heroSection.overview"
+                :description="heroSection.description"
+                :buttonText="heroSection.buttonText"
+                :image="heroImage"
                 link="/c/clinical-laboratory"
             />
           </template>
@@ -168,7 +169,6 @@ import {onSSR} from "@vue-storefront/core";
 import {computed} from "@vue/composition-api";
 import { getCalculatedPrice } from '~/helpers';
 
-
 export default {
   name: 'Home',
   async created() {
@@ -203,12 +203,17 @@ export default {
   setup() {
     const { toggleNewsletterModal } = useUiState();
     const {categories} = useCategory();
+    const {search:searchCms,getCms}=useCms();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { search, result } = useFacet();
+    const parser = process.client ? new DOMParser() : null;
     const products = computed(() => result.value.data.items);
+    const heroSection = computed(()=>JSON.parse(getCms.value.content))
+    const heroImage = computed(()=>getCms.value.featuredAsset.preview)
     onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8});
+      await searchCms('HERO_SECTION')
     });
     const headerNavigation = [];
     const getTree = ()=>{
@@ -219,7 +224,7 @@ export default {
       })
     }
     const onSubscribe = (emailAddress) => {
-console.log(useCms)
+       // getCms('HERO_SECTION').then((r)=>console.log(r,'pp'))
       // useCms().getCms('HERO_SECTION').then((r)=>console.log(r,'pp'))
       console.log(`Email ${emailAddress} was added to newsletter.`);
       toggleNewsletterModal();
@@ -249,6 +254,9 @@ console.log(useCms)
       addItemToCart,
       isInCart,
       cart,
+      heroSection,
+      heroImage,
+      parser
     };
   },
 };

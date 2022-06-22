@@ -27,7 +27,7 @@ export type GetActiveCustomerResponse = QueryResponse<'activeCustomer', Customer
 export type GetShippingMethodsResponse = QueryResponse<'eligibleShippingMethods', ShippingMethodQuote[]>;
 export type GetPaymentMethodsResponse = QueryResponse<'eligiblePaymentMethods', PaymentMethodQuote[]>;
 export type GetMeResponse = QueryResponse<'me', CurrentUser>;
-export type GetCmsResponse = QueryResponse<'cms', Cms>;
+export type GetCmsResponse = QueryResponse<'getCms', Cms>;
 export type AddToCartResponse = MutationResponse<'addItemToOrder', UpdateOrderItemsResult>;
 export type RemoveFromCartResponse = MutationResponse<'removeOrderLine', RemoveOrderItemsResult>;
 export type UpdateCartQuantityResponse = MutationResponse<'adjustOrderLine', UpdateOrderItemsResult>;
@@ -59,7 +59,7 @@ export interface VendureApiMethods {
   getCategory(params: CollectionParams, customQuery?: CustomQuery): Promise<GetCategoryResponse>;
   getCart(customQuery?: CustomQuery): Promise<GetCartResponse>;
   getMe(customQuery?: CustomQuery): Promise<GetMeResponse>;
-  getCms(params:CmsParams):Promise<GetCmsResponse>;
+  getCms(params:CmsParams, customQuery?: CustomQuery):Promise<GetCmsResponse>;
   getActiveCustomer(customQuery?: CustomQuery): Promise<GetActiveCustomerResponse>;
   getShippingMethods(customQuery?: CustomQuery): Promise<GetShippingMethodsResponse>;
   getPaymentMethods(customQuery?: CustomQuery): Promise<GetPaymentMethodsResponse>;
