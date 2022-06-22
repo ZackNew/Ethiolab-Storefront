@@ -60,11 +60,11 @@
           <template>
             <SfBanner
                 class="banner"
-                :title="heroSection.title"
-                :subtitle="heroSection.overview"
-                :description="heroSection.description"
-                :buttonText="heroSection.buttonText"
-                :image="heroImage"
+                :title="heroSection.title || 'Big Sale'"
+                :subtitle="heroSection.overview || 'Medical Equipments'"
+                :description="heroSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.' "
+                :buttonText="heroSection.buttonText || 'Shop Now'"
+                :image="heroImage || '/homepage/bannerB.webp'"
                 link="/c/clinical-laboratory"
             />
           </template>
@@ -223,8 +223,6 @@ export default {
       })
     }
     const onSubscribe = (emailAddress) => {
-       // getCms('HERO_SECTION').then((r)=>console.log(r,'pp'))
-      // useCms().getCms('HERO_SECTION').then((r)=>console.log(r,'pp'))
       console.log(`Email ${emailAddress} was added to newsletter.`);
       toggleNewsletterModal();
     };
