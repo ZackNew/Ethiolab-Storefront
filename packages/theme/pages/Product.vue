@@ -94,8 +94,8 @@
               <SfReview
                 v-for="review in reviews"
                 :key="review.id"
-                :author="review.authorName"
-                :date="review.createdAt"
+                :author="''"
+                :date="new Date(review.createdAt).toLocaleString()"
                 :message="review.summary"
                 :max-rating="5"
                 :rating="review.rating"
@@ -104,7 +104,8 @@
                 :hide-full-text="$t('Read less')"
                 class="product__review"
               />
-             <MyReview :productId="id" :myReview="currentReview.value" @updateMyReview="updateMyReview" @addNewReview="addNewReview"/>
+              <!-- :myReview="currentReview.value" @updateMyReview="updateMyReview" @addNewReview="addNewReview" -->
+             <MyReview :productId="id" :currentUserHasNoReview="!currentUserHasReview"/>
             </SfTab>
           </SfTabs>
         </LazyHydrate>
@@ -152,6 +153,9 @@ import { getProductVariantByConfiguration } from '~/helpers';
 export default {
   name: 'Product',
   transition: 'fade',
+  async created(){
+    this.reviews= await this.getProductsReviews();
+  },
   setup(props, context) {
     const qty = ref(1);
     const { id } = context.root.$route.params;
@@ -195,7 +199,7 @@ export default {
 
     onSSR(async () => {
       await search({ id });
-      await searchReviews({ productId: id });
+      // await searchReviews({ productId: id });searchReviews
       const currentCollectionId = product.value._categoriesRef[product.value._categoriesRef.length - 1];
       await searchRelatedProducts({ input: { collectionId: currentCollectionId, take: 8, groupByProduct: true }});
     });
@@ -338,7 +342,6 @@ export default {
   watch: {
     isAuthenticated(newIsAuthenticated, oldIsAuthenticated){
       if(newIsAuthenticated){
-        console.log(this.reviews);
         this.reviews= this.setThisUsersReview(this.reviews);
         this.reviewKey= this.reviewKey+1;
       }
