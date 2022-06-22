@@ -10,26 +10,24 @@
       @click:change="changeActivePage"
     >
       <SfContentPage
-        v-for="(page, key) in pages"
+        v-for="(page, key) in staticPages"
         :key="key"
-        :title="$t(page.title)"
+        :title="$t(page.name)"
       >
-        <template v-if="page.content[0] && typeof page.content[0] === 'string'">
+        <template v-if="page.description[0] && typeof page.description[0] === 'string'">
           <SfHeading
-            :title="$t(page.subtitle)"
+            :title="$t(page.name)"
             :level="3"/>
           <p
-            v-for="(paragraph, index) in page.content"
-            :key="index"
             class="paragraph paragraph--without-tab"
+            v-html="page.description"
           >
-            {{ paragraph }}
           </p>
         </template>
         <template v-else>
           <SfTabs :open-tab="1">
             <SfTab
-              v-for="(tab, index) in page.content"
+              v-for="(tab, index) in page.description"
               :key="index"
               :title="tab.tabName"
             >
@@ -50,6 +48,8 @@
 <script>
 import { SfContentPages, SfTabs, SfBreadcrumbs, SfHeading } from '@storefront-ui/vue';
 import { computed } from '@vue/composition-api';
+import {useCms} from "@vue-storefront/vendure";
+import {onSSR} from "@vue-storefront/core";
 export default {
   name: 'Static',
   components: {
@@ -72,6 +72,11 @@ export default {
   },
   setup(props, context) {
     const { $router, $route } = context.root;
+    const {search:searchCms,getCms}=useCms();
+    const staticPages=computed(()=>JSON.parse(getCms.value.content))
+    onSSR(async () => {
+      await searchCms('STATIC')
+    });
     const activePage = computed(() => {
       const { pageName } = $route.params;
       if (pageName) {
@@ -82,7 +87,7 @@ export default {
     const changeActivePage = async (title) => {
       $router.push(`/page/${(title || '').toLowerCase().replaceAll(' ', '-')}`);
     };
-    return { changeActivePage, activePage };
+    return { changeActivePage, activePage,staticPages };
   },
   data() {
     return {

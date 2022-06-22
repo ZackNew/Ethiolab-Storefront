@@ -207,7 +207,6 @@ export default {
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { search, result } = useFacet();
-    const parser = process.client ? new DOMParser() : null;
     const products = computed(() => result.value.data.items);
     const heroSection = computed(()=>JSON.parse(getCms.value.content))
     const heroImage = computed(()=>getCms.value.featuredAsset.preview)
@@ -255,8 +254,7 @@ export default {
       isInCart,
       cart,
       heroSection,
-      heroImage,
-      parser
+      heroImage
     };
   },
 };
