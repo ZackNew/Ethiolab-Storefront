@@ -8,7 +8,7 @@
             <p class="mt-4 max-w-md text-slate-500">Subscribe to the Ethiolab newsletter to receive timely updates from your favorite products.</p>
             <div class="mt-3">
               <input type="checkbox" v-model="disablePopUp" v-on:change="disablePopUpMethod()">
-              <span class="text-slate-500">Do not show this popup again</span>
+              <span class="text-slate-500">Do not show this popup again {{popupResult}} {{popup}}</span>
             </div>
           </div>
       </div>
@@ -20,14 +20,24 @@
   import {SfModal} from "@storefront-ui/vue";
   import {useUiState} from "~/composables";
   import {ref} from "@nuxtjs/composition-api";
+  import {onSSR} from "@vue-storefront/core";
+  import {useCms} from "@vue-storefront/vendure";
+  import {computed} from "@vue/composition-api";
   export default {
       name: 'PopupNotification',
     components:{
       SfModal,
     },
     setup(){
+        onSSR(async ()=>{
+          const {search:searchCms,getCms}=useCms();
+          await searchCms('POPUP');
+          popupResult = getCms.value
+        })
       const { enablePopUp,togglePopUp } = useUiState();
       const disablePopUp=ref(false);
+      let popupResult = {content:'{}'};
+      const popup = computed(()=>JSON.parse(popupResult.content))
       const { isMobileMenuOpen} = useUiState();
       const disablePopUpMethod=()=>{
         if(disablePopUp.value) {
@@ -39,7 +49,9 @@
         togglePopUp,
         disablePopUp,
         disablePopUpMethod,
-        isMobileMenuOpen
+        isMobileMenuOpen,
+        popup,
+        popupResult
       }
     }
   }

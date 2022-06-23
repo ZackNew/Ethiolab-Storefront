@@ -1,4 +1,5 @@
 <template>
+
   <div id="home">
     <PopupNotification/>
       <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
@@ -64,7 +65,7 @@
                 :subtitle="heroSection.overview || 'Medical Equipments'"
                 :description="heroSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.' "
                 :buttonText="heroSection.buttonText || 'Shop Now'"
-                :image="heroImage || '/homepage/bannerB.webp'"
+                image='/homepage/bannerB.webp'
                 link="/c/clinical-laboratory"
             />
           </template>
@@ -138,6 +139,7 @@
       <NewsletterModal @email-submitted="onSubscribe" />
     </LazyHydrate>
   </div>
+
 </template>
 <script>
 import {
@@ -201,19 +203,23 @@ export default {
     SfCard
   },
   setup() {
+    onSSR(async () => {
+      const {search:searchCms,getCms}=useCms();
+      await search({ sort: { name: 'DESC' }, take: 8});
+      await searchCms('HERO_SECTION')
+      results =getCms.value
+
+    });
     const { toggleNewsletterModal } = useUiState();
     const {categories} = useCategory();
-    const {search:searchCms,getCms}=useCms();
+   let results= {content:'{}'};
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { search, result } = useFacet();
     const products = computed(() => result.value.data.items);
-    const heroSection = computed(()=>JSON.parse(getCms.value.content))
-    const heroImage = computed(()=>getCms.value.featuredAsset.preview)
-    onSSR(async () => {
-      await search({ sort: { name: 'DESC' }, take: 8});
-      await searchCms('HERO_SECTION')
-    });
+    const heroSection = computed(()=>JSON.parse(results.content))
+  //  const heroImage =computed(()=>results.featuredAsset.preview)
+
     const headerNavigation = [];
     const getTree = ()=>{
       categories.value.items.forEach((a)=>{
@@ -252,7 +258,7 @@ export default {
       isInCart,
       cart,
       heroSection,
-      heroImage
+
     };
   },
 };
