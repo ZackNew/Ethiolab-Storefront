@@ -50,7 +50,7 @@ type Query {
   # Search Products based on the criteria set by the `SearchInput`
   search(input: SearchInput!): SearchResponse!
   # Gets different content based on their `Type`
-  getCms(type:Type!):cms
+  getCms(type:[Type!]!):[cms]
 }
 
 type Mutation {
