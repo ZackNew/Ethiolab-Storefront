@@ -1,4 +1,5 @@
 <template>
+  <client-only>
   <div id="home">
     <PopupNotification/>
       <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
@@ -58,15 +59,15 @@
 
         <LazyHydrate when-visible>
           <template>
-            <SfBanner
-                class="banner"
-                :title="heroSection.title || 'Big Sale'"
-                :subtitle="heroSection.overview || 'Medical Equipments'"
-                :description="heroSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.' "
-                :buttonText="heroSection.buttonText || 'Shop Now'"
-                :image="heroImage || '/homepage/bannerB.webp'"
-                link="/c/clinical-laboratory"
-            />
+<!--            <SfBanner-->
+<!--                class="banner"-->
+<!--                :title="heroSection.title || 'Big Sale'"-->
+<!--                :subtitle="heroSection.overview || 'Medical Equipments'"-->
+<!--                :description="heroSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.' "-->
+<!--                :buttonText="heroSection.buttonText || 'Shop Now'"-->
+<!--                image='/homepage/bannerB.webp'-->
+<!--                link="/c/clinical-laboratory"-->
+<!--            />-->
           </template>
         </LazyHydrate>
           <LazyHydrate when-visible>
@@ -138,6 +139,7 @@
       <NewsletterModal @email-submitted="onSubscribe" />
     </LazyHydrate>
   </div>
+  </client-only>
 </template>
 <script>
 import {
@@ -166,7 +168,7 @@ import cacheControl from './../helpers/cacheControl';
 import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet,useCms} from "@vue-storefront/vendure";
 import CategoriesAccordion from "~/components/CategoriesAccordion";
 import {onSSR} from "@vue-storefront/core";
-import {computed} from "@vue/composition-api";
+import {computed, onMounted} from "@vue/composition-api";
 import { getCalculatedPrice } from '~/helpers';
 
 export default {
@@ -208,11 +210,12 @@ export default {
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { search, result } = useFacet();
     const products = computed(() => result.value.data.items);
-    const heroSection = computed(()=>JSON.parse(getCms.value.content))
-    const heroImage = computed(()=>getCms.value.featuredAsset.preview)
+    const heroSection =null// computed(()=>JSON.parse(getCms.value.content))
+    const heroImage = null//computed(()=>getCms.value.featuredAsset.preview)
     onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8});
-      await searchCms('HERO_SECTION')
+      await searchCms(['HERO_SECTION','POPUP'])
+      console.log(getCms.value,'pop')
     });
     const headerNavigation = [];
     const getTree = ()=>{
@@ -223,7 +226,6 @@ export default {
       })
     }
     const onSubscribe = (emailAddress) => {
-      console.log(`Email ${emailAddress} was added to newsletter.`);
       toggleNewsletterModal();
     };
     const toggleWishlist = (index) => {
@@ -252,7 +254,7 @@ export default {
       isInCart,
       cart,
       heroSection,
-      heroImage
+
     };
   },
 };
