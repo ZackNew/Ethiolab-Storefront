@@ -215,7 +215,6 @@ export default {
     onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8});
       await searchCms(['HERO_SECTION','POPUP'])
-      console.log(getCms.value,'pop')
     });
     const headerNavigation = [];
     const getTree = ()=>{
