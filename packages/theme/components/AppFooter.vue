@@ -87,6 +87,15 @@
               />
             </router-link>
           </SfListItem>
+
+            <SfListItem class="footer-list-item">
+            <router-link to="/policy" exact>
+              <SfMenuItem
+                class="sf-footer__menu-item"
+                :label="$t('Policy')"
+              />
+            </router-link>
+          </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn title="Social" class="footer-column">

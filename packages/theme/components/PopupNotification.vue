@@ -4,8 +4,9 @@
     <template #modal-bar>
         <div class="flex">
           <div class="lg:p-8 mx-3 my-auto">
-            <div class="uppercase tracking-wide text-5xl text-indigo-500 font-semibold  text-gray-800">get <span class="text-[#a6c76c]">25 %</span> off</div>
-            <p class="mt-4 max-w-md text-slate-500">Subscribe to the Ethiolab newsletter to receive timely updates from your favorite products.</p>
+            <div class="uppercase tracking-wide text-5xl text-indigo-500 font-semibold  text-gray-800">{{popup.title }}</div>
+            <!-- :<div>get <span class="text-[#a6c76c]">25 %</span> off </div> -->
+            <p class="mt-4 max-w-md text-slate-500" v-html="popup.description"></p>
             <div class="mt-3">
               <input type="checkbox" v-model="disablePopUp" v-on:change="disablePopUpMethod()">
               <span class="text-slate-500">Do not show this popup again</span>
@@ -20,6 +21,11 @@
   import {SfModal} from "@storefront-ui/vue";
   import {useUiState} from "~/composables";
   import {ref} from "@nuxtjs/composition-api";
+  import {useCms,useFacet} from "@vue-storefront/vendure";
+  import {computed} from "@vue/composition-api";
+import {onSSR} from "@vue-storefront/core";
+
+
   export default {
       name: 'PopupNotification',
     components:{
@@ -29,6 +35,18 @@
       const { enablePopUp,togglePopUp } = useUiState();
       const disablePopUp=ref(false);
       const { isMobileMenuOpen} = useUiState();
+      const {search:searchCms,getCms}=useCms();
+      const { search, result } = useFacet();
+
+      const popup = computed(()=>JSON.parse(getCms.value.content))
+    
+      onSSR(async () => {
+      await search({ sort: { name: 'DESC' }, take: 8});
+      await searchCms('POPUP')
+            // console.log("the popup value is ",popup);
+
+      });
+
       const disablePopUpMethod=()=>{
         if(disablePopUp.value) {
           localStorage.setItem('popup', 'false')
@@ -39,7 +57,8 @@
         togglePopUp,
         disablePopUp,
         disablePopUpMethod,
-        isMobileMenuOpen
+        isMobileMenuOpen,
+        popup
       }
     }
   }
