@@ -46,7 +46,7 @@
     </SfTab>
     <SfTab title="Tin Number">
           Tin Number: <SfInput pplaceholder="Your tin number" v-model="tinNumber"/>
-          <SfButton>Update Tin Number</SfButton>
+          <SfButton @click="updateTinNumber">Update Tin Number</SfButton>
     </SfTab>
   </SfTabs>
 </template>
@@ -167,6 +167,30 @@ export default {
              
     }, )
     });
+    const updateTinNumber  = async()=>{
+      try{
+              const query =    gql`mutation upd($tinNumber: String!){
+                    updateCustomer(input: {
+                       # id: $id,
+                        customFields: {
+                          tin_number: $tinNumber
+                        }
+
+                    }){
+                      id
+                    }
+              }`
+            console.log("Token=", getCookie('etech-auth-token'))
+            axios.post('http://localhost:3000/shop-api', 
+            {query: print(query),variables: {tinNumber: tinNumber.value, }},
+            {headers:{
+              'Authorization': 'Bearer ' + getCookie('etech-auth-token')
+            }}
+            
+            )
+    }catch(e){
+      console.log(JSON.stringify(e))
+    }}
 
     return {
       tinNumber,
@@ -174,10 +198,11 @@ export default {
       updatePersonalData,
       updatePassword,
       updateEmailData,
+      updateTinNumber,
       user
     };
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>
