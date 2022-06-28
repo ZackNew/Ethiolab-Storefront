@@ -59,15 +59,15 @@
 
         <LazyHydrate when-visible>
           <template>
-<!--            <SfBanner-->
-<!--                class="banner"-->
-<!--                :title="heroSection.title || 'Big Sale'"-->
-<!--                :subtitle="heroSection.overview || 'Medical Equipments'"-->
-<!--                :description="heroSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.' "-->
-<!--                :buttonText="heroSection.buttonText || 'Shop Now'"-->
-<!--                image='/homepage/bannerB.webp'-->
-<!--                link="/c/clinical-laboratory"-->
-<!--            />-->
+           <SfBanner
+               class="banner"
+               :title="heroSection.title || 'Big Sale'"
+               :subtitle="heroSection.overview || 'Medical Equipments'"
+               :description="heroSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.' "
+               :buttonText="heroSection.buttonText || 'Shop Now'"
+               :image="heroSection.featuredAsset.preview || '/homepage/bannerB.webp'"
+               link="/c/clinical-laboratory"
+           />
           </template>
         </LazyHydrate>
           <LazyHydrate when-visible>
@@ -210,13 +210,25 @@ export default {
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { search, result } = useFacet();
     const products = computed(() => result.value.data.items);
-    const heroSection =null// computed(()=>JSON.parse(getCms.value.content))
+    const heroSection =computed(()=>JSON.parse(getCms.value[0].content))
     const heroImage = null//computed(()=>getCms.value.featuredAsset.preview)
+    // console.log("getcms value is ", getCms.value[0].data);
+  //   const hero = getCms.value.filter((item)=>item.cmsType==='POPUP').map(filteredObj => filteredObj.content);
+  //  const herocontent= JSON.parse(hero);
+    
     onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8});
       await searchCms(['HERO_SECTION','POPUP'])
-      console.log(getCms.value,'pop')
     });
+
+    onMounted(() => {
+        console.log("heroSection value is ",getCms.value[0].cmsType) 
+                console.log("heroSection value is ",JSON.parse(getCms.value[0].content)) 
+
+
+    })
+
+
     const headerNavigation = [];
     const getTree = ()=>{
       categories.value.items.forEach((a)=>{
@@ -254,6 +266,7 @@ export default {
       isInCart,
       cart,
       heroSection,
+      //herocontent
 
     };
   },
