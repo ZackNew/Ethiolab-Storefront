@@ -100,7 +100,7 @@
               <SfReview
                 v-for="review in reviews"
                 :key="review.id"
-                :author="''"
+                :author="review.authorName"
                 :date="new Date(review.createdAt).toLocaleString()"
                 :message="review.summary"
                 :max-rating="5"

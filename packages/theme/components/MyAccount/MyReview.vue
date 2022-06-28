@@ -77,7 +77,10 @@ export default {
   computed: {
     isEnabled(){
       return this.email !== '' && this.$props.currentUserHasNoReview;// && this.authorName !== '';
-    }
+    },
+    // authorName(){
+    //   return this.user.firstName + ' '+ this.user.lastName;
+    // }
   },
   setup(props){
     const { user, isAuthenticated,load } = useUser();
@@ -96,8 +99,8 @@ export default {
   data() {
     return {
       count: 0,
-      authorName: '',
       email: '',
+      authorName: '',
       showNotification: false,
       isSubmiting: false,
       summary: '',
@@ -117,7 +120,7 @@ export default {
         this.authorName= userGetters.getFullName(this.user.value);
         console.log(this.user);
         // this.email = userGetters.getEmailAddress(this.user.value);
-        this.email= this.user.identifier;
+        this.email= userGetters.getEmailAddress(this.user);
         console.log(`${this.email} this.email`);
         // console.log(this.$props.myReview);
         // if(this.$props.myReview["authorLocation"] === this.email){
