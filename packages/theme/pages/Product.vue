@@ -154,9 +154,11 @@ export default {
   name: 'Product',
   transition: 'fade',
   async created(){
+    console.log('Product Page created');
     this.reviews= await this.getProductsReviews();
   },
   setup(props, context) {
+    console.log('Product Page setup');
     const qty = ref(1);
     const { id } = context.root.$route.params;
     const { products, search } = useProduct('products');
@@ -169,7 +171,7 @@ export default {
     // TODO: Implement reviews
     //const reviews = ref([]);//computed(() => reviewGetters.getItems(productReviews.value));
     const configuration = ref({});
-    const { user, isAuthenticated } = useUser();
+    const { user, isAuthenticated,load } = useUser();
     const properties = computed(() => [
       {
         name: 'ID',
@@ -199,7 +201,7 @@ export default {
 
     onSSR(async () => {
       await search({ id });
-      // await searchReviews({ productId: id });searchReviews
+      await load();
       const currentCollectionId = product.value._categoriesRef[product.value._categoriesRef.length - 1];
       await searchRelatedProducts({ input: { collectionId: currentCollectionId, take: 8, groupByProduct: true }});
     });

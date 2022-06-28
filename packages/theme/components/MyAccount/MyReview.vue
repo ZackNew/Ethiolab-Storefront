@@ -80,10 +80,11 @@ export default {
     }
   },
   setup(props){
-    const { user, isAuthenticated } = useUser();
+    const { user, isAuthenticated,load } = useUser();
     var previousReviewId= -1;
     var title= "Add a Review";
     var prompt= "Submit";
+    load();
     return {
       user,
       prompt,
@@ -114,7 +115,7 @@ export default {
         // await this.load();
         // console.log(this.user.identifier);
         this.authorName= userGetters.getFullName(this.user.value);
-        console.log(this.authorName);
+        console.log(this.user);
         // this.email = userGetters.getEmailAddress(this.user.value);
         this.email= this.user.identifier;
         console.log(`${this.email} this.email`);
