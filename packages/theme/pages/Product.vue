@@ -276,6 +276,7 @@ export default {
             }
             customFields{
               youtube_link
+              maintenance_fee
             }
           }
         }
@@ -293,6 +294,11 @@ export default {
       let splitted= reviewsListResponse.data.product.customFields.youtube_link.split('?v=');
       if(splitted.length == 2){
         this.youtube_link= splitted[1];
+      }
+      if(reviewsListResponse.data.product.customFields.maintenance_fee !== '' ){
+        console.log(`${reviewsListResponse.data.product.customFields.maintenance_fee} fee`);
+        this.properties.push({name: 'Maintenance Fee', value: reviewsListResponse.data.product.customFields.maintenance_fee});
+        console.log(this.properties);
       }
       var reviewsList= reviewsListResponse.data.product.reviews.items;
       if(this.isAuthenticated){
