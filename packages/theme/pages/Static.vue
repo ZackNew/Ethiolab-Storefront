@@ -73,10 +73,7 @@ export default {
   setup(props, context) {
     const { $router, $route } = context.root;
     const {search:searchCms,getCms}=useCms();
-    const staticPages=computed(()=>JSON.parse(getCms.value.content))
-    onSSR(async () => {
-      await searchCms('STATIC')
-    });
+    const staticPages=computed(()=>JSON.parse(getCms.value[2].content))
     const activePage = computed(() => {
       const { pageName } = $route.params;
       if (pageName) {

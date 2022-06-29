@@ -65,7 +65,7 @@
                :subtitle="heroSection.overview || 'Medical Equipments'"
                :description="heroSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.' "
                :buttonText="heroSection.buttonText || 'Shop Now'"
-               :image="heroSection.featuredAsset.preview || '/homepage/bannerB.webp'"
+               :image="heroImage || '/homepage/bannerB.webp'"
                link="/c/clinical-laboratory"
            />
           </template>
@@ -202,34 +202,19 @@ export default {
     SfDivider,
     SfCard
   },
+  
   setup() {
     const { toggleNewsletterModal } = useUiState();
     const {categories} = useCategory();
-    const {search:searchCms,getCms}=useCms();
+    const {getCms}=useCms();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
-    const { search, result } = useFacet();
+    const { result } = useFacet();
     const products = computed(() => result.value.data.items);
     const heroSection =computed(()=>JSON.parse(getCms.value[0].content))
-    const heroImage = null//computed(()=>getCms.value.featuredAsset.preview)
-    // console.log("getcms value is ", getCms.value[0].data);
-  //   const hero = getCms.value.filter((item)=>item.cmsType==='POPUP').map(filteredObj => filteredObj.content);
-  //  const herocontent= JSON.parse(hero);
-    
-    onSSR(async () => {
-      await search({ sort: { name: 'DESC' }, take: 8});
-      await searchCms(['HERO_SECTION','POPUP'])
-    });
-
-    onMounted(() => {
-        console.log("heroSection value is ",getCms.value[0].cmsType) 
-                console.log("heroSection value is ",JSON.parse(getCms.value[0].content)) 
-
-
-    })
-
-
+    const heroImage = computed(()=>getCms.value[0].featuredAsset.preview)
     const headerNavigation = [];
+    console.log('products',products)
     const getTree = ()=>{
       categories.value.items.forEach((a)=>{
         if (a.children.length > 0) {
@@ -266,7 +251,7 @@ export default {
       isInCart,
       cart,
       heroSection,
-      //herocontent
+      heroImage
 
     };
   },
