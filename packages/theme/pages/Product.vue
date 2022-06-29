@@ -41,6 +41,12 @@
         </div>
         <div>
           <div class="product__description desktop-only" v-html="productGetters.getDescription(product)"></div>
+            <iframe width="560" height="315" :src='"https://www.youtube.com/embed/"+youtube_link'
+            title="YouTube video player" 
+            frameborder="0"
+            v-if="youtube_link !== ''" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen></iframe>
           <div v-if="options && options.length">
             <SfSelect
               v-for="optionGroup in options"
@@ -118,8 +124,11 @@
         title="Related Products"
       />
     </LazyHydrate>
+    <!-- <LazyHydrate when-visible> -->
+    <!-- </LazyHydrate> -->
   </div>
 </template>
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
 import {
   SfProperty,
@@ -154,9 +163,11 @@ export default {
   name: 'Product',
   transition: 'fade',
   async created(){
+    console.log('Product Page created');
     this.reviews= await this.getProductsReviews();
   },
   setup(props, context) {
+    console.log('Product Page setup');
     const qty = ref(1);
     const { id } = context.root.$route.params;
     const { products, search } = useProduct('products');
@@ -165,11 +176,12 @@ export default {
     const { relatedProducts, load: searchRelatedProducts, loading: relatedLoading } = useRelatedProducts();
 
     const product = computed(() => productGetters.getByFilters(products.value, { master: true, attributes: context.root.$route.query }));
+    console.log(product);
     const options = computed(() => productGetters.getOptions(products.value, ['color', 'size']));
     // TODO: Implement reviews
     //const reviews = ref([]);//computed(() => reviewGetters.getItems(productReviews.value));
     const configuration = ref({});
-    const { user, isAuthenticated } = useUser();
+    const { user, isAuthenticated,load, getU } = useUser();
     const properties = computed(() => [
       {
         name: 'ID',
@@ -196,10 +208,9 @@ export default {
       big: { url: img.big },
       alt: product.value._name || product.value.name
     })));
-
     onSSR(async () => {
       await search({ id });
-      // await searchReviews({ productId: id });searchReviews
+      await load();
       const currentCollectionId = product.value._categoriesRef[product.value._categoriesRef.length - 1];
       await searchRelatedProducts({ input: { collectionId: currentCollectionId, take: 8, groupByProduct: true }});
     });
@@ -263,6 +274,9 @@ export default {
                 id
               }
             }
+            customFields{
+              youtube_link
+            }
           }
         }
       `
@@ -276,6 +290,10 @@ export default {
         }
       });
       const reviewsListResponse = await response.json();
+      let splitted= reviewsListResponse.data.product.customFields.youtube_link.split('?v=');
+      if(splitted.length == 2){
+        this.youtube_link= splitted[1];
+      }
       var reviewsList= reviewsListResponse.data.product.reviews.items;
       if(this.isAuthenticated){
         return this.setThisUsersReview(reviewsList);
@@ -301,6 +319,37 @@ export default {
       }
       return reviewsList;
     },
+
+    // getYoutubeLinks(){
+    //   const data = JSON.stringify({
+    //     query: `
+    //     query{
+    //       product(id: ${this.id}){
+    //         reviews{
+    //           items{
+    //             summary
+    //             body
+    //             rating
+    //             authorName
+    //             authorLocation
+    //             createdAt
+    //             id
+    //           }
+    //         }
+    //       }
+    //     }
+    //   `
+    //   });
+    //   const response = await fetch("http://localhost:3000/shop-api", {
+    //     method: 'post',
+    //     body: data,
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Content-Length': data.length
+    //     }
+    //   });
+    //   const reviewsListResponse = await response.json();
+    // }
 
   },
   components: {
@@ -336,6 +385,7 @@ export default {
       email: '',
       reviews: [],
       currentUserHasReview: false,
+      youtube_link:'',
       reviewKey: 0,
     };
   },
