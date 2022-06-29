@@ -208,6 +208,9 @@ export default {
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { search, result } = useFacet();
     const products = computed(() => result.value.data.items);
+    // onMounted(async () => {
+    //   const products = computed(() => result.value.data.items);
+    // });
     onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8});
     });
