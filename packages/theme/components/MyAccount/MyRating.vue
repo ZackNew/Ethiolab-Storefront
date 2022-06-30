@@ -69,7 +69,7 @@ import { integer } from 'vee-validate/dist/rules';
               if(this.$props.disabled == true){
                 return;
               }
-              console.log(`over here ${this.$props.value}`);
+              // console.log(`over here ${this.$props.value}`);
               var index;
               for(var classes of e.target.classList){
                 if(classes.includes("star-")){

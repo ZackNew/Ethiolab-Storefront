@@ -5,8 +5,9 @@
       <p class="message">
         {{ $t('Feel free to edit') }}
       </p>
-
+   
       <ProfileUpdateForm @submit="updatePersonalData" />
+     
 
       <p class="notice">
         {{ $t('Use your personal data') }}
@@ -43,6 +44,10 @@
 
       <PasswordResetForm @submit="updatePassword" />
     </SfTab>
+    <SfTab title="Tin Number">
+          Tin Number: <SfInput pplaceholder="Your tin number" v-model="tinNumber"/>
+          <SfButton @click="updateTinNumber">Update Tin Number</SfButton>
+    </SfTab>
   </SfTabs>
 </template>
 
@@ -54,7 +59,10 @@ import PasswordResetForm from '~/components/MyAccount/PasswordResetForm';
 import EmailUpdateForm from '~/components/MyAccount/EmailUpdateForm';
 import { SfTabs, SfInput, SfButton } from '@storefront-ui/vue';
 import { useUser, userGetters } from '@vue-storefront/vendure';
-import { onMounted } from '@vue/composition-api';
+import { onMounted,watchEffect,ref } from '@vue/composition-api';
+import gql from 'graphql-tag';
+import { print } from 'graphql';
+import axios from 'axios'
 
 extend('email', {
   ...email,
@@ -83,7 +91,9 @@ extend('confirmed', {
 
 export default {
   name: 'PersonalDetails',
-
+  onMounted(){
+      
+  },
   components: {
     SfTabs,
     SfInput,
@@ -95,9 +105,9 @@ export default {
 
   setup() {
     const { updateUser, changePassword, user, load, updateEmail } = useUser();
-
+    const tinNumber = ref('');
     const currentEmail = userGetters.getEmailAddress(user.value);
-
+    console.log("user=",JSON.stringify( user.value))
     const formHandler = async (fn, onComplete, onError) => {
       try {
         const data = await fn();
@@ -106,6 +116,23 @@ export default {
         onError(error);
       }
     };
+    function getCookie(cname) {
+        console.log('Getting ' +  cname)
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+     }
+    console.log("user", JSON.stringify(user.value))
 
     const updatePersonalData = ({ form, onComplete, onError }) => formHandler(() => updateUser({ user: form.value }), onComplete, onError);
     const updateEmailData = ({ form, onComplete, onError }) => formHandler(() => updateEmail({ password: form.value.password, newEmail: form.value.email }), onComplete, onError);
@@ -113,17 +140,69 @@ export default {
 
     onMounted(async () => {
       await load();
+         const query =    gql`{
+        activeCustomer{
+            customFields {
+                tin_number
+            }
+            user{
+                id
+                
+            }
+            
+        }
+      }`
+    console.log("Token=", getCookie('etech-auth-token'))
+    axios.post('http://localhost:3000/shop-api', 
+    {query: print(query),},
+    {headers:{
+      'Authorization': 'Bearer ' + getCookie('etech-auth-token')
+    }}
+    
+    )
+    
+    .then(data =>{
+            tinNumber.value = data.data.data.activeCustomer.customFields.tin_number
+             console.log(data.data.data.activeCustomer.customFields.tin_number)
+             
+    }, )
     });
+    const updateTinNumber  = async()=>{
+      try{
+              const query =    gql`mutation upd($tinNumber: String!){
+                    updateCustomer(input: {
+                       # id: $id,
+                        customFields: {
+                          tin_number: $tinNumber
+                        }
+
+                    }){
+                      id
+                    }
+              }`
+            console.log("Token=", getCookie('etech-auth-token'))
+            axios.post('http://localhost:3000/shop-api', 
+            {query: print(query),variables: {tinNumber: tinNumber.value, }},
+            {headers:{
+              'Authorization': 'Bearer ' + getCookie('etech-auth-token')
+            }}
+            
+            )
+    }catch(e){
+      console.log(JSON.stringify(e))
+    }}
 
     return {
+      tinNumber,
       currentEmail,
       updatePersonalData,
       updatePassword,
       updateEmailData,
+      updateTinNumber,
       user
     };
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>
