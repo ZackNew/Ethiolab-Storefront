@@ -117,7 +117,7 @@ export default {
       if(this.isAuthenticated){
         // await this.load();
         // console.log(this.user.identifier);
-        this.authorName= userGetters.getFullName(this.user.value);
+        this.authorName= userGetters.getFullName(this.user);
         console.log(this.user);
         // this.email = userGetters.getEmailAddress(this.user.value);
         this.email= userGetters.getEmailAddress(this.user);
