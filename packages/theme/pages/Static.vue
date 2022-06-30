@@ -10,26 +10,24 @@
       @click:change="changeActivePage"
     >
       <SfContentPage
-        v-for="(page, key) in pages"
+        v-for="(page, key) in staticPages || pages"
         :key="key"
-        :title="$t(page.title)"
+        :title="$t(page.name)"
       >
-        <template v-if="page.content[0] && typeof page.content[0] === 'string'">
+        <template v-if="page.description[0] && typeof page.description[0] === 'string'">
           <SfHeading
-            :title="$t(page.subtitle)"
+            :title="$t(page.name)"
             :level="3"/>
           <p
-            v-for="(paragraph, index) in page.content"
-            :key="index"
             class="paragraph paragraph--without-tab"
+            v-html="page.description"
           >
-            {{ paragraph }}
           </p>
         </template>
         <template v-else>
           <SfTabs :open-tab="1">
             <SfTab
-              v-for="(tab, index) in page.content"
+              v-for="(tab, index) in page.description"
               :key="index"
               :title="tab.tabName"
             >
@@ -50,6 +48,8 @@
 <script>
 import { SfContentPages, SfTabs, SfBreadcrumbs, SfHeading } from '@storefront-ui/vue';
 import { computed } from '@vue/composition-api';
+import {useCms} from "@vue-storefront/vendure";
+import {onSSR} from "@vue-storefront/core";
 export default {
   name: 'Static',
   components: {
@@ -72,6 +72,8 @@ export default {
   },
   setup(props, context) {
     const { $router, $route } = context.root;
+    const {search:searchCms,getCms}=useCms();
+    const staticPages=computed(()=>JSON.parse(getCms.value[2].content))
     const activePage = computed(() => {
       const { pageName } = $route.params;
       if (pageName) {
@@ -82,7 +84,7 @@ export default {
     const changeActivePage = async (title) => {
       $router.push(`/page/${(title || '').toLowerCase().replaceAll(' ', '-')}`);
     };
-    return { changeActivePage, activePage };
+    return { changeActivePage, activePage,staticPages };
   },
   data() {
     return {
@@ -92,33 +94,29 @@ export default {
       ],
       pages: [
         {
-          title: 'About',
-          subtitle: 'About EthioLabs',
-          content: [
+          name: 'About',
+          description: [
             'Ethiolab is a firm established in 2012 with the objective of supplying quality equipment from branded partners for research and development, testing, measuring and laboratory analysis applications.',
             ' We have solutions for R&D institutions, universities, production industries, and controlling & regulating authorities. On our eCommerce platform, we carry several portable measuring and testing devices, laboratory and research consumables, instruments and many more ranges for our partners and customers. In addition to our high equipment quality our after sales service is a source of trust by our clients.'
           ]
         },
         {
-          title: 'Mission',
-          subtitle: 'Our Mission',
-          content: [
+          name: 'Mission',
+          description: [
             'Providing high quality and latest technology laboratory instruments from world leading companies to researchers and other interested parties with efficient pre and post sales service.',
             'Creating an alternative marketplace online where safe and reliable market transactions are carried out.',
             'Growing and expanding our business to regional cities of the country.'
           ]
         },
         {
-          title: 'Vision',
-          subtitle: 'Our vison',
-          content: [
+          name: 'Vision',
+          description: [
             'To be the leading laboratory products supplier in Africa.'
           ]
         },
         {
-          title: 'Value',
-          subtitle: 'Our Values',
-          content: [
+          name: 'Value',
+          description: [
             'Our first principal is honesty in our engagements with clients to serve them in a manner that upholds our cultural values as Ethiopians, where a promise is highly consecrated above all. ',
             'We believe trust is everything in the business world; therefore, we encourage open communication with our employees as well as with our clients.',
             'Passion – We are driven to perform better, progress constantly and exceed expectations.',

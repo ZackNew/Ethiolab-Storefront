@@ -1,4 +1,4 @@
-import { CollectionListOptions, CreateAddressInput, SearchInput, CollectionBreadcrumb } from './GraphQL';
+import {CollectionListOptions, CreateAddressInput, SearchInput, CollectionBreadcrumb, cmsType} from './GraphQL';
 
 export type TODO = unknown;
 
@@ -50,7 +50,9 @@ export type ProductParams = {
   id?: string;
   slug?: string;
 };
-
+export type CmsParams = {
+  type:cmsType
+}
 export type ProductFilter = {
   master?: boolean;
   id?: string;

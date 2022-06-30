@@ -24,19 +24,18 @@
             :selected="selectedShippingMethod && selectedShippingMethod.id"
             @input="selectShippingMethod(method)"
             name="shippingMethod"
-            :description="method.localizedDescription"
+            :description="method.description"
             class="form__radio shipping"
           >
             <template #label="{ label }">
               <div class="sf-radio__label shipping__label">
                 <div>{{ label }}</div>
-                <div v-if="method && method.priceWithTax">{{ getCalculatedPrice(method.priceWithTax).toLocaleString() + ' ETB' }}</div>
+                <div v-if="method && method.priceWithTax">{{ $n(getCalculatedPrice(method.priceWithTax), 'currency') }}</div>
               </div>
             </template>
-            <template #description="{ localizedDescription }">
+            <template #description="{ description }">
               <div class="sf-radio__description shipping__description">
-                <div class="shipping__info">
-                  {{ localizedDescription }}
+                <div class="shipping__info" v-html='description'>
                 </div>
               </div>
             </template>

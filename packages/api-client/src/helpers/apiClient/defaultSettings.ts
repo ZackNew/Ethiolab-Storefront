@@ -1,4 +1,4 @@
-import { ClientConfig } from '../../types/setup';
+import { ClientConfig } from '../../types';
 
 export const defaultSettings: ClientConfig = {
   api: {

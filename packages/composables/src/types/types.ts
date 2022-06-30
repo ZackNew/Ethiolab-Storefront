@@ -1,5 +1,13 @@
 import { AgnosticAttribute } from '@vue-storefront/core';
-import { ProductCollection, CollectionResult, FacetValueResult, SearchResult, ResetPasswordResponse, RequestPasswordResetResponse } from '@vue-storefront/vendure-api';
+import {
+  ProductCollection,
+  CollectionResult,
+  FacetValueResult,
+  SearchResult,
+  ResetPasswordResponse,
+  RequestPasswordResetResponse,
+  Cms
+} from '@vue-storefront/vendure-api';
 
 export type TODO = any;
 
@@ -81,7 +89,9 @@ export interface ForgotPasswordResult {
   resetPasswordResult: RequestPasswordResetResponse;
   setNewPasswordResult: ResetPasswordResponse;
 }
-
+export interface GetCmsResult{
+  getCmsResult:Cms;
+}
 export interface Error {
   name: string;
   message: string;

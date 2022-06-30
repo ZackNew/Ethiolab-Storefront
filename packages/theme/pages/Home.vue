@@ -1,10 +1,12 @@
 <template>
+  <client-only>
   <div id="home">
     <PopupNotification/>
       <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
 <!--        categories-->
       <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">
         <LazyHydrate when-visible>
+
      <CategoriesAccordion open-state="all"/>
         </LazyHydrate>
         <SfDivider/>
@@ -57,15 +59,15 @@
 
         <LazyHydrate when-visible>
           <template>
-            <SfBanner
-                class="banner"
-                title="BIG SALE"
-                subtitle="High Quality Lab Equipments"
-                description="Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical."
-                buttonText="Shop Now"
-                image="/homepage/bannerB.webp"
-                link="/c/clinical-laboratory"
-            />
+           <SfBanner
+               class="banner"
+               :title="heroSection.title || 'Big Sale'"
+               :subtitle="heroSection.overview || 'Medical Equipments'"
+               :description="heroSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.' "
+               :buttonText="heroSection.buttonText || 'Shop Now'"
+               :image="heroImage || '/homepage/bannerB.webp'"
+               link="/c/clinical-laboratory"
+           />
           </template>
         </LazyHydrate>
           <LazyHydrate when-visible>
@@ -137,6 +139,7 @@
       <NewsletterModal @email-submitted="onSubscribe" />
     </LazyHydrate>
   </div>
+  </client-only>
 </template>
 <script>
 import {
@@ -156,19 +159,17 @@ import {
   SfDivider,
   SfCard
 } from '@storefront-ui/vue';
-import { ref } from '@nuxtjs/composition-api';
 import LazyHydrate from 'vue-lazy-hydration';
 import Testimonial from '~/components/Testimonial.vue';
 import NewsletterModal from '~/components/NewsletterModal.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
 import { useUiState } from '../composables';
 import cacheControl from './../helpers/cacheControl';
-import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet} from "@vue-storefront/vendure";
+import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet,useCms} from "@vue-storefront/vendure";
 import CategoriesAccordion from "~/components/CategoriesAccordion";
 import {onSSR} from "@vue-storefront/core";
-import {computed} from "@vue/composition-api";
+import {computed, onMounted} from "@vue/composition-api";
 import { getCalculatedPrice } from '~/helpers';
-
 
 export default {
   name: 'Home',
@@ -201,20 +202,19 @@ export default {
     SfDivider,
     SfCard
   },
+  
   setup() {
     const { toggleNewsletterModal } = useUiState();
     const {categories} = useCategory();
+    const {getCms}=useCms();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
-    const { search, result } = useFacet();
+    const { result } = useFacet();
     const products = computed(() => result.value.data.items);
-    // onMounted(async () => {
-    //   const products = computed(() => result.value.data.items);
-    // });
-    onSSR(async () => {
-      await search({ sort: { name: 'DESC' }, take: 8});
-    });
+    const heroSection =computed(()=>JSON.parse(getCms.value[0].content))
+    const heroImage = computed(()=>getCms.value[0].featuredAsset.preview)
     const headerNavigation = [];
+    console.log('products',products)
     const getTree = ()=>{
       categories.value.items.forEach((a)=>{
         if (a.children.length > 0) {
@@ -223,7 +223,6 @@ export default {
       })
     }
     const onSubscribe = (emailAddress) => {
-      console.log(`Email ${emailAddress} was added to newsletter.`);
       toggleNewsletterModal();
     };
     const toggleWishlist = (index) => {
@@ -251,6 +250,9 @@ export default {
       addItemToCart,
       isInCart,
       cart,
+      heroSection,
+      heroImage
+
     };
   },
 };

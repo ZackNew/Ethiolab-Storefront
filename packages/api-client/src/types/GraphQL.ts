@@ -1,5 +1,8 @@
 /* eslint-disable */
 
+import exp from "constants";
+import {symlink} from "fs";
+
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -92,7 +95,16 @@ export enum AssetType {
   Video = 'VIDEO',
   Binary = 'BINARY'
 }
-
+export enum cmsType{
+  POPUP='POPUP',
+STATIC='STATIC',
+CONTACT_INFO='CONTACT_INFO',
+HERO_SECTION='HERO_SECTION',
+ADVERTISEMENT='ADVERTISEMENT',
+POLICIES='POLICIES',
+FAQ='FAQ',
+SOCIAL='SOCIAL'
+}
 export type AuthenticationInput = {
   native?: Maybe<NativeAuthInput>;
 };
@@ -684,6 +696,13 @@ export type CurrentUser = {
   identifier: Scalars['String'];
   channels: Array<CurrentUserChannel>;
 };
+export type Cms={
+  __typename?:'Cms';
+  id:Scalars['ID'];
+  content:Scalars['String'];
+  cmsType:cmsType;
+  featuredAsset?: Maybe<Asset>;
+}
 
 export type CurrentUserChannel = {
   __typename?: 'CurrentUserChannel';

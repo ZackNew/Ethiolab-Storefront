@@ -39,8 +39,9 @@ import LoginModal from '~/components/LoginModal.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import Notification from '~/components/Notification';
 import CategoriesSidebar from "~/components/CategoriesSidebar";
-import {useUiState} from "~/composables";
-
+import {useCms,useFacet} from "@vue-storefront/vendure";
+import {useUiState} from "~/composables"
+import {onSSR} from "@vue-storefront/core";
 export default {
   name: 'DefaultLayout',
 
@@ -58,6 +59,12 @@ export default {
   },
   setup(){
     const {isDarkMode} = useUiState();
+     const {search:searchCms}=useCms();
+        const { search } = useFacet();
+      onSSR(async () => {
+      await search({ sort: { name: 'DESC' }, take: 8});
+      await searchCms(['HERO_SECTION','POPUP','STATIC'])
+    });
     return{isDarkMode}
   },
 };

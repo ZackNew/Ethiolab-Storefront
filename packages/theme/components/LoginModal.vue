@@ -1,16 +1,16 @@
 <template>
   <SfModal
-    v-e2e="'login-modal'"
-    :visible="isLoginModalOpen"
-    class="modal"
-    @close="closeModal"
+      v-e2e="'login-modal'"
+      :visible="isLoginModalOpen"
+      class="modal"
+      @close="closeModal"
   >
     <template #modal-bar>
       <SfBar
-        class="sf-modal__bar smartphone-only"
-        :close="true"
-        :title="$t(barTitle)"
-        @click:close="closeModal"
+          class="sf-modal__bar smartphone-only"
+          :close="true"
+          :title="$t(barTitle)"
+          @click:close="closeModal"
       />
     </template>
     <div v-if="currentScreen === SCREEN_LOGIN || currentScreen === SCREEN_REGISTER">
@@ -82,23 +82,23 @@
           <form class="form" @submit.prevent="handleSubmit(handleForgotten)">
             <ValidationProvider rules="required|email" v-slot="{ errors }">
               <SfInput
-                v-e2e="'forgot-modal-email'"
-                v-model="form.username"
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-                name="email"
-                :label="$t('Forgot Password Modal Email')"
-                class="form__element"
+                  v-e2e="'forgot-modal-email'"
+                  v-model="form.username"
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                  name="email"
+                  :label="$t('Forgot Password Modal Email')"
+                  class="form__element"
               />
             </ValidationProvider>
             <div v-if="forgotPasswordError.request">
               {{ forgotPasswordError.request.message }}
             </div>
             <SfButton
-              v-e2e="'forgot-modal-submit'"
-              type="submit"
-              class="sf-button--full-width form__button"
-              :disabled="forgotPasswordLoading"
+                v-e2e="'forgot-modal-submit'"
+                type="submit"
+                class="sf-button--full-width form__button"
+                :disabled="forgotPasswordLoading"
             >
               <SfLoader :class="{ loader: forgotPasswordLoading }" :loading="forgotPasswordLoading">
                 <div>{{ $t('Reset Password') }}</div>
@@ -118,35 +118,35 @@
           <form class="form" @submit.prevent="handleSubmit(handleRegister)" autocomplete="off">
             <ValidationProvider rules="required|email" v-slot="{ errors }">
               <SfInput
-                v-e2e="'login-modal-email'"
-                v-model="form.email"
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-                name="email"
-                label="Your email"
-                class="form__element"
+                  v-e2e="'login-modal-email'"
+                  v-model="form.email"
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                  name="email"
+                  label="Your email"
+                  class="form__element"
               />
             </ValidationProvider>
             <ValidationProvider rules="required" v-slot="{ errors }">
               <SfInput
-                v-e2e="'login-modal-firstName'"
-                v-model="form.firstName"
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-                name="first-name"
-                label="First Name"
-                class="form__element"
+                  v-e2e="'login-modal-firstName'"
+                  v-model="form.firstName"
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                  name="first-name"
+                  label="First Name"
+                  class="form__element"
               />
             </ValidationProvider>
             <ValidationProvider rules="required" v-slot="{ errors }">
               <SfInput
-                v-e2e="'login-modal-lastName'"
-                v-model="form.lastName"
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-                name="last-name"
-                label="Last Name"
-                class="form__element"
+                  v-e2e="'login-modal-lastName'"
+                  v-model="form.lastName"
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                  name="last-name"
+                  label="Last Name"
+                  class="form__element"
               />
             </ValidationProvider>
             <ValidationProvider rules="required" v-slot="{ errors }">
@@ -176,9 +176,9 @@
               {{ error.register }}
             </div>
             <SfButton
-              type="submit"
-              class="sf-button--full-width form__button"
-              :disabled="loading"
+                type="submit"
+                class="sf-button--full-width form__button"
+                :disabled="loading"
             >
               <SfLoader :class="{ loader: loading }" :loading="loading">
                 <div>{{ $t('Create an account') }}</div>
@@ -194,7 +194,6 @@
         </div>
       </div>
     </transition>
-
   </SfModal>
 </template>
 <script>
