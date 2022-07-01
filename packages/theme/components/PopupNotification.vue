@@ -50,7 +50,7 @@ export default {
       disablePopUpMethod,
       isMobileMenuOpen,
       getCms,
-      popup,
+      // popup,
       popupContent
     }
   }
