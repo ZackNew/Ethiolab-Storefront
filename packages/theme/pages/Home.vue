@@ -13,12 +13,12 @@
         <LazyHydrate>
           <SfBanner
               class="advert"
-              title="SMALL SALE"
-              subtitle="High Quality Lab Equipments"
-              description="Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical."
-              buttonText="Shop Now"
+              :title="adSection.title || 'SMALL SALE'"
+              :subtitle="adSection.overview || 'High Quality Lab Equipments'"
+              :description="adSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'"
+              :buttonText="adSection.buttonText || 'Shop Now'"
               background=""
-              image="/homepage/bannerA.webp"
+              :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory">
 
           </SfBanner>
@@ -170,6 +170,7 @@ import CategoriesAccordion from "~/components/CategoriesAccordion";
 import {onSSR} from "@vue-storefront/core";
 import {computed, onMounted} from "@vue/composition-api";
 import { getCalculatedPrice } from '~/helpers';
+import getCms from '@vue-storefront/vendure-api/src/api/cms';
 
 export default {
   name: 'Home',
@@ -212,9 +213,13 @@ export default {
     const { result } = useFacet();
     const products = computed(() => result.value.data.items);
     const heroSection =computed(()=>JSON.parse(getCms.value[0].content))
+    const adSection = computed(() => JSON.parse(getCms.value[3].content));
     const heroImage = computed(()=>getCms.value[0].featuredAsset.preview)
+    const adImage = computed(()=>getCms.value[3].featuredAsset.preview)
     const headerNavigation = [];
     console.log('products',products)
+          console.log("the adsection value is ", adSection);
+
     const getTree = ()=>{
       categories.value.items.forEach((a)=>{
         if (a.children.length > 0) {
@@ -251,7 +256,9 @@ export default {
       isInCart,
       cart,
       heroSection,
-      heroImage
+      heroImage,
+      adSection,
+      adImage
 
     };
   },

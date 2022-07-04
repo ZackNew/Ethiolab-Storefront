@@ -10,7 +10,7 @@
       @click:change="changeActivePage"
     >
       <SfContentPage
-        v-for="(page, key) in staticPages || pages"
+        v-for="(page, key) in policyPages || pages"
         :key="key"
         :title="$t(page.name)"
       >
@@ -65,7 +65,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'Home page description'
+          content: 'Policy page description'
         }
       ]
     };
@@ -73,10 +73,11 @@ export default {
   setup(props, context) {
     const { $router, $route } = context.root;
     const {search:searchCms,getCms}=useCms();
-    const staticPages=computed(()=>JSON.parse(getCms.value.content))
-    onSSR(async () => {
-      await searchCms('POLICIES')
-    });
+    const policyPages=computed(()=>JSON.parse(getCms.value[4].content))
+    // console.log("the fetched vaue is ", policyPages)
+    // onSSR(async () => {
+    //   await searchCms('POLICIES')
+    // });
     const activePage = computed(() => {
       const { pageName } = $route.params;
       if (pageName) {
@@ -87,7 +88,7 @@ export default {
     const changeActivePage = async (title) => {
       $router.push(`/policy/${(title || '').toLowerCase().replaceAll(' ', '-')}`);
     };
-    return { changeActivePage, activePage,staticPages };
+    return { changeActivePage, activePage,policyPages };
   },
   data() {
     return {

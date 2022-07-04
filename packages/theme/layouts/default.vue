@@ -63,7 +63,7 @@ export default {
         const { search } = useFacet();
       onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8});
-      await searchCms(['HERO_SECTION','POPUP','STATIC'])
+      await searchCms(['HERO_SECTION','POPUP','STATIC','ADVERTISEMENT',"POLICIES"])
     });
     return{isDarkMode}
   },
