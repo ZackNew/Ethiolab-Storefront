@@ -44,6 +44,7 @@ import {useUiState} from "~/composables"
 import {onSSR} from "@vue-storefront/core";
 export default {
   name: 'DefaultLayout',
+  middleware: "themeChecker",
 
   components: {
     CategoriesSidebar,

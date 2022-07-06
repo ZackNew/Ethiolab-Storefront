@@ -5,13 +5,13 @@
       <template #modal-bar>
         <div class="flex">
           <div class="lg:p-8 mx-3 my-auto">
-            <div class="uppercase tracking-wide text-5xl text-indigo-500 font-semibold  text-gray-800"
+            <div class="sf-heading__title uppercase tracking-wide text-5xl text-indigo-500 font-semibold  text-gray-800"
                v-html="popupContent.title || 'Title'">
             </div>
-            <p class="mt-4 max-w-md text-slate-500" v-html="popupContent.description || 'kirubel'"></p>
+            <p class="sf-heading__description mt-4 max-w-md text-slate-500" v-html="popupContent.description || 'kirubel'"></p>
             <div class="mt-3">
               <input type="checkbox" v-model="disablePopUp" v-on:change="disablePopUpMethod()">
-              <span class="text-slate-500">Do not show this popup again</span>
+              <span class="sf-heading__description text-slate-500">Do not show this popup again</span>
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@ export default {
     const {enablePopUp, togglePopUp} = useUiState();
     const disablePopUp = ref(false);
     const {getCms} = useCms();
-    const popup = getCms.value.filter((item)=>item.cmsType==='POPUP').map(filteredObj => filteredObj.content);
+    const popup = getCms.value.filter((item)=>item?.cmsType==='POPUP').map(filteredObj => filteredObj.content);
    const popupContent= JSON.parse(popup);
     const {isMobileMenuOpen} = useUiState();
     const disablePopUpMethod = () => {
