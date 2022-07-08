@@ -1,7 +1,7 @@
 <template>
   <client-only>
   <div id="home">
-    <PopupNotification/>
+    <!-- <PopupNotification/> -->
       <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
 <!--        categories-->
       <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">

@@ -91,6 +91,9 @@
         </div>
       </div>
     </SfTab>
+    <SfTab title="My Quotes">
+         My Quotes
+    </SfTab>
   </SfTabs>
 </template>
 
@@ -106,8 +109,12 @@ import {
 import { computed, ref } from '@vue/composition-api';
 import { useUserOrder, orderGetters } from '@vue-storefront/vendure';
 import { AgnosticOrderStatus, onSSR } from '@vue-storefront/core';
-
+import { useUser } from '@vue-storefront/vendure';
+import axios from 'axios'
+import gql from 'graphql-tag';
+import { print } from 'graphql';
 export default {
+
   name: 'PersonalDetails',
   components: {
     SfTabs,
@@ -118,9 +125,22 @@ export default {
     SfArrow,
   },
   setup() {
+    const quotes = ref([])
+    const  mutation = gql`
+    query getQuotesOf($email: String!){
+          getQueryOf(email: $email)    {
+            id 
+          }
+    }`
+    axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{email: 'eben@gmail.com'}})
+    .then(data => console.log(data))
+    
+    
     const limit = 10;
     const { orders, search } = useUserOrder();
     const currentOrder = ref(null);
+    const user = useUser()
+
 
     onSSR(async () => {
       await search({ limit, offset: 0, sort: 'createdAt desc' });
