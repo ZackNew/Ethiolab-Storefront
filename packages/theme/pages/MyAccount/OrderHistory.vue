@@ -92,7 +92,7 @@
       </div>
     </SfTab>
     <SfTab title="My Quotes">
-         My Quotes
+         <div v-for="quote of quotes">Subject {{quote.subject}}  Message: {{quote.msg}}</div>
     </SfTab>
   </SfTabs>
 </template>
@@ -129,11 +129,17 @@ export default {
     const  mutation = gql`
     query getQuotesOf($email: String!){
           getQueryOf(email: $email)    {
-            id 
+            id,
+            #fromEmail,
+            msg,
+            subject
           }
     }`
     axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{email: 'eben@gmail.com'}})
-    .then(data => console.log(data))
+    .then(data =>{
+      console.log(data)
+        quotes.value = data.data.data.getQueryOf
+    })
     
     
     const limit = 10;
@@ -182,7 +188,8 @@ export default {
       goNext,
       goPrev,
       orderGetters,
-      currentOrder
+      currentOrder,
+      quotes
     };
   }
 };
