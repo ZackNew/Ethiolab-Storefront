@@ -92,7 +92,10 @@
       </div>
     </SfTab>
     <SfTab title="My Quotes">
-         <div v-for="quote of quotes">Subject {{quote.subject}}  Message: {{quote.msg}}</div>
+         <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
+         <br />Message: {{quote.msg}}
+             
+         </div>
     </SfTab>
   </SfTabs>
 </template>
@@ -130,9 +133,11 @@ export default {
     query getQuotesOf($email: String!){
           getQueryOf(email: $email)    {
             id,
+            productDescr,
             #fromEmail,
             msg,
-            subject
+            subject,
+            createdAt
           }
     }`
     axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{email: 'eben@gmail.com'}})
