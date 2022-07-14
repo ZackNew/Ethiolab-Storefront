@@ -19,7 +19,8 @@ module.exports = {
         dark_accent:'#182533',
         light_accent:'#edeef8',
         faded_white:'#FFFFFF93',
-        faded_black:'#2f2f2f'
+        faded_black:'#2f2f2f',
+        light_gray: '#D3D3D3'
     },
   },
   plugins: [],

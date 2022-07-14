@@ -244,7 +244,6 @@ export default {
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data.items);
-    console.log("product value is", products.value)
     const heroSection =computed(()=>JSON.parse(getCms.value[0].content))
     const adSection = computed(() => JSON.parse(getCms.value[3].content));
     const heroImage = computed(()=>getCms.value[0].featuredAsset.preview)
