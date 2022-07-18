@@ -226,7 +226,10 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, onMounted } from '@vue/composition-api'
+import { useCategory, categoryGetters } from '@vue-storefront/vendure';
+import { onSSR } from '@vue-storefront/core'
+import {computed} from "@vue/composition-api";
 
 export default defineComponent({
     setup() {
@@ -236,10 +239,23 @@ export default defineComponent({
             let temp = checked;
             checked = !temp;
         }
+           const { categories, search } = useCategory('menu-categories');
+
+    const headerNavigation = computed(() => categoryGetters.getNavigation(categories.value));
+
+    onSSR(async () => {
+      await search();
+    });
+
+    onMounted(() => {
+        console.log("the value of categories is ", categories.value.items)
+    })
 
         return {
             check,
-            checked
+            checked,
+            categories,
+            headerNavigation
         }
         
     },
