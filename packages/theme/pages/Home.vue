@@ -4,11 +4,10 @@
     <PopupNotification/>
       <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
 <!--        categories-->
-      <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">
+      <!-- <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">
         <LazyHydrate when-visible>
-
-     <CategoriesAccordion open-state="all"/>
-        </LazyHydrate>
+          <CategoriesAccordion open-state="all"/>
+        </LazyHydrate> 
         <SfDivider/>
         <LazyHydrate>
           <SfBanner
@@ -20,10 +19,9 @@
               background=""
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory">
-
           </SfBanner>
-        </LazyHydrate>
-      </div>
+        </LazyHydrate> 
+      </div> -->
         <div class="md:col-span-9 col-span-12 md:ml-3 ">
         <LazyHydrate when-visible>
           <div class="similar-products">
@@ -215,7 +213,8 @@ export default {
     const heroSection =computed(()=>JSON.parse(getCms.value[0].content))
     const adSection = computed(() => JSON.parse(getCms.value[3].content));
     const heroImage = computed(()=>getCms.value[0].featuredAsset.preview)
-    const adImage = computed(()=>getCms.value[3].featuredAsset.preview)
+    const adImage = computed(()=>getCms.value[3].featuredAsset.preview);
+    console.log(adImage);
     const headerNavigation = [];
     console.log('products',products)
           console.log("the adsection value is ", adSection);

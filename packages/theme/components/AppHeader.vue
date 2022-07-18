@@ -19,7 +19,6 @@
           />
         </nuxt-link>
       </template>
-
       <template #aside>
          <div class="flex flex-row justify-between">
         <LocaleSelector class="smartphone-only" />
@@ -110,6 +109,9 @@
       class="search-result-container"
     />
     <SfOverlay :visible="isSearchOpen" />
+    <template>
+        <HeaderNavigation :isMobile="isMobile" />
+    </template>
   </div>
 </template>
 
@@ -156,6 +158,7 @@ import {
   unMapMobileObserver
 } from '@storefront-ui/vue/src/utilities/mobile-observer.js';
 import debounce from 'lodash.debounce';
+import HeaderNavigation from './HeaderNavigation';
 import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import { useProduct } from '@vue-storefront/vendure';
 export default {
@@ -175,7 +178,8 @@ export default {
     DropdownNavigationItem,
     SfTextarea,
     SfModal,
-    ThemeChanger
+    ThemeChanger,
+    HeaderNavigation
   },
   directives: { clickOutside },
   setup(props, { root }) {
