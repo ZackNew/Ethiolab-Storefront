@@ -1,0 +1,84 @@
+<template>
+  <div class="sub-body">
+      <div class="content">
+        <a :key="-1" :href="localePath(`/c/${this.$props.slug}`)">{{this.$props.title}}</a>
+        <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
+        <div class="grid grid-rows-4 grid-cols-2 gap-6 overlay">
+            <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{sub.label}}</a>
+        </div>
+      </div>
+  </div>
+</template>
+<script>
+export default {
+    name: "HeaderSubNavigation",
+    components: {
+        
+    },
+    props: {
+        title:String,
+        subnavList:Array,
+        slug:String
+    },
+    setup() {
+        
+    },
+}
+</script>
+<style scoped>
+.overlay{
+  display: none !important;
+  text-align: 5%;
+  background:rgb(255,255,255) !important;
+  opacity: 1 !important;
+  /* width: 300% !important; */
+}
+
+.sub-body{
+    margin-bottom: 2%;
+    width: 30%;
+    height: 50%;
+}
+
+.content{
+    position: absolute;
+    /* left: 0%;  */
+}
+
+.content>a{
+    display: block;
+    width: 120% !important;
+    text-align: left;
+    margin-bottom: 10%;
+}
+
+.content:hover>.overlay{
+  position: absolute;
+  left: 120% !important;
+  top: 25% !important;
+  display: block !important;
+  width: 250px !important;
+  min-height: 200px !important;
+  /* border: 0.1px solid var(--c-bg-primary) !important; */
+  box-shadow: 2px rgb(0, 0, 0, 0.5);
+  z-index: 2 !important;
+  opacity: 1 !important;
+}
+
+.overlay>a{
+  display: inline-block;
+  margin-left: 5% !important;
+  width: 80%;
+}
+a:hover{
+  /* border-bottom:  0.1px solid var(--c-bg-primary) !important; */
+  color: var(--c-bg-primary);
+  font-weight: bold;
+}
+
+.content:hover>a{
+    border-bottom: 0.1px solid var(--c-bg-primary) !important;
+    font-weight: bold;
+    color: var(--c-bg-primary);
+}
+</style>
