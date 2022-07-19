@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <p class="mt-4 ml-4 mb-2 text-sm text-gray">
-      <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Category</NuxtLink> | 
-      <span>Subcategory</span>
+  <div class="ml-10">
+    <p class="mt-4 mb-2 text-sm text-gray">
+      <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Shope by brand</NuxtLink> | 
+      <span>brand name</span>
     </p>
-    <div class="flex mt-4">
-      <!-- Side filters -->
-      <div class="shadow-2xl rounded ml-4 w-2/6 h-3/4">
+    <!-- Side Bar -->
+    <div class="flex">
+      <div class="shadow-2xl rounded w-2/6 h-3/4">
         <div class="m-2">
           <p class="sf-heading__description m-2 font-xs mt-6">search with in these results:</p>
           <div class="my-2">
@@ -24,6 +24,11 @@
             v-for="filter in filters"
             :key="filter.filter_title" 
             class="mb-2 px-2 accordion-bg" transition="" open="all" showChevron>
+            <SfAccordionItem header="category" class="sf-accordion">
+              <ul class="ml-3" v-for="category in categories" :key="category">
+                <li class="mb-3"><a href="# ">{{ category }}</a></li>
+              </ul>
+            </SfAccordionItem>
             <SfAccordionItem :header="filter.filter_title" class="sf-accordion -mb-4">
               <ul v-for="list in filter.filter_options" :key="list">
                 <li class="ml-3"><input type="checkbox" class="mr-4" /> {{ list }} </li>
@@ -32,13 +37,14 @@
           </SfAccordion>
         </div>
       </div>
-      <div class="ml-2">
-        <!-- Subcategory name and description -->
-        <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">Subcategory Title</h2>
-        <div class="card shadow-lg my-4 flex w-auto mr-5">
+
+      <!-- Main Content -->
+      <div class="ml-4">
+        <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">Cole Parmer</h2>
+        <div class="card shadow-lg mt-4 flex w-auto mr-10">
           <img
             class="h-36 w-auto my-auto bg-light"
-            src="../static/homepage/productA.webp"
+            src="../static/icon.png"
             alt=""
           />
           <div class="bg-faded_black">
@@ -50,35 +56,15 @@
             </p>
           </div>
         </div>
-        <!-- Ad section -->
-        <div
-          style="background-color: #e2e5de"
-          class="flex card mr-5 w-auto h-16 mb-10"
-        >
-          <img class="w-32 object-cover" src="../static/icon.png" alt="" />
-          <div class="relative overflow-hidden">
-            <img class="w-full" src="../static/homepage/bannerA.webp" alt="" />
-            <div
-              class="absolute flex justify-evenly w-full bottom-0 inset-x-0 py-2 text-xs leading-4"
-            >
-              <p class="font-semibold text-4xl font-sans -ml-16">
-                This is a AD
-              </p>
-              <button class="bg-blue-500 font-bold">Shop Now</button>
-            </div>
-          </div>
-        </div>
 
-        <div
-          class="card mr-5 w-auto h-12 bg-light_accent"
-        >
+        <div class="card mr-10 mt-5 h-12 bg-light_accent">
           <p class="float-left pt-3 ml-3">Number of Results | sortby</p>
           <button class="mt-2 ml-3 bg-dark p-1">Best Match</button>
         </div>
-        <!-- Products -->
+
         <div class="grid grid-cols-4">
-          <div class="card shadow-lg w-52 my-3 ml-2 bg-light_accent" v-for="i in 10" :key="i">
-            <img src="../static/homepage/productA.webp" alt="" />
+          <div class="card shadow-lg w-52 my-3 bg-light_accent" v-for="i in 10" :key="i">
+            <img src="../static/homepage/productC.webp" alt="" />
             <h3 class="text-center m-3">link</h3>
             <h4 class="text-center font-serif m-3">
               $925.00 - $2,080.00USD / Each
@@ -89,23 +75,17 @@
             >
               View All
             </button>
-          </div>
+          </div>  
         </div>
 
-        <div
-          style="background-color: #e2e5de"
-          class="card mr-16 ml-4 mt-5 w-auto h-12"
-        >
-          <p class="float-left pt-3 ml-3">Showing 1-10 of 10</p>
-        </div>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
 import { SfAccordion, SfSearchBar } from "@storefront-ui/vue";
-
 export default {
   data() {
     return {
@@ -129,13 +109,18 @@ export default {
         },
         { filter_title: 'Capacity', filter_options: ['0.22', '0.31', '0.33'] },
       ],
+      categories: [
+        'Laboratory equipment', 'Laboratiory Supplies', 'Water Quality Products', 'Test and Measurment', 'Heating and Cooling'
+      ],
     };
   },
   components: {
     SfAccordion,
-    SfSearchBar, 
+    SfSearchBar,
   },
-};
+}
 </script>
 
-<style></style>
+<style>
+
+</style>
