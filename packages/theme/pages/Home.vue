@@ -2,26 +2,28 @@
   <client-only>
   <div id="home">
     <PopupNotification/>
-      <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
+ <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
 <!--        categories-->
-      <!-- <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">
-        <LazyHydrate when-visible>
-          <CategoriesAccordion open-state="all"/>
-        </LazyHydrate> 
-        <SfDivider/>
-        <LazyHydrate>
-          <SfBanner
-              class="advert"
-              :title="adSection.title || 'SMALL SALE'"
-              :subtitle="adSection.overview || 'High Quality Lab Equipments'"
-              :description="adSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'"
-              :buttonText="adSection.buttonText || 'Shop Now'"
-              background=""
-              :image="adImage || '/homepage/bannerA.webp'"
-              link="/c/clinical-laboratory">
-          </SfBanner>
-        </LazyHydrate> 
-      </div> -->
+        <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">
+          <LazyHydrate when-visible>
+
+          <CategoriesAccordion open-state=""/>
+          </LazyHydrate>
+          <SfDivider/>
+          <LazyHydrate>
+            <SfBanner
+                class="advert"
+                :title="adSection.title || 'SMALL SALE'"
+                :subtitle="adSection.overview || 'High Quality Lab Equipments'"
+                :description="adSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'"
+                :buttonText="adSection.buttonText || 'Shop Now'"
+                background=""
+                :image="adImage || '/homepage/bannerA.webp'"
+                link="/c/clinical-laboratory">
+
+            </SfBanner>
+          </LazyHydrate>
+        </div>
         <div class="md:col-span-9 col-span-12 md:ml-3 ">
         <LazyHydrate when-visible>
           <div class="similar-products">
