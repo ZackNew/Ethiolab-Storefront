@@ -1,42 +1,16 @@
 <template>
   <div class="ml-10">
+    <!-- <SfBreadcrumbs
+      class="breadcrumbs desktop-only"
+      :breadcrumbs="breadcrumbs"
+    /> -->
     <p class="mt-4 mb-2 text-sm text-gray">
       <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Shope by brand</NuxtLink> | 
       <span>brand name</span>
     </p>
     <!-- Side Bar -->
     <div class="flex">
-      <div class="shadow-2xl rounded w-2/6 h-3/4">
-        <div class="m-2">
-          <p class="sf-heading__description m-2 font-xs mt-6">search with in these results:</p>
-          <div class="my-2">
-            <SfSearchBar
-              placeholder="Search for items"
-              :value="null"
-              :icon='{"icon":"search","size":"1.25rem","color":"#43464E"}'
-              aria-label="Search"
-              class="w-10/12 mx-2 border rounded bg-light_accent"
-            />
-          </div>
-
-          <!-- filter options -->
-          <SfAccordion 
-            v-for="filter in filters"
-            :key="filter.filter_title" 
-            class="mb-2 px-2 accordion-bg" transition="" open="all" showChevron>
-            <SfAccordionItem header="category" class="sf-accordion">
-              <ul class="ml-3" v-for="category in categories" :key="category">
-                <li class="mb-3"><a href="# ">{{ category }}</a></li>
-              </ul>
-            </SfAccordionItem>
-            <SfAccordionItem :header="filter.filter_title" class="sf-accordion -mb-4">
-              <ul v-for="list in filter.filter_options" :key="list">
-                <li class="ml-3"><input type="checkbox" class="mr-4" /> {{ list }} </li>
-              </ul>
-            </SfAccordionItem>
-          </SfAccordion>
-        </div>
-      </div>
+      <SubcategoryBrandAccordion :categories="categories" :filters="filters"/>
 
       <!-- Main Content -->
       <div class="ml-4">
@@ -85,38 +59,45 @@
 </template>
 
 <script>
-import { SfAccordion, SfSearchBar } from "@storefront-ui/vue";
+import { SfAccordion, SfSearchBar, SfBreadcrumbs } from "@storefront-ui/vue";
+import SubcategoryBrandAccordion from "~/components/SubcategoryBrandAccordion";
+
 export default {
-  data() {
+  setup () {
+    const filters = [
+      {
+        filter_title: 'Brand',
+        filter_options: ['Sartorius', 'Ohaus', 'Cole parmer'],
+      },
+      { filter_title: 'Color', filter_options: ['Indigo', 'yellow', 'Cyan'] },
+      {
+        filter_title: 'Price Range',
+        filter_options: [
+          '1000 ETB and less',
+          '1000 to 10,000 ETB',
+          '10,000 ETB and more',
+        ],
+      },
+      {
+        filter_title: 'Calibration Type',
+        filter_options: ['Internal', 'External', 'Internal Calibration'],
+      },
+      { filter_title: 'Capacity', filter_options: ['0.22', '0.31', '0.33'] },
+    ]
+    const categories = [
+        'Laboratory equipment', 'Laboratiory Supplies', 'Water Quality Products', 'Test and Measurment', 'Heating and Cooling',
+      ]
     return {
-      filters: [
-        {
-          filter_title: 'Brand',
-          filter_options: ['Sartorius', 'Ohaus', 'Cole parmer'],
-        },
-        { filter_title: 'Color', filter_options: ['Indigo', 'yellow', 'Cyan'] },
-        {
-          filter_title: 'Price Range',
-          filter_options: [
-            '1000 ETB and less',
-            '1000 to 10,000 ETB',
-            '10,000 ETB and more',
-          ],
-        },
-        {
-          filter_title: 'Calibration Type',
-          filter_options: ['Internal', 'External', 'Internal Calibration'],
-        },
-        { filter_title: 'Capacity', filter_options: ['0.22', '0.31', '0.33'] },
-      ],
-      categories: [
-        'Laboratory equipment', 'Laboratiory Supplies', 'Water Quality Products', 'Test and Measurment', 'Heating and Cooling'
-      ],
+      filters,
+      categories,
+      // breadcrumbs,
     };
   },
   components: {
     SfAccordion,
     SfSearchBar,
+    SfBreadcrumbs,
+    SubcategoryBrandAccordion
   },
 }
 </script>

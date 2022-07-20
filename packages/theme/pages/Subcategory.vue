@@ -1,39 +1,18 @@
 <template>
   <div>
+    <!-- <SfBreadcrumbs
+      class="breadcrumbs desktop-only"
+      :breadcrumbs="breadcrumbs"
+    /> -->
     <p class="mt-4 ml-4 mb-2 text-sm text-gray">
       <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Category</NuxtLink> | 
       <span>Subcategory</span>
     </p>
     <div class="flex mt-4">
-      <!-- Side filters -->
-      <div class="shadow-2xl rounded ml-4 w-2/6 h-3/4">
-        <div class="m-2">
-          <p class="sf-heading__description m-2 font-xs mt-6">search with in these results:</p>
-          <div class="my-2">
-            <SfSearchBar
-              placeholder="Search for items"
-              :value="null"
-              :icon='{"icon":"search","size":"1.25rem","color":"#43464E"}'
-              aria-label="Search"
-              class="w-10/12 mx-2 border rounded bg-light_accent"
-            />
-          </div>
-
-          <!-- filter options -->
-          <SfAccordion 
-            v-for="filter in filters"
-            :key="filter.filter_title" 
-            class="mb-2 px-2 accordion-bg" transition="" open="all" showChevron>
-            <SfAccordionItem :header="filter.filter_title" class="sf-accordion -mb-4">
-              <ul v-for="list in filter.filter_options" :key="list">
-                <li class="ml-3"><input type="checkbox" class="mr-4" /> {{ list }} </li>
-              </ul>
-            </SfAccordionItem>
-          </SfAccordion>
-        </div>
-      </div>
+      <!-- Side filter search -->
+      <SubcategoryBrandAccordion :filters="filters" />
+      <!-- Subcategory name and description -->
       <div class="ml-2">
-        <!-- Subcategory name and description -->
         <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">Subcategory Title</h2>
         <div class="card shadow-lg my-4 flex w-auto mr-5">
           <img
@@ -77,9 +56,9 @@
         </div>
         <!-- Products -->
         <div class="grid grid-cols-4">
-          <div class="card shadow-lg w-52 my-3 ml-2 bg-light_accent" v-for="i in 10" :key="i">
-            <img src="../static/homepage/productA.webp" alt="" />
-            <h3 class="text-center m-3">link</h3>
+          <div class="card shadow-lg w-52 my-3 ml-2 bg-light_accent" v-for="i in 5" :key="i">
+            <img src="" alt="image" />
+            <!-- <h3 class="text-center m-3">link</h3> -->
             <h4 class="text-center font-serif m-3">
               $925.00 - $2,080.00USD / Each
             </h4>
@@ -104,12 +83,26 @@
 </template>
 
 <script>
-import { SfAccordion, SfSearchBar } from "@storefront-ui/vue";
+import { computed } from '@vue/composition-api';
+import { SfAccordion, SfSearchBar, SfBreadcrumbs } from "@storefront-ui/vue";
+import SubcategoryBrandAccordion from "~/components/SubcategoryBrandAccordion";
+import { useFacet, facetGetters } from '@vue-storefront/vendure';
+import { useUiHelpers } from '~/composables';
 
 export default {
-  data() {
-    return {
-      filters: [
+  name: 'Subcategory',
+  setup () {
+    const th = useUiHelpers();
+    const { result } = useFacet();
+    const searchResult = computed(() => facetGetters.getAgnosticSearchResult(result.value));
+    const rawCategoryTree = computed(() => searchResult.value?.data?.categories?.map(category => {
+      const tree = facetGetters.getTree(category.collection);
+      tree.isCurrent = th.doesUrlIncludesCategory(tree.slug);
+      return tree;
+    }));
+    const categoryTree = computed(() => getTreeWithoutEmptyCategories(rawCategoryTree.value));
+    console.log(categoryTree);
+    const filters = [
         {
           filter_title: 'Brand',
           filter_options: ['Sartorius', 'Ohaus', 'Cole parmer'],
@@ -128,12 +121,19 @@ export default {
           filter_options: ['Internal', 'External', 'Internal Calibration'],
         },
         { filter_title: 'Capacity', filter_options: ['0.22', '0.31', '0.33'] },
-      ],
+      ]
+    return {
+      th,
+      categoryTree,
+      filters,
+      // breadcrumbs,
     };
   },
   components: {
     SfAccordion,
     SfSearchBar, 
+    SfBreadcrumbs,
+    SubcategoryBrandAccordion
   },
 };
 </script>

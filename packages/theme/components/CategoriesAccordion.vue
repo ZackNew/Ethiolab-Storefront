@@ -24,7 +24,7 @@
           <SfMenuItem :label=subCat.label >
             <template #label="{ label }">
               <nuxt-link
-                  :to="'/c/'+subCat.slug"
+                  :to="'/s/'+subCat.slug"
                   :class="subCat.isCurrent ? 'sidebar--cat-selected' : 'mb-3'"
                   @click.native="closeSideNav()"
               >
