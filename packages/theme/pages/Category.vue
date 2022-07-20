@@ -156,7 +156,41 @@
             
 
               <LazyHydrate>
-                <CategoryFeature />
+                <!-- <CategoryFeature /> -->
+                  <div>
+                      <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3>
+                        <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
+                          <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
+                                 <div   v-for="(cat, i) in categoryTree && categoryTree " :key="i">
+                                    <div v-if="i == 0" class="grid grid-cols-3 gap-10 mt-10 mb-10">
+                                      <div v-for="(sub,j) in cat.items" :key="j">
+                                           <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                              
+                                               <div class="m-4">
+                                                    <h4 class="">{{sub.label}}</h4>
+                                               </div>
+                                              <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
+                                          </div>                                     
+                                         </div>
+                                    <!-- </div> -->
+                              <!-- <div :v-for="sub in value.items">
+                                  <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                              
+                                  <div class="m-4">
+                                          <h4 class="">{{sub.label}}</h4>
+                                    </div>
+                                    <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
+                              </div>
+                                   
+                      
+                            </div> -->
+                          </div>
+
+                     
+                        </div>
+                      </div>
+    
+                <!-- categoryTree.value[0]?.items -->
 
               </LazyHydrate>
 
@@ -425,7 +459,6 @@ export default {
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
-    console.log("use facet result value is ", result.value)
     const { changeFilters, isFacetColor } = useUiHelpers();
     const { toggleFilterSidebar } = useUiState();
 
@@ -447,14 +480,18 @@ export default {
       ...rawPagination.value
     }));
     // TODO: Refactor this getter
+    console.log("search result value is ", searchResult.value)
     const rawCategoryTree = computed(() => searchResult.value?.data?.categories?.map(category => {
       const tree = facetGetters.getTree(category.collection);
       tree.isCurrent = th.doesUrlIncludesCategory(tree.slug);
       return tree;
     }));
+    console.log("row category value is ", rawCategoryTree.value)
     const categoryTree = computed(() => getTreeWithoutEmptyCategories(rawCategoryTree.value));
+    console.log("category tree is ", categoryTree.value)
     const activeCategory = computed(() => {
       const items = categoryTree.value;
+      console.log("items value is ", items[0]?.label)
 
       if (!items || !items.length) {
         return '';
@@ -484,6 +521,7 @@ export default {
     onMounted(() => {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
+      console.log("the new category tree value is ",categoryTree.value)
     });
 
     const isFilterSelected = (facet, option) => (selectedFilters.value.attributes || []).includes(option.id);
