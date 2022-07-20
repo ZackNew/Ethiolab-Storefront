@@ -425,6 +425,7 @@ export default {
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
+    console.log("use facet result value is ", result.value)
     const { changeFilters, isFacetColor } = useUiHelpers();
     const { toggleFilterSidebar } = useUiState();
 

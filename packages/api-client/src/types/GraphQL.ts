@@ -169,6 +169,7 @@ export type Collection = Node & {
   translations: Array<CollectionTranslation>;
   productVariants: ProductVariantList;
   customFields?: Maybe<Scalars['JSON']>;
+  
 };
 
 
