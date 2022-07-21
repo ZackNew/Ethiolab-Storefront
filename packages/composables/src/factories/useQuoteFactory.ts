@@ -13,8 +13,8 @@ export function useQuoteFactory(){
         const myQuotes: ComputedProperty<Quote[]> = ref([])
         function deleteQuote(params: ComposableFunctionArgs<string>){}; 
         function load(){
-            context.$vendure.api.
-            myQuotes.value = [];
+          
+           
         };
         return {
             load,
