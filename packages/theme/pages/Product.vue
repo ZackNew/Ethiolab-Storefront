@@ -4,11 +4,12 @@
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
-    <div class="product">
+    <div class="flex">
       <LazyHydrate when-idle>
-        <SfGallery :images="productGallery" class="product__gallery" />
+        <!-- <SfGallery :images="productGallery" class="product__gallery" /> -->
+        <img class="w-80 h-80 ml-14 shadow-lg" src="~/static/icon.png" alt="">
       </LazyHydrate>
-      <div class="product__info">
+      <div class="ml-4 mr-10">
         <div class="product__header">
           <SfHeading
             :title="productGetters.getName(product)"
@@ -22,61 +23,72 @@
             class="product__drag-icon smartphone-only"
           />
         </div>
-        <div class="product__price-and-rating">
-          <SfPrice
-            :regular="productGetters.getPrice(product).regular.toLocaleString() + ' ETB'"
-          />
+        <div class="flex">
           <div>
-            <div class="product__rating">
-              <SfRating
-                :score="averageRating"
-                :max="5"
-              />
-              <a v-if="!!totalReviews" href="#" class="product__count">
-                ({{ totalReviews }})
-              </a>
+            <div class="mt-4">
+              
+              <div>
+                <div class="mt-4">
+                  <SfRating
+                    :score="averageRating"
+                    :max="5"
+                  />
+                  <a v-if="!!totalReviews" href="#" class="product__count">
+                    ({{ totalReviews }})
+                  </a>
+                </div>
+                <SfButton class="sf-button--text">{{ $t('Read all reviews') }}</SfButton>
+              </div>
             </div>
-            <SfButton class="sf-button--text">{{ $t('Read all reviews') }}</SfButton>
+            <div>
+              <div class="product__description desktop-only mt-8" v-html="productGetters.getDescription(product)">
+              </div>
+              <iframe width="560" height="315" :src='"https://www.youtube.com/embed/"+youtube_link'
+              title="YouTube video player" 
+              frameborder="0"
+              v-if="youtube_link !== ''" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen>
+              </iframe>
+              <!-- Options -->
+              <!-- <div v-if="options && options.length">
+                <SfSelect
+                  v-for="optionGroup in options"
+                  :key="optionGroup.id"
+                  v-model="configuration[optionGroup.value]"
+                  @input="option => updateFilter({ [optionGroup.value]: option })"
+                  :label="optionGroup.label"
+                  class="sf-select--underlined product__select-size bg-dark"
+                  :required="true"
+                >
+                  <SfSelectOption
+                    v-for="option in optionGroup.options"
+                    :key="option.id"
+                    :value="option.value"
+                  >
+                    {{option.label}}
+                  </SfSelectOption>
+                </SfSelect>
+              </div> -->
+            </div>
           </div>
-        </div>
-        <div>
-          <div class="product__description desktop-only" v-html="productGetters.getDescription(product)"></div>
-            <iframe width="560" height="315" :src='"https://www.youtube.com/embed/"+youtube_link'
-            title="YouTube video player" 
-            frameborder="0"
-            v-if="youtube_link !== ''" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen></iframe>
-          <div v-if="options && options.length">
-            <SfSelect
-              v-for="optionGroup in options"
-              :key="optionGroup.id"
-              v-model="configuration[optionGroup.value]"
-              @input="option => updateFilter({ [optionGroup.value]: option })"
-              :label="optionGroup.label"
-              class="sf-select--underlined product__select-size"
-              :required="true"
-            >
-              <SfSelectOption
-                v-for="option in optionGroup.options"
-                :key="option.id"
-                :value="option.value"
-              >
-                {{option.label}}
-              </SfSelectOption>
-            </SfSelect>
-          </div>
-          <SfAddToCart
+          <div class="card shadow-lg bg-light_accent">
+            <SfPrice
+                class="mx-4 my-7"
+                :regular="productGetters.getPrice(product).regular.toLocaleString() + ' ETB'"
+              />
+            <SfAddToCart
             v-e2e="'product_add-to-cart'"
             :stock="stock"
             v-model="qty"
             :disabled="loading"
             :canAddToCart="stock > 0"
-            class="product__add-to-cart"
+            class="product__add-to-cart mb-5 -mt-6"
             @click="addToCart"
           />
+          </div>
         </div>
-        <LazyHydrate when-idle>
+        <!-- <LazyHydrate when-idle>
           <SfTabs :open-tab="1" class="product__tabs">
             <SfTab :title="$t('Description')">
               <SfProperty
@@ -94,9 +106,11 @@
               </SfProperty>
             </SfTab>
             <SfTab :title="$t('Read reviews')" :key="reviewKey">
-              <!-- <div v-for="(review, index) in reviews" :key="index">
+            comment
+              <div v-for="(review, index) in reviews" :key="index">
                 {{review.summary}}
-              </div> -->
+              </div>
+            /comment
               <SfReview
                 v-for="review in reviews"
                 :key="review.id"
@@ -110,22 +124,81 @@
                 :hide-full-text="$t('Read less')"
                 class="product__review"
               />
-              <!-- :myReview="currentReview.value" @updateMyReview="updateMyReview" @addNewReview="addNewReview" -->
+              comment
+              :myReview="currentReview.value" @updateMyReview="updateMyReview" @addNewReview="addNewReview"
+              /comment
              <MyReview :productId="id" :currentUserHasNoReview="!currentUserHasReview"/>
             </SfTab>
           </SfTabs>
-        </LazyHydrate>
+        </LazyHydrate> -->
       </div>
     </div>
-    <LazyHydrate when-visible>
+    <!-- <LazyHydrate when-visible>
       <RelatedProducts
         :products="relatedProducts"
         :loading="relatedLoading"
         title="Related Products"
       />
-    </LazyHydrate>
+    </LazyHydrate> -->
     <!-- <LazyHydrate when-visible> -->
     <!-- </LazyHydrate> -->
+    <div class="flex justify-evenly bg-light_accent mt-6 pt-4 pb-10">
+      <div class="w-1/2">
+        <h3 class="font-thin mb-4 ml-16"> Specification and Description </h3>
+        <table class="table-auto w-2/3 border ml-16">
+          <tbody>
+            <tr>
+              <td>Capacity (kg)</td>
+              <td>25</td>
+            </tr>
+            <tr>
+              <td>Readability (g)</td>
+              <td>25</td>
+            </tr>
+            <tr>
+              <td>Platform Length (in)</td>
+              <td>40</td>
+            </tr>
+            <tr>
+              <td>Platform Width (in)</td>
+              <td>25</td>
+            </tr>
+            <tr>
+              <td>Min Temperature (° C)</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>Max Temperature (° C)</td>
+              <td>-10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="w-1/2 -ml-16 mr-8">
+        <h3 class="font-thin">More about this item</h3>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi eveniet, illum eligendi distinctio obcaecati magni error molestias, provident explicabo omnis doloribus animi voluptatum blanditiis esse. Fuga quisquam eos veniam aspernatur! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nostrum accusamus mollitia, autem officia harum quae itaque nesciunt eos commodi sunt numquam, ex beatae ea nihil? Neque optio doloremque quidem facilis.
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam, pariatur nulla qui exercitationem, aliquid fuga provident veritatis quisquam tempore commodi inventore debitis corporis minima facilis assumenda, praesentium eum optio omnis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur deserunt, nam aliquam accusamus iure perspiciatis ullam. Aut error, aliquam exercitationem aliquid neque corrupti perferendis illo accusantium nulla, quidem qui quam!
+        </p>
+      </div>
+    </div>
+    <div class="mx-14 mt-14">
+      <h3 class="font-extralight">Accessories</h3>
+      <div class="grid grid-cols-5">
+      <div class="card shadow-lg w-52 my-3 bg-light_accent" v-for="i in 5" :key="i">
+        <img src="../static/homepage/testTube.jpg" alt="" />
+        <h3 class="text-center m-3">link</h3>
+        <h4 class="text-center font-serif m-3">
+          $925.00 - $2,080.00USD / Each
+        </h4>
+        <p class="text-center m-3">description</p>
+        <button
+          class="mx-10 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+        >
+          Add to Cart
+        </button>
+      </div>
+      </div>
+    </div>
   </div>
 </template>
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -574,5 +647,19 @@ export default {
   100% {
     transform: translate3d(0, 0, 0);
   }
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
 }
 </style>

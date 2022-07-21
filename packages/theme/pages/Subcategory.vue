@@ -1,0 +1,141 @@
+<template>
+  <div>
+    <!-- <SfBreadcrumbs
+      class="breadcrumbs desktop-only"
+      :breadcrumbs="breadcrumbs"
+    /> -->
+    <p class="mt-4 ml-4 mb-2 text-sm text-gray">
+      <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Category</NuxtLink> | 
+      <span>Subcategory</span>
+    </p>
+    <div class="flex mt-4">
+      <!-- Side filter search -->
+      <SubcategoryBrandAccordion :filters="filters" />
+      <!-- Subcategory name and description -->
+      <div class="ml-2">
+        <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">Subcategory Title</h2>
+        <div class="card shadow-lg my-4 flex w-auto mr-5">
+          <img
+            class="h-36 w-auto my-auto bg-light"
+            src="../static/homepage/productA.webp"
+            alt=""
+          />
+          <div class="bg-faded_black">
+            <p class="py-4 ml-4 mr-4 text-white">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
+              voluptates illum consequatur necessitatibus voluptas, autem amet
+              nostrum in eos officia maxime voluptate possimus sapiente delectus
+              eum ipsam. Explicabo, aspernatur fuga.
+            </p>
+          </div>
+        </div>
+        <!-- Ad section -->
+        <div
+          style="background-color: #e2e5de"
+          class="flex card mr-5 w-auto h-16 mb-10"
+        >
+          <img class="w-32 object-cover" src="../static/icon.png" alt="" />
+          <div class="relative overflow-hidden">
+            <img class="w-full" src="../static/homepage/bannerA.webp" alt="" />
+            <div
+              class="absolute flex justify-evenly w-full bottom-0 inset-x-0 py-2 text-xs leading-4"
+            >
+              <p class="font-semibold text-4xl font-sans -ml-16">
+                This is a AD
+              </p>
+              <button class="bg-blue-500 font-bold">Shop Now</button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="card mr-5 w-auto h-12 bg-light_accent"
+        >
+          <p class="float-left pt-3 ml-3">Number of Results | sortby</p>
+          <button class="mt-2 ml-3 bg-dark p-1">Best Match</button>
+        </div>
+        <!-- Products -->
+        <div class="grid grid-cols-4">
+          <div class="card shadow-lg w-52 my-3 ml-2 bg-light_accent" v-for="i in 5" :key="i">
+            <img src="" alt="image" />
+            <!-- <h3 class="text-center m-3">link</h3> -->
+            <h4 class="text-center font-serif m-3">
+              $925.00 - $2,080.00USD / Each
+            </h4>
+            <p class="text-center m-3">description</p>
+            <button
+              class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+            >
+              View All
+            </button>
+          </div>
+        </div>
+
+        <div
+          style="background-color: #e2e5de"
+          class="card mr-16 ml-4 mt-5 w-auto h-12"
+        >
+          <p class="float-left pt-3 ml-3">Showing 1-10 of 10</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { computed } from '@vue/composition-api';
+import { SfAccordion, SfSearchBar, SfBreadcrumbs } from "@storefront-ui/vue";
+import SubcategoryBrandAccordion from "~/components/SubcategoryBrandAccordion";
+import { useFacet, facetGetters } from '@vue-storefront/vendure';
+import { useUiHelpers } from '~/composables';
+
+export default {
+  name: 'Subcategory',
+  setup () {
+    const th = useUiHelpers();
+    const { result } = useFacet();
+    const searchResult = computed(() => facetGetters.getAgnosticSearchResult(result.value));
+    const rawCategoryTree = computed(() => searchResult.value?.data?.categories?.map(category => {
+      const tree = facetGetters.getTree(category.collection);
+      tree.isCurrent = th.doesUrlIncludesCategory(tree.slug);
+      return tree;
+    }));
+    const categoryTree = computed(() => getTreeWithoutEmptyCategories(rawCategoryTree.value));
+    console.log(categoryTree);
+    const filters = [
+        {
+          filter_title: 'Brand',
+          filter_options: ['Sartorius', 'Ohaus', 'Cole parmer'],
+        },
+        { filter_title: 'Color', filter_options: ['Indigo', 'yellow', 'Cyan'] },
+        {
+          filter_title: 'Price Range',
+          filter_options: [
+            '1000 ETB and less',
+            '1000 to 10,000 ETB',
+            '10,000 ETB and more',
+          ],
+        },
+        {
+          filter_title: 'Calibration Type',
+          filter_options: ['Internal', 'External', 'Internal Calibration'],
+        },
+        { filter_title: 'Capacity', filter_options: ['0.22', '0.31', '0.33'] },
+      ]
+    return {
+      th,
+      categoryTree,
+      filters,
+      // breadcrumbs,
+    };
+  },
+  components: {
+    SfAccordion,
+    SfSearchBar, 
+    SfBreadcrumbs,
+    SubcategoryBrandAccordion
+  },
+};
+</script>
+
+<style></style>
