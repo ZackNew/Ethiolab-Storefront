@@ -223,15 +223,19 @@ export default {
     const products = computed(() => result.value.data?.items);
     //console.log(useTest())
  
-    const {writeQuote} = useQuote();
+    const {writeQuote, load, myQuotes} = useQuote();
     try{
-          const data = 
-          {subject: "dsdsdsdsds", msg: "This is not a drill", 
-                      productDescr: "dsdsds11111111", productIds: "[1]", 
-                      fromEmail: "eben@gmail.com", fromPhone: "0912701156", location: "addis ababa"
-          }
-           console.warn(`Data: `+ JSON.stringify(data))
-          writeQuote(data);
+          load({email: "eben@gmail.com"})
+          .then(
+            ()=> console.log('myQuote: ', myQuotes.value)
+          )
+          // const data = 
+          // {subject: "dsdsdsdsds", msg: "This is not a drill", 
+          //             productDescr: "dsdsds11111111", productIds: "[1]", 
+          //             fromEmail: "eben@gmail.com", fromPhone: "0912701156", location: "addis ababa"
+          // }
+          //  console.warn(`Data: `+ JSON.stringify(data))
+          ///writeQuote(data);
 
          
     }catch(e){

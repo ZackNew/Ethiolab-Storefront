@@ -4,12 +4,11 @@ import { CustomQuery } from '@vue-storefront/core';
 import { Context, RequestDataStructure, GetCartResponse, Order } from '../../types';
 import { NO_CACHE_FETCH_POLICY } from '../../helpers/constants';
 
-type getQuotesOfParams = {id: String}
-const getCart = async (context: Context, params: getQuotesOfParams,customQuery?: CustomQuery): Promise<GetCartResponse> => {
-  const getQuoteVars = {};
-
+type getQuotesOfParams = {email: String}
+const getQueryOf = async (context: Context, params: getQuotesOfParams,customQuery?: CustomQuery): Promise<GetCartResponse> => {
+  
   const { getQuote } = context.extendQuery(
-    customQuery, { activeOrder: { query: getQueryQuery, variables: getQuoteVars } }
+    customQuery, { getQuote: { query: getQueryQuery, variables: {...params} } }
   );
 
   const request = await context.client.query({
@@ -21,4 +20,4 @@ const getCart = async (context: Context, params: getQuotesOfParams,customQuery?:
 
 };
 
-export default getCart;
+export default getQueryOf;

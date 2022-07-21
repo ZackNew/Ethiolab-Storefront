@@ -53,10 +53,15 @@ export type UpdateCustomerEmailAddressResponse = MutationResponse<'updateCustome
 export type Quote = {id: number, msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds:string, productDescr: string}
 export type writeQuoteParams = {msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: string, productDescr: string}
 export type writeQuoteResult = MutationResponse<"writeQuote" ,Quote>
+export type getQuotesResult = QueryResponse<'getQueryOf', Quote[]>
+export type getQuotesOfParams = {email: string}
+
+export interface VendureApiMethods 
+{
+  getQueryOf(params: getQuotesOfParams, customQuery?: CustomQuery): Promise<getQuotesResult>;
+  writeQuote (params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult>;
 
 
-export interface VendureApiMethods {
-   writeQuote (params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult>;
   getProduct(params: ProductParams, customQuery?: CustomQuery): Promise<GetProductResponse>;
   getFacet(params: SearchParams, customQuery?: CustomQuery): Promise<GetFacetResponse>;
   getCategory(params: CollectionParams, customQuery?: CustomQuery): Promise<GetCategoryResponse>;

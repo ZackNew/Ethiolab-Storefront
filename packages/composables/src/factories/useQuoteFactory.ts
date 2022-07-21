@@ -7,14 +7,19 @@ export function useQuoteFactory(){
     return function useQuote() : UseQuote{
         const context = useVSFContext();
         async function writeQuote(params: ComposableFunctionArgs<writeQuoteParams>): Promise<Quote | undefined>{
-            const result =  await context.$vendure.api.writeQuote({...params});
+            console.log("WriteQuote=>", context.$vendure.api.writeQuote)
+             const result =  await context.$vendure.api.writeQuote({...params});
             return result.data.writeQuote;
+           
         }
         const myQuotes: ComputedProperty<Quote[]> = ref([])
         function deleteQuote(params: ComposableFunctionArgs<string>){}; 
-        function load(){
-          
-           
+        async function load(params: ComposableFunctionArgs<{email: string}>) {
+           // context.$vendure.api.getQueryOf(id)
+           console.log('Called load')
+           const data= await context.$vendure.api.getQueryOf({...params})
+           console.log('Load:: ', context.$vendure.api.getQueryOf, ' ', data.data?.getQueryOf )
+          // myQuotes.value = data.data.getQueryOf;
         };
         return {
             load,
