@@ -97,12 +97,12 @@ export default {
   /* margin: 0 auto !important; */
   position: absolute;
   left: 22.5% !important;
-  top: 19.5% !important;
+  /* top: 19.5vh !important; */
   right: 22.5% !important;
-  bottom: 38% !important;
-  display: inline-block !important;
-  /* width: 55% !important;
-  height: 42.5% !important; */
+  /* bottom: 38vh !important; */
+  display: block !important;
+  width: 55% !important;
+  height: 40% !important;
   /* border: 0.1px solid var(--c-bg-primary) !important; */
   box-shadow: 1px rgb(0, 0, 0, 0.2);
   z-index: 1 !important;

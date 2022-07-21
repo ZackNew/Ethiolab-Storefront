@@ -34,6 +34,10 @@ export default {
   /* width: 300% !important; */
 }
 
+/* .content>a{
+  display: block !important;
+} */
+
 .sub-body{
     margin-bottom: 2%;
     width: 30%;
@@ -69,6 +73,7 @@ export default {
   display: inline-block;
   margin-left: 5% !important;
   width: 80%;
+  height: 5% !important;
 }
 a:hover{
   /* border-bottom:  0.1px solid var(--c-bg-primary) !important; */

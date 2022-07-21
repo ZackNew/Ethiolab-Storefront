@@ -1,8 +1,5 @@
 <template>
     <div class="body">
-        <!-- <div class="header">
-
-        </div> -->
         <div class="grid grid-rows-6 grid-flow-col">
             <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id" :slug="navs.slug"/>
             <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
@@ -68,31 +65,28 @@ export default {
     text-align: left !important;
 }
 .body{
+    position: absolute !important;
     background:rgb(255,255,255,1) !important;
+    height: 100% !important;
+    overflow: hidden !important;
 }
 
 .grid{
-    margin-top: 5%;
-    margin-left: 2.5%;
-    width: 80%;
-    height: 75%;
+    margin-top: 5% !important;
+    margin-left: 2.5% !important;
+    width: 80% !important;
+    height: 75% !important;
 }
 
-.ad-banner{
+.sf-banner{
   width:20% !important;
-  height:100% !important;
-  position: relative;
+  height: 60% !important;
+  position: relative !important;
   left: 80% !important;
-  top: -87% !important;
+  /* top: -87% !important; */
   /* right: 0% !important; */
-  /* bottom: -10% !important; */
+  bottom: 90% !important;
   display: inline-block !important;
   /* border: 1px solid black; */
-}
-
-.header{
-    width:100%;
-    height: 25%;
-    /* border-bottom: 0.1px solid var(--c-bg-primary) !important; */
 }
 </style>
