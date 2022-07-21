@@ -160,12 +160,14 @@ import {
   SfCard
 } from '@storefront-ui/vue';
 import LazyHydrate from 'vue-lazy-hydration';
+import * as comps from "@vue-storefront/vendure" ;
 import Testimonial from '~/components/Testimonial.vue';
 import NewsletterModal from '~/components/NewsletterModal.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
 import { useUiState } from '../composables';
 import cacheControl from './../helpers/cacheControl';
-import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet,useCms} from "@vue-storefront/vendure";
+import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet,useCms,useQuote,
+ useTest, useAnotherTest} from "@vue-storefront/vendure";
 import CategoriesAccordion from "~/components/CategoriesAccordion";
 import {onSSR} from "@vue-storefront/core";
 import {computed, onMounted} from "@vue/composition-api";
@@ -203,7 +205,14 @@ export default {
     SfDivider,
     SfCard
   },
-  
+  /*
+     msg: String!
+        subject: String!
+        fromEmail: String!
+        fromPhone: String!
+        location: String!
+        productDescr: String!
+        productIds: [String]!*/
   setup() {
     const { toggleNewsletterModal } = useUiState();
     const {categories} = useCategory();
@@ -212,10 +221,26 @@ export default {
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+    //console.log(useTest())
+ 
+    const {writeQuote} = useQuote();
+    try{
+          const data = 
+          {subject: "dsdsdsdsds", msg: "This is not a drill", 
+                      productDescr: "dsdsds11111111", productIds: "[1]", 
+                      fromEmail: "eben@gmail.com", fromPhone: "0912701156", location: "addis ababa"
+          }
+           console.warn(`Data: `+ JSON.stringify(data))
+          writeQuote(data);
+
+         
+    }catch(e){
+      console.log(`Error ${e}`)
+    }
     
-    
-    console.log(getCms.value[0] )
-    
+   //console.log({comps})
+   // console.log(getCms.value[0] )
+
     const heroSection =computed(()=>JSON.parse(getCms.value[0]?.content ?? "{}"))
     const adSection = computed(() => JSON.parse(getCms.value[3]?.content?? "{}"));
     const heroImage = computed(()=>getCms.value[0]?.featuredAsset.preview)

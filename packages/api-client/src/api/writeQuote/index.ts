@@ -6,7 +6,7 @@ import { NO_CACHE_FETCH_POLICY } from '../../helpers/constants';
 
 
 
-type writeQuoteParams = {msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: String[], prodcutDescr: string}
+type writeQuoteParams = {msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: string, productDescr: string}
 
 const writeQuote = async (context: Context, params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult> => {
   const removeCartCouponVariables = {

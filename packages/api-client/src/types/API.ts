@@ -50,8 +50,11 @@ export type RequestPasswordResetResponse = MutationResponse<'requestPasswordRese
 export type ResetPasswordResponse = MutationResponse<'resetPassword', ResetPasswordResult>;
 export type UpdateCustomerEmailAddressResponse = MutationResponse<'updateCustomerEmailAddress', Success>;
 
-type writeQuoteParams = {msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: String[], prodcutDescr: string}
-export type writeQuoteResult = MutationResponse<"writeQuote" ,{id: number, msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: String[], prodcutDescr: string}>
+export type Quote = {id: number, msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds:string, productDescr: string}
+export type writeQuoteParams = {msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: string, productDescr: string}
+export type writeQuoteResult = MutationResponse<"writeQuote" ,Quote>
+
+
 export interface VendureApiMethods {
    writeQuote (params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult>;
   getProduct(params: ProductParams, customQuery?: CustomQuery): Promise<GetProductResponse>;
