@@ -144,7 +144,95 @@
         </LazyHydrate>
       </div>
       <SfLoader :class="{ loading }" :loading="loading">
-        <div class="products" v-if="!loading">
+        <div class="products m-5" v-if="!loading">
+          <div class="h-40 bg-bg_dark grid grid-cols-3">
+            <img src="/categories/cat2.jpeg" class="h-40"/>
+                <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
+                   electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
+                    metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
+                    Our NIST-traceable calibration services and repairs help you meet your quality, regulatory, 
+                    and compliance needs.</p>
+          </div>
+            
+
+              <LazyHydrate>
+                <!-- <CategoryFeature /> -->
+                  <div>
+                      <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3>
+                        <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
+                          <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
+                                 <div   v-for="(cat, i) in categoryTree && categoryTree " :key="i">
+                                    <div v-if="i == 0" class="grid grid-cols-3 gap-10 mt-10 mb-10">
+                                      <div v-for="(sub,j) in cat.items" :key="j">
+                                           <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                              
+                                               <div class="m-4">
+                                                    <h4 class="">{{sub.label}}</h4>
+                                               </div>
+                                              <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
+                                          </div>                                     
+                                         </div>
+                                    <!-- </div> -->
+                              <!-- <div :v-for="sub in value.items">
+                                  <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                              
+                                  <div class="m-4">
+                                          <h4 class="">{{sub.label}}</h4>
+                                    </div>
+                                    <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
+                              </div>
+                                   
+                      
+                            </div> -->
+                          </div>
+
+                     
+                        </div>
+                      </div>
+    
+                <!-- categoryTree.value[0]?.items -->
+
+              </LazyHydrate>
+
+                <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">Shop Our Best Sellers</h3>
+
+
+              <div class="grid grid-cols-3 gap-10" >
+                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 4" :key="i">
+                  <img src="/categories/cat1.jpeg" alt="" />
+                  <h3 class="text-center m-3">link</h3>
+                  <h4 class="text-center font-serif m-3">
+                    $925.00 - $2,080.00USD / Each
+                  </h4>
+                  <p class="text-center m-3">description</p>
+                  <button
+                    class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+                  >
+                    View All
+                  </button>
+                </div>
+              </div>
+
+               <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">New Products You Might Like</h3>
+
+
+              <div class="grid grid-cols-3 gap-10" >
+                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 5" :key="i">
+                  <img src="/categories/cat3.jpeg" alt="" />
+                  <h3 class="text-center m-3">link</h3>
+                  <h4 class="text-center font-serif m-3">
+                    $925.00 - $2,080.00USD / Each
+                  </h4>
+                  <p class="text-center m-3">description</p>
+                  <button
+                    class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+                  >
+                    View All
+                  </button>
+                </div>
+              </div>
+
+        
           <transition-group
             v-if="isCategoryGridView"
             appear
@@ -152,6 +240,7 @@
             tag="div"
             class="products__grid"
           >
+
             <SfProductCard
               v-e2e="'category-product-card'"
               v-for="(product, i) in products"
@@ -356,6 +445,7 @@ import { getTreeWithoutEmptyCategories } from '~/helpers';
 import { onSSR } from '@vue-storefront/core';
 import LazyHydrate from 'vue-lazy-hydration';
 import Vue from 'vue';
+import CategoryFeature from '~/components/CategoryFeature.vue';
 
 // TODO(addToCart qty, horizontal): https://github.com/vuestorefront/storefront-ui/issues/1606
 export default {
@@ -390,14 +480,18 @@ export default {
       ...rawPagination.value
     }));
     // TODO: Refactor this getter
+    console.log("search result value is ", searchResult.value)
     const rawCategoryTree = computed(() => searchResult.value?.data?.categories?.map(category => {
       const tree = facetGetters.getTree(category.collection);
       tree.isCurrent = th.doesUrlIncludesCategory(tree.slug);
       return tree;
     }));
+    console.log("row category value is ", rawCategoryTree.value)
     const categoryTree = computed(() => getTreeWithoutEmptyCategories(rawCategoryTree.value));
+    console.log("category tree is ", categoryTree.value)
     const activeCategory = computed(() => {
       const items = categoryTree.value;
+      console.log("items value is ", items[0]?.label)
 
       if (!items || !items.length) {
         return '';
@@ -427,6 +521,7 @@ export default {
     onMounted(() => {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
+      console.log("the new category tree value is ",categoryTree.value)
     });
 
     const isFilterSelected = (facet, option) => (selectedFilters.value.attributes || []).includes(option.id);
@@ -503,8 +598,9 @@ export default {
     SfColor,
     SfHeading,
     SfProperty,
-    LazyHydrate
-  }
+    LazyHydrate,
+    CategoryFeature
+}
 };
 </script>
 

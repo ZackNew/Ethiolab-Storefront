@@ -4,22 +4,22 @@
     <PopupNotification/>
  <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
 <!--        categories-->
-        <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">
-          <LazyHydrate when-visible>
+      <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container max-h-screen overflow-auto">
+        <LazyHydrate when-visible>
 
-          <CategoriesAccordion open-state=""/>
-          </LazyHydrate>
-          <SfDivider/>
-          <LazyHydrate>
-            <SfBanner
-                class="advert"
-                :title="adSection.title || 'SMALL SALE'"
-                :subtitle="adSection.overview || 'High Quality Lab Equipments'"
-                :description="adSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'"
-                :buttonText="adSection.buttonText || 'Shop Now'"
-                background=""
-                :image="adImage || '/homepage/bannerA.webp'"
-                link="/c/clinical-laboratory">
+     <CategoriesAccordion/>
+        </LazyHydrate>
+        <SfDivider/>
+        <LazyHydrate>
+          <SfBanner
+              class="advert"
+              :title="adSection.title || 'SMALL SALE'"
+              :subtitle="adSection.overview || 'High Quality Lab Equipments'"
+              :description="adSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'"
+              :buttonText="adSection.buttonText || 'Shop Now'"
+              background=""
+              :image="adImage || '/homepage/bannerA.webp'"
+              link="/c/clinical-laboratory">
 
             </SfBanner>
           </LazyHydrate>
@@ -70,6 +70,11 @@
            />
           </template>
         </LazyHydrate>
+    
+          <iframe class="w-full h-96 mt-10 ytplayer" id="ytplayer" type="text/html" 
+          src="https://www.youtube-nocookie.com/embed/27cD4yObcTs?autoplay=1&mute=1&controls=0&loop=1&playlist=27cD4yObcTs&rel=0"
+           frameborder="0" allowfullscreen ng-show="showvideo"></iframe>
+
           <LazyHydrate when-visible>
             <div class="similar-products mt-3">
               <SfHeading title="Featured Products" :level="2" />
@@ -112,6 +117,25 @@
       </div>
       <!-- <top-section></top-section> -->
 
+
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <LazyHydrate>
+      <CategoryFeature />
+
+    </LazyHydrate>
+
+       <LazyHydrate>
+        <BestSeller />
+
+      </LazyHydrate>
+
+       <LazyHydrate>
+        <FeaturedProducts />
+
+      </LazyHydrate>
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
     <LazyHydrate when-visible>
       <SfCallToAction
         title="Subscribe to Newsletters"
@@ -131,9 +155,11 @@
         </template>
       </SfCallToAction>
     </LazyHydrate>
+
     <LazyHydrate when-visible>
       <Testimonial />
     </LazyHydrate>
+    
 
     <LazyHydrate when-visible>
       <NewsletterModal @email-submitted="onSubscribe" />
@@ -171,6 +197,9 @@ import {onSSR} from "@vue-storefront/core";
 import {computed, onMounted} from "@vue/composition-api";
 import { getCalculatedPrice } from '~/helpers';
 import getCms from '@vue-storefront/vendure-api/src/api/cms';
+import CategoryFeature from "../components/CategoryFeature.vue"
+import BestSeller from '../components/BestSeller.vue';
+import FeaturedProducts from '../components/FeaturedProducts.vue';
 
 export default {
   name: 'Home',
@@ -201,8 +230,11 @@ export default {
     SfMenuItem,
     SfList,
     SfDivider,
-    SfCard
-  },
+    SfCard,
+    CategoryFeature,
+    BestSeller,
+    FeaturedProducts
+},
   
   setup() {
     const { toggleNewsletterModal } = useUiState();
@@ -216,10 +248,10 @@ export default {
     const adSection = computed(() => JSON.parse(getCms.value[3].content));
     const heroImage = computed(()=>getCms.value[0].featuredAsset.preview)
     const adImage = computed(()=>getCms.value[3].featuredAsset.preview);
-    console.log(adImage);
+    // console.log(adImage);
     const headerNavigation = [];
-    console.log('products',products)
-          console.log("the adsection value is ", adSection);
+    // console.log('products',products)
+    //       console.log("the adsection value is ", adSection);
 
     const getTree = ()=>{
       categories.value.items.forEach((a)=>{
@@ -356,4 +388,6 @@ export default {
 .category-container,.product-card {
   background-color: var(--c-accent);
 }
+
+.ytplayer {pointer-events: none;}
 </style>

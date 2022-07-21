@@ -8,6 +8,9 @@ export const CategoryCollection = `
 			name
 			slug
 		}
+		featuredAsset{
+			preview
+		}
 	}
 `;
 

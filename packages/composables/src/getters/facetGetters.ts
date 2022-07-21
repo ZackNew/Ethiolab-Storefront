@@ -104,6 +104,7 @@ const getBreadcrumbsFromSlug = (searchResult: FacetSearchResult<AgnosticSearchRe
 };
 
 const getTree = (category: Collection): AgnosticCategoryTree | null => {
+  // console.log('inside getTree category value is ', category.featuredAsset)
   if (!category || !category.id) return null;
 
   return {
@@ -111,7 +112,8 @@ const getTree = (category: Collection): AgnosticCategoryTree | null => {
     slug: category.slug,
     id: category.id,
     isCurrent: false,
-    items: category.children.map(child => getTree(child))
+    items: category.children.map(child => getTree(child)),
+    featuredAsset: category.featuredAsset
   };
 };
 

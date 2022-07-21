@@ -71,7 +71,7 @@ export default {
     const {categories} = useCategory();
     const getTree = ()=>{
       categories.value.items.forEach((a)=>{
-        if (a.children.length > 0) {
+        if (a.parent.name === "__root_collection__") {
           headerNavigation.push(facetGetters.getTree(a));
         }
       });
