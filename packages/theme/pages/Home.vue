@@ -224,23 +224,7 @@ export default {
     //console.log(useTest())
  
     const {writeQuote, load, myQuotes} = useQuote();
-    try{
-          load({email: "eben@gmail.com"})
-          .then(
-            ()=> console.log('myQuote: ', myQuotes.value)
-          )
-          // const data = 
-          // {subject: "dsdsdsdsds", msg: "This is not a drill", 
-          //             productDescr: "dsdsds11111111", productIds: "[1]", 
-          //             fromEmail: "eben@gmail.com", fromPhone: "0912701156", location: "addis ababa"
-          // }
-          //  console.warn(`Data: `+ JSON.stringify(data))
-          ///writeQuote(data);
 
-         
-    }catch(e){
-      console.log(`Error ${e}`)
-    }
     
    //console.log({comps})
    // console.log(getCms.value[0] )

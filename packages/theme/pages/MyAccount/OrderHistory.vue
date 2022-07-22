@@ -109,8 +109,8 @@ import {
   SfLink,
   SfArrow
 } from '@storefront-ui/vue';
-import { computed, ref } from '@vue/composition-api';
-import { useUserOrder, orderGetters } from '@vue-storefront/vendure';
+import { computed, ref, provide } from '@vue/composition-api';
+import { useUserOrder, orderGetters, useQuote } from '@vue-storefront/vendure';
 import { AgnosticOrderStatus, onSSR } from '@vue-storefront/core';
 import { useUser } from '@vue-storefront/vendure';
 import axios from 'axios'
@@ -127,24 +127,38 @@ export default {
     SfLink,
     SfArrow,
   },
+
   setup() {
     const quotes = ref([])
-    const  mutation = gql`
-    query getQuotesOf($email: String!){
-          getQueryOf(email: $email)    {
-            id,
-            productDescr,
-            #fromEmail,
-            msg,
-            subject,
-            createdAt
-          }
-    }`
-    axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{email: 'eben@gmail.com'}})
-    .then(data =>{
-      console.log(data)
-        quotes.value = data.data.data.getQueryOf
-    })
+    const { load, myQuotes} = useQuote();
+
+
+
+    load({email: 'eben@gmail.com'})
+    .then(data => {
+       quotes.value = myQuotes.value;
+       //console.log("DATA: ", myQuotes.value)
+     })
+    .catch(err => console.warn(err))
+    //    // quotes.value = myQuotes
+   // console.log('DATA::',  load)
+
+    //const  mutation = gql`
+    // query getQuotesOf($email: String!){
+    //       getQueryOf(email: $email)    {
+    //         id,
+    //         productDescr,
+    //         #fromEmail,
+    //         msg,
+    //         subject,
+    //         createdAt
+    //       }
+    // }`
+    // axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{email: 'eben@gmail.com'}})
+    // .then(data =>{
+    //   console.log(data)
+    //     quotes.value = data.data.data.getQueryOf
+    // })
     
     
     const limit = 10;
