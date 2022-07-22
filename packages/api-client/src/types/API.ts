@@ -55,12 +55,12 @@ export type writeQuoteParams = {msg: string, subject: string,fromEmail: string,f
 export type writeQuoteResult = MutationResponse<"writeQuote" ,Quote>
 export type getQuotesResult = QueryResponse<'getQueryOf', Quote[]>
 export type getQuotesOfParams = {email: string}
-
+export type DeleteQuoteParams = {id: string}
 export interface VendureApiMethods 
 {
   getQueryOf(params: getQuotesOfParams, customQuery?: CustomQuery): Promise<getQuotesResult>;
   writeQuote (params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult>;
-
+  deleteQuote(params: DeleteQuoteParams, customQuery?: CustomQuery): Promise<MutationResponse<'deleteQuote', boolean>>
 
   getProduct(params: ProductParams, customQuery?: CustomQuery): Promise<GetProductResponse>;
   getFacet(params: SearchParams, customQuery?: CustomQuery): Promise<GetFacetResponse>;

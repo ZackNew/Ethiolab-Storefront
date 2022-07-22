@@ -158,6 +158,7 @@ import {
 import debounce from 'lodash.debounce';
 import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import { useProduct } from '@vue-storefront/vendure';
+import { load } from 'mime';
 export default {
   components: {
     SfInput,
@@ -214,7 +215,7 @@ export default {
 
     const showQuotation = ref(false);
     const { setTermForUrl, getFacetsFromURL } = useUiHelpers();
-    const { isAuthenticated, load: loadUser } = useUser();
+    const { isAuthenticated, load: loadUser, user } = useUser();
     const { cart, load: loadCart } = useCart();
     const { wishlist, load: loadWishlist } = useWishlist();
     const { search, categories } = useCategory();
@@ -242,13 +243,22 @@ export default {
       const count = wishlistGetters.getTotalItems(wishlist.value);
       return count ? count.toString() : null;
     });
+    const accountIcon = ref('profile');
+    
+    (async ()=>await loadUser())()
+   
+    watch(user, ()=> (async()=>{
+      
+      accountIcon.value = isAuthenticated.value ? 'profile_fill' : 'profile'
+    })())
 
-    const accountIcon = computed(() =>
-      isAuthenticated.value ? 'profile_fill' : 'profile'
-    );
+    // const accountIcon = computed(() =>
+    //   isAuthenticated.value ? 'profile_fill' : 'profile'
+    // );
 
     // TODO: https://github.com/vuestorefront/vue-storefront/issues/4927
     const handleAccountClick = async () => {
+      await loadUser();
       if (isAuthenticated.value) {
         return root.$router.push('/my-account');
       }

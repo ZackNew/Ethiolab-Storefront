@@ -2,7 +2,7 @@ import { ComposableFunctionArgs, ComputedProperty, sharedRef, useVSFContext } fr
 import { Quote, writeQuoteParams } from "@vue-storefront/vendure-api/src/types";
 import { Ref, ref } from "@vue/composition-api";
 import { UseQuote } from "../composables/useQuote"
-
+import {DeleteQuoteParams} from '../types'
 export function useQuoteFactory(){
     return function useQuote() : UseQuote{
         const context = useVSFContext();
@@ -13,7 +13,11 @@ export function useQuoteFactory(){
            
         }
         const myQuotes: Ref<Quote[]> = sharedRef([], "myQuotes")
-        function deleteQuote(params: ComposableFunctionArgs<string>){}; 
+        async function deleteQuote(params: ComposableFunctionArgs<DeleteQuoteParams>){
+             console.log(params)
+             context.$vendure.api.deleteQuote({...params})
+
+        }; 
         async function load(params: ComposableFunctionArgs<{email: string}>) {
            // context.$vendure.api.getQueryOf(id)
            //console.log('Called load')

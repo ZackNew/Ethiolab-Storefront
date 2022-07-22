@@ -41,7 +41,7 @@ import LoginModal from '~/components/LoginModal.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import Notification from '~/components/Notification';
 import CategoriesSidebar from "~/components/CategoriesSidebar";
-import {useCms,useFacet} from "@vue-storefront/vendure";
+import {useCms,useFacet, useUser} from "@vue-storefront/vendure";
 import {useUiState} from "~/composables"
 import {onSSR} from "@vue-storefront/core";
 import Toast from '~/components/Toast.vue';
@@ -65,6 +65,7 @@ export default {
  },
 
   setup(){
+    const {load: loadUser} = useUser();
 
     const {isDarkMode} = useUiState();
      const {search:searchCms}=useCms();
@@ -84,6 +85,12 @@ export default {
       }
       provide('closeToast', closeToast);
       provide('showToast', showToast)
+      loadUser()
+      .then(
+        ()=>{
+          this.$router.go(0)
+        }
+      )
 
       onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8});

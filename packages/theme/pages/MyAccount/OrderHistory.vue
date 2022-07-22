@@ -92,10 +92,30 @@
       </div>
     </SfTab>
     <SfTab title="My Quotes">
-         <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
-         <br />Message: {{quote.msg}}
-             
-         </div>
+         <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
+           Message: {{quote.msg}}
+          <SfButton>Delete</SfButton>
+         </div> -->
+         <SfTable>
+           <SfTableHeading>
+            <SfTableHeader
+              v-for="tableHeader in quotesHeader"
+              :key="tableHeader"
+            >{{ tableHeader }}</SfTableHeader>
+            <SfTableHeader class="orders__element--right" />
+          </SfTableHeading>
+          <SfTableRow v-for="quote of quotes">
+           <SfTableData>{{quotes.indexOf(quote) + 1}})</SfTableData>  
+           <SfTableData>{{quote.createdAt}}</SfTableData> 
+           <SfTableData>{{quote.subject}}</SfTableData>  
+           <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
+           <SfTableData>
+                     <SfButton class="sf-button--text">See Details</SfButton>
+                     <SfButton class="sf-button--text red-text" @click="removeQuote(quotes.indexOf(quote))">Delete</SfButton>
+           </SfTableData>
+      
+          </SfTableRow>
+         </SfTable>
     </SfTab>
   </SfTabs>
 </template>
@@ -110,9 +130,9 @@ import {
   SfArrow
 } from '@storefront-ui/vue';
 import { computed, ref, provide } from '@vue/composition-api';
-import { useUserOrder, orderGetters, useQuote } from '@vue-storefront/vendure';
+import { useUserOrder, orderGetters, useQuote, useUser, userGetters } from '@vue-storefront/vendure';
 import { AgnosticOrderStatus, onSSR } from '@vue-storefront/core';
-import { useUser } from '@vue-storefront/vendure';
+
 import axios from 'axios'
 import gql from 'graphql-tag';
 import { print } from 'graphql';
@@ -130,16 +150,27 @@ export default {
 
   setup() {
     const quotes = ref([])
-    const { load, myQuotes} = useQuote();
+    const { load, myQuotes, deleteQuote} = useQuote();
+    const {user ,load: loadUser} = useUser();
+    loadUser().then(() =>{
+         const currentEmail = userGetters.getEmailAddress(user.value);
+             load({email: currentEmail})
+            .then(data => {
+              console.log("DATA ", currentEmail)
+              quotes.value = myQuotes.value;
+              //console.log("DATA: ", myQuotes.value)
+            })
+            .catch(err => console.warn(err))
+
+    } );
+  
+  function removeQuote(index){
+    deleteQuote({id:quotes.value[index].id})
+    quotes.value = quotes.value.filter(q => quotes.value.indexOf(q) !== index);
+  
+  }
 
 
-
-    load({email: 'eben@gmail.com'})
-    .then(data => {
-       quotes.value = myQuotes.value;
-       //console.log("DATA: ", myQuotes.value)
-     })
-    .catch(err => console.warn(err))
     //    // quotes.value = myQuotes
    // console.log('DATA::',  load)
 
@@ -164,7 +195,7 @@ export default {
     const limit = 10;
     const { orders, search } = useUserOrder();
     const currentOrder = ref(null);
-    const user = useUser()
+   
 
 
     onSSR(async () => {
@@ -185,6 +216,13 @@ export default {
       'Amount',
       'Status'
     ];
+    const quotesHeader = [
+      'Id',
+      'Sent At',
+      'Subject',
+   //   'message',
+      'Actions'
+    ]
 
     const getStatusTextClass = (order) => {
       const status = orderGetters.getStatus(order);
@@ -199,6 +237,7 @@ export default {
     };
 
     return {
+      quotesHeader,
       tableHeaders,
       orders: computed(() => orders.value ?? []),
       offset: computed(() => orders.value?.offset ?? 0),
@@ -208,7 +247,9 @@ export default {
       goPrev,
       orderGetters,
       currentOrder,
-      quotes
+      quotes,
+      deleteQuote,
+      removeQuote
     };
   }
 };
@@ -321,6 +362,9 @@ export default {
 }
 .review-bar{
   width: 100% !important;
+}
+.red-text{
+  color: red;
 }
 
 </style>
