@@ -470,6 +470,7 @@ export default {
     const sortBy = computed(() => facetGetters.getSortOptions(searchResult.value));
     const facets = computed(() => facetGetters.getGrouped(searchResult.value));
     const products = computed(() => facetGetters.getProducts(searchResult.value));
+    console.log("product value", products.value)
 
     const rawBreadcrumbs = computed(() => facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug));
     const breadcrumbs = computed(() => th.getFormattedBreadcrumbs(rawBreadcrumbs.value));

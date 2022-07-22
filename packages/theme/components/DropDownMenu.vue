@@ -9,13 +9,15 @@
         </div>
         <SfBanner
             class="ad-banner"
-            :title="adSection.title || 'SMALL SALE'"
-            :subtitle="adSection.overview || 'High Quality Lab Equipments'"
-            :description="adSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'"
-            :buttonText="adSection.buttonText || 'Shop Now'"
+            :title="adSection.title || 'Ad Titile'"
+            :subtitle="adSection.overview || 'Ad Overview'"
+            :description="adSection.description || 'Ad Description'"
+            :buttonText="adSection.buttonText || 'Ad Button'"
             background=""
             :image="adImage || '/homepage/bannerA.webp'"
-            link="/c/clinical-laboratory">
+            link="/c/clinical-laboratory"
+            :classes="advert"
+            >
         </SfBanner>
     </div>
 </template>
@@ -95,4 +97,7 @@ export default {
     height: 25%;
     /* border-bottom: 0.1px solid var(--c-bg-primary) !important; */
 }
+
+.advert{
+max-height: 100px;}
 </style>

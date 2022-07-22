@@ -1,5 +1,6 @@
 <template>
   <div class="sf-header-navigation-item" v-on="$listeners">
+    
     <!-- <div
       class="
         sf-header-navigation-item__item sf-header-navigation-item__item--dePRODUCTSsktop
@@ -105,6 +106,7 @@ export default {
   height: 42.5% !important; */
   /* border: 0.1px solid var(--c-bg-primary) !important; */
   box-shadow: 1px rgb(0, 0, 0, 0.2);
+  border: solid 1px gray;
   z-index: 1 !important;
 }
 </style>

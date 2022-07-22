@@ -1,5 +1,5 @@
 <template>
-    <div class="sf-header__navigation desktop" v-if="!isMobile">
+    <div class="sf-header__navigation desktop border-b-solid border-b-2 border-secondary" v-if="!isMobile">
       <HeaderNavigationItem
         v-for="(category, index) in categories"
         :key="index"

@@ -1,7 +1,7 @@
 <template>
   <SfTopBar class="topbar">
     <template #left>
-        <SfButton class="topbar__button sf-button--text">+251-111-264-829</SfButton>
+        <!-- <SfButton class="topbar__button sf-button--text">+251-111-264-829</SfButton> -->
       </template>
     <template #center>
       <div class="flex items-center gap-20">
