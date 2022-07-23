@@ -32,3 +32,4 @@ export { default as resetPassword } from './resetPassword';
 export { default as writeQuote} from './writeQuote'
 export {default as getQueryOf} from './getQueryOf';
 export {default as deleteQuote} from './deleteQuote';
+export {default as writeContactUsMessage} from './writeContactUs'

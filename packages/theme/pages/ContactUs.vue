@@ -175,7 +175,7 @@ import {
   SfBanner,
 } from "@storefront-ui/vue";
 import LazyHydrate from "vue-lazy-hydration";
-import { ref, onMounted } from "@vue/composition-api";
+import { ref, onMounted , inject} from "@vue/composition-api";
 import { required, min, digits, email } from "vee-validate/dist/rules";
 import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
 import { useVSFContext } from "@vue-storefront/core";
@@ -230,6 +230,7 @@ export default {
     },
   },
   setup(_, { root }) {
+    const showToast = inject('showToast')
     const isFormSubmitted = ref(false);
     const { $vendure } = useVSFContext();
     const { cart, load } = useCart();
@@ -246,14 +247,15 @@ export default {
     });
      
      const sendMessage = async () =>{
-       console.log("......x")
+  //     console.log("......x")
        sendContactUs({
                   phone_number: form.value.phoneNumber,
                   first_name: form.value.firstName,
                   last_name: form.value.lastName,
                   email: form.value.emailAddress,  
                   message: form.value.message})
-       setTinNumber({tinNumber: '09ddsifdilsjfdis'});
+      showToast('Sent!')
+       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
       
       //    mutation sendMessage($phone_number: String!,$first_name: String!, $last_name: String!, $message: String!, $email:String!){

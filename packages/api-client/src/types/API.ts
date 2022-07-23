@@ -55,15 +55,18 @@ export type writeQuoteParams = {msg: string, subject: string,fromEmail: string,f
 export type writeQuoteResult = MutationResponse<"writeQuote" ,Quote>
 export type getQuotesResult = QueryResponse<'getQueryOf', Quote[]>
 export type getQuotesOfParams = {email: string}
-export type writeContactUsParamsResult = MutationResponse<"writeContactUsMessage", boolean>; //its is not correct
-export type writeContactUsParams = {phone_number: string,first_name: string, last_name: string, message: string, email:string}
+export type writeContactUsParamsResult = MutationResponse<"writeContactUsMessage", ContactUsMessage>; //its is not correct
+export type writeContactUsParams = {message: {phone_number: string,first_name: string, last_name: string, message: string, email:string}}
 export type setTinNumberParams = {tinNumber:string};
 export type DeleteQuoteParams = {id: string};
+export type ContactUsMessage = {id: string, }
 export interface VendureApiMethods 
 {
   getQueryOf(params: getQuotesOfParams, customQuery?: CustomQuery): Promise<getQuotesResult>;
   writeQuote (params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult>;
   deleteQuote(params: DeleteQuoteParams, customQuery?: CustomQuery): Promise<MutationResponse<'deleteQuote', boolean>>
+  writeContactUsMessage(params: writeContactUsParams, customQuery?: CustomQuery): Promise<MutationResponse<'writeContactUsMessage', ContactUsMessage>>
+
 
   getProduct(params: ProductParams, customQuery?: CustomQuery): Promise<GetProductResponse>;
   getFacet(params: SearchParams, customQuery?: CustomQuery): Promise<GetFacetResponse>;

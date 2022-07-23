@@ -14,13 +14,13 @@
          }`
 
          
-         type writeContactUsParams = {msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: string, productDescr: string}
+        
          
          const writeQuote = async (context: Context, params: writeContactUsParams, customQuery?: CustomQuery): Promise<writeContactUsParamsResult> => {
            const removeCartCouponVariables = {
              ...params
            };
-         
+           console.log('Called to calle')
            const { removeCouponCode } = context.extendQuery(
              customQuery, { removeCouponCode: { query: mutation, variables: removeCartCouponVariables } }
            );
