@@ -29,7 +29,7 @@
              mutation: gql`${removeCouponCode.query}`,
              variables: removeCouponCode.variables,
              fetchPolicy: NO_CACHE_FETCH_POLICY
-           }) as writeQuoteResult;
+           }) as writeContactUsParamsResult;
          
            return request;
          };
