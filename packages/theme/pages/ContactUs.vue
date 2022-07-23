@@ -179,7 +179,7 @@ import { ref, onMounted } from "@vue/composition-api";
 import { required, min, digits, email } from "vee-validate/dist/rules";
 import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
 import { useVSFContext } from "@vue-storefront/core";
-import { useCart } from "@vue-storefront/vendure";
+import { useCart, useTinNumber, useContactUs } from "@vue-storefront/vendure";
 import { EMAIL_ADDRESS_CONFLICT_ERROR } from "~/helpers";
 import gql from 'graphql-tag';
 import { print } from 'graphql';
@@ -233,7 +233,9 @@ export default {
     const isFormSubmitted = ref(false);
     const { $vendure } = useVSFContext();
     const { cart, load } = useCart();
-    const errorMessage = ref("");
+    const errorMessage = ref(""); 
+    const {sendContactUs} = useContactUs();
+    const {setTinNumber} = useTinNumber()
 
     const form = ref({
       firstName: "",
@@ -244,25 +246,36 @@ export default {
     });
      
      const sendMessage = async () =>{
-       console.log("......")
-      const mutation = gql`
-      
-         mutation sendMessage($phone_number: String!,$first_name: String!, $last_name: String!, $message: String!, $email:String!){
-            writeContactUsMessage(message: {email: $email, firstName: $first_name, 
-                          lastName: $last_name, phoneNumber: $phone_number, message: $message}){id}
-         }
-      `
-      const data = await axios.post('http://localhost:3000/shop-api', 
-                  {query: print(mutation), variables :{
+       console.log("......x")
+       sendContactUs({
                   phone_number: form.value.phoneNumber,
                   first_name: form.value.firstName,
                   last_name: form.value.lastName,
                   email: form.value.emailAddress,  
-                  message: form.value.message
-       }});
-       console.log({data})            
-       form.value = {}
-       location.href = 'http://localhost:3001'
+                  message: form.value.message})
+       setTinNumber({
+                  phone_number: form.value.phoneNumber,
+                  first_name: form.value.firstName,
+                  last_name: form.value.lastName,
+                  email: form.value.emailAddress,  });
+      // const mutation = gql`
+      
+      //    mutation sendMessage($phone_number: String!,$first_name: String!, $last_name: String!, $message: String!, $email:String!){
+      //       writeContactUsMessage(message: {email: $email, firstName: $first_name, 
+      //                     lastName: $last_name, phoneNumber: $phone_number, message: $message}){id}
+      //    }
+      // `
+      // const data = await axios.post('http://localhost:3000/shop-api', 
+      //             {query: print(mutation), variables :{
+      //             phone_number: form.value.phoneNumber,
+      //             first_name: form.value.firstName,
+      //             last_name: form.value.lastName,
+      //             email: form.value.emailAddress,  
+      //             message: form.value.message
+      //  }});
+      //  console.log({data})            
+      //  form.value = {}
+      //  location.href = 'http://localhost:3001'
      }  
      const handleFormSubmit = async () => {
          sendMessage()

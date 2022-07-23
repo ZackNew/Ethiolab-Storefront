@@ -55,6 +55,7 @@ export type writeQuoteParams = {msg: string, subject: string,fromEmail: string,f
 export type writeQuoteResult = MutationResponse<"writeQuote" ,Quote>
 export type getQuotesResult = QueryResponse<'getQueryOf', Quote[]>
 export type getQuotesOfParams = {email: string}
+export type writeContactUsParams = {phone_number: string,first_name: string, last_name: string, message: string, email:string}
 export type DeleteQuoteParams = {id: string}
 export interface VendureApiMethods 
 {
