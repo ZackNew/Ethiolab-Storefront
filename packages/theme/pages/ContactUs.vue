@@ -253,11 +253,7 @@ export default {
                   last_name: form.value.lastName,
                   email: form.value.emailAddress,  
                   message: form.value.message})
-       setTinNumber({
-                  phone_number: form.value.phoneNumber,
-                  first_name: form.value.firstName,
-                  last_name: form.value.lastName,
-                  email: form.value.emailAddress,  });
+       setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
       
       //    mutation sendMessage($phone_number: String!,$first_name: String!, $last_name: String!, $message: String!, $email:String!){
@@ -276,6 +272,7 @@ export default {
       //  console.log({data})            
       //  form.value = {}
       //  location.href = 'http://localhost:3001'
+      
      }  
      const handleFormSubmit = async () => {
          sendMessage()
