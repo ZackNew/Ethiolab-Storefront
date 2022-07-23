@@ -137,7 +137,8 @@ import {
   useFacet,
   useUser,
   useWishlist,
-  wishlistGetters
+  wishlistGetters,
+  userGetters
 } from '@vue-storefront/vendure';
 import {
   computed,
@@ -248,7 +249,8 @@ export default {
     (async ()=>await loadUser())()
    
     watch(user, ()=> (async()=>{
-      
+      console.log("Tin Number: ", userGetters.getTinNumber(user))
+      console.log('User %c', 'color: lightblue', user)
       accountIcon.value = isAuthenticated.value ? 'profile_fill' : 'profile'
     })())
 
