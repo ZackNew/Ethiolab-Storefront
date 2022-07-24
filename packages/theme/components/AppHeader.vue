@@ -277,6 +277,7 @@ export default {
       { name: 'Products', link: '/c/clinical-laboratory' },
       { name: 'About us', link: '/page/about' },
       { name: 'Contact us', link: '/pages/contact' },
+      { name: 'Write a Quote', link: '/pages/contact'},
       { name: 'Help center', link: '/pages/helpAndFAQ' }
     ];
 

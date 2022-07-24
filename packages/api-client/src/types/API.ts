@@ -50,8 +50,13 @@ export type RequestPasswordResetResponse = MutationResponse<'requestPasswordRese
 export type ResetPasswordResponse = MutationResponse<'resetPassword', ResetPasswordResult>;
 export type UpdateCustomerEmailAddressResponse = MutationResponse<'updateCustomerEmailAddress', Success>;
 
-export type Quote = {id: number, msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds:string, productDescr: string}
-export type writeQuoteParams = {msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: string, productDescr: string}
+export type Quote = {isSpecial?: boolean, id: number, msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds?:string, productDescr: string}
+export type writeQuoteParams = {
+   msg: string, subject: string,
+   fromEmail: string,fromPhone: string, 
+   location: string, productIds?: string, productDescr: string
+   isSpecial?: Boolean
+  }
 export type writeQuoteResult = MutationResponse<"writeQuote" ,Quote>
 export type getQuotesResult = QueryResponse<'getQueryOf', Quote[]>
 export type getQuotesOfParams = {email: string}
