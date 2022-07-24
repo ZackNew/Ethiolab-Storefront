@@ -112,6 +112,7 @@
            <SfTableData>
                      <SfButton class="sf-button--text">See Details</SfButton>
                      <SfButton class="sf-button--text red-text" @click="removeQuote(quotes.indexOf(quote))">Delete</SfButton>
+                      <SfButton class="sf-button--text" @click="downloadQuote(quotes.indexOf(quote))">Download As Pdf</SfButton>
            </SfTableData>
       
           </SfTableRow>
@@ -132,7 +133,7 @@ import {
 import { computed, ref, provide } from '@vue/composition-api';
 import { useUserOrder, orderGetters, useQuote, useUser, userGetters } from '@vue-storefront/vendure';
 import { AgnosticOrderStatus, onSSR } from '@vue-storefront/core';
-
+import {jsPDF} from 'jspdf';
 import axios from 'axios'
 import gql from 'graphql-tag';
 import { print } from 'graphql';
@@ -156,7 +157,7 @@ export default {
          const currentEmail = userGetters.getEmailAddress(user.value);
              load({email: currentEmail})
             .then(data => {
-              console.log("DATA ", currentEmail)
+              console.log("DATA ", myQuotes.value)
               quotes.value = myQuotes.value;
               //console.log("DATA: ", myQuotes.value)
             })
@@ -168,6 +169,13 @@ export default {
     deleteQuote({id:quotes.value[index].id})
     quotes.value = quotes.value.filter(q => quotes.value.indexOf(q) !== index);
   
+  }
+  function downloadQuote(index){
+       const doc= jsPDF()
+       
+       doc.text(`Subject: ${quotes.value[index]?.subject}`, 10, 10)
+       doc.text(`Msg ${quotes.value[index]?.msg}`, 10, 20)
+        doc.save("quote.pdf");
   }
 
 
@@ -249,6 +257,7 @@ export default {
       currentOrder,
       quotes,
       deleteQuote,
+      downloadQuote,
       removeQuote
     };
   }
