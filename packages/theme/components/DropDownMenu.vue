@@ -13,7 +13,6 @@
             background=""
             :image="adImage || '/homepage/bannerA.webp'"
             link="/c/clinical-laboratory"
-            :classes="advert"
             >
         </SfBanner>
     </div>

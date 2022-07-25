@@ -11,6 +11,7 @@ export const CategoryCollection = `
 		featuredAsset{
 			preview
 		}
+		description
 	}
 `;
 

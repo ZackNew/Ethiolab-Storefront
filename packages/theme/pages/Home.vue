@@ -12,11 +12,10 @@
         <SfDivider/>
         <LazyHydrate>
           <SfBanner
-              class="advert"
-              :title="adSection.title || 'SMALL SALE'"
-              :subtitle="adSection.overview || 'High Quality Lab Equipments'"
-              :description="adSection.description || 'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'"
-              :buttonText="adSection.buttonText || 'Shop Now'"
+              :title="adSection.title || 'AD Title'"
+              :subtitle="adSection.overview || 'AD Overview'"
+              :description="adSection.description || 'AD Description'"
+              :buttonText="adSection.buttonText || 'AD Button'"
               background=""
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory">
@@ -25,15 +24,15 @@
           </LazyHydrate>
         </div>
         <div class="md:col-span-9 col-span-12 md:ml-3 ">
-        <LazyHydrate when-visible>
+        <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
             <nuxt-link :to="localePath('/c/all')" class="smartphone-only"
             >See all</nuxt-link
             >
           </div>
-        </LazyHydrate>
-        <LazyHydrate when-visible>
+        </LazyHydrate> -->
+        <!-- <LazyHydrate when-visible>
       <div class="flex flex-wrap gap-4 mb-4 mt-3 place-content-center md:place-content-start"  >
         <div v-for="(product, i) in this.products"
              :key="i" class="rounded-lg drop-shadow-lg product-card w-40 md:w-48">
@@ -55,7 +54,7 @@
             />
         </div>
       </div>
-        </LazyHydrate>
+        </LazyHydrate> -->
 
         <LazyHydrate when-visible>
           <template>
@@ -344,9 +343,6 @@ export default {
   }
 }
 
-.advert{
-  --banner-width:100%;
-}
 
 .similar-products {
   display: flex;

@@ -145,14 +145,24 @@
       </div>
       <SfLoader :class="{ loading }" :loading="loading">
         <div class="products m-5" v-if="!loading">
-          <div class="h-40 bg-bg_dark grid grid-cols-3">
-            <img src="/categories/cat2.jpeg" class="h-40"/>
-                <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
-                   electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
-                    metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
-                    Our NIST-traceable calibration services and repairs help you meet your quality, regulatory, 
-                    and compliance needs.</p>
-          </div>
+
+                    <div   v-for="(cat, i) in rawCategoryTree && rawCategoryTree " :key="i">
+                             <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="">
+                              <div class="h-40 bg-bg_dark grid grid-cols-3">
+                                          <img :src="cat.featuredAsset.preview || '/categories/cat2.jpeg' " class="h-40" />
+                                          <div v-html="cat.description || `Category Description`" class="text-white col-span-2 pt-5 "></div>
+                                              <!-- <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
+                                                electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
+                                                  metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
+                                                  Our NIST-traceable calibration services and repairs help you meet your quality, regulatory, 
+                                                  and compliance needs.</p> -->
+                                        </div>
+
+                               </div>
+
+                    
+                    </div>
+         
             
 
               <LazyHydrate>
@@ -161,8 +171,8 @@
                       <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3>
                         <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
                           <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
-                                 <div   v-for="(cat, i) in categoryTree && categoryTree " :key="i">
-                                    <div v-if="i == 0" class="grid grid-cols-3 gap-10 mt-10 mb-10">
+                                 <div   v-for="(cat, i) in rawCategoryTree && rawCategoryTree " :key="i">
+                                    <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="grid grid-cols-3 gap-10 mt-10 mb-10">
                                       <div v-for="(sub,j) in cat.items" :key="j">
                                            <div class="max-w-sm rouned overflow-hidden shadow-xl">
                               
@@ -198,7 +208,7 @@
 
 
               <div class="grid grid-cols-3 gap-10" >
-                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 4" :key="i">
+                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 3" :key="i">
                   <img src="/categories/cat1.jpeg" alt="" />
                   <h3 class="text-center m-3">link</h3>
                   <h4 class="text-center font-serif m-3">
@@ -215,9 +225,9 @@
 
                <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">New Products You Might Like</h3>
 
-
+<!-- 
               <div class="grid grid-cols-3 gap-10" >
-                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 5" :key="i">
+                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 3" :key="i">
                   <img src="/categories/cat3.jpeg" alt="" />
                   <h3 class="text-center m-3">link</h3>
                   <h4 class="text-center font-serif m-3">
@@ -230,7 +240,7 @@
                     View All
                   </button>
                 </div>
-              </div>
+              </div> -->
 
         
           <transition-group
@@ -439,7 +449,7 @@ import {
   SfProperty
 } from '@storefront-ui/vue';
 import { ref, computed, onMounted } from '@vue/composition-api';
-import { useCart, useWishlist, productGetters, useFacet, facetGetters } from '@vue-storefront/vendure';
+import { useCart, useWishlist, productGetters, useFacet, facetGetters,categoryGetters } from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import { getTreeWithoutEmptyCategories } from '~/helpers';
 import { onSSR } from '@vue-storefront/core';
@@ -492,7 +502,7 @@ export default {
     console.log("category tree is ", categoryTree.value)
     const activeCategory = computed(() => {
       const items = categoryTree.value;
-      console.log("items value is ", items[0]?.label)
+      // console.log("items value is ", items[0]?.label)
 
       if (!items || !items.length) {
         return '';
@@ -522,7 +532,7 @@ export default {
     onMounted(() => {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
-      console.log("the new category tree value is ",categoryTree.value)
+      console.log("the onmounted category tree value is ",categoryTree.value)
     });
 
     const isFilterSelected = (facet, option) => (selectedFilters.value.attributes || []).includes(option.id);
@@ -562,6 +572,7 @@ export default {
       categoryTree,
       loading,
       productGetters,
+      categoryGetters,
       pagination,
       activeCategory,
       sortBy,
@@ -579,7 +590,9 @@ export default {
       clearFilters,
       applyFilters,
       cart,
-      itemQuantity
+      itemQuantity,
+      rawCategoryTree,
+      lastSlug
     };
   },
   components: {

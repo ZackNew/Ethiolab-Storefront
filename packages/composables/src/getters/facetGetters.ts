@@ -113,7 +113,8 @@ const getTree = (category: Collection): AgnosticCategoryTree | null => {
     id: category.id,
     isCurrent: false,
     items: category.children.map(child => getTree(child)),
-    featuredAsset: category.featuredAsset
+    featuredAsset: category.featuredAsset,
+    description: category.description
   };
 };
 
