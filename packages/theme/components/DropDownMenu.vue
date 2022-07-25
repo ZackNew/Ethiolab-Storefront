@@ -1,7 +1,7 @@
 <template>
     <div class="body">
         <div class="grid grid-rows-6 grid-flow-col">
-            <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id" :slug="navs.slug"/>
+            <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in $props.subnavList" :key="navs.id" :link="navs.link"/>
             <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
         </div>
         <SfBanner
@@ -36,24 +36,24 @@ export default {
         // console.log(this.headerNavigation);
     },
     props: {
-        
+        subnavList:Array,
     },
     setup() {
-        const headerNavigation = [];
-        const {categories} = useCategory();
+        // const headerNavigation = [];
+        // const {categories} = useCategory();
         const {getCms}=useCms();
         const adSection = computed(() => JSON.parse(getCms.value[3].content));
         const adImage = computed(()=>getCms.value[3].featuredAsset.preview);
         const getTree = ()=>{
-        categories.value.items.forEach((a)=>{
-            if (a.parent.name === "__root_collection__") {
-                headerNavigation.push(facetGetters.getTree(a));
-           }
-        });
+        // categories.value.items.forEach((a)=>{
+        //     if (a.parent.name === "__root_collection__") {
+        //         headerNavigation.push(facetGetters.getTree(a));
+        //    }
+        // });
         };
         return {
             getTree,
-            headerNavigation,
+            // headerNavigation,
             adSection,
             adImage
         }

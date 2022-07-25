@@ -1,7 +1,7 @@
 <template>
   <div class="sub-body">
       <div class="content">
-        <a :key="-1" :href="localePath(`/c/${this.$props.slug}`)">{{this.$props.title}}</a>
+        <a :key="-1" :href="this.$props.link">{{this.$props.title}}</a>
         <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
         <div class="grid grid-rows-4 grid-cols-2 gap-6 overlay">
             <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{sub.label}}</a>
@@ -18,7 +18,7 @@ export default {
     props: {
         title:String,
         subnavList:Array,
-        slug:String
+        link:String
     },
     setup() {
         

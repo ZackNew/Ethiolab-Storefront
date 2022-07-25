@@ -8,6 +8,8 @@
         :label="category"
         :link="localePath(`/c/${category}`)"
       />
+      <BrandsSubNav/>
+      <IndustriesSubNav/>
     </div>
     
   <!-- <SfModal v-else :visible="isMobileMenuOpen">
@@ -33,13 +35,17 @@
 import { SfMenuItem, SfModal } from '@storefront-ui/vue';
 import { useUiState } from '~/composables';
 import HeaderNavigationItem from './HeaderNavigationItem.vue';
+import BrandsSubNav from './subnavs/BrandsSubNav.vue';
+import IndustriesSubNav from './subnavs/IndustriesSubNav.vue';
 
 export default {
   name: 'HeaderNavigation',
   components: {
     SfMenuItem,
     SfModal,
-    HeaderNavigationItem
+    HeaderNavigationItem,
+    BrandsSubNav,
+    IndustriesSubNav
   },
   props: {
     isMobile: {
@@ -49,7 +55,7 @@ export default {
   },
   setup() {
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
-    const categories = ['PRODUCTS', 'INDUSTRIES', 'BRANDS','SERVICES'];
+    const categories = ['PRODUCTS', 'SERVICES'];
 
     return {
       categories,
