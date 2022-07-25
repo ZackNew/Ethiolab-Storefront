@@ -10,7 +10,8 @@
           <SfHeading
             :level="3"
             :title="$t('Categories')"
-            class="navbar__title" />
+            class="navbar__title"
+          />
         </LazyHydrate>
       </div>
 
@@ -52,9 +53,13 @@
         </div>
 
         <div class="navbar__counter">
-          <span class="navbar__label desktop-only">{{ $t('Products found') }}: </span>
+          <span class="navbar__label desktop-only"
+            >{{ $t('Products found') }}:
+          </span>
           <span class="desktop-only">{{ pagination.totalItems }}</span>
-          <span class="navbar__label smartphone-only">{{ pagination.totalItems }} {{ $t('Items') }}</span>
+          <span class="navbar__label smartphone-only"
+            >{{ pagination.totalItems }} {{ $t('Items') }}</span
+          >
         </div>
 
         <div class="navbar__view">
@@ -89,12 +94,10 @@
       <div class="sidebar desktop-only">
         <LazyHydrate when-idle>
           <SfLoader
-          :class="{ 'loading--categories': loading }"
-          :loading="loading">
-            <SfAccordion
-              :open="activeCategory"
-              :show-chevron="true"
-            >
+            :class="{ 'loading--categories': loading }"
+            :loading="loading"
+          >
+            <SfAccordion :open="activeCategory" :show-chevron="true">
               <SfAccordionItem
                 v-for="(cat, i) in categoryTree && categoryTree"
                 :key="i"
@@ -103,14 +106,13 @@
                 <template>
                   <SfList class="list">
                     <SfListItem class="list__item">
-                      <SfMenuItem
-                        :count="cat.count || ''"
-                        :label="cat.label"
-                      >
+                      <SfMenuItem :count="cat.count || ''" :label="cat.label">
                         <template #label>
                           <nuxt-link
                             :to="localePath(th.getCatLink(cat))"
-                            :class="cat.isCurrent ? 'sidebar--cat-selected' : ''"
+                            :class="
+                              cat.isCurrent ? 'sidebar--cat-selected' : ''
+                            "
                           >
                             All
                           </nuxt-link>
@@ -129,7 +131,9 @@
                         <template #label="{ label }">
                           <nuxt-link
                             :to="localePath(th.getCatLink(subCat))"
-                            :class="subCat.isCurrent ? 'sidebar--cat-selected' : ''"
+                            :class="
+                              subCat.isCurrent ? 'sidebar--cat-selected' : ''
+                            "
                           >
                             {{ label }}
                           </nuxt-link>
@@ -146,34 +150,42 @@
       <SfLoader :class="{ loading }" :loading="loading">
         <div class="products m-5" v-if="!loading">
           <div class="h-40 bg-bg_dark grid grid-cols-3">
-            <img src="/categories/cat2.jpeg" class="h-40"/>
-                <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
-                   electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
-                    metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
-                    Our NIST-traceable calibration services and repairs help you meet your quality, regulatory, 
-                    and compliance needs.</p>
+            <img src="/categories/cat2.jpeg" class="h-40" />
+            <p class="text-white col-span-2 pt-5">
+              Get the precision calibration tools you need to maintain the
+              accuracy of your process, electrical, temperature, pressure, and
+              flow measuring instruments and equipment. In addition, our
+              in-house metrology lab will precalibrate an instrument at time of
+              order or recalibrate equipment already owned. Our NIST-traceable
+              calibration services and repairs help you meet your quality,
+              regulatory, and compliance needs.
+            </p>
           </div>
-            
 
-              <LazyHydrate>
-                <!-- <CategoryFeature /> -->
-                  <div>
-                      <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3>
-                        <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
-                          <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
-                                 <div   v-for="(cat, i) in categoryTree && categoryTree " :key="i">
-                                    <div v-if="i == 0" class="grid grid-cols-3 gap-10 mt-10 mb-10">
-                                      <div v-for="(sub,j) in cat.items" :key="j">
-                                           <div class="max-w-sm rouned overflow-hidden shadow-xl">
-                              
-                                               <div class="m-4">
-                                                    <h4 class="">{{sub.label}}</h4>
-                                               </div>
-                                              <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
-                                          </div>                                     
-                                         </div>
-                                    <!-- </div> -->
-                              <!-- <div :v-for="sub in value.items">
+          <LazyHydrate>
+            <!-- <CategoryFeature /> -->
+            <div>
+              <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">
+                Featured Categories
+              </h3>
+              <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
+              <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
+              <div v-for="(cat, i) in categoryTree && categoryTree" :key="i">
+                <div v-if="i == 0" class="grid grid-cols-3 gap-10 mt-10 mb-10">
+                  <div v-for="(sub, j) in cat.items" :key="j">
+                    <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                      <div class="m-4">
+                        <h4 class="">{{ sub.label }}</h4>
+                      </div>
+                      <img
+                        v-if="sub.featuredAsset"
+                        :src="sub.featuredAsset.preview"
+                        class="w-full h-32 sm:h-48 object-cover"
+                      />
+                    </div>
+                  </div>
+                  <!-- </div> -->
+                  <!-- <div :v-for="sub in value.items">
                                   <div class="max-w-sm rouned overflow-hidden shadow-xl">
                               
                                   <div class="m-4">
@@ -184,55 +196,53 @@
                                    
                       
                             </div> -->
-                          </div>
-
-                     
-                        </div>
-                      </div>
-    
-                <!-- categoryTree.value[0]?.items -->
-
-              </LazyHydrate>
-
-                <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">Shop Our Best Sellers</h3>
-
-
-              <div class="grid grid-cols-3 gap-10" >
-                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 4" :key="i">
-                  <img src="/categories/cat1.jpeg" alt="" />
-                  <h3 class="text-center m-3">link</h3>
-                  <h4 class="text-center font-serif m-3">
-                    $925.00 - $2,080.00USD / Each
-                  </h4>
-                  <p class="text-center m-3">description</p>
-                  <button
-                    class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-                  >
-                    View All
-                  </button>
                 </div>
               </div>
+            </div>
 
-               <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">New Products You Might Like</h3>
+            <!-- categoryTree.value[0]?.items -->
+          </LazyHydrate>
 
+          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+            Shop Our Best Sellers
+          </h3>
 
-              <div class="grid grid-cols-3 gap-10" >
-                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 5" :key="i">
-                  <img src="/categories/cat3.jpeg" alt="" />
-                  <h3 class="text-center m-3">link</h3>
-                  <h4 class="text-center font-serif m-3">
-                    $925.00 - $2,080.00USD / Each
-                  </h4>
-                  <p class="text-center m-3">description</p>
-                  <button
-                    class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-                  >
-                    View All
-                  </button>
-                </div>
-              </div>
+          <div class="grid grid-cols-3 gap-10">
+            <div class="card shadow-lg my-3 ml-2" v-for="i in 4" :key="i">
+              <img src="/categories/cat1.jpeg" alt="" />
+              <h3 class="text-center m-3">link</h3>
+              <h4 class="text-center font-serif m-3">
+                $925.00 - $2,080.00USD / Each
+              </h4>
+              <p class="text-center m-3">description</p>
+              <button
+                class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+              >
+                View All
+              </button>
+            </div>
+          </div>
 
-        
+          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+            New Products You Might Like
+          </h3>
+
+          <div class="grid grid-cols-3 gap-10">
+            <div class="card shadow-lg my-3 ml-2" v-for="i in 5" :key="i">
+              <img src="/categories/cat3.jpeg" alt="" />
+              <h3 class="text-center m-3">link</h3>
+              <h4 class="text-center font-serif m-3">
+                $925.00 - $2,080.00USD / Each
+              </h4>
+              <p class="text-center m-3">description</p>
+              <button
+                class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+              >
+                View All
+              </button>
+            </div>
+          </div>
+
           <transition-group
             v-if="isCategoryGridView"
             appear
@@ -240,7 +250,6 @@
             tag="div"
             class="products__grid"
           >
-
             <SfProductCard
               v-e2e="'category-product-card'"
               v-for="(product, i) in products"
@@ -250,15 +259,28 @@
               :image="productGetters.getCoverImage(product)"
               imageHeight="20.25rem"
               imageWidth="100%"
-              :regular-price="productGetters.getPrice(product).regular.toLocaleString() + ' ETB'"
+              :regular-price="
+                productGetters.getPrice(product).regular.toLocaleString() +
+                ' ETB'
+              "
               :max-rating="5"
               :score-rating="productGetters.getAverageRating(product)"
               :show-add-to-cart-button="true"
               :isInWishlist="isInWishlist({ product })"
               :isAddedToCart="isInCart({ product })"
-              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
               class="products__product-card"
-              @click:wishlist="!isInWishlist({ product }) ? addItemToWishlist({ product }) : removeItemFromWishlist({ product })"
+              @click:wishlist="
+                !isInWishlist({ product })
+                  ? addItemToWishlist({ product })
+                  : removeItemFromWishlist({ product })
+              "
               @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
             />
           </transition-group>
@@ -278,22 +300,41 @@
               :title="productGetters.getName(product)"
               :description="productGetters.getDescription(product)"
               :image="productGetters.getCoverImage(product)"
-              :regular-price="productGetters.getPrice(product).regular.toLocaleString() + ' ETB'"
+              :regular-price="
+                productGetters.getPrice(product).regular.toLocaleString() +
+                ' ETB'
+              "
               :max-rating="5"
               :score-rating="3"
               :isInWishlist="isInWishlist({ product })"
               class="products__product-card-horizontal"
               @input="productQuantity[product._id] = $event"
-              @click:wishlist="!isInWishlist({ product }) ? addItemToWishlist({ product }) : removeItemFromWishlist({ product })"
-              @click:add-to-cart="addItemToCart({ product, quantity:  Number(productQuantity[product._id]) || itemQuantity })"
-              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+              @click:wishlist="
+                !isInWishlist({ product })
+                  ? addItemToWishlist({ product })
+                  : removeItemFromWishlist({ product })
+              "
+              @click:add-to-cart="
+                addItemToCart({
+                  product,
+                  quantity:
+                    Number(productQuantity[product._id]) || itemQuantity,
+                })
+              "
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
             >
               <template #configuration>
                 <SfProperty
                   class="desktop-only"
                   name="Size"
                   value="XS"
-                  style="margin: 0 0 1rem 0;"
+                  style="margin: 0 0 1rem 0"
                 />
                 <SfProperty class="desktop-only" name="Color" value="white" />
               </template>
@@ -301,7 +342,7 @@
                 <SfButton
                   v-if="!isInWishlist({ product })"
                   class="sf-button--text desktop-only"
-                  style="margin: 0 0 1rem auto; display: block;"
+                  style="margin: 0 0 1rem auto; display: block"
                   @click="addItemToWishlist({ product })"
                 >
                   {{ $t('Save for later') }}
@@ -309,7 +350,7 @@
                 <SfButton
                   v-else
                   class="sf-button--text desktop-only"
-                  style="margin: 0 0 1rem auto; display: block;"
+                  style="margin: 0 0 1rem auto; display: block"
                   @click="removeItemFromWishlist({ product })"
                 >
                   {{ $t('Remove from wishlist') }}
@@ -333,7 +374,9 @@
             v-show="pagination.totalPages > 1"
             class="products__show-on-page"
           >
-            <span class="products__show-on-page__label">{{ $t('Show on page') }}</span>
+            <span class="products__show-on-page__label">{{
+              $t('Show on page')
+            }}</span>
             <LazyHydrate on-interaction>
               <SfSelect
                 :value="pagination.itemsPerPage.toString()"
@@ -370,16 +413,19 @@
               class="filters__title sf-heading--left"
               :key="`filter-title-${facet.id}`"
             />
-              <div>
-                <SfFilter
-                  v-for="option in facet.options"
-                  :key="`${facet.attrName}-${option.value}`"
-                  :label="option.attrName + `${option.count ? ` (${option.count})` : ''}`"
-                  :selected="isFilterSelected(facet, option)"
-                  class="filters__item"
-                  @change="() => selectFilter(facet, option)"
-                />
-              </div>
+            <div>
+              <SfFilter
+                v-for="option in facet.options"
+                :key="`${facet.attrName}-${option.value}`"
+                :label="
+                  option.attrName +
+                  `${option.count ? ` (${option.count})` : ''}`
+                "
+                :selected="isFilterSelected(facet, option)"
+                class="filters__item"
+                @change="() => selectFilter(facet, option)"
+              />
+            </div>
           </div>
         </div>
         <SfAccordion class="filters smartphone-only">
@@ -389,24 +435,22 @@
               :header="facet.label"
               class="filters__accordion-item"
             >
-            <SfFilter
-              v-for="option in facet.options"
-              :key="`${facet.id}-${option.id}`"
-              :label="option.attrName"
-              :selected="isFilterSelected(facet, option)"
-              class="filters__item"
-              @change="() => selectFilter(facet, option)"
-            />
-          </SfAccordionItem>
-        </div>
+              <SfFilter
+                v-for="option in facet.options"
+                :key="`${facet.id}-${option.id}`"
+                :label="option.attrName"
+                :selected="isFilterSelected(facet, option)"
+                class="filters__item"
+                @change="() => selectFilter(facet, option)"
+              />
+            </SfAccordionItem>
+          </div>
         </SfAccordion>
         <template #content-bottom>
           <div class="filters__buttons">
-            <SfButton
-              class="sf-button--full-width"
-              @click="applyFilters"
-              >{{ $t('Done') }}</SfButton
-            >
+            <SfButton class="sf-button--full-width" @click="applyFilters">{{
+              $t('Done')
+            }}</SfButton>
             <SfButton
               class="sf-button--full-width filters__button-clear"
               @click="clearFilters"
@@ -436,10 +480,16 @@ import {
   SfBreadcrumbs,
   SfLoader,
   SfColor,
-  SfProperty
+  SfProperty,
 } from '@storefront-ui/vue';
 import { ref, computed, onMounted } from '@vue/composition-api';
-import { useCart, useWishlist, productGetters, useFacet, facetGetters } from '@vue-storefront/vendure';
+import {
+  useCart,
+  useWishlist,
+  productGetters,
+  useFacet,
+  facetGetters,
+} from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import { getTreeWithoutEmptyCategories } from '~/helpers';
 import { onSSR } from '@vue-storefront/core';
@@ -457,7 +507,11 @@ export default {
     const th = useUiHelpers();
     const uiState = useUiState();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
-    const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
+    const {
+      addItem: addItemToWishlist,
+      isInWishlist,
+      removeItem: removeItemFromWishlist,
+    } = useWishlist();
     const { result, search, loading } = useFacet();
     const { changeFilters, isFacetColor } = useUiHelpers();
     const { toggleFilterSidebar } = useUiState();
@@ -465,52 +519,82 @@ export default {
     // TODO: Refactor this to work on path rather than slugs because slug params are undefined so we have to filter them.
     const lastSlug = th.getLastSlugFromParams();
 
-    const searchResult = computed(() => facetGetters.getAgnosticSearchResult(result.value));
+    const searchResult = computed(() =>
+      facetGetters.getAgnosticSearchResult(result.value)
+    );
 
-    const sortBy = computed(() => facetGetters.getSortOptions(searchResult.value));
+    const sortBy = computed(() =>
+      facetGetters.getSortOptions(searchResult.value)
+    );
     const facets = computed(() => facetGetters.getGrouped(searchResult.value));
-    const products = computed(() => facetGetters.getProducts(searchResult.value));
+    const products = computed(() =>
+      facetGetters.getProducts(searchResult.value)
+    );
+    console.log('products result');
+    console.log(products);
 
-    const rawBreadcrumbs = computed(() => facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug));
-    const breadcrumbs = computed(() => th.getFormattedBreadcrumbs(rawBreadcrumbs.value));
+    const rawBreadcrumbs = computed(() =>
+      facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug)
+    );
+    const breadcrumbs = computed(() =>
+      th.getFormattedBreadcrumbs(rawBreadcrumbs.value)
+    );
     // TODO: Refactor this getter
-    const rawPagination = computed(() => facetGetters.getPagination(searchResult.value));
+    const rawPagination = computed(() =>
+      facetGetters.getPagination(searchResult.value)
+    );
     const pagination = computed(() => ({
       page: parseInt(context.root.$route.query.page, 10) || 1,
-      ...rawPagination.value
+      ...rawPagination.value,
     }));
     // TODO: Refactor this getter
-    console.log("search result value is ", searchResult.value)
-    const rawCategoryTree = computed(() => searchResult.value?.data?.categories?.map(category => {
-      const tree = facetGetters.getTree(category.collection);
-      tree.isCurrent = th.doesUrlIncludesCategory(tree.slug);
-      return tree;
-    }));
-    console.log("row category value is ", rawCategoryTree.value)
-    const categoryTree = computed(() => getTreeWithoutEmptyCategories(rawCategoryTree.value));
-    console.log("category tree is ", categoryTree.value)
+    console.log('result value is ', result.value);
+    console.log('search result value is ', searchResult.value);
+    const rawCategoryTree = computed(() =>
+      searchResult.value?.data?.categories?.map((category) => {
+        const tree = facetGetters.getTree(category.collection);
+        tree.isCurrent = th.doesUrlIncludesCategory(tree.slug);
+        return tree;
+      })
+    );
+    console.log('row category value is ', rawCategoryTree.value);
+    const categoryTree = computed(() =>
+      getTreeWithoutEmptyCategories(rawCategoryTree.value)
+    );
+    console.log('category tree is ', categoryTree.value);
     const activeCategory = computed(() => {
       const items = categoryTree.value;
-      console.log("items value is ", items[0]?.label)
-
+      console.log('items value is ', items[0]?.label);
       if (!items || !items.length) {
         return '';
       }
 
-      const category = items.find(({ isCurrent, items }) => isCurrent || items.find(({ isCurrent }) => isCurrent));
+      const category = items.find(
+        ({ isCurrent, items }) =>
+          isCurrent || items.find(({ isCurrent }) => isCurrent)
+      );
 
       return category?.label || items[0].label;
     });
-
+    console.log('search result');
+    console.log(searchResult);
+    console.log(' result');
+    console.log(result.value);
+    console.log('raw category tree');
+    console.log(rawCategoryTree);
+    console.log('category Tree');
+    console.log(categoryTree);
     const selectedFilters = ref({});
     const setSelectedFilters = () => {
-      if (!facets.value.length || Object.keys(selectedFilters.value).length) return;
-      selectedFilters.value = facets.value.reduce((prev, curr) => ({
-        ...prev,
-        [curr.id]: curr.options
-          .filter(o => o.selected)
-          .map(o => o.id)
-      }), {});
+      if (!facets.value.length || Object.keys(selectedFilters.value).length)
+        return;
+      selectedFilters.value = facets.value.reduce(
+        (prev, curr) => ({
+          ...prev,
+          [curr.id]: curr.options.filter((o) => o.selected).map((o) => o.id),
+        }),
+        {}
+      );
     };
 
     onSSR(async () => {
@@ -521,18 +605,21 @@ export default {
     onMounted(() => {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
-      console.log("the new category tree value is ",categoryTree.value)
+      console.log('the new category tree value is ', categoryTree.value);
     });
 
-    const isFilterSelected = (facet, option) => (selectedFilters.value.attributes || []).includes(option.id);
+    const isFilterSelected = (facet, option) =>
+      (selectedFilters.value.attributes || []).includes(option.id);
 
     const selectFilter = (facet, option) => {
       if (!selectedFilters.value.attributes) {
         Vue.set(selectedFilters.value, 'attributes', []);
       }
 
-      if (selectedFilters.value?.attributes.find(f => f === option.id)) {
-        const filterIndex = selectedFilters.value?.attributes.indexOf(option.id);
+      if (selectedFilters.value?.attributes.find((f) => f === option.id)) {
+        const filterIndex = selectedFilters.value?.attributes.indexOf(
+          option.id
+        );
         if (filterIndex > -1) {
           selectedFilters.value?.attributes?.splice(filterIndex, 1);
         }
@@ -578,7 +665,7 @@ export default {
       clearFilters,
       applyFilters,
       cart,
-      itemQuantity
+      itemQuantity,
     };
   },
   components: {
@@ -599,8 +686,8 @@ export default {
     SfHeading,
     SfProperty,
     LazyHydrate,
-    CategoryFeature
-}
+    CategoryFeature,
+  },
 };
 </script>
 
@@ -817,8 +904,8 @@ export default {
     flex: 0 0 100%;
     @include for-mobile {
       ::v-deep .sf-image {
-      --image-width: 5.3125rem;
-      --image-height: 7.0625rem;
+        --image-width: 5.3125rem;
+        --image-height: 7.0625rem;
       }
     }
   }

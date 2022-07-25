@@ -11,6 +11,13 @@ export const CategoryCollection = `
 		featuredAsset{
 			preview
 		}
+		description
+		filters{
+      args{
+        name
+        value
+      }
+    }
 	}
 `;
 
