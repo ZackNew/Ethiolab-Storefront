@@ -123,7 +123,7 @@
         <div class="w-1/2 -ml-16 mr-8">
           <h3 class="font-thin">More about this item</h3>
           <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi
+            Lorem ipsum dolor, yes sit amet consectetur adipisicing elit. Nisi
             eveniet, illum eligendi distinctio obcaecati magni error molestias,
             provident explicabo omnis doloribus animi voluptatum blanditiis
             esse. Fuga quisquam eos veniam aspernatur! Lorem ipsum, dolor sit
