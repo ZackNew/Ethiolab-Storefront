@@ -1,13 +1,14 @@
 <template>
     <div class="sf-header__navigation desktop" v-if="!isMobile">
-      <HeaderNavigationItem
+      <!-- <HeaderNavigationItem
         v-for="(category, index) in categories"
         :key="index"
         class="nav-item"
         v-e2e="`app-header-url_${category}`"
         :label="category"
         :link="localePath(`/c/${category}`)"
-      />
+      /> -->
+      <CategoriesSubNav/>
       <BrandsSubNav/>
       <IndustriesSubNav/>
     </div>
@@ -37,6 +38,8 @@ import { useUiState } from '~/composables';
 import HeaderNavigationItem from './HeaderNavigationItem.vue';
 import BrandsSubNav from './subnavs/BrandsSubNav.vue';
 import IndustriesSubNav from './subnavs/IndustriesSubNav.vue';
+import CategoriesSubNav from './subnavs/CategoriesSubNav.vue';
+
 
 export default {
   name: 'HeaderNavigation',
@@ -45,7 +48,8 @@ export default {
     SfModal,
     HeaderNavigationItem,
     BrandsSubNav,
-    IndustriesSubNav
+    IndustriesSubNav,
+    CategoriesSubNav
   },
   props: {
     isMobile: {

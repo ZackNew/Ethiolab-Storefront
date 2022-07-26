@@ -34,7 +34,6 @@ export default {
             brands{
                 id
                 name
-                description
             }
         }`});
         fetch('http://localhost:3000/shop-api', {
@@ -51,7 +50,7 @@ export default {
                     label: value.name,
                     items:[],
                     id: index,
-                    link:`/b/${value.name.toLowerCase()}`
+                    link:`/b/${value.name.toLowerCase()}/${value.id}`
                 }
               });
             //   console.log(this.)

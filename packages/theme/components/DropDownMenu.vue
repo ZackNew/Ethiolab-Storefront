@@ -18,8 +18,7 @@
 </template>
 <script>
 import HeaderSubNavigation from './HeaderSubNavigation.vue';
-import { useCategory, categoryGetters,useFacet, facetGetters,useCms } from '@vue-storefront/vendure';
-import { onSSR } from '@vue-storefront/core';
+import { useCms } from '@vue-storefront/vendure';
 import { computed } from '@vue/composition-api';
 import 
   {SfBanner}
@@ -32,7 +31,7 @@ export default {
         SfBanner
     },
     created(){
-        this.getTree();
+        // this.getTree();
         // console.log(this.headerNavigation);
     },
     props: {
@@ -44,15 +43,15 @@ export default {
         const {getCms}=useCms();
         const adSection = computed(() => JSON.parse(getCms.value[3].content));
         const adImage = computed(()=>getCms.value[3].featuredAsset.preview);
-        const getTree = ()=>{
-        // categories.value.items.forEach((a)=>{
-        //     if (a.parent.name === "__root_collection__") {
-        //         headerNavigation.push(facetGetters.getTree(a));
-        //    }
-        // });
-        };
+        // const getTree = ()=>{
+        // // categories.value.items.forEach((a)=>{
+        // //     if (a.parent.name === "__root_collection__") {
+        // //         headerNavigation.push(facetGetters.getTree(a));
+        // //    }
+        // // });
+        // };
         return {
-            getTree,
+            // getTree,
             // headerNavigation,
             adSection,
             adImage
