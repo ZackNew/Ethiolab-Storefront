@@ -12,6 +12,12 @@ export const CategoryCollection = `
 			preview
 		}
 		description
+		filters{
+      args{
+        name
+        value
+      }
+    }
 	}
 `;
 

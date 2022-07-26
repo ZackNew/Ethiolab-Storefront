@@ -5,28 +5,25 @@
       :breadcrumbs="breadcrumbs"
     /> -->
     <p class="mt-4 ml-4 mb-2 text-sm text-gray">
-      <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Category</NuxtLink> | 
+      <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Category</NuxtLink> |
       <span>Subcategory</span>
     </p>
     <div class="flex mt-4">
       <!-- Side filter search -->
-      <SubcategoryBrandAccordion :filters="filters" />
+      <SubcategoryBrandAccordion :filters="filterrs" />
       <!-- Subcategory name and description -->
       <div class="ml-2">
-        <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">Subcategory Title</h2>
+        <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">
+          {{ name }}
+        </h2>
         <div class="card shadow-lg my-4 flex w-auto mr-5">
           <img
             class="h-36 w-auto my-auto bg-light"
-            src="../static/homepage/productA.webp"
+            :src="subcategoryImage"
             alt=""
           />
           <div class="bg-faded_black">
-            <p class="py-4 ml-4 mr-4 text-white">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-              voluptates illum consequatur necessitatibus voluptas, autem amet
-              nostrum in eos officia maxime voluptate possimus sapiente delectus
-              eum ipsam. Explicabo, aspernatur fuga.
-            </p>
+            <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
           </div>
         </div>
         <!-- Ad section -->
@@ -48,21 +45,33 @@
           </div>
         </div>
 
-        <div
-          class="card mr-5 w-auto h-12 bg-light_accent"
-        >
+        <div class="card mr-5 w-auto h-12 bg-light_accent">
           <p class="float-left pt-3 ml-3">Number of Results | sortby</p>
           <button class="mt-2 ml-3 bg-dark p-1">Best Match</button>
         </div>
         <!-- Products -->
         <div class="grid grid-cols-4">
-          <div class="card shadow-lg w-52 my-3 ml-2 bg-light_accent" v-for="i in 5" :key="i">
-            <img src="" alt="image" />
+          <div
+            class="card shadow-lg w-52 my-3 ml-2 bg-light_accent"
+            v-for="product in result"
+            :key="product.id"
+          >
+            <img
+              class="h-36"
+              v-for="(img, index) in product.assets"
+              :key="index"
+              :src="img.preview"
+              alt="image"
+            />
             <!-- <h3 class="text-center m-3">link</h3> -->
-            <h4 class="text-center font-serif m-3">
-              $925.00 - $2,080.00USD / Each
-            </h4>
-            <p class="text-center m-3">description</p>
+            <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
+            <p
+              class="text-center m-3"
+              v-for="(price, index) in product.variants"
+              :key="index"
+            >
+              {{ String(price.price).slice(0, -2) }}
+            </p>
             <button
               class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
             >
@@ -83,57 +92,152 @@
 </template>
 
 <script>
-import { computed } from '@vue/composition-api';
-import { SfAccordion, SfSearchBar, SfBreadcrumbs } from "@storefront-ui/vue";
-import SubcategoryBrandAccordion from "~/components/SubcategoryBrandAccordion";
-import { useFacet, facetGetters } from '@vue-storefront/vendure';
+import { computed, onMounted, ref, onBeforeMount } from '@vue/composition-api';
+import { SfAccordion, SfSearchBar, SfBreadcrumbs } from '@storefront-ui/vue';
+import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
+import {
+  useFacet,
+  facetGetters,
+  useCategory,
+  useProduct,
+} from '@vue-storefront/vendure';
 import { useUiHelpers } from '~/composables';
+import { onSSR } from '@vue-storefront/core';
+import axios from 'axios';
 
 export default {
   name: 'Subcategory',
-  setup () {
+  setup(props, context) {
     const th = useUiHelpers();
-    const { result } = useFacet();
-    const searchResult = computed(() => facetGetters.getAgnosticSearchResult(result.value));
-    const rawCategoryTree = computed(() => searchResult.value?.data?.categories?.map(category => {
-      const tree = facetGetters.getTree(category.collection);
-      tree.isCurrent = th.doesUrlIncludesCategory(tree.slug);
-      return tree;
-    }));
-    const categoryTree = computed(() => getTreeWithoutEmptyCategories(rawCategoryTree.value));
-    console.log(categoryTree);
-    const filters = [
-        {
-          filter_title: 'Brand',
-          filter_options: ['Sartorius', 'Ohaus', 'Cole parmer'],
-        },
-        { filter_title: 'Color', filter_options: ['Indigo', 'yellow', 'Cyan'] },
-        {
-          filter_title: 'Price Range',
-          filter_options: [
-            '1000 ETB and less',
-            '1000 to 10,000 ETB',
-            '10,000 ETB and more',
-          ],
-        },
-        {
-          filter_title: 'Calibration Type',
-          filter_options: ['Internal', 'External', 'Internal Calibration'],
-        },
-        { filter_title: 'Capacity', filter_options: ['0.22', '0.31', '0.33'] },
-      ]
+    const lastSlug = th.getLastSlugFromParams();
+    const { categories } = useCategory();
+    const activeSubcategory = computed(() => {
+      for (let category of categories.value.items) {
+        const { slug } = category;
+        if (slug === lastSlug) {
+          return category;
+        }
+      }
+    });
+    const { name, featuredAsset, description, filters } =
+      activeSubcategory.value;
+    const subcategoryImage = featuredAsset?.preview;
+
+    // =========================================================== //
+
+    // let cbody = {
+    //   query: `query getCollection($slug: String) {
+    //             collection(slug: $slug) {
+    //               name
+    //               description
+    //               featuredAsset {
+    //                 source
+    //               }
+    //               filters {
+    //                 args {
+    //                   value
+    //                 }
+    //               }
+    //             }
+    //           }`,
+    //   variables: {
+    //     slug: lastSlug,
+    //   },
+    // };
+
+    // let coptions = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // };
+
+    // const activeCat = ref(null);
+    // axios
+    //   .post('http://localhost:3000/shop-api', cbody, coptions)
+    //   .then((response) => (activeCat.value = response.data?.data?.collection));
+
+    // console.log('me me me', activeCat.value);
+
+    // ================================================= ||
+
+    const productIdString = JSON.parse(filters[0]?.args[0].value);
+    const productId = productIdString.map((num) => {
+      return String(num);
+    });
+
+    let pbody = {
+      query: `query getProductById($in: [String!]) {
+                products(options: {filter: {id: {in: $in}}}) {
+                  items {
+                    name
+                    id
+                    slug
+                    description
+                    variants {
+                      price
+                    }
+                    assets {
+                      preview
+                    }
+                  }
+                }
+              }`,
+      variables: {
+        in: productId,
+      },
+    };
+
+    let poptions = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const result = ref({});
+    axios
+      .post('http://localhost:3000/shop-api', pbody, poptions)
+      .then(
+        (response) => (result.value = response.data?.data?.products?.items)
+      );
+
+    const filterrs = [
+      {
+        filter_title: 'Brand',
+        filter_options: ['Sartorius', 'Ohaus', 'Cole parmer'],
+      },
+      { filter_title: 'Color', filter_options: ['Indigo', 'yellow', 'Cyan'] },
+      {
+        filter_title: 'Price Range',
+        filter_options: [
+          '1000 ETB and less',
+          '1000 to 10,000 ETB',
+          '10,000 ETB and more',
+        ],
+      },
+      {
+        filter_title: 'Calibration Type',
+        filter_options: ['Internal', 'External', 'Internal Calibration'],
+      },
+      { filter_title: 'Capacity', filter_options: ['0.22', '0.31', '0.33'] },
+    ];
+
     return {
       th,
-      categoryTree,
-      filters,
+      filterrs,
+      description,
+      name,
+      result,
+      // activeCat,
+      subcategoryImage,
+      activeSubcategory,
       // breadcrumbs,
     };
   },
   components: {
     SfAccordion,
-    SfSearchBar, 
+    SfSearchBar,
     SfBreadcrumbs,
-    SubcategoryBrandAccordion
+    SubcategoryBrandAccordion,
   },
 };
 </script>
