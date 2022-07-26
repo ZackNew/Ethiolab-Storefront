@@ -697,6 +697,7 @@ export type CurrentUser = {
   identifier: Scalars['String'];
   channels: Array<CurrentUserChannel>;
 };
+
 export type Cms={
   __typename?:'Cms';
   id:Scalars['ID'];

@@ -91,6 +91,33 @@
         </div>
       </div>
     </SfTab>
+    <SfTab title="My Quotes">
+         <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
+           Message: {{quote.msg}}
+          <SfButton>Delete</SfButton>
+         </div> -->
+         <SfTable>
+           <SfTableHeading>
+            <SfTableHeader
+              v-for="tableHeader in quotesHeader"
+              :key="tableHeader"
+            >{{ tableHeader }}</SfTableHeader>
+            <SfTableHeader class="orders__element--right" />
+          </SfTableHeading>
+          <SfTableRow v-for="quote of quotes">
+           <SfTableData>{{quotes.indexOf(quote) + 1}})</SfTableData>  
+           <SfTableData>{{quote.createdAt}}</SfTableData> 
+           <SfTableData>{{quote.subject}}</SfTableData>  
+           <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
+           <SfTableData>
+                     <SfButton class="sf-button--text">See Details</SfButton>
+                     <SfButton class="sf-button--text red-text" @click="removeQuote(quotes.indexOf(quote))">Delete</SfButton>
+                      <SfButton class="sf-button--text" @click="downloadQuote(quotes.indexOf(quote))">Download As Pdf</SfButton>
+           </SfTableData>
+      
+          </SfTableRow>
+         </SfTable>
+    </SfTab>
   </SfTabs>
 </template>
 
@@ -103,11 +130,15 @@ import {
   SfLink,
   SfArrow
 } from '@storefront-ui/vue';
-import { computed, ref } from '@vue/composition-api';
-import { useUserOrder, orderGetters } from '@vue-storefront/vendure';
+import { computed, ref, provide } from '@vue/composition-api';
+import { useUserOrder, orderGetters, useQuote, useUser, userGetters } from '@vue-storefront/vendure';
 import { AgnosticOrderStatus, onSSR } from '@vue-storefront/core';
-
+import {jsPDF} from 'jspdf';
+import axios from 'axios'
+import gql from 'graphql-tag';
+import { print } from 'graphql';
 export default {
+
   name: 'PersonalDetails',
   components: {
     SfTabs,
@@ -117,10 +148,63 @@ export default {
     SfLink,
     SfArrow,
   },
+
   setup() {
+    const quotes = ref([])
+    const { load, myQuotes, deleteQuote} = useQuote();
+    const {user ,load: loadUser} = useUser();
+    loadUser().then(() =>{
+         const currentEmail = userGetters.getEmailAddress(user.value);
+             load({email: currentEmail})
+            .then(data => {
+              console.log("DATA ", myQuotes.value)
+              quotes.value = myQuotes.value;
+              //console.log("DATA: ", myQuotes.value)
+            })
+            .catch(err => console.warn(err))
+
+    } );
+  
+  function removeQuote(index){
+    deleteQuote({id:quotes.value[index].id})
+    quotes.value = quotes.value.filter(q => quotes.value.indexOf(q) !== index);
+  
+  }
+  function downloadQuote(index){
+       const doc= jsPDF()
+       
+       doc.text(`Subject: ${quotes.value[index]?.subject}`, 10, 10)
+       doc.text(`Msg ${quotes.value[index]?.msg}`, 10, 20)
+        doc.save("quote.pdf");
+  }
+
+
+    //    // quotes.value = myQuotes
+   // console.log('DATA::',  load)
+
+    //const  mutation = gql`
+    // query getQuotesOf($email: String!){
+    //       getQueryOf(email: $email)    {
+    //         id,
+    //         productDescr,
+    //         #fromEmail,
+    //         msg,
+    //         subject,
+    //         createdAt
+    //       }
+    // }`
+    // axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{email: 'eben@gmail.com'}})
+    // .then(data =>{
+    //   console.log(data)
+    //     quotes.value = data.data.data.getQueryOf
+    // })
+    
+    
     const limit = 10;
     const { orders, search } = useUserOrder();
     const currentOrder = ref(null);
+   
+
 
     onSSR(async () => {
       await search({ limit, offset: 0, sort: 'createdAt desc' });
@@ -140,6 +224,13 @@ export default {
       'Amount',
       'Status'
     ];
+    const quotesHeader = [
+      'Id',
+      'Sent At',
+      'Subject',
+   //   'message',
+      'Actions'
+    ]
 
     const getStatusTextClass = (order) => {
       const status = orderGetters.getStatus(order);
@@ -154,6 +245,7 @@ export default {
     };
 
     return {
+      quotesHeader,
       tableHeaders,
       orders: computed(() => orders.value ?? []),
       offset: computed(() => orders.value?.offset ?? 0),
@@ -162,7 +254,11 @@ export default {
       goNext,
       goPrev,
       orderGetters,
-      currentOrder
+      currentOrder,
+      quotes,
+      deleteQuote,
+      downloadQuote,
+      removeQuote
     };
   }
 };
@@ -275,6 +371,9 @@ export default {
 }
 .review-bar{
   width: 100% !important;
+}
+.red-text{
+  color: red;
 }
 
 </style>

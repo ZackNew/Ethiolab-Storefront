@@ -372,6 +372,9 @@ export default {
   }
 }
 
+.advert {
+  --banner-width: 100%;
+}
 
 .similar-products {
   display: flex;

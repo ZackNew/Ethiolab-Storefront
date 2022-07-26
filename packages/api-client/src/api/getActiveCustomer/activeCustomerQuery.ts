@@ -11,6 +11,9 @@ export default gql`
       lastName
       emailAddress
       phoneNumber
+      customFields{
+        tin_number
+      }
       orders {
         items {
           id

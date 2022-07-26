@@ -45,7 +45,7 @@ export default {
         { name: '+251-111-264-829', link: '#'},
         { name: 'My Account', link: '/my-account'},
         { name: 'Sign In', link: '#'},
-
+         { name: 'Request a Quote', link: '/WriteAQuote'},
       ];
     return{
       headerNavigation

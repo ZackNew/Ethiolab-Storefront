@@ -226,7 +226,7 @@
                   </button>
                 </div>
               </div>
-            </div>
+
 
                <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">New Products You Might Like</h3>
 
@@ -382,6 +382,8 @@
               </SfSelect>
             </LazyHydrate>
           </div>
+            </div>
+
        
       </SfLoader>
     </div>
