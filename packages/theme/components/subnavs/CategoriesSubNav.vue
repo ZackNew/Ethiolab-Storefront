@@ -2,9 +2,9 @@
   <HeaderNavigationItem
       :subnavList="headerNavigation"
       class="nav-item"
-      v-e2e="`app-header-url_${category}`"
+      v-e2e="`app-header-url_CATEGORY`"
       :label="'PRODUCTS'"
-      :link="localePath(`/c/${category}`)"
+      :link="localePath(`/c/CATEGORY`)"
     />
 </template>
 

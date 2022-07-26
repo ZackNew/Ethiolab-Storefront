@@ -35,10 +35,10 @@ export default {
     const {enablePopUp, togglePopUp} = useUiState();
     const disablePopUp = ref(false);
     const {getCms} = useCms();
-   // const popup = getCms.value.filter((item)=>item.cmsType==='POPUP').map(filteredObj => filteredObj.content);
-       const popup =computed(()=>JSON.parse(getCms.value[1].content))
+   const popup = getCms.value.filter((item)=>item.cmsType==='POPUP').map(filteredObj => filteredObj.content);
+      //  const popup =computed(()=>JSON.parse(getCms.value[1].content))
 
-  //  const popupContent= JSON.parse(popup);
+   const popupContent= JSON.parse(popup);
     const {isMobileMenuOpen} = useUiState();
     const disablePopUpMethod = () => {
       if (disablePopUp.value) {
