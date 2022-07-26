@@ -20,10 +20,14 @@ function getFullName(user: Customer): string {
 function getEmailAddress(user: Customer): string {
   return user?.emailAddress || '';
 }
+function getTinNumber(user: Customer): string{
+  return user?.customFields?.tin_number;
+}
 
 export const userGetters: UserGetters<Customer> = {
   getFirstName,
   getLastName,
   getFullName,
-  getEmailAddress
+  getEmailAddress,
+  getTinNumber
 };

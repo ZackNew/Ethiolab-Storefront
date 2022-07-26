@@ -59,7 +59,7 @@ import PasswordResetForm from '~/components/MyAccount/PasswordResetForm';
 import EmailUpdateForm from '~/components/MyAccount/EmailUpdateForm';
 import { SfTabs, SfInput, SfButton } from '@storefront-ui/vue';
 import { useUser, userGetters } from '@vue-storefront/vendure';
-import { onMounted,watchEffect,ref } from '@vue/composition-api';
+import { onMounted,watchEffect,ref, inject } from '@vue/composition-api';
 import gql from 'graphql-tag';
 import { print } from 'graphql';
 import axios from 'axios'
@@ -104,6 +104,7 @@ export default {
   },
 
   setup() {
+    const showToast = inject('showToast')
     const { updateUser, changePassword, user, load, updateEmail } = useUser();
     const tinNumber = ref('');
     const currentEmail = userGetters.getEmailAddress(user.value);
@@ -169,7 +170,9 @@ export default {
     });
     const updateTinNumber  = async()=>{
       try{
-              const query =    gql`mutation upd($tinNumber: String!){
+         showToast('Updated!')
+              const query 
+              =    gql`mutation upd($tinNumber: String!){
                     updateCustomer(input: {
                        # id: $id,
                         customFields: {
@@ -185,7 +188,9 @@ export default {
             {query: print(query),variables: {tinNumber: tinNumber.value, }},
             {headers:{
               'Authorization': 'Bearer ' + getCookie('etech-auth-token')
-            }}
+            }
+            }
+           
             
             )
     }catch(e){

@@ -30,6 +30,7 @@ export type UseUserUpdateParams = TODO;
 export type UseUserRegisterParams = TODO;
 
 export type useUserOrderSearchParams = TODO;
+export type DeleteQuoteParams = {id: string}
 
 export type AgnosticProductVariant = {
   _id: string,
