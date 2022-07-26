@@ -42,10 +42,8 @@ export default {
       const headerNavigation = [
         { name: 'Help', link: '/pages/helpAndFAQ' },
         { name: 'Contact us', link: '/pages/contact'},
-        { name: '+251-111-264-829', link: '#'},
-        { name: 'My Account', link: '/my-account'},
-        { name: 'Sign In', link: '#'},
-
+        { name: 'Help center', link: '/pages/helpAndFAQ'},
+         { name: 'Request a Quote', link: '/WriteAQuote'},
       ];
     return{
       headerNavigation

@@ -22,9 +22,9 @@
 
 <script>
 import {useUiState} from "~/composables";
-import {computed, ref, watchEffect} from "@vue/composition-api";
-import {SfInput, SfModal, SfTextarea,SfButton} from "@storefront-ui/vue";
-import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
+import {computed, ref, watchEffect, inject} from "@vue/composition-api";
+import {SfInput, SfModal, SfTextarea,SfButton, } from "@storefront-ui/vue";
+import { useCart, useUser, cartGetters, useQuote } from '@vue-storefront/vendure';
 import test from '~/composables/test'
 import axios from 'axios'
 import gql from 'graphql-tag';
@@ -49,14 +49,15 @@ export default {
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
               );
    };
-  const isSubjectValid = ref(true);
-  const isPhoneValid =  ref(true);
-  const isMessageValid =  ref(true);
-  const isLocationValid =  ref(true);
-  const  isEmailValid =  ref(true);
+    const isSubjectValid = ref(true);
+    const isPhoneValid =  ref(true);
+    const isMessageValid =  ref(true);
+    const isLocationValid =  ref(true);
+    const  isEmailValid =  ref(true);
 
+    const showToast = inject('showToast');
+    const {writeQuote} = useQuote();
 
-  
     const { isQuoteModalOpen,toggleQuoteModal,toggleCartSidebar } = useUiState();
     const qTitle=ref(""), qEmail=ref(""), qBody=ref(""), qPhone = ref('');
     const cities = ['Addis Ababa', 'Adama', 'Mekele', 'Gondar', 'Bahir Dar']
@@ -101,36 +102,49 @@ export default {
           descr += "Unit Price With Tax "+ item['unitPriceWithTax'] + '<br /><br /><br />'
        })
        pIds += "]"
-        console.log("%c sent!", "color: red", pIds)
-       console.log("Title: ",qTitle.value, " Email:", qEmail.value, " Body:", qBody.value, " Phone", qPhone.value, " city:",quoteCity.value);
-       console.log( " Desc2 ", descr, "/");
-       const mutation = gql`
+      
+      //   console.log("%c sent!", "color: red", pIds)
+      //  console.log("Title: ",qTitle.value, " Email:", qEmail.value, " Body:", qBody.value, " Phone", qPhone.value, " city:",quoteCity.value);
+      //  console.log( " Desc2 ", descr, "/");
+    //    const mutation = gql`
  
-                      mutation writeQuote($msg: String!, $subject: String!, $fromEmail: String!, $fromPhone: String!, $location:String!, $productDescr: String!, $productIds: [String]!){
-                        writeQuote(args:{msg:$msg,
-                          subject: $subject, 
-                          fromEmail: $fromEmail, 
-                          fromPhone: $fromPhone, 
-                          location: $location, 
-                          productDescr: $productDescr,
-                          productIds: $productIds  
-                        }){
-                          location,
-                          msg,
-                          id,
-                          subject,
-                          productDescr,
-                          forProducts{
-                            name
-                          }
-                        }
-                      }
-                      `;
+    //                   mutation writeQuote($msg: String!, $subject: String!, $fromEmail: String!, $fromPhone: String!, $location:String!, $productDescr: String!, $productIds: [String]!){
+    //                     writeQuote(args:{msg:$msg,
+    //                       subject: $subject, 
+    //                       fromEmail: $fromEmail, 
+    //                       fromPhone: $fromPhone, 
+    //                       location: $location, 
+    //                       productDescr: $productDescr,
+    //                       productIds: $productIds  
+    //                     }){
+    //                       location,
+    //                       msg,
+    //                       id,
+    //                       subject,
+    //                       productDescr,
+    //                       forProducts{
+    //                         name
+    //                       }
+    //                     }
+    //                   }
+    //                   `;
   
 
-     (
-       async () =>{
-         const data = await axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{
+    //  (
+    //    async () =>{
+    //      const data = await axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{
+    //        msg: qBody.value,
+    //        subject: qTitle.value,
+    //        fromEmail: qEmail.value,
+    //        fromPhone: qPhone.value,
+    //        location: quoteCity.value,
+    //        productDescr: descr,
+    //        productIds: pIds
+    //      }});
+    //      console.log(data);
+    //    }
+    //  )()
+    writeQuote({
            msg: qBody.value,
            subject: qTitle.value,
            fromEmail: qEmail.value,
@@ -138,10 +152,8 @@ export default {
            location: quoteCity.value,
            productDescr: descr,
            productIds: pIds
-         }});
-         console.log(data);
-       }
-     )()
+     })
+     showToast('Sent!')
      toggleQuoteModal();
     }
     return{

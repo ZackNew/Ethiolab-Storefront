@@ -12,7 +12,8 @@
 
     <div id="layout" >
       <nuxt :key="$route.fullPath"/>
-
+     
+      <ToastVue :show="isToastVisible" :message='toastMessage'/>
       <LazyHydrate when-visible>
         <BottomNavigation />
       </LazyHydrate>
@@ -29,6 +30,7 @@
 </template>
 
 <script>
+import ToastVue from '~/components/Toast.vue';
 import AppHeader from '~/components/AppHeader.vue';
 import BottomNavigation from '~/components/BottomNavigation.vue';
 import AppFooter from '~/components/AppFooter.vue';
@@ -39,13 +41,16 @@ import LoginModal from '~/components/LoginModal.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import Notification from '~/components/Notification';
 import CategoriesSidebar from "~/components/CategoriesSidebar";
-import {useCms,useFacet} from "@vue-storefront/vendure";
+import {useCms,useFacet, useUser} from "@vue-storefront/vendure";
 import {useUiState} from "~/composables"
 import {onSSR} from "@vue-storefront/core";
+import Toast from '~/components/Toast.vue';
+import {computed, ref, watchEffect, provide} from "@vue/composition-api";
 export default {
   name: 'DefaultLayout',
 
   components: {
+    ToastVue,
     CategoriesSidebar,
     LazyHydrate,
     TopBar,
@@ -55,17 +60,43 @@ export default {
     CartSidebar,
     WishlistSidebar,
     LoginModal,
-    Notification
-  },
+    Notification,
+    Toast
+ },
+
   setup(){
+    const {load: loadUser} = useUser();
+
     const {isDarkMode} = useUiState();
      const {search:searchCms}=useCms();
-        const { search } = useFacet();
+      const { search } = useFacet();
+      const isToastVisible = ref(false);
+      const toastMessage = ref('')
+      function showToast(msg){
+        toastMessage.value = msg;
+        isToastVisible.value = true;
+
+        setTimeout(() => {
+          closeToast()
+        }, 100);
+      }
+      function closeToast(){
+          isToastVisible.value = false;
+      }
+      provide('closeToast', closeToast);
+      provide('showToast', showToast)
+      loadUser()
+      .then(
+        ()=>{
+          //this.$router.go(0)
+        }
+      )
+
       onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8});
       await searchCms(['HERO_SECTION','POPUP','STATIC','ADVERTISEMENT',"POLICIES"])
     });
-    return{isDarkMode}
+    return{isDarkMode, isToastVisible, showToast, toastMessage}
   },
 };
 </script>

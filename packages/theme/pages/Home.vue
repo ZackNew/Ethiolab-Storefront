@@ -1,8 +1,13 @@
 <template>
   <client-only>
   <div id="home">
+<<<<<<< HEAD
     <PopupNotification/>
  <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
+=======
+    <!-- <PopupNotification/> -->
+      <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
+>>>>>>> main
 <!--        categories-->
         <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container">
           <LazyHydrate when-visible>
@@ -160,12 +165,14 @@ import {
   SfCard
 } from '@storefront-ui/vue';
 import LazyHydrate from 'vue-lazy-hydration';
+import * as comps from "@vue-storefront/vendure" ;
 import Testimonial from '~/components/Testimonial.vue';
 import NewsletterModal from '~/components/NewsletterModal.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
 import { useUiState } from '../composables';
 import cacheControl from './../helpers/cacheControl';
-import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet,useCms} from "@vue-storefront/vendure";
+import {productGetters, useCategory, facetGetters, useCart, useWishlist, useFacet,useCms,useQuote,
+ useTest, useAnotherTest} from "@vue-storefront/vendure";
 import CategoriesAccordion from "~/components/CategoriesAccordion";
 import {onSSR} from "@vue-storefront/core";
 import {computed, onMounted} from "@vue/composition-api";
@@ -203,7 +210,14 @@ export default {
     SfDivider,
     SfCard
   },
-  
+  /*
+     msg: String!
+        subject: String!
+        fromEmail: String!
+        fromPhone: String!
+        location: String!
+        productDescr: String!
+        productIds: [String]!*/
   setup() {
     const { toggleNewsletterModal } = useUiState();
     const {categories} = useCategory();
@@ -211,18 +225,25 @@ export default {
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
     const { result } = useFacet();
-    const products = computed(() => result.value.data.items);
-    const heroSection =computed(()=>JSON.parse(getCms.value[0].content))
-    const adSection = computed(() => JSON.parse(getCms.value[3].content));
-    const heroImage = computed(()=>getCms.value[0].featuredAsset.preview)
-    const adImage = computed(()=>getCms.value[3].featuredAsset.preview);
-    console.log(adImage);
+    const products = computed(() => result.value.data?.items);
+    //console.log(useTest())
+ 
+    const {writeQuote, load, myQuotes} = useQuote();
+
+    
+   //console.log({comps})
+   // console.log(getCms.value[0] )
+
+    const heroSection =computed(()=>JSON.parse(getCms.value[0]?.content ?? "{}"))
+    const adSection = computed(() => JSON.parse(getCms.value[3]?.content?? "{}"));
+    const heroImage = computed(()=>getCms.value[0]?.featuredAsset.preview)
+    const adImage = computed(()=>getCms.value[3]?.featuredAsset.preview)
     const headerNavigation = [];
     console.log('products',products)
           console.log("the adsection value is ", adSection);
 
     const getTree = ()=>{
-      categories.value.items.forEach((a)=>{
+      categories.value.items?.forEach((a)=>{
         if (a.children.length > 0) {
           headerNavigation.push(facetGetters.getTree(a));
         }

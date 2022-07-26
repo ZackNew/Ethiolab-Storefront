@@ -50,10 +50,29 @@ export type RequestPasswordResetResponse = MutationResponse<'requestPasswordRese
 export type ResetPasswordResponse = MutationResponse<'resetPassword', ResetPasswordResult>;
 export type UpdateCustomerEmailAddressResponse = MutationResponse<'updateCustomerEmailAddress', Success>;
 
-type writeQuoteParams = {msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: String[], prodcutDescr: string}
-export type writeQuoteResult = MutationResponse<"writeQuote" ,{id: number, msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds: String[], prodcutDescr: string}>
-export interface VendureApiMethods {
-   writeQuote (params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult>;
+export type Quote = {isSpecial?: boolean, id: number, msg: string, subject: string,fromEmail: string,fromPhone: string, location: string, productIds?:string, productDescr: string}
+export type writeQuoteParams = {
+   msg: string, subject: string,
+   fromEmail: string,fromPhone: string, 
+   location: string, productIds?: string, productDescr: string
+   isSpecial?: Boolean
+  }
+export type writeQuoteResult = MutationResponse<"writeQuote" ,Quote>
+export type getQuotesResult = QueryResponse<'getQueryOf', Quote[]>
+export type getQuotesOfParams = {email: string}
+export type writeContactUsParamsResult = MutationResponse<"writeContactUsMessage", ContactUsMessage>; //its is not correct
+export type writeContactUsParams = {message: {phone_number: string,first_name: string, last_name: string, message: string, email:string}}
+export type setTinNumberParams = {tinNumber:string};
+export type DeleteQuoteParams = {id: string};
+export type ContactUsMessage = {id: string, }
+export interface VendureApiMethods 
+{
+  getQueryOf(params: getQuotesOfParams, customQuery?: CustomQuery): Promise<getQuotesResult>;
+  writeQuote (params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult>;
+  deleteQuote(params: DeleteQuoteParams, customQuery?: CustomQuery): Promise<MutationResponse<'deleteQuote', boolean>>
+  writeContactUsMessage(params: writeContactUsParams, customQuery?: CustomQuery): Promise<MutationResponse<'writeContactUsMessage', ContactUsMessage>>
+
+
   getProduct(params: ProductParams, customQuery?: CustomQuery): Promise<GetProductResponse>;
   getFacet(params: SearchParams, customQuery?: CustomQuery): Promise<GetFacetResponse>;
   getCategory(params: CollectionParams, customQuery?: CustomQuery): Promise<GetCategoryResponse>;
