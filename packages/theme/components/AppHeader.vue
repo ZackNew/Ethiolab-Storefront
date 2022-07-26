@@ -245,7 +245,7 @@ export default {
     });
 
     const wishlistTotalItems = computed(() => {
-      // loadCart()
+      if(isAuthenticated.value) loadCart()
       const count = wishlistGetters.getTotalItems(wishlist.value);
       return count ? count.toString() : null;
     });
