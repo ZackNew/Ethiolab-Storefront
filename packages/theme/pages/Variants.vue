@@ -75,7 +75,8 @@
                                     <img src="/categories/cat7.jpeg" class="col-span-1 mt-5 ml-5" />
                                 </div>
                                 <div class="col-span-2">
-                                    <a href="#" class="text-secondary ml-5">EW-10001-00</a>
+                                    <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
+                                    <nuxt-link to="/p/9/balancer">EW-10001-00</nuxt-link>
                                 </div>
 
                             </div>
