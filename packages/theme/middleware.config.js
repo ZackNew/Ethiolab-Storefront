@@ -1,5 +1,4 @@
 NODE_TLS_REJECT_UNAUTHORIZED='0'
-process.env.GRAPQL_API
 module.exports = {
   integrations: {
     vendure: {
