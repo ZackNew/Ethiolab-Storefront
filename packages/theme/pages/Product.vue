@@ -276,11 +276,9 @@ export default {
     console.log('Product Page setup');
     const qty = ref(1);
     const { id } = context.root.$route.params;
-    console.log('id', typeof id);
     const { products, search } = useProduct('products');
     const { addItem, loading } = useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
-    console.log('ps', products);
     const {
       relatedProducts,
       load: searchRelatedProducts,

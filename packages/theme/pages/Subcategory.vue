@@ -70,7 +70,7 @@
               v-for="(price, index) in product.variants"
               :key="index"
             >
-              {{ price.price }}
+              {{ String(price.price).slice(0, -2) }}
             </p>
             <button
               class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
@@ -88,8 +88,6 @@
         </div>
       </div>
     </div>
-    <p>=====================</p>
-    <p>{{ activeCat }}</p>
   </div>
 </template>
 
@@ -127,38 +125,38 @@ export default {
 
     // =========================================================== //
 
-    let cbody = {
-      query: `query getCollection($slug: String) {
-                collection(slug: $slug) {
-                  name
-                  description
-                  featuredAsset {
-                    source
-                  }
-                  filters {
-                    args {
-                      value
-                    }
-                  }
-                }
-              }`,
-      variables: {
-        slug: lastSlug,
-      },
-    };
+    // let cbody = {
+    //   query: `query getCollection($slug: String) {
+    //             collection(slug: $slug) {
+    //               name
+    //               description
+    //               featuredAsset {
+    //                 source
+    //               }
+    //               filters {
+    //                 args {
+    //                   value
+    //                 }
+    //               }
+    //             }
+    //           }`,
+    //   variables: {
+    //     slug: lastSlug,
+    //   },
+    // };
 
-    let coptions = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+    // let coptions = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // };
 
-    const activeCat = ref(null);
-    axios
-      .post('http://localhost:3000/shop-api', cbody, coptions)
-      .then((response) => (activeCat.value = response.data?.data?.collection));
+    // const activeCat = ref(null);
+    // axios
+    //   .post('http://localhost:3000/shop-api', cbody, coptions)
+    //   .then((response) => (activeCat.value = response.data?.data?.collection));
 
-    console.log('me me me', activeCat.value);
+    // console.log('me me me', activeCat.value);
 
     // ================================================= ||
 
@@ -229,7 +227,7 @@ export default {
       description,
       name,
       result,
-      activeCat,
+      // activeCat,
       subcategoryImage,
       activeSubcategory,
       // breadcrumbs,
