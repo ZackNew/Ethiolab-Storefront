@@ -72,11 +72,12 @@
             >
               {{ String(price.price).slice(0, -2) }}
             </p>
-            <button
+            <nuxt-link
               class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+              :to="'/v/' + product.slug"
             >
               View All
-            </button>
+            </nuxt-link>
           </div>
         </div>
 

@@ -27,6 +27,11 @@ export function getRoutes(themeDir = __dirname) {
     component: path.resolve(themeDir, 'pages/Subcategory.vue')
   },
   {
+    name: 'variants',
+    path: '/v/:slug_1/:slug_2?/:slug_3?/:slug_4?/:slug_5?',
+    component: path.resolve(themeDir, 'pages/Variants.vue')
+  },
+  {
     name: 'static',
     path: '/page/:pageName?',
     component: path.resolve(themeDir, 'pages/Static.vue')
