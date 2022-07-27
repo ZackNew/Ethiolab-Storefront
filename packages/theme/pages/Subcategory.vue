@@ -195,8 +195,9 @@ export default {
     };
 
     const result = ref({});
+    let baseUrl = process.env.GRAPHQL_API
     axios
-      .post('http://localhost:3000/shop-api', pbody, poptions)
+      .post(baseUrl, pbody, poptions)
       .then(
         (response) => (result.value = response.data?.data?.products?.items)
       );

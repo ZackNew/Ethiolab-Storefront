@@ -33,7 +33,8 @@ export default {
                                             }
                                           }
                                         }}`;
-      const data = await axios.post('http://localhost:3000/shop-api',
+      let baseUrl = process.env.GRAPHQL_API
+      const data = await axios.post(baseUrl,
           {
             query: print(mutation), variables: {
               code: this.$route.query.code

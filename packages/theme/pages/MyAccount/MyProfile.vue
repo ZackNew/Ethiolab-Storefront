@@ -154,7 +154,8 @@ export default {
         }
       }`
     console.log("Token=", getCookie('etech-auth-token'))
-    axios.post('http://localhost:3000/shop-api', 
+    let baseUrl = process.env.GRAPHQL_API
+    axios.post(baseUrl, 
     {query: print(query),},
     {headers:{
       'Authorization': 'Bearer ' + getCookie('etech-auth-token')
@@ -184,7 +185,8 @@ export default {
                     }
               }`
             console.log("Token=", getCookie('etech-auth-token'))
-            axios.post('http://localhost:3000/shop-api', 
+            let baseUrl = process.env.GRAPHQL_API
+            axios.post(baseUrl, 
             {query: print(query),variables: {tinNumber: tinNumber.value, }},
             {headers:{
               'Authorization': 'Bearer ' + getCookie('etech-auth-token')

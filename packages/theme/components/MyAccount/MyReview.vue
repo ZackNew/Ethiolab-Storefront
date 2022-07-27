@@ -228,7 +228,8 @@ export default {
       // authorLocation: "${this.lineItem.productVariant.id}"
       console.log(addReviewMutation);
       this.isSubmiting= true;
-      await fetch('http://localhost:3000/shop-api', {
+      let baseUrl = process.env.GRAPHQL_API
+      await fetch(baseUrl, {
           method: 'post',
           body: addReviewMutation,
           headers: {

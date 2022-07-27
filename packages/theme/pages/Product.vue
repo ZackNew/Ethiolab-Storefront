@@ -371,7 +371,8 @@ export default {
         }
       `,
       });
-      const response = await fetch('http://localhost:3000/shop-api', {
+      let baseUrll = process.env.GRAPHQL_API
+      const response = await fetch(baseUrll, {
         method: 'post',
         body: data,
         headers: {
