@@ -1,7 +1,7 @@
 <template>
     <div class="body">
         <div class="grid grid-rows-6 grid-flow-col">
-            <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in $props.subnavList" :key="navs.id" :link="navs.link"/>
+            <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in $props.subnavList" :key="navs.id"/>
             <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
         </div>
         <SfBanner
