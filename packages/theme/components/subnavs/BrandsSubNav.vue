@@ -2,9 +2,9 @@
   <HeaderNavigationItem
       :subnavList="headerNavigation"
       class="nav-item"
-      v-e2e="`app-header-url_INDUSTRIES`"
-      :label="'INDUSTRIES'"
-      :link="localePath(`/c/INDUSTRIES`)"
+      v-e2e="`app-header-url_BRANDS`"
+      :label="'BRANDS'"
+      :link="localePath(`/c/BRANDS`)"
     />
 </template>
 
@@ -13,7 +13,7 @@ import HeaderNavigationItem from '../HeaderNavigationItem.vue';
 import { ref } from '@vue/composition-api';
 import { useCategory,} from '@vue-storefront/vendure';
 export default {
-    name: 'IndustriesSubNav',
+    name: 'BrandsSubNav',
     components:{
         HeaderNavigationItem,
     },
@@ -31,7 +31,7 @@ export default {
       getBrands(){
         let graphql=JSON.stringify({
           query:`query{
-            industries{
+            brands{
                 id
                 name
             }
@@ -45,12 +45,12 @@ export default {
           }
         }).then(r => r.json())
           .then((data) => {
-              this.headerNavigation=data.data.industries.map((value, index)=>{
+              this.headerNavigation=data.data.brands.map((value, index)=>{
                 return {
                     label: value.name,
                     items:[],
                     id: index,
-                    link:`/i/${value.name.toLowerCase()}/${value.id}`
+                    link:`/b/${value.name.toLowerCase()}/${value.id}`
                 }
               });
             //   console.log(this.)
