@@ -1,10 +1,10 @@
 <template>
   <div class="sub-body">
       <div class="content">
-        <a :key="-1" :href="localePath(`/c/${this.$props.title.toUpperCase()}`)">{{this.$props.title}}</a>
+        <nuxt-link :key="-1" :to="'/c/' + this.$props.slug">{{this.$props.title}}</nuxt-link>
         <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
         <div class="grid grid-rows-4 grid-cols-2 gap-6 overlay" v-if="subnavList.length > 0">
-            <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{sub.label}}</a>
+            <a v-for="sub in subnavList" :key="sub.id" :href="`/s/${sub.slug}`">{{sub.label}}</a>
         </div>
       </div>
   </div>
@@ -18,6 +18,7 @@ export default {
     props: {
         title:String,
         subnavList:Array,
+        slug: String
     },
     setup() {
         

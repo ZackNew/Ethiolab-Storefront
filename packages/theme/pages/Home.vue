@@ -148,10 +148,10 @@
       <LazyHydrate>
         <BestSeller />
       </LazyHydrate>
-
+<!-- 
       <LazyHydrate>
         <FeaturedProducts />
-      </LazyHydrate>
+      </LazyHydrate> -->
       <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
       <LazyHydrate when-visible>

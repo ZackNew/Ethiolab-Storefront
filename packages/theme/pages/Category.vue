@@ -154,7 +154,7 @@
                              <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="">
                               <div class="h-40 bg-bg_dark grid grid-cols-3">
                                           <img :src="cat.featuredAsset.preview || '/categories/cat2.jpeg' " class="h-40" />
-                                          <div v-html="cat.description || `Category Description`" class="text-white col-span-2 pt-5 "></div>
+                                          <div v-html="cat.description || `Category Description`" class="text-white col-span-2 pt-5 overflow-auto max-h-40"></div>
                                               <!-- <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
                                                 electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
                                                   metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
