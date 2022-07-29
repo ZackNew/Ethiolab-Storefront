@@ -1,7 +1,7 @@
 <template>
     <div class="body">
         <div class="grid grid-rows-6 grid-flow-col">
-            <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id" :slug="navs.slug"/>
+            <HeaderSubNavigation :title="navs.label" :slug="navs.slug" :subnavList="navs.items" v-for="navs in $props.subnavList" :key="navs.id"/>
             <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
         </div>
         <SfBanner
@@ -19,8 +19,7 @@
 </template>
 <script>
 import HeaderSubNavigation from './HeaderSubNavigation.vue';
-import { useCategory, categoryGetters,useFacet, facetGetters,useCms } from '@vue-storefront/vendure';
-import { onSSR } from '@vue-storefront/core';
+import { useCms } from '@vue-storefront/vendure';
 import { computed } from '@vue/composition-api';
 import 
   {SfBanner}
@@ -33,28 +32,28 @@ export default {
         SfBanner
     },
     created(){
-        this.getTree();
+        // this.getTree();
         // console.log(this.headerNavigation);
     },
     props: {
-        
+        subnavList:Array,
     },
     setup() {
-        const headerNavigation = [];
-        const {categories} = useCategory();
+        // const headerNavigation = [];
+        // const {categories} = useCategory();
         const {getCms}=useCms();
         const adSection = computed(() => JSON.parse(getCms.value[3].content));
         const adImage = computed(()=>getCms.value[3].featuredAsset.preview);
-        const getTree = ()=>{
-        categories.value.items.forEach((a)=>{
-            if (a.parent.name === "__root_collection__") {
-                headerNavigation.push(facetGetters.getTree(a));
-           }
-        });
-        };
+        // const getTree = ()=>{
+        // // categories.value.items.forEach((a)=>{
+        // //     if (a.parent.name === "__root_collection__") {
+        // //         headerNavigation.push(facetGetters.getTree(a));
+        // //    }
+        // // });
+        // };
         return {
-            getTree,
-            headerNavigation,
+            // getTree,
+            // headerNavigation,
             adSection,
             adImage
         }

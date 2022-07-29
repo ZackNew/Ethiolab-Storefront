@@ -1,13 +1,16 @@
 <template>
-    <div class="sf-header__navigation desktop border-b-solid border-b-2 border-secondary" v-if="!isMobile">
-      <HeaderNavigationItem
+    <div class="sf-header__navigation desktop" v-if="!isMobile">
+      <!-- <HeaderNavigationItem
         v-for="(category, index) in categories"
         :key="index"
         class="nav-item"
         v-e2e="`app-header-url_${category}`"
         :label="category"
         :link="localePath(`/c/${category}`)"
-      />
+      /> -->
+      <CategoriesSubNav/>
+      <BrandsSubNav/>
+      <IndustriesSubNav/>
     </div>
     
   <!-- <SfModal v-else :visible="isMobileMenuOpen">
@@ -33,13 +36,20 @@
 import { SfMenuItem, SfModal } from '@storefront-ui/vue';
 import { useUiState } from '~/composables';
 import HeaderNavigationItem from './HeaderNavigationItem.vue';
+import BrandsSubNav from './subnavs/BrandsSubNav.vue';
+import IndustriesSubNav from './subnavs/IndustriesSubNav.vue';
+import CategoriesSubNav from './subnavs/CategoriesSubNav.vue';
+
 
 export default {
   name: 'HeaderNavigation',
   components: {
     SfMenuItem,
     SfModal,
-    HeaderNavigationItem
+    HeaderNavigationItem,
+    BrandsSubNav,
+    IndustriesSubNav,
+    CategoriesSubNav
   },
   props: {
     isMobile: {
@@ -49,7 +59,7 @@ export default {
   },
   setup() {
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
-    const categories = ['PRODUCTS', 'INDUSTRIES', 'BRANDS','SERVICES'];
+    const categories = ['PRODUCTS', 'SERVICES'];
 
     return {
       categories,

@@ -22,7 +22,7 @@
         <SfMenuItem :label="label" class="sf-header-navigation-item__menu-item">
           {{ label }}
         </SfMenuItem>
-        <DropDownMenu class="overlay"/>
+        <DropDownMenu class="overlay" :subnavList="$props.subnavList"/>
         <!-- <div > -->
         <!-- </div> -->
       </slot>

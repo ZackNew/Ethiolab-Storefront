@@ -1,10 +1,10 @@
 <template>
   <div class="sub-body">
       <div class="content">
-        <a :key="-1" :href="localePath(`/c/${this.$props.slug}`)">{{this.$props.title}}</a>
+        <nuxt-link :key="-1" :to="'/c/' + this.$props.slug">{{this.$props.title}}</nuxt-link>
         <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
-        <div class="grid grid-rows-4 grid-cols-2 gap-6 overlay">
-            <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{sub.label}}</a>
+        <div class="grid grid-rows-4 grid-cols-2 gap-6 overlay" v-if="subnavList.length > 0">
+            <a v-for="sub in subnavList" :key="sub.id" :href="`/s/${sub.slug}`">{{sub.label}}</a>
         </div>
       </div>
   </div>
@@ -18,7 +18,7 @@ export default {
     props: {
         title:String,
         subnavList:Array,
-        slug:String
+        slug: String
     },
     setup() {
         
@@ -63,8 +63,8 @@ export default {
   display: block !important;
   width: 250px !important;
   min-height: 200px !important;
-  /* border: 0.1px solid var(--c-bg-primary) !important; */
-  box-shadow: 2px rgb(0, 0, 0, 0.5);
+  border: 0.025px solid var(--c-bg-primary) !important;
+  /* box-shadow: 5px grey; */
   z-index: 2 !important;
   opacity: 1 !important;
 }
