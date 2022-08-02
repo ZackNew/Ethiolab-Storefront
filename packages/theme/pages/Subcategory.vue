@@ -58,8 +58,8 @@
           >
             <img
               class="h-36"
-              v-for="(img, index) in product.assets"
-              :key="index"
+              v-for="(img) in product.assets"
+              :key="img.preview"
               :src="img.preview"
               alt="image"
             />
@@ -124,47 +124,15 @@ export default {
       activeSubcategory.value;
     const subcategoryImage = featuredAsset?.preview;
 
-    // =========================================================== //
-
-    // let cbody = {
-    //   query: `query getCollection($slug: String) {
-    //             collection(slug: $slug) {
-    //               name
-    //               description
-    //               featuredAsset {
-    //                 source
-    //               }
-    //               filters {
-    //                 args {
-    //                   value
-    //                 }
-    //               }
-    //             }
-    //           }`,
-    //   variables: {
-    //     slug: lastSlug,
-    //   },
-    // };
-
-    // let coptions = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // };
-
-    // const activeCat = ref(null);
-    // axios
-    //   .post('http://localhost:3000/shop-api', cbody, coptions)
-    //   .then((response) => (activeCat.value = response.data?.data?.collection));
-
-    // console.log('me me me', activeCat.value);
-
-    // ================================================= ||
-
     const productIdString = JSON.parse(filters[0]?.args[0].value);
     const productId = productIdString.map((num) => {
       return String(num);
     });
+
+    onMounted(() => {
+        console.log("the active sub category value is ", activeSubcategory.value)
+
+    })
 
     let pbody = {
       query: `query getProductById($in: [String!]) {

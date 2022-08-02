@@ -3,33 +3,21 @@
             <div class="grid grid-cols-5 "> 
                 <div class="col-span-2 m-10">
                  
-                    <img src="/categories/cat6.webp" class="h-96" />
+                    <img :src="products.featuredAsset.preview || '' " class="h-96" />
                        <div class="grid grid-cols-3"> 
-                        <img src="/categories/cat7.jpeg" class="col-span-1 mt-5" />
+                        <img :src="products.featuredAsset.preview || '' " class="col-span-1 mt-5" />
 
                         </div>
 
                 </div>
 
                 <div class="col-span-3 m-10 "> 
-                    <p class="font-semibold text-2xl">Cole-Parmer® PA+ Analytical Balances with USB Connectivity</p>
-                    <P class="text-secondary mt-5">COLE-PARMER</P>
+                    <p class="font-semibold text-2xl">{{products && products.name}}</p>
+                    <!-- <P class="text-secondary mt-5"></P> -->
 
                     <div class="grid grid-cols-2">
                         <div class="col-span-1 overflow-auto h-96 mt-10"> 
-                            <p>Affordable analytical balances for precise weighing of small samples
-                                Three-door glass draft shield provides easy access inside weighing chamber
-                                Weighing modes include parts counting, percent weighing and checkweighing
-                                USB and RS-232 interfaces offer connection to a computer or printer for GLP/GMP-compliant output
-                                Sealed keypad, splashproof design, and removable stainless steel weighing pan
-                                Oversized backlit LCD display provides clear visibility of weighing results
-                                Affordable analytical balances for precise weighing of small samples
-                                Three-door glass draft shield provides easy access inside weighing chamber
-                                Weighing modes include parts counting, percent weighing and checkweighing
-                                USB and RS-232 interfaces offer connection to a computer or printer for GLP/GMP-compliant output
-                                Sealed keypad, splashproof design, and removable stainless steel weighing pan
-                                Oversized backlit LCD display provides clear visibility of weighing results
-                                Digital filters compensate for vibration, drafts or </p>
+                            <p v-html="products && products.description"></p>
 
                             <!-- <span> 
                                 <p class="text-secondary mb-3"> MORE +</p>
@@ -37,10 +25,10 @@
 
                         </div> 
                         <div class="col-span-1"> 
-                            <span class="text-xl font-bold ml-10 mr-5 mt-10">$1,370.00 - $1,850.00</span> <span>USD/EACH</span>
+                            <span class="text-xl font-bold ml-10 mr-5 mt-10">{{minPrice}}.00$ - {{maxPrice}}.00$</span> <span>USD/EACH</span>
                             <div class="h-20 bg-light_gray ml-5 mt-10">
-                                    <p class="m-5">4 variations of this product are available.</p>
-                                    <a href="#" class="text-secondary text-sm m-5 font-bold">SEE ALL PRODUCT OPTIONS BELOW</a>
+                                    <p class="m-5">{{product && product.length}} variations of this product are available.</p>
+                                    <a href="#var-table" class="text-secondary text-sm m-5 font-bold">SEE ALL PRODUCT OPTIONS BELOW</a>
                                 </div>
 
                         </div>
@@ -51,7 +39,7 @@
 
             </div>
 
-            <table class="table-auto border-collapse border-spacing-2 border border-slate-100 mt-20">
+            <table class="table-auto border-collapse border-spacing-2 border border-slate-100 mt-20" id="var-table">
                 <thead>
                     <tr>
                         <div class=" grid grid-cols-12">
@@ -227,36 +215,75 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from '@vue/composition-api'
-import { useCategory, categoryGetters } from '@vue-storefront/vendure';
+import { defineComponent, onBeforeMount, onMounted } from '@vue/composition-api'
+import { useCategory, categoryGetters , useProduct, productGetters} from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core'
 import {computed} from "@vue/composition-api";
+import { useUiHelpers } from '~/composables';
+import { name } from 'file-loader';
+
 
 export default defineComponent({
     setup() {
+
+         const { products, search, loading, error } = useProduct('<UNIQUE_ID>');
+        const th = useUiHelpers();
+         const lastSlug = th.getLastSlugFromParams();
+         console.log("the lastslug value is ", lastSlug)
+
+
         let checked = true;
 
        const check = (e) => {
             let temp = checked;
             checked = !temp;
         }
-           const { categories, search } = useCategory('menu-categories');
+      
+        
+             onSSR(async () => {
+            await search({ slug: lastSlug })  
+              });
 
-    const headerNavigation = computed(() => categoryGetters.getNavigation(categories.value));
 
-    onSSR(async () => {
-      await search();
-    });
+            const product = computed(() => productGetters.getByFilters(products.value));
+            // const option = computed(() => productGetters.getOptions(products.value));
+            // const configuration = computed(() => productGetters.getCategoryIds(product.value))
+
+            const oiginalPrice = []
+            const currentPrice = []
+
+             product.value.forEach(element => {
+                oiginalPrice.push(element.price.original)
+                currentPrice.push(element.price.current)
+                
+            });
+
+            const maxPrice = Math.max(...currentPrice).toString().slice(0, -2)
+            const minPrice = Math.min(...currentPrice).toString().slice(0, -2)
+
+
+
+            // const attributes = computed(() => productGetters.getAttributes(products.value))
+
 
     onMounted(() => {
-        console.log("the value of categories is ", categories.value.items)
+        console.log("the product value is ", product.value)
+        // console.log("the option value is ", option.value)
+                console.log("the productsss value is ", products.value)
+
     })
 
         return {
             check,
             checked,
-            categories,
-            headerNavigation
+            loading,
+            error,
+            products,
+            product,
+            // option,
+            // configuration,
+            minPrice,
+            maxPrice
         }
         
     },
