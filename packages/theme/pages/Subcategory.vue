@@ -22,7 +22,7 @@
             :src="subcategoryImage"
             alt=""
           />
-          <div class="bg-faded_black">
+          <div class="bg-faded_black w-full">
             <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
           </div>
         </div>
@@ -59,16 +59,15 @@
             <img
               class="h-36"
               v-for="(img, index) in product.assets"
-              :key="index"
+              :key="'img' + index"
               :src="img.preview"
               alt="image"
             />
-            <!-- <h3 class="text-center m-3">link</h3> -->
             <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
             <p
               class="text-center m-3"
               v-for="(price, index) in product.variants"
-              :key="index"
+              :key="'price' + index"
             >
               {{ String(price.price).slice(0, -2) }}
             </p>
