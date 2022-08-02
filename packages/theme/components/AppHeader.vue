@@ -13,16 +13,16 @@
         <nuxt-link :to="localePath('/')">
           <SfImage
             src="/icons/logo.svg"
-            :alt="$t('Ethiolab')"
+            alt="EthioLab"
             width="200"
             class="sf-header__logo-image"
           />
         </nuxt-link>
       </template>
       <template #aside>
-         <div class="flex flex-row justify-between">
-        <LocaleSelector class="smartphone-only" />
-        <ThemeChanger class="smartphone-only" />
+        <div class="flex flex-row justify-between">
+          <LocaleSelector class="smartphone-only" />
+          <ThemeChanger class="smartphone-only" />
         </div>
       </template>
       <template #header-icons>
@@ -110,7 +110,7 @@
     />
     <SfOverlay :visible="isSearchOpen" />
     <template>
-        <HeaderNavigation :isMobile="isMobile" />
+      <HeaderNavigation :isMobile="isMobile" />
     </template>
   </div>
 </template>
@@ -128,7 +128,7 @@ import {
   SfOverlay,
   SfSearchBar,
   SfTextarea,
-  SfModal
+  SfModal,
 } from '@storefront-ui/vue';
 import { useUiHelpers, useUiState } from '~/composables';
 import {
@@ -140,23 +140,23 @@ import {
   useUser,
   useWishlist,
   wishlistGetters,
-  userGetters
+  userGetters,
 } from '@vue-storefront/vendure';
 import {
   computed,
   onBeforeUnmount,
   onMounted,
   ref,
-  watch
+  watch,
 } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import LocaleSelector from '~/components/LocaleSelector';
-import ThemeChanger from "~/components/ThemeChanger";
+import ThemeChanger from '~/components/ThemeChanger';
 import SearchResults from '~/components/SearchResults';
 import { clickOutside } from '@storefront-ui/vue/src/utilities/directives/click-outside/click-outside-directive.js';
 import {
   mapMobileObserver,
-  unMapMobileObserver
+  unMapMobileObserver,
 } from '@storefront-ui/vue/src/utilities/mobile-observer.js';
 import debounce from 'lodash.debounce';
 import HeaderNavigation from './HeaderNavigation';
@@ -181,7 +181,7 @@ export default {
     SfTextarea,
     SfModal,
     ThemeChanger,
-    HeaderNavigation
+    HeaderNavigation,
   },
   directives: { clickOutside },
   setup(props, { root }) {
@@ -189,7 +189,7 @@ export default {
       toggleCartSidebar,
       toggleWishlistSidebar,
       toggleLoginModal,
-      isMobileMenuOpen
+      isMobileMenuOpen,
     } = useUiState();
     const selectedProds = ref(['Micro']);
     // let selectedProdsNames = null;
@@ -245,19 +245,21 @@ export default {
     });
 
     const wishlistTotalItems = computed(() => {
-      if(isAuthenticated.value) loadCart()
+      if (isAuthenticated.value) loadCart();
       const count = wishlistGetters.getTotalItems(wishlist.value);
       return count ? count.toString() : null;
     });
     const accountIcon = ref('profile');
-    
-    (async ()=>await loadUser())()
-   
-    watch(user, ()=> (async()=>{
-      console.log("Tin Number: ", userGetters.getTinNumber(user))
-      console.log('User %c', 'color: lightblue', user)
-      accountIcon.value = isAuthenticated.value ? 'profile_fill' : 'profile'
-    })())
+
+    (async () => await loadUser())();
+
+    watch(user, () =>
+      (async () => {
+        console.log('Tin Number: ', userGetters.getTinNumber(user));
+        console.log('User %c', 'color: lightblue', user);
+        accountIcon.value = isAuthenticated.value ? 'profile_fill' : 'profile';
+      })()
+    );
 
     // const accountIcon = computed(() =>
     //   isAuthenticated.value ? 'profile_fill' : 'profile'
@@ -282,8 +284,8 @@ export default {
       { name: 'Products', link: '/c/clinical-laboratory' },
       { name: 'About us', link: '/page/about' },
       { name: 'Contact us', link: '/pages/contact' },
-      { name: 'Write a Quote', link: '/pages/contact'},
-      { name: 'Help center', link: '/pages/helpAndFAQ' }
+      { name: 'Write a Quote', link: '/pages/contact' },
+      { name: 'Help center', link: '/pages/helpAndFAQ' },
     ];
 
     const currentRoute = computed(() => {
@@ -407,9 +409,9 @@ export default {
       wishlistTotalItems,
       tree,
       SfTextarea,
-      prodList
+      prodList,
     };
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -463,5 +465,4 @@ export default {
   width: fit-content;
   margin: auto;
 }
-
 </style>
