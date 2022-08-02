@@ -8,6 +8,16 @@ export const CategoryCollection = `
 			name
 			slug
 		}
+		featuredAsset{
+			preview
+		}
+		description
+		filters{
+      args{
+        name
+        value
+      }
+    }
 	}
 `;
 

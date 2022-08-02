@@ -48,6 +48,7 @@ import Toast from '~/components/Toast.vue';
 import {computed, ref, watchEffect, provide} from "@vue/composition-api";
 export default {
   name: 'DefaultLayout',
+  middleware: "themeChecker",
 
   components: {
     ToastVue,

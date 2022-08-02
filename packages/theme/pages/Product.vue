@@ -8,7 +8,7 @@
       <LazyHydrate when-idle>
         <SfGallery :images="productGallery" class="product__gallery" />
       </LazyHydrate>
-      <div class="product__info">
+      <div class="product__info mr-20">
         <div class="product__header">
           <SfHeading
             :title="productGetters.getName(product)"
@@ -24,35 +24,52 @@
         </div>
         <div class="product__price-and-rating">
           <SfPrice
-            :regular="productGetters.getPrice(product).regular.toLocaleString() + ' ETB'"
+            :regular="
+              productGetters.getPrice(product).regular.toLocaleString() + ' ETB'
+            "
           />
           <div>
             <div class="product__rating">
-              <SfRating
-                :score="averageRating"
-                :max="5"
-              />
+              <SfRating :score="averageRating" :max="5" />
               <a v-if="!!totalReviews" href="#" class="product__count">
                 ({{ totalReviews }})
               </a>
             </div>
-            <SfButton class="sf-button--text">{{ $t('Read all reviews') }}</SfButton>
+            <SfButton class="sf-button--text">{{
+              $t('Read all reviews')
+            }}</SfButton>
           </div>
         </div>
         <div>
-          <div class="product__description desktop-only" v-html="productGetters.getDescription(product)"></div>
-            <iframe width="560" height="315" :src='"https://www.youtube.com/embed/"+youtube_link'
-            title="YouTube video player" 
+          <SfAddToCart
+            v-e2e="'product_add-to-cart'"
+            :stock="stock"
+            v-model="qty"
+            :disabled="loading"
+            :canAddToCart="stock > 0"
+            class="product__add-to-cart -mt-2"
+            @click="addToCart"
+          />
+          <div
+            class="product__description desktop-only my-4"
+            v-html="productGetters.getDescription(product)"
+          ></div>
+          <iframe
+            width="560"
+            height="315"
+            :src="'https://www.youtube.com/embed/' + youtube_link"
+            title="YouTube video player"
             frameborder="0"
-            v-if="youtube_link !== ''" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen></iframe>
+            v-if="youtube_link !== ''"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
           <div v-if="options && options.length">
             <SfSelect
               v-for="optionGroup in options"
               :key="optionGroup.id"
               v-model="configuration[optionGroup.value]"
-              @input="option => updateFilter({ [optionGroup.value]: option })"
+              @input="(option) => updateFilter({ [optionGroup.value]: option })"
               :label="optionGroup.label"
               class="sf-select--underlined product__select-size"
               :required="true"
@@ -62,59 +79,88 @@
                 :key="option.id"
                 :value="option.value"
               >
-                {{option.label}}
+                {{ option.label }}
               </SfSelectOption>
             </SfSelect>
           </div>
-          <SfAddToCart
-            v-e2e="'product_add-to-cart'"
-            :stock="stock"
-            v-model="qty"
-            :disabled="loading"
-            :canAddToCart="stock > 0"
-            class="product__add-to-cart"
-            @click="addToCart"
-          />
         </div>
-        <LazyHydrate when-idle>
-          <SfTabs :open-tab="1" class="product__tabs">
-            <SfTab :title="$t('Description')">
-              <SfProperty
-                v-for="(property, i) in properties"
-                :key="i"
-                :name="property.name"
-                :value="property.value"
-                class="product__property"
-              >
-                <template v-if="property.name === 'Category'" #value>
-                  <SfButton class="product__property__button sf-button--text">
-                    {{ property.value }}
-                  </SfButton>
-                </template>
-              </SfProperty>
-            </SfTab>
-            <SfTab :title="$t('Read reviews')" :key="reviewKey">
-              <!-- <div v-for="(review, index) in reviews" :key="index">
-                {{review.summary}}
-              </div> -->
-              <SfReview
-                v-for="review in reviews"
-                :key="review.id"
-                :author="review.authorName"
-                :date="new Date(review.createdAt).toLocaleString()"
-                :message="review.summary"
-                :max-rating="5"
-                :rating="review.rating"
-                :char-limit="250"
-                :read-more-text="$t('Read more')"
-                :hide-full-text="$t('Read less')"
-                class="product__review"
-              />
-              <!-- :myReview="currentReview.value" @updateMyReview="updateMyReview" @addNewReview="addNewReview" -->
-             <MyReview :productId="id" :currentUserHasNoReview="!currentUserHasReview"/>
-            </SfTab>
-          </SfTabs>
-        </LazyHydrate>
+        <LazyHydrate when-idle> </LazyHydrate>
+      </div>
+    </div>
+    <div>
+      <div class="flex justify-evenly bg-light_accent mt-6 pt-4 pb-10">
+        <div class="w-1/2">
+          <h3 class="font-thin mb-4 ml-16">Specification and Description</h3>
+          <table class="table-auto w-2/3 border ml-16">
+            <tbody>
+              <tr>
+                <td>Capacity (kg)</td>
+                <td>25</td>
+              </tr>
+              <tr>
+                <td>Readability (g)</td>
+                <td>25</td>
+              </tr>
+              <tr>
+                <td>Platform Length (in)</td>
+                <td>40</td>
+              </tr>
+              <tr>
+                <td>Platform Width (in)</td>
+                <td>25</td>
+              </tr>
+              <tr>
+                <td>Min Temperature (° C)</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>Max Temperature (° C)</td>
+                <td>-10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="w-1/2 -ml-16 mr-8">
+          <h3 class="font-thin">More about this item</h3>
+          <p>
+            Lorem ipsum dolor, yes sit amet consectetur adipisicing elit. Nisi
+            eveniet, illum eligendi distinctio obcaecati magni error molestias,
+            provident explicabo omnis doloribus animi voluptatum blanditiis
+            esse. Fuga quisquam eos veniam aspernatur! Lorem ipsum, dolor sit
+            amet consectetur adipisicing elit. Nostrum accusamus mollitia, autem
+            officia harum quae itaque nesciunt eos commodi sunt numquam, ex
+            beatae ea nihil? Neque optio doloremque quidem facilis. Lorem ipsum
+            dolor sit amet consectetur, adipisicing elit. Laboriosam, pariatur
+            nulla qui exercitationem, aliquid fuga provident veritatis quisquam
+            tempore commodi inventore debitis corporis minima facilis assumenda,
+            praesentium eum optio omnis. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Pariatur deserunt, nam aliquam accusamus iure
+            perspiciatis ullam. Aut error, aliquam exercitationem aliquid neque
+            corrupti perferendis illo accusantium nulla, quidem qui quam!
+          </p>
+        </div>
+      </div>
+      <div class="mx-14 mt-14">
+        <h3 class="font-extralight">Accessories</h3>
+        <div class="grid grid-cols-5">
+          <div
+            class="card shadow-lg w-52 my-3 bg-light_accent"
+            v-for="i in 5"
+            :key="i"
+          >
+            <img src="../static/homepage/testTube.jpg" alt="" />
+            <h3 class="text-center m-3">link</h3>
+            <h4 class="text-center font-serif m-3">
+              $925.00 - $2,080.00USD / Each
+            </h4>
+            <p class="text-center m-3">description</p>
+            <button
+              class="mx-10 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <LazyHydrate when-visible>
@@ -147,13 +193,22 @@ import {
   SfReview,
   SfBreadcrumbs,
   SfButton,
-  SfColor
+  SfColor,
 } from '@storefront-ui/vue';
 import MyReview from '~/components/MyAccount/MyReview.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
 import { ref, computed, reactive } from '@vue/composition-api';
-import { useProduct, useCart, productGetters, useReview, reviewGetters, useRelatedProducts, useUser, userGetters } from '@vue-storefront/vendure';
+import {
+  useProduct,
+  useCart,
+  productGetters,
+  useReview,
+  reviewGetters,
+  useRelatedProducts,
+  useUser,
+  userGetters,
+} from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
@@ -162,9 +217,9 @@ import { getProductVariantByConfiguration } from '~/helpers';
 export default {
   name: 'Product',
   transition: 'fade',
-  async created(){
+  async created() {
     console.log('Product Page created');
-    this.reviews= await this.getProductsReviews();
+    this.reviews = await this.getProductsReviews();
   },
   setup(props, context) {
     console.log('Product Page setup');
@@ -173,46 +228,68 @@ export default {
     const { products, search } = useProduct('products');
     const { addItem, loading } = useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
-    const { relatedProducts, load: searchRelatedProducts, loading: relatedLoading } = useRelatedProducts();
+    const {
+      relatedProducts,
+      load: searchRelatedProducts,
+      loading: relatedLoading,
+    } = useRelatedProducts();
 
-    const product = computed(() => productGetters.getByFilters(products.value, { master: true, attributes: context.root.$route.query }));
+    const product = computed(() =>
+      productGetters.getByFilters(products.value, {
+        master: true,
+        attributes: context.root.$route.query,
+      })
+    );
     console.log(product);
-    const options = computed(() => productGetters.getOptions(products.value, ['color', 'size']));
+    const options = computed(() =>
+      productGetters.getOptions(products.value, ['color', 'size'])
+    );
     // TODO: Implement reviews
     //const reviews = ref([]);//computed(() => reviewGetters.getItems(productReviews.value));
     const configuration = ref({});
-    const { user, isAuthenticated,load, getU } = useUser();
+    const { user, isAuthenticated, load, getU } = useUser();
     const properties = computed(() => [
       {
         name: 'ID',
-        value: productGetters.getId(product.value)
+        value: productGetters.getId(product.value),
       },
       {
         name: 'Slug',
-        value: productGetters.getSlug(product.value)
+        value: productGetters.getSlug(product.value),
       },
       {
         name: 'SKU',
-        value: productGetters.getSku(product.value)
+        value: productGetters.getSku(product.value),
       },
       {
         name: 'Categories',
-        value: productGetters.getCategoryNames(products.value).join(', ')
-      }
+        value: productGetters.getCategoryNames(products.value).join(', '),
+      },
     ]);
 
-    const breadcrumbs = computed(() => productGetters.getBreadcrumbs(product.value));
-    const productGallery = computed(() => productGetters.getGallery(product.value).map(img => ({
-      mobile: { url: img.small },
-      desktop: { url: img.normal },
-      big: { url: img.big },
-      alt: product.value._name || product.value.name
-    })));
+    const breadcrumbs = computed(() =>
+      productGetters.getBreadcrumbs(product.value)
+    );
+    const productGallery = computed(() =>
+      productGetters.getGallery(product.value).map((img) => ({
+        mobile: { url: img.small },
+        desktop: { url: img.normal },
+        big: { url: img.big },
+        alt: product.value._name || product.value.name,
+      }))
+    );
     onSSR(async () => {
       await search({ id });
       await load();
-      const currentCollectionId = product.value._categoriesRef[product.value._categoriesRef.length - 1];
-      await searchRelatedProducts({ input: { collectionId: currentCollectionId, take: 8, groupByProduct: true }});
+      const currentCollectionId =
+        product.value._categoriesRef[product.value._categoriesRef.length - 1];
+      await searchRelatedProducts({
+        input: {
+          collectionId: currentCollectionId,
+          take: 8,
+          groupByProduct: true,
+        },
+      });
     });
 
     const updateFilter = (filter) => {
@@ -224,9 +301,17 @@ export default {
     const addToCart = () => {
       const isConfigurationSelected = Object.values(configuration.value).length;
       if (isConfigurationSelected) {
-        const productVariant = getProductVariantByConfiguration(products.value, configuration.value);
-        const agnosticProductVariant = computed(() => productGetters.getByFilters(products.value, { id: productVariant.id }));
-        addItem({ product: agnosticProductVariant.value, quantity: parseInt(qty.value)});
+        const productVariant = getProductVariantByConfiguration(
+          products.value,
+          configuration.value
+        );
+        const agnosticProductVariant = computed(() =>
+          productGetters.getByFilters(products.value, { id: productVariant.id })
+        );
+        addItem({
+          product: agnosticProductVariant.value,
+          quantity: parseInt(qty.value),
+        });
       } else {
         addItem({ product: product.value, quantity: parseInt(qty.value) });
       }
@@ -239,8 +324,12 @@ export default {
       product,
       isAuthenticated,
       reviewGetters,
-      averageRating: computed(() => productGetters.getAverageRating(product.value)),
-      totalReviews: computed(() => productGetters.getTotalReviews(product.value)),
+      averageRating: computed(() =>
+        productGetters.getAverageRating(product.value)
+      ),
+      totalReviews: computed(() =>
+        productGetters.getTotalReviews(product.value)
+      ),
       relatedProducts: computed(() => relatedProducts.value.items),
       relatedLoading,
       options,
@@ -256,8 +345,8 @@ export default {
       //reviewKey,
     };
   },
-  methods:{
-    async getProductsReviews(){
+  methods: {
+    async getProductsReviews() {
       console.log(this.id);
       const data = JSON.stringify({
         query: `
@@ -280,48 +369,56 @@ export default {
             }
           }
         }
-      `
+      `,
       });
-      const response = await fetch("http://localhost:3000/shop-api", {
+      const response = await fetch('http://localhost:3000/shop-api', {
         method: 'post',
         body: data,
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': data.length
-        }
+          'Content-Length': data.length,
+        },
       });
       const reviewsListResponse = await response.json();
-      let splitted= reviewsListResponse.data.product.customFields.youtube_link.split('?v=');
-      if(splitted.length == 2){
-        this.youtube_link= splitted[1];
+      let splitted =
+        reviewsListResponse.data.product.customFields.youtube_link.split('?v=');
+      if (splitted.length == 2) {
+        this.youtube_link = splitted[1];
       }
-      if(reviewsListResponse.data.product.customFields.maintenance_fee !== '' ){
-        console.log(`${reviewsListResponse.data.product.customFields.maintenance_fee} fee`);
-        this.properties.push({name: 'Maintenance Fee', value: reviewsListResponse.data.product.customFields.maintenance_fee});
+      if (
+        reviewsListResponse.data.product.customFields.maintenance_fee !== ''
+      ) {
+        console.log(
+          `${reviewsListResponse.data.product.customFields.maintenance_fee} fee`
+        );
+        this.properties.push({
+          name: 'Maintenance Fee',
+          value: reviewsListResponse.data.product.customFields.maintenance_fee,
+        });
         console.log(this.properties);
       }
-      var reviewsList= reviewsListResponse.data.product.reviews.items;
-      if(this.isAuthenticated){
+      var reviewsList = reviewsListResponse.data.product.reviews.items;
+      if (this.isAuthenticated) {
         return this.setThisUsersReview(reviewsList);
       }
       return reviewsList;
     },
 
-    setThisUsersReview(reviewsList){
-      var email  = this.user.emailAddress;
-      for(var review of reviewsList){
-          console.log(`review['authorLocation'] ${review['authorLocation']}`);
-          if(review["authorLocation"] === email){
-            console.log("review['authorLocation'] === this.email");
-            review["authorName"]= "You";
-            this.currentUserHasReview= true;
-            var currentItemIndex= reviewsList.indexOf(review);
-            var firstItem= reviewsList[0];
-            var tempItem= {...review};
-            reviewsList[currentItemIndex]= firstItem;
-            reviewsList[0]= tempItem;
-            break;
-          }
+    setThisUsersReview(reviewsList) {
+      var email = this.user.emailAddress;
+      for (var review of reviewsList) {
+        console.log(`review['authorLocation'] ${review['authorLocation']}`);
+        if (review['authorLocation'] === email) {
+          console.log("review['authorLocation'] === this.email");
+          review['authorName'] = 'You';
+          this.currentUserHasReview = true;
+          var currentItemIndex = reviewsList.indexOf(review);
+          var firstItem = reviewsList[0];
+          var tempItem = { ...review };
+          reviewsList[currentItemIndex] = firstItem;
+          reviewsList[0] = tempItem;
+          break;
+        }
       }
       return reviewsList;
     },
@@ -356,7 +453,6 @@ export default {
     //   });
     //   const reviewsListResponse = await response.json();
     // }
-
   },
   components: {
     SfAlert,
@@ -380,29 +476,29 @@ export default {
     RelatedProducts,
     MobileStoreBanner,
     LazyHydrate,
-    MyReview
+    MyReview,
   },
   data() {
     return {
       stock: 5,
       brand:
-          'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
+        'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
       careInstructions: 'Do not wash!',
       email: '',
       reviews: [],
       currentUserHasReview: false,
-      youtube_link:'',
+      youtube_link: '',
       reviewKey: 0,
     };
   },
   watch: {
-    isAuthenticated(newIsAuthenticated, oldIsAuthenticated){
-      if(newIsAuthenticated){
-        this.reviews= this.setThisUsersReview(this.reviews);
-        this.reviewKey= this.reviewKey+1;
+    isAuthenticated(newIsAuthenticated, oldIsAuthenticated) {
+      if (newIsAuthenticated) {
+        this.reviews = this.setThisUsersReview(this.reviews);
+        this.reviewKey = this.reviewKey + 1;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -415,7 +511,7 @@ export default {
   }
 }
 .product {
-  color:var(--c-text);
+  color: var(--c-text);
   @include for-desktop {
     display: flex;
   }
@@ -476,7 +572,7 @@ export default {
       1.6,
       var(--font-family--primary)
     );
-    color:(--c-text);
+    color: (--c-text);
   }
   &__select-size {
     margin: 0 var(--spacer-sm);
@@ -574,5 +670,19 @@ export default {
   100% {
     transform: translate3d(0, 0, 0);
   }
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
 }
 </style>

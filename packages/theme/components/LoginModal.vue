@@ -59,7 +59,7 @@
               :disabled="loading"
             >
               <SfLoader :class="{ loader: loading }" :loading="loading">
-                <div>{{ $t('Login') }}</div>
+                <div :style="isDarkMode ? '': 'color: black;'">{{ $t('Login') }}</div>
               </SfLoader>
             </SfButton>
           </form>
@@ -181,7 +181,7 @@
                 :disabled="loading"
             >
               <SfLoader :class="{ loader: loading }" :loading="loading">
-                <div>{{ $t('Create an account') }}</div>
+                <div :style="isDarkMode ? '': 'color: black;'">{{ $t('Create an account') }}</div>
               </SfLoader>
             </SfButton>
           </form>
@@ -236,6 +236,7 @@ export default {
     const SCREEN_FORGOTTEN = 'forgottenPassword';
 
     const { isLoginModalOpen, toggleLoginModal } = useUiState();
+      const {isDarkMode} = useUiState();
     const form = ref({});
     const userEmail = ref('');
     const createAccount = ref(false);
@@ -331,7 +332,8 @@ export default {
       SCREEN_LOGIN,
       SCREEN_REGISTER,
       SCREEN_THANK_YOU,
-      SCREEN_FORGOTTEN
+      SCREEN_FORGOTTEN,
+      isDarkMode
     };
   }
 };

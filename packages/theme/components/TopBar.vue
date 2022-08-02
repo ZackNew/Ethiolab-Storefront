@@ -1,7 +1,7 @@
 <template>
   <SfTopBar class="topbar">
     <template #left>
-        <SfButton class="topbar__button sf-button--text">+251-111-264-829</SfButton>
+        <!-- <SfButton class="topbar__button sf-button--text">+251-111-264-829</SfButton> -->
       </template>
     <template #center>
       <div class="flex items-center gap-20">
@@ -40,10 +40,11 @@ export default {
   },
   setup() {
       const headerNavigation = [
-        { name: 'Products', link: '/c/clinical-laboratory' },
-        { name: 'About us', link: '/page/about'},
+        { name: 'Help', link: '/pages/helpAndFAQ' },
         { name: 'Contact us', link: '/pages/contact'},
-        { name: 'Help center', link: '/pages/helpAndFAQ'},
+        { name: '+251-111-264-829', link: '#'},
+        { name: 'My Account', link: '/my-account'},
+        { name: 'Sign In', link: '#'},
          { name: 'Request a Quote', link: '/WriteAQuote'},
       ];
     return{

@@ -1,3 +1,4 @@
+// NODE_TLS_REJECT_UNAUTHORIZED=0
 module.exports = {
   integrations: {
     vendure: {
@@ -12,3 +13,4 @@ module.exports = {
     }
   }
 };
+
