@@ -3,9 +3,9 @@
             <div class="grid grid-cols-5 "> 
                 <div class="col-span-2 m-10">
                  
-                    <img :src="products.featuredAsset.preview || '' " class="h-96" />
+                    <img :src="loading? '' : products.featuredAsset.preview" class="h-96" />
                        <div class="grid grid-cols-3"> 
-                        <img :src="products.featuredAsset.preview || '' " class="col-span-1 mt-5" />
+                        <!-- <img :src="products.featuredAsset.preview || '' " class="col-span-1 mt-5" /> -->
 
                         </div>
 
@@ -25,7 +25,7 @@
 
                         </div> 
                         <div class="col-span-1"> 
-                            <span class="text-xl font-bold ml-10 mr-5 mt-10">{{minPrice}}.00$ - {{maxPrice}}.00$</span> <span>USD/EACH</span>
+                            <span class="text-xl font-bold ml-10 mr-5 mt-10">{{minPrice? minPrice : ""}}$ - {{maxPrice}}$</span> <span>USD/EACH</span>
                             <div class="h-20 bg-light_gray ml-5 mt-10">
                                     <p class="m-5">{{product && product.length}} variations of this product are available.</p>
                                     <a href="#var-table" class="text-secondary text-sm m-5 font-bold">SEE ALL PRODUCT OPTIONS BELOW</a>
@@ -226,13 +226,21 @@ import { name } from 'file-loader';
 export default defineComponent({
     setup() {
 
+        let maxPrice='';
+        let minPrice='';
+
          const { products, search, loading, error } = useProduct('<UNIQUE_ID>');
+        //  const {featuredAsset} = products.value;
+        // const productImage = computed(() => products.value?.assets[0]?.preview); 
+
+         
         const th = useUiHelpers();
          const lastSlug = th.getLastSlugFromParams();
          console.log("the lastslug value is ", lastSlug)
 
 
         let checked = true;
+        
 
        const check = (e) => {
             let temp = checked;
@@ -258,8 +266,12 @@ export default defineComponent({
                 
             });
 
-            const maxPrice = Math.max(...currentPrice).toString().slice(0, -2)
-            const minPrice = Math.min(...currentPrice).toString().slice(0, -2)
+            const maxP = Math.max(...currentPrice).toString();
+            const minP = Math.min(...currentPrice).toString();
+
+             maxPrice=maxP.substring(0,maxP.length-2)+"."+maxP.substring(maxP.length-2);
+             minPrice=minP.substring(0,minP.length-2)+"."+minP.substring(minP.length-2);
+
 
 
 
@@ -270,6 +282,8 @@ export default defineComponent({
         console.log("the product value is ", product.value)
         // console.log("the option value is ", option.value)
                 console.log("the productsss value is ", products.value)
+                //   console.log("the productsss image value is ", products.value.assets[0].preview)
+
 
     })
 
@@ -283,7 +297,8 @@ export default defineComponent({
             // option,
             // configuration,
             minPrice,
-            maxPrice
+            maxPrice,
+            // productImage
         }
         
     },
