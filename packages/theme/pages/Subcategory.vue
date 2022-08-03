@@ -1,9 +1,25 @@
 <template>
   <div>
-    <!-- <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    /> -->
+    <nav class="sf-breadcrumbs" aria-label="breadcrumbs">
+      <ol class="sf-breadcrumbs__list">
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+            Home
+          </nuxt-link>
+        </li>
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link
+            class="sf-breadcrumbs__breadcrumb"
+            :to="`/c/${parent.slug}`"
+          >
+            {{ parent.name }}
+          </nuxt-link>
+        </li>
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          {{ name }}
+        </li>
+      </ol>
+    </nav>
     <p class="mt-4 ml-4 mb-2 text-sm text-gray">
       <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Category</NuxtLink> |
       <span>Subcategory</span>
@@ -11,7 +27,7 @@
     <div class="flex mt-4">
       <!-- Side filter search or an Ad -->
       <div
-        v-if="result === false"
+        v-if="products === false"
         class="border shadow-2xl rounded ml-4 w-2/6 h-3/4 mt-5"
       >
         <LazyHydrate>
@@ -62,7 +78,7 @@
           </div>
         </div>
         <div
-          v-if="result === false"
+          v-if="products === false"
           class="border border-light_accent shadow-md bg-white rounded-lg"
         >
           <div class="justify-end">
@@ -75,14 +91,13 @@
         </div>
         <div v-else>
           <div class="card mr-5 w-auto h-12 bg-light_accent">
-            <p class="float-left pt-3 ml-3">Number of Results | sortby</p>
-            <button class="mt-2 ml-3 bg-dark p-1">Best Match</button>
+            <p class="float-left pt-3 ml-3">Number of Results | 0</p>
           </div>
           <!-- Products -->
           <div class="grid grid-cols-4">
             <div
               class="card shadow-lg w-52 my-3 ml-2 bg-light_accent"
-              v-for="product in result"
+              v-for="product in products"
               :key="product.id"
             >
               <img
@@ -160,11 +175,11 @@ export default {
     const adSection = computed(() =>
       JSON.parse(getCms.value[3]?.content ?? '{}')
     );
-    const { name, featuredAsset, description, filters } =
+    const { name, featuredAsset, description, filters, parent } =
       activeSubcategory.value;
     const subcategoryImage = featuredAsset?.preview;
 
-    const result = ref(null);
+    const products = ref(null);
 
     if (filters[0]?.args[0]?.name === 'productIds') {
       const productIdString = JSON.parse(filters[0]?.args[0].value);
@@ -203,10 +218,10 @@ export default {
       axios
         .post('http://localhost:3000/shop-api', pbody, poptions)
         .then(
-          (response) => (result.value = response.data?.data?.products?.items)
+          (response) => (products.value = response.data?.data?.products?.items)
         );
     } else {
-      result.value = false;
+      products.value = false;
     }
 
     const filterrs = [
@@ -236,14 +251,15 @@ export default {
       description,
       name,
       adSection,
-      result,
+      products,
       // activeCat,
       subcategoryImage,
       activeSubcategory,
-      // breadcrumbs,
+      parent,
     };
   },
   components: {
+    LazyHydrate,
     SfAccordion,
     SfSearchBar,
     SfBreadcrumbs,

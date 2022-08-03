@@ -166,6 +166,7 @@ const getTree = (category: Collection): AgnosticCategoryTree | null => {
     featuredAsset: category.featuredAsset,
     description: category.description,
     filters: category.filters,
+    parent: category.parent,
   };
 };
 
