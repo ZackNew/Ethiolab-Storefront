@@ -20,10 +20,6 @@
         </li>
       </ol>
     </nav>
-    <p class="mt-4 ml-4 mb-2 text-sm text-gray">
-      <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Category</NuxtLink> |
-      <span>Subcategory</span>
-    </p>
     <div class="flex mt-4">
       <!-- Side filter search or an Ad -->
       <div
@@ -108,12 +104,9 @@
                 alt="image"
               />
               <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
-              <p
-                class="text-center m-3"
-                v-for="(price, index) in product.variants"
-                :key="'price' + index"
-              >
-                {{ String(price.price).slice(0, -2) }}
+              <p class="text-center m-3">
+                {{ String(product.variants[0].price).slice(0, -2) }}
+                <!-- {{ String(price.price).slice(0, -2) }} -->
               </p>
               <nuxt-link
                 class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
