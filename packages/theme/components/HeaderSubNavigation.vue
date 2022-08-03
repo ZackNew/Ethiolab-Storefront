@@ -1,35 +1,38 @@
 <template>
   <div class="sub-body">
-      <div class="content">
-        <nuxt-link :key="-1" :to="'/c/' + this.$props.slug">{{this.$props.title}}</nuxt-link>
-        <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
-        <div class="grid grid-rows-4 grid-cols-2 gap-6 overlay" v-if="subnavList.length > 0">
-            <a v-for="sub in subnavList" :key="sub.id" :href="`/s/${sub.slug}`">{{sub.label}}</a>
-        </div>
+    <div class="content">
+      <nuxt-link :key="-1" :to="this.$props.link">{{
+        this.$props.title
+      }}</nuxt-link>
+      <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
+      <div
+        class="grid grid-rows-4 grid-cols-2 gap-6 overlay"
+        v-if="subnavList.length > 0"
+      >
+        <a v-for="sub in subnavList" :key="sub.id" :href="`/s/${sub.slug}`">{{
+          sub.label
+        }}</a>
       </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
-    name: "HeaderSubNavigation",
-    components: {
-        
-    },
-    props: {
-        title:String,
-        subnavList:Array,
-        slug: String
-    },
-    setup() {
-        
-    },
-}
+  name: 'HeaderSubNavigation',
+  components: {},
+  props: {
+    title: String,
+    subnavList: Array,
+    link: String,
+  },
+  setup() {},
+};
 </script>
 <style scoped>
-.overlay{
+.overlay {
   display: none !important;
   text-align: 5%;
-  background:rgb(255,255,255) !important;
+  background: rgb(255, 255, 255) !important;
   opacity: 1 !important;
   /* width: 300% !important; */
 }
@@ -38,25 +41,25 @@ export default {
   display: block !important;
 } */
 
-.sub-body{
-    margin-bottom: 2%;
-    width: 30%;
-    height: 50%;
+.sub-body {
+  margin-bottom: 2%;
+  width: 30%;
+  height: 50%;
 }
 
-.content{
-    position: absolute;
-    /* left: 0%;  */
+.content {
+  position: absolute;
+  /* left: 0%;  */
 }
 
-.content>a{
-    display: block;
-    width: 120% !important;
-    text-align: left;
-    margin-bottom: 10%;
+.content > a {
+  display: block;
+  width: 120% !important;
+  text-align: left;
+  margin-bottom: 10%;
 }
 
-.content:hover>.overlay{
+.content:hover > .overlay {
   position: absolute;
   left: 120% !important;
   top: 25% !important;
@@ -69,21 +72,21 @@ export default {
   opacity: 1 !important;
 }
 
-.overlay>a{
+.overlay > a {
   display: inline-block;
   margin-left: 5% !important;
   width: 80%;
   height: 5% !important;
 }
-a:hover{
+a:hover {
   /* border-bottom:  0.1px solid var(--c-bg-primary) !important; */
   color: var(--c-bg-primary);
   font-weight: bold;
 }
 
-.content:hover>a{
-    border-bottom: 0.1px solid var(--c-bg-primary) !important;
-    font-weight: bold;
-    color: var(--c-bg-primary);
+.content:hover > a {
+  border-bottom: 0.1px solid var(--c-bg-primary) !important;
+  font-weight: bold;
+  color: var(--c-bg-primary);
 }
 </style>
