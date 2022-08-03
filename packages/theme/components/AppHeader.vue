@@ -8,12 +8,14 @@
       :is-nav-visible="isMobileMenuOpen"
       data-app
     >
-      <!-- TODO: add mobile view buttons after SFUI team PR -->
+      <!-- TODO: add mobile view buttons after SFUI team PR 
+     ///// deleted at the sfImage alt property because of causing infinite loop ->  :alt="$t('Ethiolab')" 
+       -->
       <template #logo>
         <nuxt-link :to="localePath('/')">
           <SfImage
             src="/icons/logo.svg"
-            :alt="$t('Ethiolab')"
+            alt=""
             width="200"
             class="sf-header__logo-image"
           />
