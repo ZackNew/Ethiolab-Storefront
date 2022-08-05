@@ -3,11 +3,6 @@ export const CategoryCollection = `
 		id
 		name
 		slug
-		breadcrumbs {
-			id
-			name
-			slug
-		}
 		featuredAsset{
 			preview
 		}
@@ -18,6 +13,10 @@ export const CategoryCollection = `
         value
       }
     }
+		parent{
+			name
+			slug
+		}
 	}
 `;
 

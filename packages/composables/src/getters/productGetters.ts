@@ -94,6 +94,9 @@ const getCategoryNames = (product: Product): string[] => {
 
 const getByFilters = (product: Product, filters?: ProductFilter): AgnosticProductVariant[] | AgnosticProductVariant => {
   const { variants, collections, featuredAsset, ...masterVariant } = product;
+  console.log("inside filter method vriants value is ", variants);
+  console.log("inside filter method mastervariant value is ", masterVariant);
+
 
   if (!variants?.length) return [];
 
@@ -105,7 +108,7 @@ const getByFilters = (product: Product, filters?: ProductFilter): AgnosticProduc
     sku: variant?.sku,
     slug: masterVariant?.slug,
     collections: collections?.map(collection => ({id: collection.id, name: collection.name, breadcrumbs: collection.breadcrumbs})),
-    images: [featuredAsset?.preview],
+    images: [variant?.featuredAsset?.preview],
     price: {
       original: variant?.price,
       current: variant?.priceWithTax

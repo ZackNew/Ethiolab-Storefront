@@ -6,7 +6,11 @@
     />
     <div class="product">
       <LazyHydrate when-idle>
-        <SfGallery :images="productGallery" class="product__gallery" />
+        <SfGallery
+          :images="productGallery"
+          class="product__gallery w-auto"
+          enableZoom
+        />
       </LazyHydrate>
       <div class="product__info mr-20">
         <div class="product__header">
@@ -57,7 +61,7 @@
           <iframe
             width="560"
             height="315"
-            :src="'https://www.youtube.com/embed/' + youtube_link"
+            :src="`https://www.youtube-nocookie.com/embed/${youtube_link}?playlist=${youtube_link}&loop=1&controls=0`"
             title="YouTube video player"
             frameborder="0"
             v-if="youtube_link !== ''"

@@ -6,10 +6,9 @@
                     <img :src="loading? '' : products.featuredAsset.preview" class="h-96" />
                        <div class="grid grid-cols-3"> 
                         <img :src="loading? '' : products.featuredAsset.preview"  class="col-span-1 mt-5" />
+        </div>
+      </div>
 
-                        </div>
-
-                </div>
 
                 <div class="col-span-3 m-10 "> 
                     <p class="font-semibold text-2xl">{{products && products.name}}</p>
@@ -19,7 +18,7 @@
                         <div class="col-span-1 overflow-auto h-96 mt-10"> 
                             <p v-html="products && products.description"></p>
 
-                            <!-- <span> 
+            <!-- <span> 
                                 <p class="text-secondary mb-3"> MORE +</p>
                             </span> -->
 
@@ -37,7 +36,8 @@
 
                 </div>
 
-            </div>
+          </div>
+         
 
             <table class="table-auto border-collapse border-spacing-2  border-slate-100 mt-20" id="var-table">
                 <thead>
@@ -91,33 +91,39 @@
                                     <img src="/categories/carticon.png" alt="cart image" class="h-16 -mb-8">
                                     </button>
                                  </span> 
+              <div class="flex items-center mx-4 my-10">
+                <input
+                  id="default-checkbox"
+                  type="checkbox"
+                  value=""
+                  class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  @change="check($event)"
+                  v-model="checked"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ml-2 text-sm font-bold text-gray-900 dark:text-gray-300"
+                >
+                  INCLUDE INNOCAL CALIBRATION SERVICES</label
+                >
+              </div>
 
-                                 <div class="flex items-center mx-4 my-10">
-                                     <input id="default-checkbox" type="checkbox" value=""  
-                                         class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500
-                                          dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" 
-                                            @change="check($event)" v-model="checked">
-                                     <label for="default-checkbox" class="ml-2 text-sm font-bold text-gray-900 dark:text-gray-300 ">
-                                            INCLUDE INNOCAL CALIBRATION SERVICES</label>
-                                </div>
-
-                                <div class="ml-10 mb-5" v-if="checked"> 
-                                    <a class="text-secondary text-lg ">InnoCal NIST-Traceable Calibration: Balance/Scale - All Types</a>
-                                    <p>for an additional <span class="font-bold">$200.00</span> USD / EACH</p>
-                                </div> 
-                        
-                                  
-                            </td>
-                            
-                        </div>
-                   </tr>
-                   </tbody>
-                
-            </table>
-    </div>
-
-  
-    
+              <div class="ml-10 mb-5" v-if="checked">
+                <a class="text-secondary text-lg"
+                  >InnoCal NIST-Traceable Calibration: Balance/Scale - All
+                  Types</a
+                >
+                <p>
+                  for an additional <span class="font-bold">$200.00</span> USD /
+                  EACH
+                </p>
+              </div>
+            </td>
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -215,6 +221,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

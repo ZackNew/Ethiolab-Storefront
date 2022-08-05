@@ -1,18 +1,47 @@
 <template>
   <div>
-    <!-- <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    /> -->
-    <p class="mt-4 ml-4 mb-2 text-sm text-gray">
-      <NuxtLink to="/">Home</NuxtLink> | <NuxtLink to="#">Category</NuxtLink> |
-      <span>Subcategory</span>
-    </p>
+    <nav class="sf-breadcrumbs" aria-label="breadcrumbs">
+      <ol class="sf-breadcrumbs__list">
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+            Home
+          </nuxt-link>
+        </li>
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link
+            class="sf-breadcrumbs__breadcrumb"
+            :to="`/c/${parent.slug}`"
+          >
+            {{ parent.name }}
+          </nuxt-link>
+        </li>
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          {{ name }}
+        </li>
+      </ol>
+    </nav>
     <div class="flex mt-4">
-      <!-- Side filter search -->
-      <SubcategoryBrandAccordion :filters="filterrs" />
+      <!-- Side filter search or an Ad -->
+      <div
+        v-if="products === false"
+        class="border shadow-2xl rounded ml-4 w-2/6 h-3/4 mt-5"
+      >
+        <LazyHydrate>
+          <SfBanner
+            :title="adSection.title || 'AD Title'"
+            :subtitle="adSection.overview || 'AD Overview'"
+            :description="adSection.description || 'AD Description'"
+            :buttonText="adSection.buttonText || 'AD Button'"
+            background=""
+            :image="adImage || '/homepage/bannerA.webp'"
+            link="/c/clinical-laboratory"
+          >
+          </SfBanner>
+        </LazyHydrate>
+      </div>
+      <SubcategoryBrandAccordion v-else :filters="filterrs" />
       <!-- Subcategory name and description -->
-      <div class="ml-2">
+      <div class="ml-6">
         <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">
           {{ name }}
         </h2>
@@ -22,7 +51,7 @@
             :src="subcategoryImage"
             alt=""
           />
-          <div class="bg-faded_black">
+          <div class="bg-faded_black w-full">
             <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
           </div>
         </div>
@@ -44,48 +73,60 @@
             </div>
           </div>
         </div>
-
-        <div class="card mr-5 w-auto h-12 bg-light_accent">
-          <p class="float-left pt-3 ml-3">Number of Results | sortby</p>
-          <button class="mt-2 ml-3 bg-dark p-1">Best Match</button>
-        </div>
-        <!-- Products -->
-        <div class="grid grid-cols-4">
-          <div
-            class="card shadow-lg w-52 my-3 ml-2 bg-light_accent"
-            v-for="product in result"
-            :key="product.id"
-          >
-            <img
-              class="h-36"
-              v-for="(img) in product.assets"
-              :key="img.preview"
-              :src="img.preview"
-              alt="image"
-            />
-            <!-- <h3 class="text-center m-3">link</h3> -->
-            <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
-            <p
-              class="text-center m-3"
-              v-for="(price, index) in product.variants"
-              :key="index"
-            >
-              {{ String(price.price).slice(0, -2) }}
-            </p>
-            <nuxt-link
-              class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-              :to="'/v/' + product.slug"
-            >
-              View All
-            </nuxt-link>
+        <div
+          v-if="products === false"
+          class="border border-light_accent shadow-md bg-white rounded-lg"
+        >
+          <div class="justify-end">
+            <div class="flex flex-col items-center py-10">
+              <img src="~/static/noProduct.png" alt="" />
+              <h2>OOPS!</h2>
+              <p>No Product Avaliable!</p>
+            </div>
           </div>
         </div>
+        <div v-else>
+          <div class="card mr-5 w-auto h-12 bg-light_accent">
+            <p class="float-left pt-3 ml-3">Number of Results | 0</p>
+          </div>
+          <!-- Products -->
+          <div class="grid grid-cols-4">
+            <div
+              class="card shadow-lg w-52 my-3 ml-2 bg-light_accent"
+              v-for="product in products"
+              :key="product.id"
+            >
+              <div class="min-h-[50%]">
+                <img
+                  class="h-auto w-52"
+                  v-for="(img, index) in product.assets"
+                  :key="'img' + index"
+                  :src="img.preview"
+                  alt="image"
+                />
+              </div>
+              <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
+              <p class="text-center m-3">
+                {{ String(product.variants[0].price).slice(0, -2) }}
+                <!-- {{ String(price.price).slice(0, -2) }} -->
+              </p>
+              <button class="mb-4">
+                <nuxt-link
+                  class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
+                  :to="'/v/' + product.slug"
+                >
+                  View All
+                </nuxt-link>
+              </button>
+            </div>
+          </div>
 
-        <div
-          style="background-color: #e2e5de"
-          class="card mr-16 ml-4 mt-5 w-auto h-12"
-        >
-          <p class="float-left pt-3 ml-3">Showing 1-10 of 10</p>
+          <div
+            style="background-color: #e2e5de"
+            class="card mr-16 ml-4 mt-5 w-auto h-12"
+          >
+            <p class="float-left pt-3 ml-3">Showing 1-10 of 10</p>
+          </div>
         </div>
       </div>
     </div>
@@ -93,10 +134,17 @@
 </template>
 
 <script>
+import LazyHydrate from 'vue-lazy-hydration';
 import { computed, onMounted, ref, onBeforeMount } from '@vue/composition-api';
-import { SfAccordion, SfSearchBar, SfBreadcrumbs } from '@storefront-ui/vue';
+import {
+  SfAccordion,
+  SfSearchBar,
+  SfBreadcrumbs,
+  SfBanner,
+} from '@storefront-ui/vue';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import {
+  useCms,
   useFacet,
   facetGetters,
   useCategory,
@@ -108,7 +156,7 @@ import axios from 'axios';
 
 export default {
   name: 'Subcategory',
-  setup(props, context) {
+  setup(props, { root }) {
     const th = useUiHelpers();
     const lastSlug = th.getLastSlugFromParams();
     const { categories } = useCategory();
@@ -120,55 +168,59 @@ export default {
         }
       }
     });
-    const { name, featuredAsset, description, filters } =
+    const { getCms } = useCms();
+    const adSection = computed(() =>
+      JSON.parse(getCms.value[3]?.content ?? '{}')
+    );
+    const { name, featuredAsset, description, filters, parent } =
       activeSubcategory.value;
     const subcategoryImage = featuredAsset?.preview;
 
-    const productIdString = JSON.parse(filters[0]?.args[0].value);
-    const productId = productIdString.map((num) => {
-      return String(num);
-    });
+    const products = ref(null);
 
-    onMounted(() => {
-        console.log("the active sub category value is ", activeSubcategory.value)
+    if (filters[0]?.args[0]?.name === 'productIds') {
+      const productIdString = JSON.parse(filters[0]?.args[0].value);
+      const productId = productIdString.map((num) => {
+        return String(num);
+      });
 
-    })
-
-    let pbody = {
-      query: `query getProductById($in: [String!]) {
-                products(options: {filter: {id: {in: $in}}}) {
-                  items {
-                    name
-                    id
-                    slug
-                    description
-                    variants {
-                      price
-                    }
-                    assets {
-                      preview
+      let pbody = {
+        query: `query getProductById($in: [String!]) {
+                  products(options: {filter: {id: {in: $in}}}) {
+                    items {
+                      name
+                      id
+                      slug
+                      description
+                      variants {
+                        price
+                      }
+                      assets {
+                        preview
+                      }
                     }
                   }
-                }
-              }`,
-      variables: {
-        in: productId,
-      },
-    };
+                }`,
+        variables: {
+          in: productId,
+        },
+      };
 
-    let poptions = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+      let poptions = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
 
-    const result = ref({});
-    axios
-      .post('http://localhost:3000/shop-api', pbody, poptions)
-      .then(
-        (response) => (result.value = response.data?.data?.products?.items)
-      );
-
+      axios
+        .post('http://localhost:3000/shop-api', pbody, poptions)
+        .then(
+          (response) => (products.value = response.data?.data?.products?.items)
+        );
+    } else {
+      products.value = false;
+    }
+    console.log('this one is ad', adSection);
     const filterrs = [
       {
         filter_title: 'Brand',
@@ -195,18 +247,21 @@ export default {
       filterrs,
       description,
       name,
-      result,
+      adSection,
+      products,
       // activeCat,
       subcategoryImage,
       activeSubcategory,
-      // breadcrumbs,
+      parent,
     };
   },
   components: {
+    LazyHydrate,
     SfAccordion,
     SfSearchBar,
     SfBreadcrumbs,
     SubcategoryBrandAccordion,
+    SfBanner,
   },
 };
 </script>

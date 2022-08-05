@@ -18,6 +18,9 @@ export default gql`
           name
           code
         }
+        featuredAsset{
+          preview
+        }
       }
       featuredAsset {
         preview
