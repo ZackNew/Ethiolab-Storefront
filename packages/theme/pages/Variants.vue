@@ -39,7 +39,7 @@
 
             </div>
 
-            <table class="table-auto border-collapse border-spacing-2 border border-slate-100 mt-20" id="var-table">
+            <table class="table-auto border-collapse border-spacing-2  border-slate-100 mt-20" id="var-table">
                 <thead>
                     <tr>
                         <div class=" grid grid-cols-12">
@@ -49,7 +49,9 @@
 
                             <!-- <th  class="border border-slate-300 bg-light_gray col-span-1">{{loading? '' : option.value[0].label}}</th> -->
                     
-                                <th v-for="(op, i) in option && option" :key="i"  class="border border-slate-300 bg-light_gray col-span-1">{{op.label.toUpperCase()}}</th>
+                                <!-- <th v-for="(op, i) in option && option" :key="i"  class="border border-slate-300 bg-light_gray col-span-1">{{op.label.toUpperCase()}}</th> -->
+                            <th class="border border-slate-300  bg-light_gray col-span-2" v-if="option && option.length != 0">Option</th>
+
                                 <th class="border border-slate-300  bg-light_gray col-span-4">Price</th>
               
                         </div>
@@ -75,7 +77,7 @@
                             <!-- <td class="border border-slate-300 col-span-1">{{pro.price.current}}</td> -->
                             <td class="border border-slate-300 col-span-1">{{pro.sku}}</td>
                             
-                            <td class="border border-slate-300 col-span-1" v-if="option.length != 0">{{ pro.name.replace(products.name, "")}}</td>
+                            <td class="border border-slate-300 col-span-2" v-if="option.length != 0">{{ pro.name.replace(products.name, "")}}</td>
                             <td class="border border-slate-300 col-span-4">
                                 <span class="text-xl font-bold ml-5 ">{{ pro.price.current.toString().substring(0,pro.price.current.toString().length-2)+"."+pro.price.current.toString().substring(pro.price.current.toString().length-2)}}</span> <span>USD/EACH</span>
                                  <span>
