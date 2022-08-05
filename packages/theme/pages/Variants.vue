@@ -25,7 +25,7 @@
 
                         </div> 
                         <div class="col-span-1"> 
-                            <span class="text-xl font-bold ml-10 mr-5 mt-10">{{product.value && minPrice}}$ - {{maxPrice}}$ USD/EACH</span>
+                            <span class="text-xl font-bold ml-10 mr-5 mt-10">{{minPrice}}$ - {{maxPrice}}$ USD/EACH</span>
                             <div class="h-20 bg-light_gray ml-5 mt-10">
                                     <p class="m-5">{{product && product.length}} variations of this product are available.</p>
                                     <a href="#var-table" class="text-secondary text-sm m-5 font-bold">SEE ALL PRODUCT OPTIONS BELOW</a>
@@ -45,12 +45,12 @@
                         <div class=" grid grid-cols-12">
                             
                             <th class="border border-slate-300  h-16 bg-light_gray col-span-4">Item</th>
-                            <th class="border border-slate-300  bg-light_gray col-span-1">Price</th>
                             <th  class="border border-slate-300 bg-light_gray col-span-1">SKU</th>
+
                             <!-- <th  class="border border-slate-300 bg-light_gray col-span-1">{{loading? '' : option.value[0].label}}</th> -->
                     
-                                <th v-for="(op, i) in option && option " :key="i"  class="border border-slate-300 bg-light_gray col-span-1">{{op.label.toUpperCase()}}</th>
-                            
+                                <th v-for="(op, i) in option && option" :key="i"  class="border border-slate-300 bg-light_gray col-span-1">{{op.label.toUpperCase()}}</th>
+                                <th class="border border-slate-300  bg-light_gray col-span-4">Price</th>
               
                         </div>
 
@@ -58,26 +58,26 @@
                 </thead>
 
                 <tbody>
-                    <tr>
+                    <tr v-for="(pro, i) in product && product" :key="i">
                         <div class="grid grid-cols-12"> 
                              <td class="border border-slate-300 col-span-4"> 
-                            <div class="grid grid-cols-4"> 
-                                <div class="col-span-2">
-                                    <img src="/categories/cat7.jpeg" class="col-span-1 mt-5 ml-5" />
-                                </div>
-                                <div class="col-span-2">
-                                    <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
-                                    <nuxt-link to="/p/9/balancer">EW-10001-00</nuxt-link>
-                                </div>
+                                <div class="grid grid-cols-4"> 
+                                    <div class="col-span-2">
+                                        <img :src="pro.images[0]" class="col-span-1 mt-5 ml-5" />
+                                    </div>
+                                    <div class="col-span-2">
+                                        <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
+                                        <nuxt-link to="/p/9/balancer">{{pro.name}}</nuxt-link>
+                                    </div>
 
-                            </div>
+                                </div>
                         </td>
-                            <td class="border border-slate-300 col-span-1">External</td>
-                            <td class="border border-slate-300 col-span-1">120</td>
-                            <td class="border border-slate-300 col-span-1">0.0001</td>
-                            <td class="border border-slate-300 col-span-1">In Stock</td>
+                            <!-- <td class="border border-slate-300 col-span-1">{{pro.price.current}}</td> -->
+                            <td class="border border-slate-300 col-span-1">{{pro.sku}}</td>
+                            
+                            <td class="border border-slate-300 col-span-1" v-if="option.length != 0">{{ pro.name.replace(products.name, "")}}</td>
                             <td class="border border-slate-300 col-span-4">
-                                <span class="text-xl font-bold ml-5 ">$1,370.00 - $1,850.00</span> <span>USD/EACH</span>
+                                <span class="text-xl font-bold ml-5 ">{{ pro.price.current.toString().substring(0,pro.price.current.toString().length-2)+"."+pro.price.current.toString().substring(pro.price.current.toString().length-2)}}</span> <span>USD/EACH</span>
                                  <span>
                                     <input type="text" id="first_name" 
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
@@ -161,11 +161,11 @@ export default defineComponent({
             const option = computed(() => productGetters.getOptions(products.value))
             const configuration = computed(() => productGetters.getCategoryIds(product.value))
 
-            const oiginalPrice = []
+            const originalPrice = []
             const currentPrice = []
 
              product.value.forEach(element => {
-                oiginalPrice.push(element.price.original)
+                originalPrice.push(element.price.original)
                 currentPrice.push(element.price.current)
                 
             });
@@ -188,6 +188,7 @@ export default defineComponent({
                 console.log("the productsss value is ", products.value)
                 console.log("configuration value is ", configuration.value)
                 //   console.log("the productsss image value is ", products.value.assets[0].preview)
+                console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
 
 
     })
@@ -203,6 +204,8 @@ export default defineComponent({
             configuration,
             minPrice,
             maxPrice,
+            originalPrice,
+            currentPrice,
             // productImage
         }
         
