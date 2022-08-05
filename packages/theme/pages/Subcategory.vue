@@ -97,7 +97,7 @@
               :key="product.id"
             >
               <img
-                class="h-36"
+                class="h-auto w-52"
                 v-for="(img, index) in product.assets"
                 :key="'img' + index"
                 :src="img.preview"
@@ -108,12 +108,14 @@
                 {{ String(product.variants[0].price).slice(0, -2) }}
                 <!-- {{ String(price.price).slice(0, -2) }} -->
               </p>
-              <nuxt-link
-                class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-                :to="'/v/' + product.slug"
-              >
-                View All
-              </nuxt-link>
+              <button class="mb-4">
+                <nuxt-link
+                  class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
+                  :to="'/v/' + product.slug"
+                >
+                  View All
+                </nuxt-link>
+              </button>
             </div>
           </div>
 
@@ -216,7 +218,7 @@ export default {
     } else {
       products.value = false;
     }
-
+    console.log('this one is ad', adSection);
     const filterrs = [
       {
         filter_title: 'Brand',
