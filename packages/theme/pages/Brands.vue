@@ -44,7 +44,7 @@
             </div>
             <h3 class="text-center m-3">{{ product.name }}</h3>
             <h4 class="text-center font-serif m-3">
-              {{ product.variants[0].price }}
+              {{ String(product.variants[0].price).slice(0, -2) }}.00
             </h4>
             <button
               class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
@@ -55,8 +55,6 @@
         </div>
       </div>
     </div>
-    <p>{{ brand }}</p>
-    <p>{{ products }}</p>
   </div>
 </template>
 

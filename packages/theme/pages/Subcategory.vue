@@ -96,13 +96,15 @@
               v-for="product in products"
               :key="product.id"
             >
-              <img
-                class="h-auto w-52"
-                v-for="(img, index) in product.assets"
-                :key="'img' + index"
-                :src="img.preview"
-                alt="image"
-              />
+              <div class="min-h-[50%]">
+                <img
+                  class="h-auto w-52"
+                  v-for="(img, index) in product.assets"
+                  :key="'img' + index"
+                  :src="img.preview"
+                  alt="image"
+                />
+              </div>
               <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
               <p class="text-center m-3">
                 {{ String(product.variants[0].price).slice(0, -2) }}
