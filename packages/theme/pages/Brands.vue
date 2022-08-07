@@ -1,17 +1,38 @@
 <template>
   <div>
-    <!-- <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    /> -->
-    <p class="mt-4 mb-2 text-sm text-gray">
-      <NuxtLink to="/">Home</NuxtLink> |
-      <NuxtLink to="/">Shope by brand</NuxtLink> |
-      <span>brand name</span>
-    </p>
+    <nav class="sf-breadcrumbs" aria-label="breadcrumbs">
+      <ol class="sf-breadcrumbs__list">
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+            Home
+          </nuxt-link>
+        </li>
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          {{ brand.name }}
+        </li>
+      </ol>
+    </nav>
     <!-- Side Bar -->
     <div class="flex mt-4">
+      <div
+        v-if="Object.keys(products).length === 0"
+        class="border shadow-2xl rounded ml-4 w-72 h-3/4 mt-5"
+      >
+        <LazyHydrate>
+          <SfBanner
+            :title="adSection.title || 'AD Title'"
+            :subtitle="adSection.overview || 'AD Overview'"
+            :description="adSection.description || 'AD Description'"
+            :buttonText="adSection.buttonText || 'AD Button'"
+            background=""
+            :image="'/homepage/bannerA.webp'"
+            link="/c/clinical-laboratory"
+          >
+          </SfBanner>
+        </LazyHydrate>
+      </div>
       <SubcategoryBrandAccordion
+        v-else
         :categories="categories"
         :filters="filters"
         class="w-72"
@@ -30,10 +51,23 @@
         </div>
 
         <div class="card mr-5 w-auto h-12 bg-light_accent">
-          <p class="float-left pt-3 ml-3">Number of Results | sortby</p>
+          <p class="float-left pt-3 ml-3">
+            Number of Results | {{ Object.keys(products).length }}
+          </p>
         </div>
-
-        <div class="grid grid-cols-4">
+        <div
+          v-if="Object.keys(products).length === 0"
+          class="border border-light_accent shadow-md bg-white rounded-lg"
+        >
+          <div class="justify-end">
+            <div class="flex flex-col items-center py-10">
+              <img src="~/static/noProduct.png" alt="" />
+              <h2>OOPS!</h2>
+              <p>No Product Avaliable!</p>
+            </div>
+          </div>
+        </div>
+        <div v-else class="grid grid-cols-4">
           <div
             class="card shadow-lg w-52 my-3 mr-10 bg-light_accent"
             v-for="product in products"
@@ -46,10 +80,13 @@
             <h4 class="text-center font-serif m-3">
               {{ String(product.variants[0].price).slice(0, -2) }}.00
             </h4>
-            <button
-              class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-            >
-              View All
+            <button class="mb-4">
+              <nuxt-link
+                class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
+                :to="'/v/' + product.slug"
+              >
+                View All
+              </nuxt-link>
             </button>
           </div>
         </div>
@@ -59,10 +96,17 @@
 </template>
 
 <script>
-import { SfAccordion, SfSearchBar, SfBreadcrumbs } from '@storefront-ui/vue';
-import { getFragmentQueryDocument } from 'apollo-utilities';
+import LazyHydrate from 'vue-lazy-hydration';
+import {
+  SfAccordion,
+  SfSearchBar,
+  SfBreadcrumbs,
+  SfBanner,
+} from '@storefront-ui/vue';
+import { computed, onMounted, ref, onBeforeMount } from '@vue/composition-api';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import axios from 'axios';
+import { useCms } from '@vue-storefront/vendure';
 
 export default {
   name: 'brand',
@@ -122,6 +166,10 @@ export default {
     },
   },
   setup() {
+    const { getCms } = useCms();
+    const adSection = computed(() =>
+      JSON.parse(getCms.value[3]?.content ?? '{}')
+    );
     const filters = [
       {
         filter_title: 'Brand',
@@ -152,10 +200,13 @@ export default {
     return {
       filters,
       categories,
+      adSection,
       // breadcrumbs,
     };
   },
   components: {
+    SfBanner,
+    LazyHydrate,
     SfAccordion,
     SfSearchBar,
     SfBreadcrumbs,

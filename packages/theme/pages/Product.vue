@@ -282,6 +282,8 @@ export default {
         alt: product.value._name || product.value.name,
       }))
     );
+    console.log('gallery', productGallery);
+
     onSSR(async () => {
       await search({ id });
       await load();

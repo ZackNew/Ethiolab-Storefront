@@ -87,7 +87,7 @@
         </div>
         <div v-else>
           <div class="card mr-5 w-auto h-12 bg-light_accent">
-            <p class="float-left pt-3 ml-3">Number of Results | 0</p>
+            <p class="float-left pt-3 ml-3">Number of Results | 4</p>
           </div>
           <!-- Products -->
           <div class="grid grid-cols-4">
