@@ -244,7 +244,7 @@ export default {
         attributes: context.root.$route.query,
       })
     );
-    console.log(product);
+    console.log('producttttt', products.value);
     const options = computed(() =>
       productGetters.getOptions(products.value, ['color', 'size'])
     );
@@ -275,13 +275,15 @@ export default {
       productGetters.getBreadcrumbs(product.value)
     );
     const productGallery = computed(() =>
-      productGetters.getGallery(product.value).map((img) => ({
+      productGetters.getAllGallery(products.value).map((img) => ({
         mobile: { url: img.small },
         desktop: { url: img.normal },
         big: { url: img.big },
         alt: product.value._name || product.value.name,
       }))
     );
+    console.log('gallery', productGallery);
+
     onSSR(async () => {
       await search({ id });
       await load();
