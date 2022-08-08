@@ -3,7 +3,7 @@ import {
   AgnosticAttribute,
   AgnosticPrice,
   ProductGetters,
-  AgnosticBreadcrumb
+  AgnosticBreadcrumb,
 } from '@vue-storefront/core';
 import { getCurrentInstance } from '@vue/composition-api';
 import { ProductFilter, Product } from '@vue-storefront/vendure-api';
@@ -11,9 +11,16 @@ import { AgnosticProductOptions, AgnosticProductVariant } from '../types';
 import { createPrice } from '../helpers/_utils';
 import { ROOT_COLLECTION } from '../helpers';
 
-interface ExtendedProductGetters extends ProductGetters<AgnosticProductVariant | Product, ProductFilter> {
-  getByFilters: (product: Product, filters?: ProductFilter) => AgnosticProductVariant[] | AgnosticProductVariant;
-  getOptions: (product: Product, filters?: string[]) => AgnosticProductOptions[]
+interface ExtendedProductGetters
+  extends ProductGetters<AgnosticProductVariant | Product, ProductFilter> {
+  getByFilters: (
+    product: Product,
+    filters?: ProductFilter
+  ) => AgnosticProductVariant[] | AgnosticProductVariant;
+  getOptions: (
+    product: Product,
+    filters?: string[]
+  ) => AgnosticProductOptions[];
   getCategoryNames: (product: Product) => string[];
 }
 const getInstance = () => {
@@ -30,21 +37,59 @@ const getSlug = (product: AgnosticProductVariant): string => {
 
 const getPrice = (product: AgnosticProductVariant): AgnosticPrice => {
   return {
-    regular: createPrice(product?.price?.current || product?.priceWithTax?.value),
-    special: createPrice(product?.price?.original)
+    regular: createPrice(
+      product?.price?.current || product?.priceWithTax?.value
+    ),
+    special: createPrice(product?.price?.original),
   };
 };
 
-const getGallery = (product: AgnosticProductVariant): AgnosticMediaGalleryItem[] => {
-  if (!product?.images?.length) return [];
+const getGallery = (
+  product: AgnosticProductVariant
+): AgnosticMediaGalleryItem[] => {
+  if (!product?.assets) {
+    // console.log("no product image", product)
+    return [];
+  }
+  // else{
+  //   // console.log("product has an image")
+  // }
 
-  return [
-    {
-      small: product?.images[0],
-      normal: product?.images[0],
-      big: product?.images[0]
-    }
-  ];
+  let gallery = [];
+
+  product.assets.map((asset) => {
+    console.log('asset value ', asset.preview);
+    let temp = {
+      small: asset.preview,
+      normal: asset.preview,
+      big: asset.preview,
+    };
+    gallery.push(temp);
+  });
+
+  return gallery;
+};
+
+const getAllGallery = (
+  product: AgnosticProductVariant
+): AgnosticMediaGalleryItem[] => {
+  if (!product?.assets) {
+    return [];
+  }
+
+  let gallery = [];
+
+  product.assets.map((asset) => {
+    console.log('asset value ', asset.preview);
+    let temp = {
+      small: asset.preview,
+      normal: asset.preview,
+      big: asset.preview,
+    };
+    gallery.push(temp);
+  });
+
+  return gallery;
 };
 
 const getCoverImage = (product: AgnosticProductVariant): string => {
@@ -53,19 +98,22 @@ const getCoverImage = (product: AgnosticProductVariant): string => {
 
 // TODO: Implement filter by attribute functionality
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getOptions = (product: Product, filters?: string[]): AgnosticProductOptions[] => {
-  const mappedOptions = product?.optionGroups?.map(optionGroup => {
-    const options = optionGroup?.options.map(option => ({
+const getOptions = (
+  product: Product,
+  filters?: string[]
+): AgnosticProductOptions[] => {
+  const mappedOptions = product?.optionGroups?.map((optionGroup) => {
+    const options = optionGroup?.options.map((option) => ({
       id: option?.id,
       value: option?.code,
-      label: option?.name
+      label: option?.name,
     }));
 
     return {
       id: optionGroup?.id,
       value: optionGroup?.code,
       label: optionGroup?.name,
-      options
+      options,
     };
   });
   return mappedOptions;
@@ -89,27 +137,35 @@ const getSku = (product: AgnosticProductVariant): string => {
 
 const getCategoryNames = (product: Product): string[] => {
   if (!product.collections?.length) return [];
-  return product?.collections?.map(collection => collection?.name);
+  return product?.collections?.map((collection) => collection?.name);
 };
 
-const getByFilters = (product: Product, filters?: ProductFilter): AgnosticProductVariant[] | AgnosticProductVariant => {
+const getByFilters = (
+  product: Product,
+  filters?: ProductFilter
+): AgnosticProductVariant[] | AgnosticProductVariant => {
   const { variants, collections, featuredAsset, ...masterVariant } = product;
+  console.log('inside filter method vriants value is ', variants);
+  console.log('inside filter method mastervariant value is ', masterVariant);
 
   if (!variants?.length) return [];
-
-  const productVariants = variants.map(variant => ({
+  const productVariants = variants.map((variant) => ({
     _id: variant?.id,
     _description: masterVariant?.description,
-    _categoriesRef: collections?.map(collection => collection.id),
+    _categoriesRef: collections?.map((collection) => collection.id),
     name: variant?.name,
     sku: variant?.sku,
     slug: masterVariant?.slug,
-    collections: collections?.map(collection => ({id: collection.id, name: collection.name, breadcrumbs: collection.breadcrumbs})),
-    images: [featuredAsset?.preview],
+    collections: collections?.map((collection) => ({
+      id: collection.id,
+      name: collection.name,
+      breadcrumbs: collection.breadcrumbs,
+    })),
+    images: [variant?.featuredAsset?.preview],
     price: {
       original: variant?.price,
-      current: variant?.priceWithTax
-    }
+      current: variant?.priceWithTax,
+    },
   }));
 
   if (filters?.master) {
@@ -117,7 +173,7 @@ const getByFilters = (product: Product, filters?: ProductFilter): AgnosticProduc
   }
 
   if (filters?.id) {
-    return productVariants.find(variant => variant._id === filters?.id);
+    return productVariants.find((variant) => variant._id === filters?.id);
   }
 
   return productVariants;
@@ -125,18 +181,24 @@ const getByFilters = (product: Product, filters?: ProductFilter): AgnosticProduc
 
 // Not used in favor of getByFilters
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getFiltered = (products: AgnosticProductVariant[], filters: ProductFilter): AgnosticProductVariant[] => {
+const getFiltered = (
+  products: AgnosticProductVariant[],
+  filters: ProductFilter
+): AgnosticProductVariant[] => {
   return [];
 };
 
 // Not used in favor of getOptions
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getAttributes = (products: AgnosticProductVariant[] | AgnosticProductVariant, filterByAttributeName?: string[]): Record<string, AgnosticAttribute | string> => {
+const getAttributes = (
+  products: AgnosticProductVariant[] | AgnosticProductVariant,
+  filterByAttributeName?: string[]
+): Record<string, AgnosticAttribute | string> => {
   return {
     id: '1',
     name: '1',
     code: '1',
-    options: 'options'
+    options: 'options',
   };
 };
 
@@ -159,7 +221,8 @@ const getBreadcrumbs = (product: Product): AgnosticBreadcrumb[] => {
   const collection = product?.collections?.slice(-1);
   const instance = getInstance();
 
-  const getRouteByName = (name: string) => instance?.$router?.options?.routes?.find(route => route?.name === name);
+  const getRouteByName = (name: string) =>
+    instance?.$router?.options?.routes?.find((route) => route?.name === name);
 
   const homeRouteConfig = getRouteByName('home');
   const categoryRouteConfig = getRouteByName('category');
@@ -169,11 +232,15 @@ const getBreadcrumbs = (product: Product): AgnosticBreadcrumb[] => {
 
   const breadcrumbs = collection[0]?.breadcrumbs?.map((breadcrumb) => ({
     text: breadcrumb?.name === ROOT_COLLECTION ? 'Home' : breadcrumb?.name,
-    link: breadcrumb?.slug === ROOT_COLLECTION ? homeRouteConfig?.path || '/' : ((categorySegments && categorySegments[0]) || '/c/') + breadcrumb?.slug
+    link:
+      breadcrumb?.slug === ROOT_COLLECTION
+        ? homeRouteConfig?.path || '/'
+        : ((categorySegments && categorySegments[0]) || '/c/') +
+          breadcrumb?.slug,
   }));
   breadcrumbs.push({
     text: product?.name,
-    link: product?.slug
+    link: product?.slug,
   });
   return breadcrumbs;
 };
@@ -183,6 +250,7 @@ export const productGetters: ExtendedProductGetters = {
   getSlug,
   getPrice,
   getGallery,
+  getAllGallery,
   getCoverImage,
   getFiltered,
   getAttributes,
@@ -196,5 +264,5 @@ export const productGetters: ExtendedProductGetters = {
   getCategoryNames,
   getByFilters,
   getOptions,
-  getBreadcrumbs
+  getBreadcrumbs,
 };

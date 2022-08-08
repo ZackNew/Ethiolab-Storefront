@@ -6,7 +6,7 @@ import {
   SearchResult,
   ResetPasswordResponse,
   RequestPasswordResetResponse,
-  Cms
+  Cms,
 } from '@vue-storefront/vendure-api';
 
 export type TODO = any;
@@ -30,41 +30,46 @@ export type UseUserUpdateParams = TODO;
 export type UseUserRegisterParams = TODO;
 
 export type useUserOrderSearchParams = TODO;
-export type DeleteQuoteParams = {id: string}
+export type DeleteQuoteParams = { id: string };
 
 export type AgnosticProductVariant = {
-  _id: string,
-  productId?: string,
-  _variantId?: string,
-  _description: string,
-  _categoriesRef: string[],
-  name: string,
-  productName?: string,
-  sku: string,
-  slug: string,
-  images: string [],
-  collections?: ProductCollection[],
+  _id: string;
+  productId?: string;
+  _variantId?: string;
+  _description: string;
+  _categoriesRef: string[];
+  name: string;
+  productName?: string;
+  sku: string;
+  slug: string;
+  images: string[];
+  assets?: [
+    {
+      preview?: string;
+    }
+  ];
+  collections?: ProductCollection[];
   price: {
-    original: number,
-    current: number
-  },
+    original: number;
+    current: number;
+  };
   priceWithTax?: {
-    value?: number,
-  }
+    value?: number;
+  };
   productAsset?: {
-    preview?: string,
-  }
+    preview?: string;
+  };
 };
 
 export type AgnosticProductOptions = {
-  id?: string,
+  id?: string;
   value?: string;
   label?: string;
   options?: AgnosticAttribute[] & {
-    id?: string
+    id?: string;
   };
   __typename?: string;
-}
+};
 
 export type AgnosticSearchResult = {
   products: SearchResult[];
@@ -73,25 +78,25 @@ export type AgnosticSearchResult = {
   total: number;
   perPageOptions: number[];
   itemsPerPage: number;
-}
+};
 
 export type AgnosticCategoryNavigation = {
   name: string;
   link: string;
-}
+};
 
 export type SearchResultValue<SEARCH_DATA, SEARCH_INPUT> = {
   data?: SEARCH_DATA;
   input?: SEARCH_INPUT;
-}
+};
 
 // TODO: Replace later with types from vendure-api after implementing api-client functions
 export interface ForgotPasswordResult {
   resetPasswordResult: RequestPasswordResetResponse;
   setNewPasswordResult: ResetPasswordResponse;
 }
-export interface GetCmsResult{
-  getCmsResult:Cms;
+export interface GetCmsResult {
+  getCmsResult: Cms;
 }
 export interface Error {
   name: string;

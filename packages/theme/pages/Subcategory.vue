@@ -98,9 +98,7 @@
               <div class="min-h-[50%]">
                 <img
                   class="h-auto w-52"
-                  v-for="(img, index) in product.assets"
-                  :key="'img' + index"
-                  :src="img.preview"
+                  :src="product.featuredAsset.preview"
                   alt="image"
                 />
               </div>
@@ -235,7 +233,7 @@ export default {
                             variants {
                               price
                             }
-                            assets {
+                            featuredAsset{
                               preview
                             }
                           }
@@ -256,6 +254,7 @@ export default {
               poptions
             );
             this.products = prod.data?.data?.products?.items;
+            console.log('products', this.products);
           }
 
           this.aCat = res.data?.data?.collection;
