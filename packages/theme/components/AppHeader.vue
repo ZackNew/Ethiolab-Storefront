@@ -417,7 +417,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
 .sf-header {
+  --header-width : 90%;
   --header-padding: var(--spacer-sm);
   @include for-desktop {
     --header-padding: 0;

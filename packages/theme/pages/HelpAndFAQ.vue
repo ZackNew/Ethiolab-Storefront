@@ -5,7 +5,7 @@
           <div class="mb-20 text-center">
           <h2 class="mt-8 text-7xl font-bold font-heading">FAQ&apos;s</h2>
           </div>
-          <div class="max-w-4xl mx-auto">
+          <div class="max-w-5xl mx-auto">
               <SfAccordion transition="" open="all" showChevron  v-for="n in 5" :key="n" class="mb-4 px-4 lg:px-12 py-8 accordion-bg rounded-2xl">
                 <SfAccordionItem  header="Clothing" class="rounded-2xl">
                   <template #header="{header, isOpen, accordionClick, showChevron}" >

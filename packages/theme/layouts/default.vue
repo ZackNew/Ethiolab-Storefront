@@ -108,11 +108,14 @@ export default {
 #layout {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 1240px;
+    max-width: 90%;
     margin: auto;
   }
 }
-
+:root{
+  --font-family--secondary: 'Roboto';
+  --font-family--primary:'Roboto Slab'
+}
 .no-scroll {
   overflow: hidden;
   height: 100vh;
@@ -132,6 +135,7 @@ body {
   font-family: var(--font-family--primary);
   margin: 0;
   padding: 0;
+
 }
 a {
   text-decoration: none;
