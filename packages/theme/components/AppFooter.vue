@@ -166,7 +166,7 @@ export default {
   &__container {
     margin: var(--spacer-sm);
     @include for-desktop {
-      max-width: 69rem;
+      max-width: 90%;
       margin: 0 auto;
     }
   }

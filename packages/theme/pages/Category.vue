@@ -536,8 +536,9 @@ export default {
     );
     console.log('row category value is ', rawCategoryTree.value);
     const categoryTree = computed(() =>
-      getTreeWithoutEmptyCategories(rawCategoryTree.value)
+      getTreeWithoutEmptyCategories(rawCategoryTree.value).filter(cat => cat.slug === lastSlug || cat.isCurrent === true)
     );
+    // categoryTree.filter((cat) => cat.slug === lastSlug);
     console.log('category tree is ', categoryTree.value);
     const activeCategory = computed(() => {
       const items = categoryTree.value;
@@ -676,7 +677,7 @@ export default {
 #category {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 1240px;
+    max-width: 90%;
     margin: 0 auto;
   }
 }

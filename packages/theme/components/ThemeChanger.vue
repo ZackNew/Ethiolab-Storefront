@@ -17,8 +17,15 @@ export default {
       this.$cookies.set('darkMode',this.isDarkMode)
     }
   },
+  // created() {
+  //   if (this.$cookies.get('darkMode') !== this.isDarkMode) {
+  //     this.toggleDarkMode();
+  //   }
+  //   // console.log(this.$cookies.get('darkMode'));
+  // },
   setup(){
     const {isDarkMode,toggleDarkMode} = useUiState();
+    
 
     return{
       isDarkMode,
