@@ -109,9 +109,9 @@ export default {
           'Content-Type': 'application/json',
         },
       };
-
+      let baseUrl = env.process.GRAPHQL_API
       const brandResult = await axios.post(
-        'http://localhost:3000/shop-api',
+        baseUrl,
         body,
         options
       );

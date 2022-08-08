@@ -36,7 +36,8 @@ export default {
                 name
             }
         }`});
-        fetch('http://localhost:3000/shop-api', {
+        let baseUrl = env.process.GRAPHQL_API
+        fetch(baseUrl, {
           method: 'post',
           body: graphql,
           headers: {
