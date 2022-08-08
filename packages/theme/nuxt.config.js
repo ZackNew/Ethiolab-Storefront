@@ -30,7 +30,7 @@ export default {
       {
         rel: "stylesheet",
         href:
-            "https://fonts.googleapis.com/css?family=Corben&display=swap",
+        "https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap",
         media: "print",
         onload: "this.media='all'"
       },
@@ -38,7 +38,7 @@ export default {
         rel: "preload",
         as: "style",
         href:
-            "https://fonts.googleapis.com/css?family=Corben&display=swap",
+        "https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap",
         crossorigin: "anonymous"
       },
       {

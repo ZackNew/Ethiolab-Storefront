@@ -113,8 +113,8 @@ export default {
   }
 }
 :root{
-  --font-family--secondary: 'Roboto';
-  --font-family--primary:'Roboto Slab'
+  --font-family--secondary: 'Roboto'!important;
+  --font-family--primary:'Roboto Slab'!important
 }
 .no-scroll {
   overflow: hidden;
