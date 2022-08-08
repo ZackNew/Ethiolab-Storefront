@@ -5,7 +5,6 @@ export default gql`
     product(id: $id, slug: $slug) {
       slug
       name
-      id
       description
       variants {
         id
