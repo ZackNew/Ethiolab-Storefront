@@ -79,7 +79,7 @@
                                     </div>
                                     <div class="col-span-2">
                                         <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
-                                        <nuxt-link to="/p/9/balancer">{{pro.name}}</nuxt-link>
+                                        <nuxt-link  :to="'/p/'+ pro._id + '/' + pro.slug">{{pro.name}}</nuxt-link>
                                     </div>
 
                                 </div>
