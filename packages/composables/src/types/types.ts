@@ -39,7 +39,6 @@ export type AgnosticProductVariant = {
   _description: string,
   _categoriesRef: string[],
   name: string,
-  id: string
   productName?: string,
   sku: string,
   slug: string,
