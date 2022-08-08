@@ -221,7 +221,7 @@ export default {
       );
 
       axios
-        .post(baseUrl, pbody, poptions)
+        .post('http://localhost:3000/shop-api', pbody, poptions)
         .then(
           (response) => (products.value = response.data?.data?.products?.items)
         );
