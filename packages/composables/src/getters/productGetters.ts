@@ -36,15 +36,51 @@ const getPrice = (product: AgnosticProductVariant): AgnosticPrice => {
 };
 
 const getGallery = (product: AgnosticProductVariant): AgnosticMediaGalleryItem[] => {
-  if (!product?.images?.length) return [];
+  if (!product?.assets){
+    
+    // console.log("no product image", product)
+    return [];
+  } 
+  // else{
+  //   // console.log("product has an image")
+  // }
 
-  return [
-    {
-      small: product?.images[0],
-      normal: product?.images[0],
-      big: product?.images[0]
-    }
-  ];
+  let gallery  = []
+
+product.assets.map(asset => {
+  console.log("asset value ", asset.preview)
+  let temp =  {
+    small: asset.preview,
+    normal: asset.preview,
+    big: asset.preview
+  }
+  gallery.push(temp);
+
+})
+
+  return gallery;
+};
+
+const getAllGallery = (product: AgnosticProductVariant): AgnosticMediaGalleryItem[] => {
+  if (!product?.assets){
+    
+    return [];
+  } 
+
+  let gallery  = []
+
+product.assets.map(asset => {
+  console.log("asset value ", asset.preview)
+  let temp =  {
+    small: asset.preview,
+    normal: asset.preview,
+    big: asset.preview
+  }
+  gallery.push(temp);
+
+})
+
+  return gallery;
 };
 
 const getCoverImage = (product: AgnosticProductVariant): string => {
@@ -186,6 +222,7 @@ export const productGetters: ExtendedProductGetters = {
   getSlug,
   getPrice,
   getGallery,
+  getAllGallery,
   getCoverImage,
   getFiltered,
   getAttributes,

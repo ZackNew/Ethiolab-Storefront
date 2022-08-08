@@ -43,6 +43,10 @@ export type AgnosticProductVariant = {
   sku: string,
   slug: string,
   images: string [],
+  assets?:[{
+    preview?:string
+  }],
+
   collections?: ProductCollection[],
   price: {
     original: number,
