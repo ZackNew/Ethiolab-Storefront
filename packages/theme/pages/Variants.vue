@@ -1,16 +1,26 @@
 <template>
   <div> 
-            <div class="grid grid-cols-5 "> 
-                <div class="col-span-2 m-10">
-                 
-                    <img :src="loading? '' : products.featuredAsset.preview" class="h-96" />
+            <div class="grid grid-cols-12 "> 
+               - <div class="col-span-6 m-3">
+                    <LazyHydrate when-idle>
+        <SfGallery
+          :images="productGallery"
+          class="product__gallery w-auto"
+          :enableZoom="true"
+          :current="1"
+          
+          
+        />
+      </LazyHydrate>
+                    <!-- <!- <img :src="loading? '' : products.featuredAsset.preview" class="h-96" />
                        <div class="grid grid-cols-3"> 
                         <img :src="loading? '' : products.featuredAsset.preview"  class="col-span-1 mt-5" />
-        </div>
+        </div> --> -->
+          
       </div>
 
 
-                <div class="col-span-3 m-10 "> 
+                <div class="col-span-5 m-3 "> 
                     <p class="font-semibold text-2xl">{{products && products.name}}</p>
                     <!-- <P class="text-secondary mt-5"></P> -->
 
@@ -69,7 +79,7 @@
                                     </div>
                                     <div class="col-span-2">
                                         <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
-                                        <nuxt-link to="/p/9/balancer">{{pro.name}}</nuxt-link>
+                                        <nuxt-link  :to="'/p/'+ pro.productId + '/' + pro.slug">{{pro.name}}</nuxt-link>
                                     </div>
 
                                 </div>
@@ -133,9 +143,32 @@ import { onSSR } from '@vue-storefront/core'
 import {computed} from "@vue/composition-api";
 import { useUiHelpers } from '~/composables';
 import { name } from 'file-loader';
+import LazyHydrate from 'vue-lazy-hydration';
 
-
+import {
+  SfProperty,
+  SfHeading,
+  SfPrice,
+  SfRating,
+  SfSelect,
+  SfAddToCart,
+  SfTabs,
+  SfGallery,
+  SfIcon,
+  SfImage,
+  SfBanner,
+  SfAlert,
+  SfSticky,
+  SfReview,
+  SfBreadcrumbs,
+  SfButton,
+  SfColor,
+} from '@storefront-ui/vue';
 export default defineComponent({
+   components: {
+    SfGallery,
+    LazyHydrate
+   },
     setup() {
 
         let maxPrice='';
@@ -169,6 +202,16 @@ export default defineComponent({
             const option = computed(() => productGetters.getOptions(products.value))
             const configuration = computed(() => productGetters.getCategoryIds(product.value))
 
+                const productGallery = computed(() =>
+                  productGetters.getAllGallery(products.value)
+                  .map((img) => ({
+                    mobile: { url: img.small },
+                    desktop: { url: img.normal },
+                    big: { url: img.big },
+                    alt: products.value.name || products.value._name,
+                  }))
+                );
+
             const originalPrice = []
             const currentPrice = []
 
@@ -193,10 +236,11 @@ export default defineComponent({
     onMounted(() => {
         console.log("the product value is ", product.value)
         console.log("the option value is ", option.value)
-                console.log("the productsss value is ", products.value)
+                console.log("the productsss value is ", productGetters.getId(product))
                 console.log("configuration value is ", configuration.value)
                 //   console.log("the productsss image value is ", products.value.assets[0].preview)
-                console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
+                // console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
+                console.log("product gallery is ", productGallery.value)
 
 
     })
@@ -214,6 +258,8 @@ export default defineComponent({
             maxPrice,
             originalPrice,
             currentPrice,
+            productGallery,
+            LazyHydrate
             // productImage
         }
         

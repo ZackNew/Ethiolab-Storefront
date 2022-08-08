@@ -258,7 +258,7 @@
               :isAddedToCart="isInCart({ product })"
               :link="
                 localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                  `/v/${productGetters.getSlug(
                     product
                   )}`
                 )
