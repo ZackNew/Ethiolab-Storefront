@@ -511,7 +511,7 @@ export default {
 #product {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 1272px;
+    max-width: 90%;
     margin: 0 auto;
   }
 }

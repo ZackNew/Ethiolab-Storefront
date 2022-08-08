@@ -109,7 +109,7 @@ export default {
           'Content-Type': 'application/json',
         },
       };
-      let baseUrl = env.process.GRAPHQL_API
+      let baseUrl = process.env.GRAPHQL_API
       const brandResult = await axios.post(
         baseUrl,
         body,

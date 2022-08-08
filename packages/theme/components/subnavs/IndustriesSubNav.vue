@@ -36,7 +36,7 @@ export default {
                 name
             }
         }`});
-        let baseUrl = env.process.GRAPHQL_API
+        let baseUrl = process.env.GRAPHQL_API
         fetch(baseUrl, {
           method: 'post',
           body: graphql,
