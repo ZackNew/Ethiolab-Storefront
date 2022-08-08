@@ -108,7 +108,7 @@ export default {
 #layout {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 90%;
+    max-width: 90% !important;
     margin: auto;
   }
 }
