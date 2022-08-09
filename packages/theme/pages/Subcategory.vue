@@ -213,6 +213,7 @@ export default {
       const acat = await axios
         .post(baseUrl, body, options)
         .then(async (res) => {
+          
           if (
             res.data?.data?.collection?.filters[0]?.args[0].name ===
             'productIds'

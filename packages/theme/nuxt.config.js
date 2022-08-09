@@ -129,7 +129,8 @@ export default {
     }],
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
-    '@vue-storefront/middleware/nuxt'
+    '@vue-storefront/middleware/nuxt',
+    'nuxt-user-agent'
   ],
   i18n: {
     currency: 'ETB',
