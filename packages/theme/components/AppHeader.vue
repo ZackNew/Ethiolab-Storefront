@@ -111,9 +111,9 @@
       class="search-result-container"
     />
     <SfOverlay :visible="isSearchOpen" />
-    <template>
+ 
       <HeaderNavigation :isMobile="isMobile" />
-    </template>
+ 
   </div>
 </template>
 
@@ -166,6 +166,7 @@ import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import { useProduct } from '@vue-storefront/vendure';
 import { load } from 'mime';
 export default {
+   
   components: {
     SfInput,
     SfHeader,
@@ -187,6 +188,7 @@ export default {
   },
   directives: { clickOutside },
   setup(props, { root }) {
+
     const {
       toggleCartSidebar,
       toggleWishlistSidebar,
@@ -316,8 +318,20 @@ export default {
       await searchTerm({ term: term.value });
       result.value = searchResult;
     }, 1000);
-
-    const isMobile = computed(() => mapMobileObserver().isMobile.get());
+    
+    
+    const isMobile = ref(false)
+    onMounted(()=>{
+           if (navigator.userAgent.match(/Android/i)
+                || navigator.userAgent.match(/webOS/i)
+                || navigator.userAgent.match(/iPhone/i) 
+                || navigator.userAgent.match(/iPad/i) 
+                || navigator.userAgent.match(/iPod/i)
+                || navigator.userAgent.match(/BlackBerry/i)
+                || navigator.userAgent.match(/Windows Phone/i)){
+                  isMobile.value = true;
+                }
+    });
 
     const closeOrFocusSearchBar = () => {
       if (isMobile.value) {
