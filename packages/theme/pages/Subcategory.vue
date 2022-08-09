@@ -110,7 +110,12 @@
             <button
               class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
             >
-              View All
+              <nuxt-link
+                class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
+                :to="'/v/' + product.slug"
+              >
+                View All
+              </nuxt-link>
             </button>
           </div>
         </div>
