@@ -4,6 +4,7 @@ export default gql`
   query product ($id: ID, $slug: String) {
     product(id: $id, slug: $slug) {
       slug
+      name
       description
       variants {
         id
@@ -16,6 +17,9 @@ export default gql`
           id
           name
           code
+        }
+        featuredAsset{
+          preview
         }
       }
       featuredAsset {

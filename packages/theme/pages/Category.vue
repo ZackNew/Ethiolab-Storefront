@@ -166,15 +166,22 @@
 
                     
                     </div>
+                    <div v-if="rawCategoryTree && rawCategoryTree.length == 0"  class="h-40 bg-bg_dark grid grid-cols-3"> 
+                        
+                                          <img src="/categories/empty_image.png" class="h-40" alt="category featured image"/>
+                                          <div  class="text-white col-span-2 pt-5 overflow-auto max-h-40"><h3>No description for this category!</h3></div>
+                                           
+                                        
+
+                               
+                    </div>
          
             
 
               <LazyHydrate>
-                <!-- <CategoryFeature /> -->
                   <div>
-                      <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3>
-                        <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
-                          <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
+                      <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Sub-Categories</h3>
+            
                                  <div   v-for="(cat, i) in rawCategoryTree && rawCategoryTree " :key="i">
                                     <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="grid grid-cols-3 gap-10 mt-10 mb-10">
                                       <div v-for="(sub,j) in cat.items" :key="j">
@@ -186,18 +193,7 @@
                                               <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
                                           </div>                                     
                                          </div>
-                                    <!-- </div> -->
-                              <!-- <div :v-for="sub in value.items">
-                                  <div class="max-w-sm rouned overflow-hidden shadow-xl">
-                              
-                                  <div class="m-4">
-                                          <h4 class="">{{sub.label}}</h4>
-                                    </div>
-                                    <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
-                              </div>
-                                   
-                      
-                            </div> -->
+                          
                           </div>
 
                      
@@ -258,7 +254,7 @@
               :isAddedToCart="isInCart({ product })"
               :link="
                 localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                  `/v/${productGetters.getSlug(
                     product
                   )}`
                 )
@@ -473,7 +469,7 @@ import {
   SfProperty,
 } from '@storefront-ui/vue';
 import { ref, computed, onMounted } from '@vue/composition-api';
-import { useCart, useWishlist, productGetters, useFacet, facetGetters,categoryGetters } from '@vue-storefront/vendure';
+import { useCategory,useCart, useWishlist, productGetters, useFacet, facetGetters,categoryGetters } from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import { getTreeWithoutEmptyCategories } from '~/helpers';
 import { onSSR } from '@vue-storefront/core';
@@ -556,13 +552,14 @@ export default {
       return category?.label || items[0].label;
     });
     console.log('search result');
-    console.log(searchResult);
+    console.log(searchResult.value);
     console.log(' result');
     console.log(result.value);
     console.log('raw category tree');
     console.log(rawCategoryTree);
     console.log('category Tree');
-    console.log(categoryTree);
+    console.log(categoryTree.value);
+    console.log("loading value ", loading)
     const selectedFilters = ref({});
     const setSelectedFilters = () => {
       if (!facets.value.length || Object.keys(selectedFilters.value).length)

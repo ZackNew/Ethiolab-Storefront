@@ -17,7 +17,7 @@
         </div>
       </template>
     </SfModal>
-  </client-only>
+  </client-only> 
 </template>
 <script>
 import {SfModal} from "@storefront-ui/vue";
