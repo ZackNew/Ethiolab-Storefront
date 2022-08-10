@@ -190,7 +190,7 @@
                                                <div class="m-4">
                                                     <h4 class="">{{sub.label}}</h4>
                                                </div>
-                                               <nuxt-link :to="`/s/${sub.slug}`"> <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300" /></nuxt-link>
+                                               <nuxt-link :to="`/s/${sub.slug}`"> <img  :src="sub.featuredAsset? sub.featuredAsset.preview: '/categories/empty_image.png'" class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300" /></nuxt-link>
                                           </div>                                     
                                          </div>
                           
