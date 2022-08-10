@@ -1,5 +1,23 @@
 <template>
   <div class="header">
+    <SfSidebar
+      v-e2e="'sidebar-cart'"
+      :visible="isMessageSideBarOpen"
+      :title="$t('Messages')"
+      class="sf-sidebar--right"
+      @close="toggleMessageSideBar"
+    >
+      <div id="messages-wrapper">
+        <div v-for="message of messages">
+            <div class="msg-from-me" v-if="!message.isFromAdmin">From You <br />{{message.msg}}</div>
+            <div class="msg-from-admin" v-else>From The Admin <br />{{message.msg}}</div>
+        </div>
+      </div> 
+      <div id="sendmessage">
+         <input id='msg-to-send' type="text" placeholder="Message to Send" />
+         <SfButton id="send-btn">Send</SfButton>
+      </div>
+    </SfSidebar>
     <SfHeader
       :class="{
         'header-on-top': isSearchOpen,
@@ -48,6 +66,9 @@
               class="sf-badge--number cart-badge"
               >{{ wishlistTotalItems }}</SfBadge
             >
+          </SfButton>
+          <SfButton class="sf-button--pure sf-header__action" @click="toggleMessageSideBar">
+                <SfIcon class="sf-header__icon" icon="message" size="1.25rem" />
           </SfButton>
           <SfButton
             v-e2e="'app-header-cart'"
@@ -131,6 +152,7 @@ import {
   SfSearchBar,
   SfTextarea,
   SfModal,
+  SfSidebar
 } from '@storefront-ui/vue';
 import { useUiHelpers, useUiState } from '~/composables';
 import {
@@ -168,6 +190,7 @@ import { load } from 'mime';
 export default {
    
   components: {
+    SfSidebar,
     SfInput,
     SfHeader,
     SfImage,
@@ -188,7 +211,11 @@ export default {
   },
   directives: { clickOutside },
   setup(props, { root }) {
-
+    const isMessageSideBarOpen = ref(false);
+    const toggleMessageSideBar = ()=>{
+      console.log('called toggle messages ' + isMessageSideBarOpen.value);
+      isMessageSideBarOpen.value = !isMessageSideBarOpen.value
+    }
     const {
       toggleCartSidebar,
       toggleWishlistSidebar,
@@ -221,7 +248,10 @@ export default {
     const selectedProd = () => {
       console.log('selected');
     };
-
+    const messages = ref([
+      {isFromAdmin: true, msg: 'hi'},
+      {isFromAdmin: false, msg: 'Hello sir'}
+    ]) //a list of {isFromAdmin, and msg}
     const showQuotation = ref(false);
     const { setTermForUrl, getFacetsFromURL } = useUiHelpers();
     const { isAuthenticated, load: loadUser, user } = useUser();
@@ -330,7 +360,9 @@ export default {
                 || navigator.userAgent.match(/BlackBerry/i)
                 || navigator.userAgent.match(/Windows Phone/i)){
                   isMobile.value = true;
-                }
+                 console.log("it is a mobile")
+           }
+           else isMobile.value = false;
     });
 
     const closeOrFocusSearchBar = () => {
@@ -388,6 +420,9 @@ export default {
     });
 
     return {
+      messages,
+      isMessageSideBarOpen,
+      toggleMessageSideBar,
       selectedProd,
       selectedProds,
       addProd,
@@ -459,8 +494,25 @@ export default {
     margin-left: 40px;
   }
 }
+#messages-wrapper{
+   display: flex;
+   flex-direction: column;
+   justify-content: space-evenly;
+}
+.msg-from-admin{
+   background-color: lightblue;
+}
+.msg-from-me{
+   background-color: lightyellow;
+}
 .header-on-top {
   z-index: 2;
+}
+#msg-to-send{
+  width: 75%;
+}
+#send-btn{
+  width: 25%;
 }
 .cart-badge {
   position: absolute;
@@ -480,5 +532,12 @@ export default {
 .header2 {
   width: fit-content;
   margin: auto;
+}
+#sendmessage{
+  position: fixed;
+   bottom: 1%;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-evenly;
 }
 </style>

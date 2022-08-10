@@ -12,7 +12,7 @@
 
     <div id="layout" >
       <nuxt :key="$route.fullPath"/>
-     
+      
       <ToastVue :show="isToastVisible" :message='toastMessage'/>
       <LazyHydrate when-visible>
         <BottomNavigation />
