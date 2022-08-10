@@ -22,6 +22,11 @@ module.exports = {
         faded_black:'#2f2f2f',
         light_gray: '#D3D3D3'
     },
+    extend: {
+      minHeight: {
+          'custom': '234px',
+          }
+     },
   },
   plugins: [],
   important: true,
