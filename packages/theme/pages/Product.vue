@@ -387,19 +387,21 @@ export default {
       });
       const reviewsListResponse = await response.json();
       let splitted =
-        reviewsListResponse.data.product.customFields.youtube_link.split('?v=');
+        reviewsListResponse.data.product.customFields?.youtube_link.split(
+          '?v='
+        );
       if (splitted.length == 2) {
         this.youtube_link = splitted[1];
       }
       if (
-        reviewsListResponse.data.product.customFields.maintenance_fee !== ''
+        reviewsListResponse.data.product.customFields?.maintenance_fee !== ''
       ) {
         console.log(
-          `${reviewsListResponse.data.product.customFields.maintenance_fee} fee`
+          `${reviewsListResponse.data.product.customFields?.maintenance_fee} fee`
         );
         this.properties.push({
           name: 'Maintenance Fee',
-          value: reviewsListResponse.data.product.customFields.maintenance_fee,
+          value: reviewsListResponse.data.product.customFields?.maintenance_fee,
         });
         console.log(this.properties);
       }
