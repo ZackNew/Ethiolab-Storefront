@@ -14,8 +14,8 @@
         </div>
       </div> 
       <div id="sendmessage">
-         <input id='msg-to-send' type="text" placeholder="Message to Send" />
-         <SfButton id="send-btn">Send</SfButton>
+         <input id='msg-to-send' type="text" v-model="messageToSend" placeholder="Message to Send" />
+         <SfButton id="send-btn" @click="sendMessageToAdmin">Send</SfButton>
       </div>
     </SfSidebar>
     <SfHeader
@@ -69,6 +69,10 @@
           </SfButton>
           <SfButton class="sf-button--pure sf-header__action" @click="toggleMessageSideBar">
                 <SfIcon class="sf-header__icon" icon="message" size="1.25rem" />
+                <SfBadge
+           
+              class="sf-badge--number cart-badge"
+              >{{unSeenMessagesLen}}</SfBadge>
           </SfButton>
           <SfButton
             v-e2e="'app-header-cart'"
@@ -211,6 +215,7 @@ export default {
   },
   directives: { clickOutside },
   setup(props, { root }) {
+    const { isAuthenticated, load: loadUser, user } = useUser();
     const isMessageSideBarOpen = ref(false);
     const toggleMessageSideBar = ()=>{
       console.log('called toggle messages ' + isMessageSideBarOpen.value);
@@ -244,17 +249,38 @@ export default {
       }
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
-
+    const messageToSend = ref('')
     const selectedProd = () => {
       console.log('selected');
     };
+    const sendMessageToAdmin = async ()=>{
+         await loadUser()
+         const userEmail = userGetters.getEmailAddress(user.value);
+         const userFirstName = userGetters.getFirstName(user.value);
+         const userLastName = userGetters.getLastName(user.value);
+          
+         console.log(`Sending ${messageToSend.value} from ${userFirstName} ${userLastName} ${userEmail}`)
+    }
     const messages = ref([
-      {isFromAdmin: true, msg: 'hi'},
-      {isFromAdmin: false, msg: 'Hello sir'}
+      {isFromAdmin: true, msg: 'hi', isSeen: false},
+      {isFromAdmin: false, msg: 'Hello sir', isSeen: true}
     ]) //a list of {isFromAdmin, and msg}
+    const unSeenMessagesLen = computed(()=>{
+       let len =0;
+      messages.value.forEach(message =>{
+        if(!message.isSeen)len++;
+      })
+      return len
+    })
+    
+    // watch(messages, ()=>{
+     
+    // })
+
+
     const showQuotation = ref(false);
     const { setTermForUrl, getFacetsFromURL } = useUiHelpers();
-    const { isAuthenticated, load: loadUser, user } = useUser();
+    
     const { cart, load: loadCart } = useCart();
     const { wishlist, load: loadWishlist } = useWishlist();
     const { search, categories } = useCategory();
@@ -461,6 +487,9 @@ export default {
       tree,
       SfTextarea,
       prodList,
+      messageToSend,
+      sendMessageToAdmin,
+      unSeenMessagesLen
     };
   },
 };
