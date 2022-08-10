@@ -62,12 +62,18 @@ export type getQuotesResult = QueryResponse<'getQueryOf', Quote[]>
 export type getQuotesOfParams = {email: string}
 export type writeContactUsParamsResult = MutationResponse<"writeContactUsMessage", ContactUsMessage>; //its is not correct
 export type writeContactUsParams = {message: {phone_number: string,first_name: string, last_name: string, message: string, email:string}}
-export type writeInstantMessageParams = {msg: string, userEmail: string, lastName: string, firstName: string};
+export type writeInstantMessageParams = {msg: string, userEmail: string, lastName: string, firstName: string, isFromAdmin?: boolean};
 export type setTinNumberParams = {tinNumber:string};
 export type DeleteQuoteParams = {id: string};
 export type ContactUsMessage = {id: string, }
-export type getUserInstantMessageParams = {id:string};
-export type InstantMessage = {id: string, msg: string, isFromAdmin: boolean,} //no need for name and email
+export type getUserInstantMessageParams = {userEmail:string};
+export type getUserInstantMessageResult= QueryResponse<"getUserInstantMessage", InstantMessage[]>
+export type InstantMessage = {id: string, msg: string, isFromAdmin: boolean, isSeen: boolean } //no need for name and email
+/*    id
+    msg
+    isSeen
+    isFromAdmin */
+export type  writeInstantMessageResult = Promise<MutationResponse<'writeInstantMessage', InstantMessage>>;
 export interface VendureApiMethods 
 {
   getQueryOf(params: getQuotesOfParams, customQuery?: CustomQuery): Promise<getQuotesResult>;

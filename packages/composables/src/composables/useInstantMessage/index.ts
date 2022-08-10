@@ -4,15 +4,16 @@ const useInstantMessage = function(){
     const context  = useVSFContext();
 
     return {
-        sendMessage(params){
+       async sendMessage(params){
        //     console.log('%c called!', 'color: green')
        //     console.log(context.$vendure.api.writeContactUsMessage)
            console.log('sendMessage Called')
-           //return context.$vendure.api.writeInstantMessage({...params})
+           await context.$vendure.api.writeInstantMessage({...params})
+            console.log('helloxxxxxxx')
         },
-        getUserInstantMessage(params){
+        async getUserInstantMessage(params){
             console.log('get all user\'s called');
-            //return context.$vendure.api.getUserInstantMessage({...params});
+            return await context.$vendure.api.getUserInstantMessage({...params});
         }
     }
 }

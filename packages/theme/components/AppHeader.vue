@@ -216,17 +216,26 @@ export default {
   },
   directives: { clickOutside },
   setup(props, { root }) {
+     const messages = ref([
+   //   {isFromAdmin: true, msg: 'hi', isSeen: false},
+     // {isFromAdmin: false, msg: 'Hello sir', isSeen: true}
+    ]) 
     const {sendMessage, getUserInstantMessage} = useInstantMessage()
-    sendMessage({})
-    getUserInstantMessage()
-    const refreshMessages = ()=>{
-      messages.value = [...messages.value]
+    const { isAuthenticated, load: loadUser, user } = useUser();
+    //getUserInstantMessage()
+    const refreshMessages = async ()=>{
+      await loadUser();
+      // messages.value = [...messages.value]
+      const data = await getUserInstantMessage({userEmail: userGetters.getEmailAddress(user.value)})
+      console.log(JSON.stringify(data.data.getUserInstantMessage))
+      messages.value = data.data.getUserInstantMessage;
+      
     }
     setInterval(()=>{
          console.log(`hello`)
          refreshMessages()
     }, 2000)
-    const { isAuthenticated, load: loadUser, user } = useUser();
+   
     const isMessageSideBarOpen = ref(false);
     const toggleMessageSideBar = ()=>{
       console.log('called toggle messages ' + isMessageSideBarOpen.value);
@@ -272,12 +281,15 @@ export default {
          const userLastName = userGetters.getLastName(user.value);
           
          console.log(`Sending ${messageToSend.value} from ${userFirstName} ${userLastName} ${userEmail}`)
+         await sendMessage({
+              msg: messageToSend.value,
+              lastName: userLastName,
+              firstName: userFirstName,
+              userEmail: userEmail
+           })
          messageToSend.value = ''
     }
-    const messages = ref([
-      {isFromAdmin: true, msg: 'hi', isSeen: false},
-      {isFromAdmin: false, msg: 'Hello sir', isSeen: true}
-    ]) //a list of {isFromAdmin, and msg}
+//a list of {isFromAdmin, and msg}
     const unSeenMessagesLen = computed(()=>{
        let len =0;
       messages.value.forEach(message =>{
