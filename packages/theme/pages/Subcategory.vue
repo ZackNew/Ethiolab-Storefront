@@ -107,9 +107,7 @@
             <p class="text-center m-3">
               {{ String(product.variants[0].price).slice(0, -2) }}.00
             </p>
-            <button
-              class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-            >
+            <button class="mb-4">
               <nuxt-link
                 class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
                 :to="'/v/' + product.slug"
@@ -237,7 +235,7 @@ export default {
 
       console.log('we still are in if');
       axios
-        .post('http://localhost:3000/shop-api', pbody, poptions)
+        .post('https://10.10.20.55/shop-api', pbody, poptions)
         .then(
           (response) => (results.value = response.data?.data?.products?.items)
         );
