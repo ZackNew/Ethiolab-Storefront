@@ -552,6 +552,7 @@ export default {
    display: flex;
    flex-direction: column;
    justify-content: space-evenly;
+   overflow-y: scroll;
 }
 .msg-from-admin{
    background-color: lightblue;
