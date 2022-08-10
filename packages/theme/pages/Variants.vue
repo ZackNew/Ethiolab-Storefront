@@ -1,31 +1,36 @@
 <template>
   <div> 
             <div class="grid grid-cols-12 "> 
-               - <div class="col-span-6 m-3">
+               - <div class="col-span-5 m-3">
                     <LazyHydrate when-idle>
-        <SfGallery
-          :images="productGallery"
-          class="product__gallery w-auto"
-          :enableZoom="true"
-          :current="1"
-          
-          
-        />
-      </LazyHydrate>
+                      <SfGallery
+                        :images="productGallery"
+                        class="product__gallery w-auto"
+                        :current="1"
+                        :imageWidth="300"
+                        :imageHeight="400"
+                        :thumbWidth="160"
+                        :thumbHeight="160"
+                        :sliderOptions='{"autoplay":3000,"rewind":true,"gap":0}'
+                        :outsideZoom="false"
+                        :enableZoom="true"
+                        
+                      />
+                    </LazyHydrate>
                     <!-- <!- <img :src="loading? '' : products.featuredAsset.preview" class="h-96" />
                        <div class="grid grid-cols-3"> 
                         <img :src="loading? '' : products.featuredAsset.preview"  class="col-span-1 mt-5" />
-        </div> --> -->
+        </div> --> 
           
-      </div>
+            </div>
 
 
-                <div class="col-span-5 m-3 "> 
+                <div class="col-span-6 m-3 "> 
                     <p class="font-semibold text-2xl">{{products && products.name}}</p>
                     <!-- <P class="text-secondary mt-5"></P> -->
 
-                    <div class="grid grid-cols-2">
-                        <div class="col-span-1 overflow-auto h-96 mt-10"> 
+                    <div class="grid grid-cols-3">
+                        <div class="col-span-2 overflow-auto h-96 mt-10"> 
                             <p v-html="products && products.description"></p>
 
             <!-- <span> 
@@ -34,10 +39,10 @@
 
                         </div> 
                         <div class="col-span-1"> 
-                            <span class="text-xl font-bold ml-10 mr-5 mt-10">{{minPrice}}$ - {{maxPrice}}$ USD/EACH</span>
+                            <span class="text-xl font-bold mt-10"><span>Price </span>{{minPrice}} - {{maxPrice}}</span>
                             <div class="h-20 bg-light_gray ml-5 mt-10">
-                                    <p class="m-5">{{product && product.length}} variations of this product are available.</p>
-                                    <a href="#var-table" class="text-secondary text-sm m-5 font-bold">SEE ALL PRODUCT OPTIONS BELOW</a>
+                                    <p class="m-5 float-left">{{product && product.length}} variations of this product are available.</p>
+                                    <a href="#var-table" class="text-secondary text-sm m-4 font-bold">SEE ALL PRODUCT OPTIONS BELOW</a>
                                 </div>
 
                         </div>
@@ -75,7 +80,7 @@
                              <td class="border border-slate-300 col-span-4"> 
                                 <div class="grid grid-cols-4"> 
                                     <div class="col-span-2">
-                                        <img :src="pro.images[0]" class="col-span-1 mt-5 ml-5" />
+                                        <img :src="pro.images[0]? pro.images[0]: products.featuredAsset.preview" class="col-span-1 mt-5 ml-5" />
                                     </div>
                                     <div class="col-span-2">
                                         <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
