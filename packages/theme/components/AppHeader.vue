@@ -67,7 +67,7 @@
               >{{ wishlistTotalItems }}</SfBadge
             >
           </SfButton>
-          <SfButton class="sf-button--pure sf-header__action" @click="toggleMessageSideBar">
+          <SfButton class="sf-button--pure sf-header__action" @click="toggleMessageSideBar" v-if="isAuthenticated">
                 <SfIcon class="sf-header__icon" icon="message" size="1.25rem" />
                 <SfBadge
            
@@ -514,6 +514,7 @@ export default {
       prodList,
       messageToSend,
       sendMessageToAdmin,
+      isAuthenticated,
       unSeenMessagesLen
     };
   },
