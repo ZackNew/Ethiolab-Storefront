@@ -19,9 +19,9 @@ export default defineComponent({
   components: {  BestSellerSingle },
     setup() {
       const categories = [
-        {title:"Balance and Scales", image:"/categories/cat1.jpeg"},
-        {title:"Calibration" , image:"/categories/cat2.jpeg"},
-        {title:"Electrical Products" , image:"/categories/cat3.jpeg"},
+        {title:"Balance and Scales", image:"/categories/empty_image.png"},
+        {title:"Calibration" , image:"/categories/empty_image.png"},
+        {title:"Electrical Products" , image:"/categories/empty_image.png"},
         // {title:"Filtration Products" , image:"/categories/cat4.jpg"},
         // {title:"Flowmeters" , image:"/categories/cat5.jpg"}
       ]

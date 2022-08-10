@@ -153,7 +153,7 @@
                     <div   v-for="(cat, i) in rawCategoryTree && rawCategoryTree " :key="i">
                              <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="">
                               <div class="h-40 bg-bg_dark grid grid-cols-3">
-                                          <img :src="cat.featuredAsset.preview || '/categories/cat2.jpeg' " class="h-40" />
+                                          <img :src="cat.featuredAsset === null? '/categories/empty_image.png': cat.featuredAsset.preview" class="h-40" />
                                           <div v-html="cat.description || `Category Description`" class="text-white col-span-2 pt-5 overflow-auto max-h-40"></div>
                                               <!-- <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
                                                 electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
@@ -169,7 +169,7 @@
                     <div v-if="rawCategoryTree && rawCategoryTree.length == 0"  class="h-40 bg-bg_dark grid grid-cols-3"> 
                         
                                           <img src="/categories/empty_image.png" class="h-40" alt="category featured image"/>
-                                          <div  class="text-white col-span-2 pt-5 overflow-auto max-h-40"><h3>No description for this category!</h3></div>
+                                          <div  class="text-white col-span-2 pt-5 overflow-auto max-h-40"><h3>No category description and no product for this category!</h3></div>
                                            
                                         
 
@@ -179,8 +179,8 @@
             
 
               <LazyHydrate>
-                  <div>
-                      <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Sub-Categories</h3>
+                  <div class="min-h-custom">
+                      <h3 class="font-bold mt-12 pb-2 border-b border-gray-200m ">Featured Sub-Categories</h3>
             
                                  <div   v-for="(cat, i) in rawCategoryTree && rawCategoryTree " :key="i">
                                     <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="grid grid-cols-3 gap-10 mt-10 mb-10">
@@ -190,7 +190,7 @@
                                                <div class="m-4">
                                                     <h4 class="">{{sub.label}}</h4>
                                                </div>
-                                              <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
+                                               <nuxt-link :to="`/s/${sub.slug}`"> <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" /></nuxt-link>
                                           </div>                                     
                                          </div>
                           
@@ -204,15 +204,16 @@
 
               </LazyHydrate>
 
-                <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">Shop Our Best Sellers</h3>
+                <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10 ">Shop Our Best Sellers</h3>
 
 
-              <div class="grid grid-cols-3 gap-10" >
+              <div class="grid grid-cols-3 gap-10 min-h-custom" >
                     <div class="card shadow-lg   my-3 ml-2" v-for="i in 3" :key="i">
-                  <img src="/categories/cat1.jpeg" alt="" />
-                  <h3 class="text-center m-3">link</h3>
+                  <img src="/categories/empty_image.png" alt="" class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300" />
+                  <!-- <h3 class="text-center m-3">link</h3> -->
                   <h4 class="text-center font-serif m-3">
-                    $925.00 - $2,080.00USD / Each
+                    ${{i}}925.00 Each
+                     <!-- - $2,080.00USD  -->
                   </h4>
                   <p class="text-center m-3">description</p>
                   <button
