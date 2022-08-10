@@ -169,6 +169,7 @@ import {
   useWishlist,
   wishlistGetters,
   userGetters,
+  useInstantMessage
 } from '@vue-storefront/vendure';
 import {
   computed,
@@ -215,6 +216,16 @@ export default {
   },
   directives: { clickOutside },
   setup(props, { root }) {
+    const {sendMessage, getUserInstantMessage} = useInstantMessage()
+    sendMessage({})
+    getUserInstantMessage()
+    const refreshMessages = ()=>{
+      messages.value = [...messages.value]
+    }
+    setInterval(()=>{
+         console.log(`hello`)
+         refreshMessages()
+    }, 2000)
     const { isAuthenticated, load: loadUser, user } = useUser();
     const isMessageSideBarOpen = ref(false);
     const toggleMessageSideBar = ()=>{
@@ -253,6 +264,7 @@ export default {
     const selectedProd = () => {
       console.log('selected');
     };
+  
     const sendMessageToAdmin = async ()=>{
          await loadUser()
          const userEmail = userGetters.getEmailAddress(user.value);
@@ -260,6 +272,7 @@ export default {
          const userLastName = userGetters.getLastName(user.value);
           
          console.log(`Sending ${messageToSend.value} from ${userFirstName} ${userLastName} ${userEmail}`)
+         messageToSend.value = ''
     }
     const messages = ref([
       {isFromAdmin: true, msg: 'hi', isSeen: false},

@@ -11,7 +11,7 @@ import {
   UpdateCustomerEmailAddressParams,
   UpdateCustomerInput
 } from '.';
-import { ActiveOrderResult, ApplyCouponCodeResult, CollectionList, CreateCustomerInput, Customer, NativeAuthenticationResult, Order, PaymentInput, PaymentMethodQuote, Product, RegisterCustomerAccountResult, RegisterCustomerInput, RemoveOrderItemsResult, SearchResponse, SetCustomerForOrderResult, ShippingMethodQuote, Success, UpdateAddressInput, UpdateOrderItemsResult, RequestPasswordResetResult, ResetPasswordResult } from './GraphQL';
+import { ActiveOrderResult, ApplyCouponCodeResult, CollectionList, CreateCustomerInput, Customer, NativeAuthenticationResult, Order, PaymentInput, PaymentMethodQuote, Product, RegisterCustomerAccountResult, RegisterCustomerInput, RemoveOrderItemsResult, SearchResponse, SetCustomerForOrderResult, ShippingMethodQuote, Success, UpdateAddressInput, UpdateOrderItemsResult, RequestPasswordResetResult, ResetPasswordResult, Query, CustomerOrdersArgs } from './GraphQL';
 import { AddToCartParams, CartCouponParams, CollectionParams, LoginParams, ProductParams, RemoveFromCartParams, SearchParams, SetShippingMethodParams, TransitionOrderToStateParams, UpdateAddressDetailsParams, UpdateCartParams, UpdateCustomerPasswordParams, RequestPasswordResetParams, ResetPasswordParams } from './types';
 import cms from "../api/cms";
 
@@ -62,15 +62,22 @@ export type getQuotesResult = QueryResponse<'getQueryOf', Quote[]>
 export type getQuotesOfParams = {email: string}
 export type writeContactUsParamsResult = MutationResponse<"writeContactUsMessage", ContactUsMessage>; //its is not correct
 export type writeContactUsParams = {message: {phone_number: string,first_name: string, last_name: string, message: string, email:string}}
+export type writeInstantMessageParams = {msg: string, userEmail: string, lastName: string, firstName: string};
 export type setTinNumberParams = {tinNumber:string};
 export type DeleteQuoteParams = {id: string};
 export type ContactUsMessage = {id: string, }
+export type getUserInstantMessageParams = {id:string};
+export type InstantMessage = {id: string, msg: string, isFromAdmin: boolean,} //no need for name and email
 export interface VendureApiMethods 
 {
   getQueryOf(params: getQuotesOfParams, customQuery?: CustomQuery): Promise<getQuotesResult>;
   writeQuote (params: writeQuoteParams, customQuery?: CustomQuery): Promise<writeQuoteResult>;
   deleteQuote(params: DeleteQuoteParams, customQuery?: CustomQuery): Promise<MutationResponse<'deleteQuote', boolean>>
   writeContactUsMessage(params: writeContactUsParams, customQuery?: CustomQuery): Promise<MutationResponse<'writeContactUsMessage', ContactUsMessage>>
+  
+  writeInstantMessage(params: writeInstantMessageParams, customQuery?:CustomQuery): Promise<MutationResponse<'writeInstantMessage', InstantMessage>>
+  getUserInstantMessage(params: getUserInstantMessageParams, customQuery?:CustomQuery): Promise<QueryResponse<"getUserInstantMessage", InstantMessage[]>>
+
 
 
   getProduct(params: ProductParams, customQuery?: CustomQuery): Promise<GetProductResponse>;
