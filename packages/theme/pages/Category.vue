@@ -153,7 +153,7 @@
                     <div   v-for="(cat, i) in rawCategoryTree && rawCategoryTree " :key="i">
                              <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="">
                               <div class="h-40 bg-bg_dark grid grid-cols-3">
-                                          <img :src="cat.featuredAsset === null? '/categories/empty_image.png': cat.featuredAsset.preview" class="h-40" />
+                                          <img :src="cat.featuredAsset === null? '/categories/empty_image.png': cat.featuredAsset.preview" class="h-40 " />
                                           <div v-html="cat.description || `Category Description`" class="text-white col-span-2 pt-5 overflow-auto max-h-40"></div>
                                               <!-- <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
                                                 electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
@@ -190,7 +190,7 @@
                                                <div class="m-4">
                                                     <h4 class="">{{sub.label}}</h4>
                                                </div>
-                                               <nuxt-link :to="`/s/${sub.slug}`"> <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" /></nuxt-link>
+                                               <nuxt-link :to="`/s/${sub.slug}`"> <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300" /></nuxt-link>
                                           </div>                                     
                                          </div>
                           
