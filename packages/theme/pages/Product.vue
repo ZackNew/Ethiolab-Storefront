@@ -222,7 +222,7 @@ export default {
   name: 'Product',
   transition: 'fade',
   async created() {
-    console.log('Product Page created');
+    console.log('Pcreated', this.$config.GRAPHQL_API);
     this.reviews = await this.getProductsReviews();
   },
   setup(props, context) {
