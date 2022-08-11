@@ -19,24 +19,29 @@
     </nav>
     <div class="flex mt-4">
       <!-- Side filter search or an Ad -->
-      <div
-        v-if="products === null"
-        class="border shadow-2xl rounded ml-4 w-2/6 h-3/4 mt-5"
-      >
-        <LazyHydrate>
-          <SfBanner
-            :title="adSection.title || 'AD Title'"
-            :subtitle="adSection.overview || 'AD Overview'"
-            :description="adSection.description || 'AD Description'"
-            :buttonText="adSection.buttonText || 'AD Button'"
-            background=""
-            :image="adImage || '/homepage/bannerA.webp'"
-            link="/c/clinical-laboratory"
-          >
-          </SfBanner>
-        </LazyHydrate>
+      <div class="shadow-2xl rounded w-2/6 h-3/4">
+        <div v-if="products.length === 0">
+          <LazyHydrate>
+            <SfBanner
+              :title="adSection.title || 'AD Title'"
+              :subtitle="adSection.overview || 'AD Overview'"
+              :description="adSection.description || 'AD Description'"
+              :buttonText="adSection.buttonText || 'AD Button'"
+              background=""
+              :image="adImage || '/homepage/bannerA.webp'"
+              link="/c/clinical-laboratory"
+            >
+            </SfBanner>
+          </LazyHydrate>
+        </div>
+        <div v-else>
+          <SubcategoryBrandAccordion
+            @searchChange="searchBox"
+            @filterClicked="filterProducts"
+            :filters="filters"
+          />
+        </div>
       </div>
-      <SubcategoryBrandAccordion v-else :filters="filterrs" />
       <!-- Subcategory name and description -->
       <div class="ml-6">
         <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">
@@ -71,7 +76,7 @@
           </div>
         </div>
         <div
-          v-if="products === null"
+          v-if="products.length === 0"
           class="border border-light_accent shadow-md bg-white rounded-lg"
         >
           <div class="justify-end">
@@ -89,33 +94,7 @@
             </p>
           </div>
           <!-- Products -->
-          <div class="grid grid-cols-4">
-            <div
-              class="card shadow-lg w-52 my-3 ml-2 bg-light_accent"
-              v-for="product in products"
-              :key="product.id"
-            >
-              <div class="min-h-[50%]">
-                <img
-                  class="h-auto w-52"
-                  :src="product.featuredAsset.preview"
-                  alt="image"
-                />
-              </div>
-              <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
-              <p class="text-center m-3">
-                {{ String(product.variants[0].price).slice(0, -2) }}.00
-              </p>
-              <button class="mb-4">
-                <nuxt-link
-                  class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
-                  :to="'/v/' + product.slug"
-                >
-                  View All
-                </nuxt-link>
-              </button>
-            </div>
-          </div>
+          <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
 
           <div
             style="background-color: #e2e5de"
@@ -142,6 +121,7 @@ import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import { useCms } from '@vue-storefront/vendure';
 import { useUiHelpers } from '~/composables';
 import axios from 'axios';
+import SubcatBrandCard from '../components/SubcatBrandCard.vue';
 
 export default {
   name: 'Subcategory',
@@ -150,35 +130,88 @@ export default {
   },
   data() {
     return {
+      filtersClicked: [],
+      search: '',
       categoryName: null,
-      products: null,
+      products: [],
       parent: null,
       aCat: null,
       categoryImg: null,
       description: null,
-      filterrs: [
-        {
-          filter_title: 'Brand',
-          filter_options: ['Sartorius', 'Ohaus', 'Cole parmer'],
-        },
-        { filter_title: 'Color', filter_options: ['Indigo', 'yellow', 'Cyan'] },
-        {
-          filter_title: 'Price Range',
-          filter_options: [
-            '1000 ETB and less',
-            '1000 to 10,000 ETB',
-            '10,000 ETB and more',
-          ],
-        },
-        {
-          filter_title: 'Calibration Type',
-          filter_options: ['Internal', 'External', 'Internal Calibration'],
-        },
-        { filter_title: 'Capacity', filter_options: ['0.22', '0.31', '0.33'] },
-      ],
     };
   },
+  computed: {
+    filteredSearchedProducts() {
+      return this.products.filter((product) =>
+        product.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+    },
+    brandsList() {
+      let brand = [];
+      this.products.forEach((element) => {
+        brand.push(element.customFields.brand?.name);
+      });
+      const brands = [...new Set(brand)];
+      return brands;
+    },
+    industryList() {
+      let industry = [];
+      this.products.forEach((element) => {
+        if (element.customFields.industry !== null) {
+          industry.push(element.customFields.industry?.name);
+        }
+      });
+      const industries = [...new Set(industry)];
+      return industries;
+    },
+    facetList() {
+      let facet = [];
+      this.products.forEach((element) => {
+        if (element.facetValues.length !== 0) {
+          element.facetValues.forEach((f) => {
+            facet.push(f?.name);
+          });
+        }
+      });
+      const facets = [...new Set(facet)];
+      return facets;
+    },
+    filters() {
+      return [
+        {
+          filter_title: 'Brand',
+          filter_options: this.brandsList,
+        },
+        {
+          filter_title: 'Industry',
+          filter_options: this.industryList,
+        },
+        {
+          filter_title: 'Facet',
+          filter_options: this.facetList,
+        },
+      ];
+    },
+  },
   methods: {
+    searchBox(event) {
+      this.search = event;
+    },
+    filterProducts(event) {
+      // if (event.checked) {
+      //   this.filtersClicked.push(event.id);
+      // } else {
+      //   const index = this.filtersClicked.indexOf(event.id);
+      //   this.filtersClicked.splice(index, 1);
+      // }
+      // console.log('you clicked a filter', this.filtersClicked);
+      // this.filteredSearchedProducts.filter((p) => {
+      //   p.customFields.industry.name in this.filtersClicked ||
+      //   p.customFields.brand.name in this.filtersClicked ||
+      //   p.facetValues.name in this.filtersClicked
+      // })
+      console.log(event);
+    },
     async getCategory() {
       const slug = this.$route.params.slug_1;
       const body = {
@@ -207,6 +240,7 @@ export default {
       const options = {
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
       };
       const acat = await axios
@@ -237,6 +271,17 @@ export default {
                             featuredAsset{
                               preview
                             }
+                            facetValues{
+                              name
+                            }
+                            customFields{
+                              industry{
+                                name
+                              }
+                              brand{
+                                name
+                              }
+                            }
                           }
                         }
                       }`,
@@ -247,6 +292,7 @@ export default {
             let poptions = {
               headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
               },
             };
             var prod = await axios.post(
@@ -255,7 +301,6 @@ export default {
               poptions
             );
             this.products = prod.data?.data?.products?.items;
-            console.log('products', this.products);
           }
 
           this.aCat = res.data?.data?.collection;
@@ -287,6 +332,7 @@ export default {
     SfBreadcrumbs,
     SubcategoryBrandAccordion,
     SfBanner,
+    SubcatBrandCard,
   },
 };
 </script>
