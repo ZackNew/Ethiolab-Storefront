@@ -52,22 +52,26 @@
                 </div>
 
           </div>
-         
 
-            <table class="table-auto border-collapse border-spacing-2  border-slate-100 mt-20" id="var-table">
-                <thead>
+          <div class="flex flex-col">
+  <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+      <div class="overflow-hidden">
+        <LazyHydrate>
+           <table class="min-w-full mt-20" id="var-table">
+                <thead class="bg-white border-b ">
                     <tr>
                         <div class=" grid grid-cols-12">
                             
-                            <th class="border border-slate-300  h-16 bg-light_gray col-span-4">Item</th>
-                            <th  class="border border-slate-300 bg-light_gray col-span-1">SKU</th>
+                            <th scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-4">Item</th>
+                            <th  scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-1">SKU</th>
 
-                            <!-- <th  class="border border-slate-300 bg-light_gray col-span-1">{{loading? '' : option.value[0].label}}</th> -->
+                            <!-- <th  scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left">{{loading? '' : option.value[0].label}}</th> -->
                     
-                                <!-- <th v-for="(op, i) in option && option" :key="i"  class="border border-slate-300 bg-light_gray col-span-1">{{op.label.toUpperCase()}}</th> -->
-                            <th class="border border-slate-300  bg-light_gray col-span-2" v-if="option && option.length != 0">Option</th>
+                                <!-- <th v-for="(op, i) in option && option" :key="i"  scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left">{{op.label.toUpperCase()}}</th> -->
+                            <th scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-2" v-if="option && option.length != 0">Option</th>
 
-                                <th class="border border-slate-300  bg-light_gray col-span-4">Price</th>
+                                <th scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-4">Price</th>
               
                         </div>
 
@@ -75,26 +79,29 @@
                 </thead>
 
                 <tbody>
-                    <tr v-for="(pro, i) in product && product" :key="i">
-                        <div class="grid grid-cols-12"> 
-                             <td class="border border-slate-300 col-span-4"> 
+                    <tr v-for="(pro, i) in product && product" :key="i" >
+                        <div :class="i%2== 0? 'grid grid-cols-12 bg-light_gray border-b': 'grid grid-cols-12 bg-white border-b'"> 
+                             <td class=" col-span-4 whitespace-nowrap"> 
                                 <div class="grid grid-cols-4"> 
                                     <div class="col-span-2">
-                                        <img :src="pro.images[0]? pro.images[0]: products.featuredAsset.preview" class="col-span-1 mt-5 ml-5" />
+                                      <LazyHydrate>
+                                        <img :src="pro.images[0]? pro.images[0]: products.featuredAsset.preview" class="col-span-1" />
+
+                                      </LazyHydrate>
                                     </div>
-                                    <div class="col-span-2">
+                                   
                                         <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
-                                        <nuxt-link  :to="'/p/'+ pro.productId + '/' + pro.slug">{{pro.name}}</nuxt-link>
-                                    </div>
+                                        <nuxt-link class="text-secondary ml-5 mt-5"  :to="'/p/'+ pro._id + '/' + pro.slug">{{pro.name}}</nuxt-link>
+                                    
 
                                 </div>
                         </td>
-                            <!-- <td class="border border-slate-300 col-span-1">{{pro.price.current}}</td> -->
-                            <td class="border border-slate-300 col-span-1">{{pro.sku}}</td>
+                            <!-- <td class=" col-span-1">{{pro.price.current}}</td> -->
+                            <td class=" col-span-1">{{pro.sku}}</td>
                             
-                            <td class="border border-slate-300 col-span-2" v-if="option.length != 0">{{ pro.name.replace(products.name, "")}}</td>
-                            <td class="border border-slate-300 col-span-4">
-                                <span class="text-xl font-bold ml-5 ">{{ pro.price.current.toString().substring(0,pro.price.current.toString().length-2)+"."+pro.price.current.toString().substring(pro.price.current.toString().length-2)}}</span> <span>USD/EACH</span>
+                            <td class=" col-span-2" v-if="option.length != 0">{{ pro.name.replace(products.name, "")}}</td>
+                            <td class=" col-span-4">
+                                <span class="text-xl font-bold ml-5 ">{{ pro.price.current.toString().substring(0,pro.price.current.toString().length-2)+"."+pro.price.current.toString().substring(pro.price.current.toString().length-2)}}</span> <span>{{ products.variants[i].currencyCode}}</span>
                                  <span>
                                     <input type="text" id="first_name" 
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
@@ -106,38 +113,45 @@
                                     <img src="/categories/carticon.png" alt="cart image" class="h-16 -mb-8">
                                     </button>
                                  </span> 
-              <div class="flex items-center mx-4 my-10">
-                <input
-                  id="default-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  @change="check($event)"
-                  v-model="checked"
-                />
-                <label
-                  for="default-checkbox"
-                  class="ml-2 text-sm font-bold text-gray-900 dark:text-gray-300"
-                >
-                  INCLUDE INNOCAL CALIBRATION SERVICES</label
-                >
-              </div>
+                              <div class="flex items-center mx-4 my-10">
+                                <input
+                                  id="default-checkbox"
+                                  type="checkbox"
+                                  value=""
+                                  class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                  @change="check($event)"
+                                  v-model="checked"
+                                />
+                                <label
+                                  for="default-checkbox"
+                                  class="ml-2 text-sm font-bold text-gray-900 dark:text-gray-300"
+                                >
+                                  INCLUDE INNOCAL CALIBRATION SERVICES</label
+                                >
+                              </div>
 
-              <div class="ml-10 mb-5" v-if="checked">
-                <a class="text-secondary text-lg"
-                  >InnoCal NIST-Traceable Calibration: Balance/Scale - All
-                  Types</a
-                >
-                <p>
-                  for an additional <span class="font-bold">$200.00</span> USD /
-                  EACH
-                </p>
-              </div>
+                            <div class="ml-10 mb-5" v-if="checked">
+                              <a class="text-secondary text-lg"
+                                >InnoCal NIST-Traceable Calibration: Balance/Scale - All
+                                Types</a
+                              >
+                              <p>
+                                for an additional <span class="font-bold">$200.00</span>{{ products.variants[i].currencyCode}} </p>
+                            </div>
             </td>
           </div>
         </tr>
       </tbody>
     </table>
+        </LazyHydrate>
+           
+        </div>
+    </div>
+  </div>
+  </div>
+         
+
+          
   </div>
 </template>
 
@@ -241,7 +255,7 @@ export default defineComponent({
     onMounted(() => {
         console.log("the product value is ", product.value)
         console.log("the option value is ", option.value)
-                console.log("the productsss value is ", productGetters.getId(product))
+                console.log("the productsss value is ", products.value)
                 console.log("configuration value is ", configuration.value)
                 //   console.log("the productsss image value is ", products.value.assets[0].preview)
                 // console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
