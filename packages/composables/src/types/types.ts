@@ -33,22 +33,21 @@ export type useUserOrderSearchParams = TODO;
 export type DeleteQuoteParams = { id: string };
 
 export type AgnosticProductVariant = {
-  _id: string;
-  productId?: string;
-  _variantId?: string;
-  _description: string;
-  _categoriesRef: string[];
-  name: string;
-  productName?: string;
-  sku: string;
-  slug: string;
-  images: string[];
-  assets?: [
-    {
-      preview?: string;
-    }
-  ];
-  collections?: ProductCollection[];
+  _id: string,
+  productId?: string,
+  _variantId?: string,
+  _description: string,
+  _categoriesRef: string[],
+  name: string,
+  productName?: string,
+  sku: string,
+  slug: string,
+  images: string [],
+  assets?:[{
+    preview?:string
+  }],
+
+  collections?: ProductCollection[],
   price: {
     original: number;
     current: number;

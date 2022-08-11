@@ -34,6 +34,7 @@
     "jspdf": "^2.5.1",
     "nuxt": "^2.15.7",
     "nuxt-i18n": "^6.5.0",
+    "nuxt-user-agent": "^1.2.2",
     "vee-validate": "^3.4.11",
     "vue-lazy-hydration": "~2.0.0-beta.4",
     "vue-scrollto": "^2.20.0"

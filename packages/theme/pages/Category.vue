@@ -270,7 +270,7 @@
               :isAddedToCart="isInCart({ product })"
               :link="
                 localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                  `/v/${productGetters.getSlug(
                     product
                   )}`
                 )
@@ -483,14 +483,7 @@ import {
   SfProperty,
 } from '@storefront-ui/vue';
 import { ref, computed, onMounted } from '@vue/composition-api';
-import {
-  useCart,
-  useWishlist,
-  productGetters,
-  useFacet,
-  facetGetters,
-  categoryGetters,
-} from '@vue-storefront/vendure';
+import { useCategory,useCart, useWishlist, productGetters, useFacet, facetGetters,categoryGetters } from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import { getTreeWithoutEmptyCategories } from '~/helpers';
 import { onSSR } from '@vue-storefront/core';
@@ -581,15 +574,14 @@ export default {
       return category?.label || items[0].label;
     });
     console.log('search result');
-    console.log(searchResult);
+    console.log(searchResult.value);
     console.log(' result');
     console.log(result.value);
     console.log('raw category tree');
     console.log(rawCategoryTree);
     console.log('category Tree');
-    console.log(categoryTree);
-    console.log('active category');
-    console.log(activeCategory);
+    console.log(categoryTree.value);
+    console.log("loading value ", loading)
     const selectedFilters = ref({});
     const setSelectedFilters = () => {
       if (!facets.value.length || Object.keys(selectedFilters.value).length)

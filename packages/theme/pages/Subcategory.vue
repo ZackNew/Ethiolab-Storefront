@@ -246,6 +246,7 @@ export default {
       const acat = await axios
         .post('http://localhost:3000/shop-api', body, options)
         .then(async (res) => {
+          
           if (
             res.data?.data?.collection?.filters[0]?.args[0].name ===
             'productIds'
