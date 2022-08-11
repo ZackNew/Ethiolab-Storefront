@@ -54,7 +54,6 @@
               type="checkbox"
               class="mr-4"
               :id="list"
-              :checked="list.checked"
             />
             {{ list }}
           </li>
@@ -88,7 +87,7 @@ export default {
       this.$emit('searchChange', event.target.value);
     },
     filterClicked(event) {
-      this.$emit('filterClicked', event.target);
+      this.$emit('filterClicked', event.target.id);
     },
   },
 };

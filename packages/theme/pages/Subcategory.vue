@@ -94,9 +94,7 @@
             </p>
           </div>
           <!-- Products -->
-          <SubcatBrandCard
-            :filteredSearchedProducts="filteredSearchedProducts"
-          />
+          <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
 
           <div
             style="background-color: #e2e5de"
@@ -151,7 +149,7 @@ export default {
     brandsList() {
       let brand = [];
       this.products.forEach((element) => {
-        brand.push(element.customFields.brand.name);
+        brand.push(element.customFields.brand?.name);
       });
       const brands = [...new Set(brand)];
       return brands;
@@ -160,7 +158,7 @@ export default {
       let industry = [];
       this.products.forEach((element) => {
         if (element.customFields.industry !== null) {
-          industry.push(element.customFields.industry.name);
+          industry.push(element.customFields.industry?.name);
         }
       });
       const industries = [...new Set(industry)];
@@ -171,7 +169,7 @@ export default {
       this.products.forEach((element) => {
         if (element.facetValues.length !== 0) {
           element.facetValues.forEach((f) => {
-            facet.push(f.name);
+            facet.push(f?.name);
           });
         }
       });
@@ -200,18 +198,19 @@ export default {
       this.search = event;
     },
     filterProducts(event) {
-      if (event.checked) {
-        this.filtersClicked.push(event.id);
-      } else {
-        const index = this.filtersClicked.indexOf(event.id);
-        this.filtersClicked.splice(index, 1);
-      }
-      console.log('you clicked a filter', this.filtersClicked);
+      // if (event.checked) {
+      //   this.filtersClicked.push(event.id);
+      // } else {
+      //   const index = this.filtersClicked.indexOf(event.id);
+      //   this.filtersClicked.splice(index, 1);
+      // }
+      // console.log('you clicked a filter', this.filtersClicked);
       // this.filteredSearchedProducts.filter((p) => {
       //   p.customFields.industry.name in this.filtersClicked ||
       //   p.customFields.brand.name in this.filtersClicked ||
       //   p.facetValues.name in this.filtersClicked
       // })
+      console.log(event);
     },
     async getCategory() {
       const slug = this.$route.params.slug_1;
