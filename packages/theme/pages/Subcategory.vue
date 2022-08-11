@@ -209,7 +209,7 @@ export default {
           'Content-Type': 'application/json',
         },
       };
-      let baseUrl = process.env.GRAPHQL_API || 'https://196.188.235.247/shop-api'
+      let baseUrl = process.env.GRAPHQL_API
       const acat = await axios
         .post(baseUrl, body, options)
         .then(async (res) => {

@@ -8,6 +8,9 @@ export default {
     host: '0.0.0.0',
     protocol:'https'
   },
+  env: {
+    GRAPHQL_API: process.env.GRAPHQL_API || 'http://localhost:3000/shop-api'
+  },
   head: {
     title: 'Ethio Labs',
     meta: [
