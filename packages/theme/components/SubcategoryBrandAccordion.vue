@@ -50,9 +50,10 @@
         <ul v-for="list in filter.filter_options" :key="list">
           <li class="ml-3">
             <input
-              @click="filterClicked"
+              v-on:click="filterClicked"
               type="checkbox"
               class="mr-4"
+              :checked="list.checked"
               :id="list"
             />
             {{ list }}
@@ -87,7 +88,7 @@ export default {
       this.$emit('searchChange', event.target.value);
     },
     filterClicked(event) {
-      this.$emit('filterClicked', event.target.id);
+      this.$emit('filterClicked', event.target);
     },
   },
 };

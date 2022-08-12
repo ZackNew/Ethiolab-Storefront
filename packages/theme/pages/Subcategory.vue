@@ -19,7 +19,7 @@
     </nav>
     <div class="flex mt-4">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-2xl rounded w-2/6 h-3/4">
+      <div class="shadow-2xl rounded-lg w-2/9 h-3/4">
         <div v-if="products.length === 0">
           <LazyHydrate>
             <SfBanner
@@ -51,28 +51,6 @@
           <img class="h-36 w-auto my-auto bg-light" :src="categoryImg" alt="" />
           <div class="bg-faded_black w-full">
             <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
-          </div>
-        </div>
-        <!-- Ad section -->
-        <div
-          style="background-color: #e2e5de"
-          class="flex card mr-5 w-auto h-16 mb-10"
-        >
-          <!-- <img class="w-32 object-cover" src="../static/icon.png" alt="" /> -->
-          <div class="relative overflow-hidden">
-            <img
-              class="min-w-[90%]"
-              src="../static/homepage/bannerA.webp"
-              alt=""
-            />
-            <div
-              class="absolute flex justify-evenly w-full bottom-0 inset-x-0 py-2 text-xs leading-4"
-            >
-              <p class="font-semibold text-4xl font-sans -ml-16">
-                This is a AD
-              </p>
-              <button class="bg-blue-500 font-bold">Shop Now</button>
-            </div>
           </div>
         </div>
         <div
@@ -198,19 +176,16 @@ export default {
       this.search = event;
     },
     filterProducts(event) {
-      // if (event.checked) {
-      //   this.filtersClicked.push(event.id);
-      // } else {
-      //   const index = this.filtersClicked.indexOf(event.id);
-      //   this.filtersClicked.splice(index, 1);
-      // }
-      // console.log('you clicked a filter', this.filtersClicked);
-      // this.filteredSearchedProducts.filter((p) => {
-      //   p.customFields.industry.name in this.filtersClicked ||
-      //   p.customFields.brand.name in this.filtersClicked ||
-      //   p.facetValues.name in this.filtersClicked
-      // })
-      console.log(event);
+      if (event.checked) {
+        this.filtersClicked.push(event.id);
+      } else {
+        const index = this.filtersClicked.indexOf(event.id);
+        this.filtersClicked.splice(index, 1);
+      }
+      console.log('you clicked a filter', this.filtersClicked);
+      this.products.filter((p) => {
+        p.name.includes('op');
+      });
     },
     async getCategory() {
       const slug = this.$route.params.slug_1;
@@ -246,7 +221,6 @@ export default {
       const acat = await axios
         .post('http://localhost:3000/shop-api', body, options)
         .then(async (res) => {
-          
           if (
             res.data?.data?.collection?.filters[0]?.args[0].name ===
             'productIds'
