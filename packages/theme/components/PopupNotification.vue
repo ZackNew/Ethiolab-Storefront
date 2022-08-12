@@ -9,7 +9,7 @@
                v-html="popupContent.title || 'Title'">
             </div>
             <p class="sf-heading__description mt-4 max-w-md text-slate-500" v-html="popupContent.description || 'kirubel'"></p>
-            <button class="w-2/5 bg-secondary m-5 h-8 text-white rounded-lg">{{popupContent.buttonText}}</button>
+              <button class="w-2/5 bg-secondary m-5 h-8 text-white rounded-lg">{{popupContent.buttonText}}</button>
 
             <div class="mt-3">
               <input type="checkbox" v-model="disablePopUp" v-on:change="disablePopUpMethod()">

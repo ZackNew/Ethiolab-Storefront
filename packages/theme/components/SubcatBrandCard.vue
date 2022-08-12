@@ -1,0 +1,41 @@
+<template>
+  <div class="mt-5 grid grid-cols-4">
+    <div
+      class="card shadow-lg w-52 my-3 ml-2 bg-white rounded-lg transform transition duration-500 hover:scale-110 border border-light_accent"
+      v-for="product in filteredProducts"
+      :key="product.id"
+    >
+      <img
+        class="object-cover h-52 w-48 rounded-t-lg m-2"
+        :src="product.featuredAsset.preview"
+        alt="image"
+      />
+      <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
+      <p class="text-center m-3">
+        {{ String(product.variants[0].price).slice(0, -2) }}.00
+      </p>
+      <button class="mb-4">
+        <nuxt-link
+          class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
+          :to="'/v/' + product.slug"
+        >
+          View All
+        </nuxt-link>
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'SubcatBrandCard',
+  props: {
+    filteredProducts: {
+      type: Array,
+      required: true,
+    },
+  },
+};
+</script>
+
+<style></style>

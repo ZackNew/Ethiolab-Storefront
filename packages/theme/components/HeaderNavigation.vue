@@ -11,6 +11,9 @@
       <CategoriesSubNav/>
       <BrandsSubNav/>
       <IndustriesSubNav/>
+      <RequestQuoteSubNav />
+  
+     
     </div>
     
   <!-- <SfModal v-else :visible="isMobileMenuOpen">
@@ -39,6 +42,8 @@ import HeaderNavigationItem from './HeaderNavigationItem.vue';
 import BrandsSubNav from './subnavs/BrandsSubNav.vue';
 import IndustriesSubNav from './subnavs/IndustriesSubNav.vue';
 import CategoriesSubNav from './subnavs/CategoriesSubNav.vue';
+import RequestQuoteSubNav from './subnavs//RequestQuoteSubNav.vue';
+
 
 
 export default {
@@ -49,8 +54,9 @@ export default {
     HeaderNavigationItem,
     BrandsSubNav,
     IndustriesSubNav,
-    CategoriesSubNav
-  },
+    CategoriesSubNav,
+    RequestQuoteSubNav
+},
   props: {
     isMobile: {
       type: Boolean,
