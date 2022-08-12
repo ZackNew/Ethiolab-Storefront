@@ -109,6 +109,7 @@ export default {
 
 <style lang="scss" scoped>
 .accordion {
+  font-family:var(--font-family--secondary) ;
   --accordion-item-header-font: 10px;
   --accordion-item-header-color: var(--c-primary);
   --accordion-item-content-font-size: 5px;
