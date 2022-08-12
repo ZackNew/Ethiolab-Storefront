@@ -68,7 +68,7 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
-          <div v-if="options && options.length">
+          <!-- <div v-if="options && options.length">
             <SfSelect
               v-for="optionGroup in options"
               :key="optionGroup.id"
@@ -86,9 +86,36 @@
                 {{ option.label }}
               </SfSelectOption>
             </SfSelect>
-          </div>
+          </div> -->
         </div>
         <LazyHydrate when-idle> </LazyHydrate>
+
+        <LazyHydrate when-idle>
+          <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
+         
+            <SfTab :title="$t('Read reviews')" :key="reviewKey">
+              <!-- <div v-for="(review, index) in reviews" :key="index">
+                {{review.summary}}
+              </div> -->
+              <SfReview
+                v-for="review in reviews"
+                :key="review.id"
+                :author="review.authorName"
+                :date="new Date(review.createdAt).toLocaleString()"
+                :message="review.summary"
+                :max-rating="5"
+                :rating="review.rating"
+                :char-limit="250"
+                :read-more-text="$t('Read more')"
+                :hide-full-text="$t('Read less')"
+                class="product__review"
+              />
+              <!-- :myReview="currentReview.value" @updateMyReview="updateMyReview" @addNewReview="addNewReview" -->
+             <MyReview :productId="id" :currentUserHasNoReview="!currentUserHasReview"/>
+            </SfTab>
+          </SfTabs>
+        </LazyHydrate>
+
       </div>
     </div>
     <div>
@@ -167,6 +194,7 @@
         </div>
       </div>
     </div>
+    
     <LazyHydrate when-visible>
       <RelatedProducts
         :products="relatedProducts"

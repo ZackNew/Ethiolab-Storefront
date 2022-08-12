@@ -91,7 +91,7 @@
                                     </div>
                                    
                                         <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
-                                        <nuxt-link class="text-secondary ml-5 mt-5"  :to="'/p/17/'+ pro.slug">{{pro.name}}</nuxt-link>
+                                        <nuxt-link class="text-secondary ml-5 mt-5"  :to="'/p/' + products.id + '/' + pro._id + '/'+ pro.slug">{{pro.name}}</nuxt-link>
                                     
 
                                 </div>
@@ -255,7 +255,7 @@ export default defineComponent({
     onMounted(() => {
         console.log("the product value is ", product.value)
         console.log("the option value is ", option.value)
-                console.log("the productsss value is ", products.value)
+                console.log("the productsss  id value is ", products.value.id)
                 console.log("configuration value is ", configuration.value)
                 //   console.log("the productsss image value is ", products.value.assets[0].preview)
                 // console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
