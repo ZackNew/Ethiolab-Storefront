@@ -91,7 +91,7 @@
                                     </div>
                                    
                                         <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
-                                        <nuxt-link class="text-secondary ml-5 mt-5"  :to="'/p/'+ pro._id + '/' + pro.slug">{{pro.name}}</nuxt-link>
+                                        <nuxt-link class="text-secondary ml-5 mt-5"  :to="'/p/17/'+ pro.slug">{{pro.name}}</nuxt-link>
                                     
 
                                 </div>
