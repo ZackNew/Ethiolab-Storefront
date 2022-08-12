@@ -149,83 +149,99 @@
       </div>
       <SfLoader :class="{ loading }" :loading="loading">
         <div class="products m-5" v-if="!loading">
-
-                    <div   v-for="(cat, i) in rawCategoryTree && rawCategoryTree " :key="i">
-                             <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="">
-                              <div class="h-40 bg-bg_dark grid grid-cols-3">
-                                          <img :src="cat.featuredAsset.preview || '/categories/cat2.jpeg' " class="h-40" />
-                                          <div v-html="cat.description || `Category Description`" class="text-white col-span-2 pt-5 overflow-auto max-h-40"></div>
-                                              <!-- <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
+          <div v-for="(cat, i) in rawCategoryTree && rawCategoryTree" :key="i">
+            <div
+              v-if="cat.isCurrent === true && cat.slug === lastSlug"
+              class=""
+            >
+              <div class="h-40 bg-bg_dark grid grid-cols-3">
+                <img
+                  :src="cat.featuredAsset.preview || '/categories/cat2.jpeg'"
+                  class="h-40"
+                />
+                <div
+                  v-html="cat.description || `Category Description`"
+                  class="text-white col-span-2 pt-5 overflow-auto max-h-40"
+                ></div>
+                <!-- <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
                                                 electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
                                                   metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
                                                   Our NIST-traceable calibration services and repairs help you meet your quality, regulatory, 
                                                   and compliance needs.</p> -->
-                                        </div>
+              </div>
+            </div>
+          </div>
 
-                               </div>
-
-                    
-                    </div>
-                    <div v-if="rawCategoryTree && rawCategoryTree.length == 0"  class="h-40 bg-bg_dark grid grid-cols-3"> 
-                        
-                                          <img src="/categories/empty_image.png" class="h-40" alt="category featured image"/>
-                                          <div  class="text-white col-span-2 pt-5 overflow-auto max-h-40"><h3>No description for this category!</h3></div>
-                                           
-                                        
-
-                               
-                    </div>
-         
-            
-
-              <LazyHydrate>
-                  <div>
-                      <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Sub-Categories</h3>
-            
-                                 <div   v-for="(cat, i) in rawCategoryTree && rawCategoryTree " :key="i">
-                                    <div v-if="cat.isCurrent === true && cat.slug === lastSlug" class="grid grid-cols-3 gap-10 mt-10 mb-10">
-                                      <div v-for="(sub,j) in cat.items" :key="j">
-                                           <div class="max-w-sm rouned overflow-hidden shadow-xl">
-                              
-                                               <div class="m-4">
-                                                    <h4 class="">{{sub.label}}</h4>
-                                               </div>
-                                              <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
-                                          </div>                                     
-                                         </div>
-                          
-                          </div>
-
-                     
-                        </div>
+          <LazyHydrate>
+            <!-- <CategoryFeature /> -->
+            <div>
+              <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">
+                Featured Categories
+              </h3>
+              <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
+              <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
+              <div
+                v-for="(cat, i) in rawCategoryTree && rawCategoryTree"
+                :key="i"
+              >
+                <div
+                  v-if="cat.isCurrent === true && cat.slug === lastSlug"
+                  class="grid grid-cols-3 gap-10 mt-10 mb-10"
+                >
+                  <div v-for="(sub, j) in cat.items" :key="j">
+                    <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                      <div class="m-4">
+                        <h4 class="">{{ sub.label }}</h4>
                       </div>
-    
-                <!-- categoryTree.value[0]?.items -->
-
-              </LazyHydrate>
-
-                <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">Shop Our Best Sellers</h3>
-
-
-              <div class="grid grid-cols-3 gap-10" >
-                    <div class="card shadow-lg   my-3 ml-2" v-for="i in 3" :key="i">
-                  <img src="/categories/cat1.jpeg" alt="" />
-                  <h3 class="text-center m-3">link</h3>
-                  <h4 class="text-center font-serif m-3">
-                    $925.00 - $2,080.00USD / Each
-                  </h4>
-                  <p class="text-center m-3">description</p>
-                  <button
-                    class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-                  >
-                    View All
-                  </button>
+                      <img
+                        v-if="sub.featuredAsset"
+                        :src="sub.featuredAsset.preview"
+                        class="w-full h-32 sm:h-48 object-cover"
+                      />
+                    </div>
+                  </div>
+                  <!-- </div> -->
+                  <!-- <div :v-for="sub in value.items">
+                                  <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                              
+                                  <div class="m-4">
+                                          <h4 class="">{{sub.label}}</h4>
+                                    </div>
+                                    <img v-if="sub.featuredAsset" :src="sub.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
+                              </div>
+                                   
+                      
+                            </div> -->
                 </div>
               </div>
+            </div>
 
+            <!-- categoryTree.value[0]?.items -->
+          </LazyHydrate>
 
-               <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">New Products You Might Like</h3>
+          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+            Shop Our Best Sellers
+          </h3>
 
+          <div class="grid grid-cols-3 gap-10">
+            <div class="card shadow-lg my-3 ml-2" v-for="i in 3" :key="i">
+              <img src="/categories/cat1.jpeg" alt="" />
+              <h3 class="text-center m-3">link</h3>
+              <h4 class="text-center font-serif m-3">
+                $925.00 - $2,080.00USD / Each
+              </h4>
+              <p class="text-center m-3">description</p>
+              <button
+                class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+              >
+                View All
+              </button>
+            </div>
+          </div>
+
+          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+            New Products You Might Like
+          </h3>
 
           <transition-group
             v-if="isCategoryGridView"
@@ -378,9 +394,7 @@
               </SfSelect>
             </LazyHydrate>
           </div>
-            </div>
-
-       
+        </div>
       </SfLoader>
     </div>
 
@@ -507,11 +521,17 @@ export default {
       facetGetters.getSortOptions(searchResult.value)
     );
     const facets = computed(() => facetGetters.getGrouped(searchResult.value));
-    const products = computed(() => facetGetters.getProducts(searchResult.value));
-    console.log("product value", products.value)
+    const products = computed(() =>
+      facetGetters.getProducts(searchResult.value)
+    );
+    console.log('product value', products.value);
 
-    const rawBreadcrumbs = computed(() => facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug));
-    const breadcrumbs = computed(() => th.getFormattedBreadcrumbs(rawBreadcrumbs.value));
+    const rawBreadcrumbs = computed(() =>
+      facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug)
+    );
+    const breadcrumbs = computed(() =>
+      th.getFormattedBreadcrumbs(rawBreadcrumbs.value)
+    );
     // TODO: Refactor this getter
     const rawPagination = computed(() =>
       facetGetters.getPagination(searchResult.value)
@@ -532,7 +552,9 @@ export default {
     );
     console.log('row category value is ', rawCategoryTree.value);
     const categoryTree = computed(() =>
-      getTreeWithoutEmptyCategories(rawCategoryTree.value).filter(cat => cat.slug === lastSlug || cat.isCurrent === true)
+      getTreeWithoutEmptyCategories(rawCategoryTree.value).filter(
+        (cat) => cat.slug === lastSlug || cat.isCurrent === true
+      )
     );
     // categoryTree.filter((cat) => cat.slug === lastSlug);
     console.log('category tree is ', categoryTree.value);
@@ -581,7 +603,7 @@ export default {
     onMounted(() => {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
-      console.log("the onmounted category tree value is ",categoryTree.value)
+      console.log('the onmounted category tree value is ', categoryTree.value);
     });
 
     const isFilterSelected = (facet, option) =>
@@ -644,7 +666,7 @@ export default {
       cart,
       itemQuantity,
       rawCategoryTree,
-      lastSlug
+      lastSlug,
     };
   },
   components: {

@@ -10,7 +10,10 @@
            <div class="m-4">
                   <h4 class="">{{category.label}}</h4>
              </div>
-            <img v-if="category.featuredAsset" :src="category.featuredAsset.preview" class="w-full h-32 sm:h-48 object-cover" />
+             <nuxt-link :to="`/c/${category.slug}`">
+                 <img  :src="category.featuredAsset? category.featuredAsset.preview: '/categories/empty_image.png'" class="w-full h-32 sm:h-48 object-cover scale-75 hover:scale-100 ease-in duration-300" /> 
+              </nuxt-link>
+            
   
         </div>
       </div>
