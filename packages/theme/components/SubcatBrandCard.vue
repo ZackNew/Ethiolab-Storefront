@@ -6,11 +6,13 @@
       :key="product.id"
     >
       <nuxt-link :to="'/v/' + product.slug">
-        <img
-          class="object-cover h-52 w-48 rounded-t-lg m-2"
-          :src="product.featuredAsset.preview"
-          alt="image"
-        />
+        <LazyHydrate>
+          <img
+            class="object-cover h-52 w-48 rounded-t-lg m-2"
+            :src="product.featuredAsset.preview"
+            alt="image"
+          />
+        </LazyHydrate>
       </nuxt-link>
       <nuxt-link :to="'/v/' + product.slug">
         <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
@@ -31,6 +33,8 @@
 </template>
 
 <script>
+import LazyHydrate from 'vue-lazy-hydration';
+
 export default {
   name: 'SubcatBrandCard',
   props: {
@@ -38,6 +42,9 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  components: {
+    LazyHydrate,
   },
 };
 </script>
