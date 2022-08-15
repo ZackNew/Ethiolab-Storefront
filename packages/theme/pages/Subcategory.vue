@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <nav class="sf-breadcrumbs" aria-label="breadcrumbs">
+  <div class="border-t mt-12">
+    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
           <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
@@ -19,8 +19,31 @@
     </nav>
     <div class="flex mt-4">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-2xl rounded w-2/6 h-3/4">
-        <div v-if="products.length === 0">
+      <div class="shadow-2xl rounded-lg w-2/10 h-3/4">
+        <div v-if="products.length > 0">
+          <SubcategoryBrandAccordion
+            @searchChange="searchBox"
+            @filterClicked="filterProducts"
+            :filters="filters"
+          />
+          <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
+          <div class="flex mx-4">
+            <input
+              v-model="low"
+              class="rounded border border-primary w-12"
+              type="number"
+              placeholder="min..."
+            />
+            <p class="mx-2">to</p>
+            <input
+              v-model="high"
+              class="rounded border border-primary w-12"
+              type="number"
+              placeholder="max..."
+            />
+          </div>
+        </div>
+        <div class="p-3">
           <LazyHydrate>
             <SfBanner
               :title="adSection.title || 'AD Title'"
@@ -34,45 +57,16 @@
             </SfBanner>
           </LazyHydrate>
         </div>
-        <div v-else>
-          <SubcategoryBrandAccordion
-            @searchChange="searchBox"
-            @filterClicked="filterProducts"
-            :filters="filters"
-          />
-        </div>
       </div>
       <!-- Subcategory name and description -->
       <div class="ml-6">
-        <h2 class="sf-heading__title font-light text-4xl font-sans text-gray">
+        <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
           {{ categoryName }}
         </h2>
         <div class="card shadow-lg my-4 flex w-auto mr-5">
           <img class="h-36 w-auto my-auto bg-light" :src="categoryImg" alt="" />
           <div class="bg-faded_black w-full">
             <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
-          </div>
-        </div>
-        <!-- Ad section -->
-        <div
-          style="background-color: #e2e5de"
-          class="flex card mr-5 w-auto h-16 mb-10"
-        >
-          <!-- <img class="w-32 object-cover" src="../static/icon.png" alt="" /> -->
-          <div class="relative overflow-hidden">
-            <img
-              class="min-w-[90%]"
-              src="../static/homepage/bannerA.webp"
-              alt=""
-            />
-            <div
-              class="absolute flex justify-evenly w-full bottom-0 inset-x-0 py-2 text-xs leading-4"
-            >
-              <p class="font-semibold text-4xl font-sans -ml-16">
-                This is a AD
-              </p>
-              <button class="bg-blue-500 font-bold">Shop Now</button>
-            </div>
           </div>
         </div>
         <div
@@ -88,13 +82,54 @@
           </div>
         </div>
         <div v-else>
-          <div class="card mr-5 w-auto h-12 bg-light_accent">
-            <p class="float-left pt-3 ml-3">
+          <div class="flex card mr-5 w-auto h-12 bg-light_accent border-b-2">
+            <p class="pt-3 mx-3">
               Number of Results | {{ Object.keys(products).length }}
             </p>
+            <div class="ml-8">
+              <button
+                id="dropdownDefault"
+                data-dropdown-toggle="dropdown"
+                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:scale-105 font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
+                type="button"
+                @click="open = !open"
+              >
+                Sort Subcategory by
+                <svg
+                  class="ml-2 w-4 h-4"
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </button>
+              <div
+                v-if="open"
+                id="dropdown"
+                class="inset-0 relative flex flex-col z-10 w-44 bg-white border border-primary transform transition duration-300"
+              >
+                <button @click="sortBtn" class="hover:bg-light_accent">
+                  Name from A to Z
+                </button>
+                <button @click="sortBtn" class="hover:bg-light_accent">
+                  Name from Z to A
+                </button>
+              </div>
+            </div>
           </div>
           <!-- Products -->
-          <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
+          <SubcatBrandCard
+            :filteredProducts="filteredSearchedProducts"
+            class="border-b"
+          />
 
           <div
             style="background-color: #e2e5de"
@@ -112,6 +147,7 @@
 import LazyHydrate from 'vue-lazy-hydration';
 import { computed, ref } from '@vue/composition-api';
 import {
+  SfRange,
   SfAccordion,
   SfSearchBar,
   SfBreadcrumbs,
@@ -130,6 +166,11 @@ export default {
   },
   data() {
     return {
+      low: '',
+      high: '',
+      A_Z: null,
+      Z_A: null,
+      open: false,
       filtersClicked: [],
       search: '',
       categoryName: null,
@@ -142,9 +183,46 @@ export default {
   },
   computed: {
     filteredSearchedProducts() {
-      return this.products.filter((product) =>
+      const filtersClicked = this.filtersClicked;
+
+      const lower = this.low || 0;
+
+      const high = this.high || 1000000;
+
+      let searchProduct = this.products.filter((product) =>
         product.name.toLowerCase().includes(this.search.toLowerCase())
       );
+
+      searchProduct = searchProduct.filter((product) => {
+        let total_price = 0;
+        for (const variant of product.variants) {
+          total_price += Number(String(variant.price).slice(0, -2));
+        }
+        total_price = total_price / product.variants.length;
+
+        return total_price >= lower && total_price <= high;
+      });
+
+      const filterProducts = searchProduct.filter((product) => {
+        if (filtersClicked.length > 0) {
+          const facetIndex = product.facetValues.findIndex((facet) =>
+            filtersClicked.includes(facet.name)
+          );
+
+          return (
+            filtersClicked.includes(product.customFields.brand?.name) ||
+            filtersClicked.includes(product.customFields.industry?.name) ||
+            filtersClicked.includes(product.facetValues[facetIndex]?.name)
+          );
+        }
+        return true;
+      });
+
+      if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
+
+      if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));
+
+      return filterProducts;
     },
     brandsList() {
       let brand = [];
@@ -194,23 +272,30 @@ export default {
     },
   },
   methods: {
+    sortBtn() {
+      this.A_Z = !this.A_Z;
+      this.Z_A = !this.Z_A;
+      this.open = !this.open;
+    },
+    generateSortFn(prop, reverse) {
+      return function (a, b) {
+        if (a[prop].toLowerCase() < b[prop].toLowerCase())
+          return reverse ? 1 : -1;
+        if (a[prop].toLowerCase() > b[prop].toLowerCase())
+          return reverse ? -1 : 1;
+        return 0;
+      };
+    },
     searchBox(event) {
       this.search = event;
     },
     filterProducts(event) {
-      // if (event.checked) {
-      //   this.filtersClicked.push(event.id);
-      // } else {
-      //   const index = this.filtersClicked.indexOf(event.id);
-      //   this.filtersClicked.splice(index, 1);
-      // }
-      // console.log('you clicked a filter', this.filtersClicked);
-      // this.filteredSearchedProducts.filter((p) => {
-      //   p.customFields.industry.name in this.filtersClicked ||
-      //   p.customFields.brand.name in this.filtersClicked ||
-      //   p.facetValues.name in this.filtersClicked
-      // })
-      console.log(event);
+      if (event.checked) {
+        this.filtersClicked.push(event.id);
+      } else {
+        const index = this.filtersClicked.indexOf(event.id);
+        this.filtersClicked.splice(index, 1);
+      }
     },
     async getCategory() {
       const slug = this.$route.params.slug_1;
@@ -246,7 +331,6 @@ export default {
       const acat = await axios
         .post('http://localhost:3000/shop-api', body, options)
         .then(async (res) => {
-          
           if (
             res.data?.data?.collection?.filters[0]?.args[0].name ===
             'productIds'
@@ -333,6 +417,7 @@ export default {
     SubcategoryBrandAccordion,
     SfBanner,
     SubcatBrandCard,
+    SfRange,
   },
 };
 </script>
