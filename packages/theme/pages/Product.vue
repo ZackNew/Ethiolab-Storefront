@@ -15,7 +15,7 @@
       <div class="product__info mr-20">
         <div class="product__header">
           <SfHeading
-            :title="productGetters.getName(product)"
+            :title="productGetters.getName(varproduct[0])"
             :level="3"
             class="sf-heading--no-underline sf-heading--left"
           />
@@ -29,12 +29,14 @@
         <div class="product__price-and-rating">
           <SfPrice
             :regular="
-              productGetters.getPrice(product).regular.toLocaleString() + ' ETB'
+            // varproduct[0].price.current
+              // productGetters.getPrice(varproduct).regular.toLocaleString() + ' ETB'
+              varprice + ' ETB'
             "
           />
-          <div>
+          <!-- <div>
             <div class="product__rating">
-              <SfRating :score="averageRating" :max="5" />
+              <SfRating :score="5" :max="5" />
               <a v-if="!!totalReviews" href="#" class="product__count">
                 ({{ totalReviews }})
               </a>
@@ -42,7 +44,7 @@
             <SfButton class="sf-button--text">{{
               $t('Read all reviews')
             }}</SfButton>
-          </div>
+          </div> -->
         </div>
         <div>
           <SfAddToCart
@@ -118,7 +120,7 @@
 
       </div>
     </div>
-    <div>
+    <!-- <div>
       <div class="flex justify-evenly bg-light_accent mt-6 pt-4 pb-10">
         <div class="w-1/2">
           <h3 class="font-thin mb-4 ml-16">Specification and Description</h3>
@@ -193,7 +195,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     
     <LazyHydrate when-visible>
       <RelatedProducts
@@ -230,7 +232,7 @@ import {
 import MyReview from '~/components/MyAccount/MyReview.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed, reactive } from '@vue/composition-api';
+import { ref, computed, reactive,onMounted } from '@vue/composition-api';
 import {
   useProduct,
   useCart,
@@ -253,10 +255,12 @@ export default {
     console.log('Pcreated', this.$config.GRAPHQL_API);
     this.reviews = await this.getProductsReviews();
   },
+  
   setup(props, context) {
     console.log('Product Page setup');
     const qty = ref(1);
     const { id } = context.root.$route.params;
+    const {vid} = context.root.$route.params;
     const { products, search } = useProduct('products');
     const { addItem, loading } = useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
@@ -302,15 +306,40 @@ export default {
     const breadcrumbs = computed(() =>
       productGetters.getBreadcrumbs(product.value)
     );
-    const productGallery = computed(() =>
-      productGetters.getAllGallery(products.value).map((img) => ({
+
+        const allvarproduct = computed(() => productGetters.getByFilters(products.value));
+                const varproduct  = allvarproduct.value.filter(value => value._id === vid);
+                const varp = varproduct[0]?.price.current.toString();
+                const varprice = varp && varp.substring(0,varp.length-2)+"."+varp.substring(varp.length-2);
+                
+    const productGallery = computed(() => {
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa", varproduct[0]?.images[0])
+      if(varproduct[0]?.images[0])
+
+        return  productGetters.getAllGallery(varproduct[0]).map((img) => ({
         mobile: { url: img.small },
         desktop: { url: img.normal },
         big: { url: img.big },
         alt: product.value._name || product.value.name,
       }))
+      else 
+        return  productGetters.getAllGallery(products.value).map((img) => ({
+        mobile: { url: img.small },
+        desktop: { url: img.normal },
+        big: { url: img.big },
+        alt: product.value._name || product.value.name,
+      }))
+    }
+  
     );
     console.log('gallery', productGallery);
+
+            
+
+    onMounted(() => {
+      console.log("the productzzzzz value is ", products.value)
+            console.log("the varproduct value is ", varproduct)
+    })
 
     onSSR(async () => {
       await search({ id });
@@ -376,6 +405,8 @@ export default {
       breadcrumbs,
       id,
       user,
+      varproduct,
+      varprice
       //reviewKey,
     };
   },
@@ -437,6 +468,9 @@ export default {
       if (this.isAuthenticated) {
         return this.setThisUsersReview(reviewsList);
       }
+
+      console.log("reviews value is ", reviewsList)
+
       return reviewsList;
     },
 
