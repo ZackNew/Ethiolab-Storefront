@@ -53,7 +53,7 @@
               v-on:click="filterClicked"
               type="checkbox"
               class="mr-4"
-              :checked="list.checked"
+              :checked="false"
               :id="list"
             />
             {{ list }}
