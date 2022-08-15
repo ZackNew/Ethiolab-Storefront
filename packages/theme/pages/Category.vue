@@ -193,11 +193,14 @@
                       <div class="m-4">
                         <h4 class="">{{ sub.label }}</h4>
                       </div>
-                      <img
+                      <nuxt-link :to="`/s/${sub.slug}`">
+                           <img
                         v-if="sub.featuredAsset"
                         :src="sub.featuredAsset.preview"
-                        class="w-full h-32 sm:h-48 object-cover"
+                        class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
                       />
+                      </nuxt-link>
+                   
                     </div>
                   </div>
                   <!-- </div> -->
@@ -225,10 +228,12 @@
 
           <div class="grid grid-cols-3 gap-10">
             <div class="card shadow-lg my-3 ml-2" v-for="i in 3" :key="i">
-              <img src="/categories/cat1.jpeg" alt="" />
-              <h3 class="text-center m-3">link</h3>
+            <nuxt-link to="#">
+              <img src="/categories/empty_image.png" alt="" class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"/>
+
+            </nuxt-link>
               <h4 class="text-center font-serif m-3">
-                $925.00 - $2,080.00USD / Each
+                $925.00
               </h4>
               <p class="text-center m-3">description</p>
               <button
