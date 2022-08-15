@@ -71,25 +71,45 @@ product.assets.map(asset => {
 };
 
 const getAllGallery = (product: AgnosticProductVariant): AgnosticMediaGalleryItem[] => {
-  if (!product?.assets){
-    
-    return [];
-  } 
-
   let gallery  = []
 
-product.assets.map(asset => {
-  console.log("asset value ", asset.preview)
-  let temp =  {
-    small: asset.preview,
-    normal: asset.preview,
-    big: asset.preview
+  if(product?.images){
+    console.log("rightttttt")
+    product.images.map(img => {
+      console.log("img value ", img)
+      let temp =  {
+        small: img,
+        normal: img,
+        big: img
+      }
+      gallery.push(temp);
+    
+    })
+    return gallery
+
   }
-  gallery.push(temp);
+  else if (product?.assets){
+    product.assets.map(asset => {
+      console.log("asset value ", asset.preview)
+      let temp =  {
+        small: asset.preview,
+        normal: asset.preview,
+        big: asset.preview
+      }
+      gallery.push(temp);
+    
+    })
+    
+      return gallery;
+  } 
 
-})
+  else {
+    return []
+  }
 
-  return gallery;
+
+
+
 };
 
 const getCoverImage = (product: AgnosticProductVariant): string => {
