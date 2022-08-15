@@ -120,7 +120,7 @@
 
       </div>
     </div>
-    <!-- <div>
+    <div>
       <div class="flex justify-evenly bg-light_accent mt-6 pt-4 pb-10">
         <div class="w-1/2">
           <h3 class="font-thin mb-4 ml-16">Specification and Description</h3>
@@ -195,7 +195,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     
     <LazyHydrate when-visible>
       <RelatedProducts
