@@ -20,9 +20,9 @@
     >
       <slot name="mobile-navigation-item">
         <SfMenuItem :label="label" @mouseOver = 'hoverHandler(label)' class="sf-header-navigation-item__menu-item">
-          {{ 'label' }}
+          {{ label}}
         </SfMenuItem>
-        <DropDownMenu class="overlay" :subnavList="$props.subnavList"/>
+        <DropDownMenu class="overlay" :main="label"  :subnavList="$props.subnavList"/>
         <!-- <div > -->
         <!-- </div> -->
       </slot>

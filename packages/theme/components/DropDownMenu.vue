@@ -2,15 +2,19 @@
   <div class="body">
     <div class="grid grid-rows-6 grid-flow-col">
       <HeaderSubNavigation
+        :handler="hoverHandler"
+        :hoverOutHandler = 'hoverOutHandler'
         :title="navs.label"
         :link="navs.link"
+        :id="navs.id"
         :subnavList="navs.items"
         v-for="navs in $props.subnavList"
         :key="navs.id"
       />
       <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
     </div>
-    <SfBanner
+    <SfBanner 
+    v-if="addVisible"
       class="ad-banner"
       :title="adSection.title || 'Ad Titile'"
       :subtitle="adSection.overview || 'Ad Overview'"
@@ -21,12 +25,15 @@
       link="/c/clinical-laboratory"
     >
     </SfBanner>
+    <div  class="detail" v-if ='showDetail'>
+      here comes the detail
+    </div>
   </div>
 </template>
 <script>
 import HeaderSubNavigation from './HeaderSubNavigation.vue';
 import { useCms } from '@vue-storefront/vendure';
-import { computed } from '@vue/composition-api';
+import { computed, ref } from '@vue/composition-api';
 import { SfBanner } from '@storefront-ui/vue';
 
 export default {
@@ -41,12 +48,13 @@ export default {
   },
   props: {
     subnavList: Array,
+    main:String
   },
-  setup() {
+  setup(props) {
     // const headerNavigation = [];
     // const {categories} = useCategory();
     const { getCms } = useCms();
-    const adSection = computed(() => JSON.parse(getCms.value[3].content));
+    let adSection = computed(() => JSON.parse(getCms.value[3].content));
     const adImage = computed(() => getCms.value[3].featuredAsset.preview);
     // const getTree = ()=>{
     // // categories.value.items.forEach((a)=>{
@@ -55,21 +63,54 @@ export default {
     // //    }
     // // });
     // };
+    let showDetail = ref(false)
+    let addVisible= ref(true)
+    let hoverHandler = (item)=>{
+        // console.log('hoavered over **:',item,props.main)
+      if(props.main==='INDUSTRIES'){
+        addVisible.value = false
+        showDetail.value=true
+      
+      }
+
+    }
+    let hoverOutHandler = ()=>{
+      addVisible.value=true
+      showDetail.value=false
+    
+    }
     return {
       // getTree,
       // headerNavigation,
       adSection,
       adImage,
+      hoverHandler,
+      hoverOutHandler,
+      addVisible,
+      showDetail
     };
   },
 };
 </script>
 <style scoped>
+.detail{
+  position: absolute;
+  right:0;
+  top:0;
+  margin:1em;
+  box-sizing: border-box;
+  height:100%;
+  width:50%;
+  padding:1em
+}
 .center-my-text {
   text-align: left !important;
 }
 .body {
   position: absolute !important;
+  display: flex!important;
+  flex-direction: row!important;
+  flex-wrap: nowrap!important;
   background: rgb(255, 255, 255, 1) !important;
   height: 100% !important;
   overflow: hidden !important;

@@ -50,7 +50,7 @@ export default {
                 return {
                     label: value.name,
                     items:[],
-                    id: index,
+                    id: value.id,
                     link:`/i/${value.name.toLowerCase()}/${value.id}`
                 }
               });
