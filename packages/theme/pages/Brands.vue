@@ -80,7 +80,7 @@
         <div v-else>
           <div class="card mr-5 w-auto h-12 bg-light_accent">
             <p class="float-left pt-3 ml-3">
-              Number of Results | {{ Object.keys(products).length }}
+              {{$t('Number of Results')}} | {{ Object.keys(products).length }}
             </p>
           </div>
           <!-- Products -->
@@ -107,7 +107,7 @@
                   class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
                   :to="'/v/' + product.slug"
                 >
-                  View All
+                   {{$t('View All')}}
                 </nuxt-link>
               </button>
             </div>
