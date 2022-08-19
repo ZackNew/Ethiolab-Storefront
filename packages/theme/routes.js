@@ -18,6 +18,11 @@ export function getRoutes(themeDir = __dirname) {
       component: path.resolve(themeDir, 'pages/Product.vue'),
     },
     {
+      name: 'industry',
+      path: '/i/:slug/:id',
+      component: path.resolve(themeDir, 'pages/Industry.vue'),
+    },
+    {
       name: 'brand',
       path: '/b/:name/:id',
       component: path.resolve(themeDir, 'pages/Brands.vue'),

@@ -19,8 +19,8 @@
       "
     >
       <slot name="mobile-navigation-item">
-        <SfMenuItem :label="label" class="sf-header-navigation-item__menu-item">
-          {{ label }}
+        <SfMenuItem :label="label" @mouseOver = 'hoverHandler(label)' class="sf-header-navigation-item__menu-item">
+          {{ 'label' }}
         </SfMenuItem>
         <DropDownMenu class="overlay" :subnavList="$props.subnavList"/>
         <!-- <div > -->
@@ -49,6 +49,11 @@ export default {
       default: "",
     },
     subnavList:Array,
+  },
+  methods: {
+    hoverHandler:(label)=>{
+      console.log('hover started ***')
+    }
   },
 };
 </script>

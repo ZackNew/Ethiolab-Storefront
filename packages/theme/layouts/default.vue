@@ -112,6 +112,9 @@ export default {
     margin: auto;
   }
 }
+.custom-bg{
+  background-color: var(--c-secondary)!important;
+}
 :root{
   --font-family--secondary: 'Roboto'!important;
   --font-family--primary:'Roboto Slab'!important

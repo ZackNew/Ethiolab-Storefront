@@ -8,12 +8,10 @@
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" :to="`/c/${parent}`">
-            {{ parent }}
-          </nuxt-link>
+          {{ 'Industries' }}
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          {{ categoryName }}
+          {{ industryName }}
         </li>
       </ol>
     </nav>
@@ -59,13 +57,13 @@
         </div>
       </div>
       <!-- Subcategory name and description -->
-      <div class="ml-6">
+      <div class="ml-6 w-full">
         <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
-          {{ categoryName }}
+          {{ industryName }}
         </h2>
-        <div class="card shadow-lg my-4 flex w-auto mr-5">
-          <img class="h-36 w-auto my-auto bg-light" :src="categoryImg" alt="" />
-          <div class="bg-faded_black w-full">
+        <div class="card shadow-lg my-4 flex w-full mr-5">
+          <img class="h-36 w-auto my-auto bg-light" :src="industryImg" alt="" />
+          <div class="bg-faded_black custom-bg w-full">
             <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
           </div>
         </div>
@@ -173,11 +171,11 @@ export default {
       open: false,
       filtersClicked: [],
       search: '',
-      categoryName: null,
+      industryName: null,
       products: [],
       parent: null,
       aCat: null,
-      categoryImg: null,
+      industryImg: null,
       description: null,
     };
   },
@@ -298,7 +296,26 @@ export default {
       }
     },
     async getCategory() {
-      const slug = this.$route.params.slug_1;
+    //   const slug = this.$route.params.slug_1;
+      let body2 = {
+        query:`query getIndustryById($id:ID){
+                    industry(id:$id){
+                        name
+                        description
+                        icon{
+                            preview
+                        }
+                        products{
+                            id
+                        }
+                        id
+                    }
+                    }`,
+        variables : {
+            id:this.$route.params.id
+        }
+      }
+
       const body = {
         query: `query getCategoryBySlug($slug: String!){
             collection(slug: $slug){
@@ -319,7 +336,7 @@ export default {
             }
           }`,
         variables: {
-          slug: slug,
+        //   slug: slug,
         },
       };
       const options = {
@@ -330,20 +347,15 @@ export default {
       };
       let baseUrl = process.env.GRAPHQL_API
       const acat = await axios
-        .post(baseUrl, body, options)
+        .post(baseUrl, body2, options)
         .then(async (res) => {
-          if (
-            res.data?.data?.collection?.filters[0]?.args[0].name ===
-            'productIds'
-          ) {
-            const productIdString = JSON.parse(
-              res.data?.data?.collection?.filters[0]?.args[0].value
-            );
-            
+          if (res.data?.data?.industry.products.length > 0) {
+            const productIdString = res.data.data.industry.products.map(product_object=>{
+                return product_object.id
+            })
             const productId = productIdString.map((num) => {
               return String(num);
             });
-            console.log('****',productId)
             let pbody = {
               query: `query getProductById($in: [String!]) {
                         products(options: {filter: {id: {in: $in}}}) {
@@ -392,9 +404,9 @@ export default {
 
           this.aCat = res.data?.data?.collection;
           this.parent = res.data?.data?.collection?.parent?.name;
-          this.categoryName = res.data?.data?.collection?.name;
-          this.categoryImg = res.data?.data?.collection?.featuredAsset?.preview;
-          this.description = res.data?.data?.collection?.description;
+          this.industryName = res.data?.data?.industry?.name;
+          this.industryImg = res.data?.data?.industry?.icon?.preview;
+          this.description = res.data?.data?.industry?.description;
         });
     },
   },
