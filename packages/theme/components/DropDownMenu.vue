@@ -108,9 +108,9 @@ export default {
 }
 .body {
   position: absolute !important;
-  display: flex!important;
-  flex-direction: row!important;
-  flex-wrap: nowrap!important;
+  /* display: flex!important; */
+  /* flex-direction: row!important; */
+  /* flex-wrap: nowrap!important; */
   background: rgb(255, 255, 255, 1) !important;
   height: 100% !important;
   overflow: hidden !important;
