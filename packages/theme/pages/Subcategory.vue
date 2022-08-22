@@ -63,15 +63,15 @@
         <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
           {{ categoryName }}
         </h2>
-        <div class="card shadow-lg my-4 flex w-auto mr-5">
-          <img class="h-36 w-auto my-auto bg-light" :src="categoryImg" alt="" />
+        <div class="card shadow-lg my-4 flex mr-5 w-full">
+          <img class="h-36 my-auto bg-light" :src="categoryImg" alt="" />
           <div class="bg-faded_black w-full">
             <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
           </div>
         </div>
         <div
-          v-if="products.length === 0"
-          class="border border-light_accent shadow-md bg-white rounded-lg"
+          v-if="filteredSearchedProducts.length === 0 && !loading"
+          class="border border-light_accent shadow-md bg-white rounded-lg w-full"
         >
           <div class="justify-end">
             <div class="flex flex-col items-center py-10">
@@ -82,7 +82,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="flex card mr-5 w-auto h-12 bg-light_accent border-b-2">
+          <div class="flex card mr-5 w-full h-12 bg-light_accent">
             <p class="pt-3 mx-3">
               Number of Results | {{ Object.keys(products).length }}
             </p>
@@ -125,18 +125,21 @@
               </div>
             </div>
           </div>
+          <div v-if="loading">
+            <img
+              class="mt-16 w-20 h-20 mx-auto"
+              src="~/assets/Loading_icon.gif"
+              alt=""
+            />
+          </div>
           <!-- Products -->
-          <SubcatBrandCard
-            :filteredProducts="filteredSearchedProducts"
-            class="border-b"
-          />
-
-          <div
+          <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
+          <!-- <div
             style="background-color: #e2e5de"
             class="card mr-16 ml-4 mt-5 w-auto h-12"
           >
             <p class="float-left pt-3 ml-3">Showing 1-10 of 10</p>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -166,6 +169,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       low: '',
       high: '',
       A_Z: null,
@@ -176,7 +180,7 @@ export default {
       categoryName: null,
       products: [],
       parent: null,
-      aCat: null,
+      activeCategory: null,
       categoryImg: null,
       description: null,
     };
@@ -328,7 +332,7 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      const acat = await axios
+      const activeCategory = await axios
         .post('http://localhost:3000/shop-api', body, options)
         .then(async (res) => {
           if (
@@ -386,8 +390,8 @@ export default {
             );
             this.products = prod.data?.data?.products?.items;
           }
-
-          this.aCat = res.data?.data?.collection;
+          this.loading = false;
+          this.activeCategory = res.data?.data?.collection;
           this.parent = res.data?.data?.collection?.parent?.name;
           this.categoryName = res.data?.data?.collection?.name;
           this.categoryImg = res.data?.data?.collection?.featuredAsset?.preview;
