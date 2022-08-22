@@ -20,7 +20,8 @@ module.exports = {
         light_accent:'#edeef8',
         faded_white:'#FFFFFF93',
         faded_black:'#2f2f2f',
-        light_gray: '#EAE8E8'
+        light_gray: '#EAE8E8',
+        dark_gray: '#BABABA'
     },
     extend: {
       minHeight: {
