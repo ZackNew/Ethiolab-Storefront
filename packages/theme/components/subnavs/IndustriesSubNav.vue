@@ -12,6 +12,8 @@
 import HeaderNavigationItem from '../HeaderNavigationItem.vue';
 import { ref } from '@vue/composition-api';
 import { useCategory,} from '@vue-storefront/vendure';
+import { isConditional } from '@babel/types';
+import { disableFragmentWarnings } from 'graphql-tag';
 export default {
     name: 'IndustriesSubNav',
     components:{
@@ -34,6 +36,10 @@ export default {
             industries{
                 id
                 name
+                description
+                icon{
+                  preview
+                }
             }
         }`});
         let baseUrl = process.env.GRAPHQL_API
@@ -47,12 +53,15 @@ export default {
         }).then(r => r.json())
           .then((data) => {
               this.headerNavigation=data.data.industries.map((value, index)=>{
-                return {
+                let result =  {
                     label: value.name,
+                    description:value.description,
+                    preview:value.icon?.preview,
                     items:[],
-                    id: index,
+                    id: value.id,
                     link:`/i/${value.name.toLowerCase()}/${value.id}`
                 }
+                return result
               });
             //   console.log(this.)
           });

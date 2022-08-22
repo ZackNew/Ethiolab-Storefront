@@ -1,6 +1,6 @@
 <template>
   <div class="sub-body">
-    <div class="content">
+    <div @mouseover="handler(id,title,disc,prev)" @mouseleave="hoverOutHandler()" class="content">
       <nuxt-link :key="-1" :to="this.$props.link">{{
         this.$props.title
       }}</nuxt-link>
@@ -17,6 +17,8 @@
   </div>
 </template>
 <script>
+import anymatch from 'anymatch';
+
 export default {
   name: 'HeaderSubNavigation',
   components: {},
@@ -24,8 +26,21 @@ export default {
     title: String,
     subnavList: Array,
     link: String,
+    handler:Function,
+    hoverOutHandler:Function,
+    disc:String,
+    prev:String,
+    id:anymatch
+
   },
-  setup() {},
+  setup() {
+        let hoverHandler = ()=>{
+      console.log('hover handler activated**')
+    }
+    return {
+      // hoverHandler
+    }
+  },
 };
 </script>
 <style scoped>
