@@ -25,7 +25,7 @@
           class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
           :to="'/v/' + product.slug"
         >
-          View All
+          {{$t('View All')}}
         </nuxt-link>
       </button>
     </div>

@@ -4,6 +4,18 @@
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
+        <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+      <ol class="sf-breadcrumbs__list">
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+            Home
+          </nuxt-link>
+        </li>
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          {{ categoryTreeMain}}
+        </li>
+      </ol>
+    </nav>
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
         <LazyHydrate never>
@@ -238,7 +250,7 @@
               <button
                 class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
               >
-                View All
+                 {{$t('View All')}}
               </button>
             </div>
           </div>
@@ -554,14 +566,20 @@ export default {
         return tree;
       })
     );
+
     console.log('row category value is ', rawCategoryTree.value);
     const categoryTree = computed(() =>
       getTreeWithoutEmptyCategories(rawCategoryTree.value).filter(
         (cat) => cat.slug === lastSlug || cat.isCurrent === true
       )
     );
+    const categoryTreeMain = computed(() =>{
+        return categoryTree.value[0].label
+    }
+      
+    );
     // categoryTree.filter((cat) => cat.slug === lastSlug);
-    console.log('category tree is ', categoryTree.value);
+    console.log('category tree is ', categoryTree);
     const activeCategory = computed(() => {
       const items = categoryTree.value;
       // console.log("items value is ", items[0]?.label)
@@ -655,6 +673,7 @@ export default {
       activeCategory,
       sortBy,
       facets,
+      categoryTreeMain,
       breadcrumbs,
       addItemToWishlist,
       removeItemFromWishlist,

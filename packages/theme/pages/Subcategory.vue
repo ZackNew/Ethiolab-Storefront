@@ -26,20 +26,20 @@
             @filterClicked="filterProducts"
             :filters="filters"
           />
-          <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
+          <p class="text-xl mx-4 mt-2 mb-2">{{$t('Price Range')}}</p>
           <div class="flex mx-4">
             <input
               v-model="low"
               class="rounded border border-primary w-12"
               type="number"
-              placeholder="min..."
+              :placeholder="$t('min')"
             />
-            <p class="mx-2">to</p>
+            <p class="mx-2">{{$t('to')}}</p>
             <input
               v-model="high"
               class="rounded border border-primary w-12"
               type="number"
-              placeholder="max..."
+              :placeholder="$t('max')"
             />
           </div>
         </div>
@@ -84,7 +84,7 @@
         <div v-else>
           <div class="flex card mr-5 w-auto h-12 bg-light_accent border-b-2">
             <p class="pt-3 mx-3">
-              Number of Results | {{ Object.keys(products).length }}
+             {{$t('Number of Results')}} | {{ Object.keys(products).length }}
             </p>
             <div class="ml-8">
               <button
@@ -94,7 +94,7 @@
                 type="button"
                 @click="open = !open"
               >
-                Sort Subcategory by
+                {{$t('Sort Subcategory by')}}
                 <svg
                   class="ml-2 w-4 h-4"
                   aria-hidden="true"
@@ -117,10 +117,10 @@
                 class="inset-0 relative flex flex-col z-10 w-44 bg-white border border-primary transform transition duration-300"
               >
                 <button @click="sortBtn" class="hover:bg-light_accent">
-                  Name from A to Z
+                  {{$t('Name from A to Z')}}
                 </button>
                 <button @click="sortBtn" class="hover:bg-light_accent">
-                  Name from Z to A
+                  {{$t('Name from Z to A')}}
                 </button>
               </div>
             </div>

@@ -3,7 +3,7 @@
     :subnavList="headerNavigation"
     class="nav-item"
     v-e2e="`app-header-url_BRANDS`"
-    :label="'BRANDS'"
+    :label="$t('BRANDS')"
     :link="localePath(`/c/BRANDS`)"
   />
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="m-2">
     <p class="sf-heading__description m-4 font-xs mt-6">
-      search with in these results:
+      {{$t('search with in these results:')}}
     </p>
     <div class="relative m-3">
       <div
@@ -33,7 +33,7 @@
     <!-- filter options -->
     <SfAccordion
       v-for="filter in filters"
-      :key="filter.filter_title"
+      :key="$t(filter.filter_title)"
       class="mb-2 px-2 accordion-bg"
       transition=""
       open="all"
