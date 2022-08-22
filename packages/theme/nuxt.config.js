@@ -25,6 +25,16 @@ export default {
         'http-equiv': 'Content-Security-Policy',
         content: 'upgrade-insecure-requests'
       },
+
+
+    ],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+        crossorigin: "anonymous"
+      },
       {
         rel: "preconnect",
         href: "https://fonts.gstatic.com/",
@@ -33,28 +43,8 @@ export default {
       {
         rel: "stylesheet",
         href:
-        "https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap",
-        media: "print",
-        onload: "this.media='all'"
+        "https://fonts.googleapis.com/css2?family=Alumni+Sans+Collegiate+One&family=Dancing+Script&family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap",
       },
-      {
-        rel: "preload",
-        as: "style",
-        href:
-        "https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap",
-        crossorigin: "anonymous"
-      },
-      {
-        rel: "stylesheet",
-        href:
-        "https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap",
-        media: "print",
-        onload: "this.media='all'"
-      }
-
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
   loading: { color: '#fff' },

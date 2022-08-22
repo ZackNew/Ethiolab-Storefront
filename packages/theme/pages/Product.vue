@@ -755,4 +755,7 @@ td {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+.product__review{
+  --font-family--primary:'Josefin Sans', sans-serif
+}
 </style>
