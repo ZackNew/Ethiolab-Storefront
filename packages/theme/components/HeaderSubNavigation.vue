@@ -1,6 +1,6 @@
 <template>
   <div class="sub-body">
-    <div @mouseover="handler(id)" @mouseleave="hoverOutHandler()" class="content">
+    <div @mouseover="handler(id,title,disc,prev)" @mouseleave="hoverOutHandler()" class="content">
       <nuxt-link :key="-1" :to="this.$props.link">{{
         this.$props.title
       }}</nuxt-link>
@@ -28,6 +28,8 @@ export default {
     link: String,
     handler:Function,
     hoverOutHandler:Function,
+    disc:String,
+    prev:String,
     id:anymatch
 
   },

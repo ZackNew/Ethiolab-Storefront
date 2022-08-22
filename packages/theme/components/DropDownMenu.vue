@@ -7,6 +7,8 @@
         :title="navs.label"
         :link="navs.link"
         :id="navs.id"
+        :disc="navs.description"
+        :prev="navs.preview"
         :subnavList="navs.items"
         v-for="navs in $props.subnavList"
         :key="navs.id"
@@ -25,8 +27,10 @@
       link="/c/clinical-laboratory"
     >
     </SfBanner>
-    <div  class="detail" v-if ='showDetail'>
-      here comes the detail
+    <div  class="detail" v-show ='showDetail'>
+      <img style = "width:10em;max-height: 6em;object-fit: cover;" alt = 'Industry Image'  :src = "cPrev"/>
+      <h4 >{{cTitle}}</h4>
+      <p v-html = 'cDisc'></p>
     </div>
   </div>
 </template>
@@ -65,11 +69,17 @@ export default {
     // };
     let showDetail = ref(false)
     let addVisible= ref(true)
-    let hoverHandler = (item)=>{
-        // console.log('hoavered over **:',item,props.main)
-      if(props.main==='INDUSTRIES'){
+    let cTitle = ref('')
+    let cDisc = ref('')
+    let cPrev = ref('')
+    let hoverHandler = (item,title,disc,prev)=>{
+      // console.log('**hovered over the items',props.main,item,title,disc,prev)
+      if(props.main==='INDUSTRIES'|| props.main =='BRANDS'){
         addVisible.value = false
         showDetail.value=true
+        cTitle.value=title
+        cDisc.value=disc
+        cPrev.value=prev
       
       }
 
@@ -84,6 +94,9 @@ export default {
       // headerNavigation,
       adSection,
       adImage,
+      cDisc,
+      cTitle,
+      cPrev,
       hoverHandler,
       hoverOutHandler,
       addVisible,
@@ -95,13 +108,24 @@ export default {
 <style scoped>
 .detail{
   position: absolute;
+  background-color: var(--c-bg-secondary);
   right:0;
   top:0;
+  color:white;
+  display: flex;
+  border-radius: 1em;
+  box-shadow: 2px 2px 5px rgb(68, 68, 68);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin:1em;
   box-sizing: border-box;
-  height:100%;
-  width:50%;
+  height:90%;
+  width:25%;
   padding:1em
+}
+.detail p{
+  text-align: justify;
 }
 .center-my-text {
   text-align: left !important;

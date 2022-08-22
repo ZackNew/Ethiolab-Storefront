@@ -34,6 +34,10 @@ export default {
             brands{
                 id
                 name
+                description
+                icon{
+                  preview
+                }
             }
         }`,
       });
@@ -52,6 +56,8 @@ export default {
             return {
               label: value.name,
               items: [],
+              preview:value.icon?.preview,
+              description:value.description,
               id: index,
               link: `/b/${value.name.toLowerCase()}/${value.id}`,
             };
