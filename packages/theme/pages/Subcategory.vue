@@ -59,12 +59,16 @@
         </div>
       </div>
       <!-- Subcategory name and description -->
-      <div class="ml-6">
+      <div class="ml-6 w-full">
         <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
           {{ categoryName }}
         </h2>
-        <div class="card shadow-lg my-4 flex mr-5 w-full">
-          <img class="h-36 my-auto bg-light" :src="categoryImg" alt="" />
+        <div class="card shadow-lg my-4 flex mr-5">
+          <img
+            class="h-36 my-auto bg-light max-w-[25%]"
+            :src="categoryImg"
+            alt=""
+          />
           <div class="bg-faded_black w-full">
             <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
           </div>
