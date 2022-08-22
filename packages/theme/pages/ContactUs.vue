@@ -10,9 +10,9 @@
       </section> -->
       <div class="flex">
         <div
-          class="card shadow-lg w-2/3 font-bold p-3 rounded text-white bg-dark_secondary"
+          class="card shadow-lg w-2/3 font-bold p-3 rounded text-white bg-primary"
         >
-          <p class="text-7xl mb-5 mt-10 font-heading">HOW CAN WE HELP?</p>
+          <p class="text-7xl mb-5 mt-10">HOW CAN WE HELP?</p>
           <p>
             Have some questions? Reach out to us by filling the form and our
             team will get in touch with you. We are looking forward to hear from
@@ -130,7 +130,7 @@
             <div class="form">
               <div class="form__action">
                 <button
-                  class="color-primary bg-primary px-4 py-1 rounded"
+                  class="color-primary bg-primary px-4 py-1 rounded text-white text-xl"
                   :aria-disabled="false"
                   :link="null"
                   type="submit"
