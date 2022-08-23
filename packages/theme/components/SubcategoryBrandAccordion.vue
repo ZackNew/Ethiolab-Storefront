@@ -61,6 +61,24 @@
         </ul>
       </SfAccordionItem>
     </SfAccordion>
+    <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
+    <div class="flex mx-4">
+      <input
+        v-model="min"
+        @input="minInput"
+        class="rounded border border-primary w-12"
+        type="number"
+        placeholder="min..."
+      />
+      <p class="mx-2">to</p>
+      <input
+        v-model="max"
+        @input="maxInput"
+        class="rounded border border-primary w-12"
+        type="number"
+        placeholder="max..."
+      />
+    </div>
   </div>
 </template>
 
@@ -73,6 +91,12 @@ export default {
     SfAccordion,
     SfSearchBar,
   },
+  data() {
+    return {
+      max: null,
+      min: null,
+    };
+  },
   props: {
     categories: {
       type: Array,
@@ -84,6 +108,12 @@ export default {
     },
   },
   methods: {
+    maxInput(event) {
+      this.$emit('maxAdded', this.max);
+    },
+    minInput(event) {
+      this.$emit('minAdded', this.min);
+    },
     sendChanges(event) {
       this.$emit('searchChange', event.target.value);
     },
