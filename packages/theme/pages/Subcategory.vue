@@ -108,10 +108,24 @@
                 id="dropdown"
                 class="inset-0 relative flex flex-col z-10 w-44 bg-white border border-primary transform transition duration-300"
               >
-                <button @click="sortBtn" class="hover:bg-light_accent">
+                <button
+                  @click="
+                    A_Z = true;
+                    Z_A = false;
+                    open = false;
+                  "
+                  class="hover:bg-light_accent"
+                >
                   Name from A to Z
                 </button>
-                <button @click="sortBtn" class="hover:bg-light_accent">
+                <button
+                  @click="
+                    A_Z = false;
+                    Z_A = true;
+                    open = false;
+                  "
+                  class="hover:bg-light_accent"
+                >
                   Name from Z to A
                 </button>
               </div>
@@ -268,11 +282,6 @@ export default {
     },
   },
   methods: {
-    sortBtn() {
-      this.A_Z = !this.A_Z;
-      this.Z_A = !this.Z_A;
-      this.open = !this.open;
-    },
     generateSortFn(prop, reverse) {
       return function (a, b) {
         if (a[prop].toLowerCase() < b[prop].toLowerCase())

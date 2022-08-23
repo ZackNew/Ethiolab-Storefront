@@ -3,7 +3,7 @@
     <p class="sf-heading__description m-4 font-xs mt-6">
       search with in these results:
     </p>
-    <div class="relative m-3">
+    <div class="relative m-2">
       <div
         class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
       >
@@ -31,6 +31,15 @@
       />
     </div>
     <!-- filter options -->
+    <SfAccordion class="-mb-2 px-2 accordion-bg" open="all" showChevron>
+      <SfAccordionItem v-if="categories" header="Category" class="sf-accordion">
+        <ul class="ml-3" v-for="category in categories" :key="category">
+          <li class="mb-3">
+            <a href="# ">{{ category }}</a>
+          </li>
+        </ul>
+      </SfAccordionItem>
+    </SfAccordion>
     <SfAccordion
       v-for="filter in filters"
       :key="filter.filter_title"
@@ -39,13 +48,6 @@
       open="all"
       showChevron
     >
-      <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
-        <ul class="ml-3" v-for="category in categories" :key="category">
-          <li class="mb-3">
-            <a href="# ">{{ category }}</a>
-          </li>
-        </ul>
-      </SfAccordionItem>
       <SfAccordionItem :header="filter.filter_title" class="sf-accordion -mb-4">
         <ul v-for="list in filter.filter_options" :key="list">
           <li class="ml-3">
@@ -61,7 +63,7 @@
         </ul>
       </SfAccordionItem>
     </SfAccordion>
-    <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
+    <p class="text-xl mx-2 mt-2 mb-2">Price Range</p>
     <div class="flex mx-4">
       <input
         v-model="min"
