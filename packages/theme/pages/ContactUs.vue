@@ -1,147 +1,159 @@
-
 <template>
   <div>
-    <section class="sf-call-to-action" :style="style">
-      <div class="sf-call-to-action__text-container">
-        <slot name="title">
-          <h2 class="sf-call-to-action__title">Contact Us</h2>
-        </slot>
-      </div>
-    </section>
-    <div>
-      <ValidationObserver v-slot="{ handleSubmit }">
-        <form @submit.prevent="handleSubmit(handleFormSubmit)">
-          <div class="form">
-            <ValidationProvider
-              name="firstName"
-              rules="required|min:2"
-              v-slot="{ errors }"
-              slim
-            >
-              <SfInput
-                v-e2e="'customer-firstName'"
-                v-model="form.firstName"
-                :label="$t('First name')"
+    <div class="p-20">
+      <!-- <section class="sf-call-to-action rounded" :style="style">
+        <div class="sf-call-to-action__text-container">
+          <slot name="title">
+            <h2 class="sf-call-to-action__title">Contact Us</h2>
+          </slot>
+        </div>
+      </section> -->
+      <div class="flex">
+        <div
+          class="card shadow-lg w-2/3 font-bold p-3 rounded text-white bg-primary"
+        >
+          <p class="text-7xl mb-5 mt-10">HOW CAN WE HELP?</p>
+          <p>
+            Have some questions? Reach out to us by filling the form and our
+            team will get in touch with you. We are looking forward to hear from
+            you.
+          </p>
+        </div>
+        <ValidationObserver
+          v-slot="{ handleSubmit }"
+          class="card shadow-lg p-10 mx-10 rounded bg-light_accent"
+        >
+          <h2 class="mb-2">Contact Us</h2>
+          <form @submit.prevent="handleSubmit(handleFormSubmit)">
+            <div class="form">
+              <ValidationProvider
                 name="firstName"
-                class="form__element form__element--half"
-                required
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-              />
-            </ValidationProvider>
-            <ValidationProvider
-              name="lastName"
-              rules="required|min:2"
-              v-slot="{ errors }"
-              slim
-            >
-              <SfInput
-                v-e2e="'customer-lastName'"
-                v-model="form.lastName"
-                :label="$t('Last name')"
-                name="lastName"
-                class="
-                  form__element form__element--half form__element--half-even
-                "
-                required
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-              />
-            </ValidationProvider>
-            <ValidationProvider
-              name="phoneNumber"
-              rules="required|email"
-              v-slot="{ errors }"
-              slim
-            >
-              <SfInput
-                v-e2e="'customer-emailAddress'"
-                v-model="form.emailAddress"
-                :label='$t("Email")'
-                name="email"
-                class="form__element form__element--half"
-                required
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-              />
-            </ValidationProvider>
-            <ValidationProvider
-              name="emailAddress"
-              rules="required|phone"
-              v-slot="{ errors }"
-              slim
-            >
-              <SfInput
-                v-e2e="'customer-emailAddress'"
-                v-model="form.phoneNumber"
-                :label="$t('Phone Number')"
-                name="phoneNumber"
-                class="
-                  form__element form__element--half form__element--half-even
-                "
-                required
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-              />
-            </ValidationProvider>
-            <ValidationProvider
-              name="message"
-              rules="required"
-              v-slot="{ errors }"
-              slim
-            >
-              <div class="sf-textarea">
-                <textarea
-                  id="message"
-                  name="message"
-                  class="form__element form__element--full"
-                  placeholder="Your Message"
-                  v-model="form.message"
-                  :cols="50"
-                  :rows="10"
-                  wrap="soft"
-                  :disabled="false"
-                  :required="false"
-                  :maxlength="null"
-                  :minlength="null"
+                rules="required|min:2"
+                v-slot="{ errors }"
+                slim
+              >
+                <SfInput
+                  v-e2e="'customer-firstName'"
+                  v-model="form.firstName"
+                  :label="$t('First name')"
+                  name="firstName"
+                  class="form__element form__element--half"
+                  required
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"
                 />
-                <div class="sf-textarea__error-message">
-                  <transition name="sf-fade">
-                    <div class="display-none">Required</div>
-                  </transition>
-                </div>
-              </div>
-            </ValidationProvider>
-          </div>
-     
-          <div class="form">
-            <div class="form__action">
-              <button
-                class="color-primary"
-                :aria-disabled="false"
-                :link="null"
-                type="submit"
+              </ValidationProvider>
+              <ValidationProvider
+                name="lastName"
+                rules="required|min:2"
+                v-slot="{ errors }"
+                slim
               >
-                Submit
-              </button>
+                <SfInput
+                  v-e2e="'customer-lastName'"
+                  v-model="form.lastName"
+                  :label="$t('Last name')"
+                  name="lastName"
+                  class="form__element form__element--half form__element--half-even"
+                  required
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                />
+              </ValidationProvider>
+              <ValidationProvider
+                name="phoneNumber"
+                rules="required|email"
+                v-slot="{ errors }"
+                slim
+              >
+                <SfInput
+                  v-e2e="'customer-emailAddress'"
+                  v-model="form.emailAddress"
+                  :label="$t('Email')"
+                  name="email"
+                  class="form__element form__element--half"
+                  required
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                />
+              </ValidationProvider>
+              <ValidationProvider
+                name="emailAddress"
+                rules="required"
+                v-slot="{ errors }"
+                slim
+              >
+                <SfInput
+                  type="number"
+                  v-e2e="'customer-emailAddress'"
+                  v-model="form.phoneNumber"
+                  :label="$t('Phone Number')"
+                  name="phoneNumber"
+                  class="form__element form__element--half form__element--half-even"
+                  required
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                />
+              </ValidationProvider>
+              <ValidationProvider
+                name="message"
+                rules="required"
+                v-slot="{ errors }"
+                slim
+              >
+                <div class="sf-textarea">
+                  <textarea
+                    id="message"
+                    name="message"
+                    class="form__element form__element--full"
+                    placeholder="Your Message"
+                    v-model="form.message"
+                    :cols="50"
+                    :rows="10"
+                    wrap="soft"
+                    :disabled="false"
+                    :required="false"
+                    :maxlength="null"
+                    :minlength="null"
+                    :valid="!errors[0]"
+                    :errorMessage="errors[0]"
+                  />
+                  <div class="sf-textarea__error-message">
+                    <transition name="sf-fade">
+                      <div class="display-none">Required</div>
+                    </transition>
+                  </div>
+                </div>
+              </ValidationProvider>
             </div>
-            <p v-if="errorMessage">{{ errorMessage }}</p>
-          </div>
-        </form>
-      </ValidationObserver>
+
+            <div class="form">
+              <div class="form__action">
+                <button
+                  class="color-primary bg-primary px-4 py-1 rounded text-white text-xl"
+                  :aria-disabled="false"
+                  :link="null"
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </div>
+              <p v-if="errorMessage">{{ errorMessage }}</p>
+            </div>
+          </form>
+        </ValidationObserver>
+      </div>
     </div>
     <div class="similar-products">
-        <SfHeading title="Our Stores" :level="1" />
-      </div>
+      <SfHeading title="Our Stores" :level="1" />
+    </div>
     <div class="contact-location">
       <SfStoreLocator
         tileServerUrl="http://mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
         :center="[9.035565, 38.759099]"
         :zoom="6"
-        :maxZoom="16"
-        :markerIconSize="[28, 28]"
+        :maxZoom="18"
+        :markerIconSize="[30, 30]"
         :markerIconAnchor="[10.5, 0]"
         :mapOptions="{}"
         :tileLayerOptions="{}"
@@ -159,11 +171,8 @@
         />
       </SfStoreLocator>
     </div>
-
   </div>
 </template>
-
-
 
 <script>
 import {
@@ -173,36 +182,35 @@ import {
   SfSelect,
   SfStoreLocator,
   SfBanner,
-} from "@storefront-ui/vue";
-import LazyHydrate from "vue-lazy-hydration";
-import { ref, onMounted , inject} from "@vue/composition-api";
-import { required, min, digits, email } from "vee-validate/dist/rules";
-import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
-import { useVSFContext } from "@vue-storefront/core";
-import { useCart, useTinNumber, useContactUs } from "@vue-storefront/vendure";
-import { EMAIL_ADDRESS_CONFLICT_ERROR } from "~/helpers";
+} from '@storefront-ui/vue';
+import LazyHydrate from 'vue-lazy-hydration';
+import { ref, onMounted, inject } from '@vue/composition-api';
+import { required, min, digits, email } from 'vee-validate/dist/rules';
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
+import { useVSFContext } from '@vue-storefront/core';
+import { useCart, useTinNumber, useContactUs } from '@vue-storefront/vendure';
+import { EMAIL_ADDRESS_CONFLICT_ERROR } from '~/helpers';
 import gql from 'graphql-tag';
 import { print } from 'graphql';
-import axios from 'axios'
+import axios from 'axios';
 
-extend("required", {
+extend('required', {
   ...required,
-  message: "This field is required",
+  message: 'This field is required',
 });
-extend("min", {
+extend('min', {
   ...min,
-  message: "The field should have at least {length} characters",
+  message: 'The field should have at least {length} characters',
 });
-extend("digits", {
+extend('digits', {
   ...digits,
-  message: "Please provide a valid phone number",
+  message: 'Please provide a valid phone number',
 });
 
-extend("email", {
+extend('email', {
   ...email,
-  message: "Invalid email",
+  message: 'Invalid email',
 });
-
 
 export default {
   components: {
@@ -222,62 +230,62 @@ export default {
       //   const image = this.image;
       //   const background = this.background;
       return {
-        "--_call-to-action-background-image": `url("")`,
-        "--_call-to-action-background-desktop-image": `url("")`,
-        "--_call-to-action-background-color": "#005FB7",
-        margin: "var(--spacer-xl) auto var(--spacer-2xl)",
+        '--_call-to-action-background-image': `url("")`,
+        '--_call-to-action-background-desktop-image': `url("")`,
+        '--_call-to-action-background-color': '#005FB7',
+        margin: 'var(--spacer-xl) auto var(--spacer-2xl)',
       };
     },
   },
   setup(_, { root }) {
-    const showToast = inject('showToast')
+    const showToast = inject('showToast');
     const isFormSubmitted = ref(false);
     const { $vendure } = useVSFContext();
     const { cart, load } = useCart();
-    const errorMessage = ref(""); 
-    const {sendContactUs} = useContactUs();
-    const {setTinNumber} = useTinNumber()
+    const errorMessage = ref('');
+    const { sendContactUs } = useContactUs();
+    const { setTinNumber } = useTinNumber();
 
     const form = ref({
-      firstName: "",
-      lastName: "",
-      emailAddress: "",
-      phoneNumber: "",
-      message: ""
+      firstName: '',
+      lastName: '',
+      emailAddress: '',
+      phoneNumber: '',
+      message: '',
     });
-     
-     const sendMessage = async () =>{
-  //     console.log("......x")
-       sendContactUs({
-                  phone_number: form.value.phoneNumber,
-                  first_name: form.value.firstName,
-                  last_name: form.value.lastName,
-                  email: form.value.emailAddress,  
-                  message: form.value.message})
-      showToast('Sent!')
-       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
+
+    const sendMessage = async () => {
+      //     console.log("......x")
+      sendContactUs({
+        phone_number: form.value.phoneNumber,
+        first_name: form.value.firstName,
+        last_name: form.value.lastName,
+        email: form.value.emailAddress,
+        message: form.value.message,
+      });
+      showToast('Sent!');
+      //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
-      
+
       //    mutation sendMessage($phone_number: String!,$first_name: String!, $last_name: String!, $message: String!, $email:String!){
-      //       writeContactUsMessage(message: {email: $email, firstName: $first_name, 
+      //       writeContactUsMessage(message: {email: $email, firstName: $first_name,
       //                     lastName: $last_name, phoneNumber: $phone_number, message: $message}){id}
       //    }
       // `
-      // const data = await axios.post('http://localhost:3000/shop-api', 
+      // const data = await axios.post('http://localhost:3000/shop-api',
       //             {query: print(mutation), variables :{
       //             phone_number: form.value.phoneNumber,
       //             first_name: form.value.firstName,
       //             last_name: form.value.lastName,
-      //             email: form.value.emailAddress,  
+      //             email: form.value.emailAddress,
       //             message: form.value.message
       //  }});
-      //  console.log({data})            
+      //  console.log({data})
       //  form.value = {}
       //  location.href = 'http://localhost:3001'
-      
-     }  
-     const handleFormSubmit = async () => {
-         sendMessage()
+    };
+    const handleFormSubmit = async () => {
+      sendMessage();
       // const response = await $vendure.api.setCustomerForOrder(form.value);
       // if (
       //   response?.data?.setCustomerForOrder?.errorCode ===
@@ -288,7 +296,6 @@ export default {
       // }
       // root.$router.push(root.localePath({ name: "shipping" }));
       // isFormSubmitted.value = true;
-     
     };
 
     onMounted(async () => {
@@ -398,4 +405,3 @@ export default {
   margin-bottom: 10vh !important;
 }
 </style>
-

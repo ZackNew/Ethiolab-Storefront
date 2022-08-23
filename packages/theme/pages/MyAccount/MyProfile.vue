@@ -5,9 +5,8 @@
       <p class="message">
         {{ $t('Feel free to edit') }}
       </p>
-   
+
       <ProfileUpdateForm @submit="updatePersonalData" />
-     
 
       <p class="notice">
         {{ $t('Use your personal data') }}
@@ -34,19 +33,16 @@
       <p class="message">
         {{ $t('Change password your account') }}:<br />
         {{ $t('Your current email address is') }}
-        <span
-          v-e2e="'myaccount-message-email'"
-          class="message__label"
-        >
-          {{currentEmail}}
+        <span v-e2e="'myaccount-message-email'" class="message__label">
+          {{ currentEmail }}
         </span>
       </p>
 
       <PasswordResetForm @submit="updatePassword" />
     </SfTab>
-    <SfTab title="Tin Number">
-          Tin Number: <SfInput pplaceholder="Your tin number" v-model="tinNumber"/>
-          <SfButton @click="updateTinNumber">Update Tin Number</SfButton>
+    <SfTab title="TIN">
+      Tin Number: <SfInput pplaceholder="Your tin number" v-model="tinNumber" />
+      <SfButton @click="updateTinNumber">Update Tin Number</SfButton>
     </SfTab>
   </SfTabs>
 </template>
@@ -59,56 +55,58 @@ import PasswordResetForm from '~/components/MyAccount/PasswordResetForm';
 import EmailUpdateForm from '~/components/MyAccount/EmailUpdateForm';
 import { SfTabs, SfInput, SfButton } from '@storefront-ui/vue';
 import { useUser, userGetters } from '@vue-storefront/vendure';
-import { onMounted,watchEffect,ref, inject } from '@vue/composition-api';
+import { onMounted, watchEffect, ref, inject } from '@vue/composition-api';
 import gql from 'graphql-tag';
 import { print } from 'graphql';
-import axios from 'axios'
+import axios from 'axios';
 
 extend('email', {
   ...email,
-  message: 'Invalid email'
+  message: 'Invalid email',
 });
 
 extend('required', {
   ...required,
-  message: 'This field is required'
+  message: 'This field is required',
 });
 
 extend('min', {
   ...min,
-  message: 'The field should have at least {length} characters'
+  message: 'The field should have at least {length} characters',
 });
 
 extend('password', {
-  validate: value => String(value).length >= 8 && String(value).match(/[A-Za-z]/gi) && String(value).match(/[0-9]/gi),
-  message: 'Password must have at least 8 characters including one letter and a number'
+  validate: (value) =>
+    String(value).length >= 8 &&
+    String(value).match(/[A-Za-z]/gi) &&
+    String(value).match(/[0-9]/gi),
+  message:
+    'Password must have at least 8 characters including one letter and a number',
 });
 
 extend('confirmed', {
   ...confirmed,
-  message: 'Passwords don\'t match'
+  message: "Passwords don't match",
 });
 
 export default {
   name: 'PersonalDetails',
-  onMounted(){
-      
-  },
+  onMounted() {},
   components: {
     SfTabs,
     SfInput,
     SfButton,
     ProfileUpdateForm,
     PasswordResetForm,
-    EmailUpdateForm
+    EmailUpdateForm,
   },
 
   setup() {
-    const showToast = inject('showToast')
+    const showToast = inject('showToast');
     const { updateUser, changePassword, user, load, updateEmail } = useUser();
     const tinNumber = ref('');
     const currentEmail = userGetters.getEmailAddress(user.value);
-    console.log("user=",JSON.stringify( user.value))
+    console.log('user=', JSON.stringify(user.value));
     const formHandler = async (fn, onComplete, onError) => {
       try {
         const data = await fn();
@@ -118,84 +116,107 @@ export default {
       }
     };
     function getCookie(cname) {
-        console.log('Getting ' +  cname)
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for(let i = 0; i <ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-          }
+      console.log('Getting ' + cname);
+      let name = cname + '=';
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
         }
-        return "";
-     }
-    console.log("user", JSON.stringify(user.value))
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return '';
+    }
+    console.log('user', JSON.stringify(user.value));
 
-    const updatePersonalData = ({ form, onComplete, onError }) => formHandler(() => updateUser({ user: form.value }), onComplete, onError);
-    const updateEmailData = ({ form, onComplete, onError }) => formHandler(() => updateEmail({ password: form.value.password, newEmail: form.value.email }), onComplete, onError);
-    const updatePassword = ({ form, onComplete, onError }) => formHandler(() => changePassword({ currentPassword: form.value.currentPassword, newPassword: form.value.newPassword }), onComplete, onError);
+    const updatePersonalData = ({ form, onComplete, onError }) =>
+      formHandler(() => updateUser({ user: form.value }), onComplete, onError);
+    const updateEmailData = ({ form, onComplete, onError }) =>
+      formHandler(
+        () =>
+          updateEmail({
+            password: form.value.password,
+            newEmail: form.value.email,
+          }),
+        onComplete,
+        onError
+      );
+    const updatePassword = ({ form, onComplete, onError }) =>
+      formHandler(
+        () =>
+          changePassword({
+            currentPassword: form.value.currentPassword,
+            newPassword: form.value.newPassword,
+          }),
+        onComplete,
+        onError
+      );
 
     onMounted(async () => {
       await load();
-         const query =    gql`{
-        activeCustomer{
+      const query = gql`
+        {
+          activeCustomer {
             customFields {
-                tin_number
+              tin_number
             }
-            user{
-                id
-                
+            user {
+              id
             }
-            
+          }
         }
-      }`
-    console.log("Token=", getCookie('etech-auth-token'))
-    axios.post('http://localhost:3000/shop-api', 
-    {query: print(query),},
-    {headers:{
-      'Authorization': 'Bearer ' + getCookie('etech-auth-token')
-    }}
-    
-    )
-    
-    .then(data =>{
-            tinNumber.value = data.data.data.activeCustomer.customFields.tin_number
-             console.log(data.data.data.activeCustomer.customFields.tin_number)
-             
-    }, )
-    });
-    const updateTinNumber  = async()=>{
-      try{
-         showToast('Updated!')
-              const query 
-              =    gql`mutation upd($tinNumber: String!){
-                    updateCustomer(input: {
-                       # id: $id,
-                        customFields: {
-                          tin_number: $tinNumber
-                        }
+      `;
+      console.log('Token=', getCookie('etech-auth-token'));
+      axios
+        .post(
+          'http://localhost:3000/shop-api',
+          { query: print(query) },
+          {
+            headers: {
+              Authorization: 'Bearer ' + getCookie('etech-auth-token'),
+            },
+          }
+        )
 
-                    }){
-                      id
-                    }
-              }`
-            console.log("Token=", getCookie('etech-auth-token'))
-            axios.post('http://localhost:3000/shop-api', 
-            {query: print(query),variables: {tinNumber: tinNumber.value, }},
-            {headers:{
-              'Authorization': 'Bearer ' + getCookie('etech-auth-token')
+        .then((data) => {
+          tinNumber.value =
+            data.data.data.activeCustomer.customFields.tin_number;
+          console.log(data.data.data.activeCustomer.customFields.tin_number);
+        });
+    });
+    const updateTinNumber = async () => {
+      try {
+        showToast('Updated!');
+        const query = gql`
+          mutation upd($tinNumber: String!) {
+            updateCustomer(
+              input: {
+                # id: $id,
+                customFields: { tin_number: $tinNumber }
+              }
+            ) {
+              id
             }
-            }
-           
-            
-            )
-    }catch(e){
-      console.log(JSON.stringify(e))
-    }}
+          }
+        `;
+        console.log('Token=', getCookie('etech-auth-token'));
+        axios.post(
+          'http://localhost:3000/shop-api',
+          { query: print(query), variables: { tinNumber: tinNumber.value } },
+          {
+            headers: {
+              Authorization: 'Bearer ' + getCookie('etech-auth-token'),
+            },
+          }
+        );
+      } catch (e) {
+        console.log(JSON.stringify(e));
+      }
+    };
 
     return {
       tinNumber,
@@ -204,13 +225,13 @@ export default {
       updatePassword,
       updateEmailData,
       updateTinNumber,
-      user
+      user,
     };
-  }
-}
+  },
+};
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .message,
 .notice {
   font-family: var(--font-family--primary);
@@ -227,5 +248,4 @@ export default {
   margin: var(--spacer-lg) 0 0 0;
   font-size: var(--font-size--sm);
 }
-
 </style>
