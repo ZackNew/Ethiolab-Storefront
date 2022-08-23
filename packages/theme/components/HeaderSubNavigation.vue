@@ -63,6 +63,7 @@ export default {
 }
 
 .content {
+  font-family: var(--font-family--secondary);
   position: absolute;
   /* left: 0%;  */
 }
