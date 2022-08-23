@@ -207,19 +207,58 @@ export default {
             filtersClicked.includes(facet.name)
           );
 
+          let matchFound = false
+          if(product.collections.length>0){
+            for (let collection of product.collections){
+              matchFound =  filtersClicked.includes(collection.name)
+              // console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
+              if(matchFound){
+                break
+              }
+            }
+          }else{
+            matchFound= false
+          }
+          // console.log('product match found collection clicked',product,matchFound,product.collections,filtersClicked)
           return (
             filtersClicked.includes(product.customFields.brand?.name) ||
-            filtersClicked.includes(product.customFields.industry?.name) ||
-            filtersClicked.includes(product.facetValues[facetIndex]?.name)
+            filtersClicked.includes(product.facetValues[facetIndex]?.name) ||
+            matchFound
           );
         }
         return true;
       });
 
+
+      // console.log('running again **',filtersClicked,filtersClicked.length)
+      // let filteredBasedOnCategory = filterProducts.filter(product=>{
+      //   // console.log('product***',product,filtersClicked)
+        
+      //   if(filtersClicked.length>0){
+      //     console.log('running now **')
+      //     // console.log('product vs filters ** ',product.collections,filtersClicked)
+      //     if(product.collections.length>0){
+      //       for (let collection of product.collections){
+      //         let matchFound =  filtersClicked.includes(collection.name)
+      //         console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
+      //         if(matchFound){
+      //           return true
+      //         }
+      //       }
+      //       return false
+      //     }else{
+      //       return true
+      //     }
+      //   }else{
+      //     return true
+      //   }
+
+      //   return true
+      // })
       if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
 
       if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));
-
+      // console.log('all clicked filters',filtersClicked)
       return filterProducts;
     },
     brandsList() {
@@ -240,6 +279,24 @@ export default {
       const industries = [...new Set(industry)];
       return industries;
     },
+    categoriesList() {
+      let categories = [];
+      this.products.forEach((element) => {
+        // console.log("category names before loop ****", element.collections)
+        if (element.collections.length >0) {
+          for (let cat in element.collections){
+            // console.log("category names in loop ****",element.collections[cat].name)
+            if(!categories.includes(element.collections[cat].name)){
+              categories.push(element.collections[cat].name);
+            }
+            
+          }
+          
+        }
+      });
+      categories = [...new Set(categories)];
+      return categories;
+    },
     facetList() {
       let facet = [];
       this.products.forEach((element) => {
@@ -259,12 +316,12 @@ export default {
           filter_options: this.brandsList,
         },
         {
-          filter_title: 'Industry',
-          filter_options: this.industryList,
-        },
-        {
           filter_title: 'Facet',
           filter_options: this.facetList,
+        },
+                {
+          filter_title: 'Categories',
+          filter_options: this.categoriesList,
         },
       ];
     },
@@ -288,6 +345,7 @@ export default {
       this.search = event;
     },
     filterProducts(event) {
+      // console.log('filter button clicked ** ',event.id,event.checked)
       if (event.checked) {
         this.filtersClicked.push(event.id);
       } else {
@@ -364,6 +422,9 @@ export default {
                             id
                             slug
                             description
+                            collections{
+                              name
+                              }
                             variants {
                               price
                             }
