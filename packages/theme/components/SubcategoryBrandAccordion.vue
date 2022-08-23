@@ -35,7 +35,7 @@
       <SfAccordionItem v-if="categories" header="Category" class="sf-accordion">
         <ul class="ml-3" v-for="category in categories" :key="category">
           <li class="mb-3">
-            <a href="# ">{{ category }}</a>
+            {{ category }}
           </li>
         </ul>
       </SfAccordionItem>

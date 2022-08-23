@@ -22,7 +22,7 @@
             @searchChange="searchBox"
             @filterClicked="filterProducts"
             :filters="filters"
-            :categories="categories"
+            :categories="collectionList"
           />
         </div>
         <div class="p-3">
@@ -46,10 +46,10 @@
           {{ brand.name }}
         </h2>
         <div
-          class="rounded bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+          class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
-            class="my-auto max-h-40 rounded-l bg-light max-w-[25%]"
+            class="my-auto rounded-md max-h-40 bg-light max-w-[25%]"
             :src="brandImage || '/categories/empty_image.png'"
             alt=""
           />
@@ -233,7 +233,20 @@ export default {
         }
       });
       const industries = [...new Set(industry)];
+      console.log('insider', this.products);
       return industries;
+    },
+    collectionList() {
+      let collection = [];
+      this.products.forEach((product) => {
+        if (product.collections !== null) {
+          product.collections.forEach((c) => {
+            collection.push(c.name);
+          });
+        }
+      });
+      const collections = [...new Set(collection)];
+      return collections;
     },
     facetList() {
       let facet = [];
@@ -305,6 +318,9 @@ export default {
                       id
                       name
                       slug
+                      collections {
+                        name
+                      }
                       featuredAsset{
                         preview
                       }
@@ -350,15 +366,7 @@ export default {
       JSON.parse(getCms.value[3]?.content ?? '{}')
     );
     const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
-    const categories = [
-      'Laboratory equipment',
-      'Laboratiory Supplies',
-      'Water Quality Products',
-      'Test and Measurment',
-      'Heating and Cooling',
-    ];
     return {
-      categories,
       adSection,
       adImage,
     };
