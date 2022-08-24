@@ -22,6 +22,7 @@
       <div class="shadow-2xl rounded-lg w-2/10 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
+            @categoryClicked="emememe"
             @maxAdded="maxInput"
             @minAdded="minInput"
             @searchChange="searchBox"
@@ -307,6 +308,10 @@ export default {
         const index = this.filtersClicked.indexOf(event.id);
         this.filtersClicked.splice(index, 1);
       }
+    },
+    eeememe(event) {
+      console.log('yelolo');
+      console.log('emememe', event);
     },
     async getCategory() {
       const slug = this.$route.params.slug_1;

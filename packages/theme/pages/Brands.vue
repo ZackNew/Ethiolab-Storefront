@@ -20,6 +20,7 @@
             @maxAdded="maxInput"
             @minAdded="minInput"
             @searchChange="searchBox"
+            @categoryClicked="filterCategory"
             @filterClicked="filterProducts"
             :filters="filters"
             :categories="collectionList"
@@ -169,6 +170,7 @@ export default {
   },
   data() {
     return {
+      clickedCategory: '',
       open: false,
       A_Z: null,
       Z_A: null,
@@ -209,20 +211,22 @@ export default {
           const facetIndex = product.facetValues.findIndex((facet) =>
             filtersClicked.includes(facet.name)
           );
-
           return (
-            filtersClicked.includes(product.customFields.brand?.name) ||
             filtersClicked.includes(product.customFields.industry?.name) ||
             filtersClicked.includes(product.facetValues[facetIndex]?.name)
           );
         }
         return true;
       });
-
       if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
-
       if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));
-
+      // if (this.clickedCategory) {
+      //   filterProducts.filter((product) => {
+      //     product.collections.forEach((c) => {
+      //       return c.name === this.clickedCategory;
+      //     });
+      //   });
+      // }
       return filterProducts;
     },
     industryList() {
@@ -263,10 +267,6 @@ export default {
     filters() {
       return [
         {
-          filter_title: 'Brand',
-          filter_options: this.brandsList,
-        },
-        {
           filter_title: 'Industry',
           filter_options: this.industryList,
         },
@@ -294,6 +294,9 @@ export default {
         const index = this.filtersClicked.indexOf(event.id);
         this.filtersClicked.splice(index, 1);
       }
+    },
+    filterCategory(event) {
+      this.clickedCategory = event.id;
     },
     generateSortFn(prop, reverse) {
       return function (a, b) {

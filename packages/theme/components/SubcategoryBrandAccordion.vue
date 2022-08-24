@@ -35,7 +35,17 @@
       <SfAccordionItem v-if="categories" header="Category" class="sf-accordion">
         <ul class="ml-3" v-for="category in categories" :key="category">
           <li class="mb-3">
-            {{ category }}
+            <div class="form-check">
+              <input
+                class="form-check-input appearance-none rounded-full h-4 w-4 border border-primary bg-white checked:bg-secondary checked:border-primary focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                name="radioButtons-Category"
+                @change="categoryClicked"
+                type="radio"
+                :id="category"
+                :checked="false"
+              />
+              {{ category }}
+            </div>
           </li>
         </ul>
       </SfAccordionItem>
@@ -44,7 +54,6 @@
       v-for="filter in filters"
       :key="filter.filter_title"
       class="mb-2 px-2 accordion-bg"
-      transition=""
       open="all"
       showChevron
     >
@@ -110,6 +119,10 @@ export default {
     },
   },
   methods: {
+    categoryClicked(event) {
+      console.log('clicked');
+      this.$emit('categoryClicked', event.target);
+    },
     maxInput(event) {
       this.$emit('maxAdded', this.max);
     },
