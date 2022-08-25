@@ -1,6 +1,6 @@
 <template>
-    <div class="sf-header__navigation desktop" v-if="!isMobile">
-      <!-- <HeaderNavigationItem
+  <div class="sf-header__navigation desktop" v-if="!isMobile">
+    <!-- <HeaderNavigationItem
         v-for="(category, index) in categories"
         :key="index"
         class="nav-item"
@@ -8,14 +8,12 @@
         :label="category"
         :link="localePath(`/c/${category}`)"
       /> -->
-      <CategoriesSubNav/>
-      <BrandsSubNav/>
-      <IndustriesSubNav/>
-      <RequestQuoteSubNav />
-  
-     
-    </div>
-    
+    <CategoriesSubNav />
+    <IndustriesSubNav />
+    <BrandsSubNav />
+    <RequestQuoteSubNav />
+  </div>
+
   <!-- <SfModal v-else :visible="isMobileMenuOpen">
     <HeaderNavigationItem
       v-for="(category, index) in categories"
@@ -44,8 +42,6 @@ import IndustriesSubNav from './subnavs/IndustriesSubNav.vue';
 import CategoriesSubNav from './subnavs/CategoriesSubNav.vue';
 import RequestQuoteSubNav from './subnavs//RequestQuoteSubNav.vue';
 
-
-
 export default {
   name: 'HeaderNavigation',
   components: {
@@ -55,13 +51,13 @@ export default {
     BrandsSubNav,
     IndustriesSubNav,
     CategoriesSubNav,
-    RequestQuoteSubNav
-},
+    RequestQuoteSubNav,
+  },
   props: {
     isMobile: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   setup() {
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
@@ -70,9 +66,9 @@ export default {
     return {
       categories,
       isMobileMenuOpen,
-      toggleMobileMenu
+      toggleMobileMenu,
     };
-  }
+  },
 };
 </script>
 
@@ -97,7 +93,7 @@ export default {
   }
 }
 
-.sf-menu-item__label{
+.sf-menu-item__label {
   /* margin: auto !important; */
   // display: block !important;
   font-weight: bold !important;
