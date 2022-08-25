@@ -12,7 +12,7 @@
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          {{ categoryTreeMain}}
+          {{ categoryTreeMain ? categoryTreeMain:'Loading'}}
         </li>
       </ol>
     </nav>
@@ -575,7 +575,7 @@ export default {
       )
     );
     const categoryTreeMain = computed(() =>{
-        return categoryTree.value[0].label
+        return categoryTree.value[0]?.label
     }
       
     );
