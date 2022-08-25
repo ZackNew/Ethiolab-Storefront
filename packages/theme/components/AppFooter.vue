@@ -1,39 +1,39 @@
 <template>
   <SfFooter :column="4" multiple class="footer">
-    <SfFooterColumn :title="$t('About us')"  class="footer-column">
+    <SfFooterColumn :title="$t('About us')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-            <router-link to="/page/about" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Who we are')"
-              />
-            </router-link>
-          </SfListItem>
-          <SfListItem class="footer-list-item">
-            <router-link to="/page/quality" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Quality in the details')"
-              />
-            </router-link>
-          </SfListItem>
-          <SfListItem class="footer-list-item">
+          <router-link to="/page/about" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Who we are')"
+            />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/page/quality" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Quality in the details')"
+            />
+          </router-link>
+        </SfListItem>
+        <!-- <SfListItem class="footer-list-item">
             <router-link to="/page/reviews" exact>
               <SfMenuItem
                 class="sf-footer__menu-item"
                 :label="$t('Customer reviews')"
               />
             </router-link>
-          </SfListItem>
-          <SfListItem class="footer-list-item">
-            <router-link to="/pages/helpAndFAQ" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Help & FAQs')"
-              />
-            </router-link>
-          </SfListItem>
+          </SfListItem> -->
+        <SfListItem class="footer-list-item">
+          <router-link to="/pages/helpAndFAQ" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Help & FAQs')"
+            />
+          </router-link>
+        </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Departments')" class="footer-column">
@@ -43,92 +43,100 @@
           :key="item"
           class="footer-list-item"
         >
-          <SfMenuItem
-            :label="$t(item)"
-          />
+          <SfMenuItem :label="$t(item)" />
         </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Help')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-            <router-link to="/page/customer" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Customer service')"
-              />
-            </router-link>
-          </SfListItem>
-          <SfListItem class="footer-list-item">
-            <router-link to="/pages/contact" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Contact us')"
-              />
-            </router-link>
-          </SfListItem>
+          <router-link to="/page/customer" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Customer service')"
+            />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/pages/contact" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Contact us')"
+            />
+          </router-link>
+        </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Payment & Delivery')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-            <router-link to="/page/terms" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Purchase terms')"
-              />
-            </router-link>
-          </SfListItem>
-          <SfListItem class="footer-list-item">
-            <router-link to="/page/guarantee" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Guarantee')"
-              />
-            </router-link>
-          </SfListItem>
+          <router-link to="/page/terms" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Purchase terms')"
+            />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/page/guarantee" exact>
+            <SfMenuItem class="sf-footer__menu-item" :label="$t('Guarantee')" />
+          </router-link>
+        </SfListItem>
 
-            <SfListItem class="footer-list-item">
-            <router-link to="/policy" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Policy')"
-              />
-            </router-link>
-          </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/policy" exact>
+            <SfMenuItem class="sf-footer__menu-item" :label="$t('Policy')" />
+          </router-link>
+        </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn title="Social" class="footer-column">
       <div class="footer__socials">
-        <SfImage class="footer__social-image" v-for="item in social" :key="item" :src="'/icons/'+item+'.svg'" :alt="item" width="32" height="32" />
+        <SfImage
+          class="footer__social-image"
+          v-for="item in social"
+          :key="item"
+          :src="'/icons/' + item + '.svg'"
+          :alt="item"
+          width="32"
+          height="32"
+        />
       </div>
     </SfFooterColumn>
   </SfFooter>
 </template>
 
 <script>
-import { SfFooter, SfList, SfImage, SfMenuItem, SfInput } from '@storefront-ui/vue';
+import {
+  SfFooter,
+  SfList,
+  SfImage,
+  SfMenuItem,
+  SfInput,
+} from '@storefront-ui/vue';
 export default {
   components: {
     SfFooter,
     SfList,
     SfImage,
     SfMenuItem,
-    SfInput
+    SfInput,
   },
   data() {
     return {
       departments: ['Surgery', 'Medical Imagery', 'General Laboratory'],
       social: ['facebook', 'pinterest', 'google', 'twitter', 'youtube'],
       isMobile: false,
-      desktopMin: 1024
+      desktopMin: 1024,
     };
-  }
+  },
 };
 </script>
 
 <style lang="scss">
-.sf-footer__menu-item, .sf-footer-column__title,.footer-list-item{
+.sf-footer__menu-item,
+.sf-footer-column__title,
+.footer-list-item {
   background-color: inherit;
 }
 .footer {
@@ -153,7 +161,7 @@ export default {
     margin: 0 var(--spacer-2xs) 0 0;
   }
 }
-.sf-footer-column{
+.sf-footer-column {
   background-color: inherit;
 }
 .sf-footer {
@@ -170,7 +178,5 @@ export default {
       margin: 0 auto;
     }
   }
-
 }
-
 </style>
