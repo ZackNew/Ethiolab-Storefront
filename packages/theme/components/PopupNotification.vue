@@ -2,15 +2,17 @@
   <client-only>
     <SfModal class="modal" title="Request A Quote" @close="togglePopUp" :visible="JSON.parse(enablePopUp)"
              :persistent='false' overlay>
-      <template #modal-bar>
-        <div class="flex">
+      <template>
+        <div class="flex outer-container">
           <div class="lg:p-8 mx-3 my-auto">
             <div class="sf-heading__title uppercase tracking-wide text-5xl text-indigo-500 font-semibold  text-gray-800"
                v-html="popupContent.title || 'Title'">
             </div>
-            <p class="sf-heading__description mt-4 max-w-md text-slate-500" v-html="popupContent.description || 'kirubel'"></p>
-              <button class="w-2/5 bg-secondary m-5 h-8 text-white rounded-lg">{{popupContent.buttonText}}</button>
-
+            <p class="sf-heading__description text-justify mt-4 max-w-md text-slate-500" v-html="popupContent.description || 'kirubel'"></p>
+             <div class = 'flex justify-center'>
+                <button class="w-2/5  bg-secondary m-5 h-8 text-white rounded-lg">{{popupContent.buttonText}}</button>
+             </div>
+             
             <div class="mt-3">
               <input type="checkbox" v-model="disablePopUp" v-on:change="disablePopUpMethod()">
               <span class="sf-heading__description text-slate-500">Do not show this popup again</span>
@@ -59,6 +61,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.outer-container{
+  align-items: center;
+  justify-content: center;
+  // background-color: yellow;
+}
 .modal {
   display: flex;
   justify-content: center;
