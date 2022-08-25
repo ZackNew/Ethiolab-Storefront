@@ -31,6 +31,29 @@
       />
     </div>
     <!-- filter options -->
+    <SfAccordion class = 'px-2'    open="all" showChevron  >
+          <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
+            <ul class="ml-3" v-for="category in categories" :key="category">
+              <li class="mb-3">
+
+                <!-- <a href="# ">{{'df'+ category }}</a> -->
+           <input
+              v-on:click="(e)=>{
+                filterClicked(e)
+                checkOne(e)
+                }"
+              type="checkbox"
+              name="categories"
+              class="mr-4"
+              :checked="false"
+              :id="category"
+            />
+            {{ category }}              
+              
+              </li>
+            </ul>
+          </SfAccordionItem>
+        </SfAccordion>
     <SfAccordion
       v-for="filter in filters"
       :key="filter.filter_title"
@@ -39,14 +62,14 @@
       open="all"
       showChevron
     >
-      <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
+      <!-- <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
         <ul class="ml-3" v-for="category in categories" :key="category">
           <li class="mb-3">
-            <a href="# ">{{ category }}</a>
+            <a href="# ">{{'df'+ category }}</a>
           </li>
         </ul>
-      </SfAccordionItem>
-      <SfAccordionItem :header="filter.filter_title" class="sf-accordion -mb-4">
+      </SfAccordionItem> -->
+      <SfAccordionItem v-if="filter.filter_title!=='Categories'" :header="filter.filter_title" class="sf-accordion -mb-4">
         <ul v-for="list in filter.filter_options" :key="list">
           <li class="ml-3">
             <input
@@ -86,6 +109,12 @@ export default {
   methods: {
     sendChanges(event) {
       this.$emit('searchChange', event.target.value);
+    },
+    checkOne(checkbox) {
+    var checkboxes = document.getElementsByName('check')
+    checkboxes.forEach((item) => {
+        if (item !== checkbox) item.checked = false
+    })
     },
     filterClicked(event) {
       this.$emit('filterClicked', event.target);

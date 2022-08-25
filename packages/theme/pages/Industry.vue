@@ -23,6 +23,7 @@
             @searchChange="searchBox"
             @filterClicked="filterProducts"
             :filters="filters"
+            :categories="categoriesList"
           />
           <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
           <div class="flex mx-4">
