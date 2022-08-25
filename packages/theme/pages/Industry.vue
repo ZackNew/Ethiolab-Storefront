@@ -346,7 +346,7 @@ export default {
       this.search = event;
     },
     filterProducts(event) {
-      // console.log('filter button clicked ** ',event.id,event.checked)
+      console.log('filter button clicked ** ',event)
       if (event.checked) {
         this.filtersClicked.push(event.id);
       } else {

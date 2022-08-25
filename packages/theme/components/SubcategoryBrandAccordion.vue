@@ -39,8 +39,8 @@
                 <!-- <a href="# ">{{'df'+ category }}</a> -->
            <input
               v-on:click="(e)=>{
-                filterClicked(e)
-                checkOne(e)
+                checkOne(e,filterClicked)
+                
                 }"
               type="checkbox"
               name="categories"
@@ -110,10 +110,16 @@ export default {
     sendChanges(event) {
       this.$emit('searchChange', event.target.value);
     },
-    checkOne(checkbox) {
-    var checkboxes = document.getElementsByName('check')
+    checkOne(checkbox,filterClicked) {
+      filterClicked(checkbox)
+    var checkboxes = document.getElementsByName('categories')
     checkboxes.forEach((item) => {
-        if (item !== checkbox) item.checked = false
+        if (item.getAttribute('id') !== checkbox.target.getAttribute('id')){
+          if(item.checked){
+            item.click()
+            checkbox.target.click()
+          }
+        } 
     })
     },
     filterClicked(event) {
