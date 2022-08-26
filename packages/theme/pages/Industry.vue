@@ -22,10 +22,12 @@
           <SubcategoryBrandAccordion
             @searchChange="searchBox"
             @filterClicked="filterProducts"
+            @maxAdded="maxInput"
+            @minAdded="minInput"
             :filters="filters"
             :categories="categoriesList"
           />
-          <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
+          <!-- <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
           <div class="flex mx-4">
             <input
               v-model="low"
@@ -40,7 +42,7 @@
               type="number"
               placeholder="max..."
             />
-          </div>
+          </div> -->
         </div>
         <div class="p-3">
           <LazyHydrate>
@@ -62,11 +64,17 @@
         <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
           {{ industryName }}
         </h2>
-        <div class="card shadow-lg my-4 flex w-full mr-5">
-          <img class="h-36 w-auto my-auto bg-light" :src="industryImg" alt="" />
-          <div class="bg-faded_black custom-bg w-full">
-            <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
-          </div>
+        <div
+          class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+        >
+            <img
+              class="rounded-md my-auto max-h-40 bg-light max-w-[25%]"
+              :src="industryImg || '/categories/empty_image.png'"
+              alt=""
+            />
+            <div class="rounded w-full overflow-auto no-scrollbar">
+              <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
+            </div>
         </div>
         <div
           v-if="products.length === 0"
@@ -340,6 +348,12 @@ export default {
     },
     searchBox(event) {
       this.search = event;
+    },
+    maxInput(event) {
+      this.high = event;
+    },
+    minInput(event) {
+      this.low = event;
     },
     filterProducts(event) {
       console.log('filter button clicked ** ',event)

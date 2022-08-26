@@ -51,7 +51,7 @@
 
                 <div class="col-span-6 m-3 "> 
                   <h2>{{products && products.name}}</h2>
-                    <p class="font-semibold text-2xl">{{products && products.name}}</p>
+                    <!-- <p class="font-semibold text-2xl">{{products && products.name}}</p> -->
                     <!-- <P class="text-secondary mt-5"></P> -->
 
                     <div class="grid grid-cols-3">
