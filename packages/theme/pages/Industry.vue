@@ -320,10 +320,6 @@ export default {
           filter_title: 'Facet',
           filter_options: this.facetList,
         },
-                {
-          filter_title: 'Categories',
-          filter_options: this.categoriesList,
-        },
       ];
     },
   },

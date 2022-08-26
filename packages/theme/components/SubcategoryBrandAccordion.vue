@@ -3,7 +3,7 @@
     <p class="sf-heading__description m-4 font-xs mt-6">
       {{$t('search with in these results:')}}
     </p>
-    <div class="relative m-3">
+    <div class="relative m-2">
       <div
         class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
       >
@@ -58,18 +58,11 @@
       v-for="filter in filters"
       :key="$t(filter.filter_title)"
       class="mb-2 px-2 accordion-bg"
-      transition=""
       open="all"
       showChevron
     >
-      <!-- <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
-        <ul class="ml-3" v-for="category in categories" :key="category">
-          <li class="mb-3">
-            <a href="# ">{{'df'+ category }}</a>
-          </li>
-        </ul>
-      </SfAccordionItem> -->
-      <SfAccordionItem v-if="filter.filter_title!=='Categories'" :header="filter.filter_title" class="sf-accordion -mb-4">
+
+      <SfAccordionItem :header="filter.filter_title" class="sf-accordion -mb-4">
         <ul v-for="list in filter.filter_options" :key="list">
           <li class="ml-3">
             <input
@@ -84,6 +77,24 @@
         </ul>
       </SfAccordionItem>
     </SfAccordion>
+    <p class="text-xl mx-2 mt-2 mb-2">Price Range</p>
+    <div class="flex mx-4">
+      <input
+        v-model="min"
+        @input="minInput"
+        class="rounded border border-primary w-20"
+        type="number"
+        placeholder="min..."
+      />
+      <p class="mx-2">to</p>
+      <input
+        v-model="max"
+        @input="maxInput"
+        class="rounded border border-primary w-20"
+        type="number"
+        placeholder="max..."
+      />
+    </div>
   </div>
 </template>
 
@@ -96,6 +107,12 @@ export default {
     SfAccordion,
     SfSearchBar,
   },
+  data() {
+    return {
+      max: null,
+      min: null,
+    };
+  },
   props: {
     categories: {
       type: Array,
@@ -107,6 +124,16 @@ export default {
     },
   },
   methods: {
+    categoryClicked(event) {
+      console.log('clicked');
+      this.$emit('categoryClicked', event.target);
+    },
+    maxInput(event) {
+      this.$emit('maxAdded', this.max);
+    },
+    minInput(event) {
+      this.$emit('minAdded', this.min);
+    },
     sendChanges(event) {
       this.$emit('searchChange', event.target.value);
     },

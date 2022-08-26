@@ -1,5 +1,5 @@
 <template>
-  <div class="border-t mt-12">
+  <div class="mt-12">
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
@@ -17,31 +17,18 @@
         </li>
       </ol>
     </nav>
-    <div class="flex mt-4">
+    <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
       <div class="shadow-2xl rounded-lg w-2/10 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
+            @categoryClicked="emememe"
+            @maxAdded="maxInput"
+            @minAdded="minInput"
             @searchChange="searchBox"
             @filterClicked="filterProducts"
             :filters="filters"
           />
-          <p class="text-xl mx-4 mt-2 mb-2">{{$t('Price Range')}}</p>
-          <div class="flex mx-4">
-            <input
-              v-model="low"
-              class="rounded border border-primary w-12"
-              type="number"
-              :placeholder="$t('min')"
-            />
-            <p class="mx-2">{{$t('to')}}</p>
-            <input
-              v-model="high"
-              class="rounded border border-primary w-12"
-              type="number"
-              :placeholder="$t('max')"
-            />
-          </div>
         </div>
         <div class="p-3">
           <LazyHydrate>
@@ -63,13 +50,15 @@
         <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
           {{ categoryName }}
         </h2>
-        <div class="card shadow-lg my-4 flex mr-5">
+        <div
+          class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+        >
           <img
-            class="h-36 my-auto bg-light max-w-[25%]"
-            :src="categoryImg"
+            class="rounded-md my-auto max-h-40 bg-light max-w-[25%]"
+            :src="categoryImg || '/categories/empty_image.png'"
             alt=""
           />
-          <div class="bg-faded_black w-full">
+          <div class="rounded w-full overflow-auto no-scrollbar">
             <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
           </div>
         </div>
@@ -120,11 +109,25 @@
                 id="dropdown"
                 class="inset-0 relative flex flex-col z-10 w-44 bg-white border border-primary transform transition duration-300"
               >
-                <button @click="sortBtn" class="hover:bg-light_accent">
-                  {{$t('Name from A to Z')}}
+                <button
+                  @click="
+                    A_Z = true;
+                    Z_A = false;
+                    open = false;
+                  "
+                  class="hover:bg-light_accent"
+                >
+                  Name from A to Z
                 </button>
-                <button @click="sortBtn" class="hover:bg-light_accent">
-                  {{$t('Name from Z to A')}}
+                <button
+                  @click="
+                    A_Z = false;
+                    Z_A = true;
+                    open = false;
+                  "
+                  class="hover:bg-light_accent"
+                >
+                  Name from Z to A
                 </button>
               </div>
             </div>
@@ -280,11 +283,6 @@ export default {
     },
   },
   methods: {
-    sortBtn() {
-      this.A_Z = !this.A_Z;
-      this.Z_A = !this.Z_A;
-      this.open = !this.open;
-    },
     generateSortFn(prop, reverse) {
       return function (a, b) {
         if (a[prop].toLowerCase() < b[prop].toLowerCase())
@@ -297,6 +295,12 @@ export default {
     searchBox(event) {
       this.search = event;
     },
+    maxInput(event) {
+      this.high = event;
+    },
+    minInput(event) {
+      this.low = event;
+    },
     filterProducts(event) {
       if (event.checked) {
         this.filtersClicked.push(event.id);
@@ -304,6 +308,10 @@ export default {
         const index = this.filtersClicked.indexOf(event.id);
         this.filtersClicked.splice(index, 1);
       }
+    },
+    eeememe(event) {
+      console.log('yelolo');
+      console.log('emememe', event);
     },
     async getCategory() {
       const slug = this.$route.params.slug_1;
@@ -337,7 +345,6 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-
       let baseUrl = process.env.GRAPHQL_API
       const acat = await axios
         .post(baseUrl, body, options)
@@ -399,11 +406,9 @@ export default {
             );
             this.products = prod.data?.data?.products?.items;
           }
-
           this.loading = false;
           this.activeCategory = res.data?.data?.collection;
-           this.parent = res.data?.data?.collection?.parent?.slug;
-
+          this.parent = res.data?.data?.collection?.parent?.slug;
           this.categoryName = res.data?.data?.collection?.name;
           this.categoryImg = res.data?.data?.collection?.featuredAsset?.preview;
           this.description = res.data?.data?.collection?.description;
@@ -437,4 +442,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>

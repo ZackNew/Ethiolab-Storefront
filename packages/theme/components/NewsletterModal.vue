@@ -1,9 +1,5 @@
 <template>
-  <SfModal
-    :visible="isNewsletterModalOpen"
-    class="modal"
-    @close="closeModal"
-  >
+  <SfModal :visible="isNewsletterModalOpen" class="modal" @close="closeModal">
     <template #modal-bar>
       <SfBar
         class="modal__title smartphone-only subs"
@@ -19,25 +15,29 @@
           :title="$t('Subscribe to newsletter')"
           class="modal__title desktop-only"
         />
-        <form @submit.prevent="$emit('email-submitted', emailAddress)">
+        <form @submit.prevent="emailSubmitted">
           <SfInput
             type="email"
             :label="$t('Email address')"
             v-model="emailAddress"
             class="modal__input"
           />
-          <SfButton class="modal__button  confirm_btn" type="submit">
+          <SfButton class="modal__button confirm_btn" type="submit">
             I confirm subscription
           </SfButton>
         </form>
-        <SfHeading
-          description="You can unsubscribe at any time"
-          :level="3"
-        />
-        <SfScrollable maxContentHeight="3.75rem" :class="{ 'is-open text-center': !isHidden }">
-<!--          <i18n tag="p"  class="modal__content" path="subscribeToNewsletterModalContent">-->
-            <SfLink v-if="!isHidden"  link="https://www.etechsc.com/privacy-policy">{{ $t('Privacy Policy') }}</SfLink>
-<!--          </i18n>-->
+        <SfHeading description="You can unsubscribe at any time" :level="3" />
+        <SfScrollable
+          maxContentHeight="3.75rem"
+          :class="{ 'is-open text-center': !isHidden }"
+        >
+          <!--          <i18n tag="p"  class="modal__content" path="subscribeToNewsletterModalContent">-->
+          <SfLink
+            v-if="!isHidden"
+            link="https://www.etechsc.com/privacy-policy"
+            >{{ $t('Privacy Policy') }}</SfLink
+          >
+          <!--          </i18n>-->
           <template #view-all>
             <SfButton
               class="sf-button--text sf-scrollable__view-all desktop-only"
@@ -52,7 +52,15 @@
   </SfModal>
 </template>
 <script>
-import { SfModal, SfHeading, SfInput, SfButton, SfScrollable, SfBar, SfLink } from '@storefront-ui/vue';
+import {
+  SfModal,
+  SfHeading,
+  SfInput,
+  SfButton,
+  SfScrollable,
+  SfBar,
+  SfLink,
+} from '@storefront-ui/vue';
 import { ref } from '@nuxtjs/composition-api';
 import { useUiState } from '~/composables';
 
@@ -65,7 +73,16 @@ export default {
     SfButton,
     SfScrollable,
     SfBar,
-    SfLink
+    SfLink,
+  },
+  methods: {
+    emailSubmitted(event) {
+      this.$emit('email-submitted', {
+        emailAddress: this.emailAddress,
+        event: event,
+      });
+      this.emailAddress = '';
+    },
   },
   setup() {
     const { isNewsletterModalOpen, toggleNewsletterModal } = useUiState();
@@ -82,17 +99,16 @@ export default {
       toggleNewsletterModal,
       isHidden,
       emailAddress,
-      closeModal
+      closeModal,
     };
-  }
-
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.confirm_btn{
-   color: white;
-   background-color: var(--c-primary);
+.confirm_btn {
+  color: white;
+  background-color: var(--c-primary);
 }
 .modal {
   display: flex;
@@ -116,5 +132,4 @@ export default {
     font-weight: var(--font-weight--light);
   }
 }
-
 </style>
