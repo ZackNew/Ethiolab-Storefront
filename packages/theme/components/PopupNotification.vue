@@ -2,15 +2,16 @@
   <client-only>
     <SfModal class="modal" title="Request A Quote" @close="togglePopUp" :visible="JSON.parse(enablePopUp)"
              :persistent='false' overlay>
+      <img class = 'popup-img' :src='popupContent.preview'  alt ='image'/>
       <template>
         <div class="flex outer-container">
           <div class="lg:p-8 mx-3 my-auto">
             <div class="sf-heading__title uppercase tracking-wide text-5xl text-indigo-500 font-semibold  text-gray-800"
-               v-html="popupContent.title || 'Title'">
+               v-html="popupContent.content.title || 'Title'">
             </div>
-            <p class="sf-heading__description text-justify mt-4 max-w-md text-slate-500" v-html="popupContent.description || 'kirubel'"></p>
-             <div class = 'flex justify-center'>
-                <button class="w-2/5  bg-secondary m-5 h-8 text-white rounded-lg">{{popupContent.buttonText}}</button>
+            <p class="sf-heading__description text-justify mt-4 max-w-md text-slate-500" v-html="popupContent.content.description || 'kirubel'"></p>
+             <div class = 'flex justify-start'>
+                <button class="w-2/5  bg-secondary my-5 h-8 text-white rounded-lg">{{popupContent.content.buttonText}}</button>
              </div>
              
             <div class="mt-3">
@@ -39,8 +40,21 @@ export default {
     const {enablePopUp, togglePopUp} = useUiState();
     const disablePopUp = ref(false);
     const {getCms} = useCms();
-    const popup = getCms.value.filter((item)=>item?.cmsType==='POPUP').map(filteredObj => filteredObj.content);
-   const popupContent= JSON.parse(popup);
+    const popup = getCms.value.filter((item)=>item?.cmsType==='POPUP').map(filteredObj => {
+      
+      return {
+        content:filteredObj.content,
+        preview:filteredObj.featuredAsset?.preview
+      }
+      });
+    console.log("pop up *****",popup)
+    let contentParsed = JSON.parse(popup[0].content)
+    let content = {
+      content:contentParsed,
+      preview:popup[0].preview
+    }
+   const popupContent= content
+   console.log("pop up content *****",popupContent)
     const {isMobileMenuOpen} = useUiState();
     const disablePopUpMethod = () => {
       if (disablePopUp.value) {
@@ -64,7 +78,16 @@ export default {
 .outer-container{
   align-items: center;
   justify-content: center;
-  // background-color: yellow;
+  background-color: transparent;
+  // padding: 190px !important;
+}
+.popup-img{
+  width: 100%;
+  top:0;
+  left:0;
+  height: 100%;
+  position: absolute;
+  z-index:-3423
 }
 .modal {
   display: flex;

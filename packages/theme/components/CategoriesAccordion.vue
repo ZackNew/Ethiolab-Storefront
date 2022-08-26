@@ -16,7 +16,7 @@
                   <nuxt-link
                     :to="'/c/' + category.slug"
                     :class="
-                      category.isCurrent ? 'sidebar--cat-selected' : 'mb-3 '
+                      category.isCurrent ? 'sidebar--cat-selected cl ' : 'mb-3 cl '
                     "
                     @click.native="closeSideNav()"
                   >
@@ -34,7 +34,7 @@
                 <template #label="{ label }">
                   <nuxt-link
                     :to="'/s/' + subCat.slug"
-                    :class="subCat.isCurrent ? 'sidebar--cat-selected' : 'mb-3'"
+                    :class="subCat.isCurrent ? 'sidebar--cat-selected cl ' : 'mb-3 cl '"
                     @click.native="closeSideNav()"
                   >
                     {{ label }}
@@ -111,7 +111,10 @@ export default {
 .accordion {
   font-family:var(--font-family--secondary) ;
   --accordion-item-header-font: 10px;
-  --accordion-item-header-color: var(--c-primary);
+  --accordion-item-header-color: var(--c-secondary);
   --accordion-item-content-font-size: 5px;
+}
+.cl{
+  color:var(--c-secondary)
 }
 </style>

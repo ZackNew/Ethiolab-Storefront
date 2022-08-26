@@ -4,6 +4,7 @@
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
+    <!-- <p>{{breadcrumbs}}</p> -->
     <div class="product">
       <LazyHydrate when-idle>
         <SfGallery

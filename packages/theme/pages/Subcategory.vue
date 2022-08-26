@@ -304,6 +304,7 @@ export default {
             collection(slug: $slug){
               parent{
                 name
+                slug
               }
               name
               featuredAsset{
@@ -391,7 +392,7 @@ export default {
           }
 
           this.aCat = res.data?.data?.collection;
-          this.parent = res.data?.data?.collection?.parent?.name;
+          this.parent = res.data?.data?.collection?.parent?.slug;
           this.categoryName = res.data?.data?.collection?.name;
           this.categoryImg = res.data?.data?.collection?.featuredAsset?.preview;
           this.description = res.data?.data?.collection?.description;
