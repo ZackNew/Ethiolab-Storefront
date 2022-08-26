@@ -78,6 +78,14 @@ export default {
         addVisible.value = false
         showDetail.value=true
         cTitle.value=title
+        let a = ''
+        a.len
+        disc = disc.replace(/<[^>]+>/g, '');
+        if(disc.length>120){
+          disc=disc.slice(0,120)
+          disc+=' ...'
+          // disc = disc.replace(/<[^>]+>/g, '');
+        }
         cDisc.value=disc
         cPrev.value=prev
       
