@@ -322,8 +322,9 @@ export default {
         },
       };
       console.log('you sussessfullay suscribed');
+      let baseUrl = process.env.GRAPHQL_API
       axios
-        .post('http://localhost:3000/shop-api', body, options)
+        .post(baseUrl, body, options)
         .then((res) => {
           if (res.status === 200) showToast('Subscribed!');
         })
