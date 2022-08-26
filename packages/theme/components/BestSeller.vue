@@ -2,14 +2,14 @@
   <div>
   <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
       <div class="p-20">
-        <div data-aos="slide-left" class="w-full h-24 bg-primary p-20
+        <div data-aos="fade-left" class="w-full h-24 bg-primary p-20
             before:content-[''] before:mr-8 before:mb-2 before:w-1/4 before:h-2 before:bg-dark_gray before:inline-block
                   after:content-[''] after:ml-8 after:mb-2 after:w-1/4 after:h-2 after:bg-dark_gray after:inline-block
             ">
             <span class="text-4xl text-white w-1/2 justify-center">Best Seller</span>
         </div>
     </div>
-    <div class="grid grid-cols-3 gap-10 mt-10 mb-10" data-aos="slide-up" >
+    <div class="grid grid-cols-3 gap-10 mt-10 mb-10" data-aos="fade-left" >
 
       <div v-for="category in categories" :key="category.title">
           <BestSellerSingle :title="category.title" :image="category.image" />

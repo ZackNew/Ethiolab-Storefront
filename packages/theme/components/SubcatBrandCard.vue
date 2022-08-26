@@ -22,7 +22,7 @@
       </p>
       <button class="mb-4">
         <nuxt-link
-          class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
+          class="mx-10 bg-dark text-white font-bold py-2 px-4 rounded"
           :to="'/v/' + product.slug"
         >
           {{$t('View All')}}
