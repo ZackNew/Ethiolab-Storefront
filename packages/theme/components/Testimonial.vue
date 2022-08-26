@@ -109,6 +109,8 @@ export default {
 
 .testimonies{
   color:var(--c-primary);
+  font-family: 'Josefin Sans', sans-serif;
+   --font-family--primary:'Josefin Sans', sans-serif
 }
 </style>
 

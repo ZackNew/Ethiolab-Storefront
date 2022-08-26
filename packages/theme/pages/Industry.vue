@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-12">
+  <div class="border-t mt-12">
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
@@ -8,27 +8,41 @@
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" :to="`/c/${parent}`">
-            {{ parent }}
-          </nuxt-link>
+          {{ 'Industries' }}
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          {{ categoryName }}
+          {{ industryName }}
         </li>
       </ol>
     </nav>
-    <div class="flex mt-6">
+    <div class="flex mt-4">
       <!-- Side filter search or an Ad -->
       <div class="shadow-2xl rounded-lg w-2/10 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
-            @categoryClicked="emememe"
-            @maxAdded="maxInput"
-            @minAdded="minInput"
             @searchChange="searchBox"
             @filterClicked="filterProducts"
+            @maxAdded="maxInput"
+            @minAdded="minInput"
             :filters="filters"
+            :categories="categoriesList"
           />
+          <!-- <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
+          <div class="flex mx-4">
+            <input
+              v-model="low"
+              class="rounded border border-primary w-12"
+              type="number"
+              placeholder="min..."
+            />
+            <p class="mx-2">to</p>
+            <input
+              v-model="high"
+              class="rounded border border-primary w-12"
+              type="number"
+              placeholder="max..."
+            />
+          </div> -->
         </div>
         <div class="p-3">
           <LazyHydrate>
@@ -48,23 +62,23 @@
       <!-- Subcategory name and description -->
       <div class="ml-6 w-full">
         <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
-          {{ categoryName }}
+          {{ industryName }}
         </h2>
         <div
           class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
-          <img
-            class="rounded-md my-auto max-h-40 min-h-40 bg-light max-w-[25%]"
-            :src="categoryImg || '/categories/empty_image.png'"
-            alt=""
-          />
-          <div class="rounded w-full overflow-auto no-scrollbar">
-            <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
-          </div>
+            <img
+              class="rounded-md my-auto max-h-40 bg-light max-w-[25%]"
+              :src="industryImg || '/categories/empty_image.png'"
+              alt=""
+            />
+            <div class="rounded w-full overflow-auto no-scrollbar">
+              <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
+            </div>
         </div>
         <div
-          v-if="filteredSearchedProducts.length === 0 && !loading"
-          class="border border-light_accent shadow-md bg-white rounded-lg w-full"
+          v-if="products.length === 0"
+          class="border border-light_accent shadow-md bg-white rounded-lg"
         >
           <div class="justify-end">
             <div class="flex flex-col items-center py-10">
@@ -75,7 +89,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="flex card mr-5 w-full h-12 bg-light_accent">
+          <div class="flex card mr-5 w-auto h-12 bg-light_accent border-b-2">
             <p class="pt-3 mx-3">
               Number of Results | {{ Object.keys(products).length }}
             </p>
@@ -83,7 +97,7 @@
               <button
                 id="dropdownDefault"
                 data-dropdown-toggle="dropdown"
-                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:scale-105 font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-48"
+                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:scale-105 font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
                 type="button"
                 @click="open = !open"
               >
@@ -107,46 +121,29 @@
               <div
                 v-if="open"
                 id="dropdown"
-                class="inset-0 relative flex flex-col z-10 w-48 bg-white border border-primary transform transition duration-300"
+                class="inset-0 relative flex flex-col z-10 w-44 bg-white border border-primary transform transition duration-300"
               >
-                <button
-                  @click="
-                    A_Z = true;
-                    Z_A = false;
-                    open = false;
-                  "
-                  class="hover:bg-light_accent"
-                >
+                <button @click="sortBtn" class="hover:bg-light_accent">
                   Name from A to Z
                 </button>
-                <button
-                  @click="
-                    A_Z = false;
-                    Z_A = true;
-                    open = false;
-                  "
-                  class="hover:bg-light_accent"
-                >
+                <button @click="sortBtn" class="hover:bg-light_accent">
                   Name from Z to A
                 </button>
               </div>
             </div>
           </div>
-          <div v-if="loading">
-            <img
-              class="mt-16 w-20 h-20 mx-auto"
-              src="~/assets/Loading_icon.gif"
-              alt=""
-            />
-          </div>
           <!-- Products -->
-          <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
-          <!-- <div
+          <SubcatBrandCard
+            :filteredProducts="filteredSearchedProducts"
+            class="border-b"
+          />
+
+          <div
             style="background-color: #e2e5de"
             class="card mr-16 ml-4 mt-5 w-auto h-12"
           >
             <p class="float-left pt-3 ml-3">Showing 1-10 of 10</p>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -176,7 +173,6 @@ export default {
   },
   data() {
     return {
-      loading: true,
       low: '',
       high: '',
       A_Z: null,
@@ -184,11 +180,11 @@ export default {
       open: false,
       filtersClicked: [],
       search: '',
-      categoryName: null,
+      industryName: null,
       products: [],
       parent: null,
-      activeCategory: null,
-      categoryImg: null,
+      aCat: null,
+      industryImg: null,
       description: null,
     };
   },
@@ -220,19 +216,58 @@ export default {
             filtersClicked.includes(facet.name)
           );
 
+          let matchFound = false
+          if(product.collections.length>0){
+            for (let collection of product.collections){
+              matchFound =  filtersClicked.includes(collection.name)
+              // console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
+              if(matchFound){
+                break
+              }
+            }
+          }else{
+            matchFound= false
+          }
+          // console.log('product match found collection clicked',product,matchFound,product.collections,filtersClicked)
           return (
             filtersClicked.includes(product.customFields.brand?.name) ||
-            filtersClicked.includes(product.customFields.industry?.name) ||
-            filtersClicked.includes(product.facetValues[facetIndex]?.name)
+            filtersClicked.includes(product.facetValues[facetIndex]?.name) ||
+            matchFound
           );
         }
         return true;
       });
 
+
+      // console.log('running again **',filtersClicked,filtersClicked.length)
+      // let filteredBasedOnCategory = filterProducts.filter(product=>{
+      //   // console.log('product***',product,filtersClicked)
+        
+      //   if(filtersClicked.length>0){
+      //     console.log('running now **')
+      //     // console.log('product vs filters ** ',product.collections,filtersClicked)
+      //     if(product.collections.length>0){
+      //       for (let collection of product.collections){
+      //         let matchFound =  filtersClicked.includes(collection.name)
+      //         console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
+      //         if(matchFound){
+      //           return true
+      //         }
+      //       }
+      //       return false
+      //     }else{
+      //       return true
+      //     }
+      //   }else{
+      //     return true
+      //   }
+
+      //   return true
+      // })
       if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
 
       if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));
-
+      // console.log('all clicked filters',filtersClicked)
       return filterProducts;
     },
     brandsList() {
@@ -253,6 +288,24 @@ export default {
       const industries = [...new Set(industry)];
       return industries;
     },
+    categoriesList() {
+      let categories = [];
+      this.products.forEach((element) => {
+        // console.log("category names before loop ****", element.collections)
+        if (element.collections.length >0) {
+          for (let cat in element.collections){
+            // console.log("category names in loop ****",element.collections[cat].name)
+            if(!categories.includes(element.collections[cat].name)){
+              categories.push(element.collections[cat].name);
+            }
+            
+          }
+          
+        }
+      });
+      categories = [...new Set(categories)];
+      return categories;
+    },
     facetList() {
       let facet = [];
       this.products.forEach((element) => {
@@ -272,10 +325,6 @@ export default {
           filter_options: this.brandsList,
         },
         {
-          filter_title: 'Industry',
-          filter_options: this.industryList,
-        },
-        {
           filter_title: 'Facet',
           filter_options: this.facetList,
         },
@@ -283,6 +332,11 @@ export default {
     },
   },
   methods: {
+    sortBtn() {
+      this.A_Z = !this.A_Z;
+      this.Z_A = !this.Z_A;
+      this.open = !this.open;
+    },
     generateSortFn(prop, reverse) {
       return function (a, b) {
         if (a[prop].toLowerCase() < b[prop].toLowerCase())
@@ -302,6 +356,7 @@ export default {
       this.low = event;
     },
     filterProducts(event) {
+      console.log('filter button clicked ** ',event)
       if (event.checked) {
         this.filtersClicked.push(event.id);
       } else {
@@ -309,18 +364,32 @@ export default {
         this.filtersClicked.splice(index, 1);
       }
     },
-    eeememe(event) {
-      console.log('yelolo');
-      console.log('emememe', event);
-    },
     async getCategory() {
-      const slug = this.$route.params.slug_1;
+    //   const slug = this.$route.params.slug_1;
+      let body2 = {
+        query:`query getIndustryById($id:ID){
+                    industry(id:$id){
+                        name
+                        description
+                        icon{
+                            preview
+                        }
+                        products{
+                            id
+                        }
+                        id
+                    }
+                    }`,
+        variables : {
+            id:this.$route.params.id
+        }
+      }
+
       const body = {
         query: `query getCategoryBySlug($slug: String!){
             collection(slug: $slug){
               parent{
                 name
-                slug
               }
               name
               featuredAsset{
@@ -336,7 +405,7 @@ export default {
             }
           }`,
         variables: {
-          slug: slug,
+        //   slug: slug,
         },
       };
       const options = {
@@ -345,22 +414,17 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      let baseUrl = process.env.GRAPHQL_API;
+      let baseUrl = process.env.GRAPHQL_API
       const acat = await axios
-        .post(baseUrl, body, options)
+        .post(baseUrl, body2, options)
         .then(async (res) => {
-          if (
-            res.data?.data?.collection?.filters[0]?.args[0].name ===
-            'productIds'
-          ) {
-            const productIdString = JSON.parse(
-              res.data?.data?.collection?.filters[0]?.args[0].value
-            );
-
+          if (res.data?.data?.industry.products.length > 0) {
+            const productIdString = res.data.data.industry.products.map(product_object=>{
+                return product_object.id
+            })
             const productId = productIdString.map((num) => {
               return String(num);
             });
-            console.log('****', productId);
             let pbody = {
               query: `query getProductById($in: [String!]) {
                         products(options: {filter: {id: {in: $in}}}) {
@@ -369,6 +433,9 @@ export default {
                             id
                             slug
                             description
+                            collections{
+                              name
+                              }
                             variants {
                               price
                             }
@@ -399,15 +466,19 @@ export default {
                 'Access-Control-Allow-Origin': '*',
               },
             };
-            var prod = await axios.post(baseUrl, pbody, poptions);
+            var prod = await axios.post(
+              baseUrl,
+              pbody,
+              poptions
+            );
             this.products = prod.data?.data?.products?.items;
           }
-          this.loading = false;
-          this.activeCategory = res.data?.data?.collection;
-          this.parent = res.data?.data?.collection?.parent?.slug;
-          this.categoryName = res.data?.data?.collection?.name;
-          this.categoryImg = res.data?.data?.collection?.featuredAsset?.preview;
-          this.description = res.data?.data?.collection?.description;
+
+          this.aCat = res.data?.data?.collection;
+          this.parent = res.data?.data?.collection?.parent?.name;
+          this.industryName = res.data?.data?.industry?.name;
+          this.industryImg = res.data?.data?.industry?.icon?.preview;
+          this.description = res.data?.data?.industry?.description;
         });
     },
   },
@@ -438,8 +509,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-</style>
+<style></style>

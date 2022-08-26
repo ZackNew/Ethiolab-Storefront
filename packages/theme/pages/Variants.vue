@@ -1,5 +1,29 @@
 <template>
+
   <div> 
+        <!-- <SfBreadcrumbs
+          class="breadcrumbs desktop-only"
+          :breadcrumbs="breadcrumbs"
+         />
+         <p>{{breadcrumbs}}</p> -->
+         <!-- <p>{{product[0].collections[0].breadcrumbs}}</p> -->
+        <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+      <ol class="sf-breadcrumbs__list">
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+            Home
+          </nuxt-link>
+        </li>
+        <!-- <li  class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb" :to="`/c/${getMainCategory || ''}`">
+            {{ getMainCategory|| '' }}
+          </nuxt-link>
+        </li> -->
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+         {{products && products.name}}
+        </li>
+      </ol>
+    </nav>
             <div class="grid grid-cols-12 "> 
                - <div class="col-span-5 m-3">
                     <LazyHydrate when-idle>
@@ -26,7 +50,8 @@
 
 
                 <div class="col-span-6 m-3 "> 
-                    <p class="font-semibold text-2xl">{{products && products.name}}</p>
+                  <h2>{{products && products.name}}</h2>
+                    <!-- <p class="font-semibold text-2xl">{{products && products.name}}</p> -->
                     <!-- <P class="text-secondary mt-5"></P> -->
 
                     <div class="grid grid-cols-3">
@@ -156,7 +181,7 @@
 </template>
 
 <script>
-import { defineComponent, onBeforeMount, onMounted } from '@vue/composition-api'
+import { defineComponent, onBeforeMount, onMounted, ref } from '@vue/composition-api'
 import { useCategory, categoryGetters , useProduct, productGetters} from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core'
 import {computed} from "@vue/composition-api";
@@ -186,18 +211,23 @@ import {
 export default defineComponent({
    components: {
     SfGallery,
-    LazyHydrate
+    LazyHydrate,
+    SfBreadcrumbs
    },
     setup() {
 
         let maxPrice='';
         let minPrice='';
+        let mainCategory = ''
+
 
          const { products, search, loading, error } = useProduct('<UNIQUE_ID>');
         //  const {featuredAsset} = products.value;
         // const productImage = computed(() => products.value?.assets[0]?.preview); 
 
-         
+        let getMainCategory = computed(()=>{
+          return mainCategory
+        })         
         const th = useUiHelpers();
          const lastSlug = th.getLastSlugFromParams();
          console.log("the lastslug value is ", lastSlug)
@@ -218,9 +248,34 @@ export default defineComponent({
 
 
             const product = computed(() => productGetters.getByFilters(products.value));
-            const option = computed(() => productGetters.getOptions(products.value))
-            const configuration = computed(() => productGetters.getCategoryIds(product.value))
+            const breadcrumbs = computed(() => {
+             let temp =  productGetters.getBreadcrumbs(product.value)
+             let path = [{ "text": "Home", "link": "/" }]
+             if(temp.length>1){
+              temp.forEach(cat=>{
+                if(cat.name === "__root_collection__"){
+ 
+                }else{
+                 path.push({
+                    "text":cat.name,
+                    "link":`c/${cat.slug}`
+                  })
+                }
 
+              })
+
+             }else{
+              path.push({
+                'text':products && products.name,
+                'link':`c/${products && products.slug}`
+              })
+             }
+             return path
+    });
+            const option = computed(() => productGetters.getOptions(products.value))
+            
+            const configuration = computed(() => productGetters.getCategoryIds(product.value))
+            
                 const productGallery = computed(() =>
                   productGetters.getAllGallery(products.value)
                   .map((img) => ({
@@ -255,6 +310,8 @@ export default defineComponent({
     onMounted(() => {
         console.log("the product value is ", product.value)
         console.log("the option value is ", option.value)
+        // mainCategory=product[0].collections[0].breadcrumbs[1].slug
+        mainCategory=product.value
                 console.log("the productsss  id value is ", products.value.id)
                 console.log("configuration value is ", configuration.value)
                 //   console.log("the productsss image value is ", products.value.assets[0].preview)
@@ -272,6 +329,9 @@ export default defineComponent({
             products,
             product,
             option,
+            breadcrumbs,
+            getMainCategory,
+            mainCategory,
             configuration,
             minPrice,
             maxPrice,

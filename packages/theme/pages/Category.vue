@@ -4,6 +4,18 @@
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
+    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+      <ol class="sf-breadcrumbs__list">
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+            Home
+          </nuxt-link>
+        </li>
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          {{ categoryTreeMain ? categoryTreeMain : 'Loading' }}
+        </li>
+      </ol>
+    </nav>
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
         <LazyHydrate never>
@@ -156,7 +168,11 @@
             >
               <div class="h-40 bg-bg_dark grid grid-cols-3">
                 <img
-                  :src="cat.featuredAsset.preview || '/categories/cat2.jpeg'"
+                  :src="
+                    cat.featuredAsset
+                      ? cat.featuredAsset.preview
+                      : '/categories/cat2.jpeg'
+                  "
                   class="h-40"
                 />
                 <div
@@ -194,13 +210,15 @@
                         <h4 class="">{{ sub.label }}</h4>
                       </div>
                       <nuxt-link :to="`/s/${sub.slug}`">
-                           <img
-                        v-if="sub.featuredAsset"
-                        :src="sub.featuredAsset.preview"
-                        class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
-                      />
+                        <img
+                          :src="
+                            sub.featuredAsset
+                              ? sub.featuredAsset.preview
+                              : '/categories/empty_image.png'
+                          "
+                          class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
+                        />
                       </nuxt-link>
-                   
                     </div>
                   </div>
                   <!-- </div> -->
@@ -228,18 +246,19 @@
 
           <div class="grid grid-cols-3 gap-10">
             <div class="card shadow-lg my-3 ml-2" v-for="i in 3" :key="i">
-            <nuxt-link to="#">
-              <img src="/categories/empty_image.png" alt="" class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"/>
-
-            </nuxt-link>
-              <h4 class="text-center font-serif m-3">
-                $925.00
-              </h4>
+              <nuxt-link to="#">
+                <img
+                  src="/categories/empty_image.png"
+                  alt=""
+                  class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
+                />
+              </nuxt-link>
+              <h4 class="text-center font-serif m-3">$925.00</h4>
               <p class="text-center m-3">description</p>
               <button
                 class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
               >
-                View All
+                {{ $t('View All') }}
               </button>
             </div>
           </div>
@@ -273,13 +292,7 @@
               :show-add-to-cart-button="true"
               :isInWishlist="isInWishlist({ product })"
               :isAddedToCart="isInCart({ product })"
-              :link="
-                localePath(
-                  `/v/${productGetters.getSlug(
-                    product
-                  )}`
-                )
-              "
+              :link="localePath(`/v/${productGetters.getSlug(product)}`)"
               class="products__product-card"
               @click:wishlist="
                 !isInWishlist({ product })
@@ -488,7 +501,15 @@ import {
   SfProperty,
 } from '@storefront-ui/vue';
 import { ref, computed, onMounted } from '@vue/composition-api';
-import { useCategory,useCart, useWishlist, productGetters, useFacet, facetGetters,categoryGetters } from '@vue-storefront/vendure';
+import {
+  useCategory,
+  useCart,
+  useWishlist,
+  productGetters,
+  useFacet,
+  facetGetters,
+  categoryGetters,
+} from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import { getTreeWithoutEmptyCategories } from '~/helpers';
 import { onSSR } from '@vue-storefront/core';
@@ -555,14 +576,18 @@ export default {
         return tree;
       })
     );
+
     console.log('row category value is ', rawCategoryTree.value);
     const categoryTree = computed(() =>
       getTreeWithoutEmptyCategories(rawCategoryTree.value).filter(
         (cat) => cat.slug === lastSlug || cat.isCurrent === true
       )
     );
+    const categoryTreeMain = computed(() => {
+      return categoryTree.value[0]?.label;
+    });
     // categoryTree.filter((cat) => cat.slug === lastSlug);
-    console.log('category tree is ', categoryTree.value);
+    console.log('category tree is ', categoryTree);
     const activeCategory = computed(() => {
       const items = categoryTree.value;
       // console.log("items value is ", items[0]?.label)
@@ -586,7 +611,7 @@ export default {
     console.log(rawCategoryTree);
     console.log('category Tree');
     console.log(categoryTree.value);
-    console.log("loading value ", loading)
+    console.log('loading value ', loading);
     const selectedFilters = ref({});
     const setSelectedFilters = () => {
       if (!facets.value.length || Object.keys(selectedFilters.value).length)
@@ -656,6 +681,7 @@ export default {
       activeCategory,
       sortBy,
       facets,
+      categoryTreeMain,
       breadcrumbs,
       addItemToWishlist,
       removeItemFromWishlist,
@@ -701,7 +727,7 @@ export default {
 #category {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 1240px;
+    max-width: 90%;
     margin: 0 auto;
   }
 }

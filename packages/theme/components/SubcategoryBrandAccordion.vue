@@ -1,9 +1,9 @@
 <template>
   <div class="m-2">
     <p class="sf-heading__description m-4 font-xs mt-6">
-      search with in these results:
+      {{$t('search with in these results:')}}
     </p>
-    <div class="relative m-3">
+    <div class="relative m-2">
       <div
         class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
       >
@@ -31,21 +31,37 @@
       />
     </div>
     <!-- filter options -->
+    <SfAccordion class = 'px-2'    open="all" showChevron  >
+          <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
+            <ul class="ml-3" v-for="category in categories" :key="category">
+              <li class="mb-3">
+
+                <!-- <a href="# ">{{'df'+ category }}</a> -->
+           <input
+              v-on:click="(e)=>{
+                checkOne(e,filterClicked)
+                
+                }"
+              type="checkbox"
+              name="categories"
+              class="mr-4"
+              :checked="false"
+              :id="category"
+            />
+            {{ category }}              
+              
+              </li>
+            </ul>
+          </SfAccordionItem>
+        </SfAccordion>
     <SfAccordion
       v-for="filter in filters"
-      :key="filter.filter_title"
+      :key="$t(filter.filter_title)"
       class="mb-2 px-2 accordion-bg"
-      transition=""
       open="all"
       showChevron
     >
-      <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
-        <ul class="ml-3" v-for="category in categories" :key="category">
-          <li class="mb-3">
-            <a href="# ">{{ category }}</a>
-          </li>
-        </ul>
-      </SfAccordionItem>
+
       <SfAccordionItem :header="filter.filter_title" class="sf-accordion -mb-4">
         <ul v-for="list in filter.filter_options" :key="list">
           <li class="ml-3">
@@ -61,6 +77,24 @@
         </ul>
       </SfAccordionItem>
     </SfAccordion>
+    <p class="text-xl mx-2 mt-2 mb-2">Price Range</p>
+    <div class="flex mx-4">
+      <input
+        v-model="min"
+        @input="minInput"
+        class="rounded border border-primary w-20"
+        type="number"
+        placeholder="min..."
+      />
+      <p class="mx-2">to</p>
+      <input
+        v-model="max"
+        @input="maxInput"
+        class="rounded border border-primary w-20"
+        type="number"
+        placeholder="max..."
+      />
+    </div>
   </div>
 </template>
 
@@ -73,6 +107,12 @@ export default {
     SfAccordion,
     SfSearchBar,
   },
+  data() {
+    return {
+      max: null,
+      min: null,
+    };
+  },
   props: {
     categories: {
       type: Array,
@@ -84,8 +124,30 @@ export default {
     },
   },
   methods: {
+    categoryClicked(event) {
+      console.log('clicked');
+      this.$emit('categoryClicked', event.target);
+    },
+    maxInput(event) {
+      this.$emit('maxAdded', this.max);
+    },
+    minInput(event) {
+      this.$emit('minAdded', this.min);
+    },
     sendChanges(event) {
       this.$emit('searchChange', event.target.value);
+    },
+    checkOne(checkbox,filterClicked) {
+      filterClicked(checkbox)
+    var checkboxes = document.getElementsByName('categories')
+    checkboxes.forEach((item) => {
+        if (item.getAttribute('id') !== checkbox.target.getAttribute('id')){
+          if(item.checked){
+            item.click()
+            checkbox.target.click()
+          }
+        } 
+    })
     },
     filterClicked(event) {
       this.$emit('filterClicked', event.target);

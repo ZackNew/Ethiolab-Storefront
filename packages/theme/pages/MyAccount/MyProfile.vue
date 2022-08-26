@@ -171,9 +171,10 @@ export default {
         }
       `;
       console.log('Token=', getCookie('etech-auth-token'));
+      let baseUrl = process.env.GRAPHQL_API
       axios
         .post(
-          'http://localhost:3000/shop-api',
+          baseUrl,
           { query: print(query) },
           {
             headers: {

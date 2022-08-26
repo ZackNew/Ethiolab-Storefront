@@ -1,7 +1,15 @@
 <template>
   <div>
-  <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3>
-    <div class="grid grid-cols-3 gap-10 mt-10 mb-10" >
+  <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
+      <div class="p-20">
+        <div data-aos="fade-left" class="w-full h-24 bg-primary p-20
+            before:content-[''] before:mr-8 before:mb-2 before:w-1/4 before:h-2 before:bg-dark_gray before:inline-block
+                  after:content-[''] after:ml-8 after:mb-2 after:w-1/4 after:h-2 after:bg-dark_gray after:inline-block
+            ">
+            <span class="text-4xl text-white w-1/2 justify-center">Best Seller</span>
+        </div>
+    </div>
+    <div class="grid grid-cols-3 gap-10 mt-10 mb-10" data-aos="fade-left" >
 
       <div v-for="category in categories" :key="category.title">
           <BestSellerSingle :title="category.title" :image="category.image" />
@@ -12,11 +20,35 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent,mounted } from '@vue/composition-api'
 import BestSellerSingle from './BestSellerSingle.vue'
-
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 export default defineComponent({
   components: {  BestSellerSingle },
+        mounted() {
+    AOS.init({
+        disable: false, // accepts following values: 'phone', 'tablet', 'mobile', boolean, expression or function
+  startEvent: 'DOMContentLoaded', // name of the event dispatched on the document, that AOS should initialize on
+  initClassName: 'aos-init', // class applied after initialization
+  animatedClassName: 'aos-animate', // class applied on animation
+  useClassNames: false, // if true, will add content of `data-aos` as classes on scroll
+  disableMutationObserver: false, // disables automatic mutations' detections (advanced)
+  debounceDelay: 50, // the delay on debounce used while resizing window (advanced)
+  throttleDelay: 99, // the delay on throttle used while scrolling the page (advanced)
+  
+
+  // Settings that can be overridden on per-element basis, by `data-aos-*` attributes:
+  offset: 120, // offset (in px) from the original trigger point
+  delay: 0, // values from 0 to 3000, with step 50ms
+  duration: 3000, // values from 0 to 3000, with step 50ms
+  easing: 'ease', // default easing for AOS animations
+  once: false, // whether animation should happen only once - while scrolling down
+  mirror: false, // whether elements should animate out while scrolling past them
+  anchorPlacement: 'top-bottom', // defines which position of the element regarding to window should trigger the animation
+
+    })
+  },
     setup() {
       const categories = [
         {title:"Balance and Scales", image:"/categories/empty_image.png"},

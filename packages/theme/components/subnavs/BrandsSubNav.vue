@@ -3,7 +3,7 @@
     :subnavList="headerNavigation"
     class="nav-item"
     v-e2e="`app-header-url_BRANDS`"
-    :label="'BRANDS'"
+    :label="$t('BRANDS')"
     :link="localePath(`/c/BRANDS`)"
   />
 </template>
@@ -34,10 +34,15 @@ export default {
             brands{
                 id
                 name
+                description
+                icon{
+                  preview
+                }
             }
         }`,
       });
-      fetch('http://localhost:3000/shop-api', {
+      let baseUrl = process.env.GRAPHQL_API
+      fetch(baseUrl, {
         method: 'post',
         body: graphql,
         headers: {
@@ -51,6 +56,8 @@ export default {
             return {
               label: value.name,
               items: [],
+              preview:value.icon?.preview,
+              description:value.description,
               id: index,
               link: `/b/${value.name.toLowerCase()}/${value.id}`,
             };

@@ -4,9 +4,12 @@ import theme from './themeConfig';
 
 export default {
   server: {
-    port: process.env.APP_PORT || 3001,
+    port: process.env.PORT || 3001,
     host: '0.0.0.0',
     protocol:'https'
+  },
+  env: {
+    GRAPHQL_API: process.env.GRAPHQL_API || 'http://localhost:3000/shop-api'
   },
   head: {
     title: 'Ethio Labs',
@@ -22,6 +25,16 @@ export default {
         'http-equiv': 'Content-Security-Policy',
         content: 'upgrade-insecure-requests'
       },
+
+
+    ],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+        crossorigin: "anonymous"
+      },
       {
         rel: "preconnect",
         href: "https://fonts.gstatic.com/",
@@ -30,28 +43,8 @@ export default {
       {
         rel: "stylesheet",
         href:
-            "https://fonts.googleapis.com/css?family=Corben&display=swap",
-        media: "print",
-        onload: "this.media='all'"
+        "https://fonts.googleapis.com/css2?family=Alumni+Sans+Collegiate+One&family=Dancing+Script&family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap",
       },
-      {
-        rel: "preload",
-        as: "style",
-        href:
-            "https://fonts.googleapis.com/css?family=Corben&display=swap",
-        crossorigin: "anonymous"
-      },
-      {
-        rel: "stylesheet",
-        href:
-            "https://fonts.googleapis.com/css?family=Oswald&display=swap",
-        media: "print",
-        onload: "this.media='all'"
-      }
-
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
   loading: { color: '#fff' },

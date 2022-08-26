@@ -67,6 +67,8 @@ export default {
   background-color: var(--c-bg-secondary);
   color: white;
   position: relative;
+  // max-width: var(--sf-topbar-width, 770.5rem)!important;
+  --sf-topbar-width:90%;
   z-index: 2;
   &__button {
     text-decoration: none;

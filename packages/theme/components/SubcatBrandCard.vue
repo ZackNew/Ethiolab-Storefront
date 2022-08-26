@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5 grid grid-cols-4">
+  <div class="mt-5 flex flex-wrap">
     <div
       class="card shadow-lg w-52 my-3 mr-5 bg-white rounded-lg transform transition duration-200 hover:scale-110 border border-light_accent"
       v-for="product in filteredProducts"
@@ -22,10 +22,10 @@
       </p>
       <button class="mb-4">
         <nuxt-link
-          class="mx-14 bg-dark text-white font-bold py-2 px-4 rounded"
+          class="mx-10 bg-dark text-white font-bold py-2 px-4 rounded"
           :to="'/v/' + product.slug"
         >
-          View All
+          {{$t('View All')}}
         </nuxt-link>
       </button>
     </div>

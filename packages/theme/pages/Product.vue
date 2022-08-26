@@ -4,6 +4,7 @@
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
+    <!-- <p>{{breadcrumbs}}</p> -->
     <div class="product">
       <LazyHydrate when-idle>
         <SfGallery
@@ -252,12 +253,11 @@ export default {
   name: 'Product',
   transition: 'fade',
   async created() {
-    console.log('Pcreated', this.$config.GRAPHQL_API);
     this.reviews = await this.getProductsReviews();
   },
   
   setup(props, context) {
-    console.log('Product Page setup');
+    console.log('Product Page setup',process.env.GRAPHQL_API);
     const qty = ref(1);
     const { id } = context.root.$route.params;
     const {vid} = context.root.$route.params;
@@ -436,7 +436,8 @@ export default {
         }
       `,
       });
-      const response = await fetch('http://localhost:3000/shop-api', {
+      let baseUrll = process.env.GRAPHQL_API
+      const response = await fetch(baseUrll, {
         method: 'post',
         body: data,
         headers: {
@@ -576,7 +577,7 @@ export default {
 #product {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 1272px;
+    max-width: 90%;
     margin: 0 auto;
   }
 }
@@ -754,5 +755,8 @@ td {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+.product__review{
+  --font-family--primary:'Josefin Sans', sans-serif
 }
 </style>

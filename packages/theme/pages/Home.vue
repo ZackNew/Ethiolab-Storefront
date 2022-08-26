@@ -1,17 +1,18 @@
 <template>
   <client-only>
-  <div id="home">
-    <PopupNotification/>
-      <div class="grid grid-cols-12 gap-4 mt-3 py-6 ">
-<!--        categories-->
-      <div class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container max-h-screen overflow-auto">
-        <LazyHydrate when-visible>
-
-     <CategoriesAccordion/>
-        </LazyHydrate>
-        <SfDivider/>
-        <LazyHydrate>
-          <SfBanner
+    <div id="home">
+      <PopupNotification />
+      <div class="grid grid-cols-12 gap-4 mt-3 py-6">
+        <!--        categories-->
+        <div
+          class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container max-h-screen overflow-auto"
+        >
+          <LazyHydrate when-visible>
+            <CategoriesAccordion />
+          </LazyHydrate>
+          <SfDivider />
+          <LazyHydrate>
+            <SfBanner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
               :description="adSection.description || 'AD Description'"
@@ -23,8 +24,8 @@
             </SfBanner>
           </LazyHydrate>
         </div>
-        <div class="md:col-span-9 col-span-12 md:ml-3 ">
-        <!-- <LazyHydrate when-visible>
+        <div class="md:col-span-9 col-span-12 md:ml-3">
+          <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
             <nuxt-link :to="localePath('/c/all')" class="smartphone-only"
@@ -32,7 +33,7 @@
             >
           </div>
         </LazyHydrate> -->
-        <!-- <LazyHydrate when-visible>
+          <!-- <LazyHydrate when-visible>
       <div class="flex flex-wrap gap-4 mb-4 mt-3 place-content-center md:place-content-start"  >
         <div v-for="(product, i) in this.products"
              :key="i" class="rounded-lg drop-shadow-lg product-card w-40 md:w-48">
@@ -148,7 +149,7 @@
       <LazyHydrate>
         <BestSeller />
       </LazyHydrate>
-<!-- 
+      <!-- 
       <LazyHydrate>
         <FeaturedProducts />
       </LazyHydrate> -->
@@ -216,16 +217,18 @@ import {
   useWishlist,
   useFacet,
   useCms,
-  useQuote
+  useQuote,
 } from '@vue-storefront/vendure';
 import CategoriesAccordion from '~/components/CategoriesAccordion';
 import { onSSR } from '@vue-storefront/core';
-import { computed, onMounted } from '@vue/composition-api';
+import { computed, onMounted, inject } from '@vue/composition-api';
 import { getCalculatedPrice } from '~/helpers';
 import getCms from '@vue-storefront/vendure-api/src/api/cms';
 import CategoryFeature from '../components/CategoryFeature.vue';
 import BestSeller from '../components/BestSeller.vue';
 import FeaturedProducts from '../components/FeaturedProducts.vue';
+import axios from 'axios';
+import { subscribe } from 'graphql';
 
 export default {
   name: 'Home',
@@ -263,6 +266,7 @@ export default {
   },
 
   setup() {
+    const showToast = inject('showToast');
     const { toggleNewsletterModal } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
@@ -275,17 +279,20 @@ export default {
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
     //console.log(useTest())
- 
-    const {writeQuote, load, myQuotes} = useQuote();
 
-    
-   //console.log({comps})
-   // console.log(getCms.value[0] )
+    const { writeQuote, load, myQuotes } = useQuote();
 
-    const heroSection =computed(()=>JSON.parse(getCms.value[0]?.content ?? "{}"))
-    const adSection = computed(() => JSON.parse(getCms.value[3]?.content?? "{}"));
-    const heroImage = computed(()=>getCms.value[0]?.featuredAsset.preview)
-    const adImage = computed(()=>getCms.value[3]?.featuredAsset.preview)
+    //console.log({comps})
+    // console.log(getCms.value[0] )
+
+    const heroSection = computed(() =>
+      JSON.parse(getCms.value[0]?.content ?? '{}')
+    );
+    const adSection = computed(() =>
+      JSON.parse(getCms.value[3]?.content ?? '{}')
+    );
+    const heroImage = computed(() => getCms.value[0]?.featuredAsset.preview);
+    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
     const headerNavigation = [];
     // console.log('products',products)
     //       console.log("the adsection value is ", adSection);
@@ -297,7 +304,32 @@ export default {
         }
       });
     };
-    const onSubscribe = (emailAddress) => {
+    const onSubscribe = ({ emailAddress, event }) => {
+      const body = {
+        query: `mutation MyMutation($email: String = "asdfg@gmail.com") {
+                  addSubscriptionEmail(input: {email: $email}) {
+                    id
+                  }
+                }`,
+        variables: {
+          email: emailAddress,
+        },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      console.log('you sussessfullay suscribed');
+      axios
+        .post('http://localhost:3000/shop-api', body, options)
+        .then((res) => {
+          if (res.status === 200) showToast('Subscribed!');
+        })
+        .catch((err) => {
+          showToast("Couldn't Subscribed!");
+        });
       toggleNewsletterModal();
     };
     const toggleWishlist = (index) => {
@@ -339,7 +371,8 @@ export default {
   box-sizing: border-box;
   padding: 0 var(--spacer-sm);
   @include for-desktop {
-    max-width: 1240px;
+    // max-width: 12400px;
+    width:100%;
     padding: 0;
     margin: 0 auto;
   }
