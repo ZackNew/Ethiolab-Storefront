@@ -77,7 +77,7 @@
       <input
         v-model="min"
         @input="minInput"
-        class="rounded border border-primary w-12"
+        class="rounded border border-primary w-20"
         type="number"
         placeholder="min..."
       />
@@ -85,7 +85,7 @@
       <input
         v-model="max"
         @input="maxInput"
-        class="rounded border border-primary w-12"
+        class="rounded border border-primary w-20"
         type="number"
         placeholder="max..."
       />

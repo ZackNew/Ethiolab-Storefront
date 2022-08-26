@@ -50,7 +50,7 @@
     <SfFooterColumn :title="$t('Company')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-          <router-link to="/page/customer" exact>
+          <router-link to="#" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Privacy Policy')"
@@ -58,7 +58,7 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/pages/contact" exact>
+          <router-link to="#" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Terms & Conditions')"
@@ -66,7 +66,7 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/pages/contact" exact>
+          <router-link to="#" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Cookie Policy')"
