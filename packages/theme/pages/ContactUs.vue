@@ -12,7 +12,7 @@
         <div
           class="card shadow-lg w-2/3 font-bold p-3 rounded text-white bg-primary"
         >
-          <p class="text-7xl mb-5 mt-10">HOW CAN WE HELP?</p>
+          <h4 class="text-7xl mb-5 mt-10">HOW CAN WE HELP?</h4>
           <p>
             Have some questions? Reach out to us by filling the form and our
             team will get in touch with you. We are looking forward to hear from

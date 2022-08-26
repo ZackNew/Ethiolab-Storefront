@@ -54,7 +54,7 @@
           class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
-            class="rounded-md my-auto max-h-40 bg-light max-w-[25%]"
+            class="rounded-md my-auto max-h-40 min-h-40 bg-light max-w-[25%]"
             :src="categoryImg || '/categories/empty_image.png'"
             alt=""
           />
@@ -77,17 +77,17 @@
         <div v-else>
           <div class="flex card mr-5 w-full h-12 bg-light_accent">
             <p class="pt-3 mx-3">
-             {{$t('Number of Results')}} | {{ Object.keys(products).length }}
+              Number of Results | {{ Object.keys(products).length }}
             </p>
             <div class="ml-8">
               <button
                 id="dropdownDefault"
                 data-dropdown-toggle="dropdown"
-                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:scale-105 font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
+                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:scale-105 font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-48"
                 type="button"
                 @click="open = !open"
               >
-                {{$t('Sort Subcategory by')}}
+                Sort Subcategory by
                 <svg
                   class="ml-2 w-4 h-4"
                   aria-hidden="true"
@@ -107,7 +107,7 @@
               <div
                 v-if="open"
                 id="dropdown"
-                class="inset-0 relative flex flex-col z-10 w-44 bg-white border border-primary transform transition duration-300"
+                class="inset-0 relative flex flex-col z-10 w-48 bg-white border border-primary transform transition duration-300"
               >
                 <button
                   @click="
@@ -345,7 +345,7 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      let baseUrl = process.env.GRAPHQL_API
+      let baseUrl = process.env.GRAPHQL_API;
       const acat = await axios
         .post(baseUrl, body, options)
         .then(async (res) => {
@@ -356,11 +356,11 @@ export default {
             const productIdString = JSON.parse(
               res.data?.data?.collection?.filters[0]?.args[0].value
             );
-            
+
             const productId = productIdString.map((num) => {
               return String(num);
             });
-            console.log('****',productId)
+            console.log('****', productId);
             let pbody = {
               query: `query getProductById($in: [String!]) {
                         products(options: {filter: {id: {in: $in}}}) {
@@ -399,11 +399,7 @@ export default {
                 'Access-Control-Allow-Origin': '*',
               },
             };
-            var prod = await axios.post(
-              baseUrl,
-              pbody,
-              poptions
-            );
+            var prod = await axios.post(baseUrl, pbody, poptions);
             this.products = prod.data?.data?.products?.items;
           }
           this.loading = false;
