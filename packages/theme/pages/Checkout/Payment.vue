@@ -151,10 +151,16 @@ export default {
         metadata: {
           // Here you would pass data from an external Payment Provided after successful payment process like payment id.
         }
-      });
 
-      const thankYouPath = { name: 'thank-you', query: { order: response?.code }};
+      });
+        console.log("the final payment response value is ", response)
+
+
+      // const thankYouPath = { name: 'thank-you', query: { order: response?.code }}; 
+      const thankYouPath = { name: 'thank-you', query: { order:11256 }}; // order number is to be getted from the response later
+
       context.root.$router.push(context.root.localePath(thankYouPath));
+      // context.root.$router.push({ redirect: window.location.href = 'https://secureacceptance.cybersource.com/checkout' });
       setCart(null);
     };
 
