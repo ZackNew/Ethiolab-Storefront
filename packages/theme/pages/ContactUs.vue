@@ -183,8 +183,8 @@
                 :coverage="1"
               />
               <div class="ml-2 mb-3">
-                <p>(+251) 940 02 44 02</p>
-                <p>(+251) 940 02 55 02</p>
+                <a href="tel:0940024402"><p>(+251) 940 02 44 02</p></a>
+                <a href="tel:0940025502"><p>(+251) 940 02 55 02</p></a>
               </div>
             </div>
             <div class="flex">
@@ -195,7 +195,9 @@
                 viewBox="0 0 24 24"
                 :coverage="1"
               />
-              <p class="ml-2">info@ethiolab.et</p>
+              <a href="mailto:info@ethiolab.et"
+                ><p class="ml-2">info@ethiolab.et</p></a
+              >
             </div>
           </div>
         </div>
