@@ -1,7 +1,51 @@
 <template>
-  <div id="main" class="flex">
-    <div id="left" class="border m-8 p-5 w-[28%]">
-      Wrie A Special Quote
+  <div id="main" class="flex mt-8 mx-24">
+    <div
+      class="card shadow-lg w-21/3 font-bold p-3 rounded text-white bg-primary mr-5"
+    >
+      <h4 class="text-6xl mb-5 mt-10 font-bold">Request a Quote</h4>
+      <p class="mt-5">
+        Follow this steps to request a quote and out team will get back to you.
+      </p>
+      <div class="ml-10 mt-16">
+        <div class="mb-3 flex">
+          <img class="w-10 h-10 mr-3" src="~/assets/add.png" />
+          <p>Add Items To Your Cart</p>
+        </div>
+        <div class="mb-3 flex">
+          <img class="w-10 h-10 mr-3" src="~/assets/click.png" />
+          <p>Click Request a quote from the Bottom.</p>
+        </div>
+        <div class="mb-10 flex">
+          <img class="w-8 h-8 mr-5" src="~/assets/send.png" />
+          <p>Click send!</p>
+        </div>
+      </div>
+      <p class="mt-8">or fill the form if you have a special quote</p>
+    </div>
+    <!-- <div class="p-3">
+      <h4 class="text-6xl mb-5 mt-10 font-bold">Request a Quote</h4>
+      <p class="mt-5">
+        Follow this steps to request a quote and out team will get back to you.
+      </p>
+      <div class="ml-10 mt-16">
+        <div class="mb-3 flex">
+          <img class="w-10 h-10 mr-3" src="~/assets/add.png" />
+          <p>Add Items To Your Cart</p>
+        </div>
+        <div class="mb-3 flex">
+          <img class="w-10 h-10 mr-3" src="~/assets/click.png" />
+          <p>Click Request a quote from the Bottom.</p>
+        </div>
+        <div class="mb-10 flex">
+          <img class="w-8 h-8 mr-5" src="~/assets/send.png" />
+          <p>Click send!</p>
+        </div>
+      </div>
+      <p class="mt-8">or fill the form if you have a special quote</p>
+    </div> -->
+    <div id="left" class="form rounded-md p-5 w-9/12 text-3xl bg-light_accent">
+      Write A Special Quote
       <div class="notice">
         NOTICE* If you didn't find what you want on this website, you can
         mention it here.
@@ -9,7 +53,7 @@
       <SfInput
         label="Your Contact Email"
         v-model="data.fromEmail"
-        class="form__element mt-3"
+        class="form__element mt-3 text-white"
       />
       <SfInput label="Subject" class="form__element" v-model="data.subject" />
 
@@ -26,35 +70,16 @@
 
       <SfInput
         label="Last Name"
-        class="form__element"
+        class="form__element text-light_accent"
         v-model="data.lastName"
       />
-
       <textarea
         placeholder="Your special quote."
         cols="20"
-        class="form__element tarea"
+        class="form__element tarea text-sm rounded mt-4 text-dark_accent"
         v-model="data.msg"
       ></textarea>
-      <SfButton class="btn rounded" @click="send">Send</SfButton>
-    </div>
-    <div id="middle" class="mt-8 mr-8">
-      <div id="or">OR</div>
-    </div>
-    <div id="right" class="border w-[60%] mt-8 p-14">
-      <div class="mb-8">Request A Quote From A Shopping Cart</div>
-      <div class="mb-3 flex">
-        <img class="w-14 h-14 mr-3" src="~/assets/add.jpg" />
-        <p>Add Items To Your Cart</p>
-      </div>
-      <div class="mb-3 flex">
-        <img class="w-14 h-14 mr-3" src="~/assets/click.jpg" />
-        <p>Click Request a quote from the Bottom.</p>
-      </div>
-      <div class="mb-3 flex">
-        <img class="w-14 h-14 mr-3" src="~/assets/send.png" />
-        <p>Click send!</p>
-      </div>
+      <SfButton class="btn rounded bg-secondary" @click="send">Send</SfButton>
     </div>
   </div>
 </template>
@@ -104,7 +129,7 @@ export default {
 <style scoped>
 .tarea {
   height: 140px;
-  width: 100%;
+  width: 91%;
   padding-bottom: 10%;
   margin-bottom: 10%;
   border: 1px;

@@ -69,7 +69,7 @@
                 "
                 :buttonText="heroSection.buttonText || 'Shop Now'"
                 :image="heroImage || '/homepage/bannerB.webp'"
-                link="/c/clinical-laboratory"
+                link="http://www.ethiolab.et"
               />
             </template>
           </LazyHydrate>
@@ -372,7 +372,7 @@ export default {
   padding: 0 var(--spacer-sm);
   @include for-desktop {
     // max-width: 12400px;
-    width:100%;
+    width: 100%;
     padding: 0;
     margin: 0 auto;
   }
@@ -397,6 +397,9 @@ export default {
         }
       }
     }
+  }
+  .sf-link {
+    font-size: xx-large;
   }
 }
 

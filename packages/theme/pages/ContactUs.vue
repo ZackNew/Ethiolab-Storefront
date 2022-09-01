@@ -153,22 +153,54 @@
         :center="[9.035565, 38.759099]"
         :zoom="6"
         :maxZoom="18"
-        :markerIconSize="[30, 30]"
         :markerIconAnchor="[10.5, 0]"
         :mapOptions="{}"
         :tileLayerOptions="{}"
         :markerOptions="{}"
         :flyToStoreZoom="15"
       >
-        <SfStore
-          :latlng="[9.035565, 38.759099]"
-          name="Ethiolab Head Office"
-          :pictureWidth="82"
-          :pictureHeight="112"
-          address="Adwa Street, Arada Sub-city, Elsi Bldg (881/EBG 407)"
-          phone="(+251) 111 264 829"
-          email="info@ethiolab.et"
-        />
+        <div class="flex">
+          <SfStore
+            :latlng="[9.035565, 38.759099]"
+            :pictureWidth="82"
+            :pictureHeight="112"
+          />
+          <!-- name="Ethiolab Head Office"
+            address="Adwa Street, Arada Sub-city, Elsi Bldg (881/EBG 407)"
+            phone="(+251) 111 264 829"
+            email="info@ethiolab.et" -->
+          <div class="mt-4">
+            <p>Ethiolab Head Office</p>
+            <p class="mb-6">
+              Adwa Street, Arada Sub-city, Elsi Bldg (881/EBG 407)
+            </p>
+            <div class="flex">
+              <SfIcon
+                icon="phone"
+                size="xs"
+                color="#b6932f"
+                viewBox="0 0 24 24"
+                :coverage="1"
+              />
+              <div class="ml-2 mb-3">
+                <a href="tel:0940024402"><p>(+251) 940 02 44 02</p></a>
+                <a href="tel:0940025502"><p>(+251) 940 02 55 02</p></a>
+              </div>
+            </div>
+            <div class="flex">
+              <SfIcon
+                icon="mail"
+                size="xs"
+                color="#b6932f"
+                viewBox="0 0 24 24"
+                :coverage="1"
+              />
+              <a href="mailto:info@ethiolab.et"
+                ><p class="ml-2">info@ethiolab.et</p></a
+              >
+            </div>
+          </div>
+        </div>
       </SfStoreLocator>
     </div>
   </div>
@@ -182,6 +214,7 @@ import {
   SfSelect,
   SfStoreLocator,
   SfBanner,
+  SfIcon,
 } from '@storefront-ui/vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { ref, onMounted, inject } from '@vue/composition-api';
@@ -222,6 +255,7 @@ export default {
     ValidationObserver,
     SfStoreLocator,
     SfBanner,
+    SfIcon,
     LazyHydrate,
   },
 

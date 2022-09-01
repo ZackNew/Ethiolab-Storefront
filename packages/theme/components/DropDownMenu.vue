@@ -1,9 +1,9 @@
 <template>
-  <div class="body">
-    <div class="grid grid-rows-6 grid-flow-col">
+  <div class="flex body">
+    <div class="grid grid-rows-6 grid-cols-5 gap-3 grid-flow-col">
       <HeaderSubNavigation
         :handler="hoverHandler"
-        :hoverOutHandler = 'hoverOutHandler'
+        :hoverOutHandler="hoverOutHandler"
         :title="navs.label"
         :link="navs.link"
         :id="navs.id"
@@ -15,8 +15,8 @@
       />
       <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
     </div>
-    <SfBanner 
-    v-if="addVisible"
+    <SfBanner
+      v-if="addVisible"
       class="ad-banner"
       :title="adSection.title || 'Ad Titile'"
       :subtitle="adSection.overview || 'Ad Overview'"
@@ -26,11 +26,16 @@
       :image="adImage || '/homepage/bannerA.webp'"
       link="/c/clinical-laboratory"
     >
+      meme
     </SfBanner>
-    <div  class="detail" v-show ='showDetail'>
-      <img style = "width:10em;max-height: 6em;object-fit: cover;" alt = 'Industry Image'  :src = "cPrev"/>
-      <h4 >{{cTitle}}</h4>
-      <p v-html = 'cDisc'></p>
+    <div class="detail" v-show="showDetail">
+      <img
+        style="width: 10em; max-height: 6em; object-fit: cover"
+        alt="Industry Image"
+        :src="cPrev"
+      />
+      <h4>{{ cTitle }}</h4>
+      <p v-html="cDisc"></p>
     </div>
   </div>
 </template>
@@ -52,7 +57,7 @@ export default {
   },
   props: {
     subnavList: Array,
-    main:String
+    main: String,
   },
   setup(props) {
     // const headerNavigation = [];
@@ -67,36 +72,33 @@ export default {
     // //    }
     // // });
     // };
-    let showDetail = ref(false)
-    let addVisible= ref(true)
-    let cTitle = ref('')
-    let cDisc = ref('')
-    let cPrev = ref('')
-    let hoverHandler = (item,title,disc,prev)=>{
+    let showDetail = ref(false);
+    let addVisible = ref(true);
+    let cTitle = ref('');
+    let cDisc = ref('');
+    let cPrev = ref('');
+    let hoverHandler = (item, title, disc, prev) => {
       // console.log('**hovered over the items',props.main,item,title,disc,prev)
-      if(props.main==='INDUSTRIES'|| props.main =='BRANDS'){
-        addVisible.value = false
-        showDetail.value=true
-        cTitle.value=title
-        let a = ''
-        a.len
+      if (props.main === 'INDUSTRIES' || props.main == 'BRANDS') {
+        addVisible.value = false;
+        showDetail.value = true;
+        cTitle.value = title;
+        let a = '';
+        a.len;
         disc = disc.replace(/<[^>]+>/g, '');
-        if(disc.length>120){
-          disc=disc.slice(0,120)
-          disc+=' ...'
+        if (disc.length > 120) {
+          disc = disc.slice(0, 120);
+          disc += ' ...';
           // disc = disc.replace(/<[^>]+>/g, '');
         }
-        cDisc.value=disc
-        cPrev.value=prev
-      
+        cDisc.value = disc;
+        cPrev.value = prev;
       }
-
-    }
-    let hoverOutHandler = ()=>{
-      addVisible.value=true
-      showDetail.value=false
-    
-    }
+    };
+    let hoverOutHandler = () => {
+      addVisible.value = true;
+      showDetail.value = false;
+    };
     return {
       // getTree,
       // headerNavigation,
@@ -108,31 +110,31 @@ export default {
       hoverHandler,
       hoverOutHandler,
       addVisible,
-      showDetail
+      showDetail,
     };
   },
 };
 </script>
 <style scoped>
-.detail{
+.detail {
   position: absolute;
   background-color: var(--c-bg-secondary);
-  right:0;
-  top:0;
-  color:white;
+  right: 0;
+  top: 0;
+  color: white;
   display: flex;
   border-radius: 1em;
   box-shadow: 2px 2px 5px rgb(68, 68, 68);
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin:1em;
+  margin: 1em;
   box-sizing: border-box;
-  height:90%;
-  width:25%;
-  padding:1em
+  height: 90%;
+  width: 25%;
+  padding: 1em;
 }
-.detail p{
+.detail p {
   text-align: justify;
 }
 .center-my-text {
