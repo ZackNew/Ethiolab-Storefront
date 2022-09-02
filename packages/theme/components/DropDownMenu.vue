@@ -15,7 +15,7 @@
       />
       <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
     </div>
-    <SfBanner
+    <!-- <SfBanner
       v-if="addVisible"
       class="ad-banner"
       :title="adSection.title || 'Ad Titile'"
@@ -27,7 +27,7 @@
       link="/c/clinical-laboratory"
     >
       meme
-    </SfBanner>
+    </SfBanner> -->
     <div class="detail" v-show="showDetail">
       <img
         style="width: 10em; max-height: 6em; object-fit: cover"
@@ -36,6 +36,24 @@
       />
       <h4>{{ cTitle }}</h4>
       <p v-html="cDisc"></p>
+    </div>
+    <div
+      v-show="!showDetail"
+      class="ad text-dark_accent pl-8 pt-16"
+      :style="{
+        backgroundImage: `url(${adImage || '/homepage/bannerA.webp'})`,
+      }"
+    >
+      <p class="text-dark_gray uppercase pr-1">
+        {{ adSection.overview || 'Ad Overview' }}
+      </p>
+      <h2 class="mt-5 uppercase pr-1">{{ adSection.title || 'Ad Titile' }}</h2>
+      <p class="mt-5">{{ adSection.description || 'Ad Description' }}</p>
+      <button
+        class="mt-5 bg-secondary w-24 p-2 text-white rounded hover:bg-dark_secondary hover:text-faded_black"
+      >
+        {{ adSection.buttonText || 'Ad Button' }}
+      </button>
     </div>
   </div>
 </template>
@@ -137,6 +155,23 @@ export default {
 .detail p {
   text-align: justify;
 }
+.ad {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: white;
+  display: flex;
+  border-radius: 0.5em;
+  box-shadow: 2px 2px 5px rgb(68, 68, 68);
+  flex-direction: column;
+  margin: 1em;
+  box-sizing: border-box;
+  height: 95%;
+  width: 20%;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .center-my-text {
   text-align: left !important;
 }
@@ -147,7 +182,6 @@ export default {
   /* flex-wrap: nowrap!important; */
   background: rgb(255, 255, 255, 1) !important;
   height: 100% !important;
-  overflow: hidden !important;
 }
 
 .grid {
