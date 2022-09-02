@@ -248,4 +248,8 @@ export default {
 .title {
   margin: var(--spacer-xl) 0 var(--spacer-base) 0;
 }
+
+.form__action-button{
+  color: black;
+}
 </style>
