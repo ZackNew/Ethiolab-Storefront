@@ -1,6 +1,10 @@
 <template>
   <div class="sub-body">
-    <div @mouseover="handler(id,title,disc,prev)" @mouseleave="hoverOutHandler()" class="content">
+    <div
+      @mouseover="handler(id, title, disc, prev)"
+      @mouseleave="hoverOutHandler()"
+      class="content"
+    >
       <nuxt-link :key="-1" :to="this.$props.link">{{
         this.$props.title
       }}</nuxt-link>
@@ -26,20 +30,19 @@ export default {
     title: String,
     subnavList: Array,
     link: String,
-    handler:Function,
-    hoverOutHandler:Function,
-    disc:String,
-    prev:String,
-    id:anymatch
-
+    handler: Function,
+    hoverOutHandler: Function,
+    disc: String,
+    prev: String,
+    id: anymatch,
   },
   setup() {
-        let hoverHandler = ()=>{
-      console.log('hover handler activated**')
-    }
+    let hoverHandler = () => {
+      console.log('hover handler activated**');
+    };
     return {
       // hoverHandler
-    }
+    };
   },
 };
 </script>

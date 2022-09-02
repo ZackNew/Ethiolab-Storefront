@@ -36,7 +36,7 @@
         </SfListItem>
       </SfList>
     </SfFooterColumn>
-    <SfFooterColumn :title="$t('Departments')" class="footer-column">
+    <!-- <SfFooterColumn :title="$t('Departments')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem
           v-for="item in departments"
@@ -46,7 +46,7 @@
           <SfMenuItem :label="$t(item)" />
         </SfListItem>
       </SfList>
-    </SfFooterColumn>
+    </SfFooterColumn> -->
     <SfFooterColumn :title="$t('Company')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
@@ -173,6 +173,7 @@ export default {
   border-top-color: var(--c-bg-primary);
   @include for-desktop {
     margin-bottom: 0;
+    padding-top: 0.5;
   }
   &__socials {
     display: flex;
@@ -186,10 +187,11 @@ export default {
     }
   }
   &__social-image {
-    margin: 0 var(--spacer-2xs) 0 0;
+    margin: 0 var(--spacer-xs) 0 0;
   }
 }
 .sf-footer-column {
+  // justify-content: space-between;
   background-color: inherit;
 }
 .sf-footer {
