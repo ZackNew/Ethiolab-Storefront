@@ -1,7 +1,7 @@
 <template>
   <div id="main" class="flex mt-8 mx-24">
     <div
-      class="card shadow-lg w-21/3 font-bold p-3 rounded text-white bg-primary mr-5"
+      class="card shadow-lg w-1/3 font-bold p-3 rounded text-white bg-primary mr-5"
     >
       <h4 class="text-6xl mb-5 mt-10 font-bold">Request a Quote</h4>
       <p class="mt-5">
@@ -44,7 +44,10 @@
       </div>
       <p class="mt-8">or fill the form if you have a special quote</p>
     </div> -->
-    <div id="left" class="form rounded-md p-5 w-9/12 text-3xl bg-light_accent">
+    <div
+      id="left"
+      class="form rounded-md p-5 pl-10 w-7/12 text-3xl bg-light_accent"
+    >
       Write A Special Quote
       <div class="notice">
         NOTICE* If you didn't find what you want on this website, you can
@@ -53,33 +56,39 @@
       <SfInput
         label="Your Contact Email"
         v-model="data.fromEmail"
-        class="form__element mt-3 text-white"
+        class="form__element mt-3 text-white w-8/12"
       />
-      <SfInput label="Subject" class="form__element" v-model="data.subject" />
+      <SfInput
+        label="Subject"
+        class="form__element w-8/12"
+        v-model="data.subject"
+      />
 
       <SfInput
         label="Phone Number"
-        class="form__element"
+        class="form__element w-8/12"
         v-model="data.fromPhone"
       />
       <SfInput
         label="First Name"
-        class="form__element"
+        class="form__element w-8/12"
         v-model="data.firstName"
       />
 
       <SfInput
         label="Last Name"
-        class="form__element text-light_accent"
+        class="form__element w-8/12"
         v-model="data.lastName"
       />
       <textarea
         placeholder="Your special quote."
         cols="20"
-        class="form__element tarea text-sm rounded mt-4 text-dark_accent"
+        class="form__element tarea text-sm rounded mt-4 text-dark_accent w-8/12"
         v-model="data.msg"
       ></textarea>
-      <SfButton class="btn rounded bg-secondary" @click="send">Send</SfButton>
+      <SfButton class="btn rounded bg-secondary w-8/12" @click="send"
+        >Send</SfButton
+      >
     </div>
   </div>
 </template>

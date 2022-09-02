@@ -14,9 +14,9 @@
       <template #logo>
         <nuxt-link :to="localePath('/')">
           <SfImage
-            src="/icons/logo.svg"
+            src="/Logo.png"
             alt="EthioLab"
-            width="200"
+            width="400"
             class="sf-header__logo-image"
           />
         </nuxt-link>
@@ -111,9 +111,8 @@
       class="search-result-container"
     />
     <SfOverlay :visible="isSearchOpen" />
- 
-      <HeaderNavigation :isMobile="isMobile" />
- 
+
+    <HeaderNavigation :isMobile="isMobile" />
   </div>
 </template>
 
@@ -166,7 +165,6 @@ import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import { useProduct } from '@vue-storefront/vendure';
 import { load } from 'mime';
 export default {
-   
   components: {
     SfInput,
     SfHeader,
@@ -188,7 +186,6 @@ export default {
   },
   directives: { clickOutside },
   setup(props, { root }) {
-
     const {
       toggleCartSidebar,
       toggleWishlistSidebar,
@@ -318,19 +315,20 @@ export default {
       await searchTerm({ term: term.value });
       result.value = searchResult;
     }, 1000);
-    
-    
-    const isMobile = ref(false)
-    onMounted(()=>{
-           if (navigator.userAgent.match(/Android/i)
-                || navigator.userAgent.match(/webOS/i)
-                || navigator.userAgent.match(/iPhone/i) 
-                || navigator.userAgent.match(/iPad/i) 
-                || navigator.userAgent.match(/iPod/i)
-                || navigator.userAgent.match(/BlackBerry/i)
-                || navigator.userAgent.match(/Windows Phone/i)){
-                  isMobile.value = true;
-                }
+
+    const isMobile = ref(false);
+    onMounted(() => {
+      if (
+        navigator.userAgent.match(/Android/i) ||
+        navigator.userAgent.match(/webOS/i) ||
+        navigator.userAgent.match(/iPhone/i) ||
+        navigator.userAgent.match(/iPad/i) ||
+        navigator.userAgent.match(/iPod/i) ||
+        navigator.userAgent.match(/BlackBerry/i) ||
+        navigator.userAgent.match(/Windows Phone/i)
+      ) {
+        isMobile.value = true;
+      }
     });
 
     const closeOrFocusSearchBar = () => {
@@ -431,9 +429,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 .sf-header {
-  --header-width : 90%;
+  --header-width: 90%;
   --header-padding: var(--spacer-sm);
   @include for-desktop {
     --header-padding: 0;
