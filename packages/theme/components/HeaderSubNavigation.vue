@@ -13,9 +13,13 @@
         class="grid grid-rows-4 grid-cols-2 gap-6 overlay"
         v-if="subnavList.length > 0"
       >
-        <a v-for="sub in subnavList" :key="sub.id" :href="`/s/${sub.slug}`">{{
-          sub.label
-        }}</a>
+        <a
+          class="mb-3"
+          v-for="sub in subnavList"
+          :key="sub.id"
+          :href="`/s/${sub.slug}`"
+          >{{ sub.label }}</a
+        >
       </div>
     </div>
   </div>
