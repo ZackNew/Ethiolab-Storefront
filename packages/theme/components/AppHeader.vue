@@ -16,7 +16,7 @@
           <SfImage
             src="/Logo.png"
             alt="EthioLab"
-            width="400"
+            width="500"
             class="sf-header__logo-image"
           />
         </nuxt-link>

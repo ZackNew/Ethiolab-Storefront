@@ -309,10 +309,6 @@ export default {
         this.filtersClicked.splice(index, 1);
       }
     },
-    eeememe(event) {
-      console.log('yelolo');
-      console.log('emememe', event);
-    },
     async getCategory() {
       const slug = this.$route.params.slug_1;
       const body = {

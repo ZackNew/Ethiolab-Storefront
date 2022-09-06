@@ -50,7 +50,7 @@
       <h2 class="mt-5 uppercase pr-1">{{ adSection.title || 'Ad Titile' }}</h2>
       <p class="mt-5">{{ adSection.description || 'Ad Description' }}</p>
       <button
-        class="mt-5 bg-secondary w-24 p-2 text-white rounded hover:bg-dark_secondary hover:text-faded_black"
+        class="mt-5 mb-2 bg-secondary w-24 p-2 text-white rounded hover:bg-dark_secondary hover:text-faded_black"
       >
         {{ adSection.buttonText || 'Ad Button' }}
       </button>
@@ -171,6 +171,10 @@ export default {
   background-position: center bottom;
   background-repeat: no-repeat;
   background-size: cover;
+  overflow: auto;
+}
+.ad::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 .center-my-text {
   text-align: left !important;
