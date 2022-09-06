@@ -110,8 +110,11 @@ import {
   SfLink
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed, onMounted } from '@vue/composition-api';
 import { useMakeOrder, useCart, cartGetters, usePayment } from '@vue-storefront/vendure';
+// import { useBilling, useShipping, useUserBilling } from '@vue-storefront/vendure';
+import { uuid } from 'vue-uuid'; 
+import {crypto} from "crypto";
 
 export default {
   name: 'ReviewOrder',
@@ -134,12 +137,36 @@ export default {
     const { loading } = useMakeOrder();
     const { set } = usePayment();
 
+    
+
     const terms = ref(false);
     const paymentMethod = ref(null);
+
+    const SECRET_KEY = "c3c1e8ba034b4763ac3bf2f08230c4623ec667ee81384283914a50e3ff2633e20657a66b7ca147c7a800b7736f3790484196a62c82924924b855134e93e0f9e3f9ff58db6d4541648145ea6d8902619634d601b3e2f44acc91c79c77453a7d54b2ac2ecf132b4ac1b8627127018d0319c95bfab90ad54dc5be251df21462e5e3";
+    let paymentDetail = {};
+    paymentDetail.access_key = "e7ecbf57318a3ce18c2ef7b4edc83021";
+    paymentDetail.profile_id = "09D76F9D-C5BB-4A5F-8D1E-4E3F2A757AD9";
+    paymentDetail.transaction_uuid = uuid.v4();
+    paymentDetail.signed_field_names = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
+    paymentDetail.unsigned_field_names = "";
+    paymentDetail.signed_date_time = new Date(Math.round(+new Date()/1000).toString() * 1000).toISOString();
+    paymentDetail.locale = "en";
+    paymentDetail.transaction_type = cart.value.__typename;
+    paymentDetail.reference_number = Math.round(+new Date()/1000).toString();
+    paymentDetail.amount = cart.value.totalWithTax;
+    paymentDetail.currency = "ETB";
+    paymentDetail.signature = ""
+
+
 
     onSSR(async () => {
       await load();
     });
+
+    onMounted(() => {
+      console.log("the usecart cart value is ", cart);
+      // console.log("the method builddatato sign", buildDataToSign(paymentDetail))
+    })
 
     const updatePaymentMethod = method => {
       paymentMethod.value = method;
@@ -163,6 +190,33 @@ export default {
       // context.root.$router.push({ redirect: window.location.href = 'https://secureacceptance.cybersource.com/checkout' });
       setCart(null);
     };
+
+    const buildDataToSign = async (paymentDetail) => {
+      let signedFieldNames = paymentDetail.signed_field_names;
+      let params = signedFieldNames.split(",");
+      let dataToSign = [];
+
+      params.forEach(param => {
+        dataToSign.push(param+"="+paymentDetail[param]);
+        
+      });
+      // console.log("before comma", dataToSign)
+      return commaSeparate(dataToSign);
+
+
+    }
+
+    const commaSeparate = async (dataToSign) => {
+      // console.log("after comma", dataToSign.join())
+      return dataToSign.join();
+      
+    }
+
+    const signData = async (data,key) => {
+      
+    }
+    let key =  signData(buildDataToSign(paymentDetail), SECRET_KEY);
+
 
     return {
       terms,
