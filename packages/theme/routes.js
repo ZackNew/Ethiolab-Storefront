@@ -48,6 +48,11 @@ export function getRoutes(themeDir = __dirname) {
       component: path.resolve(themeDir, 'pages/Static.vue'),
     },
     {
+      name: 'policy',
+      path: '/policy/:pageName?',
+      component: path.resolve(themeDir, 'pages/policy.vue'),
+    },
+    {
       name: 'my-account',
       path: '/my-account/:pageName?',
       component: path.resolve(themeDir, 'pages/MyAccount.vue'),

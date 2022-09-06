@@ -16,7 +16,7 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy" exact>
+          <router-link to="/policy/shipping" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Shipping Policy')"
@@ -80,7 +80,7 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy" exact>
+          <router-link to="/policy/privacy" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Privacy Policy')"
@@ -88,7 +88,7 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy" exact>
+          <router-link to="/policy/terms-and-conditions" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Terms & Conditions')"
