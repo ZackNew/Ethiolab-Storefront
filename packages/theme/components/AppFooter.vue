@@ -1,5 +1,5 @@
 <template>
-  <SfFooter :column="5" multiple class="footer">
+  <SfFooter :column="4" multiple class="footer">
     <SfFooterColumn :title="$t('Order Support')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
@@ -123,7 +123,7 @@
     <SfFooterColumn :title="$t('Social')" class="footer-column">
       <div class="footer__socials">
         <div v-for="item in social" :key="item.name">
-          <a :href="item.link">
+          <a :href="item.link" target="_blank">
             <SfImage
               class="footer__social-image"
               :src="'/icons/' + item.name + '.svg'"
