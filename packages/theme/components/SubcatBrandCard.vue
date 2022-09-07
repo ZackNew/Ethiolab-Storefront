@@ -1,7 +1,7 @@
 <template>
   <div class="mt-5 flex flex-wrap">
     <div
-      class="card shadow-lg w-52 my-3 mr-5 bg-white rounded-lg transform transition duration-200 hover:scale-110 border border-light_accent"
+      class="card shadow-lg w-52 my-3 mr-5 bg-white rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
       v-for="product in filteredProducts"
       :key="product.id"
     >
@@ -20,14 +20,16 @@
       <p class="text-center m-3">
         {{ String(product.variants[0].price).slice(0, -2) }}.00
       </p>
-      <button class="mb-4">
-        <nuxt-link
-          class="mx-10 bg-dark text-white font-bold py-2 px-4 rounded"
-          :to="'/v/' + product.slug"
-        >
-          {{$t('View All')}}
-        </nuxt-link>
-      </button>
+      <div class="text-center">
+        <button class="mb-4">
+          <nuxt-link
+            class="mx-10 bg-dark text-white font-bold py-2 px-4 rounded"
+            :to="'/v/' + product.slug"
+          >
+            {{ $t('View All') }}
+          </nuxt-link>
+        </button>
+      </div>
     </div>
   </div>
 </template>
