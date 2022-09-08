@@ -4,7 +4,7 @@
     <div class="p-20">
       <div
         data-aos="slide-up"
-        class="w-full h-24 bg-primary p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/4 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/4 after:h-2 after:bg-dark_gray after:inline-block"
+        class="w-full h-24 bg-primary p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/4 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/4 after:h-2 after:bg-dark_gray after:inline-block text-center"
       >
         <span class="text-4xl text-white w-1/2">Featured</span>
       </div>

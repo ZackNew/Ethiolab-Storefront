@@ -148,6 +148,8 @@ export default {
   box-sizing: border-box;
   height: 95%;
   width: 20%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .detail p {
   text-align: justify;
