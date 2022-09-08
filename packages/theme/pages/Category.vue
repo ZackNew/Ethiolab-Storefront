@@ -278,9 +278,11 @@
           </div>
 
           <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
-            Products Under Thids Category
+            Products Under This Category
           </h3>
-          <div class="shadow-inner max-h-[53rem] overflow-auto nobar pl-14">
+          <div
+            class="shadowInner max-h-[53rem] overflow-auto nobar pl-12 rounded-lg hover:border border-light_gray"
+          >
             <transition-group
               v-if="isCategoryGridView"
               appear
@@ -307,7 +309,7 @@
                 :isInWishlist="isInWishlist({ product })"
                 :isAddedToCart="isInCart({ product })"
                 :link="localePath(`/v/${productGetters.getSlug(product)}`)"
-                class="products__product-card mr-4 mb-4"
+                class="products__product-card mr-4 mb-4 -z-1"
                 @click:wishlist="
                   !isInWishlist({ product })
                     ? addItemToWishlist({ product })
@@ -1066,5 +1068,9 @@ export default {
     --button-color: var(--c-dark-variant);
     margin: var(--spacer-xs) 0 0 0;
   }
+}
+.shadowInner {
+  box-shadow: inset 0 0 10px #b9b9b9;
+  z-index: 1;
 }
 </style>
