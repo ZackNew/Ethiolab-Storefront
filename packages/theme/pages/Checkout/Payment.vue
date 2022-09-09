@@ -81,14 +81,32 @@
           >
             {{ $t('Go back') }}
           </SfButton>
-          <SfButton
+
+          <form  :action="url" target='_blank'  method="POST">
+            <input type="hidden" name="access_key" v-model="paymentDetail.access_key">
+            <input type="hidden" name="profile_id" v-model="paymentDetail.profile_id">
+            <input type="hidden" name="transaction_uuid" v-model="paymentDetail.transaction_uuid">
+            <input type="hidden" name="signed_field_names" v-model="paymentDetail.signed_field_names">
+            <input type="hidden" name="unsigned_field_names" v-model="paymentDetail.unsigned_field_names">
+            <input type="hidden" name="signed_date_time" v-model="paymentDetail.signed_date_time">
+            <input type="hidden" name="locale" v-model="paymentDetail.locale">
+            <input type="hidden" name="transaction_type" v-model="paymentDetail.transaction_type">
+            <input type="hidden" name="reference_number" v-model="paymentDetail.reference_number">
+            <input type="hidden" name="amount" v-model="paymentDetail.amount">
+            <input type="hidden" name="currency" v-model="paymentDetail.currency">
+            <input type="submit" name="submit" value="Submit">
+            <input type="hidden" name="signature" v-model="paymentDetail.signature">
+
+          </form>
+
+          <!-- <SfButton
             v-e2e="'make-an-order'"
             :disabled="!paymentMethod || !terms"
             class="summary__action-button"
             @click="processOrder"
           >
             {{ $t('Make an order') }}
-          </SfButton>
+          </SfButton> -->
         </div>
       </div>
     </div>
@@ -115,6 +133,8 @@ import { useMakeOrder, useCart, cartGetters, usePayment } from '@vue-storefront/
 // import { useBilling, useShipping, useUserBilling } from '@vue-storefront/vendure';
 import { uuid } from 'vue-uuid'; 
 import {crypto} from "crypto";
+import CryptoJS from 'crypto-js'
+import moment from "moment";
 
 export default {
   name: 'ReviewOrder',
@@ -142,19 +162,22 @@ export default {
     const terms = ref(false);
     const paymentMethod = ref(null);
 
-    const SECRET_KEY = "c3c1e8ba034b4763ac3bf2f08230c4623ec667ee81384283914a50e3ff2633e20657a66b7ca147c7a800b7736f3790484196a62c82924924b855134e93e0f9e3f9ff58db6d4541648145ea6d8902619634d601b3e2f44acc91c79c77453a7d54b2ac2ecf132b4ac1b8627127018d0319c95bfab90ad54dc5be251df21462e5e3";
+    // let time = new Date().toISOString;
+    const url = "https://testsecureacceptance.cybersource.com/pay";
+    const date = moment()
+    const SECRET_KEY = "18ed886851904eb6a60b3f1ecf211b0e2e86ea4dafe54cfd8e64f769ec9f267b97da940f23e9459cb7a3b7d436fb8cdb7719ae32db99473298b193f52c05b91a1a05f4a114224d13a5656486d6b23074e9b049a4b7f345aabc7960b96ae66ea060013c30d3b24937874e7d4804b0b084359a4f95768b41e8ad5cc573751166b7";
     let paymentDetail = {};
-    paymentDetail.access_key = "e7ecbf57318a3ce18c2ef7b4edc83021";
+    paymentDetail.access_key = "acaae10d98ab3ccaa168bf62cb2c2844";
     paymentDetail.profile_id = "09D76F9D-C5BB-4A5F-8D1E-4E3F2A757AD9";
     paymentDetail.transaction_uuid = uuid.v4();
     paymentDetail.signed_field_names = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
     paymentDetail.unsigned_field_names = "";
-    paymentDetail.signed_date_time = new Date(Math.round(+new Date()/1000).toString() * 1000).toISOString();
+    paymentDetail.signed_date_time = moment.utc(date).format('YYYY-MM-DDTHH:mm:ss[Z]');
     paymentDetail.locale = "en";
-    paymentDetail.transaction_type = cart.value.__typename;
-    paymentDetail.reference_number = Math.round(+new Date()/1000).toString();
-    paymentDetail.amount = cart.value.totalWithTax;
-    paymentDetail.currency = "ETB";
+    paymentDetail.transaction_type = "authorization";
+    paymentDetail.reference_number = moment().unix().toString();
+    paymentDetail.amount = (cart.value.totalWithTax/100).toFixed(2);
+    paymentDetail.currency = "USD";
     paymentDetail.signature = ""
 
 
@@ -165,7 +188,9 @@ export default {
 
     onMounted(() => {
       console.log("the usecart cart value is ", cart);
-      // console.log("the method builddatato sign", buildDataToSign(paymentDetail))
+      console.log("key vlaue is ", key)
+      console.log("the final payment detail value is ", paymentDetail)
+      console.log("amount type", typeof(paymentDetail.transaction_uuid))
     })
 
     const updatePaymentMethod = method => {
@@ -192,7 +217,8 @@ export default {
     };
 
     const buildDataToSign = async (paymentDetail) => {
-      let signedFieldNames = paymentDetail.signed_field_names;
+      let signedFieldNames =await  paymentDetail.signed_field_names;
+      console.log("the signed field names are ", signedFieldNames)
       let params = signedFieldNames.split(",");
       let dataToSign = [];
 
@@ -200,22 +226,32 @@ export default {
         dataToSign.push(param+"="+paymentDetail[param]);
         
       });
-      // console.log("before comma", dataToSign)
+      console.log("before comma", dataToSign)
       return commaSeparate(dataToSign);
 
 
     }
 
     const commaSeparate = async (dataToSign) => {
-      // console.log("after comma", dataToSign.join())
+      console.log("after comma", dataToSign.join())
       return dataToSign.join();
       
     }
 
-    const signData = async (data,key) => {
+    const signData =  (data,key) => {
+      console.log("the incoming value is ", "data", data, "key", key);
+      // const b64 = CryptoJS.AES.encrypt(JSON.stringify(data), key).toString()
+      // const e64 = CryptoJS.enc.Base64.parse(b64)
+
+      // const sign = CryptoJS.HmacSHA256(data, key).toString(CryptoJS.enc.Hex)
+      var hash = CryptoJS.HmacSHA256(data, key);
+  var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+      // console.log("the final key string value is ", sign.toString(CryptoJS.enc.Hex))
+      return hashInBase64 
       
     }
     let key =  signData(buildDataToSign(paymentDetail), SECRET_KEY);
+    paymentDetail.signature = key;
 
 
     return {
@@ -227,7 +263,9 @@ export default {
       cartGetters,
       processOrder,
       updatePaymentMethod,
-      paymentMethod
+      paymentMethod,
+      paymentDetail,
+      url
     };
   }
 };
