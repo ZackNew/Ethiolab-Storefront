@@ -14,7 +14,7 @@
     </nav>
     <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-2xl rounded-lg w-2/10 h-3/4">
+      <div class="shadow-2xl rounded-lg w-96 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
             @maxAdded="maxInput"
@@ -71,7 +71,6 @@
           </div>
         </div>
         <div v-else>
-
           <div class="flex card mr-5 w-full h-12 bg-light_accent">
             <p class="pt-3 mx-3">
               Number of Results | {{ Object.keys(products).length }}
@@ -80,7 +79,7 @@
               <button
                 id="dropdownDefault"
                 data-dropdown-toggle="dropdown"
-                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:scale-105 font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
+                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:shadow-2xl font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
                 type="button"
                 @click="open = !open"
               >
@@ -351,12 +350,8 @@ export default {
           'Content-Type': 'application/json',
         },
       };
-      let baseUrl = process.env.GRAPHQL_API
-      const brandResult = await axios.post(
-        baseUrl,
-        body,
-        options
-      );
+      let baseUrl = process.env.GRAPHQL_API;
+      const brandResult = await axios.post(baseUrl, body, options);
       this.loading = false;
       this.brand = brandResult.data.data.brand;
       this.brandImage = brandResult.data.data.brand.icon?.preview;

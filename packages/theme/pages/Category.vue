@@ -79,7 +79,7 @@
           <SfIcon
             v-e2e="'tiles-icon'"
             class="navbar__view-icon"
-            :color="isCategoryGridView ? 'black' : 'dark-secondary'"
+            :color="isCategoryGridView ? '#b6932f' : 'dark-secondary'"
             icon="tiles"
             size="12px"
             role="button"
@@ -90,7 +90,7 @@
           <SfIcon
             v-e2e="'list-icon'"
             class="navbar__view-icon"
-            :color="!isCategoryGridView ? 'black' : 'dark-secondary'"
+            :color="!isCategoryGridView ? '#b6932f' : 'dark-secondary'"
             icon="list"
             size="12px"
             role="button"
@@ -109,7 +109,11 @@
             :class="{ 'loading--categories': loading }"
             :loading="loading"
           >
-            <SfAccordion :open="activeCategory" :show-chevron="true">
+            <SfAccordion
+              :open="activeCategory"
+              :show-chevron="true"
+              class="shadow-md w-80 p-2"
+            >
               <SfAccordionItem
                 v-for="(cat, i) in categoryTree && categoryTree"
                 :key="i"
@@ -142,7 +146,7 @@
                       >
                         <template #label="{ label }">
                           <nuxt-link
-                            :to="localePath(th.getCatLink(subCat))"
+                            :to="'/s/' + subCat.slug"
                             :class="
                               subCat.isCurrent ? 'sidebar--cat-selected' : ''
                             "
@@ -166,19 +170,27 @@
               v-if="cat.isCurrent === true && cat.slug === lastSlug"
               class=""
             >
-              <div class="h-40 bg-bg_dark grid grid-cols-3">
+              <div
+                class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+              >
                 <img
                   :src="
                     cat.featuredAsset
                       ? cat.featuredAsset.preview
                       : '/categories/cat2.jpeg'
                   "
-                  class="h-40"
+                  class="rounded-md my-auto max-h-40 min-h-40 bg-light max-w-[25%]"
                 />
-                <div
+                <div class="rounded w-full overflow-auto no-scrollbar">
+                  <p
+                    class="py-4 ml-4 mr-4 text-white"
+                    v-html="cat.description || `Category Description`"
+                  ></p>
+                </div>
+                <!-- <div
                   v-html="cat.description || `Category Description`"
                   class="text-white col-span-2 pt-5 overflow-auto max-h-40"
-                ></div>
+                ></div> -->
                 <!-- <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
                                                 electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
                                                   metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
@@ -192,7 +204,7 @@
             <!-- <CategoryFeature /> -->
             <div>
               <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">
-                Featured Categories
+                Featured
               </h3>
               <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
               <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
@@ -253,129 +265,134 @@
                   class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
                 />
               </nuxt-link>
-              <h4 class="text-center font-serif m-3">$925.00</h4>
+              <h4 class="text-center m-3">925.00 ETB</h4>
               <p class="text-center m-3">description</p>
-              <button
-                class="mx-12 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-              >
-                {{ $t('View All') }}
-              </button>
+              <div class="text-center">
+                <button
+                  class="my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+                >
+                  {{ $t('View All') }}
+                </button>
+              </div>
             </div>
           </div>
 
           <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
-            New Products You Might Like
+            Products Under This Category
           </h3>
-
-          <transition-group
-            v-if="isCategoryGridView"
-            appear
-            name="products__slide"
-            tag="div"
-            class="products__grid"
+          <div
+            class="shadowInner max-h-[53rem] overflow-auto nobar pl-12 rounded-lg hover:border border-light_gray"
           >
-            <SfProductCard
-              v-e2e="'category-product-card'"
-              v-for="(product, i) in products"
-              :key="productGetters.getSlug(product)"
-              :style="{ '--index': i }"
-              :title="productGetters.getName(product)"
-              :image="productGetters.getCoverImage(product)"
-              imageHeight="20.25rem"
-              imageWidth="100%"
-              :regular-price="
-                productGetters.getPrice(product).regular.toLocaleString() +
-                ' ETB'
-              "
-              :max-rating="5"
-              :score-rating="productGetters.getAverageRating(product)"
-              :show-add-to-cart-button="true"
-              :isInWishlist="isInWishlist({ product })"
-              :isAddedToCart="isInCart({ product })"
-              :link="localePath(`/v/${productGetters.getSlug(product)}`)"
-              class="products__product-card"
-              @click:wishlist="
-                !isInWishlist({ product })
-                  ? addItemToWishlist({ product })
-                  : removeItemFromWishlist({ product })
-              "
-              @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-            />
-          </transition-group>
-          <transition-group
-            v-else
-            appear
-            name="products__slide"
-            tag="div"
-            class="products__list"
-          >
-            <SfProductCardHorizontal
-              v-e2e="'category-product-card'"
-              v-for="(product, i) in products"
-              :key="productGetters.getSlug(product)"
-              :qty="itemQuantity"
-              :style="{ '--index': i }"
-              :title="productGetters.getName(product)"
-              :description="productGetters.getDescription(product)"
-              :image="productGetters.getCoverImage(product)"
-              :regular-price="
-                productGetters.getPrice(product).regular.toLocaleString() +
-                ' ETB'
-              "
-              :max-rating="5"
-              :score-rating="3"
-              :isInWishlist="isInWishlist({ product })"
-              class="products__product-card-horizontal"
-              @input="productQuantity[product._id] = $event"
-              @click:wishlist="
-                !isInWishlist({ product })
-                  ? addItemToWishlist({ product })
-                  : removeItemFromWishlist({ product })
-              "
-              @click:add-to-cart="
-                addItemToCart({
-                  product,
-                  quantity:
-                    Number(productQuantity[product._id]) || itemQuantity,
-                })
-              "
-              :link="
-                localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )
-              "
+            <transition-group
+              v-if="isCategoryGridView"
+              appear
+              name="products__slide"
+              tag="div"
+              class="products__grid"
             >
-              <template #configuration>
-                <SfProperty
-                  class="desktop-only"
-                  name="Size"
-                  value="XS"
-                  style="margin: 0 0 1rem 0"
-                />
-                <SfProperty class="desktop-only" name="Color" value="white" />
-              </template>
-              <template #actions>
-                <SfButton
-                  v-if="!isInWishlist({ product })"
-                  class="sf-button--text desktop-only"
-                  style="margin: 0 0 1rem auto; display: block"
-                  @click="addItemToWishlist({ product })"
-                >
-                  {{ $t('Save for later') }}
-                </SfButton>
-                <SfButton
-                  v-else
-                  class="sf-button--text desktop-only"
-                  style="margin: 0 0 1rem auto; display: block"
-                  @click="removeItemFromWishlist({ product })"
-                >
-                  {{ $t('Remove from wishlist') }}
-                </SfButton>
-              </template>
-            </SfProductCardHorizontal>
-          </transition-group>
+              <SfProductCard
+                v-e2e="'category-product-card'"
+                v-for="(product, i) in products"
+                :key="productGetters.getSlug(product)"
+                :style="{ '--index': i }"
+                :title="productGetters.getName(product)"
+                :image="productGetters.getCoverImage(product)"
+                imageHeight="20.25rem"
+                imageWidth="100%"
+                :regular-price="
+                  productGetters.getPrice(product).regular.toLocaleString() +
+                  ' ETB'
+                "
+                :max-rating="5"
+                :score-rating="productGetters.getAverageRating(product)"
+                :show-add-to-cart-button="true"
+                :isInWishlist="isInWishlist({ product })"
+                :isAddedToCart="isInCart({ product })"
+                :link="localePath(`/v/${productGetters.getSlug(product)}`)"
+                class="products__product-card mr-4 mb-4 -z-1"
+                @click:wishlist="
+                  !isInWishlist({ product })
+                    ? addItemToWishlist({ product })
+                    : removeItemFromWishlist({ product })
+                "
+                @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+              />
+            </transition-group>
+            <transition-group
+              v-else
+              appear
+              name="products__slide"
+              tag="div"
+              class="products__list"
+            >
+              <SfProductCardHorizontal
+                v-e2e="'category-product-card'"
+                v-for="(product, i) in products"
+                :key="productGetters.getSlug(product)"
+                :qty="itemQuantity"
+                :style="{ '--index': i }"
+                :title="productGetters.getName(product)"
+                :description="productGetters.getDescription(product)"
+                :image="productGetters.getCoverImage(product)"
+                :regular-price="
+                  productGetters.getPrice(product).regular.toLocaleString() +
+                  ' ETB'
+                "
+                :max-rating="5"
+                :score-rating="3"
+                :isInWishlist="isInWishlist({ product })"
+                class="products__product-card-horizontal"
+                @input="productQuantity[product._id] = $event"
+                @click:wishlist="
+                  !isInWishlist({ product })
+                    ? addItemToWishlist({ product })
+                    : removeItemFromWishlist({ product })
+                "
+                @click:add-to-cart="
+                  addItemToCart({
+                    product,
+                    quantity:
+                      Number(productQuantity[product._id]) || itemQuantity,
+                  })
+                "
+                :link="
+                  localePath(
+                    `/p/${productGetters.getId(
+                      product
+                    )}/${productGetters.getSlug(product)}`
+                  )
+                "
+              >
+                <template #configuration>
+                  <SfProperty
+                    class="desktop-only"
+                    name="Size"
+                    value="XS"
+                    style="margin: 0 0 1rem 0"
+                  />
+                  <SfProperty class="desktop-only" name="Color" value="white" />
+                </template>
+                <template #actions>
+                  <SfButton
+                    v-if="!isInWishlist({ product })"
+                    class="sf-button--text desktop-only"
+                    style="margin: 0 0 1rem auto; display: block"
+                    @click="addItemToWishlist({ product })"
+                  >
+                    {{ $t('Save for later') }}
+                  </SfButton>
+                  <SfButton
+                    v-else
+                    class="sf-button--text desktop-only"
+                    style="margin: 0 0 1rem auto; display: block"
+                    @click="removeItemFromWishlist({ product })"
+                  >
+                    {{ $t('Remove from wishlist') }}
+                  </SfButton>
+                </template>
+              </SfProductCardHorizontal>
+            </transition-group>
+          </div>
 
           <LazyHydrate on-interaction>
             <SfPagination
@@ -992,6 +1009,9 @@ export default {
 ::v-deep .sf-sidebar__aside {
   --sidebar-z-index: 3;
 }
+.nobar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
 .filters {
   &__title {
     --heading-title-font-size: var(--font-size--xl);
@@ -1048,5 +1068,9 @@ export default {
     --button-color: var(--c-dark-variant);
     margin: var(--spacer-xs) 0 0 0;
   }
+}
+.shadowInner {
+  box-shadow: inset 0 0 10px #b9b9b9;
+  z-index: 1;
 }
 </style>
