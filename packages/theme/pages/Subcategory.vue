@@ -19,7 +19,7 @@
     </nav>
     <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-2xl rounded-lg w-2/10 h-3/4">
+      <div class="shadow-xl rounded-lg w-96 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
             @categoryClicked="emememe"
@@ -308,10 +308,6 @@ export default {
         const index = this.filtersClicked.indexOf(event.id);
         this.filtersClicked.splice(index, 1);
       }
-    },
-    eeememe(event) {
-      console.log('yelolo');
-      console.log('emememe', event);
     },
     async getCategory() {
       const slug = this.$route.params.slug_1;

@@ -17,7 +17,7 @@
     </nav>
     <div class="flex mt-4">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-2xl rounded-lg w-2/10 h-3/4">
+      <div class="shadow-2xl rounded-lg w-96 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
             @searchChange="searchBox"
@@ -67,14 +67,14 @@
         <div
           class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
-            <img
-              class="rounded-md my-auto max-h-40 bg-light max-w-[25%]"
-              :src="industryImg || '/categories/empty_image.png'"
-              alt=""
-            />
-            <div class="rounded w-full overflow-auto no-scrollbar">
-              <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
-            </div>
+          <img
+            class="rounded-md my-auto max-h-40 bg-light max-w-[25%]"
+            :src="industryImg || '/categories/empty_image.png'"
+            alt=""
+          />
+          <div class="rounded w-full overflow-auto no-scrollbar">
+            <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
+          </div>
         </div>
         <div
           v-if="products.length === 0"
@@ -216,17 +216,17 @@ export default {
             filtersClicked.includes(facet.name)
           );
 
-          let matchFound = false
-          if(product.collections.length>0){
-            for (let collection of product.collections){
-              matchFound =  filtersClicked.includes(collection.name)
+          let matchFound = false;
+          if (product.collections.length > 0) {
+            for (let collection of product.collections) {
+              matchFound = filtersClicked.includes(collection.name);
               // console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
-              if(matchFound){
-                break
+              if (matchFound) {
+                break;
               }
             }
-          }else{
-            matchFound= false
+          } else {
+            matchFound = false;
           }
           // console.log('product match found collection clicked',product,matchFound,product.collections,filtersClicked)
           return (
@@ -238,11 +238,10 @@ export default {
         return true;
       });
 
-
       // console.log('running again **',filtersClicked,filtersClicked.length)
       // let filteredBasedOnCategory = filterProducts.filter(product=>{
       //   // console.log('product***',product,filtersClicked)
-        
+
       //   if(filtersClicked.length>0){
       //     console.log('running now **')
       //     // console.log('product vs filters ** ',product.collections,filtersClicked)
@@ -292,15 +291,13 @@ export default {
       let categories = [];
       this.products.forEach((element) => {
         // console.log("category names before loop ****", element.collections)
-        if (element.collections.length >0) {
-          for (let cat in element.collections){
+        if (element.collections.length > 0) {
+          for (let cat in element.collections) {
             // console.log("category names in loop ****",element.collections[cat].name)
-            if(!categories.includes(element.collections[cat].name)){
+            if (!categories.includes(element.collections[cat].name)) {
               categories.push(element.collections[cat].name);
             }
-            
           }
-          
         }
       });
       categories = [...new Set(categories)];
@@ -356,7 +353,7 @@ export default {
       this.low = event;
     },
     filterProducts(event) {
-      console.log('filter button clicked ** ',event)
+      console.log('filter button clicked ** ', event);
       if (event.checked) {
         this.filtersClicked.push(event.id);
       } else {
@@ -365,9 +362,9 @@ export default {
       }
     },
     async getCategory() {
-    //   const slug = this.$route.params.slug_1;
+      //   const slug = this.$route.params.slug_1;
       let body2 = {
-        query:`query getIndustryById($id:ID){
+        query: `query getIndustryById($id:ID){
                     industry(id:$id){
                         name
                         description
@@ -380,10 +377,10 @@ export default {
                         id
                     }
                     }`,
-        variables : {
-            id:this.$route.params.id
-        }
-      }
+        variables: {
+          id: this.$route.params.id,
+        },
+      };
 
       const body = {
         query: `query getCategoryBySlug($slug: String!){
@@ -405,7 +402,7 @@ export default {
             }
           }`,
         variables: {
-        //   slug: slug,
+          //   slug: slug,
         },
       };
       const options = {
@@ -414,14 +411,16 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      let baseUrl = process.env.GRAPHQL_API
+      let baseUrl = process.env.GRAPHQL_API;
       const acat = await axios
         .post(baseUrl, body2, options)
         .then(async (res) => {
           if (res.data?.data?.industry.products.length > 0) {
-            const productIdString = res.data.data.industry.products.map(product_object=>{
-                return product_object.id
-            })
+            const productIdString = res.data.data.industry.products.map(
+              (product_object) => {
+                return product_object.id;
+              }
+            );
             const productId = productIdString.map((num) => {
               return String(num);
             });
@@ -466,11 +465,7 @@ export default {
                 'Access-Control-Allow-Origin': '*',
               },
             };
-            var prod = await axios.post(
-              baseUrl,
-              pbody,
-              poptions
-            );
+            var prod = await axios.post(baseUrl, pbody, poptions);
             this.products = prod.data?.data?.products?.items;
           }
 

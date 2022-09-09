@@ -14,15 +14,14 @@
         :key="key"
         :title="$t(page.name)"
       >
-        <template v-if="page.description[0] && typeof page.description[0] === 'string'">
-          <SfHeading
-            :title="$t(page.name)"
-            :level="3"/>
+        <template
+          v-if="page.description[0] && typeof page.description[0] === 'string'"
+        >
+          <SfHeading :title="$t(page.name)" :level="3" />
           <p
             class="paragraph paragraph--without-tab"
             v-html="page.description"
-          >
-          </p>
+          ></p>
         </template>
         <template v-else>
           <SfTabs :open-tab="1">
@@ -46,73 +45,80 @@
   </div>
 </template>
 <script>
-import { SfContentPages, SfTabs, SfBreadcrumbs, SfHeading } from '@storefront-ui/vue';
+import {
+  SfContentPages,
+  SfTabs,
+  SfBreadcrumbs,
+  SfHeading,
+} from '@storefront-ui/vue';
 import { computed } from '@vue/composition-api';
-import {useCms} from "@vue-storefront/vendure";
-import {onSSR} from "@vue-storefront/core";
+import { useCms } from '@vue-storefront/vendure';
+import { onSSR } from '@vue-storefront/core';
 export default {
   name: 'Static',
   components: {
     SfContentPages,
     SfTabs,
     SfBreadcrumbs,
-    SfHeading
+    SfHeading,
   },
-  head () {
+  head() {
     return {
       title: this.activePage,
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'Home page description'
-        }
-      ]
+          content: 'Home page description',
+        },
+      ],
     };
   },
   setup(props, context) {
     const { $router, $route } = context.root;
-    const {search:searchCms,getCms}=useCms();
-    const staticPages=computed(()=>JSON.parse(getCms.value[2].content))
+    const { search: searchCms, getCms } = useCms();
+    const staticPages = computed(() => JSON.parse(getCms.value[2].content));
     const activePage = computed(() => {
       const { pageName } = $route.params;
       if (pageName) {
-        return (pageName.charAt(0).toUpperCase() + pageName.slice(1)).replaceAll('-', ' ');
+        return (
+          pageName.charAt(0).toUpperCase() + pageName.slice(1)
+        ).replaceAll('-', ' ');
       }
       return 'About';
     });
     const changeActivePage = async (title) => {
       $router.push(`/page/${(title || '').toLowerCase().replaceAll(' ', '-')}`);
     };
-    return { changeActivePage, activePage,staticPages };
+    return { changeActivePage, activePage, staticPages };
   },
   data() {
     return {
       breadcrumbs: [
         { text: 'Home', route: { link: '#' } },
-        { text: this.activePage, route: { link: '#' } }
+        { text: this.activePage, route: { link: '#' } },
       ],
       pages: [
         {
           name: 'About',
           description: [
             'Ethiolab is a firm established in 2012 with the objective of supplying quality equipment from branded partners for research and development, testing, measuring and laboratory analysis applications.',
-            ' We have solutions for R&D institutions, universities, production industries, and controlling & regulating authorities. On our eCommerce platform, we carry several portable measuring and testing devices, laboratory and research consumables, instruments and many more ranges for our partners and customers. In addition to our high equipment quality our after sales service is a source of trust by our clients.'
-          ]
+            ' We have solutions for R&D institutions, universities, production industries, and controlling & regulating authorities. On our eCommerce platform, we carry several portable measuring and testing devices, laboratory and research consumables, instruments and many more ranges for our partners and customers. In addition to our high equipment quality our after sales service is a source of trust by our clients.',
+          ],
         },
         {
           name: 'Mission',
           description: [
             'Providing high quality and latest technology laboratory instruments from world leading companies to researchers and other interested parties with efficient pre and post sales service.',
             'Creating an alternative marketplace online where safe and reliable market transactions are carried out.',
-            'Growing and expanding our business to regional cities of the country.'
-          ]
+            'Growing and expanding our business to regional cities of the country.',
+          ],
         },
         {
           name: 'Vision',
           description: [
-            'To be the leading laboratory products supplier in Africa.'
-          ]
+            'To be the leading laboratory products supplier in Africa.',
+          ],
         },
         {
           name: 'Value',
@@ -120,16 +126,16 @@ export default {
             'Our first principal is honesty in our engagements with clients to serve them in a manner that upholds our cultural values as Ethiopians, where a promise is highly consecrated above all. ',
             'We believe trust is everything in the business world; therefore, we encourage open communication with our employees as well as with our clients.',
             'Passion – We are driven to perform better, progress constantly and exceed expectations.',
-            ''
-          ]
+            '',
+          ],
         },
-      ]
+      ],
     };
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 #static {
   box-sizing: border-box;
   @include for-desktop {
@@ -143,7 +149,7 @@ export default {
 }
 .paragraph {
   margin: var(--spacer-sm) 0;
-  color:var(--c-text);
+  color: var(--c-text);
   &:first-child {
     margin: 0 0 var(--spacer-sm) 0;
   }

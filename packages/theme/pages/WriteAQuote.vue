@@ -97,7 +97,7 @@
 //import {}
 import { SfTabs, SfInput, SfButton, SfTextarea } from '@storefront-ui/vue';
 import { useUser, userGetters, useQuote } from '@vue-storefront/vendure';
-import { ref } from '@vue/composition-api';
+import { ref, inject } from '@vue/composition-api';
 export default {
   components: {
     SfTabs,
@@ -106,6 +106,7 @@ export default {
     SfTextarea,
   },
   setup() {
+    const showToast = inject('showToast');
     const { writeQuote } = useQuote();
     const data = ref({
       fromEmail: '',
@@ -118,7 +119,6 @@ export default {
       lastName: '',
     });
     const send = () => {
-      console.log({ data });
       writeQuote({
         isSpecial: true,
         fromEmail: data.value.fromEmail,
@@ -129,6 +129,7 @@ export default {
         location: data.value.location,
         productDescr: '',
       });
+      showToast('Quote Sent!');
     };
     return { data, send };
   },
