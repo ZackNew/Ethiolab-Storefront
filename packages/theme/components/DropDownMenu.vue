@@ -28,14 +28,15 @@
     >
       meme
     </SfBanner> -->
-    <div class="detail" v-show="showDetail">
+    <div class="detail bg-light_accent pb-3" v-show="showDetail">
       <img
-        style="width: 10em; max-height: 6em; object-fit: cover"
+        style="object-fit: cover"
         alt="Industry Image"
         :src="cPrev"
+        class="w-full min-h-[50%] max-h-[70%]"
       />
       <h4>{{ cTitle }}</h4>
-      <p v-html="cDisc"></p>
+      <p v-html="cDisc" class="mx-3"></p>
     </div>
     <div
       v-show="!showDetail"
@@ -136,21 +137,19 @@ export default {
 <style scoped>
 .detail {
   position: absolute;
-  background-color: var(--c-bg-secondary);
   right: 0;
   top: 0;
-  color: white;
   display: flex;
-  border-radius: 1em;
+  border-radius: 1px;
   box-shadow: 2px 2px 5px rgb(68, 68, 68);
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  margin: 1em;
+  margin: 0.5em;
   box-sizing: border-box;
-  height: 90%;
-  width: 25%;
-  padding: 1em;
+  height: 95%;
+  width: 20%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .detail p {
   text-align: justify;
@@ -161,10 +160,10 @@ export default {
   top: 0;
   color: white;
   display: flex;
-  border-radius: 0.5em;
+  border-radius: 1px;
   box-shadow: 2px 2px 5px rgb(68, 68, 68);
   flex-direction: column;
-  margin: 1em;
+  margin: 0.5em;
   box-sizing: border-box;
   height: 95%;
   width: 20%;
