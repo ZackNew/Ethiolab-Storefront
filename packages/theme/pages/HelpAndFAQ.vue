@@ -1,57 +1,117 @@
 <template>
-    <div>
-      <section class="py-20 2xl:py-40 faq ">
-        <div class="container px-4 mx-auto">
-          <div class="mb-20 text-center">
+  <div>
+    <section class="py-20 2xl:py-40 faq">
+      <div class="container px-4 mx-auto">
+        <div class="mb-20 text-center">
           <h2 class="mt-8 text-7xl font-bold font-heading">FAQ&apos;s</h2>
-          </div>
-          <div class="max-w-5xl mx-auto">
-              <SfAccordion transition="" open="all" showChevron  v-for="n in 5" :key="n" class="mb-4 px-4 lg:px-12 py-8 accordion-bg rounded-2xl">
-                <SfAccordionItem  header="Clothing" class="rounded-2xl">
-                  <template #header="{header, isOpen, accordionClick, showChevron}" >
-                    <div @click="accordionClick" :style="{cursor: 'pointer'}" class="flex justify-between">
-                      <h3 class="text-xl font-bold"><span  class="w-auto mr-8">{{ n }}</span>How should I develop my workflow over time?</h3>
-                      <span class="sf-chevron" :class="isOpen? '':'sf-chevron--right'">
-                          <span class="sf-chevron__bar sf-chevron__bar--left" />
-                           <span class="sf-chevron__bar sf-chevron__bar--right" />
-                      </span>
-
-                    </div>
-                  </template>
-                  <div class="mt-6 border-l-2 border-gray-50 pl-10 ml-10">
-                    <p class="mb-5 text-xl">The point of using Lorem Ipsum is that it has a more-or-less normal:</p>
-                    <p class="mb-2 text-lg">
-                      <span class="inline-block mr-6 h-2 w-2 rounded-full bg-blue-500"></span>
-                      <span>Distribution of letters</span>
-                    </p>
-                    <p class="text-lg">
-                      <span class="inline-block mr-6 h-2 w-2 rounded-full bg-blue-500"></span>
-                      <span>Content here</span>
-                    </p>
-                  </div>
-                </SfAccordionItem>
-
-              </SfAccordion>
-          </div>
         </div>
-      </section>
-    </div>
+        <div class="max-w-4xl mx-auto">
+          <SfAccordion
+            transition=""
+            open="all"
+            showChevron
+            v-for="(faq, index) in FAQs"
+            :key="faq.id"
+            class="mb-4 px-4 lg:px-12 py-8 accordion-bg rounded-2xl"
+          >
+            <SfAccordionItem header="Clothing" class="rounded-2xl">
+              <template
+                #header="{ header, isOpen, accordionClick, showChevron }"
+              >
+                <div
+                  @click="accordionClick"
+                  :style="{ cursor: 'pointer' }"
+                  class="flex justify-between"
+                >
+                  <h3 class="text-xl font-bold">
+                    <span class="w-auto mr-8">{{ index + 1 }}</span
+                    >{{ faq.question }}
+                  </h3>
+                  <span
+                    class="sf-chevron"
+                    :class="isOpen ? '' : 'sf-chevron--right'"
+                  >
+                    <span class="sf-chevron__bar sf-chevron__bar--left" />
+                    <span class="sf-chevron__bar sf-chevron__bar--right" />
+                  </span>
+                </div>
+              </template>
+              <div class="mt-6 border-l-2 border-gray-50 pl-10 ml-10">
+                <p class="mb-5 text-xl">
+                  {{ faq.answer }}
+                </p>
+                <!-- <p class="mb-2 text-lg">
+                  <span
+                    class="inline-block mr-6 h-2 w-2 rounded-full bg-blue-500"
+                  ></span>
+                  <span>Distribution of letters</span>
+                </p>
+                <p class="text-lg">
+                  <span
+                    class="inline-block mr-6 h-2 w-2 rounded-full bg-blue-500"
+                  ></span>
+                  <span>Content here</span>
+                </p> -->
+              </div>
+            </SfAccordionItem>
+          </SfAccordion>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 <script>
-import {SfAccordion} from "@storefront-ui/vue";
+import { SfAccordion } from '@storefront-ui/vue';
+import axios from 'axios';
 
 export default {
-//   name: "Help&FAQ",
+  //   name: "Help&FAQ",
   components: {
     SfAccordion,
   },
-}
+  created() {
+    this.getFAQs();
+  },
+  data() {
+    return {
+      FAQs: [],
+    };
+  },
+  methods: {
+    async getFAQs() {
+      const body = {
+        query: `query getFAQ {
+            getFaqs {
+              answer
+              id
+              question
+              isEnabled
+            }
+          }`,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios
+        .post('http://localhost:3000/shop-api', body, options)
+        .then((res) => {
+          console.log('===========');
+          console.log(res.data.data.getFaqs);
+          this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
+        });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-.faq,h2{
+.faq,
+h2 {
   color: var(--c-text);
 }
-.accordion-bg{
+.accordion-bg {
   background-color: var(--c-accent);
 }
 </style>

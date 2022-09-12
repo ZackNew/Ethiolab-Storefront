@@ -1,42 +1,39 @@
 <template>
-  <SfFooter :column="5" multiple class="footer">
-    <SfFooterColumn :title="$t('About us')" class="footer-column">
+  <SfFooter :column="4" multiple class="footer">
+    <SfFooterColumn :title="$t('Order Support')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-          <router-link to="/page/about" exact>
+          <router-link to="#" exact>
+            <SfMenuItem class="sf-footer__menu-item" :label="$t('Order')" />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/policy" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
-              :label="$t('Who we are')"
+              :label="$t('Return and Cancellation')"
             />
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/page/quality" exact>
+          <router-link to="/policy/shipping" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
-              :label="$t('Quality in the details')"
+              :label="$t('Shipping Policy')"
             />
           </router-link>
         </SfListItem>
-        <!-- <SfListItem class="footer-list-item">
-            <router-link to="/page/reviews" exact>
-              <SfMenuItem
-                class="sf-footer__menu-item"
-                :label="$t('Customer reviews')"
-              />
-            </router-link>
-          </SfListItem> -->
         <SfListItem class="footer-list-item">
-          <router-link to="/pages/helpAndFAQ" exact>
+          <router-link to="/policy" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
-              :label="$t('Help & FAQs')"
+              :label="$t('Warranty Policy')"
             />
           </router-link>
         </SfListItem>
       </SfList>
     </SfFooterColumn>
-    <SfFooterColumn :title="$t('Departments')" class="footer-column">
+    <!-- <SfFooterColumn :title="$t('Departments')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem
           v-for="item in departments"
@@ -46,11 +43,44 @@
           <SfMenuItem :label="$t(item)" />
         </SfListItem>
       </SfList>
+    </SfFooterColumn> -->
+    <SfFooterColumn :title="$t('Customer Support')" class="footer-column">
+      <SfList class="footer-list">
+        <SfListItem class="footer-list-item">
+          <router-link to="/pages/contact" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Contact Us')"
+            />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/policy" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Cookie Policy')"
+            />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/pages/helpAndFAQ" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Help and FAQ')"
+            />
+          </router-link>
+        </SfListItem>
+      </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Company')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-          <router-link to="#" exact>
+          <router-link to="/page/about" exact>
+            <SfMenuItem class="sf-footer__menu-item" :label="$t('About Us')" />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/policy/privacy" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Privacy Policy')"
@@ -58,44 +88,16 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="#" exact>
+          <router-link to="/policy/terms-and-conditions" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Terms & Conditions')"
             />
           </router-link>
         </SfListItem>
-        <SfListItem class="footer-list-item">
-          <router-link to="#" exact>
-            <SfMenuItem
-              class="sf-footer__menu-item"
-              :label="$t('Cookie Policy')"
-            />
-          </router-link>
-        </SfListItem>
       </SfList>
     </SfFooterColumn>
-    <SfFooterColumn :title="$t('Help')" class="footer-column">
-      <SfList class="footer-list">
-        <SfListItem class="footer-list-item">
-          <router-link to="/page/customer" exact>
-            <SfMenuItem
-              class="sf-footer__menu-item"
-              :label="$t('Customer service')"
-            />
-          </router-link>
-        </SfListItem>
-        <SfListItem class="footer-list-item">
-          <router-link to="/pages/contact" exact>
-            <SfMenuItem
-              class="sf-footer__menu-item"
-              :label="$t('Contact us')"
-            />
-          </router-link>
-        </SfListItem>
-      </SfList>
-    </SfFooterColumn>
-    <SfFooterColumn :title="$t('Payment & Delivery')" class="footer-column">
+    <!-- <SfFooterColumn :title="$t('Payment & Delivery')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
           <router-link to="/page/terms" exact>
@@ -117,18 +119,20 @@
           </router-link>
         </SfListItem>
       </SfList>
-    </SfFooterColumn>
+    </SfFooterColumn> -->
     <SfFooterColumn :title="$t('Social')" class="footer-column">
       <div class="footer__socials">
-        <SfImage
-          class="footer__social-image"
-          v-for="item in social"
-          :key="item"
-          :src="'/icons/' + item + '.svg'"
-          :alt="item"
-          width="32"
-          height="32"
-        />
+        <div v-for="item in social" :key="item.name">
+          <a :href="item.link" target="_blank">
+            <SfImage
+              class="footer__social-image"
+              :src="'/icons/' + item.name + '.svg'"
+              :alt="item.name"
+              width="32"
+              height="32"
+            />
+          </a>
+        </div>
       </div>
     </SfFooterColumn>
   </SfFooter>
@@ -153,7 +157,21 @@ export default {
   data() {
     return {
       departments: ['Surgery', 'Medical Imagery', 'General Laboratory'],
-      social: ['facebook', 'pinterest', 'google', 'twitter', 'youtube'],
+      social: [
+        {
+          name: 'facebook',
+          link: 'https://www.facebook.com/Ethiolab-Equipment-Supplies-112293414934486',
+        },
+        {
+          name: 'linkedin',
+          link: 'https://www.linkedin.com/company/ethiolab-plc/',
+        },
+        { name: 'telegram', link: 'https://t.me/ethiolab_official' },
+        {
+          name: 'youtube',
+          link: 'https://www.youtube.com/channel/UC70xfcgu5gNOP2M0fL6PnAw',
+        },
+      ],
       isMobile: false,
       desktopMin: 1024,
     };
@@ -173,6 +191,7 @@ export default {
   border-top-color: var(--c-bg-primary);
   @include for-desktop {
     margin-bottom: 0;
+    padding-top: 0.5;
   }
   &__socials {
     display: flex;
@@ -186,10 +205,11 @@ export default {
     }
   }
   &__social-image {
-    margin: 0 var(--spacer-2xs) 0 0;
+    margin: 0 var(--spacer-xs) 0 0;
   }
 }
 .sf-footer-column {
+  // justify-content: space-between;
   background-color: inherit;
 }
 .sf-footer {

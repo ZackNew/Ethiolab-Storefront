@@ -1,6 +1,10 @@
 <template>
   <div class="sub-body">
-    <div @mouseover="handler(id,title,disc,prev)" @mouseleave="hoverOutHandler()" class="content">
+    <div
+      @mouseover="handler(id, title, disc, prev)"
+      @mouseleave="hoverOutHandler()"
+      class="content"
+    >
       <nuxt-link :key="-1" :to="this.$props.link">{{
         this.$props.title
       }}</nuxt-link>
@@ -9,9 +13,13 @@
         class="grid grid-rows-4 grid-cols-2 gap-6 overlay"
         v-if="subnavList.length > 0"
       >
-        <a v-for="sub in subnavList" :key="sub.id" :href="`/s/${sub.slug}`">{{
-          sub.label
-        }}</a>
+        <a
+          class="mb-3"
+          v-for="sub in subnavList"
+          :key="sub.id"
+          :href="`/s/${sub.slug}`"
+          >{{ sub.label }}</a
+        >
       </div>
     </div>
   </div>
@@ -26,20 +34,19 @@ export default {
     title: String,
     subnavList: Array,
     link: String,
-    handler:Function,
-    hoverOutHandler:Function,
-    disc:String,
-    prev:String,
-    id:anymatch
-
+    handler: Function,
+    hoverOutHandler: Function,
+    disc: String,
+    prev: String,
+    id: anymatch,
   },
   setup() {
-        let hoverHandler = ()=>{
-      console.log('hover handler activated**')
-    }
+    let hoverHandler = () => {
+      console.log('hover handler activated**');
+    };
     return {
       // hoverHandler
-    }
+    };
   },
 };
 </script>
