@@ -312,7 +312,7 @@ export default defineComponent({
         console.log("the option value is ", option.value)
         // mainCategory=product[0].collections[0].breadcrumbs[1].slug
         mainCategory=product.value
-                console.log("the productsss  id value is ", products.value.id)
+                console.log("the productsss  id value is ", products.value)
                 console.log("configuration value is ", configuration.value)
                 //   console.log("the productsss image value is ", products.value.assets[0].preview)
                 // console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
