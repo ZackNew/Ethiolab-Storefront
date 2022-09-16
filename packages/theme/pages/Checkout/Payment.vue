@@ -81,26 +81,28 @@
           >
             {{ $t('Go back') }}
           </SfButton>
-          <button v-on:click="sendData">
+          <!-- <button v-on:click="sendData">
             Click me
-          </button>
+          </button> -->
 
-          <!-- <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/pay" method="post">
-            <input type="hidden" name="access_key" v-model="paymentDetail.access_key">
-            <input type="hidden" name="profile_id" v-model="paymentDetail.profile_id">
-            <input type="hidden" name="transaction_uuid" v-model="paymentDetail.transaction_uuid">
-            <input type="hidden" name="signed_field_names" v-model="paymentDetail.signed_field_names">
-            <input type="hidden" name="unsigned_field_names" v-model="paymentDetail.unsigned_field_names">
-            <input type="hidden" name="signed_date_time" v-model="paymentDetail.signed_date_time">
-            <input type="hidden" name="locale" v-model="paymentDetail.locale">
-            <input type="hidden" name="transaction_type" v-model="paymentDetail.transaction_type">
-            <input type="hidden" name="reference_number" v-model="paymentDetail.reference_number">
-            <input type="hidden" name="amount" v-model="paymentDetail.amount">
-            <input type="hidden" name="currency" v-model="paymentDetail.currency">
-            <input type="hidden" name="signature" v-model="paymentDetail.signature">
-            <input type="submit" name="submit" value="Confirm">
+           <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/pay" target="_blank" method="post">
+            <input id="access_key"  name="access_key" v-model="paymentDetail.access_key">
+            <input id="profile_id"  name="profile_id" v-model="paymentDetail.profile_id">
+            <input id="transaction_uuid"  name="transaction_uuid" v-model="paymentDetail.transaction_uuid">
+            <input id="signed_field_names"  name="signed_field_names" v-model="paymentDetail.signed_field_names">
+            <input id="unsigned_field_names"  name="unsigned_field_names" v-model="paymentDetail.unsigned_field_names">
+            <input id="signed_date_time" name="signed_date_time" v-model="paymentDetail.signed_date_time">
+            <input id="locale" name="locale" v-model="paymentDetail.locale">
+            <input id="transaction_type" name="transaction_type" v-model="paymentDetail.transaction_type">
+            <input id="reference_number" name="reference_number" v-model="paymentDetail.reference_number">
+            <input id="amount" name="amount" v-model.lazy="paymentDetail.amount">
+            <input id="currency" name="currency" v-model="paymentDetail.currency">
+            <input id="signature" name="signature" v-model="paymentDetail.signature">
 
-          </form> -->
+          <br></br>  <input type="submit" id="submit" name="submit" value="Confirm">
+
+
+          </form> 
 
           <!-- <SfButton
             v-e2e="'make-an-order'"
@@ -131,7 +133,7 @@ import {
   SfLink
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
-import { ref, computed, onMounted } from '@vue/composition-api';
+import { ref, computed, onMounted , onBeforeMount} from '@vue/composition-api';
 import { useMakeOrder, useCart, cartGetters, usePayment } from '@vue-storefront/vendure';
 // import { useBilling, useShipping, useUserBilling } from '@vue-storefront/vendure';
 import { uuid } from 'vue-uuid'; 
@@ -159,7 +161,7 @@ export default {
     const { cart, load, setCart } = useCart();
     const { loading } = useMakeOrder();
     const { set } = usePayment();
-
+    
     
 
     const terms = ref(false);
@@ -167,10 +169,27 @@ export default {
 
      let time = new Date().getTime();
 
-    const url = "https://testsecureacceptance.cybersource.com/pay";
-    const date = moment()
-    const SECRET_KEY = "c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7";
+
+    let sign = ref("")
     let paymentDetail = {};
+    let SECRET_KEY = ""
+    let url =""
+    onSSR(async () => {
+      await load();
+    });
+
+    onMounted(() => {
+      console.log("the usecart cart value is ", cart);
+      console.log("the final payment detail value is ", paymentDetail)
+      console.log("amount type", typeof(paymentDetail.transaction_uuid))
+      console.log("the time value is ", time)
+    })
+
+    onBeforeMount(() => {
+
+     url = "https://testsecureacceptance.cybersource.com/pay";
+    // const date = moment()
+     SECRET_KEY = "c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7";
     paymentDetail.access_key = "98e9854d57563c34843c61c09e13f17c";
     paymentDetail.profile_id = "09D76F9D-C5BB-4A5F-8D1E-4E3F2A757AD9";
     paymentDetail.transaction_uuid = uuid.v4();
@@ -179,64 +198,35 @@ export default {
     paymentDetail.signed_date_time = moment.utc(time).format('YYYY-MM-DDTHH:mm:ss[Z]');
     paymentDetail.locale = "en";
     paymentDetail.transaction_type = "authorization";
-    paymentDetail.reference_number = moment().unix().toString();
+    paymentDetail.reference_number = new Date().getTime();
     paymentDetail.amount = (cart.value.totalWithTax/100).toFixed(2).toString();
-    paymentDetail.currency = "USD";
+    paymentDetail.currency = "ETB";
     paymentDetail.signature = "";
     paymentDetail.submit = "Submit";
 
-    function sendData() {
-  console.log('Sending data');
+    // let key =  signData(buildDataToSign(paymentDetail), SECRET_KEY);
+    // sign = key;
+    // paymentDetail.signature = "111111aaaa";
 
-  const XHR = new XMLHttpRequest();
+    // console.log("finalyyyyy", paymentDetail.signature)
 
-  const urlEncodedDataPairs = [];
+    let signedFieldNames = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
+      // console.log("the signed field names are ", signedFieldNames)
+      let params = signedFieldNames.split(",");
+      let dataToSign = [];
 
-  // Turn the data object into an array of URL-encoded key/value pairs.
-  for (const [name, value] of Object.entries(paymentDetail)) {
-    urlEncodedDataPairs.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
-  }
+      params.forEach(param => {
+        dataToSign.push(param+"="+paymentDetail[param]);
+        
+      });
 
-  // Combine the pairs into a single string and replace all %-encoded spaces to
-  // the '+' character; matches the behavior of browser form submissions.
-  const urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+      let data = dataToSign.join();
 
-  // Define what happens on successful data submission
-  XHR.addEventListener('load', (event) => {
-    alert('Yeah! Data sent and response loaded.');
-  });
-
-  // Define what happens in case of error
-  XHR.addEventListener('error', (event) => {
-    alert('Oops! Something went wrong.');
-  });
-
-  // Set up our request
-  XHR.open('POST', 'https://testsecureacceptance.cybersource.com/pay');
-
-  // Add the required HTTP header for form data POST requests
-  XHR.setRequestHeader('Access-Control-Allow-Origin', '*');
-  XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
-  // XHR.setRequestHeader("withCredentials", true);
-  // XHR.setRequestHeader("mode", "no-cors");
-
-
-
-  // Finally, send our data.
-  XHR.send(urlEncodedData);
-}
-
-    onSSR(async () => {
-      await load();
-    });
-
-    onMounted(() => {
-      console.log("the usecart cart value is ", cart);
-      console.log("key vlaue is ", key)
-      console.log("the final payment detail value is ", paymentDetail)
-      console.log("amount type", typeof(paymentDetail.transaction_uuid))
-      console.log("the time value is ", time)
+      var hash = CryptoJS.HmacSHA256(data, SECRET_KEY);
+  var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+  paymentDetail.signature = hashInBase64;
+      // console.log("before comma", dataToSign)
+      // return commaSeparate(dataToSign);
     })
 
     const updatePaymentMethod = method => {
@@ -296,8 +286,7 @@ export default {
       return hashInBase64 
       
     }
-    let key =  signData(buildDataToSign(paymentDetail), SECRET_KEY);
-    paymentDetail.signature = key;
+
 
 
     return {
@@ -312,7 +301,7 @@ export default {
       paymentMethod,
       paymentDetail,
       url,
-      sendData
+      sign
     };
   }
 };
