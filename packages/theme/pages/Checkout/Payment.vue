@@ -99,7 +99,7 @@
             <input id="currency" name="currency" v-model="paymentDetail.currency">
             <input id="signature" name="signature" v-model="paymentDetail.signature">
 
-          <br></br>  <input type="submit" id="submit" name="submit" value="Confirm">
+          <br></br>  <input type="submit" id="submit" name="submit" value="Confirm" @click="processOrder">
 
 
           </form> 
@@ -140,6 +140,8 @@ import { uuid } from 'vue-uuid';
 import {crypto} from "crypto";
 import CryptoJS from 'crypto-js'
 import moment from "moment";
+import axios from 'axios';
+
 
 export default {
   name: 'ReviewOrder',
@@ -237,19 +239,45 @@ export default {
       const response = await set({
         method: paymentMethod?.value?.code,
         metadata: {
+          status:"test"
           // Here you would pass data from an external Payment Provided after successful payment process like payment id.
         }
 
       });
         console.log("the final payment response value is ", response)
 
+        const state = "Completed";
+
+        const body = {
+        query: `mutation transitionOrderToState($state: String!) {
+                transitionOrderToState(state: $state) {
+               
+                }
+              }`,
+        variables: {
+          state: state,
+        },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      let baseUrl = process.env.GRAPHQL_API;
+
+           const acat = await axios
+        .post(baseUrl, body, options)
+        .then(async (res) => {
+          console.log("the  gql response value is ", res);
+        })
 
       // const thankYouPath = { name: 'thank-you', query: { order: response?.code }}; 
-      const thankYouPath = { name: 'thank-you', query: { order:11256 }}; // order number is to be getted from the response later
+      // const thankYouPath = { name: 'thank-you', query: { order:11256 }}; // order number is to be getted from the response later
 
-      context.root.$router.push(context.root.localePath(thankYouPath));
-      // context.root.$router.push({ redirect: window.location.href = 'https://secureacceptance.cybersource.com/checkout' });
-      setCart(null);
+      // context.root.$router.push(context.root.localePath(thankYouPath));
+      // // context.root.$router.push({ redirect: window.location.href = 'https://secureacceptance.cybersource.com/checkout' });
+      // setCart(null);
     };
 
     const buildDataToSign = async (paymentDetail) => {

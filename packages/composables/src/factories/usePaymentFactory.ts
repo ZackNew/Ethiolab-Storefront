@@ -50,6 +50,7 @@ export function usePaymentFactory<PAYMENT = any>(
     };
 
     const set = async (searchParams) => {
+      console.log("setttttt method", searchParams);
       Logger.debug('usePayment/set', searchParams);
 
       try {
