@@ -22,7 +22,6 @@
       <div class="shadow-xl rounded-lg w-96 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
-            @categoryClicked="emememe"
             @maxAdded="maxInput"
             @minAdded="minInput"
             @searchChange="searchBox"
