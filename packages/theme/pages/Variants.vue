@@ -30,11 +30,7 @@
           <SfGallery
             :images="productGallery"
             class="product__gallery w-auto"
-            :imageWidth="300"
-            :imageHeight="400"
-            :thumbWidth="160"
-            :thumbHeight="160"
-            :enableZoom="true"
+            enableZoom
           />
         </LazyHydrate>
         <!-- <!- <img :src="loading? '' : products.featuredAsset.preview" class="h-96" />
@@ -94,24 +90,26 @@
                       >
                         Item
                       </th>
-                      <th
+                      <!-- <th
                         scope="col"
                         class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-1"
                       >
                         SKU
-                      </th>
+                      </th> -->
 
                       <!-- <th  scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left">{{loading? '' : option.value[0].label}}</th> -->
 
                       <!-- <th v-for="(op, i) in option && option" :key="i"  scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left">{{op.label.toUpperCase()}}</th> -->
-                      <th
-                        scope="col"
-                        class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-2"
-                        v-if="option && option.length != 0"
-                      >
-                        Option
-                      </th>
-
+                      <template v-if="option && option.length != 0">
+                        <th
+                          scope="col"
+                          class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-2"
+                          v-for="(opt, index) in option"
+                          :key="index"
+                        >
+                          {{ opt.label }}
+                        </th>
+                      </template>
                       <th
                         scope="col"
                         class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-4"
@@ -147,26 +145,36 @@
                           </div>
 
                           <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
-                          <a
-                            class="text-secondary ml-5 mt-5"
-                            :href="
-                              '/p/' +
-                              products.id +
-                              '/' +
-                              pro._id +
-                              '/' +
-                              pro.slug
-                            "
-                            >{{ pro.name }}
-                          </a>
+                          <template class="max-w-16">
+                            <a
+                              class="text-secondary ml-5 mt-5"
+                              :href="
+                                '/p/' +
+                                products.id +
+                                '/' +
+                                pro._id +
+                                '/' +
+                                pro.slug
+                              "
+                              >{{ pro.name }}
+                            </a>
+                          </template>
                         </div>
                       </td>
                       <!-- <td class=" col-span-1">{{pro.price.current}}</td> -->
-                      <td class="col-span-1">{{ pro.sku }}</td>
-
-                      <td class="col-span-2" v-if="option.length != 0">
-                        {{ pro.name.replace(products.name, '') }}
-                      </td>
+                      <!-- <td class="col-span-1">{{ pro.sku }}</td> -->
+                      <template v-if="option.length != 0">
+                        <td
+                          v-for="(opt, index) in option"
+                          :key="index"
+                          class="col-span-2"
+                        >
+                          <template v-for="o in opt.options">
+                            {{ o.value }}
+                          </template>
+                          <!-- {{ pro.name.replace(products.name, '') }} -->
+                        </td>
+                      </template>
                       <td class="col-span-4">
                         <span class="text-xl font-bold ml-5">{{
                           pro.price.current
