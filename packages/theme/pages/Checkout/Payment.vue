@@ -141,7 +141,7 @@ import {crypto} from "crypto";
 import CryptoJS from 'crypto-js'
 import moment from "moment";
 import axios from 'axios';
-
+import { mapAddressFormToOrderAddress, COUNTRIES, getDefaultAddress, mapAddressToAddressForm } from '~/helpers';
 
 export default {
   name: 'ReviewOrder',
@@ -239,7 +239,6 @@ export default {
       const response = await set({
         method: paymentMethod?.value?.code,
         metadata: {
-          status:"test"
           // Here you would pass data from an external Payment Provided after successful payment process like payment id.
         }
 
@@ -249,14 +248,19 @@ export default {
         const state = "Completed";
 
         const body = {
-        query: `mutation transitionOrderToState($state: String!) {
-                transitionOrderToState(state: $state) {
-               
+        query: `mutation{
+                transitionOrderToState(state: "AddingItems"){
+                  ... on Order{
+                    billingAddress{
+                      fullName
+                    }
+                  }
+                  ... on OrderStateTransitionError{
+                    errorCode
+                    message
+                  }
                 }
-              }`,
-        variables: {
-          state: state,
-        },
+              }`
       };
       const options = {
         headers: {
@@ -265,12 +269,40 @@ export default {
         },
       };
       let baseUrl = process.env.GRAPHQL_API;
-
-           const acat = await axios
+      const acat = await axios
         .post(baseUrl, body, options)
         .then(async (res) => {
-          console.log("the  gql response value is ", res);
+          console.log("the response value sura is ", res);
+        }).catch(err => {
+          console.log("error occured while updating the state and err is ", err);
         })
+
+
+      //   const body = {
+      //   query: `mutation transitionOrderToState($state: String!) {
+      //           transitionOrderToState(input : {state: $state}) {
+               
+      //           }
+      //         }`,
+      //   variables: {
+      //     state: state,
+      //   },
+      // };
+      // const options = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Access-Control-Allow-Origin': '*',
+      //   },
+      // };
+      // let baseUrl = process.env.GRAPHQL_API;
+
+      //      const acat = await axios
+      //   .post(baseUrl, body, options)
+      //   .then(async (res) => {
+      //     console.log("the  gql response value is ", res);
+      //   }).catch(err => {
+      //     console.log("the catch err is ", err)
+      //   })
 
       // const thankYouPath = { name: 'thank-you', query: { order: response?.code }}; 
       // const thankYouPath = { name: 'thank-you', query: { order:11256 }}; // order number is to be getted from the response later
