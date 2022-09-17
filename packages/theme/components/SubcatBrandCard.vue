@@ -5,7 +5,7 @@
       v-for="product in filteredProducts"
       :key="product.id"
     >
-      <nuxt-link :to="'/v/' + product.slug">
+      <a :href="'/v/' + product.slug">
         <LazyHydrate>
           <img
             class="object-cover h-52 w-48 rounded-t-lg m-2"
@@ -13,10 +13,10 @@
             alt="image"
           />
         </LazyHydrate>
-      </nuxt-link>
-      <nuxt-link :to="'/v/' + product.slug">
+      </a>
+      <a :href="'/v/' + product.slug">
         <h4 class="text-center font-serif m-3">{{ product.name }}</h4>
-      </nuxt-link>
+      </a>
       <p class="text-center m-3">
         {{ String(product.variants[0].price).slice(0, -2) }}.00
       </p>
