@@ -290,33 +290,38 @@
               tag="div"
               class="products__grid"
             >
-              <SfProductCard
-                v-e2e="'category-product-card'"
+              <div
                 v-for="(product, i) in products"
                 :key="productGetters.getSlug(product)"
-                :style="{ '--index': i }"
-                :title="productGetters.getName(product)"
-                :image="productGetters.getCoverImage(product)"
-                imageHeight="20.25rem"
-                imageWidth="100%"
-                :regular-price="
-                  productGetters.getPrice(product).regular.toLocaleString() +
-                  ' ETB'
-                "
-                :max-rating="5"
-                :score-rating="productGetters.getAverageRating(product)"
-                :show-add-to-cart-button="true"
-                :isInWishlist="isInWishlist({ product })"
-                :isAddedToCart="isInCart({ product })"
-                :link="localePath(`/v/${productGetters.getSlug(product)}`)"
-                class="products__product-card mr-4 mb-4 -z-1"
-                @click:wishlist="
-                  !isInWishlist({ product })
-                    ? addItemToWishlist({ product })
-                    : removeItemFromWishlist({ product })
-                "
-                @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-              />
+              >
+                <a :href="`/v/${productGetters.getSlug(product)}`">
+                  <SfProductCard
+                    v-e2e="'category-product-card'"
+                    :style="{ '--index': i }"
+                    :title="productGetters.getName(product)"
+                    :image="productGetters.getCoverImage(product)"
+                    imageHeight="20.25rem"
+                    imageWidth="100%"
+                    :regular-price="
+                      productGetters
+                        .getPrice(product)
+                        .regular.toLocaleString() + ' ETB'
+                    "
+                    :max-rating="5"
+                    :score-rating="productGetters.getAverageRating(product)"
+                    :show-add-to-cart-button="true"
+                    :isInWishlist="isInWishlist({ product })"
+                    :isAddedToCart="isInCart({ product })"
+                    class="products__product-card mr-4 mb-4 -z-1"
+                    @click:wishlist="
+                      !isInWishlist({ product })
+                        ? addItemToWishlist({ product })
+                        : removeItemFromWishlist({ product })
+                    "
+                    @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                  />
+                </a>
+              </div>
             </transition-group>
             <transition-group
               v-else
