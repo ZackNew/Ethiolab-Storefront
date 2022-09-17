@@ -22,12 +22,12 @@
       </p>
       <div class="text-center">
         <button class="mb-4">
-          <nuxt-link
+          <a
             class="mx-10 bg-dark text-white font-bold py-2 px-4 rounded"
-            :to="'/v/' + product.slug"
+            :href="'/v/' + product.slug"
           >
             {{ $t('View All') }}
-          </nuxt-link>
+          </a>
         </button>
       </div>
     </div>
