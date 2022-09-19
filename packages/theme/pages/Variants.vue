@@ -49,6 +49,7 @@
             class="col-span-2 overflow-auto nobar hover:border border-light_gray p-1 h-96 mt-10"
           >
             <p
+              class="text-justify"
               :class="classes.red"
               v-html="products && products.description"
             ></p>
