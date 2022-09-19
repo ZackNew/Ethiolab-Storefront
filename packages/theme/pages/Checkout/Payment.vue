@@ -249,7 +249,7 @@ export default {
 
         const body = {
         query: `mutation{
-                transitionOrderToState(state: "AddingItems"){
+                transitionOrderToState(state: "PaymentAuthorized"){
                   ... on Order{
                     billingAddress{
                       fullName
