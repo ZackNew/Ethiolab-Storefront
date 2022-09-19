@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5 flex flex-wrap">
+  <div class="mt-5 grid grid-cols-4">
     <div
       class="card shadow-lg w-52 my-3 mr-5 bg-white rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
       v-for="product in filteredProducts"

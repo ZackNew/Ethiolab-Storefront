@@ -60,7 +60,7 @@
           <div
             :class="classes.red"
             class="product__description desktop-only my-4 max-h-[30rem] overflow-hidden"
-            v-html="productGetters.getDescription(product)"
+            v-html="variant_description"
           ></div>
           <a style="color: blue" href="#full-description">MORE +</a>
           <iframe
@@ -147,22 +147,7 @@
         </div>
         <div class="w-1/2 -ml-16 mr-8">
           <h3 class="font-thin">More about this item</h3>
-          <p>
-            Lorem ipsum dolor, yes sit amet consectetur adipisicing elit. Nisi
-            eveniet, illum eligendi distinctio obcaecati magni error molestias,
-            provident explicabo omnis doloribus animi voluptatum blanditiis
-            esse. Fuga quisquam eos veniam aspernatur! Lorem ipsum, dolor sit
-            amet consectetur adipisicing elit. Nostrum accusamus mollitia, autem
-            officia harum quae itaque nesciunt eos commodi sunt numquam, ex
-            beatae ea nihil? Neque optio doloremque quidem facilis. Lorem ipsum
-            dolor sit amet consectetur, adipisicing elit. Laboriosam, pariatur
-            nulla qui exercitationem, aliquid fuga provident veritatis quisquam
-            tempore commodi inventore debitis corporis minima facilis assumenda,
-            praesentium eum optio omnis. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Pariatur deserunt, nam aliquam accusamus iure
-            perspiciatis ullam. Aut error, aliquam exercitationem aliquid neque
-            corrupti perferendis illo accusantium nulla, quidem qui quam!
-          </p>
+          <p :class="classes.red" v-html="variant_description"></p>
         </div>
       </div>
       <div v-if="productAccessories.length !== 0" class="mx-14 mt-14">
@@ -422,6 +407,9 @@ export default {
                   product(id: $id) {
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {
+                        customFields {
+                          description
+                        }
                         options {
                           name
                           group {
@@ -451,6 +439,8 @@ export default {
           head: o.group.name,
         }));
       this.optionTableValues = tablular;
+      this.variant_description =
+        variant.data.data?.product?.variantList?.items[0]?.customFields?.description;
 
       console.log(
         '=======================',
@@ -640,6 +630,7 @@ export default {
   },
   data() {
     return {
+      variant_description: null,
       productAccessories: [],
       optionTableValues: [],
       stock: 5,
