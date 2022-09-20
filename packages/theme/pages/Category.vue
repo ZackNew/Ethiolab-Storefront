@@ -218,7 +218,7 @@
               >
                 <div
                   v-if="cat.isCurrent === true && cat.slug === lastSlug"
-                  class="grid grid-cols-3 gap-10 mt-10 mb-10"
+                  class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10 mb-10"
                 >
                   <div v-for="(sub, j) in cat.items" :key="j">
                     <div
@@ -265,7 +265,7 @@
             Shop Our Best Sellers
           </h3>
 
-          <div class="grid grid-cols-3 gap-10">
+          <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
             <div class="card shadow-lg my-3 ml-2" v-for="i in 3" :key="i">
               <nuxt-link to="#">
                 <img
@@ -342,6 +342,7 @@
               tag="div"
               class="products__list"
             >
+              <!-- :description="productGetters.getDescription(product)" -->
               <SfProductCardHorizontal
                 v-e2e="'category-product-card'"
                 v-for="(product, i) in products"
@@ -349,7 +350,6 @@
                 :qty="itemQuantity"
                 :style="{ '--index': i }"
                 :title="productGetters.getName(product)"
-                :description="productGetters.getDescription(product)"
                 :image="productGetters.getCoverImage(product)"
                 :regular-price="
                   productGetters.getPrice(product).regular.toLocaleString() +
