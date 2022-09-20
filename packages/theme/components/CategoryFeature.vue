@@ -13,6 +13,7 @@
       <div v-for="category in headerNavigation" :key="category.label">
         <!-- <CategorySingle :title="category.label" :image="category.featuredAsset.preview" /> -->
         <div
+          :style="!isDarkMode ? '' : 'background-color: #182533'"
           class="max-w-sm rounded overflow-hidden shadow-xl hover:bg-light_gray hover:text-secondary"
         >
           <div class="m-4">
@@ -48,6 +49,7 @@ import {
 import { onSSR } from '@vue-storefront/core';
 import { computed } from '@vue/composition-api';
 import AOS from 'aos';
+import { useUiState } from '~/composables';
 import 'aos/dist/aos.css';
 export default defineComponent({
   components: { CategorySingle },
@@ -77,6 +79,7 @@ export default defineComponent({
     });
   },
   setup() {
+    const { isDarkMode } = useUiState();
     const headerNavigation = [];
     const { categories } = useCategory();
 
@@ -105,6 +108,7 @@ export default defineComponent({
       cats,
       getTree,
       headerNavigation,
+      isDarkMode,
     };
   },
 });

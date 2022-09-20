@@ -110,6 +110,7 @@
             :loading="loading"
           >
             <SfAccordion
+              :style="!isDarkMode ? '' : 'background-color: #182533'"
               :open="activeCategory"
               :show-chevron="true"
               class="shadow-md w-80 p-2"
@@ -203,7 +204,10 @@
           <LazyHydrate>
             <!-- <CategoryFeature /> -->
             <div>
-              <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">
+              <h3
+                class="font-bold mt-12 pb-2 border-b border-gray-200"
+                :style="!isDarkMode ? '' : 'color: white'"
+              >
                 Featured
               </h3>
               <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
@@ -217,9 +221,14 @@
                   class="grid grid-cols-3 gap-10 mt-10 mb-10"
                 >
                   <div v-for="(sub, j) in cat.items" :key="j">
-                    <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                    <div
+                      class="max-w-sm rouned overflow-hidden shadow-xl"
+                      :style="!isDarkMode ? '' : 'background-color: #182533'"
+                    >
                       <div class="m-4">
-                        <h4 class="">{{ sub.label }}</h4>
+                        <h4 :style="!isDarkMode ? '' : 'color: white'">
+                          {{ sub.label }}
+                        </h4>
                       </div>
                       <nuxt-link :to="`/s/${sub.slug}`">
                         <img
@@ -277,7 +286,10 @@
             </div>
           </div>
 
-          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+          <h3
+            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
+            :style="!isDarkMode ? '' : 'color: white'"
+          >
             Products Under This Category
           </h3>
           <div
@@ -544,6 +556,7 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
+    const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
     const th = useUiHelpers();
@@ -691,6 +704,7 @@ export default {
     };
 
     return {
+      isDarkMode,
       ...uiState,
       productQuantity,
       th,

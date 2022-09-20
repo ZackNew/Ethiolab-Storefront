@@ -19,7 +19,7 @@
     </nav>
     <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-xl rounded-lg w-96 h-3/4">
+      <div class="shadow-xl rounded-lg w-96 h-3/4 hidden md:block">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
             @maxAdded="maxInput"
