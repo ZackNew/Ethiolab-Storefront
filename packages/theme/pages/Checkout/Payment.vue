@@ -277,17 +277,6 @@ export default {
           console.log("error occured while updating the state and err is ", err);
         })
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "testsecureacceptance.cybersource.com/pay"); 
-        xhr.onload = function(event){ 
-            alert("Success, server responded with: " + event.target.response); // raw response
-        }; 
-        // or onerror, onabort
-        var formData = new FormData(document.getElementById("payment_confirmation")); 
-        console.log("formdata value is ", formdata)
-
-       const value =  xhr.send(formData);
-       console.log("xhr value is ", value)
 
       //   const body = {
       //   query: `mutation transitionOrderToState($state: String!) {
