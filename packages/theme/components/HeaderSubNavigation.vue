@@ -56,6 +56,8 @@ export default {
   text-align: 5%;
   background: rgb(255, 255, 255) !important;
   opacity: 1 !important;
+  overflow: auto;
+  max-height: 280px;
   /* width: 300% !important; */
 }
 
