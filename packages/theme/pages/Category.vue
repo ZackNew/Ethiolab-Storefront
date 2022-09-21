@@ -48,12 +48,14 @@
           <span class="navbar__label">{{ $t('Sort by') }}:</span>
           <LazyHydrate on-interaction>
             <SfSelect
+              :style="!isDarkMode ? '' : 'background-color: #182533'"
               :value="sortBy.selected"
               :placeholder="$t('Select sorting')"
               class="navbar__select"
               @input="th.changeSorting"
             >
               <SfSelectOption
+                :style="!isDarkMode ? '' : 'background-color: #182533'"
                 v-for="option in sortBy.options"
                 :key="option.id"
                 :value="option.id"

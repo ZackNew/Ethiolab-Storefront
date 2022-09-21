@@ -28,6 +28,11 @@ import BestSellerSingle from './BestSellerSingle.vue';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 export default defineComponent({
+  data() {
+    return {
+      cats: null,
+    };
+  },
   components: { BestSellerSingle },
   mounted() {
     AOS.init({

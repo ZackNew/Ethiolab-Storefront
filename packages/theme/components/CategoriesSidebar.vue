@@ -1,14 +1,14 @@
 <template>
   <div id="cart">
     <SfSidebar
-        v-e2e="'sidebar-menu'"
-        :visible="isMobileMenuOpen"
-        :title="$t('Categories')"
-        class="sf-sidebar--right"
-        @close="toggleMobileMenu"
+      v-e2e="'sidebar-menu'"
+      :visible="isMobileMenuOpen"
+      :title="$t('Categories')"
+      class="sf-sidebar--right"
+      @close="toggleMobileMenu"
     >
       <template #content-top>
-        <CategoriesAccordion/>
+        <CategoriesAccordion />
       </template>
     </SfSidebar>
   </div>
@@ -24,15 +24,15 @@ import {
   SfPrice,
   SfCollectedProduct,
   SfImage,
-  SfQuantitySelector
+  SfQuantitySelector,
 } from '@storefront-ui/vue';
 import { computed } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
-import CategoriesAccordion from "~/components/CategoriesAccordion";
+import CategoriesAccordion from '~/components/CategoriesAccordion';
 
 export default {
-  name: "CategoriesSidebar",
+  name: 'CategoriesSidebar',
   components: {
     CategoriesAccordion,
     SfSidebar,
@@ -43,10 +43,11 @@ export default {
     SfPrice,
     SfCollectedProduct,
     SfImage,
-    SfQuantitySelector
+    SfQuantitySelector,
   },
   setup() {
-    const { isCartSidebarOpen, toggleMobileMenu,isMobileMenuOpen } = useUiState();
+    const { isCartSidebarOpen, toggleMobileMenu, isMobileMenuOpen } =
+      useUiState();
     const { cart, removeItem, updateItemQty, loading } = useCart();
     const { isAuthenticated } = useUser();
     const products = computed(() => cartGetters.getItems(cart.value));
@@ -64,9 +65,9 @@ export default {
       toggleMobileMenu,
       totals,
       totalItems,
-      cartGetters
+      cartGetters,
     };
-  }
+  },
 };
 </script>
 

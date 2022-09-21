@@ -23,13 +23,13 @@
         </li>
       </ol>
     </nav>
-    <div class="grid grid-cols-12">
+    <div class="grid md:grid-cols-12">
       -
-      <div class="col-span-5 m-3">
+      <div class="md:col-span-5 m-3">
         <LazyHydrate when-idle>
           <SfGallery
             :images="productGallery"
-            class="product__gallery w-auto"
+            class="product__gallery :w-auto"
             enableZoom
           />
         </LazyHydrate>
@@ -39,12 +39,29 @@
         </div> -->
       </div>
 
-      <div class="col-span-6 m-3">
+      <div class="md:col-span-6 m-3">
         <h2>{{ products && products.name }}</h2>
         <!-- <p class="font-semibold text-2xl">{{products && products.name}}</p> -->
         <!-- <P class="text-secondary mt-5"></P> -->
 
-        <div class="grid grid-cols-3">
+        <div class="grid grid-cols-1 grid-cols-3">
+          <div class="col-span-1">
+            <span class="text-xl font-bold mt-10"
+              ><span>Price </span>{{ minPrice }} - {{ maxPrice }}</span
+            >
+            <div class="h-20 bg-light_gray md:ml-5 mt-10">
+              <p class="md:m-5 float-left">
+                {{ product && product.length }} variations of this product are
+                available.
+              </p>
+              <a
+                href="#var-table"
+                class="text-secondary text-sm md:m-4 font-bold"
+                >SEE ALL PRODUCT OPTIONS BELOW</a
+              >
+            </div>
+          </div>
+
           <div
             class="col-span-2 overflow-auto nobar hover:border border-light_gray p-1 h-96 mt-10"
           >
@@ -57,20 +74,6 @@
             <!-- <span> 
                                 <p class="text-secondary mb-3"> MORE +</p>
                             </span> -->
-          </div>
-          <div class="col-span-1">
-            <span class="text-xl font-bold mt-10"
-              ><span>Price </span>{{ minPrice }} - {{ maxPrice }}</span
-            >
-            <div class="h-20 bg-light_gray ml-5 mt-10">
-              <p class="m-5 float-left">
-                {{ product && product.length }} variations of this product are
-                available.
-              </p>
-              <a href="#var-table" class="text-secondary text-sm m-4 font-bold"
-                >SEE ALL PRODUCT OPTIONS BELOW</a
-              >
-            </div>
           </div>
         </div>
       </div>

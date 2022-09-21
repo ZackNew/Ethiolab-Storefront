@@ -1,14 +1,17 @@
 <template>
-  <div class="mt-5 grid grid-cols-2 md:grid-cols-4">
+  <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
     <div
-      class="card shadow-lg w-40 md:w-52 my-3 mr-5 bg-white rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
+      :style="
+        !isDarkMode ? 'background-color: #ffffff' : 'background-color: #182533'
+      "
+      class="card shadow-lg w-80 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
       v-for="product in filteredProducts"
       :key="product.id"
     >
       <a :href="'/v/' + product.slug">
         <LazyHydrate>
           <img
-            class="object-cover h-52 w-36 md:w-48 rounded-t-lg m-2"
+            class="object-cover h-52 w-72 md:w-48 rounded-t-lg m-2"
             :src="product.featuredAsset.preview"
             alt="image"
           />
@@ -41,6 +44,7 @@
 </template>
 
 <script>
+import { useUiState } from '~/composables';
 import LazyHydrate from 'vue-lazy-hydration';
 
 export default {
@@ -53,6 +57,12 @@ export default {
   },
   components: {
     LazyHydrate,
+  },
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
+    };
   },
 };
 </script>
