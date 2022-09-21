@@ -272,7 +272,9 @@ export default {
     brandsList() {
       let brand = [];
       this.products.forEach((element) => {
-        brand.push(element.customFields.brand?.name);
+        if (element.customFields.brand?.name) {
+          brand.push(element.customFields.brand?.name);
+        }
       });
       const brands = [...new Set(brand)];
       return brands;

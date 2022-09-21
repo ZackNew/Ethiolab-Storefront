@@ -232,7 +232,7 @@ export default {
     industryList() {
       let industry = [];
       this.products.forEach((product) => {
-        if (product.customFields.industry !== null) {
+        if (product.customFields.industry?.name) {
           industry.push(product.customFields.industry?.name);
         }
       });

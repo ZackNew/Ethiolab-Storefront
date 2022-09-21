@@ -22,7 +22,6 @@
       <div class="shadow-xl rounded-lg w-96 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
-            @categoryClicked="emememe"
             @maxAdded="maxInput"
             @minAdded="minInput"
             @searchChange="searchBox"
@@ -238,7 +237,9 @@ export default {
     brandsList() {
       let brand = [];
       this.products.forEach((element) => {
-        brand.push(element.customFields.brand?.name);
+        if (element.customFields.brand?.name) {
+          brand.push(element.customFields.brand?.name);
+        }
       });
       const brands = [...new Set(brand)];
       return brands;
@@ -246,7 +247,7 @@ export default {
     industryList() {
       let industry = [];
       this.products.forEach((element) => {
-        if (element.customFields.industry !== null) {
+        if (element.customFields.industry?.name) {
           industry.push(element.customFields.industry?.name);
         }
       });
