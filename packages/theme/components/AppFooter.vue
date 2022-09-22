@@ -209,6 +209,10 @@ export default {
   }
 }
 .sf-footer-column {
+  &__title {
+    // font-size: 30px;
+    font-weight: bold !important;
+  }
   // justify-content: space-between;
   background-color: inherit;
 }
