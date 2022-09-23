@@ -1,15 +1,26 @@
 <template>
   <div>
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
-    <div class="p-20">
+    <div class="p-3 md:p-20">
       <div
         data-aos="fade-left"
+<<<<<<< HEAD
+        class="w-full md:h-24 md:bg-primary md:p-20 md:before:content-[''] md:before:mr-8 md:before:mb-2 md:before:w-1/4 md:before:h-2 md:before:bg-dark_gray md:before:inline-block md:after:content-[''] md:after:ml-8 md:after:mb-2 md:after:w-1/4 md:after:h-2 md:after:bg-dark_gray md:after:inline-block text-center"
+      >
+        <span class="text-3xl md:text-4xl text-black md:text-white w-1/2"
+          >Best Seller</span
+        >
+=======
         class="w-full h-24 p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/6 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/6 after:h-2 after:bg-dark_gray after:inline-block text-center"
       >
         <span class="text-4xl w-1/4">Best Seller</span>
+>>>>>>> 2818149beea62ffa1f35e9a2ddafcf6736e5e781
       </div>
     </div>
-    <div class="grid grid-cols-3 gap-10 mt-10 mb-10" data-aos="fade-left">
+    <div
+      class="grid grid-cols-1 gap-10 mt-10 mb-10 md:grid-cols-3"
+      data-aos="fade-left"
+    >
       <div v-for="category in categories" :key="category.title">
         <BestSellerSingle :title="category.title" :image="category.image" />
       </div>
@@ -23,6 +34,11 @@ import BestSellerSingle from './BestSellerSingle.vue';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 export default defineComponent({
+  data() {
+    return {
+      cats: null,
+    };
+  },
   components: { BestSellerSingle },
   mounted() {
     AOS.init({

@@ -3,7 +3,10 @@
     <SfFooterColumn :title="$t('Order Support')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-          <router-link to="#" exact>
+          <router-link
+            :to="isAuthenticated ? '/my-account/order-history' : '#'"
+            exact
+          >
             <SfMenuItem class="sf-footer__menu-item" :label="$t('Order')" />
           </router-link>
         </SfListItem>
@@ -55,7 +58,7 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy" exact>
+          <router-link to="/policy/cookie-policy" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Cookie Policy')"
@@ -146,6 +149,9 @@ import {
   SfMenuItem,
   SfInput,
 } from '@storefront-ui/vue';
+import { useUser } from '@vue-storefront/vendure';
+import { onSSR } from '@vue-storefront/core';
+
 export default {
   components: {
     SfFooter,
@@ -174,6 +180,16 @@ export default {
       ],
       isMobile: false,
       desktopMin: 1024,
+    };
+  },
+  setup() {
+    const { isAuthenticated, load: loadUser, user } = useUser();
+    (async () => await loadUser())();
+    onSSR(async () => {
+      await loadUser();
+    });
+    return {
+      isAuthenticated,
     };
   },
 };

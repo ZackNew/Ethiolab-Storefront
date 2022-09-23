@@ -23,13 +23,13 @@
         </li>
       </ol>
     </nav>
-    <div class="grid grid-cols-12">
+    <div class="grid md:grid-cols-12">
       -
-      <div class="col-span-5 m-3">
+      <div class="md:col-span-5 m-3">
         <LazyHydrate when-idle>
           <SfGallery
             :images="productGallery"
-            class="product__gallery w-auto"
+            class="product__gallery :w-auto"
             enableZoom
           />
         </LazyHydrate>
@@ -39,16 +39,17 @@
         </div> -->
       </div>
 
-      <div class="col-span-6 m-3">
+      <div class="md:col-span-6 m-3">
         <h2>{{ products && products.name }}</h2>
         <!-- <p class="font-semibold text-2xl">{{products && products.name}}</p> -->
         <!-- <P class="text-secondary mt-5"></P> -->
 
-        <div class="grid grid-cols-3">
+        <div class="grid grid-cols-1 grid-cols-3">
           <div
             class="col-span-2 overflow-auto nobar hover:border border-light_gray p-1 h-96 mt-10"
           >
             <p
+              class="text-justify"
               :class="classes.red"
               v-html="products && products.description"
             ></p>
@@ -57,16 +58,19 @@
                                 <p class="text-secondary mb-3"> MORE +</p>
                             </span> -->
           </div>
+
           <div class="col-span-1">
             <span class="text-xl font-bold mt-10"
               ><span>Price </span>{{ minPrice }} - {{ maxPrice }}</span
             >
-            <div class="h-20 bg-light_gray ml-5 mt-10">
-              <p class="m-5 float-left">
+            <div class="h-20 bg-light_gray md:ml-5 mt-10">
+              <p class="md:m-5 float-left">
                 {{ product && product.length }} variations of this product are
                 available.
               </p>
-              <a href="#var-table" class="text-secondary text-sm m-4 font-bold"
+              <a
+                href="#var-table"
+                class="text-secondary text-sm md:m-4 font-bold"
                 >SEE ALL PRODUCT OPTIONS BELOW</a
               >
             </div>
@@ -75,7 +79,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col">
+    <div class="flex flex-col hidden md:block">
       <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
           <div class="overflow-hidden">
@@ -246,6 +250,39 @@
         </div>
       </div>
     </div>
+    <div class="md:hidden">
+      <div
+        v-for="(pro, i) in product && product"
+        :key="i"
+        class="flex shadow-lg card mx-3 mt-5 mb-1"
+      >
+        <a :href="'/p/' + products.id + '/' + pro._id + '/' + pro.slug">
+          <img
+            class="max-h-[5rem] max-w-[5rem]"
+            :src="
+              pro.images[0] ? pro.images[0] : products.featuredAsset.preview
+            "
+          />
+        </a>
+        <a :href="'/p/' + products.id + '/' + pro._id + '/' + pro.slug">
+          <div class="ml-2">
+            <p class="text-sm">{{ pro.name }}</p>
+            <p class="font-bold mt-2">
+              {{
+                pro.price.current
+                  .toString()
+                  .substring(0, pro.price.current.toString().length - 2) +
+                '.' +
+                pro.price.current
+                  .toString()
+                  .substring(pro.price.current.toString().length - 2)
+              }}
+              ETB
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -383,6 +420,13 @@ export default defineComponent({
     // const attributes = computed(() => productGetters.getAttributes(products.value))
 
     onMounted(() => {
+      // if (option.value.length === 0) {
+      //   const slug = route.params.slug_1;
+      //   const id = products.value.id;
+      //   const vid = product.value[0]?._id;
+      //   router.push(`/p/${id}/${vid}/${slug}`);
+      //   console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', slug, id, vid);
+      // }
       console.log('the product value is ', product.value);
       console.log('the option value is ', option.value);
       // if (option.value.length === 0) {
