@@ -65,7 +65,7 @@
           {{ industryName }}
         </h2>
         <div
-          class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+          class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
             class="rounded-md my-auto max-h-40 bg-light max-w-[25%]"

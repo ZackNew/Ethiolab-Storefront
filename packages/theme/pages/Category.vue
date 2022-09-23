@@ -48,12 +48,14 @@
           <span class="navbar__label">{{ $t('Sort by') }}:</span>
           <LazyHydrate on-interaction>
             <SfSelect
+              :style="!isDarkMode ? '' : 'background-color: #182533'"
               :value="sortBy.selected"
               :placeholder="$t('Select sorting')"
               class="navbar__select"
               @input="th.changeSorting"
             >
               <SfSelectOption
+                :style="!isDarkMode ? '' : 'background-color: #182533'"
                 v-for="option in sortBy.options"
                 :key="option.id"
                 :value="option.id"
@@ -110,6 +112,7 @@
             :loading="loading"
           >
             <SfAccordion
+              :style="!isDarkMode ? '' : 'background-color: #182533'"
               :open="activeCategory"
               :show-chevron="true"
               class="shadow-md w-80 p-2"
@@ -171,7 +174,7 @@
               class=""
             >
               <div
-                class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+                class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
               >
                 <img
                   :src="
@@ -203,7 +206,10 @@
           <LazyHydrate>
             <!-- <CategoryFeature /> -->
             <div>
-              <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">
+              <h3
+                class="font-bold mt-12 pb-2 border-b border-gray-200"
+                :style="!isDarkMode ? '' : 'color: white'"
+              >
                 Featured
               </h3>
               <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
@@ -214,12 +220,17 @@
               >
                 <div
                   v-if="cat.isCurrent === true && cat.slug === lastSlug"
-                  class="grid grid-cols-3 gap-10 mt-10 mb-10"
+                  class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10 mb-10"
                 >
                   <div v-for="(sub, j) in cat.items" :key="j">
-                    <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                    <div
+                      class="max-w-sm rouned overflow-hidden shadow-xl"
+                      :style="!isDarkMode ? '' : 'background-color: #182533'"
+                    >
                       <div class="m-4">
-                        <h4 class="">{{ sub.label }}</h4>
+                        <h4 :style="!isDarkMode ? '' : 'color: white'">
+                          {{ sub.label }}
+                        </h4>
                       </div>
                       <nuxt-link :to="`/s/${sub.slug}`">
                         <img
@@ -256,7 +267,7 @@
             Shop Our Best Sellers
           </h3>
 
-          <div class="grid grid-cols-3 gap-10">
+          <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
             <div class="card shadow-lg my-3 ml-2" v-for="i in 3" :key="i">
               <nuxt-link to="#">
                 <img
@@ -277,7 +288,10 @@
             </div>
           </div>
 
-          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+          <h3
+            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
+            :style="!isDarkMode ? '' : 'color: white'"
+          >
             Products Under This Category
           </h3>
           <div
@@ -330,6 +344,7 @@
               tag="div"
               class="products__list"
             >
+              <!-- :description="productGetters.getDescription(product)" -->
               <SfProductCardHorizontal
                 v-e2e="'category-product-card'"
                 v-for="(product, i) in products"
@@ -337,7 +352,6 @@
                 :qty="itemQuantity"
                 :style="{ '--index': i }"
                 :title="productGetters.getName(product)"
-                :description="productGetters.getDescription(product)"
                 :image="productGetters.getCoverImage(product)"
                 :regular-price="
                   productGetters.getPrice(product).regular.toLocaleString() +
@@ -544,6 +558,7 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
+    const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
     const th = useUiHelpers();
@@ -691,6 +706,7 @@ export default {
     };
 
     return {
+      isDarkMode,
       ...uiState,
       productQuantity,
       th,

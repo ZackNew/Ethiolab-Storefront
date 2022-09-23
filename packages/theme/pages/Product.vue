@@ -59,7 +59,7 @@
           />
           <div
             :class="classes.red"
-            class="product__description desktop-only my-4 max-h-[30rem] overflow-hidden"
+            class="product__description desktop-only my-4 max-h-[30rem] overflow-hidden text-justify"
             v-html="variant_description"
           ></div>
           <a style="color: blue" href="#full-description">MORE +</a>
@@ -147,7 +147,11 @@
         </div>
         <div class="w-1/2 -ml-16 mr-8">
           <h3 class="font-thin">More about this item</h3>
-          <p :class="classes.red" v-html="variant_description"></p>
+          <p
+            class="text-justify"
+            :class="classes.red"
+            v-html="variant_description"
+          ></p>
         </div>
       </div>
       <div v-if="productAccessories.length !== 0" class="mx-14 mt-14">
