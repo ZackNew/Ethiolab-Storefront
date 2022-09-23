@@ -351,4 +351,8 @@ export default {
 .phone-number{
   width: 17.5% !important;
 }
+
+.form__action-button{
+  color: black;
+}
 </style>

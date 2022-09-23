@@ -19,7 +19,7 @@
               :buttonText="adSection.buttonText || 'AD Button'"
               background=""
               :image="adImage || '/homepage/bannerA.webp'"
-              link="/c/clinical-laboratory"
+              
             >
             </SfBanner>
           </LazyHydrate>
@@ -69,7 +69,7 @@
                 "
                 :buttonText="heroSection.buttonText || 'Shop Now'"
                 :image="heroImage || '/homepage/bannerB.webp'"
-                link="http://www.ethiolab.et"
+                @click="mymethod('https://www.ethiolab.et')"
               />
             </template>
           </LazyHydrate>
@@ -260,6 +260,14 @@ export default {
     BestSeller,
     FeaturedProducts,
   },
+  methods: {
+    mymethod(url) {
+      console.log("button clicked")
+      window.location.href = url;
+
+
+    }
+  },
 
   setup() {
     const showToast = inject('showToast');
@@ -410,6 +418,10 @@ export default {
       --banner-container-flex: 0 0 70%;
     }
   }
+}
+
+.sf-banner {
+  
 }
 
 .advert {
