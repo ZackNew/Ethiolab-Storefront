@@ -4,9 +4,9 @@
     <div class="p-20">
       <div
         data-aos="fade-left"
-        class="w-full h-24 bg-primary p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/4 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/4 after:h-2 after:bg-dark_gray after:inline-block text-center"
+        class="w-full h-24 p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/6 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/6 after:h-2 after:bg-dark_gray after:inline-block text-center"
       >
-        <span class="text-4xl text-white w-1/2">Best Seller</span>
+        <span class="text-4xl w-1/4">Best Seller</span>
       </div>
     </div>
     <div class="grid grid-cols-3 gap-10 mt-10 mb-10" data-aos="fade-left">
