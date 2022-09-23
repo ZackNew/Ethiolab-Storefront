@@ -1,14 +1,20 @@
 <template>
-  <div id="cart">
+  <div id="cart xxx">
     <SfSidebar
       v-e2e="'sidebar-menu'"
       :visible="isMobileMenuOpen"
       :title="$t('Categories')"
-      class="sf-sidebar--right"
+      class="sf-sidebar--right overflow-scroll"
+      :class="scroll.scroller"
       @close="toggleMobileMenu"
+      overlay
     >
       <template #content-top>
         <CategoriesAccordion />
+        <SfAccordion>
+          <SfAccordionItem header="Brands"> </SfAccordionItem>
+          <SfAccordionItem header="Industries"> </SfAccordionItem>
+        </SfAccordion>
       </template>
     </SfSidebar>
   </div>
@@ -25,6 +31,7 @@ import {
   SfCollectedProduct,
   SfImage,
   SfQuantitySelector,
+  SfAccordion,
 } from '@storefront-ui/vue';
 import { computed } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
@@ -44,6 +51,7 @@ export default {
     SfCollectedProduct,
     SfImage,
     SfQuantitySelector,
+    SfAccordion,
   },
   setup() {
     const { isCartSidebarOpen, toggleMobileMenu, isMobileMenuOpen } =
@@ -168,5 +176,11 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style module="scroll">
+.scroller .sf-sidebar__top {
+  overflow: scroll;
 }
 </style>
