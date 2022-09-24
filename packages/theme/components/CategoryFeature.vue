@@ -4,17 +4,9 @@
     <div class="p-3 md:p-20">
       <div
         data-aos="slide-up"
-<<<<<<< HEAD
-        class="w-full md:h-24 md:bg-primary md:p-20 md:before:content-[''] md:before:mr-8 md:before:mb-2 md:before:w-1/4 md:before:h-2 md:before:bg-dark_gray md:before:inline-block md:after:content-[''] md:after:ml-8 md:after:mb-2 md:after:w-1/4 md:after:h-2 md:after:bg-dark_gray md:after:inline-block text-left md:text-center"
-      >
-        <span class="text-3xl md:text-4xl text-primary md:text-white w-1/2"
-          >Featured</span
-        >
-=======
         class="w-full h-24 p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/6 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/6 after:h-2 after:bg-dark_gray after:inline-block text-center"
       >
         <span class="text-4xl  w-1/4">Featured</span>
->>>>>>> 2818149beea62ffa1f35e9a2ddafcf6736e5e781
       </div>
     </div>
     <div
