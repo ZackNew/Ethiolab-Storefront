@@ -74,7 +74,7 @@
             </template>
           </LazyHydrate>
 
-          <iframe
+          <!-- <iframe
             class="w-full h-96 mt-10 ytplayer"
             id="ytplayer"
             type="text/html"
@@ -82,7 +82,7 @@
             frameborder="0"
             allowfullscreen
             ng-show="showvideo"
-          ></iframe>
+          ></iframe> -->
 
           <LazyHydrate when-visible>
             <div class="similar-products mt-3">
