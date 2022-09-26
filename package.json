@@ -3,9 +3,9 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": "=16.14.0",
-    "npm": "=8.3.1",
-    "yarn": "=1.22.17"
+    "node": ">=16.14.0",
+    "npm": ">=8.3.1",
+    "yarn": ">=1.22.17"
   },
   "scripts": {
     "build": "yarn build:api-client && yarn build:composables && yarn build:theme",
@@ -29,7 +29,7 @@
     "test:composables": "cd packages/composables && yarn test --passWithNoTests",
     "test:theme": "cd packages/theme && yarn test --passWithNoTests",
     "update:check": "ncu && lerna run update:check --stream",
-    "update:update": "ncu -u && lerna run update:update --stream"
+    "update:update": "ncu -u && lerna run update:update --stream" 
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -71,7 +71,6 @@
     "crypto-js": "^4.1.1",
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
-    "node-rsa": "^1.1.1",
     "nuxt-user-agent": "^1.2.2",
     "vue-uuid": "^3.0.0"
   }

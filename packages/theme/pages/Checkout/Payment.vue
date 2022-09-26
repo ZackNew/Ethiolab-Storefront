@@ -216,7 +216,7 @@ export default {
     paymentDetail.locale = "en";
     paymentDetail.transaction_type = "authorization";
     paymentDetail.reference_number = new Date().getTime();
-    paymentDetail.amount = (cart.value.totalWithTax/100).toFixed(2).toString();
+    paymentDetail.amount = (cart?.value?.totalWithTax/100).toFixed(2).toString();
     paymentDetail.currency = "ETB";
     paymentDetail.signature = "";
     paymentDetail.submit = "Submit";
