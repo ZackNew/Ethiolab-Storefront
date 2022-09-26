@@ -28,7 +28,7 @@
         </div>
         <div class="p-3">
           <LazyHydrate>
-            <SfBanner
+            <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
               :description="adSection.description || 'AD Description'"
@@ -37,7 +37,7 @@
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory"
             >
-            </SfBanner>
+            </Banner>
           </LazyHydrate>
         </div>
       </div>
@@ -150,6 +150,7 @@
 </template>
 
 <script>
+import Banner from '~/components/Banner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import {
   SfAccordion,
@@ -378,6 +379,7 @@ export default {
     SfSearchBar,
     SfBreadcrumbs,
     SubcategoryBrandAccordion,
+    Banner,
   },
 };
 </script>

@@ -35,30 +35,20 @@
           />
         </ValidationProvider>
       </div>
-      <ValidationProvider
-        rules="required"
-        v-slot="{ errors }"
-        class="form__element"
-      >
+      <ValidationProvider v-slot="{ errors }" class="form__element">
         <SfInput
           v-model="form.streetName"
           name="streetName"
           :label="$t('Street Name')"
-          required
           :valid="!errors[0]"
           :errorMessage="errors[0]"
         />
       </ValidationProvider>
-      <ValidationProvider
-        rules="required"
-        v-slot="{ errors }"
-        class="form__element"
-      >
+      <ValidationProvider v-slot="{ errors }" class="form__element">
         <SfInput
           v-model="form.streetNumber"
           name="apartment"
           :label="$t('House/Apartment number')"
-          required
           :valid="!errors[0]"
           :errorMessage="errors[0]"
         />
@@ -103,10 +93,7 @@
         </ValidationProvider>
       </div>
       <div class="form__horizontal">
-        <ValidationProvider
-          name="state"
-          slim
-        >
+        <ValidationProvider name="state" slim>
           <SfInput
             v-e2e="'shipping-state'"
             v-model="form.state"
@@ -115,11 +102,7 @@
             class="form__element form__element--half form__element--half-even"
           />
         </ValidationProvider>
-        <ValidationProvider
-          rules="required|min:2"
-          v-slot="{ errors }"
-          class="form__element"
-        >
+        <ValidationProvider v-slot="{ errors }" class="form__element">
           <SfInput
             v-model="form.postalCode"
             name="zipCode"
@@ -158,12 +141,7 @@
 </template>
 
 <script>
-import {
-  SfInput,
-  SfButton,
-  SfSelect,
-  SfCheckbox
-} from '@storefront-ui/vue';
+import { SfInput, SfButton, SfSelect, SfCheckbox } from '@storefront-ui/vue';
 import { required, min, oneOf } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { reactive, computed, watch } from '@vue/composition-api';
@@ -172,17 +150,17 @@ import '@/helpers';
 
 extend('required', {
   ...required,
-  message: 'This field is required'
+  message: 'This field is required',
 });
 
 extend('min', {
   ...min,
-  message: 'The field should have at least {length} characters'
+  message: 'The field should have at least {length} characters',
 });
 
 extend('oneOf', {
   ...oneOf,
-  message: 'Invalid country'
+  message: 'Invalid country',
 });
 
 export default {
@@ -194,7 +172,7 @@ export default {
     SfSelect,
     SfCheckbox,
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
 
   props: {
@@ -211,13 +189,13 @@ export default {
         postalCode: '',
         country: '',
         phone: '',
-        isDefault: false
-      })
+        isDefault: false,
+      }),
     },
     isNew: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
 
   setup(props, { emit }) {
@@ -232,7 +210,7 @@ export default {
       postalCode: props.address.postalCode,
       country: props.address.country,
       phone: props.address.phone,
-      isDefault: props.address.isDefault
+      isDefault: props.address.isDefault,
     });
 
     const submitForm = () => {
@@ -240,7 +218,7 @@ export default {
         form,
         onComplete: () => {},
         // TODO: Handle Error
-        onError: () => {}
+        onError: () => {},
       });
     };
 
@@ -248,17 +226,20 @@ export default {
       if (!form.country) {
         return null;
       }
-      const selectedCountry = COUNTRIES.find(country => country.label === form.country);
+      const selectedCountry = COUNTRIES.find(
+        (country) => country.label === form.country
+      );
       return selectedCountry && selectedCountry.states;
     });
 
     const validationRules = {
-      country: `required|oneOf:${COUNTRIES.map(c => c.key).join(',')}`,
-      state: !statesInSelectedCountry ? null : 'required|min:2'
+      country: `required|oneOf:${COUNTRIES.map((c) => c.key).join(',')}`,
+      state: !statesInSelectedCountry ? null : 'required|min:2',
     };
 
-    watch(statesInSelectedCountry, statesInSelectedCountry => {
-      const countryHasStates = statesInSelectedCountry && statesInSelectedCountry.length;
+    watch(statesInSelectedCountry, (statesInSelectedCountry) => {
+      const countryHasStates =
+        statesInSelectedCountry && statesInSelectedCountry.length;
       if (!countryHasStates && form.state) {
         form.state = null;
       }
@@ -269,13 +250,13 @@ export default {
       validationRules,
       submitForm,
       countries: COUNTRIES,
-      statesInSelectedCountry
+      statesInSelectedCountry,
     };
-  }
+  },
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .form {
   &__element {
     display: block;
