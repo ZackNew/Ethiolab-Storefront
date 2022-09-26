@@ -428,6 +428,12 @@ export default {
         ////////////////////////////////STEP 7//////////////////////////////////////
 
         const api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
+              // const options = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Access-Control-Allow-Origin': '*',
+      //   },
+      // };
               axios
                       .post(api, requestMessage)
                       .then(res => {
