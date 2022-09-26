@@ -85,15 +85,19 @@
             </template>
           </LazyHydrate>
 
-          <iframe
+          <div v-if="heroSection.link">  
+               <iframe
             class="w-full h-96 mt-10 ytplayer"
             id="ytplayer"
             type="text/html"
-            src="https://www.youtube-nocookie.com/embed/KQBQrVlEqXA?autoplay=1&mute=1&controls=0&loop=1&playlist=KQBQrVlEqXA&rel=0"
+            :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
             frameborder="0"
             allowfullscreen
             ng-show="showvideo"
           ></iframe>
+          </div>
+
+       
 
           <LazyHydrate when-visible>
             <div class="similar-products mt-3">
@@ -280,6 +284,7 @@ export default {
     },
   },
 
+
   setup() {
     const showToast = inject('showToast');
     const { toggleNewsletterModal } = useUiState();
@@ -356,6 +361,11 @@ export default {
         content: 'desc is not good',
       },
     ];
+
+    onMounted(() => {
+      localStorage.setItem("sort", "Select Sorting");
+
+    })
     return {
       productGetters,
       tabs,

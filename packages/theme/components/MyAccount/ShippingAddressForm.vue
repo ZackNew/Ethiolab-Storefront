@@ -114,11 +114,12 @@
         </ValidationProvider>
       </div>
       <ValidationProvider
-        rules="required|phone"
+        rules="required"
         v-slot="{ errors }"
         class="form__element"
       >
         <SfInput
+          type="number"
           v-model="form.phone"
           name="phone"
           :label="$t('Phone number')"

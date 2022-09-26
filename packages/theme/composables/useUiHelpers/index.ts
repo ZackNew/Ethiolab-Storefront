@@ -92,6 +92,27 @@ const useUiHelpers = () => {
   const changeSorting = (sort: string) => {
     const { query } = instance.$router.history.current;
     instance.$router.push({ query: { ...query, sort } });
+    if(sort == "NAME_ASC"){
+    localStorage.setItem("sort", "Name from A to Z")
+
+    }
+
+    else if(sort == "NAME_DESC"){
+      localStorage.setItem("sort", "Name from Z to A")
+      
+    }
+
+    else if(sort == "PRICE_ASC"){
+    localStorage.setItem("sort", "Price from low to high")
+      
+    }
+
+   else if(sort == "PRICE_DESC"){
+    localStorage.setItem("sort", "Price from high to low")
+      
+    }
+
+
   };
 
   const changeFilters = (filters: any) => {

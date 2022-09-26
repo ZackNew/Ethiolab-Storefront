@@ -50,7 +50,7 @@
             <SfSelect
               :style="!isDarkMode ? '' : 'background-color: #182533'"
               :value="sortBy.selected"
-              :placeholder="$t('Select sorting')"
+              :placeholder="sort"
               class="navbar__select"
               @input="th.changeSorting"
             >
@@ -566,6 +566,7 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
+    let  sort =  localStorage.getItem("sort");
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
@@ -679,6 +680,8 @@ export default {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
       console.log('the onmounted category tree value is ', categoryTree.value);
+     
+      // sort =  localStorage.getItem("sort");
     });
 
     const isFilterSelected = (facet, option) =>
@@ -744,6 +747,7 @@ export default {
       itemQuantity,
       rawCategoryTree,
       lastSlug,
+      sort
     };
   },
   components: {

@@ -15,7 +15,11 @@
       data-aos="fade-left"
     >
       <div v-for="category in bestSellings" :key="category.title">
-        <BestSellerSingle :title="category.name" :image="category.preview" />
+        <BestSellerSingle
+          :title="category.name"
+          :image="category.preview"
+          :slug="category.slug"
+        />
       </div>
     </div>
   </div>
