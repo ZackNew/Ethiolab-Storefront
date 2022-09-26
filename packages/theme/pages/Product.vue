@@ -405,7 +405,7 @@ export default {
     async getVariants() {
       const productId = parseInt(this.$route.params.id);
       const variantId = this.$route.params.vid;
-      let baseUrl = process.env.GRAPHQL_API;
+      const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {

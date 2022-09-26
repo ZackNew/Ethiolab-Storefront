@@ -1,21 +1,30 @@
 <template>
   <div class="container">
     <SfButton
-        class="container__lang container__lang--selected"
-        @click="isLangModalOpen = !isLangModalOpen"
+      class="container__lang container__lang--selected"
+      @click="isLangModalOpen = !isLangModalOpen"
     >
       <SfImage :src="`/icons/langs/${locale}.webp`" width="20" alt="Flag" />
     </SfButton>
-    <SfBottomModal :is-open="isLangModalOpen" title="Choose language" @click:close="isLangModalOpen = !isLangModalOpen">
+    <SfBottomModal
+      :is-open="isLangModalOpen"
+      title="Choose language"
+      @click:close="isLangModalOpen = !isLangModalOpen"
+    >
       <SfList>
         <SfListItem v-for="lang in availableLocales" :key="lang.code">
-           <a @click="languageSwitcher(lang.code)" href="#">
+          <a @click="languageSwitcher(lang.code)" href="#">
             <SfCharacteristic class="language">
               <template #title>
                 <span>{{ lang.label }}</span>
               </template>
               <template #icon>
-                <SfImage :src="`/icons/langs/${lang.code}.webp`" width="20" alt="Flag" class="language__flag" />
+                <SfImage
+                  :src="`/icons/langs/${lang.code}.webp`"
+                  width="20"
+                  alt="Flag"
+                  class="language__flag"
+                />
               </template>
             </SfCharacteristic>
           </a>
@@ -32,10 +41,10 @@ import {
   SfButton,
   SfList,
   SfBottomModal,
-  SfCharacteristic
+  SfCharacteristic,
 } from '@storefront-ui/vue';
 
-import { ref, computed} from '@vue/composition-api';
+import { ref, computed } from '@vue/composition-api';
 export default {
   components: {
     SfImage,
@@ -43,12 +52,14 @@ export default {
     SfButton,
     SfList,
     SfBottomModal,
-    SfCharacteristic
+    SfCharacteristic,
   },
   setup(props, context) {
     const { locales, locale } = context.root.$i18n;
     const isLangModalOpen = ref(false);
-    const availableLocales = computed(() => locales.filter(i => i.code !== locale));
+    const availableLocales = computed(() =>
+      locales.filter((i) => i.code !== locale)
+    );
     const languageSwitcher = (lang) => {
       context.root.$i18n.setLocale(lang);
       context.root.switchLocalePath(lang);
@@ -60,9 +71,9 @@ export default {
       availableLocales,
       locale,
       isLangModalOpen,
-      languageSwitcher
+      languageSwitcher,
     };
-  }
+  },
 };
 </script>
 
