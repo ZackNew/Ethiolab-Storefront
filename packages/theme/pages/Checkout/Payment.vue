@@ -103,15 +103,7 @@
 
           <br></br>  <input type="submit" id="submit" name="submit" value="Confirm"  @click="processOrder">
 
-          </form>     <iframe
-            class="w-full h-96 mt-10 ytplayer"
-            id="ytplayer"
-            type="text/html"
-            src="https://www.youtube-nocookie.com/embed/KQBQrVlEqXA?autoplay=1&mute=1&controls=0&loop=1&playlist=KQBQrVlEqXA&rel=0"
-            frameborder="0"
-            allowfullscreen
-            ng-show="showvideo"
-          ></iframe>
+          </form>     
 
           </div>
 
