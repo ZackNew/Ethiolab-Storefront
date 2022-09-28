@@ -19,10 +19,12 @@
     </nav>
     <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-xl rounded-lg w-96 h-3/4">
+      <div
+        :style="!isDarkMode ? '' : 'background-color: #182533'"
+        class="shadow-xl rounded-lg w-96 h-3/4 hidden md:block"
+      >
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
-            @categoryClicked="emememe"
             @maxAdded="maxInput"
             @minAdded="minInput"
             @searchChange="searchBox"
@@ -32,7 +34,7 @@
         </div>
         <div class="p-3">
           <LazyHydrate>
-            <SfBanner
+            <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
               :description="adSection.description || 'AD Description'"
@@ -41,7 +43,7 @@
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory"
             >
-            </SfBanner>
+            </Banner>
           </LazyHydrate>
         </div>
       </div>
@@ -51,7 +53,7 @@
           {{ categoryName }}
         </h2>
         <div
-          class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+          class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
             class="rounded-md my-auto max-h-40 min-h-40 bg-light max-w-[25%]"
@@ -75,10 +77,13 @@
           </div>
         </div>
         <div v-else>
-          <div class="flex card mr-5 w-full h-12 bg-light_accent">
-            <p class="pt-3 mx-3">
+          <div
+            class="flex card mr-5 w-full h-12 bg-light_accent text-sm md:text-base"
+          >
+            <p class="pt-1 md:pt-3 mx-3">
               Number of Results | {{ Object.keys(products).length }}
             </p>
+
             <div class="ml-8">
               <button
                 id="dropdownDefault"
@@ -139,6 +144,45 @@
               alt=""
             />
           </div>
+          <button
+            class="flex my-5 visible md:invisible text-sm px-2"
+            @click="showFilter = !showFilter"
+          >
+            <SfIcon
+              icon="menu"
+              size="xxs"
+              color="primary"
+              viewBox="0 0 24 24"
+              :coverage="1"
+            />
+            <p>Filters</p>
+          </button>
+          <div
+            class="shadow-xl rounded-lg w-80 h-3/4"
+            v-if="products.length > 0 && showFilter"
+          >
+            <SubcategoryBrandAccordion
+              @maxAdded="maxInput"
+              @minAdded="minInput"
+              @searchChange="searchBox"
+              @filterClicked="filterProducts"
+              :filters="filters"
+            />
+            <div class="p-3">
+              <LazyHydrate>
+                <SfBanner
+                  :title="adSection.title || 'AD Title'"
+                  :subtitle="adSection.overview || 'AD Overview'"
+                  :description="adSection.description || 'AD Description'"
+                  :buttonText="adSection.buttonText || 'AD Button'"
+                  background=""
+                  :image="adImage || '/homepage/bannerA.webp'"
+                  link="/c/clinical-laboratory"
+                >
+                </SfBanner>
+              </LazyHydrate>
+            </div>
+          </div>
           <!-- Products -->
           <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
           <!-- <div
@@ -154,6 +198,7 @@
 </template>
 
 <script>
+import Banner from '~/components/Banner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { computed, ref } from '@vue/composition-api';
 import {
@@ -162,10 +207,11 @@ import {
   SfSearchBar,
   SfBreadcrumbs,
   SfBanner,
+  SfIcon,
 } from '@storefront-ui/vue';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import { useCms } from '@vue-storefront/vendure';
-import { useUiHelpers } from '~/composables';
+import { useUiHelpers, useUiState } from '~/composables';
 import axios from 'axios';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
 
@@ -176,6 +222,7 @@ export default {
   },
   data() {
     return {
+      showFilter: false,
       loading: true,
       low: '',
       high: '',
@@ -238,7 +285,9 @@ export default {
     brandsList() {
       let brand = [];
       this.products.forEach((element) => {
-        brand.push(element.customFields.brand?.name);
+        if (element.customFields.brand?.name) {
+          brand.push(element.customFields.brand?.name);
+        }
       });
       const brands = [...new Set(brand)];
       return brands;
@@ -246,7 +295,7 @@ export default {
     industryList() {
       let industry = [];
       this.products.forEach((element) => {
-        if (element.customFields.industry !== null) {
+        if (element.customFields.industry?.name) {
           industry.push(element.customFields.industry?.name);
         }
       });
@@ -408,6 +457,7 @@ export default {
     },
   },
   setup(props, { root }) {
+    const { isDarkMode } = useUiState();
     const th = useUiHelpers();
     const { getCms } = useCms();
     const adSection = computed(() =>
@@ -419,6 +469,7 @@ export default {
       th,
       adSection,
       adImage,
+      isDarkMode,
     };
   },
   components: {
@@ -430,6 +481,8 @@ export default {
     SfBanner,
     SubcatBrandCard,
     SfRange,
+    SfIcon,
+    Banner,
   },
 };
 </script>

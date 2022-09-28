@@ -95,6 +95,36 @@
                   :errorMessage="errors[0]"
                 />
               </ValidationProvider>
+              <ValidationProvider name="firstName" v-slot="{ errors }" slim>
+                <SfInput
+                  v-e2e="'customer-firstName'"
+                  v-model="form.customerName"
+                  :label="$t('Company Name')"
+                  name="company_name"
+                  class="form__element form__element--half"
+                  required
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                />
+              </ValidationProvider>
+              <ValidationProvider
+                name="emailAddress"
+                rules="email"
+                v-slot="{ errors }"
+                slim
+              >
+                <SfInput
+                  type="text"
+                  v-e2e="'customer-emailAddress'"
+                  v-model="form.customerEmail"
+                  :label="$t('Company Email Address')"
+                  name="phoneNumber"
+                  class="form__element form__element--half form__element--half-even"
+                  required
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                />
+              </ValidationProvider>
               <ValidationProvider
                 name="message"
                 rules="required"
@@ -286,6 +316,8 @@ export default {
       emailAddress: '',
       phoneNumber: '',
       message: '',
+      customerEmail: '',
+      customerName: '',
     });
 
     const sendMessage = async () => {
@@ -296,6 +328,8 @@ export default {
         last_name: form.value.lastName,
         email: form.value.emailAddress,
         message: form.value.message,
+        customerName: form.value.customerName,
+        customerEmail: form.value.customerEmail,
       });
       showToast('Sent!');
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});

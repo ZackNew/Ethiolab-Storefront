@@ -1,18 +1,22 @@
 <template>
   <div class="">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3> -->
-    <div class="p-20">
+    <div class="p-3 md:p-20">
       <div
         data-aos="slide-up"
-        class="w-full h-24 bg-primary p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/4 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/4 after:h-2 after:bg-dark_gray after:inline-block text-center"
+        class="w-full h-24 p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/6 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/6 after:h-2 after:bg-dark_gray after:inline-block text-center"
       >
-        <span class="text-4xl text-white w-1/2">Featured</span>
+        <span class="text-4xl  w-1/4">Featured</span>
       </div>
     </div>
-    <div class="grid grid-cols-3 gap-10 mt-10 mb-10" data-aos="fade-right">
+    <div
+      class="grid grid-cols-1 gap-10 mt-10 mb-10 md:grid-cols-3"
+      data-aos="fade-right"
+    >
       <div v-for="category in headerNavigation" :key="category.label">
         <!-- <CategorySingle :title="category.label" :image="category.featuredAsset.preview" /> -->
         <div
+          :style="!isDarkMode ? '' : 'background-color: #182533'"
           class="max-w-sm rounded overflow-hidden shadow-xl hover:bg-light_gray hover:text-secondary"
         >
           <div class="m-4">
@@ -48,6 +52,7 @@ import {
 import { onSSR } from '@vue-storefront/core';
 import { computed } from '@vue/composition-api';
 import AOS from 'aos';
+import { useUiState } from '~/composables';
 import 'aos/dist/aos.css';
 export default defineComponent({
   components: { CategorySingle },
@@ -77,6 +82,7 @@ export default defineComponent({
     });
   },
   setup() {
+    const { isDarkMode } = useUiState();
     const headerNavigation = [];
     const { categories } = useCategory();
 
@@ -105,6 +111,7 @@ export default defineComponent({
       cats,
       getTree,
       headerNavigation,
+      isDarkMode,
     };
   },
 });

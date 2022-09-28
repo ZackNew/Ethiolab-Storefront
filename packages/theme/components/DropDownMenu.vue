@@ -35,7 +35,7 @@
         :src="cPrev"
         class="w-full min-h-[50%] max-h-[70%]"
       />
-      <h4>{{ cTitle }}</h4>
+      <h4 class="text-primary font-bold">{{ cTitle }}</h4>
       <p v-html="cDisc" class="mx-3"></p>
     </div>
     <div

@@ -46,7 +46,7 @@
         </div>
         <div class="p-3">
           <LazyHydrate>
-            <SfBanner
+            <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
               :description="adSection.description || 'AD Description'"
@@ -55,7 +55,7 @@
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory"
             >
-            </SfBanner>
+            </Banner>
           </LazyHydrate>
         </div>
       </div>
@@ -65,7 +65,7 @@
           {{ industryName }}
         </h2>
         <div
-          class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+          class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
             class="rounded-md my-auto max-h-40 bg-light max-w-[25%]"
@@ -151,6 +151,7 @@
 </template>
 
 <script>
+import Banner from '~/components/Banner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { computed, ref } from '@vue/composition-api';
 import {
@@ -272,7 +273,9 @@ export default {
     brandsList() {
       let brand = [];
       this.products.forEach((element) => {
-        brand.push(element.customFields.brand?.name);
+        if (element.customFields.brand?.name) {
+          brand.push(element.customFields.brand?.name);
+        }
       });
       const brands = [...new Set(brand)];
       return brands;
@@ -500,6 +503,7 @@ export default {
     SfBanner,
     SubcatBrandCard,
     SfRange,
+    Banner,
   },
 };
 </script>

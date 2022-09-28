@@ -28,7 +28,7 @@
         </div>
         <div class="p-3">
           <LazyHydrate>
-            <SfBanner
+            <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
               :description="adSection.description || 'AD Description'"
@@ -37,7 +37,7 @@
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory"
             >
-            </SfBanner>
+            </Banner>
           </LazyHydrate>
         </div>
       </div>
@@ -47,7 +47,7 @@
           {{ brand.name }}
         </h2>
         <div
-          class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+          class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
             class="my-auto rounded-md max-h-40 bg-light max-w-[25%]"
@@ -150,6 +150,7 @@
 </template>
 
 <script>
+import Banner from '~/components/Banner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import {
   SfAccordion,
@@ -232,7 +233,7 @@ export default {
     industryList() {
       let industry = [];
       this.products.forEach((product) => {
-        if (product.customFields.industry !== null) {
+        if (product.customFields.industry?.name) {
           industry.push(product.customFields.industry?.name);
         }
       });
@@ -378,6 +379,7 @@ export default {
     SfSearchBar,
     SfBreadcrumbs,
     SubcategoryBrandAccordion,
+    Banner,
   },
 };
 </script>

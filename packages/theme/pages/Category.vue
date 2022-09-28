@@ -48,12 +48,14 @@
           <span class="navbar__label">{{ $t('Sort by') }}:</span>
           <LazyHydrate on-interaction>
             <SfSelect
+              :style="!isDarkMode ? '' : 'background-color: #182533'"
               :value="sortBy.selected"
-              :placeholder="$t('Select sorting')"
+              :placeholder="sort"
               class="navbar__select"
               @input="th.changeSorting"
             >
               <SfSelectOption
+                :style="!isDarkMode ? '' : 'background-color: #182533'"
                 v-for="option in sortBy.options"
                 :key="option.id"
                 :value="option.id"
@@ -110,6 +112,7 @@
             :loading="loading"
           >
             <SfAccordion
+              :style="!isDarkMode ? '' : 'background-color: #182533'"
               :open="activeCategory"
               :show-chevron="true"
               class="shadow-md w-80 p-2"
@@ -171,7 +174,7 @@
               class=""
             >
               <div
-                class="rounded-md bg-secondary card shadow-lg my-4 flex mr-5 max-h-40"
+                class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
               >
                 <img
                   :src="
@@ -203,7 +206,10 @@
           <LazyHydrate>
             <!-- <CategoryFeature /> -->
             <div>
-              <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">
+              <h3
+                class="font-bold mt-12 pb-2 border-b border-gray-200"
+                :style="!isDarkMode ? '' : 'color: white'"
+              >
                 Featured
               </h3>
               <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
@@ -214,12 +220,17 @@
               >
                 <div
                   v-if="cat.isCurrent === true && cat.slug === lastSlug"
-                  class="grid grid-cols-3 gap-10 mt-10 mb-10"
+                  class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10 mb-10"
                 >
                   <div v-for="(sub, j) in cat.items" :key="j">
-                    <div class="max-w-sm rouned overflow-hidden shadow-xl">
+                    <div
+                      class="max-w-sm rouned overflow-hidden shadow-xl"
+                      :style="!isDarkMode ? '' : 'background-color: #182533'"
+                    >
                       <div class="m-4">
-                        <h4 class="">{{ sub.label }}</h4>
+                        <h4 :style="!isDarkMode ? '' : 'color: white'">
+                          {{ sub.label }}
+                        </h4>
                       </div>
                       <nuxt-link :to="`/s/${sub.slug}`">
                         <img
@@ -252,32 +263,42 @@
             <!-- categoryTree.value[0]?.items -->
           </LazyHydrate>
 
-          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+          <h3
+            v-if="bestSellings.length !== 0"
+            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
+          >
             Shop Our Best Sellers
           </h3>
 
-          <div class="grid grid-cols-3 gap-10">
-            <div class="card shadow-lg my-3 ml-2" v-for="i in 3" :key="i">
-              <nuxt-link to="#">
+          <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
+            <div
+              class="card shadow-lg my-3 ml-2"
+              v-for="(i, index) in bestSellings"
+              :key="index"
+            >
+              <a :href="`/v/${slug}`">
                 <img
-                  src="/categories/empty_image.png"
+                  :src="i.preview"
                   alt=""
                   class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
                 />
-              </nuxt-link>
-              <h4 class="text-center m-3">925.00 ETB</h4>
-              <p class="text-center m-3">description</p>
+              </a>
+              <h4 class="text-center m-3">{{ i.name }}</h4>
+              <!-- <p class="text-center m-3">description</p> -->
               <div class="text-center">
-                <button
+                <!-- <button
                   class="my-4 bg-dark text-white font-bold py-2 px-4 rounded"
                 >
                   {{ $t('View All') }}
-                </button>
+                </button> -->
               </div>
             </div>
           </div>
 
-          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+          <h3
+            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
+            :style="!isDarkMode ? '' : 'color: white'"
+          >
             Products Under This Category
           </h3>
           <div
@@ -290,33 +311,38 @@
               tag="div"
               class="products__grid"
             >
-              <SfProductCard
-                v-e2e="'category-product-card'"
+              <div
                 v-for="(product, i) in products"
                 :key="productGetters.getSlug(product)"
-                :style="{ '--index': i }"
-                :title="productGetters.getName(product)"
-                :image="productGetters.getCoverImage(product)"
-                imageHeight="20.25rem"
-                imageWidth="100%"
-                :regular-price="
-                  productGetters.getPrice(product).regular.toLocaleString() +
-                  ' ETB'
-                "
-                :max-rating="5"
-                :score-rating="productGetters.getAverageRating(product)"
-                :show-add-to-cart-button="true"
-                :isInWishlist="isInWishlist({ product })"
-                :isAddedToCart="isInCart({ product })"
-                :link="localePath(`/v/${productGetters.getSlug(product)}`)"
-                class="products__product-card mr-4 mb-4 -z-1"
-                @click:wishlist="
-                  !isInWishlist({ product })
-                    ? addItemToWishlist({ product })
-                    : removeItemFromWishlist({ product })
-                "
-                @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-              />
+              >
+                <a :href="`/v/${productGetters.getSlug(product)}`">
+                  <SfProductCard
+                    v-e2e="'category-product-card'"
+                    :style="{ '--index': i }"
+                    :title="productGetters.getName(product)"
+                    :image="productGetters.getCoverImage(product)"
+                    imageHeight="20.25rem"
+                    imageWidth="100%"
+                    :regular-price="
+                      productGetters
+                        .getPrice(product)
+                        .regular.toLocaleString() + ' ETB'
+                    "
+                    :max-rating="5"
+                    :score-rating="productGetters.getAverageRating(product)"
+                    :show-add-to-cart-button="true"
+                    :isInWishlist="isInWishlist({ product })"
+                    :isAddedToCart="isInCart({ product })"
+                    class="products__product-card mr-4 mb-4 -z-1"
+                    @click:wishlist="
+                      !isInWishlist({ product })
+                        ? addItemToWishlist({ product })
+                        : removeItemFromWishlist({ product })
+                    "
+                    @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                  />
+                </a>
+              </div>
             </transition-group>
             <transition-group
               v-else
@@ -325,6 +351,7 @@
               tag="div"
               class="products__list"
             >
+              <!-- :description="productGetters.getDescription(product)" -->
               <SfProductCardHorizontal
                 v-e2e="'category-product-card'"
                 v-for="(product, i) in products"
@@ -332,7 +359,6 @@
                 :qty="itemQuantity"
                 :style="{ '--index': i }"
                 :title="productGetters.getName(product)"
-                :description="productGetters.getDescription(product)"
                 :image="productGetters.getCoverImage(product)"
                 :regular-price="
                   productGetters.getPrice(product).regular.toLocaleString() +
@@ -499,6 +525,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import {
   SfSidebar,
   SfButton,
@@ -539,6 +566,8 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
+    let  sort =  localStorage.getItem("sort");
+    const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
     const th = useUiHelpers();
@@ -651,6 +680,8 @@ export default {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
       console.log('the onmounted category tree value is ', categoryTree.value);
+     
+      // sort =  localStorage.getItem("sort");
     });
 
     const isFilterSelected = (facet, option) =>
@@ -686,6 +717,7 @@ export default {
     };
 
     return {
+      isDarkMode,
       ...uiState,
       productQuantity,
       th,
@@ -715,6 +747,7 @@ export default {
       itemQuantity,
       rawCategoryTree,
       lastSlug,
+      sort
     };
   },
   components: {
@@ -736,6 +769,39 @@ export default {
     SfProperty,
     LazyHydrate,
     CategoryFeature,
+  },
+  methods: {
+    async getBestSellersCategory() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `
+        query{
+          bestSellersInCategory{
+            name
+            preview
+            slug
+          }
+        }
+        `,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const bestSeller = await axios.post(baseUrl, body, options);
+      this.bestSellings = bestSeller.data.data.bestSellersInCategory;
+      console.log('ddddddddjjjjjjjjjjjj', bestSeller);
+    },
+  },
+  created() {
+    this.getBestSellersCategory();
+  },
+  data() {
+    return {
+      bestSellings: [],
+    };
   },
 };
 </script>

@@ -42,7 +42,7 @@ export default {
     const headerNavigation = [
       { name: 'Help', link: '/pages/helpAndFAQ' },
       { name: 'Contact us', link: '/pages/contact' },
-      { name: '+251-111-264-829', link: '#' },
+      { name: '(+251) 940 02 44 02', link: '#' },
       //  { name: 'Request a Quote', link: '/WriteAQuote'}
     ];
     return {
