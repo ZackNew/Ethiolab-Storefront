@@ -23,9 +23,29 @@ const updateAddressDetails = async (context: Context, params: UpdateAddressDetai
     fetchPolicy: NO_CACHE_FETCH_POLICY
   }) as UpdateAddressDetailsResponse;
 
-  if (isBilling && isCustomerDataFilled(request?.data?.setOrderBillingAddress as Order)) {
-    await transitionOrderToState(context, { state: ARRANGING_PAYMENT_STATE });
-  }
+  console.log("the request billing response is ", request);
+  // const request2 = await context.client.mutate({
+  //   mutation: gql`mutation{
+  //     transitionOrderToState(state: "PaymentArranging"){
+  //       ... on Order{
+  //         billingAddress{
+  //           fullName
+  //         }
+  //       }
+  //       ... on OrderStateTransitionError{
+  //         errorCode
+  //         message
+  //       }
+  //     }
+  //   }`,
+  //   variables: updateAddressDetails.variables,
+  //   fetchPolicy: NO_CACHE_FETCH_POLICY
+  // }) as UpdateAddressDetailsResponse;
+
+
+  // if (isBilling && isCustomerDataFilled(request?.data?.setOrderBillingAddress as Order)) {
+  //   await transitionOrderToState(context, { state: ARRANGING_PAYMENT_STATE });
+  // }
 
   return request;
 };
