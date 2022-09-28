@@ -12,16 +12,15 @@
           </LazyHydrate>
           <SfDivider />
           <LazyHydrate>
-            <SfBanner
+            <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
               :description="adSection.description || 'AD Description'"
               :buttonText="adSection.buttonText || 'AD Button'"
               background=""
               :image="adImage || '/homepage/bannerA.webp'"
-              
             >
-            </SfBanner>
+            </Banner>
           </LazyHydrate>
         </div>
         <div class="md:col-span-9 col-span-12 md:ml-3">
@@ -59,7 +58,19 @@
 
           <LazyHydrate when-visible>
             <template>
-              <SfBanner
+              <!-- <SfBanner
+                class="banner"
+                :title="heroSection.title || 'Big Sale'"
+                :subtitle="heroSection.overview || 'Medical Equipments'"
+                :description="
+                  heroSection.description ||
+                  'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'
+                "
+                :buttonText="heroSection.buttonText || 'Shop Now'"
+                :image="heroImage || '/homepage/bannerB.webp'"
+                @click="mymethod('https://www.ethiolab.et')"
+              /> -->
+              <Banner
                 class="banner"
                 :title="heroSection.title || 'Big Sale'"
                 :subtitle="heroSection.overview || 'Medical Equipments'"
@@ -74,15 +85,19 @@
             </template>
           </LazyHydrate>
 
-          <iframe
+          <div v-if="heroSection.link">  
+               <iframe
             class="w-full h-96 mt-10 ytplayer"
             id="ytplayer"
             type="text/html"
-            src="https://www.youtube-nocookie.com/embed/KQBQrVlEqXA?autoplay=1&mute=1&controls=0&loop=1&playlist=KQBQrVlEqXA&rel=0"
+            :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
             frameborder="0"
             allowfullscreen
             ng-show="showvideo"
           ></iframe>
+          </div>
+
+       
 
           <LazyHydrate when-visible>
             <div class="similar-products mt-3">
@@ -216,6 +231,7 @@ import {
   useQuote,
 } from '@vue-storefront/vendure';
 import CategoriesAccordion from '~/components/CategoriesAccordion';
+import Banner from '~/components/Banner';
 import { onSSR } from '@vue-storefront/core';
 import { computed, onMounted, inject } from '@vue/composition-api';
 import { getCalculatedPrice } from '~/helpers';
@@ -259,15 +275,15 @@ export default {
     CategoryFeature,
     BestSeller,
     FeaturedProducts,
+    Banner,
   },
   methods: {
     mymethod(url) {
-      console.log("button clicked")
+      console.log('button clicked');
       window.location.href = url;
-
-
-    }
+    },
   },
+
 
   setup() {
     const showToast = inject('showToast');
@@ -309,8 +325,9 @@ export default {
       });
     };
     const onSubscribe = ({ emailAddress, event }) => {
+      let baseUrl = process.env.GRAPHQL_API;
       const body = {
-        query: `mutation MyMutation($email: String = "asdfg@gmail.com") {
+        query: `mutation MyMutation($email: String!) {
                   addSubscriptionEmail(input: {email: $email}) {
                     id
                   }
@@ -325,8 +342,6 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      console.log('you sussessfullay suscribed');
-      let baseUrl = process.env.GRAPHQL_API
       axios
         .post(baseUrl, body, options)
         .then((res) => {
@@ -346,6 +361,11 @@ export default {
         content: 'desc is not good',
       },
     ];
+
+    onMounted(() => {
+      localStorage.setItem("sort", "Select Sorting");
+
+    })
     return {
       productGetters,
       tabs,
@@ -422,7 +442,6 @@ export default {
 }
 
 .sf-banner {
-  
 }
 
 .advert {

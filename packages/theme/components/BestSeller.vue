@@ -3,6 +3,7 @@
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
     <div class="p-3 md:p-20">
       <div
+        v-if="bestSellings.length !== 0"
         data-aos="fade-left"
         class="w-full h-24 p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/6 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/6 after:h-2 after:bg-dark_gray after:inline-block text-center"
       >
@@ -13,8 +14,12 @@
       class="grid grid-cols-1 gap-10 mt-10 mb-10 md:grid-cols-3"
       data-aos="fade-left"
     >
-      <div v-for="category in categories" :key="category.title">
-        <BestSellerSingle :title="category.title" :image="category.image" />
+      <div v-for="category in bestSellings" :key="category.title">
+        <BestSellerSingle
+          :title="category.name"
+          :image="category.preview"
+          :slug="category.slug"
+        />
       </div>
     </div>
   </div>
@@ -24,11 +29,13 @@
 import { defineComponent, mounted } from '@vue/composition-api';
 import BestSellerSingle from './BestSellerSingle.vue';
 import AOS from 'aos';
+import axios from 'axios';
 import 'aos/dist/aos.css';
 export default defineComponent({
   data() {
     return {
       cats: null,
+      bestSellings: [],
     };
   },
   components: { BestSellerSingle },
@@ -65,6 +72,34 @@ export default defineComponent({
     return {
       categories,
     };
+  },
+  methods: {
+    async getBestSellers() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `
+        query{
+          bestSellingProducts{
+            name
+            preview
+            slug
+          }
+        }
+        `,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const bestSeller = await axios.post(baseUrl, body, options);
+      this.bestSellings = bestSeller.data.data.bestSellingProducts;
+      console.log('ddddddddjjjjjjjjjjjj', bestSeller);
+    },
+  },
+  created() {
+    this.getBestSellers();
   },
 });
 </script>

@@ -50,7 +50,7 @@
             <SfSelect
               :style="!isDarkMode ? '' : 'background-color: #182533'"
               :value="sortBy.selected"
-              :placeholder="$t('Select sorting')"
+              :placeholder="sort"
               class="navbar__select"
               @input="th.changeSorting"
             >
@@ -263,27 +263,34 @@
             <!-- categoryTree.value[0]?.items -->
           </LazyHydrate>
 
-          <h3 class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10">
+          <h3
+            v-if="bestSellings.length !== 0"
+            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
+          >
             Shop Our Best Sellers
           </h3>
 
           <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
-            <div class="card shadow-lg my-3 ml-2" v-for="i in 3" :key="i">
-              <nuxt-link to="#">
+            <div
+              class="card shadow-lg my-3 ml-2"
+              v-for="(i, index) in bestSellings"
+              :key="index"
+            >
+              <a :href="`/v/${slug}`">
                 <img
-                  src="/categories/empty_image.png"
+                  :src="i.preview"
                   alt=""
                   class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
                 />
-              </nuxt-link>
-              <h4 class="text-center m-3">925.00 ETB</h4>
-              <p class="text-center m-3">description</p>
+              </a>
+              <h4 class="text-center m-3">{{ i.name }}</h4>
+              <!-- <p class="text-center m-3">description</p> -->
               <div class="text-center">
-                <button
+                <!-- <button
                   class="my-4 bg-dark text-white font-bold py-2 px-4 rounded"
                 >
                   {{ $t('View All') }}
-                </button>
+                </button> -->
               </div>
             </div>
           </div>
@@ -518,6 +525,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import {
   SfSidebar,
   SfButton,
@@ -558,6 +566,7 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
+    let  sort =  localStorage.getItem("sort");
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
@@ -671,6 +680,8 @@ export default {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
       console.log('the onmounted category tree value is ', categoryTree.value);
+     
+      // sort =  localStorage.getItem("sort");
     });
 
     const isFilterSelected = (facet, option) =>
@@ -736,6 +747,7 @@ export default {
       itemQuantity,
       rawCategoryTree,
       lastSlug,
+      sort
     };
   },
   components: {
@@ -757,6 +769,39 @@ export default {
     SfProperty,
     LazyHydrate,
     CategoryFeature,
+  },
+  methods: {
+    async getBestSellersCategory() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `
+        query{
+          bestSellersInCategory{
+            name
+            preview
+            slug
+          }
+        }
+        `,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const bestSeller = await axios.post(baseUrl, body, options);
+      this.bestSellings = bestSeller.data.data.bestSellersInCategory;
+      console.log('ddddddddjjjjjjjjjjjj', bestSeller);
+    },
+  },
+  created() {
+    this.getBestSellersCategory();
+  },
+  data() {
+    return {
+      bestSellings: [],
+    };
   },
 };
 </script>
