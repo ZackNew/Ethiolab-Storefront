@@ -204,7 +204,7 @@ export default {
     paymentDetail.transaction_uuid = uuid.v4();
     paymentDetail.signed_field_names = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
     paymentDetail.unsigned_field_names = "";
-    paymentDetail.signed_date_time = moment.utc(date).format('YYYY-MM-DDTHH:mm:ss[Z]');
+    paymentDetail.signed_date_time = moment.utc(time).format('YYYY-MM-DDTHH:mm:ss[Z]');
     paymentDetail.locale = "en";
     paymentDetail.transaction_type = "authorization";
     paymentDetail.reference_number = new Date().getTime();
