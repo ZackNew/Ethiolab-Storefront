@@ -95,7 +95,7 @@
                   :errorMessage="errors[0]"
                 />
               </ValidationProvider>
-              <ValidationProvider name="firstName" v-slot="{ errors }" slim>
+              <ValidationProvider name="companyName" v-slot="{ errors }" slim>
                 <SfInput
                   v-e2e="'customer-firstName'"
                   v-model="form.customerName"
@@ -212,9 +212,14 @@
                 viewBox="0 0 24 24"
                 :coverage="1"
               />
-              <div class="ml-2 mb-3">
-                <a href="tel:0940024402"><p>(+251) 940 02 44 02</p></a>
-                <a href="tel:0940025502"><p>(+251) 940 02 55 02</p></a>
+              <div
+                class="ml-2 mb-3"
+                v-for="(phone, index) in phoneNumbers"
+                :key="index"
+              >
+                <a :href="`tel:${phone}`">
+                  <p>{{ phone }}</p>
+                </a>
               </div>
             </div>
             <div class="flex">
@@ -225,9 +230,11 @@
                 viewBox="0 0 24 24"
                 :coverage="1"
               />
-              <a href="mailto:info@ethiolab.et"
-                ><p class="ml-2">info@ethiolab.et</p></a
-              >
+              <div v-for="(email, index) in emails" :key="index">
+                <a :href="`mailto:${email}`">
+                  <p class="ml-2">{{ email }}</p>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -299,6 +306,14 @@ export default {
         '--_call-to-action-background-color': '#005FB7',
         margin: 'var(--spacer-xl) auto var(--spacer-2xl)',
       };
+    },
+    phoneNumbers() {
+      const phone = this.companyInfo?.phone_number.split(';');
+      return phone;
+    },
+    emails() {
+      const email = this.companyInfo?.email.split(';');
+      return email;
     },
   },
   setup(_, { root }) {
@@ -376,6 +391,40 @@ export default {
       handleFormSubmit,
       errorMessage,
     };
+  },
+  data() {
+    return {
+      companyInfo: null,
+    };
+  },
+  methods: {
+    async getCompanyInfo() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `query companyInfo {
+          getCompanyInfos {
+            company_name
+            email
+            id
+            latitude
+            longitude
+            phone_number
+          }
+        }`,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const companyInformation = await axios.post(baseUrl, body, options);
+      this.companyInfo = companyInformation?.data.data?.getCompanyInfos;
+      console.log('company info', this.companyInfo);
+    },
+  },
+  mounted() {
+    this.getCompanyInfo();
   },
 };
 </script>

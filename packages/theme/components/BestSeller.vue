@@ -19,6 +19,7 @@
           :title="category.name"
           :image="category.preview"
           :slug="category.slug"
+          :price="category.priceWithTax"
         />
       </div>
     </div>
@@ -83,6 +84,7 @@ export default defineComponent({
             name
             preview
             slug
+            priceWithTax
           }
         }
         `,
