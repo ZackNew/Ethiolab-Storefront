@@ -178,7 +178,7 @@
       <SfHeading title="Our Stores" :level="1" />
     </div>
     <div class="contact-location">
-      <SfStoreLocator
+      <StoreLocator
         tileServerUrl="http://mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
         :center="[9.035565, 38.759099]"
         :zoom="6"
@@ -191,6 +191,7 @@
       >
         <div class="flex">
           <SfStore
+            picture="~/static/Logo.png"
             :latlng="[9.035565, 38.759099]"
             :pictureWidth="82"
             :pictureHeight="112"
@@ -238,7 +239,7 @@
             </div>
           </div>
         </div>
-      </SfStoreLocator>
+      </StoreLocator>
     </div>
   </div>
 </template>
@@ -253,6 +254,7 @@ import {
   SfBanner,
   SfIcon,
 } from '@storefront-ui/vue';
+import StoreLocator from '~/components/StoreLocator.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { ref, onMounted, inject } from '@vue/composition-api';
 import { required, min, digits, email } from 'vee-validate/dist/rules';
@@ -294,6 +296,7 @@ export default {
     SfBanner,
     SfIcon,
     LazyHydrate,
+    StoreLocator,
   },
 
   computed: {
