@@ -252,7 +252,7 @@ export default {
     @include font(
       --banner-title-font,
       var(--font-weight--normal),
-      var(--h3-font-size),
+      var(--h4-font-size),
       1.4,
       var(--font-family--secondary)
     );
