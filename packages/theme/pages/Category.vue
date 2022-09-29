@@ -276,7 +276,7 @@
               v-for="(i, index) in bestSellings"
               :key="index"
             >
-              <a :href="`/v/${slug}`">
+              <a :href="`/v/${i.slug}`">
                 <img
                   :src="i.preview"
                   alt=""
@@ -284,6 +284,10 @@
                 />
               </a>
               <h4 class="text-center m-3">{{ i.name }}</h4>
+              <h4 class="text-center m-3">{{ i.priceWithTax }}</h4>
+              <button>
+                <a :href="`/v/${i.slug}`"> View </a>
+              </button>
               <!-- <p class="text-center m-3">description</p> -->
               <div class="text-center">
                 <!-- <button
@@ -566,7 +570,7 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
-    let  sort =  localStorage.getItem("sort");
+    let sort = localStorage.getItem('sort');
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
@@ -680,7 +684,7 @@ export default {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
       console.log('the onmounted category tree value is ', categoryTree.value);
-     
+
       // sort =  localStorage.getItem("sort");
     });
 
@@ -747,7 +751,7 @@ export default {
       itemQuantity,
       rawCategoryTree,
       lastSlug,
-      sort
+      sort,
     };
   },
   components: {
@@ -780,6 +784,7 @@ export default {
             name
             preview
             slug
+            priceWithTax
           }
         }
         `,

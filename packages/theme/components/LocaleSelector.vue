@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <SfButton
+    <!-- <SfButton
       class="container__lang container__lang--selected"
       @click="isLangModalOpen = !isLangModalOpen"
     >
       <SfImage :src="`/icons/langs/${locale}.webp`" width="20" alt="Flag" />
-    </SfButton>
+    </SfButton> -->
     <SfBottomModal
       :is-open="isLangModalOpen"
       title="Choose language"
