@@ -80,8 +80,9 @@
                 "
                 :buttonText="heroSection.buttonText || 'Shop Now'"
                 :image="heroImage || '/homepage/bannerB.webp'"
-                @click="mymethod('https://www.ethiolab.et')"
+                link="https://www.ethiolab.et"
               />
+              <!-- @click="mymethod('https://www.ethiolab.et')" -->
             </template>
           </LazyHydrate>
 
