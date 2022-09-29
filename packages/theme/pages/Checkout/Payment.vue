@@ -68,7 +68,7 @@
         <SfCheckbox v-e2e="'terms'" v-model="terms" name="terms" class="summary__terms">
           <template #label>
             <div class="sf-checkbox__label">
-              {{ $t('I agree to') }} <SfLink href="#"> {{ $t('Terms and conditions') }}</SfLink>
+              {{ $t('I agree to') }} <SfLink href="/policy/terms-and-conditions"> {{ $t('Terms and conditions') }}</SfLink>
             </div>
           </template>
         </SfCheckbox>
@@ -81,35 +81,44 @@
           >
             {{ $t('Go back') }}
           </SfButton>
-          <button v-on:click="sendData">
+          <!-- <button v-on:click="sendData">
             Click me
-          </button>
+          </button> -->
 
-          <!-- <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/pay" method="post">
-            <input type="hidden" name="access_key" v-model="paymentDetail.access_key">
-            <input type="hidden" name="profile_id" v-model="paymentDetail.profile_id">
-            <input type="hidden" name="transaction_uuid" v-model="paymentDetail.transaction_uuid">
-            <input type="hidden" name="signed_field_names" v-model="paymentDetail.signed_field_names">
-            <input type="hidden" name="unsigned_field_names" v-model="paymentDetail.unsigned_field_names">
-            <input type="hidden" name="signed_date_time" v-model="paymentDetail.signed_date_time">
-            <input type="hidden" name="locale" v-model="paymentDetail.locale">
-            <input type="hidden" name="transaction_type" v-model="paymentDetail.transaction_type">
-            <input type="hidden" name="reference_number" v-model="paymentDetail.reference_number">
-            <input type="hidden" name="amount" v-model="paymentDetail.amount">
-            <input type="hidden" name="currency" v-model="paymentDetail.currency">
-            <input type="hidden" name="signature" v-model="paymentDetail.signature">
-            <input type="submit" name="submit" value="Confirm">
+          <div v-if="paymentMethod && paymentMethod.name == 'Abyssinia Cybersource Hosted Checkout' " class="cyberForm"> 
 
-          </form> -->
+           <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/pay" target="_blank" method="post">
+            <input id="access_key" type="hidden"  name="access_key" v-model="paymentDetail.access_key">
+            <input id="profile_id" type="hidden"  name="profile_id" v-model="paymentDetail.profile_id">
+            <input id="transaction_uuid" type="hidden"  name="transaction_uuid" v-model="paymentDetail.transaction_uuid">
+            <input id="signed_field_names" type="hidden"  name="signed_field_names" v-model="paymentDetail.signed_field_names">
+            <input id="unsigned_field_names" type="hidden"  name="unsigned_field_names" v-model="paymentDetail.unsigned_field_names">
+            <input id="signed_date_time" type="hidden"  name="signed_date_time" v-model="paymentDetail.signed_date_time">
+            <input id="locale" type="hidden"  name="locale" v-model="paymentDetail.locale">
+            <input id="transaction_type" type="hidden"  name="transaction_type" v-model="paymentDetail.transaction_type">
+            <input id="reference_number" type="hidden"  name="reference_number" v-model="paymentDetail.reference_number">
+            <input id="amount" type="hidden"  name="amount" v-model.lazy="paymentDetail.amount">
+            <input id="currency" type="hidden"  name="currency" v-model="paymentDetail.currency">
+            <input id="signature" type="hidden"  name="signature" v-model="paymentDetail.signature">
 
-          <!-- <SfButton
+          <br></br>  <input type="submit" id="submit" name="submit" value="Confirm"  @click="processOrder">
+
+          </form>     
+
+          </div>
+
+
+          <div v-if="paymentMethod && paymentMethod.name == 'Telebirr'">
+            <SfButton
             v-e2e="'make-an-order'"
-            :disabled="!paymentMethod || !terms"
+            :disabled="!paymentMethod"
             class="summary__action-button"
-            @click="processOrder"
+            @click="processTelebirr"
           >
-            {{ $t('Make an order') }}
-          </SfButton> -->
+            {{ $t('Pay with Telebirr') }}
+          </SfButton>
+          </div>
+      
         </div>
       </div>
     </div>
@@ -131,14 +140,16 @@ import {
   SfLink
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
-import { ref, computed, onMounted } from '@vue/composition-api';
+import { ref, computed, onMounted , onBeforeMount} from '@vue/composition-api';
 import { useMakeOrder, useCart, cartGetters, usePayment } from '@vue-storefront/vendure';
 // import { useBilling, useShipping, useUserBilling } from '@vue-storefront/vendure';
 import { uuid } from 'vue-uuid'; 
-import {crypto} from "crypto";
+import * as crypto from 'crypto';
 import CryptoJS from 'crypto-js'
 import moment from "moment";
-
+import axios from 'axios';
+import { mapAddressFormToOrderAddress, COUNTRIES, getDefaultAddress, mapAddressToAddressForm } from '~/helpers';
+import NodeRSA from "node-rsa";
 export default {
   name: 'ReviewOrder',
   components: {
@@ -159,7 +170,7 @@ export default {
     const { cart, load, setCart } = useCart();
     const { loading } = useMakeOrder();
     const { set } = usePayment();
-
+    
     
 
     const terms = ref(false);
@@ -167,10 +178,27 @@ export default {
 
      let time = new Date().getTime();
 
-    const url = "https://testsecureacceptance.cybersource.com/pay";
-    const date = moment()
-    const SECRET_KEY = "c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7";
+
+    let sign = ref("")
     let paymentDetail = {};
+    let SECRET_KEY = ""
+    let url =""
+    onSSR(async () => {
+      await load();
+    });
+
+    onMounted(() => {
+      console.log("the usecart cart value is ", cart);
+      console.log("the final payment detail value is ", paymentDetail)
+      console.log("amount type", typeof(paymentDetail.transaction_uuid))
+      console.log("the time value is ", time)
+    })
+
+    onBeforeMount(() => {
+
+     url = "https://testsecureacceptance.cybersource.com/pay";
+    // const date = moment()
+     SECRET_KEY = "c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7";
     paymentDetail.access_key = "98e9854d57563c34843c61c09e13f17c";
     paymentDetail.profile_id = "09D76F9D-C5BB-4A5F-8D1E-4E3F2A757AD9";
     paymentDetail.transaction_uuid = uuid.v4();
@@ -179,68 +207,40 @@ export default {
     paymentDetail.signed_date_time = moment.utc(time).format('YYYY-MM-DDTHH:mm:ss[Z]');
     paymentDetail.locale = "en";
     paymentDetail.transaction_type = "authorization";
-    paymentDetail.reference_number = moment().unix().toString();
-    paymentDetail.amount = (cart.value.totalWithTax/100).toFixed(2).toString();
-    paymentDetail.currency = "USD";
+    paymentDetail.reference_number = new Date().getTime();
+    paymentDetail.amount = (cart?.value?.totalWithTax/100).toFixed(2).toString();
+    paymentDetail.currency = "ETB";
     paymentDetail.signature = "";
     paymentDetail.submit = "Submit";
 
-    function sendData() {
-  console.log('Sending data');
+    // let key =  signData(buildDataToSign(paymentDetail), SECRET_KEY);
+    // sign = key;
+    // paymentDetail.signature = "111111aaaa";
 
-  const XHR = new XMLHttpRequest();
+    // console.log("finalyyyyy", paymentDetail.signature)
 
-  const urlEncodedDataPairs = [];
+    let signedFieldNames = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
+      // console.log("the signed field names are ", signedFieldNames)
+      let params = signedFieldNames.split(",");
+      let dataToSign = [];
 
-  // Turn the data object into an array of URL-encoded key/value pairs.
-  for (const [name, value] of Object.entries(paymentDetail)) {
-    urlEncodedDataPairs.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
-  }
+      params.forEach(param => {
+        dataToSign.push(param+"="+paymentDetail[param]);
+        
+      });
 
-  // Combine the pairs into a single string and replace all %-encoded spaces to
-  // the '+' character; matches the behavior of browser form submissions.
-  const urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+      let data = dataToSign.join();
 
-  // Define what happens on successful data submission
-  XHR.addEventListener('load', (event) => {
-    alert('Yeah! Data sent and response loaded.');
-  });
-
-  // Define what happens in case of error
-  XHR.addEventListener('error', (event) => {
-    alert('Oops! Something went wrong.');
-  });
-
-  // Set up our request
-  XHR.open('POST', 'https://testsecureacceptance.cybersource.com/pay');
-
-  // Add the required HTTP header for form data POST requests
-  XHR.setRequestHeader('Access-Control-Allow-Origin', '*');
-  XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
-  // XHR.setRequestHeader("withCredentials", true);
-  // XHR.setRequestHeader("mode", "no-cors");
-
-
-
-  // Finally, send our data.
-  XHR.send(urlEncodedData);
-}
-
-    onSSR(async () => {
-      await load();
-    });
-
-    onMounted(() => {
-      console.log("the usecart cart value is ", cart);
-      console.log("key vlaue is ", key)
-      console.log("the final payment detail value is ", paymentDetail)
-      console.log("amount type", typeof(paymentDetail.transaction_uuid))
-      console.log("the time value is ", time)
+      var hash = CryptoJS.HmacSHA256(data, SECRET_KEY);
+  var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+  paymentDetail.signature = hashInBase64;
+      // console.log("before comma", dataToSign)
+      // return commaSeparate(dataToSign);
     })
 
     const updatePaymentMethod = method => {
       paymentMethod.value = method;
+      // console.log("paymentmethod id ", method);
     };
 
     const processOrder = async () => {
@@ -253,14 +253,192 @@ export default {
       });
         console.log("the final payment response value is ", response)
 
+        const state = "Completed";
+
+        const body = {
+        query: `mutation{
+                transitionOrderToState(state: "PaymentAuthorized"){
+                  ... on Order{
+                    billingAddress{
+                      fullName
+                    }
+                  }
+                  ... on OrderStateTransitionError{
+                    errorCode
+                    message
+                  }
+                }
+              }`
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      let baseUrl = process.env.GRAPHQL_API;
+      const acat = await axios
+        .post(baseUrl, body, options)
+        .then(async (res) => {
+          console.log("the response value sura is ", res);
+        }).catch(err => {
+          console.log("error occured while updating the state and err is ", err);
+        })
+
+
+      //   const body = {
+      //   query: `mutation transitionOrderToState($state: String!) {
+      //           transitionOrderToState(input : {state: $state}) {
+               
+      //           }
+      //         }`,
+      //   variables: {
+      //     state: state,
+      //   },
+      // };
+      // const options = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Access-Control-Allow-Origin': '*',
+      //   },
+      // };
+      // let baseUrl = process.env.GRAPHQL_API;
+
+      //      const acat = await axios
+      //   .post(baseUrl, body, options)
+      //   .then(async (res) => {
+      //     console.log("the  gql response value is ", res);
+      //   }).catch(err => {
+      //     console.log("the catch err is ", err)
+      //   })
 
       // const thankYouPath = { name: 'thank-you', query: { order: response?.code }}; 
-      const thankYouPath = { name: 'thank-you', query: { order:11256 }}; // order number is to be getted from the response later
+      // const thankYouPath = { name: 'thank-you', query: { order:11256 }}; // order number is to be getted from the response later
 
-      context.root.$router.push(context.root.localePath(thankYouPath));
-      // context.root.$router.push({ redirect: window.location.href = 'https://secureacceptance.cybersource.com/checkout' });
-      setCart(null);
+      // context.root.$router.push(context.root.localePath(thankYouPath));
+      // // context.root.$router.push({ redirect: window.location.href = 'https://secureacceptance.cybersource.com/checkout' });
+      // setCart(null);
     };
+
+    const processTelebirr = () => {
+      console.log("telebirr next");
+
+      ////////////////////////////////STEP 1//////////////////////////////////////
+
+        const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
+        let signObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
+                      "nonce":paymentDetail.transaction_uuid,
+                      "notifyUrl":"http://localhost:3001/checkout/thank-you",
+                      "outTradeNo":cart.value.code,
+                      "receiveName":"Ethiolab",
+                      "returnUrl":"http://localhost:3001/checkout/thank-you",
+                      "shortCode":"220322",
+                      "subject":"Goods Name",
+                      "timeoutExpress":"30",
+                      "timestamp":paymentDetail.reference_number,
+                      "totalAmount":paymentDetail.amount
+                    };
+
+        signObj.appKey = appKey;
+        let StringA = jsonSort(signObj);
+
+        function jsonSort(jsonObj) {
+        let arr = [];
+        for (var key in jsonObj) {
+        arr.push(key);
+        }
+        arr.sort();
+        let str = '';
+        for (var i in arr) {
+        str += arr[i] + "=" + jsonObj[arr[i]] + "&";
+        }
+        return str.substr(0, str.length - 1);
+        }
+
+              ////////////////////////////////STEP 2//////////////////////////////////////
+
+              let StringB = sha256(StringA);
+
+        function sha256(data) {
+            var hash = crypto.createHash('sha256');
+            hash.update(data);
+            return hash.digest('hex');
+        }
+              ////////////////////////////////STEP 3//////////////////////////////////////
+
+       let sign = StringB.toUpperCase();
+
+              ////////////////////////////////STEP 4//////////////////////////////////////
+
+              let jsonObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
+                      "nonce":paymentDetail.transaction_uuid,
+                      "notifyUrl":"http://localhost:3001/checkout/thank-you",
+                      "outTradeNo":cart.value.code,
+                      "receiveName":"Ethiolab",
+                      "returnUrl":"http://localhost:3001/checkout/thank-you",
+                      "shortCode":"220322",
+                      "subject":"Goods Name",
+                      "timeoutExpress":"30",
+                      "timestamp":paymentDetail.reference_number,
+                      "totalAmount":paymentDetail.amount
+                    };
+                    
+                    let ussdjson = JSON.stringify(jsonObj);
+
+              ////////////////////////////////STEP 5//////////////////////////////////////
+
+              let ussd = rsa_encrypt(ussdjson);
+
+          function rsa_encrypt (data) {
+            let publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhu+JrZMv17Ah5joHaBWWOl2NOZruM6M0ZMQLpRDfvobwZhK46mDH+b9nej1PnM4mSqQ8TlDIQJ5Y27vIyc2KWksxdLb59+POd3wUv455npMeK2RCBL5KDSam+eets6XoO6dRZv00eWMQ+SOHaK48XlftIUghfeOfZs/LdWK6EksgXaOKQsQzhqOnmsGdJkMe3YMqm10SBuWqkaZcmt+DUUzd2j1rvDr8B8Tu24FkmMbpSKhfRYI3HBIBG1tB6nefXT3A7ouwnuEMqwe1XCHaHWUMErmvr4bs3o3ZzJvEinIi5LX7mTG/+OB/OI4AyAbjrHad77Vb5RyGSFrpCr5TEwIDAQAB";
+              let key = new NodeRSA(getPublicKey(publicKey));
+              key.setOptions({encryptionScheme: 'pkcs1'});
+              let encryptKey = key.encrypt(data, 'base64');
+              return encryptKey;
+          }
+
+          function insertStr(str, insertStr, sn) {
+              var newstr = '';
+              for (var i = 0; i < str.length; i += sn) {
+                  var tmp = str.substring(i, i + sn);
+                  newstr += tmp + insertStr;
+              }
+              return newstr;
+          }
+
+          function getPublicKey (key) {
+              const result = insertStr(key, '\n', 64);
+              return '-----BEGIN PUBLIC KEY-----\n' + result + '-----END PUBLIC KEY-----';
+          };
+
+                    ////////////////////////////////STEP 6//////////////////////////////////////
+
+          const appId = '4ae7217b4e7149fdac877852e7fd87db';
+        let requestMessage = {appid: signObj.appId, sign: sign, ussd: ussd};
+
+
+        ////////////////////////////////STEP 7//////////////////////////////////////
+
+        const api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
+              // const options = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Access-Control-Allow-Origin': '*',
+      //   },
+      // };
+              axios
+                      .post(api, requestMessage)
+                      .then(res => {
+                          if (res.status == 200 && res.data.code == 200) {
+                              rsp.redirect(res.data.data.toPayUrl);
+                          } else {
+                              console.error(res.data.message);
+                          }
+                      })
+                      .catch(error => {
+                          console.error(error);
+                      });
+    }
 
     const buildDataToSign = async (paymentDetail) => {
       let signedFieldNames =await  paymentDetail.signed_field_names;
@@ -296,8 +474,7 @@ export default {
       return hashInBase64 
       
     }
-    let key =  signData(buildDataToSign(paymentDetail), SECRET_KEY);
-    paymentDetail.signature = key;
+
 
 
     return {
@@ -312,13 +489,17 @@ export default {
       paymentMethod,
       paymentDetail,
       url,
-      sendData
+      sign,
+      processTelebirr
     };
   }
 };
 </script>
 
 <style lang="scss" scoped>
+  .cyberForm {
+    max-height: 100px;
+  }
 .title {
   margin: var(--spacer-xl) 0 var(--spacer-base) 0;
 }
