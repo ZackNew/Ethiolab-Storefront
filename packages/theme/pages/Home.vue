@@ -80,8 +80,9 @@
                 "
                 :buttonText="heroSection.buttonText || 'Shop Now'"
                 :image="heroImage || '/homepage/bannerB.webp'"
-                @click="mymethod('https://www.ethiolab.et')"
+                link="https://www.ethiolab.et"
               />
+              <!-- @click="mymethod('https://www.ethiolab.et')" -->
             </template>
           </LazyHydrate>
 
@@ -118,7 +119,7 @@
                 v-for="(product, i) in this.products"
                 :key="i"
               >
-                <a :href="`/v/${productGetters.getSlug(product)}`">
+                <nuxt-link :to="`/v/${productGetters.getSlug(product)}`">
                   <SfProductCard
                     :title="productGetters.getName(product)"
                     :image="productGetters.getCoverImage(product)"
@@ -142,7 +143,7 @@
                     class="carousel__item__product w-48"
                     style="border-radius: 15px"
                   />
-                </a>
+                </nuxt-link>
               </SfCarouselItem>
             </SfCarousel>
           </LazyHydrate>
