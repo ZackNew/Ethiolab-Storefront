@@ -150,9 +150,9 @@
 
                           <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
                           <template class="max-w-16">
-                            <a
+                            <nuxt-link
                               class="text-secondary ml-5 mt-5"
-                              :href="
+                              :to="
                                 '/p/' +
                                 products.id +
                                 '/' +
@@ -161,7 +161,7 @@
                                 pro.slug
                               "
                               >{{ pro.name }}
-                            </a>
+                            </nuxt-link>
                           </template>
                         </div>
                       </td>
@@ -256,15 +256,15 @@
         :key="i"
         class="flex shadow-lg card mx-3 mt-5 mb-1"
       >
-        <a :href="'/p/' + products.id + '/' + pro._id + '/' + pro.slug">
+        <nuxt-link :to="'/p/' + products.id + '/' + pro._id + '/' + pro.slug">
           <img
             class="max-h-[5rem] max-w-[5rem]"
             :src="
               pro.images[0] ? pro.images[0] : products.featuredAsset.preview
             "
           />
-        </a>
-        <a :href="'/p/' + products.id + '/' + pro._id + '/' + pro.slug">
+        </nuxt-link>
+        <nuxt-link :to="'/p/' + products.id + '/' + pro._id + '/' + pro.slug">
           <div class="ml-2">
             <p class="text-sm">{{ pro.name }}</p>
             <p class="font-bold mt-2">
@@ -280,7 +280,7 @@
               ETB
             </p>
           </div>
-        </a>
+        </nuxt-link>
       </div>
     </div>
   </div>
