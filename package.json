@@ -73,6 +73,6 @@
     "moment": "^2.29.4",
     "nuxt-user-agent": "^1.2.2",
     "vue-uuid": "^3.0.0",
-    "node-rsa": "^1.1.1"
-  }
+    "node-rsa": "^1.1.1",
+    "vue-router": "^3.5.1"  }
 }
