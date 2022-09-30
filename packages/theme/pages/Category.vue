@@ -319,7 +319,7 @@
                 v-for="(product, i) in products"
                 :key="productGetters.getSlug(product)"
               >
-                <a :href="`/v/${productGetters.getSlug(product)}`">
+                <nuxt-link :to="`/v/${productGetters.getSlug(product)}`">
                   <SfProductCard
                     v-e2e="'category-product-card'"
                     :style="{ '--index': i }"
@@ -345,7 +345,7 @@
                     "
                     @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
                   />
-                </a>
+                </nuxt-link>
               </div>
             </transition-group>
             <transition-group
