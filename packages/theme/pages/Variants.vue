@@ -26,9 +26,9 @@
     <div class="flex mx-10">
       <div class="w-1/2">
         <LazyHydrate when-idle>
-          <SfGallery
+          <Gallery
             :images="productGallery"
-            class="w-auto"
+            class="w-full"
             imageWidth="900"
             thumbWidth="500"
             enableZoom
@@ -74,7 +74,7 @@
           </div>
           <iframe
             class="mt-4"
-            width="560"
+            width="760"
             height="315"
             :src="`https://www.youtube-nocookie.com/embed/${link}?playlist=${link}&loop=1&controls=0`"
             title="YouTube video player"
@@ -214,12 +214,14 @@ import {
   SfTable,
 } from '@storefront-ui/vue';
 import { placeholder } from '@babel/types';
+import Gallery from '~/components/Gallery.vue';
 export default defineComponent({
   components: {
     SfGallery,
     LazyHydrate,
     SfBreadcrumbs,
     SfTable,
+    Gallery,
   },
   created() {
     this.getProducts();
@@ -336,6 +338,9 @@ export default defineComponent({
         });
       });
       return variants;
+    },
+    featuredImage() {
+      return this.productVariants?.featuredAsset?.preview;
     },
   },
   setup(props, context) {

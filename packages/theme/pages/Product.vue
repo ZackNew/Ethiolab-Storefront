@@ -7,7 +7,7 @@
     <!-- <p>{{breadcrumbs}}</p> -->
     <div class="product">
       <LazyHydrate when-idle>
-        <SfGallery
+        <Gallery
           :images="productGallery"
           class="product__gallery w-auto"
           enableZoom
@@ -214,6 +214,7 @@ import {
   SfColor,
 } from '@storefront-ui/vue';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
+import Gallery from '../components/Gallery.vue';
 import MyReview from '~/components/MyAccount/MyReview.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
@@ -631,6 +632,7 @@ export default {
     MobileStoreBanner,
     LazyHydrate,
     MyReview,
+    Gallery,
   },
   data() {
     return {
