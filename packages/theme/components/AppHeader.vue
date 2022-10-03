@@ -14,7 +14,7 @@
       <template #logo>
         <nuxt-link :to="localePath('/')">
           <SfImage
-            src="/Logo.png"
+            :src="logo"
             alt="EthioLab"
             width="500"
             class="sf-header__logo-image"
@@ -183,6 +183,11 @@ export default {
     SfModal,
     ThemeChanger,
     HeaderNavigation,
+  },
+  computed: {
+    logo() {
+      return this.$store.state.companyDetails.companyInformation?.icon?.preview;
+    },
   },
   directives: { clickOutside },
   setup(props, { root }) {

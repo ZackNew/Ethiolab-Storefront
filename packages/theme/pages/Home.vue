@@ -85,7 +85,6 @@
               <!-- @click="mymethod('https://www.ethiolab.et')" -->
             </template>
           </LazyHydrate>
-
           <div v-if="heroSection.link">
             <iframe
               class="w-full h-96 mt-10 ytplayer"

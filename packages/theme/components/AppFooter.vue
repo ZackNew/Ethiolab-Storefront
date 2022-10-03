@@ -186,10 +186,25 @@ export default {
       //   const j = i.split('_')[0];
       //   name_link.push({ name: j, link: 'nice' });
       // }
+      let soci = {
+        facebook_address:
+          this.$store.state.companyDetails.companyInformation?.facebook_address,
+        instagram_address:
+          this.$store.state.companyDetails.companyInformation
+            ?.instagram_address,
+        twitter_address:
+          this.$store.state.companyDetails.companyInformation?.twitter_address,
+        linkdin_address:
+          this.$store.state.companyDetails.companyInformation?.linkdin_address,
+        telegram_address:
+          this.$store.state.companyDetails.companyInformation?.telegram_address,
+        youtube_address:
+          this.$store.state.companyDetails.companyInformation?.youtube_address,
+      };
       let sm = this.socialMedia;
-      Object.keys(sm).forEach((s) => {
+      Object.keys(soci).forEach((s) => {
         const n = s.split('_')[0];
-        name_link.push({ name: n, link: sm[s] });
+        name_link.push({ name: n, link: soci[s] });
       });
       return name_link;
     },
@@ -217,7 +232,7 @@ export default {
       };
       const companyScocialMedia = await axios.post(baseUrl, body, options);
       this.socialMedia = companyScocialMedia?.data.data?.getCompanyInfos;
-      console.log('company social', this.socialMedia);
+      console.log('company social', typeof this.socialMedia);
     },
   },
   created() {
