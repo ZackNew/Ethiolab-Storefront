@@ -26,13 +26,7 @@
     <div class="flex mx-10">
       <div class="w-1/2">
         <LazyHydrate when-idle>
-          <Gallery
-            :images="productGallery"
-            class="w-full"
-            imageWidth="900"
-            thumbWidth="500"
-            enableZoom
-          />
+          <Gallery :images="productGallery" thumbWidth="500" enableZoom />
         </LazyHydrate>
       </div>
 
@@ -145,7 +139,7 @@
           Price
         </SfTableHeader>
       </SfTableHeading>
-      <SfTableRow v-for="variant in variantss" :key="variant.id" class="border">
+      <SfTableRow v-for="variant in variantss" :key="variant.id" class="">
         <SfTableData class="flex mr-10">
           <img
             :src="variant.image || productVariants.featuredAsset.preview"

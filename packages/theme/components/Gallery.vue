@@ -1,13 +1,13 @@
 <template>
-  <div class="sf-gallery">
-    <div class="sf-gallery__stage">
+  <div class="gallery">
+    <div class="gallery__stage">
       <div ref="glide" class="glide">
         <div class="glide__track" data-glide-el="track">
           <ul class="glide__slides">
             <li
               v-for="(picture, index) in images"
               :key="'slide-' + index"
-              class="glide__slide"
+              class=""
               @mouseover="startZoom(picture)"
               @mousemove="moveZoom($event, index)"
               @mouseout="removeZoom(index)"
@@ -26,8 +26,8 @@
               >
                 <SfImage
                   ref="sfGalleryBigImage"
-                  class="sf-gallery__big-image"
-                  :class="{ 'sf-gallery__big-image--has-zoom': enableZoom }"
+                  class="gallery__big-image"
+                  :class="{ 'gallery__big-image--has-zoom': enableZoom }"
                   :src="picture.desktop.url"
                   :alt="picture.alt"
                   :placeholder="picture.placeholder"
@@ -63,7 +63,7 @@
           >
             <SfImage
               ref="imgZoom"
-              class="sf-gallery__zoom"
+              class="gallery__zoom"
               :src="definedPicture.url"
               :width="imageWidth"
               :height="imageHeight"
@@ -77,18 +77,18 @@
         </div>
       </transition> -->
     </div>
-    <div class="sf-gallery__thumbs">
+    <div class="gallery__thumbs">
       <slot name="thumbs" v-bind="{ images, active: activeIndex, go }">
         <SfButton
           v-for="(image, index) in images"
           :key="'img-' + index"
-          class="sf-button--pure sf-gallery__item"
-          :class="{ 'sf-gallery__item--selected': index === activeIndex }"
+          class="sf-button--pure gallery__item"
+          :class="{ 'gallery__item--selected': index === activeIndex }"
           :aria-label="'Image ' + index"
           @click="go(index)"
         >
           <SfImage
-            class="sf-gallery__thumb"
+            class="gallery__thumb"
             :src="image.mobile.url"
             :alt="image.alt"
             :placeholder="image.placeholder"
@@ -312,4 +312,80 @@ export default {
   },
 };
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.gallery {
+  display: flex;
+  flex-direction: var(--gallery-flex-direction, column);
+  --image-width: var(--gallery-image-width, 100%);
+  --image-height: var(--gallery-image-height, 31.25rem);
+  @include for-desktop {
+    --gallery-image-width: 26.375rem;
+    --gallery-image-height: 41.5rem;
+  }
+  &__thumbs {
+    display: var(--gallery-thumbs-display, flex);
+    flex: var(--gallery-thumbs-flex);
+    flex-direction: var(--gallery-thumbs-flex-direction);
+    margin: var(--gallery-thumbs-margin, var(--spacer-xs) 0 0 0);
+    order: var(--gallery-thumbs-order);
+    overflow: auto;
+    --image-width: var(--gallery-thumbs-image-width, 10rem);
+    --image-height: var(--gallery-thumbs-image-height, 10rem);
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+  &__item {
+    display: flex;
+    flex: 0 0 var(--gallery-thumb-width, 10rem);
+    margin: var(--gallery-item-margin, 0 var(--spacer-xs) 0 0);
+    &:last-child {
+      --gallery-item-margin: 0;
+    }
+    opacity: var(--gallery-item-opacity, 0.5);
+    transition: var(--gallery-item-transition, opacity 150ms ease-in-out);
+    cursor: var(--gallery-item-cursor, pointer);
+    &--selected {
+      --gallery-item-opacity: 1;
+      --gallery-item-cursor: default;
+    }
+  }
+  &__stage {
+    position: relative;
+    flex: 1;
+    max-width: var(--gallery-stage-width, 26.375rem);
+  }
+  &__zoom {
+    position: absolute;
+    pointer-events: none;
+    width: 12.5rem;
+    height: 12.5rem;
+    overflow: hidden;
+  }
+  .glide {
+    &__slide {
+      flex: 1;
+    }
+    &__slides {
+      margin: 0;
+    }
+  }
+  @include for-desktop {
+    --gallery-flex-direction: row;
+    --gallery-thumbs-flex: 0 0 var(--gallery-thumb-width, 10rem);
+    --gallery-thumbs-flex-direction: column;
+    --gallery-thumbs-order: -1;
+    --gallery-thumbs-margin: 0 var(--spacer-xs) 0 0;
+    --gallery-item-margin: 0 0 var(--spacer-xs) 0;
+    &__item {
+      &:last-child {
+        --gallery-item-margin: 0;
+      }
+    }
+    &__thumbs {
+      overflow-y: scroll;
+      height: var(--gallery-image-height);
+    }
+  }
+}
+</style>
