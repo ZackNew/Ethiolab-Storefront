@@ -201,7 +201,7 @@
             phone="(+251) 111 264 829"
             email="info@ethiolab.et" -->
           <div class="mt-4">
-            <p>Ethiolab Head Office</p>
+            <p>{{ companyName[0] }} Head Office</p>
             <p class="mb-6">
               Adwa Street, Arada Sub-city, Elsi Bldg (881/EBG 407)
             </p>
@@ -311,12 +311,23 @@ export default {
       };
     },
     phoneNumbers() {
-      const phone = this.companyInfo?.phone_number.split(';');
+      const phone =
+        this.$store.state.companyDetails.companyInformation?.phone_number.split(
+          ';'
+        );
       return phone;
     },
     emails() {
-      const email = this.companyInfo?.email.split(';');
+      const email =
+        this.$store.state.companyDetails.companyInformation?.email.split(';');
       return email;
+    },
+    companyName() {
+      const name =
+        this.$store.state.companyDetails.companyInformation?.company_name.split(
+          ';'
+        );
+      return name;
     },
   },
   setup(_, { root }) {
@@ -394,40 +405,6 @@ export default {
       handleFormSubmit,
       errorMessage,
     };
-  },
-  data() {
-    return {
-      companyInfo: null,
-    };
-  },
-  methods: {
-    async getCompanyInfo() {
-      const baseUrl = process.env.GRAPHQL_API;
-      const body = {
-        query: `query companyInfo {
-          getCompanyInfos {
-            company_name
-            email
-            id
-            latitude
-            longitude
-            phone_number
-          }
-        }`,
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      const companyInformation = await axios.post(baseUrl, body, options);
-      this.companyInfo = companyInformation?.data.data?.getCompanyInfos;
-      console.log('company info', this.companyInfo);
-    },
-  },
-  mounted() {
-    this.getCompanyInfo();
   },
 };
 </script>

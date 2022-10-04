@@ -79,6 +79,7 @@ export default {
   },
   methods: {
     async getFAQs() {
+      const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `query getFAQ {
             getFaqs {
@@ -95,13 +96,11 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      await axios
-        .post('http://localhost:3000/shop-api', body, options)
-        .then((res) => {
-          console.log('===========');
-          console.log(res.data.data.getFaqs);
-          this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
-        });
+      await axios.post(baseUrl, body, options).then((res) => {
+        console.log('===========');
+        console.log(res.data.data.getFaqs);
+        this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
+      });
     },
   },
 };
