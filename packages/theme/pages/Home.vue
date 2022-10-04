@@ -13,8 +13,6 @@
           <SfDivider />
           <LazyHydrate>
             <Banner
-              :title="adSection.title || 'AD Title'"
-              :subtitle="adSection.overview || 'AD Overview'"
               :description="adSection.description || 'AD Description'"
               :buttonText="adSection.buttonText || 'AD Button'"
               background=""

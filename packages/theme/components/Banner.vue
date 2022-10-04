@@ -25,19 +25,19 @@
       <slot name="call-to-action" v-bind="{ buttonText }" />
     </component> -->
     <div class="sf-banner__wrapper-desktop" :link="link">
-      <slot name="subtitle" v-bind="{ subtitle }">
+      <!-- <slot name="subtitle" v-bind="{ subtitle }">
         <span
           :class="{ 'display-none': !subtitle }"
           class="sf-banner__subtitle"
         >
           {{ subtitle }}
         </span>
-      </slot>
-      <slot name="title" v-bind="{ title }">
+      </slot> -->
+      <!-- <slot name="title" v-bind="{ title }">
         <span :class="{ 'display-none': !title }" class="sf-banner__title">
           {{ title }}
         </span>
-      </slot>
+      </slot> -->
       <slot name="description" v-bind="{ description }">
         <span
           :class="{ 'display-none': !description }"
