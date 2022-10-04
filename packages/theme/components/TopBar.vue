@@ -38,16 +38,35 @@ export default {
     LocaleSelector,
     DropdownNavigationItem,
   },
+  computed: {
+    headerNavigation() {
+      const navigation = [
+        { name: 'Help', link: '/pages/helpAndFAQ' },
+        { name: 'Contact us', link: '/pages/contact' },
+        {
+          name: this.$store.state.companyDetails.companyInformation?.phone_number.split(
+            ';'
+          )[0],
+          link: '#',
+        },
+        { name: 'Request a Quote', link: '/WriteAQuote' },
+      ];
+      return navigation;
+    },
+  },
   setup() {
-    const headerNavigation = [
-      { name: 'Help', link: '/pages/helpAndFAQ' },
-      { name: 'Contact us', link: '/pages/contact' },
-      { name: '(+251) 940 02 44 02', link: '#' },
-      //  { name: 'Request a Quote', link: '/WriteAQuote'}
-    ];
-    return {
-      headerNavigation,
-    };
+    // const headerNavigation = [
+    //   { name: 'Help', link: '/pages/helpAndFAQ' },
+    //   { name: 'Contact us', link: '/pages/contact' },
+    //   { name: '(+251) 940 02 44 02', link: '#' },
+    //  { name: 'Request a Quote', link: '/WriteAQuote'}
+    // ];
+    // return {
+    //   headerNavigation,
+    // };
+  },
+  created() {
+    this.$store.dispatch('companyDetails/getCompanyInfo');
   },
 };
 </script>
@@ -68,7 +87,7 @@ export default {
   color: white;
   position: relative;
   // max-width: var(--sf-topbar-width, 770.5rem)!important;
-  --sf-topbar-width:90%;
+  --sf-topbar-width: 90%;
   z-index: 2;
   &__button {
     text-decoration: none;
