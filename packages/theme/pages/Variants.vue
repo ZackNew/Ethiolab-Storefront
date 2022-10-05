@@ -86,6 +86,7 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
+          <br />
           <div
             class="inline-block mt-4"
             v-for="(facet, index) in facets"
