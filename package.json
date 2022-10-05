@@ -29,7 +29,7 @@
     "test:composables": "cd packages/composables && yarn test --passWithNoTests",
     "test:theme": "cd packages/theme && yarn test --passWithNoTests",
     "update:check": "ncu && lerna run update:check --stream",
-    "update:update": "ncu -u && lerna run update:update --stream" 
+    "update:update": "ncu -u && lerna run update:update --stream"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -65,13 +65,17 @@
     "packages/*"
   ],
   "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
     "aos": "^2.3.4",
     "axios": "^0.27.2",
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
+    "node-rsa": "^1.1.1",
     "nuxt-user-agent": "^1.2.2",
+    "vue-axios": "^3.4.1",
+    "vue-router": "^3.5.1",
     "vue-uuid": "^3.0.0"
   }
 }

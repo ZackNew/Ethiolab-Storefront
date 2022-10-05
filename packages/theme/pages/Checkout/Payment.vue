@@ -148,8 +148,14 @@ import * as crypto from 'crypto';
 import CryptoJS from 'crypto-js'
 import moment from "moment";
 import axios from 'axios';
+import Vue from 'vue';
+import VueAxios from 'vue-axios';
 import { mapAddressFormToOrderAddress, COUNTRIES, getDefaultAddress, mapAddressToAddressForm } from '~/helpers';
 import NodeRSA from "node-rsa";
+
+// Vue.use(VueAxios, axios);
+
+
 export default {
   name: 'ReviewOrder',
   components: {
@@ -320,7 +326,7 @@ export default {
       // setCart(null);
     };
 
-    const processTelebirr = () => {
+    const processTelebirr =  async() => {
       console.log("telebirr next");
 
       ////////////////////////////////STEP 1//////////////////////////////////////
@@ -335,7 +341,7 @@ export default {
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
-                      "timestamp":paymentDetail.reference_number,
+                      "timestamp":paymentDetail.reference_number.toString(),
                       "totalAmount":paymentDetail.amount
                     };
 
@@ -355,6 +361,8 @@ export default {
         return str.substr(0, str.length - 1);
         }
 
+        // console.log("string A vlaue is ", StringA)
+
               ////////////////////////////////STEP 2//////////////////////////////////////
 
               let StringB = sha256(StringA);
@@ -365,8 +373,12 @@ export default {
             return hash.digest('hex');
         }
               ////////////////////////////////STEP 3//////////////////////////////////////
+              // console.log("string B vlaue is ", StringB)
 
        let sign = StringB.toUpperCase();
+
+
+      //  console.log("sign vlaue is ", sign)
 
               ////////////////////////////////STEP 4//////////////////////////////////////
 
@@ -379,9 +391,11 @@ export default {
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
-                      "timestamp":paymentDetail.reference_number,
+                      "timestamp":paymentDetail.reference_number.toString(),
                       "totalAmount":paymentDetail.amount
                     };
+
+                    // console.log("jsonobj is ", jsonObj)
                     
                     let ussdjson = JSON.stringify(jsonObj);
 
@@ -426,9 +440,23 @@ export default {
       //     'Access-Control-Allow-Origin': '*',
       //   },
       // };
+          //       const instance = axios.create({
+          //   baseURL: 'http://196.188.120.3:11443/service-openup/toTradeWebPay',
+          //   // timeout: 1000,
+          //   // headers: {'X-Custom-Header': 'foobar'}
+          // });
+
+          // const instance = axios.create({
+          //           // url: '/service-openup/toTradeWebPay',
+          //           baseURL: 'http://196.188.120.3:11443',
+          //           // method: 'POST',
+          //           // timeout: 1000
+          //         });
+
               axios
-                      .post(api, requestMessage)
+                      .post("http://196.188.120.3:11443/service-openup/toTradeWebPay", requestMessage)
                       .then(res => {
+                        console.log("local response is ", res);
                           if (res.status == 200 && res.data.code == 200) {
                               rsp.redirect(res.data.data.toPayUrl);
                           } else {
@@ -438,6 +466,19 @@ export default {
                       .catch(error => {
                           console.error(error);
                       });
+
+        //       await this.$axios
+        // .post("/service-openup/toTradeWebPay", requestMessage)
+        // .then((res) => {
+        //   if (res.status == 200 && res.data.code == 200) {
+        //     rsp.redirect(res.data.data.toPayUrl);
+        //   } else {
+        //     console.error(res.data.message);
+        //   }
+        // })
+        // .catch((error) => {
+        //   console.error(error);
+        // });
     }
 
     const buildDataToSign = async (paymentDetail) => {

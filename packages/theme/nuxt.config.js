@@ -6,7 +6,7 @@ export default {
   server: {
     port: process.env.PORT || 3001,
     host: '0.0.0.0',
-    protocol:'https'
+    // protocol:'https'
   },
   env: {
     GRAPHQL_API: process.env.GRAPHQL_API || 'http://localhost:3000/shop-api'
@@ -123,7 +123,8 @@ export default {
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
-    'nuxt-user-agent'
+    'nuxt-user-agent',
+    '@nuxtjs/axios',
   ],
   i18n: {
     currency: 'ETB',

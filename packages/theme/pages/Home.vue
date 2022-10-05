@@ -4,7 +4,7 @@
       <PopupNotification />
       <div class="grid grid-cols-12 gap-4 mt-3 py-6">
         <!--        categories-->
-        <div
+        <!-- <div
           class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container max-h-screen overflow-auto"
         >
           <LazyHydrate when-visible>
@@ -22,8 +22,8 @@
             >
             </Banner>
           </LazyHydrate>
-        </div>
-        <div class="md:col-span-9 col-span-12 md:ml-3">
+        </div> -->
+        <div class="md:col-span-12 col-span-12 md:ml-3">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -84,7 +84,7 @@
               />
             </template>
           </LazyHydrate>
-
+<!-- 
           <div v-if="heroSection.link">  
                <iframe
             class="w-full h-96 mt-10 ytplayer"
@@ -95,7 +95,7 @@
             allowfullscreen
             ng-show="showvideo"
           ></iframe>
-          </div>
+          </div> -->
 
        
 
