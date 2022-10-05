@@ -7,7 +7,7 @@
     <!-- <p>{{breadcrumbs}}</p> -->
     <div class="product">
       <LazyHydrate when-idle>
-        <Gallery
+        <SfGallery
           :images="productGallery"
           class="product__gallery w-auto"
           enableZoom
@@ -64,7 +64,7 @@
           ></div>
           <a style="color: blue" href="#full-description">MORE +</a>
           <iframe
-            width="560"
+            width="520"
             height="315"
             :src="`https://www.youtube-nocookie.com/embed/${youtube_link}?playlist=${youtube_link}&loop=1&controls=0`"
             title="YouTube video player"

@@ -26,7 +26,7 @@
     <div class="flex mx-10">
       <div class="w-1/2">
         <LazyHydrate when-idle>
-          <Gallery :images="productGallery" thumbWidth="500" enableZoom />
+          <SfGallery :images="productGallery" thumbWidth="500" enableZoom />
         </LazyHydrate>
       </div>
 
@@ -66,9 +66,18 @@
               v-html="productVariants.description"
             ></p>
           </div>
+          <button
+            v-if="descriptionDocument"
+            class="bg-secondary my-2 p-1 rounded"
+          >
+            <a class="text-white" :href="descriptionDocument" target="_blank">
+              See full description
+            </a>
+            <!-- Get documentation -->
+          </button>
           <iframe
             class="mt-4"
-            width="760"
+            width="560"
             height="315"
             :src="`https://www.youtube-nocookie.com/embed/${link}?playlist=${link}&loop=1&controls=0`"
             title="YouTube video player"
@@ -77,6 +86,15 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
+          <div
+            class="inline-block mt-4"
+            v-for="(facet, index) in facets"
+            :key="index"
+          >
+            <span class="bg-light_accent p-2 rounded ml-2">
+              {{ facet.name }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -226,6 +244,21 @@ export default defineComponent({
     };
   },
   methods: {
+    // getDocument() {
+    //   const fileURL = process.env.GRAPHQL + this.descriptionDocument;
+    //   axios({
+    //     url: fileURL,
+    //     method: 'GET',
+    //     responseType: 'blob',
+    //   }).then((res) => {
+    //     var FILE = window.URL.createObjectURL(new Blob([res.data]));
+    //     var docUrl = document.createElement('x');
+    //     docUrl.href = FILE;
+    //     docUrl.setAttribute('download', 'product_description.pdf');
+    //     document.body.appendChild(docUrl);
+    //     docUrl.click();
+    //   });
+    // },
     async getProducts() {
       const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
@@ -238,6 +271,10 @@ export default defineComponent({
             description
             customFields{
               youtube_link
+              documentation
+            }
+            facetValues{
+              name
             }
             featuredAsset{
               preview
@@ -335,6 +372,14 @@ export default defineComponent({
     },
     featuredImage() {
       return this.productVariants?.featuredAsset?.preview;
+    },
+    facets() {
+      return this.productVariants?.facetValues;
+    },
+    descriptionDocument() {
+      return (
+        process.env.GRAPHQL + this.productVariants?.customFields?.documentation
+      );
     },
   },
   setup(props, context) {
