@@ -568,7 +568,10 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
-    let sort = localStorage.getItem('sort');
+    let sort = '';
+    if (process.env.client) {
+      sort = localStorage.getItem('sort');
+    }
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
