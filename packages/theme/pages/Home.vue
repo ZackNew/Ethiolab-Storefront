@@ -116,31 +116,29 @@
                 v-for="(product, i) in this.products"
                 :key="i"
               >
-                <nuxt-link :to="`/v/${productGetters.getSlug(product)}`">
-                  <SfProductCard
-                    :title="productGetters.getName(product)"
-                    :image="productGetters.getCoverImage(product)"
-                    :regular-price="
-                      productGetters
-                        .getPrice(product)
-                        .regular.toLocaleString() + ' ETB'
-                    "
-                    imageHeight="10rem"
-                    :alt="productGetters.getName(product)"
-                    :score-rating="productGetters.getAverageRating(product)"
-                    :show-add-to-cart-button="true"
-                    :isInWishlist="isInWishlist({ product })"
-                    :isAddedToCart="isInCart({ product })"
-                    @click:wishlist="
-                      !isInWishlist({ product })
-                        ? addItemToWishlist({ product })
-                        : removeItemFromWishlist({ product })
-                    "
-                    @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-                    class="carousel__item__product w-48"
-                    style="border-radius: 15px"
-                  />
-                </nuxt-link>
+                <SfProductCard
+                  :title="productGetters.getName(product)"
+                  :image="productGetters.getCoverImage(product)"
+                  :regular-price="
+                    productGetters.getPrice(product).regular.toLocaleString() +
+                    ' ETB'
+                  "
+                  imageHeight="10rem"
+                  :alt="productGetters.getName(product)"
+                  :score-rating="productGetters.getAverageRating(product)"
+                  :show-add-to-cart-button="true"
+                  :isInWishlist="isInWishlist({ product })"
+                  :isAddedToCart="isInCart({ product })"
+                  :link="localePath(`/v/${productGetters.getSlug(product)}`)"
+                  @click:wishlist="
+                    !isInWishlist({ product })
+                      ? addItemToWishlist({ product })
+                      : removeItemFromWishlist({ product })
+                  "
+                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                  class="carousel__item__product w-48"
+                  style="border-radius: 15px"
+                />
               </SfCarouselItem>
             </SfCarousel>
           </LazyHydrate>

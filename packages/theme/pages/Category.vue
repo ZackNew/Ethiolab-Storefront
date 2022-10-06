@@ -319,33 +319,31 @@
                 v-for="(product, i) in products"
                 :key="productGetters.getSlug(product)"
               >
-                <nuxt-link :to="`/v/${productGetters.getSlug(product)}`">
-                  <SfProductCard
-                    v-e2e="'category-product-card'"
-                    :style="{ '--index': i }"
-                    :title="productGetters.getName(product)"
-                    :image="productGetters.getCoverImage(product)"
-                    imageHeight="20.25rem"
-                    imageWidth="100%"
-                    :regular-price="
-                      productGetters
-                        .getPrice(product)
-                        .regular.toLocaleString() + ' ETB'
-                    "
-                    :max-rating="5"
-                    :score-rating="productGetters.getAverageRating(product)"
-                    :show-add-to-cart-button="true"
-                    :isInWishlist="isInWishlist({ product })"
-                    :isAddedToCart="isInCart({ product })"
-                    class="products__product-card mr-4 mb-4 -z-1"
-                    @click:wishlist="
-                      !isInWishlist({ product })
-                        ? addItemToWishlist({ product })
-                        : removeItemFromWishlist({ product })
-                    "
-                    @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-                  />
-                </nuxt-link>
+                <SfProductCard
+                  v-e2e="'category-product-card'"
+                  :style="{ '--index': i }"
+                  :title="productGetters.getName(product)"
+                  :image="productGetters.getCoverImage(product)"
+                  imageHeight="20.25rem"
+                  imageWidth="100%"
+                  :regular-price="
+                    productGetters.getPrice(product).regular.toLocaleString() +
+                    ' ETB'
+                  "
+                  :max-rating="5"
+                  :score-rating="productGetters.getAverageRating(product)"
+                  :show-add-to-cart-button="true"
+                  :isInWishlist="isInWishlist({ product })"
+                  :isAddedToCart="isInCart({ product })"
+                  :link="localePath(`/v/${productGetters.getSlug(product)}`)"
+                  class="products__product-card mr-4 mb-4 -z-1"
+                  @click:wishlist="
+                    !isInWishlist({ product })
+                      ? addItemToWishlist({ product })
+                      : removeItemFromWishlist({ product })
+                  "
+                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                />
               </div>
             </transition-group>
             <transition-group
@@ -570,7 +568,10 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
-    let sort = localStorage.getItem('sort');
+    let sort = '';
+    if (process.env.client) {
+      sort = localStorage.getItem('sort');
+    }
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);

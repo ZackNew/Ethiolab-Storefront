@@ -23,234 +23,88 @@
         </li>
       </ol>
     </nav>
-    <div class="grid md:grid-cols-12">
-      -
-      <div class="md:col-span-5 m-3">
+    <div class="flex mx-10">
+      <div class="w-1/2">
         <LazyHydrate when-idle>
-          <SfGallery
-            :images="productGallery"
-            class="product__gallery :w-auto"
-            enableZoom
-          />
+          <SfGallery :images="productGallery" thumbWidth="500" enableZoom />
         </LazyHydrate>
-        <!-- <!- <img :src="loading? '' : products.featuredAsset.preview" class="h-96" />
-                       <div class="grid grid-cols-3"> 
-                        <img :src="loading? '' : products.featuredAsset.preview"  class="col-span-1 mt-5" />
-        </div> -->
       </div>
 
-      <div class="md:col-span-6 m-3">
-        <h2>{{ products && products.name }}</h2>
+      <div class="w-1/2">
+        <h2 class="text-secondary">{{ productVariants.name }}</h2>
         <!-- <p class="font-semibold text-2xl">{{products && products.name}}</p> -->
         <!-- <P class="text-secondary mt-5"></P> -->
-
-        <div class="grid grid-cols-1 grid-cols-3">
+        <div class="text-xl font-bold mt-10" v-if="totalVariants === 1">
+          <span>Price </span>{{ prices }}
+        </div>
+        <div class="text-xl font-bold mt-5" v-else>
+          Price
+          <div class="inline-flex" v-for="(p, index) of prices" :key="index">
+            <div class="mx-2" v-if="index === 1">-</div>
+            <template>{{ p }}ETB </template>
+          </div>
+        </div>
+        <div>
           <div
-            class="col-span-2 overflow-auto nobar hover:border border-light_gray p-1 h-96 mt-10"
+            class="flex items-center justify-center text-center h-10 bg-light_gray mt-10"
+          >
+            <p class="mr-5">
+              {{ totalVariants }} variations of this product are available.
+            </p>
+            <a href="#var-table" class="text-secondary text-sm font-bold"
+              >SEE ALL PRODUCT OPTIONS BELOW
+            </a>
+          </div>
+        </div>
+        <div>
+          <div
+            class="overflow-auto nobar hover:border border-light_gray p-1 max-h-72 mt-5"
           >
             <p
               class="text-justify"
               :class="classes.red"
-              v-html="products && products.description"
+              v-html="productVariants.description"
             ></p>
-
-            <!-- <span> 
-                                <p class="text-secondary mb-3"> MORE +</p>
-                            </span> -->
           </div>
-
-          <div class="col-span-1">
-            <span class="text-xl font-bold mt-10"
-              ><span>Price </span>{{ minPrice }} - {{ maxPrice }}</span
+          <button
+            v-if="descriptionDocument"
+            class="bg-secondary my-2 p-1 rounded"
+          >
+            <a
+              class="text-white"
+              :href="url + descriptionDocument"
+              target="_blank"
             >
-            <div class="h-20 bg-light_gray md:ml-5 mt-10">
-              <p class="md:m-5 float-left">
-                {{ product && product.length }} variations of this product are
-                available.
-              </p>
-              <a
-                href="#var-table"
-                class="text-secondary text-sm md:m-4 font-bold"
-                >SEE ALL PRODUCT OPTIONS BELOW</a
-              >
-            </div>
+              See full description
+            </a>
+            <!-- Get documentation -->
+          </button>
+          <iframe
+            class="mt-4"
+            width="560"
+            height="315"
+            :src="`https://www.youtube-nocookie.com/embed/${link}?playlist=${link}&loop=1&controls=0`"
+            title="YouTube video player"
+            frameborder="0"
+            v-if="link"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+          <br />
+          <div
+            class="inline-block mt-4"
+            v-for="(facet, index) in facets"
+            :key="index"
+          >
+            <span class="bg-light_accent p-2 rounded ml-2">
+              {{ facet.name }}
+            </span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="flex flex-col hidden md:block">
-      <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
-          <div class="overflow-hidden">
-            <LazyHydrate>
-              <table class="min-w-full mt-20" id="var-table">
-                <thead class="bg-white border-b">
-                  <tr>
-                    <div class="grid grid-cols-12">
-                      <th
-                        scope="col"
-                        class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-4"
-                      >
-                        Item
-                      </th>
-                      <!-- <th
-                        scope="col"
-                        class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-1"
-                      >
-                        SKU
-                      </th> -->
-
-                      <!-- <th  scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left">{{loading? '' : option.value[0].label}}</th> -->
-
-                      <!-- <th v-for="(op, i) in option && option" :key="i"  scope="col" class="text-lg font-medium text-gray-900 px-6 py-4 text-left">{{op.label.toUpperCase()}}</th> -->
-                      <template v-if="option && option.length != 0">
-                        <th
-                          scope="col"
-                          class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-2"
-                          v-for="(opt, index) in option"
-                          :key="index"
-                        >
-                          {{ opt.label }}
-                        </th>
-                      </template>
-                      <th
-                        scope="col"
-                        class="text-lg font-medium text-gray-900 px-6 py-4 text-left col-span-4"
-                      >
-                        Price
-                      </th>
-                    </div>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <tr v-for="(pro, i) in product && product" :key="i">
-                    <div
-                      :class="
-                        i % 2 == 0
-                          ? 'grid grid-cols-12 bg-light_gray border-b'
-                          : 'grid grid-cols-12 bg-white border-b'
-                      "
-                    >
-                      <td class="col-span-4 whitespace-nowrap">
-                        <div class="grid grid-cols-4">
-                          <div class="col-span-2">
-                            <LazyHydrate>
-                              <img
-                                :src="
-                                  pro.images[0]
-                                    ? pro.images[0]
-                                    : products.featuredAsset.preview
-                                "
-                                class="col-span-1"
-                              />
-                            </LazyHydrate>
-                          </div>
-
-                          <!-- <a href="#" class="text-secondary ml-5">EW-10001-00</a> -->
-                          <template class="max-w-16">
-                            <nuxt-link
-                              class="text-secondary ml-5 mt-5"
-                              :to="
-                                '/p/' +
-                                products.id +
-                                '/' +
-                                pro._id +
-                                '/' +
-                                pro.slug
-                              "
-                              >{{ pro.name }}
-                            </nuxt-link>
-                          </template>
-                        </div>
-                      </td>
-                      <!-- <td class=" col-span-1">{{pro.price.current}}</td> -->
-                      <!-- <td class="col-span-1">{{ pro.sku }}</td> -->
-                      <template v-if="option.length != 0">
-                        <td
-                          v-for="(opt, index) in option"
-                          :key="index"
-                          class="col-span-2"
-                        >
-                          <template v-for="o in opt.options">
-                            {{ o.value }}
-                          </template>
-                          <!-- {{ pro.name.replace(products.name, '') }} -->
-                        </td>
-                      </template>
-                      <td class="col-span-4">
-                        <span class="text-xl font-bold ml-5">{{
-                          pro.price.current
-                            .toString()
-                            .substring(
-                              0,
-                              pro.price.current.toString().length - 2
-                            ) +
-                          '.' +
-                          pro.price.current
-                            .toString()
-                            .substring(pro.price.current.toString().length - 2)
-                        }}</span>
-                        <span>{{ products.variants[i].currencyCode }}</span>
-                        <span>
-                          <input
-                            type="text"
-                            id="first_name"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-12 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="John"
-                            value="1"
-                            required
-                          />
-                        </span>
-                        <span class="b">
-                          <button class="">
-                            <img
-                              src="/categories/carticon.png"
-                              alt="cart image"
-                              class="h-16 -mb-8"
-                            />
-                          </button>
-                        </span>
-                        <div class="flex items-center mx-4 my-10">
-                          <!-- <input
-                            id="default-checkbox"
-                            type="checkbox"
-                            value=""
-                            class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            @change="check($event)"
-                            v-model="checked"
-                          /> -->
-                          <!-- <label
-                            for="default-checkbox"
-                            class="ml-2 text-sm font-bold text-gray-900 dark:text-gray-300"
-                          >
-                            INCLUDE INNOCAL CALIBRATION SERVICES</label
-                          > -->
-                        </div>
-
-                        <!-- <div class="ml-10 mb-5" v-if="checked">
-                          <a class="text-secondary text-lg"
-                            >InnoCal NIST-Traceable Calibration: Balance/Scale -
-                            All Types</a
-                          >
-                          <p>
-                            for an additional
-                            <span class="font-bold">$200.00</span
-                            >{{ products.variants[i].currencyCode }}
-                          </p>
-                        </div> -->
-                      </td>
-                    </div>
-                  </tr>
-                </tbody>
-              </table>
-            </LazyHydrate>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="md:hidden">
+    <div class="md:hidden mt-10">
       <div
         v-for="(pro, i) in product && product"
         :key="i"
@@ -283,6 +137,57 @@
         </nuxt-link>
       </div>
     </div>
+    <!-- {{ variantss }}
+    <h1>iii</h1> -->
+    <SfTable
+      v-if="productVariants.length !== 0"
+      class="invisible md:visible mt-10"
+      id="var-table"
+    >
+      <SfTableHeading class="bg-primary">
+        <!-- <SfTableHeader class="text-white font-bold text-xl"></SfTableHeader> -->
+        <SfTableHeader class="text-white font-bold text-xl mr-10">
+          Item
+        </SfTableHeader>
+        <template v-if="opt.length > 0">
+          <SfTableHeader
+            class="text-white font-bold text-xl"
+            v-for="(o, index) in opt"
+            :key="index"
+          >
+            {{ o }}
+          </SfTableHeader>
+        </template>
+        <SfTableHeader class="text-white font-bold text-xl">
+          Price
+        </SfTableHeader>
+      </SfTableHeading>
+      <SfTableRow v-for="variant in variantss" :key="variant.id" class="">
+        <SfTableData class="flex mr-10">
+          <img
+            :src="variant.image || productVariants.featuredAsset.preview"
+            alt=""
+            class="float-left h-28 w-28 mr-2"
+          />
+          <p class="text-secondary mt-3">
+            <nuxt-link
+              class="text-secondary"
+              :to="`/p/${productVariants.id}/${variant.id}/${productVariants.slug}`"
+            >
+              {{ productVariants.name }}
+            </nuxt-link>
+          </p>
+        </SfTableData>
+        <SfTableData
+          class="m-auto"
+          v-for="(option, index) in variant.optionValue"
+          :key="index"
+        >
+          {{ option.name }}
+        </SfTableData>
+        <SfTableData class="m-auto">{{ variant.price }}</SfTableData>
+      </SfTableRow>
+    </SfTable>
   </div>
 </template>
 
@@ -304,7 +209,7 @@ import { computed } from '@vue/composition-api';
 import { useUiHelpers } from '~/composables';
 import { name } from 'file-loader';
 import LazyHydrate from 'vue-lazy-hydration';
-
+import axios from 'axios';
 import {
   SfProperty,
   SfHeading,
@@ -323,13 +228,163 @@ import {
   SfBreadcrumbs,
   SfButton,
   SfColor,
+  SfTable,
 } from '@storefront-ui/vue';
 import { placeholder } from '@babel/types';
+import Gallery from '~/components/Gallery.vue';
 export default defineComponent({
   components: {
     SfGallery,
     LazyHydrate,
     SfBreadcrumbs,
+    SfTable,
+    Gallery,
+  },
+  created() {
+    this.getProducts();
+  },
+  data() {
+    return {
+      url: process.env.GRAPHQL,
+      productVariants: [],
+    };
+  },
+  methods: {
+    // getDocument() {
+    //   const fileURL = process.env.GRAPHQL + this.descriptionDocument;
+    //   axios({
+    //     url: fileURL,
+    //     method: 'GET',
+    //     responseType: 'blob',
+    //   }).then((res) => {
+    //     var FILE = window.URL.createObjectURL(new Blob([res.data]));
+    //     var docUrl = document.createElement('x');
+    //     docUrl.href = FILE;
+    //     docUrl.setAttribute('download', 'product_description.pdf');
+    //     document.body.appendChild(docUrl);
+    //     docUrl.click();
+    //   });
+    // },
+    async getProducts() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const slug = this.$route.params.slug_1;
+      const body = {
+        query: `query getProducts ($slug: String!){
+          product(slug:$slug){
+            id
+            name
+            slug
+            description
+            customFields{
+              youtube_link
+              documentation
+            }
+            facetValues{
+              name
+            }
+            featuredAsset{
+              preview
+            }
+            assets{
+              preview
+            }
+            variantList{
+              totalItems
+              items{
+                priceWithTax
+                id
+                featuredAsset{
+                  preview
+                }
+                options{
+                  group{
+                    name
+                  }
+                  name
+                }
+              }
+            }
+          }
+        }`,
+        variables: { slug: slug },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const currentProducts = await axios.post(baseUrl, body, options);
+      this.productVariants = currentProducts.data.data?.product;
+      console.log('yaaay', this.productVariants);
+    },
+  },
+  computed: {
+    totalVariants() {
+      return this.productVariants?.variantList?.totalItems;
+    },
+    prices() {
+      if (this.productVariants?.variantList?.totalItems === 1) {
+        const price = String(
+          this.productVariants?.variantList?.items[0]?.priceWithTax
+        );
+        const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
+        return fPrice;
+      }
+      if (this.productVariants?.variantList?.totalItems > 1) {
+        let items = this.productVariants?.variantList?.items;
+        let prices = [];
+        items.forEach((item) => {
+          prices.push(item.priceWithTax);
+        });
+        const max =
+          String(Math.max(...prices)).slice(0, -2) +
+          '.' +
+          String(Math.max(...prices)).slice(-2);
+        const min =
+          String(Math.min(...prices)).slice(0, -2) +
+          '.' +
+          String(Math.min(...prices)).slice(-2);
+        return [min, max];
+      }
+    },
+    link() {
+      const splittedLink =
+        this.productVariants?.customFields?.youtube_link.split('?v=')[1];
+      return splittedLink;
+    },
+    opt() {
+      const options = [];
+      this.productVariants?.variantList?.items[0]?.options.forEach((o) => {
+        options.push(o.group.name);
+      });
+      return options;
+    },
+    variantss() {
+      const variants = [];
+      this.productVariants?.variantList?.items.forEach((variant) => {
+        const price =
+          String(variant.priceWithTax).slice(0, -2) +
+          '.' +
+          String(variant.priceWithTax).slice(-2);
+        variants.push({
+          id: variant.id,
+          image: variant.featuredAsset?.preview,
+          optionValue: variant.options,
+          price: price,
+        });
+      });
+      return variants;
+    },
+    featuredImage() {
+      return this.productVariants?.featuredAsset?.preview;
+    },
+    facets() {
+      return this.productVariants?.facetValues;
+    },
+    descriptionDocument() {
+      return this.productVariants?.customFields?.documentation;
+    },
   },
   setup(props, context) {
     const router = context.root.$router;
@@ -465,10 +520,14 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .nobar::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+// .sf-table td {
+//   align-items: center;
+//   justify-content: center;
+// }
 </style>
 
 <style module="classes">
