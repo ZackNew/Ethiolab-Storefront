@@ -70,7 +70,11 @@
             v-if="descriptionDocument"
             class="bg-secondary my-2 p-1 rounded"
           >
-            <a class="text-white" :href="descriptionDocument" target="_blank">
+            <a
+              class="text-white"
+              :href="url + descriptionDocument"
+              target="_blank"
+            >
               See full description
             </a>
             <!-- Get documentation -->
@@ -241,6 +245,7 @@ export default defineComponent({
   },
   data() {
     return {
+      url: process.env.GRAPHQL,
       productVariants: [],
     };
   },
@@ -378,9 +383,7 @@ export default defineComponent({
       return this.productVariants?.facetValues;
     },
     descriptionDocument() {
-      return (
-        process.env.GRAPHQL + this.productVariants?.customFields?.documentation
-      );
+      return this.productVariants?.customFields?.documentation;
     },
   },
   setup(props, context) {
