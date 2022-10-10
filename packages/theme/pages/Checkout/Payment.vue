@@ -101,12 +101,12 @@
             <input id="currency" type="hidden"  name="currency" v-model="paymentDetail.currency">
             <input id="signature" type="hidden"  name="signature" v-model="paymentDetail.signature">
 
-          <br></br>  <input type="submit" id="submit" name="submit" value="Confirm"  @click="processOrder">
-
+          <br></br>  <input type="submit" id="submit" name="submit" value="Confirm"  class="box-border relative flex h-16 w-48 align-center justify-center p-4 text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold -mt-12">
+  
           </form>     
 
           </div>
-
+ 
 
           <div v-if="paymentMethod && paymentMethod.name == 'Telebirr'">
             <SfButton
@@ -171,6 +171,29 @@ export default {
     SfAccordion,
     SfLink,
     VsfPaymentProvider: () => import('~/components/Checkout/VsfPaymentProvider')
+  },
+  async fetch() {
+    console.log("fetchhhhhh");
+
+    if(req.method == "GET"){
+      const body = []
+    req.on('ACCEPT', (chunk) => {
+      body.push(chunk)
+    })
+    console.log("body accept ", body);
+    }
+  //   if(event.type == "ACCEPT"){
+  //     console.log("payment is accepted")
+  //   }
+  //  else if(event.type == "REVIEW"){
+  //     console.log("payment is Review")
+  //   } else if(event.type == "Decline"){
+  //     console.log("payment is delined")
+  //   } else if(event.type == "ERROR"){
+  //     console.log("payment is error")
+  //   } else if(event.type == "CANCEL"){
+  //     console.log("payment is canceled")
+  //   }
   },
   setup(props, context) {
     const { cart, load, setCart } = useCart();
@@ -261,35 +284,35 @@ export default {
 
         const state = "Completed";
 
-        const body = {
-        query: `mutation{
-                transitionOrderToState(state: "PaymentAuthorized"){
-                  ... on Order{
-                    billingAddress{
-                      fullName
-                    }
-                  }
-                  ... on OrderStateTransitionError{
-                    errorCode
-                    message
-                  }
-                }
-              }`
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      let baseUrl = process.env.GRAPHQL_API;
-      const acat = await axios
-        .post(baseUrl, body, options)
-        .then(async (res) => {
-          console.log("the response value sura is ", res);
-        }).catch(err => {
-          console.log("error occured while updating the state and err is ", err);
-        })
+      //   const body = {
+      //   query: `mutation{
+      //           transitionOrderToState(state: "PaymentAuthorized"){
+      //             ... on Order{
+      //               billingAddress{
+      //                 fullName
+      //               }
+      //             }
+      //             ... on OrderStateTransitionError{
+      //               errorCode
+      //               message
+      //             }
+      //           }
+      //         }`
+      // };
+      // const options = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Access-Control-Allow-Origin': '*',
+      //   },
+      // };
+      // let baseUrl = process.env.GRAPHQL_API;
+      // const acat = await axios
+      //   .post(baseUrl, body, options)
+      //   .then(async (res) => {
+      //     console.log("the response value sura is ", res);
+      //   }).catch(err => {
+      //     console.log("error occured while updating the state and err is ", err);
+      //   })
 
 
       //   const body = {
@@ -334,10 +357,10 @@ export default {
         const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
         let signObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
                       "nonce":paymentDetail.transaction_uuid,
-                      "notifyUrl":"http://localhost:3001/checkout/thank-you",
+                      "notifyUrl":"http://localhost:3001/checkout/thank-you/",
                       "outTradeNo":cart.value.code,
                       "receiveName":"Ethiolab",
-                      "returnUrl":"http://localhost:3001/checkout/thank-you",
+                      "returnUrl":"http://localhost:3001/checkout/thank-you/",
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
@@ -361,7 +384,7 @@ export default {
         return str.substr(0, str.length - 1);
         }
 
-        // console.log("string A vlaue is ", StringA)
+        console.log("string A vlaue is ", StringA)
 
               ////////////////////////////////STEP 2//////////////////////////////////////
 
@@ -373,27 +396,29 @@ export default {
             return hash.digest('hex');
         }
               ////////////////////////////////STEP 3//////////////////////////////////////
-              // console.log("string B vlaue is ", StringB)
+              console.log("string B vlaue is ", StringB)
 
        let sign = StringB.toUpperCase();
 
 
-      //  console.log("sign vlaue is ", sign)
+       console.log("sign vlaue is ", sign)
 
               ////////////////////////////////STEP 4//////////////////////////////////////
 
               let jsonObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
                       "nonce":paymentDetail.transaction_uuid,
-                      "notifyUrl":"http://localhost:3001/checkout/thank-you",
+                      "notifyUrl":"http://localhost:3001/checkout/thank-you/",
                       "outTradeNo":cart.value.code,
                       "receiveName":"Ethiolab",
-                      "returnUrl":"http://localhost:3001/checkout/thank-you",
+                      "returnUrl":"http://localhost:3001/checkout/thank-you/",
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
                       "timestamp":paymentDetail.reference_number.toString(),
                       "totalAmount":paymentDetail.amount
                     };
+
+                    
 
                     // console.log("jsonobj is ", jsonObj)
                     
@@ -407,7 +432,7 @@ export default {
             let publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhu+JrZMv17Ah5joHaBWWOl2NOZruM6M0ZMQLpRDfvobwZhK46mDH+b9nej1PnM4mSqQ8TlDIQJ5Y27vIyc2KWksxdLb59+POd3wUv455npMeK2RCBL5KDSam+eets6XoO6dRZv00eWMQ+SOHaK48XlftIUghfeOfZs/LdWK6EksgXaOKQsQzhqOnmsGdJkMe3YMqm10SBuWqkaZcmt+DUUzd2j1rvDr8B8Tu24FkmMbpSKhfRYI3HBIBG1tB6nefXT3A7ouwnuEMqwe1XCHaHWUMErmvr4bs3o3ZzJvEinIi5LX7mTG/+OB/OI4AyAbjrHad77Vb5RyGSFrpCr5TEwIDAQAB";
               let key = new NodeRSA(getPublicKey(publicKey));
               key.setOptions({encryptionScheme: 'pkcs1'});
-              let encryptKey = key.encrypt(data, 'base64');
+              let encryptKey = key.encrypt(data, 'base64'); 
               return encryptKey;
           }
 
@@ -454,11 +479,12 @@ export default {
           //         });
 
               axios
-                      .post("http://196.188.120.3:11443/service-openup/toTradeWebPay", requestMessage)
+                      .post("http://localhost:8000", requestMessage)
                       .then(res => {
                         console.log("local response is ", res);
-                          if (res.status == 200 && res.data.code == 200) {
-                              rsp.redirect(res.data.data.toPayUrl);
+                          if (res.status == 200 && res.data.data.code == 200) {
+                              // rsp.redirect(res.data.data.toPayUrl);
+                              window.location.href = res.data.data.data.toPayUrl
                           } else {
                               console.error(res.data.message);
                           }
@@ -539,7 +565,7 @@ export default {
 
 <style lang="scss" scoped>
   .cyberForm {
-    max-height: 100px;
+    max-height: 50px;
   }
 .title {
   margin: var(--spacer-xl) 0 var(--spacer-base) 0;

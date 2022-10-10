@@ -225,5 +225,8 @@ export default {
       }
     },
     display: 'swap'
-  }
+  },
+  serverMiddleware: [
+    { path: '/api/hook', handler: '~/api/hook.js' }
+  ]
 };
