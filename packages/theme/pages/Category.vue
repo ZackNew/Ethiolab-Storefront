@@ -298,7 +298,6 @@
               </div>
             </div>
           </div>
-
           <h3
             class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
             :style="!isDarkMode ? '' : 'color: white'"
@@ -315,27 +314,21 @@
               tag="div"
               class="products__grid"
             >
-              <div
-                v-for="(product, i) in products"
-                :key="productGetters.getSlug(product)"
-              >
-                <SfProductCard
+              <div v-for="product in allProducts" :key="product._id">
+                <ProductCard
                   v-e2e="'category-product-card'"
                   :style="{ '--index': i }"
-                  :title="productGetters.getName(product)"
-                  :image="productGetters.getCoverImage(product)"
+                  :title="product.name"
+                  :image="product.images[0]"
                   imageHeight="20.25rem"
                   imageWidth="100%"
-                  :regular-price="
-                    productGetters.getPrice(product).regular.toLocaleString() +
-                    ' ETB'
-                  "
+                  :regular-price="product.price.current + ' ETB'"
                   :max-rating="5"
-                  :score-rating="productGetters.getAverageRating(product)"
+                  :score-rating="product.rating"
                   :show-add-to-cart-button="true"
                   :isInWishlist="isInWishlist({ product })"
                   :isAddedToCart="isInCart({ product })"
-                  :link="localePath(`/v/${productGetters.getSlug(product)}`)"
+                  :link="localePath(`/v/${product.slug}`)"
                   class="products__product-card mr-4 mb-4 -z-1"
                   @click:wishlist="
                     !isInWishlist({ product })
@@ -547,6 +540,7 @@ import {
   SfProperty,
 } from '@storefront-ui/vue';
 import { ref, computed, onMounted } from '@vue/composition-api';
+import ProductCard from '~/components/ProductCard.vue';
 import {
   useCategory,
   useCart,
@@ -774,8 +768,77 @@ export default {
     SfProperty,
     LazyHydrate,
     CategoryFeature,
+    ProductCard,
   },
   methods: {
+    async getProducts() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const slug = this.$route.params.slug_1;
+      const body = {
+        query: `
+        query getCategoriesProducts($slug: String!){
+          collection(slug: $slug){
+            products{
+              id
+              name
+              slug
+              description
+              featuredAsset{
+                preview
+              }
+              variants{
+                id
+                price
+              }
+              collections{
+                id
+              }
+              customFields{
+                reviewRating
+              }
+            }
+          }
+        }`,
+        variables: { slug: slug },
+      };
+      let options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(baseUrl, body, options).then((res) => {
+        const products = res.data.data.collection?.products?.map((product) => {
+          let cref = [];
+          product?.collections?.forEach((x) => {
+            cref.push(String(x.id));
+          });
+          const image = [String(product?.featuredAsset?.preview)];
+          const price =
+            String(product?.variants[0]?.price).slice(0, -2) +
+            '.' +
+            String(product?.variants[0]?.price).slice(-2);
+          const prod = {
+            _id: product?.id,
+            _variantId: product?.variants[0]?.id,
+            _description: product.description,
+            _categoriesRef: cref,
+            name: product.name,
+            images: image,
+            price: {
+              original: price,
+              current: price,
+            },
+            slug: product.slug,
+            rating: product?.customFields?.reviewRating,
+          };
+          console.log('irecha', product);
+          return prod;
+        });
+        this.allProducts = products;
+        console.log('nigro', products);
+      });
+    },
     async getBestSellersCategory() {
       const baseUrl = process.env.GRAPHQL_API;
       const body = {
@@ -802,10 +865,12 @@ export default {
     },
   },
   created() {
+    this.getProducts();
     this.getBestSellersCategory();
   },
   data() {
     return {
+      allProducts: [],
       bestSellings: [],
     };
   },

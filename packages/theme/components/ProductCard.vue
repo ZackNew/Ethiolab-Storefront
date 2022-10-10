@@ -1,10 +1,10 @@
 <template>
   <div
-    class="ssf-product-card"
+    class="rounded-t-xl rounded-b-lg pt-3 border border-light_accent w-72 bg-white shadow-lg hover:shadow-2xl duration-300"
     :class="{ 'has-colors': colors.length }"
     data-testid="product-card"
   >
-    <div class="ssf-product-card__image-wrapper">
+    <div class="ssf-product-card__image-wrapper mx-3">
       <slot
         name="image"
         v-bind="{
@@ -37,16 +37,23 @@
               :nuxt-img-config="nuxtImgConfig"
             />
           </template>
-          <SfImage
+          <img
+            style="object-fit: cover"
             v-else
-            class="ssf-product-card__image"
+            :src="image"
+            :alt="title"
+            :class="`rounded-t-lg rounded-b w-full min-h-[20rem] max-h-[20rem]`"
+          />
+          <!-- <SfImage
+            v-else
+            class="rounded-2xl"
             :src="image"
             :alt="title"
             :width="imageWidth"
             :height="imageHeight"
             :image-tag="imageTag"
             :nuxt-img-config="nuxtImgConfig"
-          />
+          /> -->
         </SfButton>
       </slot>
       <slot name="colors" v-bind="{ colors }">
@@ -113,11 +120,13 @@
           <SfIcon
             v-if="currentWishlistIcon !== false"
             :icon="currentWishlistIcon"
+            color="#CC0066"
             size="22px"
             data-test="sf-wishlist-icon"
           />
         </slot>
       </SfButton>
+      <!--
       <div :class="{ 'display-none': !showAddToCartButton }">
         <slot
           name="add-to-cart"
@@ -166,48 +175,77 @@
           </SfCircleIcon>
         </slot>
       </div>
+      -->
     </div>
     <slot name="title" v-bind="{ title, link }">
-      <SfButton
+      <!-- <SfButton
         :link="link"
-        class="sf-button--pure ssf-product-card__link"
+        class="sf-button--pure ssf-product-card__link mx-3"
         data-testid="product-link"
         v-on="$listeners"
       >
         <span class="ssf-product-card__title">
           {{ title }}
         </span>
-      </SfButton>
+      </SfButton> -->
+      <p class="mx-3 my-2">
+        <nuxt-link :to="link">
+          {{ title }}
+        </nuxt-link>
+      </p>
     </slot>
-    <slot name="price" v-bind="{ specialPrice, regularPrice }">
-      <SfPrice
-        :class="{ 'display-none': !regularPrice }"
-        class="ssf-product-card__price"
-        :regular="regularPrice"
-        :special="specialPrice"
-      />
-    </slot>
-    <slot name="reviews" v-bind="{ maxRating, scoreRating }">
-      <div
-        :class="{ 'display-none': !scoreRating }"
-        class="ssf-product-card__reviews"
-      >
-        <SfRating
-          v-if="typeof scoreRating === 'number'"
-          class="ssf-product-card__rating"
-          :max="maxRating"
-          :score="scoreRating"
-        />
-        <SfButton
-          :class="{ 'display-none': !reviewsCount }"
-          :aria-label="`Read ${reviewsCount} reviews about ${title}`"
-          class="sf-button--pure ssf-product-card__reviews-count"
-          data-testid="product-review-button"
-          @click="$emit('click:reviews')"
+    <div class="mt-1 flex justify-between mx-3">
+      <slot name="price" v-bind="{ specialPrice, regularPrice }">
+        <!--<SfPrice
+          :class="{ 'display-none': !regularPrice }"
+          class="ssf-product-card__price"
+          :regular="regularPrice"
+          :special="specialPrice"
+        />-->
+        <p class="text-lg text-secondary">{{ regularPrice }}</p>
+        <div class="sf-price"></div>
+      </slot>
+      <slot name="review" v-bind="{ maxRating, scoreRating }">
+        <div
+          :class="{ 'display-none': !scoreRating }"
+          class="ssf-product-card__reviews"
         >
-          ({{ reviewsCount }})
-        </SfButton>
-      </div>
+          <SfRating
+            v-if="typeof scoreRating === 'number'"
+            class="ssf-product-card__rating"
+            :max="maxRating"
+            :score="scoreRating"
+          />
+          <SfButton
+            :class="{ 'display-none': !reviewsCount }"
+            :aria-label="`Read ${reviewsCount} reviews about ${title}`"
+            class="sf-button--pure ssf-product-card__reviews-count"
+            data-testid="product-review-button"
+            @click="$emit('click:reviews')"
+          >
+            ({{ reviewsCount }})
+          </SfButton>
+        </div>
+      </slot>
+    </div>
+    <slot
+      v-bind="{
+        isAddedToCart,
+        showAddedToCartBadge,
+        isAddingToCart,
+        title,
+      }"
+    >
+      <button
+        class="mt-1 flex justify-center bg-primary w-full text-white py-4 font-bold transform transition duration-500 rounded-b-lg mt-2"
+        @click="onAddToCart"
+      >
+        <p class="mr-2">ADD TO CART</p>
+        <SfIcon
+          color="white"
+          :icon="`${isAddedToCart ? 'added_to_cart' : 'add_to_cart'}`"
+        />
+      </button>
     </slot>
   </div>
 </template>
@@ -367,6 +405,8 @@ export default {
       this.$emit('click:wishlist', !this.isInWishlist);
     },
     onAddToCart(event) {
+      console.log(event);
+
       event.preventDefault();
       this.isAddingToCart = true;
       setTimeout(() => {
@@ -392,14 +432,14 @@ export default {
 </script>
 <style scoped lang="scss">
 .ssf-product-card {
-  box-sizing: border-box;
+  // box-sizing: border-box;
   position: relative;
   z-index: var(--product-card-z-index);
   max-width: var(--product-card-max-width, 10.625rem);
   flex: 0 1 var(--product-card-max-width, 10.625rem);
   height: var(--product-card-height);
-  padding: var(--product-card-padding, var(--spacer-xs));
-  // background-color: var(--product-card-background, var(--c-white));
+  // padding: var(--product-card-padding, var(--spacer-xs), 0, var(--spacer-xs));
+  background-color: var(--product-card-background, var(--c-white));
   &::after {
     content: '';
     position: absolute;
@@ -574,5 +614,13 @@ export default {
       box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     }
   }
+}
+.truncate-3-lines {
+  max-height: 4rem; /* double the size of line-height */
+  min-height: 4rem;
+  line-height: 1.3rem;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 </style>
