@@ -236,7 +236,10 @@ export default {
     paymentDetail.signed_date_time = moment.utc(time).format('YYYY-MM-DDTHH:mm:ss[Z]');
     paymentDetail.locale = "en";
     paymentDetail.transaction_type = "authorization";
-    paymentDetail.reference_number = new Date().getTime();
+    // paymentDetail.reference_number = new Date().getTime();
+    paymentDetail.reference_number = cart.value.code;
+
+    
     paymentDetail.amount = (cart?.value?.totalWithTax/100).toFixed(2).toString();
     paymentDetail.currency = "ETB";
     paymentDetail.signature = "";
