@@ -192,73 +192,76 @@ export default {
   },
   methods: {
     debounceInput: debounce(function async() {
-      console.log('my nigga');
-      const baseUrl = process.env.GRAPHQL_API;
-      const body = {
-        query: `query getSearched($text: String!){
-        simpleSearch(text: $text){
-          id
-          name
-          slug
-          description
-          featuredAsset{
-            preview
-          }
-          variants{
-            id
-            price
-          }
-          collections{
+      if (this.searchText === '') {
+        return;
+      } else {
+        const baseUrl = process.env.GRAPHQL_API;
+        const body = {
+          query: `query getSearched($text: String!){
+          simpleSearch(text: $text){
             id
             name
             slug
+            description
+            featuredAsset{
+              preview
+            }
+            variants{
+              id
+              price
+            }
+            collections{
+              id
+              name
+              slug
+            }
+            customFields{
+              reviewRating
+            }    
           }
-          customFields{
-            reviewRating
-          }    
-        }
-      }`,
-        variables: {
-          text: this.searchText,
-        },
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      axios.post(baseUrl, body, options).then((res) => {
-        const results = res.data.data?.simpleSearch.map((result) => {
-          let cref = [];
-          result?.collections?.forEach((x) => {
-            cref.push({ id: x.id, name: x.name, slug: x.slug });
-          });
-          const image = [String(result?.featuredAsset?.preview)];
-          const price =
-            String(result?.variants[0]?.price).slice(0, -2) +
-            '.' +
-            String(result?.variants[0]?.price).slice(-2);
+        }`,
+          variables: {
+            text: this.searchText,
+          },
+        };
+        const options = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        };
+        axios.post(baseUrl, body, options).then((res) => {
+          const results = res.data.data?.simpleSearch.map((result) => {
+            let cref = [];
+            result?.collections?.forEach((x) => {
+              cref.push({ id: x.id, name: x.name, slug: x.slug });
+            });
+            const image = [String(result?.featuredAsset?.preview)];
+            const price =
+              String(result?.variants[0]?.price).slice(0, -2) +
+              '.' +
+              String(result?.variants[0]?.price).slice(-2);
 
-          const prod = {
-            _id: result.id,
-            _variantId: result?.variants[0]?.id,
-            _description: result?.description,
-            _categoriesRef: cref,
-            name: result?.name,
-            images: image,
-            price: {
-              original: price,
-              current: price,
-            },
-            slug: result.slug,
-            rating: result?.customFields?.reviewRating,
-          };
-          return prod;
+            const prod = {
+              _id: result.id,
+              _variantId: result?.variants[0]?.id,
+              _description: result?.description,
+              _categoriesRef: cref,
+              name: result?.name,
+              images: image,
+              price: {
+                original: price,
+                current: price,
+              },
+              slug: result.slug,
+              rating: result?.customFields?.reviewRating,
+            };
+            return prod;
+          });
+          this.results = results;
+          console.log('hiiiha', results);
         });
-        this.results = results;
-        console.log('hiiiha', results);
-      });
+      }
     }, 2000),
   },
   directives: { clickOutside },
