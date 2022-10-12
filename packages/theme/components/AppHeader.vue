@@ -1,7 +1,7 @@
 <template>
-  <div class="header border-b-2 border-light_accent">
+  <div class="border-b-2 border-light_accent">
     <div class="border-b-4 border-light_accent">
-      <div class="mx-32">
+      <div class="md:mx-32">
         <SfHeader
           :class="{
             'header-on-top': isSearchOpen,
@@ -12,7 +12,7 @@
         >
           <!-- TODO: add mobile view buttons after SFUI team PR 
           ///// deleted at the sfImage alt property because of causing infinite loop ->  :alt="$t('Ethiolab')" 
-       -->
+          -->
           <template #logo>
             <nuxt-link :to="localePath('/')">
               <SfImage
@@ -81,7 +81,7 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search w-[40rem] bg-light_accent rounded-xl border-none"
+              class="search md:w-[40rem] bg-light_accent rounded-xl border-none"
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="debounceInput"
