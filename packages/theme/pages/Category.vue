@@ -831,11 +831,9 @@ export default {
             slug: product.slug,
             rating: product?.customFields?.reviewRating,
           };
-          console.log('irecha', product);
           return prod;
         });
         this.allProducts = products;
-        console.log('nigro', products);
       });
     },
     async getBestSellersCategory() {
