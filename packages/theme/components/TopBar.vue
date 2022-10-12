@@ -5,7 +5,7 @@
     </template>
     <template #center>
       <div class="flex items-center gap-20">
-        <DropdownNavigationItem
+        <!-- <DropdownNavigationItem
           v-for="category in headerNavigation"
           :key="category.name"
           class="nav-item"
@@ -14,7 +14,31 @@
           :link="localePath(category.link)"
           :link-class="category.linkClass"
           :button="category.button"
-        />
+        /> -->
+        <nuxt-link :to="'/pages/helpAndFAQ/'"
+          ><p class="text-xl text-white hover:scale-110">Help</p></nuxt-link
+        >
+        <nuxt-link :to="'/pages/contact'"
+          ><p class="text-xl text-white hover:scale-110">
+            Contact us
+          </p></nuxt-link
+        >
+        <a href="#">
+          <p class="text-xl text-white hover:scale-110">{{ phoneNumber }}</p>
+        </a>
+        <a href="https://www.ethiolab.et/">
+          <p
+            class="bg-white text-secondary px-2 py-0.5 rounded text-sm hover:scale-110"
+          >
+            Website
+          </p>
+        </a>
+        <nuxt-link :to="'#'">
+          <p class="text-xl text-white hover:scale-110 flex">
+            <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
+            MY ACCOUNT
+          </p>
+        </nuxt-link>
       </div>
     </template>
     <template #right>
@@ -25,7 +49,7 @@
 </template>
 
 <script>
-import { SfButton, SfTopBar } from '@storefront-ui/vue';
+import { SfButton, SfTopBar, SfIcon } from '@storefront-ui/vue';
 import LocaleSelector from './LocaleSelector.vue';
 import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import ThemeChanger from './ThemeChanger.vue';
@@ -37,6 +61,7 @@ export default {
     SfButton,
     LocaleSelector,
     DropdownNavigationItem,
+    SfIcon,
   },
   computed: {
     headerNavigation() {
@@ -52,6 +77,11 @@ export default {
         { name: 'Request a Quote', link: '/WriteAQuote' },
       ];
       return navigation;
+    },
+    phoneNumber() {
+      return this.$store.state.companyDetails.companyInformation?.phone_number.split(
+        ';'
+      )[0];
     },
   },
   setup() {
