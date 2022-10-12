@@ -317,7 +317,6 @@
               <div v-for="product in allProducts" :key="product._id">
                 <ProductCard
                   v-e2e="'category-product-card'"
-                  :style="{ '--index': i }"
                   :title="product.name"
                   :image="product.images[0]"
                   imageHeight="20.25rem"
