@@ -107,7 +107,7 @@
                   :errorMessage="errors[0]"
                 />
               </ValidationProvider>
-              <ValidationProvider
+              <!-- <ValidationProvider
                 name="emailAddress"
                 rules="email"
                 v-slot="{ errors }"
@@ -124,7 +124,7 @@
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"
                 />
-              </ValidationProvider>
+              </ValidationProvider> -->
               <ValidationProvider
                 name="message"
                 rules="required"
@@ -138,7 +138,7 @@
                     class="form__element form__element--full"
                     placeholder="Your Message"
                     v-model="form.message"
-                    :cols="50"
+                    :cols="80"
                     :rows="10"
                     wrap="soft"
                     :disabled="false"
@@ -361,6 +361,13 @@ export default {
         customerEmail: form.value.customerEmail,
       });
       showToast('Sent!');
+      form.value.phoneNumber = '';
+      form.value.firstName = '';
+      form.value.lastName = '';
+      form.value.emailAddress = '';
+      form.value.message = '';
+      form.value.customerName = '';
+      form.value.customerEmail = '';
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
 
