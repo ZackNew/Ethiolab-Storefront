@@ -1,27 +1,16 @@
 <template>
-  <div class="">
+  <div class="mx-80">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3> -->
-    <div class="p-3 md:p-20">
-      <div
-        data-aos="slide-up"
-        class="w-full h-24 p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/6 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/6 after:h-2 after:bg-dark_gray after:inline-block text-center"
-      >
-        <span class="text-4xl  w-1/4">Featured</span>
+    <div class="p-3 md:pt-20">
+      <div class="w-full h-24 pt-20 text-center">
+        <SfHeading title="Featured" :level="2" />
+        <h1 class="">Featured</h1>
       </div>
     </div>
-    <div
-      class="grid grid-cols-1 gap-10 mt-10 mb-10 md:grid-cols-3"
-      data-aos="fade-right"
-    >
-      <div v-for="category in headerNavigation" :key="category.label">
+    <div class="grid grid-cols-1 gap-4 mt-20 mb-10 md:grid-cols-3">
+      <div v-for="category in headerNavigation" :key="category.label" class="">
         <!-- <CategorySingle :title="category.label" :image="category.featuredAsset.preview" /> -->
-        <div
-          :style="!isDarkMode ? '' : 'background-color: #182533'"
-          class="max-w-sm rounded overflow-hidden shadow-xl hover:bg-light_gray hover:text-secondary"
-        >
-          <div class="m-4">
-            <h4 class="">{{ category.label }}</h4>
-          </div>
+        <div class="rounded overflow-hidden text-secondary mx-auto bg- mb-5">
           <nuxt-link :to="`/c/${category.slug}`">
             <img
               :src="
@@ -29,9 +18,12 @@
                   ? category.featuredAsset.preview
                   : '/categories/empty_image.png'
               "
-              class="w-full h-32 sm:h-48 object-cover scale-75 hover:scale-100 ease-in duration-300"
+              class="w-full h-32 md:h-72 object-cover shadow-xl"
             />
           </nuxt-link>
+          <div class="mt-1">
+            <h4 class="">{{ category.label }}</h4>
+          </div>
         </div>
       </div>
     </div>

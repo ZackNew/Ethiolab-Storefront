@@ -1,10 +1,10 @@
 <template>
   <client-only>
-    <div id="home">
+    <div id="home" class="">
       <PopupNotification />
-      <div class="grid grid-cols-12 gap-4 mt-3 py-6">
+      <div class="">
         <!--        categories-->
-        <div
+        <!-- <div
           class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container max-h-screen overflow-auto"
         >
           <LazyHydrate when-visible>
@@ -20,8 +20,8 @@
             >
             </Banner>
           </LazyHydrate>
-        </div>
-        <div class="md:col-span-9 col-span-12 md:ml-3">
+        </div> -->
+        <div class="grid grid-cols-12 gap-4 md:mx-64">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -29,10 +29,10 @@
             >See all</nuxt-link
             >
           </div>
-        </LazyHydrate> -->
+          </LazyHydrate> -->
           <!-- <LazyHydrate when-visible>
-      <div class="flex flex-wrap gap-4 mb-4 mt-3 place-content-center md:place-content-start"  >
-        <div v-for="(product, i) in this.products"
+          <div class="flex flex-wrap gap-4 mb-4 mt-3 place-content-center md:place-content-start"  >
+          <div v-for="(product, i) in this.products"
              :key="i" class="rounded-lg drop-shadow-lg product-card w-40 md:w-48">
           <SfProductCard
               :title="productGetters.getName(product)"
@@ -50,24 +50,12 @@
               class="carousel__item__product w-48"
               style="border-radius: 15px"
             />
-        </div>
-      </div>
-        </LazyHydrate> -->
+          </div>
+          </div>
+          </LazyHydrate> -->
 
-          <LazyHydrate when-visible>
+          <!-- <LazyHydrate when-visible>
             <template>
-              <!-- <SfBanner
-                class="banner"
-                :title="heroSection.title || 'Big Sale'"
-                :subtitle="heroSection.overview || 'Medical Equipments'"
-                :description="
-                  heroSection.description ||
-                  'Find new, used, and surplus lab equipment plus medical, test equipment, process, pharmaceutical.'
-                "
-                :buttonText="heroSection.buttonText || 'Shop Now'"
-                :image="heroImage || '/homepage/bannerB.webp'"
-                @click="mymethod('https://www.ethiolab.et')"
-              /> -->
               <Banner
                 class="banner"
                 :title="heroSection.title || 'Big Sale'"
@@ -80,12 +68,13 @@
                 :image="heroImage || '/homepage/bannerB.webp'"
                 link="https://www.ethiolab.et"
               />
-              <!-- @click="mymethod('https://www.ethiolab.et')" -->
             </template>
-          </LazyHydrate>
-          <div v-if="heroSection.link">
+          </LazyHydrate> -->
+          <div class="col-span-9" v-if="heroSection.link">
             <iframe
-              class="w-full h-96 mt-10 ytplayer"
+              width="750"
+              height="495"
+              class="w-full justify-end ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
@@ -94,55 +83,60 @@
               ng-show="showvideo"
             ></iframe>
           </div>
-
-          <LazyHydrate when-visible>
-            <div class="similar-products mt-3">
-              <SfHeading title="Recently Viewed Products" :level="2" />
-            </div>
-          </LazyHydrate>
-          <LazyHydrate when-visible>
-            <SfCarousel
-              class="carousel mt-2"
-              :settings="{
-                type: 'slider',
-                rewind: true,
-                perView: 3,
-                slidePerPage: true,
-                breakpoints: { 1023: { peek: 0, perView: 1 } },
-              }"
-            >
-              <SfCarouselItem
-                class="carousel__item border-0 rounded-lg drop-shadow-md product-card ml-2 w-40 md:w-48"
-                v-for="(product, i) in this.products"
-                :key="i"
-              >
-                <SfProductCard
-                  :title="productGetters.getName(product)"
-                  :image="productGetters.getCoverImage(product)"
-                  :regular-price="
-                    productGetters.getPrice(product).regular.toLocaleString() +
-                    ' ETB'
-                  "
-                  imageHeight="10rem"
-                  :alt="productGetters.getName(product)"
-                  :score-rating="productGetters.getAverageRating(product)"
-                  :show-add-to-cart-button="true"
-                  :isInWishlist="isInWishlist({ product })"
-                  :isAddedToCart="isInCart({ product })"
-                  :link="localePath(`/v/${productGetters.getSlug(product)}`)"
-                  @click:wishlist="
-                    !isInWishlist({ product })
-                      ? addItemToWishlist({ product })
-                      : removeItemFromWishlist({ product })
-                  "
-                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-                  class="carousel__item__product w-48"
-                  style="border-radius: 15px"
-                />
-              </SfCarouselItem>
-            </SfCarousel>
-          </LazyHydrate>
+          <div class="col-span-3">
+            <h1>hello there</h1>
+          </div>
         </div>
+      </div>
+
+      <div v-if="this.products.length !== 0" class="mt-14">
+        <LazyHydrate when-visible>
+          <div class="similar-products mt-3">
+            <SfHeading title="Recently Viewed Products" :level="2" />
+          </div>
+        </LazyHydrate>
+        <LazyHydrate when-visible>
+          <Carousel
+            class="carousel mt-2"
+            :settings="{
+              type: 'slider',
+              rewind: true,
+              perView: 3,
+              slidePerPage: true,
+              breakpoints: { 1023: { peek: 0, perView: 1 } },
+            }"
+          >
+            <SfCarouselItem
+              class="carousel__item border-0 rounded-lg drop-shadow-md product-card ml-2 w-40 md:w-48"
+              v-for="(product, i) in this.products"
+              :key="i"
+            >
+              <RVPCard
+                :title="productGetters.getName(product)"
+                :image="productGetters.getCoverImage(product)"
+                :regular-price="
+                  productGetters.getPrice(product).regular.toLocaleString() +
+                  ' ETB'
+                "
+                imageHeight="10rem"
+                :alt="productGetters.getName(product)"
+                :score-rating="productGetters.getAverageRating(product)"
+                :show-add-to-cart-button="true"
+                :isInWishlist="isInWishlist({ product })"
+                :isAddedToCart="isInCart({ product })"
+                :link="localePath(`/v/${productGetters.getSlug(product)}`)"
+                @click:wishlist="
+                  !isInWishlist({ product })
+                    ? addItemToWishlist({ product })
+                    : removeItemFromWishlist({ product })
+                "
+                @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                class="carousel__item__product w-72"
+                style="border-radius: 15px"
+              />
+            </SfCarouselItem>
+          </Carousel>
+        </LazyHydrate>
       </div>
       <!-- <top-section></top-section> -->
 
@@ -211,7 +205,9 @@ import {
 import LazyHydrate from 'vue-lazy-hydration';
 import Testimonial from '~/components/Testimonial.vue';
 import NewsletterModal from '~/components/NewsletterModal.vue';
+import Carousel from '~/components/carousel.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
+import RVPCard from '~/components/RVPCard.vue';
 import { useUiState } from '../composables';
 import cacheControl from './../helpers/cacheControl';
 import {
@@ -270,6 +266,8 @@ export default {
     BestSeller,
     FeaturedProducts,
     Banner,
+    Carousel,
+    RVPCard,
   },
   methods: {
     mymethod(url) {

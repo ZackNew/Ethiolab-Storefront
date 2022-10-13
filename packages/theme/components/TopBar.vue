@@ -16,15 +16,19 @@
           :button="category.button"
         /> -->
         <nuxt-link :to="'/pages/helpAndFAQ/'"
-          ><p class="text-xl text-white hover:scale-110">Help</p></nuxt-link
+          ><p class="text-xl text-white hover:scale-110 font-semibold">
+            Help
+          </p></nuxt-link
         >
         <nuxt-link :to="'/pages/contact'"
-          ><p class="text-xl text-white hover:scale-110">
+          ><p class="text-xl text-white hover:scale-110 font-semibold">
             Contact us
           </p></nuxt-link
         >
         <a href="#">
-          <p class="text-xl text-white hover:scale-110">{{ phoneNumber }}</p>
+          <p class="text-xl text-white hover:scale-110 font-semibold">
+            {{ phoneNumber }}
+          </p>
         </a>
         <a href="https://www.ethiolab.et/">
           <p
@@ -34,7 +38,7 @@
           </p>
         </a>
         <nuxt-link :to="'#'">
-          <p class="text-xl text-white hover:scale-110 flex">
+          <p class="text-xl text-white hover:scale-110 flex font-semibold">
             <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
             MY ACCOUNT
           </p>

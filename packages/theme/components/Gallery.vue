@@ -107,7 +107,7 @@ import Glide from '@glidejs/glide';
 import { SfImage, SfButton } from '@storefront-ui/vue';
 
 export default {
-  name: 'SfGallery',
+  name: 'Gallery',
   components: {
     SfImage,
     SfButton,
