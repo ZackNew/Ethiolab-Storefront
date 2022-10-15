@@ -71,17 +71,16 @@
             </template>
           </LazyHydrate> -->
           <div class="col-span-9" v-if="heroSection.link">
-            <iframe
-              width="750"
-              height="495"
-              class="w-full justify-end ytplayer"
+            <!-- <iframe
+              class="w-[100%] md:h-[26rem] justify-end ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
               frameborder="0"
               allowfullscreen
               ng-show="showvideo"
-            ></iframe>
+            ></iframe> -->
+            <h1>ngasjnkajsdnfa</h1>
           </div>
           <div class="col-span-3">
             <h1>hello there</h1>
@@ -89,10 +88,11 @@
         </div>
       </div>
 
-      <div v-if="this.products.length !== 0" class="mt-14">
+      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3">
         <LazyHydrate when-visible>
-          <div class="similar-products mt-3">
-            <SfHeading title="Recently Viewed Products" :level="2" />
+          <div class="similar-products my-5 text-center">
+            <!-- <SfHeading title="Recently Viewed Products" :level="2" /> -->
+            <h1 class="">Recently Viewed Products</h1>
           </div>
         </LazyHydrate>
         <LazyHydrate when-visible>

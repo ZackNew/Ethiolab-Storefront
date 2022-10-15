@@ -328,13 +328,14 @@
                   :isInWishlist="isInWishlist({ product })"
                   :isAddedToCart="isInCart({ product })"
                   :link="localePath(`/v/${product.slug}`)"
-                  class="products__product-card mr-4 mb-4 -z-1"
                   @click:wishlist="
                     !isInWishlist({ product })
                       ? addItemToWishlist({ product })
                       : removeItemFromWishlist({ product })
                   "
                   @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                  class="carousel__item__product w-72"
+                  style="border-radius: 15px"
                 />
               </div>
             </transition-group>

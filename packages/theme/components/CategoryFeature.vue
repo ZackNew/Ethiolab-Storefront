@@ -1,13 +1,12 @@
 <template>
-  <div class="mx-80">
+  <div class="md:mx-80">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3> -->
-    <div class="p-3 md:pt-20">
-      <div class="w-full h-24 pt-20 text-center">
-        <SfHeading title="Featured" :level="2" />
+    <div class="md:p-3">
+      <div class="w-full py-5 md:pt-14 md:text-center">
         <h1 class="">Featured</h1>
       </div>
     </div>
-    <div class="grid grid-cols-1 gap-4 mt-20 mb-10 md:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 md:mt-10 mb-10 md:grid-cols-3">
       <div v-for="category in headerNavigation" :key="category.label" class="">
         <!-- <CategorySingle :title="category.label" :image="category.featuredAsset.preview" /> -->
         <div class="rounded overflow-hidden text-secondary mx-auto bg- mb-5">
@@ -22,7 +21,7 @@
             />
           </nuxt-link>
           <div class="mt-1">
-            <h4 class="">{{ category.label }}</h4>
+            <h4 class="text-2xl">{{ category.label }}</h4>
           </div>
         </div>
       </div>

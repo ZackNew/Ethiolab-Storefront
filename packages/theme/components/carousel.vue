@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-carousel mx-72">
+  <div class="sf-carousel md:mx-72">
     <div ref="controls" class="sf-carousel__controls">
       <slot name="prev" v-bind="{ go: () => go('prev') }">
         <!-- <SfArrow

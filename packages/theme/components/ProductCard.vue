@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-t-xl rounded-b-lg pt-3 border border-light_accent w-72 bg-white shadow-lg hover:shadow-2xl duration-300"
+    class="pt-3 border border-light_accent w-72 bg-white shadow-lg hover:shadow-2xl duration-300"
     :class="{ 'has-colors': colors.length }"
     data-testid="product-card"
   >
@@ -177,6 +177,25 @@
       </div>
       -->
     </div>
+    <slot
+      v-bind="{
+        isAddedToCart,
+        showAddedToCartBadge,
+        isAddingToCart,
+        title,
+      }"
+    >
+      <button
+        class="mt-1 flex justify-center bg-primary w-full text-white py-4 font-bold transform transition duration-500 mt-2"
+        @click="onAddToCart"
+      >
+        <p class="mr-2">ADD TO CART</p>
+        <SfIcon
+          color="white"
+          :icon="`${isAddedToCart ? 'added_to_cart' : 'add_to_cart'}`"
+        />
+      </button>
+    </slot>
     <slot name="title" v-bind="{ title, link }">
       <!-- <SfButton
         :link="link"
@@ -188,23 +207,15 @@
           {{ title }}
         </span>
       </SfButton> -->
-      <p class="mx-3 my-2">
+      <div class="min-h[500px]">
         <nuxt-link :to="link">
-          {{ title }}
+          <p class="mx-3 my-4 text-center text-secondary">
+            {{ title }}
+          </p>
         </nuxt-link>
-      </p>
+      </div>
     </slot>
-    <div class="mt-1 flex justify-between mx-3">
-      <slot name="price" v-bind="{ specialPrice, regularPrice }">
-        <!--<SfPrice
-          :class="{ 'display-none': !regularPrice }"
-          class="ssf-product-card__price"
-          :regular="regularPrice"
-          :special="specialPrice"
-        />-->
-        <p class="text-lg text-secondary">{{ regularPrice }}</p>
-        <div class="sf-price"></div>
-      </slot>
+    <div class="mt-1 mx-3 flex justify-around">
       <slot name="review" v-bind="{ maxRating, scoreRating }">
         <div
           :class="{ 'display-none': !scoreRating }"
@@ -215,6 +226,7 @@
             class="ssf-product-card__rating"
             :max="maxRating"
             :score="scoreRating"
+            size="4xl"
           />
           <SfButton
             :class="{ 'display-none': !reviewsCount }"
@@ -227,26 +239,17 @@
           </SfButton>
         </div>
       </slot>
+      <slot name="price" v-bind="{ specialPrice, regularPrice }">
+        <!--<SfPrice
+          :class="{ 'display-none': !regularPrice }"
+          class="ssf-product-card__price"
+          :regular="regularPrice"
+          :special="specialPrice"
+        />-->
+        <p class="text-lg text-secondary">{{ regularPrice }}</p>
+        <div class="sf-price"></div>
+      </slot>
     </div>
-    <slot
-      v-bind="{
-        isAddedToCart,
-        showAddedToCartBadge,
-        isAddingToCart,
-        title,
-      }"
-    >
-      <button
-        class="mt-1 flex justify-center bg-primary w-full text-white py-4 font-bold transform transition duration-500 rounded-b-lg mt-2"
-        @click="onAddToCart"
-      >
-        <p class="mr-2">ADD TO CART</p>
-        <SfIcon
-          color="white"
-          :icon="`${isAddedToCart ? 'added_to_cart' : 'add_to_cart'}`"
-        />
-      </button>
-    </slot>
   </div>
 </template>
 <script>

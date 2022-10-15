@@ -42,7 +42,7 @@
             v-else
             :src="image"
             :alt="title"
-            :class="`w-full min-h-[15rem] max-h-[15rem]`"
+            :class="`w-full md:min-h-[15rem] md:max-h-[15rem]`"
           />
           <!-- <SfImage
             v-else
@@ -191,7 +191,7 @@
       </SfButton> -->
       <nuxt-link :to="link">
         <p
-          class="mx-3 my-2 mx-auto font-extrabold text-primary text-2xl text-center min-h-[6rem]"
+          class="mx-3 my-2 mx-auto font-extrabold text-primary md:text-2xl text-center md:min-h-[6rem]"
         >
           {{ title }}
         </p>

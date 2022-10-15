@@ -1,16 +1,12 @@
 <template>
-  <div>
+  <div class="">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
-    <div class="p-3 md:p-20">
-      <div
-        v-if="bestSellings.length !== 0"
-        data-aos="fade-left"
-        class="w-full h-24 p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/6 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/6 after:h-2 after:bg-dark_gray after:inline-block text-center"
-      >
-        <span class="text-4xl w-1/4">Best Seller</span>
+    <div class="p-3 md:p-14">
+      <div v-if="bestSellings.length !== 0" class="w-full text-center">
+        <h1 class="">Best Seller</h1>
       </div>
     </div>
-    <div
+    <!-- <div
       class="grid grid-cols-1 gap-10 mt-10 mb-10 md:grid-cols-3"
       data-aos="fade-left"
     >
@@ -22,16 +18,58 @@
           :price="category.priceWithTax"
         />
       </div>
-    </div>
+    </div> -->
+    <Carousel
+      class="carousel mt-2"
+      :settings="{
+        type: 'slider',
+        rewind: true,
+        perView: 3,
+        slidePerPage: true,
+        breakpoints: { 1023: { peek: 0, perView: 1 } },
+      }"
+    >
+      <SfCarouselItem
+        class="carousel__item border-0 rounded-lg drop-shadow-md product-card ml-2 w-40 md:w-72"
+        v-for="product in bestSellings"
+        :key="product._id"
+      >
+        <ProductCard
+          :title="product.name"
+          :image="product.image"
+          :regular-price="product.price.current + ' ETB'"
+          imageHeight="20.25rem"
+          imageWidth="100%"
+          :alt="product.name"
+          :max-rating="5"
+          :score-rating="3"
+          :show-add-to-cart-button="true"
+          :isInWishlist="isInWishlist({ product })"
+          :isAddedToCart="isInCart({ product })"
+          :link="localePath(`/v/${product.slug}`)"
+          @click:wishlist="
+            !isInWishlist({ product })
+              ? addItemToWishlist({ product })
+              : removeItemFromWishlist({ product })
+          "
+          @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+          class="carousel__item__product"
+          style="border-radius: 15px"
+        />
+      </SfCarouselItem>
+    </Carousel>
   </div>
 </template>
 
 <script>
 import { defineComponent, mounted } from '@vue/composition-api';
+import Carousel from './carousel.vue';
 import BestSellerSingle from './BestSellerSingle.vue';
+import ProductCard from './ProductCard.vue';
 import AOS from 'aos';
 import axios from 'axios';
 import 'aos/dist/aos.css';
+import { useWishlist, useCart } from '@vue-storefront/vendure';
 export default defineComponent({
   data() {
     return {
@@ -39,7 +77,7 @@ export default defineComponent({
       bestSellings: [],
     };
   },
-  components: { BestSellerSingle },
+  components: { BestSellerSingle, Carousel, ProductCard },
   mounted() {
     AOS.init({
       disable: false, // accepts following values: 'phone', 'tablet', 'mobile', boolean, expression or function
@@ -62,6 +100,15 @@ export default defineComponent({
     });
   },
   setup() {
+    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const {
+      addItem: addItemToWishlist,
+      isInWishlist,
+      removeItem: removeItemFromWishlist,
+    } = useWishlist();
+    const toggleWishlist = (index) => {
+      products.value[index].isInWishlist = !products.value[index].isInWishlist;
+    };
     const categories = [
       { title: 'Balance and Scales', image: '/categories/empty_image.png' },
       { title: 'Calibration', image: '/categories/empty_image.png' },
@@ -72,6 +119,12 @@ export default defineComponent({
 
     return {
       categories,
+      isInWishlist,
+      isInCart,
+      toggleWishlist,
+      addItemToCart,
+      addItemToWishlist,
+      removeItemFromWishlist,
     };
   },
   methods: {
@@ -81,10 +134,7 @@ export default defineComponent({
         query: `
         query{
           bestSellingProducts{
-            name
-            preview
             slug
-            priceWithTax
           }
         }
         `,
@@ -96,8 +146,75 @@ export default defineComponent({
         },
       };
       const bestSeller = await axios.post(baseUrl, body, options);
-      this.bestSellings = bestSeller.data.data.bestSellingProducts;
-      console.log('ddddddddjjjjjjjjjjjj', bestSeller);
+      const slugs = bestSeller.data.data.bestSellingProducts.map((bs) => {
+        let x = [];
+        x.push(bs?.slug);
+        return x;
+      });
+      const STRSlug = [];
+      const a = slugs.forEach((s) => {
+        STRSlug.push(s[0]);
+      });
+      console.log('ddddddddjjjjjjjjjjjj', slugs);
+      const pbody = {
+        query: `
+        query BSProducts($in: [String!]!) {
+          products(options: {filter: {slug: {in: $in}}}) {
+            items {
+              id
+              name
+              slug
+              description
+              featuredAsset {
+                preview
+              }
+              variants {
+                id
+                price
+              }
+              collections {
+                id
+              }
+              customFields {
+                reviewRating
+              }
+            }
+          }
+        }`,
+        variables: {
+          in: STRSlug,
+        },
+      };
+      await axios.post(baseUrl, pbody, options).then((res) => {
+        const ppp = res.data.data.products?.items.map((product) => {
+          let cref = [];
+          product?.collections?.forEach((x) => {
+            cref.push(String(x.id));
+          });
+          const image = [String(product?.featuredAsset?.preview)];
+          const price =
+            String(product?.variants[0]?.price).slice(0, -2) +
+            '.' +
+            String(product?.variants[0]?.price).slice(-2);
+          const prod = {
+            _id: product?.id,
+            _variantId: product?.variants[0]?.id,
+            _description: product.description,
+            _categoriesRef: cref,
+            name: product.name,
+            images: image,
+            price: {
+              original: price,
+              current: price,
+            },
+            slug: product.slug,
+            rating: product?.customFields?.reviewRating,
+          };
+          return prod;
+        });
+        this.bestSellings = ppp;
+        console.log('minini', this.bestSellings);
+      });
     },
   },
   created() {
