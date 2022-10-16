@@ -1,7 +1,6 @@
 <template>
   <div
-    class="pt-3 border border-light_accent w-72 bg-white shadow-lg hover:shadow-2xl duration-300"
-    :class="{ 'has-colors': colors.length }"
+    class="pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300"
     data-testid="product-card"
   >
     <div class="ssf-product-card__image-wrapper mx-3">
@@ -19,7 +18,7 @@
       >
         <SfButton
           :link="link"
-          class="sf-button--pure ssf-product-card__link"
+          class="sf-button--pure ssf-product-card__link w-full"
           data-testid="product-link"
           :aria-label="'Go To Product'"
           v-on="$listeners"
@@ -28,7 +27,7 @@
             <SfImage
               v-for="(picture, key) in image.slice(0, 2)"
               :key="key"
-              class="ssf-product-card__picture"
+              :class="`ssf-product-card__picture min-h-[${imageHeight}]`"
               :src="picture"
               :alt="title"
               :width="imageWidth"
@@ -37,23 +36,23 @@
               :nuxt-img-config="nuxtImgConfig"
             />
           </template>
-          <img
+          <!-- <img
             style="object-fit: cover"
             v-else
             :src="image"
             :alt="title"
-            :class="`rounded-t-lg rounded-b w-full min-h-[20rem] max-h-[20rem]`"
-          />
-          <!-- <SfImage
+            :class="`rounded-t-lg rounded-b w-full min-h-[14rem] max-h-[14rem]`"
+          /> -->
+          <SfImage
             v-else
-            class="rounded-2xl"
+            class=""
             :src="image"
             :alt="title"
             :width="imageWidth"
             :height="imageHeight"
             :image-tag="imageTag"
             :nuxt-img-config="nuxtImgConfig"
-          /> -->
+          />
         </SfButton>
       </slot>
       <slot name="colors" v-bind="{ colors }">
@@ -185,16 +184,19 @@
         title,
       }"
     >
-      <button
-        class="mt-1 flex justify-center bg-primary w-full text-white py-4 font-bold transform transition duration-500 mt-2"
-        @click="onAddToCart"
-      >
-        <p class="mr-2">ADD TO CART</p>
-        <SfIcon
-          color="white"
-          :icon="`${isAddedToCart ? 'added_to_cart' : 'add_to_cart'}`"
+      <div class="flex mt-2 justify-center">
+        <input
+          type="text"
+          class="w-[20%] bg-light_accent mr-3 h-10 text-center"
+          v-model="numberCart"
         />
-      </button>
+        <button
+          class="justify-center bg-secondary w-[50%] text-white py-2 font-bold transform transition duration-500"
+          @click="onAddToCart"
+        >
+          <h1 class="text-xs md:text-sm">ADD TO CART</h1>
+        </button>
+      </div>
     </slot>
     <slot name="title" v-bind="{ title, link }">
       <!-- <SfButton
@@ -203,17 +205,17 @@
         data-testid="product-link"
         v-on="$listeners"
       >
-        <span class="ssf-product-card__title">
+        <span class="ssf-product-card__title  md:min-h-[5rem]">
           {{ title }}
         </span>
       </SfButton> -->
-      <div class="min-h[500px]">
-        <nuxt-link :to="link">
-          <p class="mx-3 my-4 text-center text-secondary">
-            {{ title }}
-          </p>
-        </nuxt-link>
-      </div>
+      <nuxt-link :to="link">
+        <h1
+          :class="`mx-3 mt-4 text-center text-secondary md:min-h-[3rem] text-sm text-extrathin md:min-w-${imageWidth}`"
+        >
+          {{ title }}
+        </h1>
+      </nuxt-link>
     </slot>
     <div class="mt-1 mx-3 flex justify-around">
       <slot name="review" v-bind="{ maxRating, scoreRating }">
@@ -377,6 +379,7 @@ export default {
     return {
       isAddingToCart: false,
       openColorPicker: false,
+      numberCart: 1,
     };
   },
   computed: {

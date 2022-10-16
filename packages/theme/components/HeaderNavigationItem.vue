@@ -23,12 +23,12 @@
         >
           {{ label }}
         </SfMenuItem> -->
-        <p
+        <h1
           @mouseOver="hoverHandler(label)"
-          class="text-xl font-bold text-secondary"
+          class="text-lg font-bold text-secondary"
         >
           {{ label }}
-        </p>
+        </h1>
 
         <DropDownMenu
           class="overlay"

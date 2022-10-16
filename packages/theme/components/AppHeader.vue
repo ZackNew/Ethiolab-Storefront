@@ -37,7 +37,7 @@
                 class="sf-button--pure sf-header__action"
                 @click="handleAccountClick"
               >
-                <SfIcon :icon="accountIcon" size="1.75rem" color="#3860a7" />
+                <SfIcon :icon="accountIcon" size="1.25rem" color="#3860a7" />
               </SfButton>
               <SfButton
                 aria-label="Toggle wishlist sidebar"
@@ -47,7 +47,7 @@
                 <SfIcon
                   class="sf-header__icon"
                   icon="heart"
-                  size="1.75rem"
+                  size="1.25rem"
                   color="#3860a7"
                 />
                 <SfBadge
@@ -65,7 +65,7 @@
                 <SfIcon
                   class="sf-header__icon"
                   icon="empty_cart"
-                  size="1.75rem"
+                  size="1.25rem"
                   color="#3860a7"
                 />
                 <SfBadge
@@ -81,7 +81,7 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search md:w-[40rem] bg-light_accent rounded-xl border-none"
+              class="search md:w-[25rem] bg-light_accent rounded-xl border-none"
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="debounceInput"
@@ -101,14 +101,14 @@
                 <SfButton
                   v-else
                   aria-label="Open search"
-                  class="sf-search-bar__button sf-button--pure w-20 rounded-r-xl"
+                  class="sf-search-bar__button sf-button--pure w-16 rounded-r-xl"
                   @click="
                     isSearchOpen
                       ? (isSearchOpen = false)
                       : (isSearchOpen = true)
                   "
                 >
-                  <SfIcon icon="search" color="#b6932f" />
+                  <SfIcon icon="search" color="#ffffff" />
                 </SfButton>
               </template>
             </SfSearchBar>
@@ -548,7 +548,7 @@ export default {
 
 .search {
   width: 800px;
-  height: 50px;
+  height: 40px;
   border-radius: 8px;
   border: 1px solid #aaa;
   padding-left: 10px;

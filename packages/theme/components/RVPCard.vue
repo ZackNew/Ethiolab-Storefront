@@ -1,7 +1,6 @@
 <template>
   <div
-    class="pt-3 border border-light_accent w-[17rem] bg-white shadow-lg hover:shadow-2xl duration-300"
-    :class="{ 'has-colors': colors.length }"
+    :class="`pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300`"
     data-testid="product-card"
   >
     <div class="ssf-product-card__image-wrapper mx-3">
@@ -37,23 +36,24 @@
               :nuxt-img-config="nuxtImgConfig"
             />
           </template>
-          <img
+          <!-- <img
             style="object-fit: cover"
             v-else
             :src="image"
             :alt="title"
-            :class="`w-full md:min-h-[15rem] md:max-h-[15rem]`"
-          />
-          <!-- <SfImage
+
+            :class="`w-full md:min-h-[10rem] md:max-h-[10rem]`"
+          /> -->
+          <SfImage
             v-else
-            class="rounded-2xl"
+            class=""
             :src="image"
             :alt="title"
             :width="imageWidth"
             :height="imageHeight"
             :image-tag="imageTag"
             :nuxt-img-config="nuxtImgConfig"
-          /> -->
+          />
         </SfButton>
       </slot>
       <slot name="colors" v-bind="{ colors }">
@@ -191,7 +191,7 @@
       </SfButton> -->
       <nuxt-link :to="link">
         <p
-          class="mx-3 my-2 mx-auto font-extrabold text-primary md:text-2xl text-center md:min-h-[6rem]"
+          :class="`mx-3 my-2 mx-auto font-extrabold text-primary md:text-md text-center md:min-h-[4rem] md:min-w-${imageWidth}`"
         >
           {{ title }}
         </p>
@@ -205,7 +205,7 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <p class="text-lg mx-auto text-secondary text-sm font-bold">
+        <p class="text-lg mx-auto text-secondary text-xs font-bold">
           {{ regularPrice }}
         </p>
       </slot>
@@ -242,17 +242,14 @@
         title,
       }"
     >
-      <button
-        class="mt-2 mb-4 flex justify-center mx-14 bg-secondary w-3/5 text-white py-1 font-bold"
-        @click="onAddToCart"
-      >
-        <p class="">ADD TO CART</p>
-        <!--
-        <SfIcon
-          color="white"
-          :icon="`${isAddedToCart ? 'added_to_cart' : 'add_to_cart'}`"
-        />-->
-      </button>
+      <div class="flex mt-2 justify-center">
+        <button
+          class="justify-center bg-secondary w-[50%] text-white py-1 mb-3 font-bold"
+          @click="onAddToCart"
+        >
+          <h1 class="text-xs md:text-xs">ADD TO CART</h1>
+        </button>
+      </div>
     </slot>
   </div>
 </template>
@@ -442,8 +439,8 @@ export default {
   // box-sizing: border-box;
   position: relative;
   z-index: var(--product-card-z-index);
-  max-width: var(--product-card-max-width, 10.625rem);
-  flex: 0 1 var(--product-card-max-width, 10.625rem);
+  max-width: var(--product-card-max-width, 9rem);
+  flex: 0 1 var(--product-card-max-width, 9rem);
   height: var(--product-card-height);
   // padding: var(--product-card-padding, var(--spacer-xs), 0, var(--spacer-xs));
   background-color: var(--product-card-background, var(--c-white));
@@ -475,10 +472,11 @@ export default {
   &__link {
     display: block;
     width: 100%;
+    min-width: 95%;
     line-height: 0;
     text-decoration: none;
     margin: var(--product-card-link-margin, 0);
-    text-align: left;
+    text-align: center;
   }
   &__colors {
     --color-picker-position: absolute;

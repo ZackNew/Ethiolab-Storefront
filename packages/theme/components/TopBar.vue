@@ -16,32 +16,32 @@
           :button="category.button"
         /> -->
         <nuxt-link :to="'/pages/helpAndFAQ/'"
-          ><p class="text-xl text-white hover:scale-110 font-semibold">
+          ><h1 class="text-lg text-white hover:scale-110 font-semibold">
             Help
-          </p></nuxt-link
+          </h1></nuxt-link
         >
         <nuxt-link :to="'/pages/contact'"
-          ><p class="text-xl text-white hover:scale-110 font-semibold">
+          ><h1 class="text-lg text-white hover:scale-110 font-semibold">
             Contact us
-          </p></nuxt-link
+          </h1></nuxt-link
         >
         <a href="#">
-          <p class="text-xl text-white hover:scale-110 font-semibold">
+          <h1 class="text-lg text-white hover:scale-110 font-semibold">
             {{ phoneNumber }}
-          </p>
+          </h1>
         </a>
         <a href="https://www.ethiolab.et/">
-          <p
+          <h1
             class="bg-white text-secondary px-2 py-0.5 rounded text-sm hover:scale-110"
           >
             Website
-          </p>
+          </h1>
         </a>
         <nuxt-link :to="'#'">
-          <p class="text-xl text-white hover:scale-110 flex font-semibold">
+          <h1 class="text-lg text-white hover:scale-110 flex font-semibold">
             <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
             MY ACCOUNT
-          </p>
+          </h1>
         </nuxt-link>
       </div>
     </template>

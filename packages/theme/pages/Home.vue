@@ -21,7 +21,7 @@
             </Banner>
           </LazyHydrate>
         </div> -->
-        <div class="grid grid-cols-12 gap-4 md:mx-64">
+        <div class="grid grid-cols-12 gap-4 md:mx-44">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -71,16 +71,15 @@
             </template>
           </LazyHydrate> -->
           <div class="col-span-9" v-if="heroSection.link">
-            <!-- <iframe
-              class="w-[100%] md:h-[26rem] justify-end ytplayer"
+            <iframe
+              class="w-[100%] md:h-[20rem] justify-end ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
               frameborder="0"
               allowfullscreen
               ng-show="showvideo"
-            ></iframe> -->
-            <h1>ngasjnkajsdnfa</h1>
+            ></iframe>
           </div>
           <div class="col-span-3">
             <h1>hello there</h1>
@@ -92,11 +91,78 @@
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
             <!-- <SfHeading title="Recently Viewed Products" :level="2" /> -->
-            <h1 class="">Recently Viewed Products</h1>
+            <h1 class="md:text-4xl">Recently Viewed Products</h1>
           </div>
         </LazyHydrate>
         <LazyHydrate when-visible>
-          <Carousel
+          <div v-if="this.products.length !== 0" class="md:mx-60">
+            <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
+              <template #prevArrow>
+                <div class="arrows">
+                  <svg
+                    class="w-12 h-12 text-secondary -ml-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    ></path>
+                  </svg>
+                </div>
+              </template>
+              /*...*/
+              <template #nextArrow>
+                <div class="arrows">
+                  <svg
+                    class="w-12 h-12 text-secondary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    ></path>
+                  </svg>
+                </div>
+              </template>
+              <div v-for="product in this.products" :key="product._id">
+                <RVPCard
+                  :title="productGetters.getName(product)"
+                  :image="productGetters.getCoverImage(product)"
+                  :regular-price="
+                    productGetters.getPrice(product).regular.toLocaleString() +
+                    ' ETB'
+                  "
+                  :imageHeight="180"
+                  :imageWidth="500"
+                  :alt="productGetters.getName(product)"
+                  :score-rating="productGetters.getAverageRating(product)"
+                  :show-add-to-cart-button="true"
+                  :isInWishlist="isInWishlist({ product })"
+                  :isAddedToCart="isInCart({ product })"
+                  :link="localePath(`/v/${productGetters.getSlug(product)}`)"
+                  @click:wishlist="
+                    !isInWishlist({ product })
+                      ? addItemToWishlist({ product })
+                      : removeItemFromWishlist({ product })
+                  "
+                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                  class="carousel__item__product mr-2"
+                  style="border-radius: 15px"
+                />
+              </div>
+            </VueSlickCarousel>
+          </div>
+          <!-- <Carousel
             class="carousel mt-2"
             :settings="{
               type: 'slider',
@@ -135,7 +201,7 @@
                 style="border-radius: 15px"
               />
             </SfCarouselItem>
-          </Carousel>
+          </Carousel> -->
         </LazyHydrate>
       </div>
       <!-- <top-section></top-section> -->
@@ -146,8 +212,10 @@
       </LazyHydrate>
 
       <LazyHydrate>
-        <BestSeller />
+        <BestSeller :bestSellers="bestSellings" />
       </LazyHydrate>
+
+      <!-- <NewCarousel /> -->
       <!-- 
       <LazyHydrate>
         <FeaturedProducts />
@@ -185,6 +253,9 @@
   </client-only>
 </template>
 <script>
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import {
   SfHero,
   SfBanner,
@@ -210,6 +281,7 @@ import PopupNotification from '~/components/PopupNotification.vue';
 import RVPCard from '~/components/RVPCard.vue';
 import { useUiState } from '../composables';
 import cacheControl from './../helpers/cacheControl';
+import NewCarousel from '~/components/NewCarousel.vue';
 import {
   productGetters,
   useCategory,
@@ -236,6 +308,58 @@ export default {
   name: 'Home',
   async created() {
     this.getTree();
+    this.getBestSellers();
+  },
+  data() {
+    return {
+      bestSellings: [],
+      settings: {
+        dots: true,
+        focusOnSelect: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        touchThreshold: 5,
+        centerMode: true,
+        centerPadding: '30px',
+        responsive: [
+          {
+            breakpoint: 2098,
+            settings: {
+              slidesToShow: 4,
+              slidesToScroll: 4,
+              infinite: true,
+              dots: true,
+            },
+          },
+          {
+            breakpoint: 1624,
+            settings: {
+              slidesToShow: 4,
+              slidesToScroll: 4,
+              infinite: true,
+              dots: true,
+            },
+          },
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2,
+              initialSlide: 2,
+            },
+          },
+          {
+            breakpoint: 430,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+            },
+          },
+        ],
+      },
+    };
   },
   middleware: cacheControl({
     'max-age': 60,
@@ -268,8 +392,98 @@ export default {
     Banner,
     Carousel,
     RVPCard,
+    NewCarousel,
+    VueSlickCarousel,
   },
   methods: {
+    async getBestSellers() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `
+        query{
+          bestSellingProducts{
+            slug
+          }
+        }
+        `,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const bestSeller = await axios.post(baseUrl, body, options);
+      const slugs = bestSeller.data.data?.bestSellingProducts.map((bs) => {
+        let x = [];
+        x.push(bs?.slug);
+        return x;
+      });
+      const STRSlug = [];
+      const a = slugs.forEach((s) => {
+        STRSlug.push(s[0]);
+      });
+      console.log('ddddddddjjjjjjjjjjjj', slugs);
+      const pbody = {
+        query: `
+        query BSProducts($in: [String!]!) {
+          products(options: {filter: {slug: {in: $in}}}) {
+            items {
+              id
+              name
+              slug
+              description
+              featuredAsset {
+                preview
+              }
+              variants {
+                id
+                price
+              }
+              collections {
+                id
+              }
+              customFields {
+                reviewRating
+              }
+            }
+          }
+        }`,
+        variables: {
+          in: STRSlug,
+        },
+      };
+      await axios.post(baseUrl, pbody, options).then((res) => {
+        const produ = res.data.data.products?.items.map((product) => {
+          let cref = [];
+          product?.collections?.forEach((x) => {
+            cref.push(String(x.id));
+          });
+          const image = [String(product?.featuredAsset?.preview)];
+          const price =
+            String(product?.variants[0]?.price).slice(0, -2) +
+            '.' +
+            String(product?.variants[0]?.price).slice(-2);
+          const prod = {
+            _id: product?.id,
+            _variantId: product?.variants[0]?.id,
+            _description: product.description,
+            _categoriesRef: cref,
+            name: product.name,
+            images: image,
+            price: {
+              original: price,
+              current: price,
+            },
+            slug: product.slug,
+            rating: product?.customFields?.reviewRating,
+          };
+          return prod;
+        });
+        this.bestSellings = produ;
+        console.log('minini', this.bestSellings);
+      });
+    },
     mymethod(url) {
       console.log('button clicked');
       window.location.href = url;

@@ -10,7 +10,7 @@
             class="sf-header-navigation-item__menu-item"
           >
           </SfMenuItem> -->
-          <p class="text-xl font-bold text-secondary">REQUEST QUOTE</p>
+          <h1 class="text-lg font-bold text-secondary">REQUEST QUOTE</h1>
         </slot>
       </div>
     </div>

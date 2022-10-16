@@ -1,12 +1,12 @@
 <template>
-  <div class="md:mx-80">
+  <div class="md:mx-48">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3> -->
     <div class="md:p-3">
       <div class="w-full py-5 md:pt-14 md:text-center">
-        <h1 class="">Featured</h1>
+        <h1 class="md:text-4xl">Featured</h1>
       </div>
     </div>
-    <div class="grid grid-cols-1 gap-4 md:mt-10 mb-10 md:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 md:mt-3 md:mb-7 md:grid-cols-3">
       <div v-for="category in headerNavigation" :key="category.label" class="">
         <!-- <CategorySingle :title="category.label" :image="category.featuredAsset.preview" /> -->
         <div class="rounded overflow-hidden text-secondary mx-auto bg- mb-5">
@@ -17,11 +17,11 @@
                   ? category.featuredAsset.preview
                   : '/categories/empty_image.png'
               "
-              class="w-full h-32 md:h-72 object-cover shadow-xl"
+              class="w-full h-28 md:h-48 object-cover shadow-xl"
             />
           </nuxt-link>
           <div class="mt-1">
-            <h4 class="text-2xl">{{ category.label }}</h4>
+            <h4 class="text-sm md:text-lg">{{ category.label }}</h4>
           </div>
         </div>
       </div>
