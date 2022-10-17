@@ -1,29 +1,31 @@
 <template>
   <div id="category">
-    <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    />
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+          <nuxt-link
+            class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+            to="/"
+          >
             Home
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          {{ categoryTreeMain ? categoryTreeMain : 'Loading' }}
+          <p class="text-secondary font-bold">
+            {{ categoryTreeMain ? categoryTreeMain : 'Loading' }}
+          </p>
         </li>
       </ol>
     </nav>
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
         <LazyHydrate never>
-          <SfHeading
+          <!-- <SfHeading
             :level="3"
             :title="$t('Categories')"
-            class="navbar__title"
-          />
+            class="navbar__title text-secondary"
+          /> -->
+          <h1 class="text-secondary font-bold text-3xl">Categories</h1>
         </LazyHydrate>
       </div>
 
@@ -132,6 +134,7 @@
                             :class="
                               cat.isCurrent ? 'sidebar--cat-selected' : ''
                             "
+                            class="text-secondary"
                           >
                             All
                           </nuxt-link>
@@ -153,6 +156,7 @@
                             :class="
                               subCat.isCurrent ? 'sidebar--cat-selected' : ''
                             "
+                            class="text-secondary"
                           >
                             {{ label }}
                           </nuxt-link>
@@ -174,7 +178,7 @@
               class=""
             >
               <div
-                class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
+                class="rounded-md bg-light_gray card shadow-lg my-4 flex mr-5 max-h-40"
               >
                 <img
                   :src="
@@ -186,7 +190,7 @@
                 />
                 <div class="rounded w-full overflow-auto no-scrollbar">
                   <p
-                    class="py-4 ml-4 mr-4 text-white"
+                    class="py-4 ml-4 mr-4"
                     v-html="cat.description || `Category Description`"
                   ></p>
                 </div>
@@ -207,7 +211,7 @@
             <!-- <CategoryFeature /> -->
             <div>
               <h3
-                class="font-bold mt-12 pb-2 border-b border-gray-200"
+                class="font-bold mt-12 pb-2 text-secondary"
                 :style="!isDarkMode ? '' : 'color: white'"
               >
                 Featured
@@ -220,18 +224,10 @@
               >
                 <div
                   v-if="cat.isCurrent === true && cat.slug === lastSlug"
-                  class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10 mb-10"
+                  class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 mb-5"
                 >
                   <div v-for="(sub, j) in cat.items" :key="j">
-                    <div
-                      class="max-w-sm rouned overflow-hidden shadow-xl"
-                      :style="!isDarkMode ? '' : 'background-color: #182533'"
-                    >
-                      <div class="m-4">
-                        <h4 :style="!isDarkMode ? '' : 'color: white'">
-                          {{ sub.label }}
-                        </h4>
-                      </div>
+                    <div class="max-w-sm rouned overflow-hidden">
                       <nuxt-link :to="`/s/${sub.slug}`">
                         <img
                           :src="
@@ -239,9 +235,17 @@
                               ? sub.featuredAsset.preview
                               : '/categories/empty_image.png'
                           "
-                          class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
+                          class="w-full h-32 sm:h-48 object-cover shadow-xl"
                         />
                       </nuxt-link>
+                      <div class="mt-1">
+                        <h4
+                          :style="!isDarkMode ? '' : 'color: white'"
+                          class="text-secondary font-thin text-sm"
+                        >
+                          {{ sub.label }}
+                        </h4>
+                      </div>
                     </div>
                   </div>
                   <!-- </div> -->
@@ -264,49 +268,12 @@
           </LazyHydrate>
 
           <h3
-            v-if="bestSellings.length !== 0"
-            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
-          >
-            Shop Our Best Sellers
-          </h3>
-
-          <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
-            <div
-              class="card shadow-lg my-3 ml-2"
-              v-for="(i, index) in bestSellings"
-              :key="index"
-            >
-              <a :href="`/v/${i.slug}`">
-                <img
-                  :src="i.preview"
-                  alt=""
-                  class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
-                />
-              </a>
-              <h4 class="text-center m-3">{{ i.name }}</h4>
-              <h4 class="text-center m-3">{{ i.priceWithTax }}</h4>
-              <button>
-                <a :href="`/v/${i.slug}`"> View </a>
-              </button>
-              <!-- <p class="text-center m-3">description</p> -->
-              <div class="text-center">
-                <!-- <button
-                  class="my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-                >
-                  {{ $t('View All') }}
-                </button> -->
-              </div>
-            </div>
-          </div>
-          <h3
-            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
+            class="mt-8 pb-2 mb-3 text-center text-secondary"
             :style="!isDarkMode ? '' : 'color: white'"
           >
             Products Under This Category
           </h3>
-          <div
-            class="shadowInner max-h-[53rem] overflow-auto nobar pl-12 rounded-lg hover:border border-light_gray"
-          >
+          <div class="max-h-[53rem] overflow-auto nobar pl-12">
             <transition-group
               v-if="isCategoryGridView"
               appear
@@ -319,8 +286,8 @@
                   v-e2e="'category-product-card'"
                   :title="product.name"
                   :image="product.images[0]"
-                  imageHeight="20.25rem"
-                  imageWidth="100%"
+                  :imageHeight="240"
+                  :imageWidth="170"
                   :regular-price="product.price.current + ' ETB'"
                   :max-rating="5"
                   :score-rating="product.rating"
@@ -413,6 +380,42 @@
                 </template>
               </SfProductCardHorizontal>
             </transition-group>
+          </div>
+
+          <h3
+            v-if="bestSellings.length !== 0"
+            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
+          >
+            Shop Our Best Sellers
+          </h3>
+
+          <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
+            <div
+              class="card shadow-lg my-3 ml-2"
+              v-for="(i, index) in bestSellings"
+              :key="index"
+            >
+              <a :href="`/v/${i.slug}`">
+                <img
+                  :src="i.preview"
+                  alt=""
+                  class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
+                />
+              </a>
+              <h4 class="text-center m-3">{{ i.name }}</h4>
+              <h4 class="text-center m-3">{{ i.priceWithTax }}</h4>
+              <button>
+                <a :href="`/v/${i.slug}`"> View </a>
+              </button>
+              <!-- <p class="text-center m-3">description</p> -->
+              <div class="text-center">
+                <!-- <button
+                  class="my-4 bg-dark text-white font-bold py-2 px-4 rounded"
+                >
+                  {{ $t('View All') }}
+                </button> -->
+              </div>
+            </div>
           </div>
 
           <LazyHydrate on-interaction>

@@ -16,17 +16,17 @@
           :button="category.button"
         /> -->
         <nuxt-link :to="'/pages/helpAndFAQ/'"
-          ><h1 class="text-lg text-white hover:scale-110 font-semibold">
+          ><h1 class="text-sm text-white hover:scale-110 font-semibold">
             Help
           </h1></nuxt-link
         >
         <nuxt-link :to="'/pages/contact'"
-          ><h1 class="text-lg text-white hover:scale-110 font-semibold">
+          ><h1 class="text-sm text-white hover:scale-110 font-semibold">
             Contact us
           </h1></nuxt-link
         >
         <a href="#">
-          <h1 class="text-lg text-white hover:scale-110 font-semibold">
+          <h1 class="text-sm text-white hover:scale-110 font-semibold">
             {{ phoneNumber }}
           </h1>
         </a>
@@ -38,7 +38,7 @@
           </h1>
         </a>
         <nuxt-link :to="'#'">
-          <h1 class="text-lg text-white hover:scale-110 flex font-semibold">
+          <h1 class="text-sm text-white hover:scale-110 flex font-semibold">
             <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
             MY ACCOUNT
           </h1>

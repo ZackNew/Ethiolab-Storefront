@@ -314,7 +314,7 @@ export default {
     return {
       bestSellings: [],
       settings: {
-        dots: true,
+        dots: false,
         focusOnSelect: false,
         infinite: true,
         speed: 500,
