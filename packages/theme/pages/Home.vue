@@ -21,7 +21,7 @@
             </Banner>
           </LazyHydrate>
         </div> -->
-        <div class="grid grid-cols-12 gap-4">
+        <div class="grid grid-cols-12 gap-4 wrap">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -72,7 +72,7 @@
           </LazyHydrate> -->
           <div class="col-span-9" v-if="heroSection.link">
             <iframe
-              class="w-[100%] md:h-[20rem] justify-end ytplayer"
+              class="w-[100%] md:h-[25rem] justify-end ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
@@ -87,7 +87,7 @@
         </div>
       </div>
 
-      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3">
+      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrapsm">
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
             <!-- <SfHeading title="Recently Viewed Products" :level="2" /> -->
@@ -95,7 +95,7 @@
           </div>
         </LazyHydrate>
         <LazyHydrate when-visible>
-          <div v-if="this.products.length !== 0" class="md:mx-[15%]">
+          <div v-if="this.products.length !== 0">
             <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
               <template #prevArrow>
                 <div class="arrows">
@@ -696,5 +696,18 @@ export default {
 
 .ytplayer {
   pointer-events: none;
+}
+
+.wrap {
+  @include for-desktop {
+    max-width: 1250px !important;
+    margin: auto;
+  }
+}
+.wrapsm {
+  @include for-desktop {
+    max-width: 900px !important;
+    margin: auto;
+  }
 }
 </style>

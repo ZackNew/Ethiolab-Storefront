@@ -1,107 +1,113 @@
 <template>
   <div id="category">
-    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
-      <ol class="sf-breadcrumbs__list">
-        <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link
-            class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
-            to="/"
-          >
-            Home
-          </nuxt-link>
-        </li>
-        <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <p class="text-secondary font-bold">
-            {{ categoryTreeMain ? categoryTreeMain : 'Loading' }}
-          </p>
-        </li>
-      </ol>
-    </nav>
-    <div class="navbar section">
-      <div class="navbar__aside desktop-only">
-        <LazyHydrate never>
-          <!-- <SfHeading
+    <div class="bg-whole_bg">
+      <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+        <ol class="sf-breadcrumbs__list">
+          <li class="sf-breadcrumbs__list-item" :aria-current="false">
+            <nuxt-link
+              class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+              to="/"
+            >
+              Home
+            </nuxt-link>
+          </li>
+          <li class="sf-breadcrumbs__list-item" :aria-current="false">
+            <p class="text-secondary font-bold">
+              {{ categoryTreeMain ? categoryTreeMain : 'Loading' }}
+            </p>
+          </li>
+        </ol>
+      </nav>
+      <div class="navbar section">
+        <div class="navbar__aside desktop-only">
+          <LazyHydrate never>
+            <!-- <SfHeading
             :level="3"
             :title="$t('Categories')"
             class="navbar__title text-secondary"
           /> -->
-          <h1 class="text-secondary font-bold text-3xl">Categories</h1>
-        </LazyHydrate>
-      </div>
-
-      <div class="navbar__main">
-        <LazyHydrate on-interaction>
-          <SfButton
-            class="sf-button--text navbar__filters-button"
-            :aria-label="$t('Filters')"
-            @click="toggleFilterSidebar"
-          >
-            <SfIcon
-              size="24px"
-              color="dark-secondary"
-              icon="filter2"
-              class="navbar__filters-icon"
-            />
-            {{ $t('Filters') }}
-          </SfButton>
-        </LazyHydrate>
-
-        <div class="navbar__sort desktop-only">
-          <span class="navbar__label text-secondary">{{ $t('Sort by') }}:</span>
-          <LazyHydrate on-interaction>
-            <SfSelect
-              :style="!isDarkMode ? '' : 'background-color: #182533'"
-              :value="sortBy.selected"
-              :placeholder="sort"
-              class="navbar__select"
-              @input="th.changeSorting"
-            >
-              <SfSelectOption
-                :style="!isDarkMode ? '' : 'background-color: #182533'"
-                v-for="option in sortBy.options"
-                :key="option.id"
-                :value="option.id"
-                class="sort-by__option"
-                >{{ option.value }}</SfSelectOption
-              >
-            </SfSelect>
+            <h1 class="text-secondary font-bold text-3xl">Categories</h1>
           </LazyHydrate>
         </div>
 
-        <div class="navbar__counter">
-          <span class="navbar__label desktop-only text-secondary"
-            >{{ $t('Products found') }}:
-          </span>
-          <span class="desktop-only">{{ pagination.totalItems }}</span>
-          <span class="navbar__label smartphone-only"
-            >{{ pagination.totalItems }} {{ $t('Items') }}</span
-          >
-        </div>
+        <div class="navbar__main">
+          <LazyHydrate on-interaction>
+            <SfButton
+              class="sf-button--text navbar__filters-button text-secondary"
+              :aria-label="$t('Filters')"
+              @click="toggleFilterSidebar"
+            >
+              <SfIcon
+                size="24px"
+                color="dark-secondary"
+                icon="filter2"
+                class="navbar__filters-icon"
+              />
+              {{ $t('Filters') }}
+            </SfButton>
+          </LazyHydrate>
 
-        <div class="navbar__view">
-          <span class="navbar__view-label desktop-only">{{ $t('View') }}</span>
-          <SfIcon
-            v-e2e="'tiles-icon'"
-            class="navbar__view-icon"
-            :color="isCategoryGridView ? '#b6932f' : 'dark-secondary'"
-            icon="tiles"
-            size="12px"
-            role="button"
-            :aria-label="$t('Change to grid view')"
-            :aria-pressed="isCategoryGridView"
-            @click="changeToCategoryGridView"
-          />
-          <SfIcon
-            v-e2e="'list-icon'"
-            class="navbar__view-icon"
-            :color="!isCategoryGridView ? '#b6932f' : 'dark-secondary'"
-            icon="list"
-            size="12px"
-            role="button"
-            :aria-label="$t('Change to list view')"
-            :aria-pressed="!isCategoryGridView"
-            @click="changeToCategoryListView"
-          />
+          <div class="navbar__sort desktop-only">
+            <span class="navbar__label text-secondary"
+              >{{ $t('Sort by') }}:</span
+            >
+            <LazyHydrate on-interaction>
+              <SfSelect
+                :style="!isDarkMode ? '' : 'background-color: #182533'"
+                :value="sortBy.selected"
+                :placeholder="sort"
+                class="navbar__select"
+                @input="th.changeSorting"
+              >
+                <SfSelectOption
+                  :style="!isDarkMode ? '' : 'background-color: #182533'"
+                  v-for="option in sortBy.options"
+                  :key="option.id"
+                  :value="option.id"
+                  class="sort-by__option"
+                  >{{ option.value }}</SfSelectOption
+                >
+              </SfSelect>
+            </LazyHydrate>
+          </div>
+
+          <div class="navbar__counter">
+            <span class="navbar__label desktop-only text-secondary"
+              >{{ $t('Products found') }}:
+            </span>
+            <span class="desktop-only">{{ pagination.totalItems }}</span>
+            <span class="navbar__label smartphone-only"
+              >{{ pagination.totalItems }} {{ $t('Items') }}</span
+            >
+          </div>
+
+          <div class="navbar__view">
+            <span class="navbar__view-label desktop-only text-secondary">{{
+              $t('View')
+            }}</span>
+            <SfIcon
+              v-e2e="'tiles-icon'"
+              class="navbar__view-icon"
+              :color="isCategoryGridView ? '#b6932f' : 'dark-secondary'"
+              icon="tiles"
+              size="12px"
+              role="button"
+              :aria-label="$t('Change to grid view')"
+              :aria-pressed="isCategoryGridView"
+              @click="changeToCategoryGridView"
+            />
+            <SfIcon
+              v-e2e="'list-icon'"
+              class="navbar__view-icon"
+              :color="!isCategoryGridView ? '#b6932f' : 'dark-secondary'"
+              icon="list"
+              size="12px"
+              role="button"
+              :aria-label="$t('Change to list view')"
+              :aria-pressed="!isCategoryGridView"
+              @click="changeToCategoryListView"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -114,10 +120,14 @@
             :loading="loading"
           >
             <SfAccordion
-              :style="!isDarkMode ? '' : 'background-color: #182533'"
+              :style="
+                !isDarkMode
+                  ? 'background-color: #ffffff'
+                  : 'background-color: #182533'
+              "
               :open="activeCategory"
               :show-chevron="true"
-              class="shadow-md w-80 p-2"
+              class="shadow-md w-80 p-2 top-32"
             >
               <SfAccordionItem
                 v-for="(cat, i) in categoryTree && categoryTree"
@@ -190,7 +200,7 @@
                 />
                 <div class="rounded w-full overflow-auto no-scrollbar">
                   <p
-                    class="py-4 ml-4 mr-4"
+                    class="py-4 ml-4 mr-4 text-secondary"
                     v-html="cat.description || `Category Description`"
                   ></p>
                 </div>
@@ -273,7 +283,7 @@
           >
             Products Under This Category
           </h3>
-          <div class="max-h-[53rem] overflow-auto nobar pl-12">
+          <div class="max-h-[53rem] overflow-auto nobar">
             <transition-group
               v-if="isCategoryGridView"
               appear
@@ -301,7 +311,7 @@
                       : removeItemFromWishlist({ product })
                   "
                   @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-                  class="carousel__item__product w-72"
+                  class="carousel__item__product w-64 mr-3 mb-5"
                   style="border-radius: 15px"
                 />
               </div>
@@ -881,10 +891,6 @@ export default {
 <style lang="scss" scoped>
 #category {
   box-sizing: border-box;
-  @include for-desktop {
-    max-width: 90%;
-    margin: 0 auto;
-  }
 }
 .main {
   &.section {
@@ -1207,8 +1213,11 @@ export default {
     margin: var(--spacer-xs) 0 0 0;
   }
 }
-.shadowInner {
-  box-shadow: inset 0 0 10px #b9b9b9;
-  z-index: 1;
-}
+// .sticky {
+//   display: block;
+//   position: -webkit-sticky;
+//   position: relative;
+//   top: 0px;
+//   z-index: 2;
+// }
 </style>

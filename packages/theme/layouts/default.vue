@@ -120,13 +120,13 @@ export default {
     background-color: #f0f7fc;
   }
 }
-#layout {
-  box-sizing: border-box;
-  @include for-desktop {
-    max-width: 1250px !important;
-    margin: auto;
-  }
-}
+// #layout {
+//   box-sizing: border-box;
+//   @include for-desktop {
+//     max-width: 1250px !important;
+//     margin: auto;
+//   }
+// }
 .custom-bg {
   background-color: var(--c-secondary) !important;
 }

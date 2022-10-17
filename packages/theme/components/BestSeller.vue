@@ -1,5 +1,5 @@
 <template>
-  <div class="md:mx-[15%]">
+  <div class="wrap">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
     <div class="p-2 md:p-3">
       <div v-if="bestSellers.length !== 0" class="w-full text-center">
@@ -217,5 +217,17 @@ export default defineComponent({
 }
 .arrows {
   background-color: none;
+}
+.wrap {
+  @include for-desktop {
+    max-width: 1250px !important;
+    margin: auto;
+  }
+}
+.wrapsm {
+  @include for-desktop {
+    max-width: 1200px !important;
+    margin: auto;
+  }
 }
 </style>

@@ -22,6 +22,7 @@ module.exports = {
       faded_black: '#2f2f2f',
       light_gray: '#EAE8E8',
       dark_gray: '#BABABA',
+      whole_bg: '#f0f7fc',
     },
     extend: {
       minHeight: {
