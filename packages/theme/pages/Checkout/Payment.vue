@@ -148,7 +148,7 @@ import CryptoJS from 'crypto-js'
 import moment from "moment";
 import axios from 'axios';
 import Vue from 'vue';
-import VueAxios from 'vue-axios';
+// import VueAxios from 'vue-axios';
 import { mapAddressFormToOrderAddress, COUNTRIES, getDefaultAddress, mapAddressToAddressForm } from '~/helpers';
 import NodeRSA from "node-rsa";
 
@@ -481,7 +481,7 @@ export default {
           //         });
 
               axios
-                      .post("http://localhost:8000", requestMessage)
+                      .post("/api/axios", requestMessage)
                       .then(res => {
                         console.log("local response is ", res);
                           if (res.status == 200 && res.data.data.code == 200) {
