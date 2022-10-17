@@ -47,7 +47,7 @@
         </LazyHydrate>
 
         <div class="navbar__sort desktop-only">
-          <span class="navbar__label">{{ $t('Sort by') }}:</span>
+          <span class="navbar__label text-secondary">{{ $t('Sort by') }}:</span>
           <LazyHydrate on-interaction>
             <SfSelect
               :style="!isDarkMode ? '' : 'background-color: #182533'"
@@ -69,7 +69,7 @@
         </div>
 
         <div class="navbar__counter">
-          <span class="navbar__label desktop-only"
+          <span class="navbar__label desktop-only text-secondary"
             >{{ $t('Products found') }}:
           </span>
           <span class="desktop-only">{{ pagination.totalItems }}</span>

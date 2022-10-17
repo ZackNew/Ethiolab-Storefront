@@ -1,5 +1,5 @@
 <template>
-  <div class="md:mx-48">
+  <div>
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3> -->
     <div class="md:p-3">
       <div class="w-full py-5 md:pt-14 md:text-center">

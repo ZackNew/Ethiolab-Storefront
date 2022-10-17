@@ -1,5 +1,5 @@
 <template>
-  <div class="md:mx-48">
+  <div class="md:mx-[15%]">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
     <div class="p-2 md:p-3">
       <div v-if="bestSellers.length !== 0" class="w-full text-center">
@@ -49,7 +49,7 @@
         <div v-for="product in bestSellers" :key="product._id">
           <ProductCard
             :title="product.name"
-            :image="product.image"
+            :image="product.images[0]"
             :regular-price="product.price.current + ' ETB'"
             :imageHeight="240"
             :imageWidth="170"

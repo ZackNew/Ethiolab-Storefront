@@ -4,6 +4,7 @@
       'theme-light': !isDarkMode,
       'theme-dark': isDarkMode,
     }"
+    id="whole"
   >
     <div class="bg-white">
       <LazyHydrate when-visible>
@@ -112,12 +113,18 @@ export default {
 <style lang="scss">
 @import '~@storefront-ui/vue/styles';
 @import './assets/styles';
-#layout {
-  box-sizing: border-box;
+#whole {
   @include for-desktop {
     max-width: 100% !important;
     margin: auto;
     background-color: #f0f7fc;
+  }
+}
+#layout {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1250px !important;
+    margin: auto;
   }
 }
 .custom-bg {

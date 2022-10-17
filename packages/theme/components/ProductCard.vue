@@ -474,10 +474,12 @@ export default {
   &__link {
     display: block;
     width: 100%;
+    min-width: 100%;
     line-height: 0;
+    min-height: 60%;
     text-decoration: none;
     margin: var(--product-card-link-margin, 0);
-    text-align: left;
+    text-align: center;
   }
   &__colors {
     --color-picker-position: absolute;

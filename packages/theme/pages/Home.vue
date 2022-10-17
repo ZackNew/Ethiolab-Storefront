@@ -21,7 +21,7 @@
             </Banner>
           </LazyHydrate>
         </div> -->
-        <div class="grid grid-cols-12 gap-4 md:mx-44">
+        <div class="grid grid-cols-12 gap-4">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -95,7 +95,7 @@
           </div>
         </LazyHydrate>
         <LazyHydrate when-visible>
-          <div v-if="this.products.length !== 0" class="md:mx-60">
+          <div v-if="this.products.length !== 0" class="md:mx-[15%]">
             <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
               <template #prevArrow>
                 <div class="arrows">
