@@ -39,7 +39,6 @@
         <SfTableData class="table__data price">
           <SfPrice
             :regular="cartGetters.getItemPrice(product).regular.toLocaleString() + ' ETB'"
-            :special="cartGetters.getItemPrice(product).special.toLocaleString() + ' ETB'"
             class="product-price"
           />
         </SfTableData>
@@ -360,7 +359,7 @@ export default {
         const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
         let signObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
                       "nonce":paymentDetail.transaction_uuid,
-                      "notifyUrl":"http://localhost:3001/checkout/thank-you/",
+                      "notifyUrl":`https://fd47-196-188-51-249.in.ngrok.io/api/hook`,
                       "outTradeNo":cart.value.code,
                       "receiveName":"Ethiolab",
                       "returnUrl":"http://localhost:3001/checkout/thank-you/",
@@ -410,7 +409,7 @@ export default {
 
               let jsonObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
                       "nonce":paymentDetail.transaction_uuid,
-                      "notifyUrl":"http://localhost:3001/checkout/thank-you/",
+                      "notifyUrl":`https://fd47-196-188-51-249.in.ngrok.io/api/hook`,
                       "outTradeNo":cart.value.code,
                       "receiveName":"Ethiolab",
                       "returnUrl":"http://localhost:3001/checkout/thank-you/",

@@ -12,15 +12,15 @@ export default async ({ app, $vsf }) => {
     app.context.redirect('/');
 
   } 
-  // else if (currentPath === CheckoutSteps.Billing && !canEnterBilling(activeCart)) {
-  //   app.context.redirect('/');
+  else if (currentPath === CheckoutSteps.Billing && !canEnterBilling(activeCart)) {
+    app.context.redirect('/');
 
-  // } 
-  // else if (currentPath === CheckoutSteps.Payment && !canEnterPayment(activeCart)) {
-  //   app.context.redirect('/');
+  } 
+  else if (currentPath === CheckoutSteps.Payment && !canEnterPayment(activeCart)) {
+    app.context.redirect('/');
 
-  // }
-  //  else if (currentPath === CheckoutSteps.ThankYou && !canEnterThankYou(app.context)) {
-  //   app.context.redirect('/');
-  // }
+  }
+   else if (currentPath === CheckoutSteps.ThankYou && !canEnterThankYou(app.context)) {
+    app.context.redirect('/');
+  }
 };
