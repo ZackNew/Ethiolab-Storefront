@@ -224,10 +224,4 @@ export default defineComponent({
     margin: auto;
   }
 }
-.wrapsm {
-  @include for-desktop {
-    max-width: 1200px !important;
-    margin: auto;
-  }
-}
 </style>

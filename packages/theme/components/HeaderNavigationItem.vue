@@ -124,6 +124,6 @@ export default {
   /* border: 0.1px solid var(--c-bg-primary) !important; */
   box-shadow: 1px rgb(0, 0, 0, 0.2);
   border: solid 1px gray;
-  z-index: 1 !important;
+  z-index: 10 !important;
 }
 </style>

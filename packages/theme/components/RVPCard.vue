@@ -191,7 +191,7 @@
       </SfButton> -->
       <nuxt-link :to="link">
         <p
-          :class="`mx-3 my-2 mx-auto font-extrabold text-primary md:text-md text-center md:min-h-[4rem] md:min-w-${imageWidth}`"
+          :class="`mx-3 my-2 mx-auto font-extrabold text-primary md:text-xl text-center md:min-h-[4rem] md:min-w-${imageWidth}`"
         >
           {{ title }}
         </p>
@@ -247,7 +247,7 @@
           class="justify-center bg-secondary w-[50%] text-white py-1 mb-3 font-bold"
           @click="onAddToCart"
         >
-          <h1 class="text-xs md:text-xs">ADD TO CART</h1>
+          <h1 class="text-xs md:text-sm">ADD TO CART</h1>
         </button>
       </div>
     </slot>

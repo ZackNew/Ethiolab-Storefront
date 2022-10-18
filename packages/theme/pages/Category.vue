@@ -1,6 +1,6 @@
 <template>
   <div id="category">
-    <div class="bg-whole_bg">
+    <div class="sticky bg-whole_bg">
       <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
@@ -127,7 +127,7 @@
               "
               :open="activeCategory"
               :show-chevron="true"
-              class="shadow-md w-80 p-2 top-32"
+              class="shadow-md w-80 p-2 sticky top-32"
             >
               <SfAccordionItem
                 v-for="(cat, i) in categoryTree && categoryTree"
@@ -187,20 +187,18 @@
               v-if="cat.isCurrent === true && cat.slug === lastSlug"
               class=""
             >
-              <div
-                class="rounded-md bg-light_gray card shadow-lg my-4 flex mr-5 max-h-40"
-              >
+              <div class="rounded-xl bg-light_gray my-4 flex max-h-40">
                 <img
                   :src="
                     cat.featuredAsset
                       ? cat.featuredAsset.preview
                       : '/categories/cat2.jpeg'
                   "
-                  class="rounded-md my-auto max-h-40 min-h-40 bg-light max-w-[25%]"
+                  class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
                 />
-                <div class="rounded w-full overflow-auto no-scrollbar">
+                <div class="w-full overflow-auto no-scrollbar">
                   <p
-                    class="py-4 ml-4 mr-4 text-secondary"
+                    class="py-4 ml-4 mr-4 text-secondary text-thin"
                     v-html="cat.description || `Category Description`"
                   ></p>
                 </div>
@@ -237,7 +235,7 @@
                   class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 mb-5"
                 >
                   <div v-for="(sub, j) in cat.items" :key="j">
-                    <div class="max-w-sm rouned overflow-hidden">
+                    <div class="">
                       <nuxt-link :to="`/s/${sub.slug}`">
                         <img
                           :src="
@@ -245,13 +243,13 @@
                               ? sub.featuredAsset.preview
                               : '/categories/empty_image.png'
                           "
-                          class="w-full h-32 sm:h-48 object-cover shadow-xl"
+                          class="w-full h-32 sm:h-48 object-cover shadow-xl hover:shadow-2xl transition duration-300"
                         />
                       </nuxt-link>
                       <div class="mt-1">
                         <h4
                           :style="!isDarkMode ? '' : 'color: white'"
-                          class="text-secondary font-thin text-sm"
+                          class="text-secondary font-thin text-lg"
                         >
                           {{ sub.label }}
                         </h4>
@@ -283,21 +281,21 @@
           >
             Products Under This Category
           </h3>
-          <div class="max-h-[53rem] overflow-auto nobar">
+          <div class="max-h-[53rem] overflow-auto nobar w-full">
             <transition-group
               v-if="isCategoryGridView"
               appear
               name="products__slide"
               tag="div"
-              class="products__grid"
+              class="grid grid-cols-1 md:grid-cols-3 gap-2"
             >
               <div v-for="product in allProducts" :key="product._id">
                 <ProductCard
                   v-e2e="'category-product-card'"
                   :title="product.name"
                   :image="product.images[0]"
-                  :imageHeight="240"
-                  :imageWidth="170"
+                  :imageHeight="290"
+                  :imageWidth="500"
                   :regular-price="product.price.current + ' ETB'"
                   :max-rating="5"
                   :score-rating="product.rating"
@@ -311,8 +309,7 @@
                       : removeItemFromWishlist({ product })
                   "
                   @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-                  class="carousel__item__product w-64 mr-3 mb-5"
-                  style="border-radius: 15px"
+                  class="carousel__item__product mb-5"
                 />
               </div>
             </transition-group>
@@ -361,7 +358,7 @@
                   )
                 "
               >
-                <template #configuration>
+                <!-- <template #configuration>
                   <SfProperty
                     class="desktop-only"
                     name="Size"
@@ -369,7 +366,7 @@
                     style="margin: 0 0 1rem 0"
                   />
                   <SfProperty class="desktop-only" name="Color" value="white" />
-                </template>
+                </template> -->
                 <template #actions>
                   <SfButton
                     v-if="!isInWishlist({ product })"
@@ -891,6 +888,10 @@ export default {
 <style lang="scss" scoped>
 #category {
   box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1250px;
+    margin: 0 auto;
+  }
 }
 .main {
   &.section {
@@ -1046,6 +1047,10 @@ export default {
   padding: var(--spacer-sm);
   border: 1px solid var(--c-light);
   border-width: 0 1px 0 0;
+  display: block;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
 }
 .sidebar-filters {
   --overlay-z-index: 3;
@@ -1213,11 +1218,11 @@ export default {
     margin: var(--spacer-xs) 0 0 0;
   }
 }
-// .sticky {
-//   display: block;
-//   position: -webkit-sticky;
-//   position: relative;
-//   top: 0px;
-//   z-index: 2;
-// }
+.sticky {
+  display: block;
+  position: -webkit-sticky;
+  position: relative;
+  top: 0px;
+  z-index: 2;
+}
 </style>

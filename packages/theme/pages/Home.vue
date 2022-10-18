@@ -82,12 +82,16 @@
             ></iframe>
           </div>
           <div class="col-span-3">
-            <h1>hello there</h1>
+            <div class="mt-5 grid grid-rows-3 grid-flow-col gap-4">
+              <img src="~/static/ad1.png" />
+              <img src="~/static/ad2.png" />
+              <img src="~/static/ad3.png" />
+            </div>
           </div>
         </div>
       </div>
 
-      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrapsm">
+      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrap">
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
             <!-- <SfHeading title="Recently Viewed Products" :level="2" /> -->
@@ -142,7 +146,7 @@
                     productGetters.getPrice(product).regular.toLocaleString() +
                     ' ETB'
                   "
-                  :imageHeight="180"
+                  :imageHeight="290"
                   :imageWidth="500"
                   :alt="productGetters.getName(product)"
                   :score-rating="productGetters.getAverageRating(product)"
@@ -157,7 +161,6 @@
                   "
                   @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
                   class="carousel__item__product mr-2"
-                  style="border-radius: 15px"
                 />
               </div>
             </VueSlickCarousel>

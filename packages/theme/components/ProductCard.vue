@@ -18,7 +18,7 @@
       >
         <SfButton
           :link="link"
-          class="sf-button--pure ssf-product-card__link w-full"
+          class="sf-button--pure ssf-product-card__link"
           data-testid="product-link"
           :aria-label="'Go To Product'"
           v-on="$listeners"
@@ -109,6 +109,7 @@
           >{{ badgeLabel }}</SfBadge
         >
       </slot>
+      <!--
       <SfButton
         :aria-label="`${ariaLabel} ${title}`"
         :class="[wishlistIconClasses, { 'display-none': !wishlistIcon }]"
@@ -124,7 +125,7 @@
             data-test="sf-wishlist-icon"
           />
         </slot>
-      </SfButton>
+      </SfButton>-->
       <!--
       <div :class="{ 'display-none': !showAddToCartButton }">
         <slot
@@ -198,6 +199,12 @@
         </button>
       </div>
     </slot>
+    <h1
+      @click="toggleIsInWishlist"
+      class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
+    >
+      <button>+ Add to List</button>
+    </h1>
     <slot name="title" v-bind="{ title, link }">
       <!-- <SfButton
         :link="link"
@@ -211,7 +218,7 @@
       </SfButton> -->
       <nuxt-link :to="link">
         <h1
-          :class="`mx-3 mt-4 text-center text-secondary md:min-h-[3rem] text-sm text-extrathin md:min-w-${imageWidth}`"
+          :class="`mx-3 mt-1 text-center text-secondary md:min-h-[3rem] text-xs md:text-base text-extrathin md:min-w-${imageWidth}`"
         >
           {{ title }}
         </h1>
