@@ -1,108 +1,124 @@
 <template>
-  <div class="header">
-    <SfHeader
-      :class="{
-        'header-on-top': isSearchOpen,
-        'sf-header--has-mobile-navigation': !isMobileMenuOpen,
-      }"
-      :is-nav-visible="isMobileMenuOpen"
-      data-app
-    >
-      <!-- TODO: add mobile view buttons after SFUI team PR 
-     ///// deleted at the sfImage alt property because of causing infinite loop ->  :alt="$t('Ethiolab')" 
-       -->
-      <template #logo>
-        <nuxt-link :to="localePath('/')">
-          <SfImage
-            :src="logo"
-            alt="EthioLab"
-            width="500"
-            class="sf-header__logo-image"
-          />
-        </nuxt-link>
-      </template>
-      <template #aside>
-        <div class="flex flex-row justify-between">
-          <LocaleSelector class="smartphone-only" />
-          <ThemeChanger class="smartphone-only" />
-        </div>
-      </template>
-      <template #header-icons>
-        <div class="sf-header__icons">
-          <SfButton
-            v-e2e="'app-header-account'"
-            aria-label="Open account button"
-            class="sf-button--pure sf-header__action"
-            @click="handleAccountClick"
-          >
-            <SfIcon :icon="accountIcon" size="1.25rem" />
-          </SfButton>
-          <SfButton
-            aria-label="Toggle wishlist sidebar"
-            class="sf-button--pure sf-header__action"
-            @click="toggleWishlistSidebar"
-          >
-            <SfIcon class="sf-header__icon" icon="heart" size="1.25rem" />
-            <SfBadge
-              v-if="wishlistTotalItems"
-              class="sf-badge--number cart-badge"
-              >{{ wishlistTotalItems }}</SfBadge
-            >
-          </SfButton>
-          <SfButton
-            v-e2e="'app-header-cart'"
-            aria-label="Toggle cart sidebar"
-            class="sf-button--pure sf-header__action"
-            @click="toggleCartSidebar"
-          >
-            <SfIcon class="sf-header__icon" icon="empty_cart" size="1.25rem" />
-            <SfBadge
-              v-if="cartTotalItems"
-              class="sf-badge--number cart-badge"
-              >{{ cartTotalItems }}</SfBadge
-            >
-          </SfButton>
-        </div>
-      </template>
-      <template #navigation>
-        <SfSearchBar
-          :aria-label="$t('Search')"
-          :placeholder="$t('Search for items')"
-          :value="term"
-          class="search"
-          @focus="isSearchOpen = true"
-          @blur="isSearchOpen = false"
-          @input="debounceInput"
-          @keydown.enter="debounceInput"
-          @keydown.esc="closeSearch"
-          v-model="searchText"
+  <div class="border-b-2 border-light_accent">
+    <div class="border-b-4 border-light_accent">
+      <div class="md:mx-32">
+        <SfHeader
+          :class="{
+            'header-on-top': isSearchOpen,
+            'sf-header--has-mobile-navigation': !isMobileMenuOpen,
+          }"
+          :is-nav-visible="isMobileMenuOpen"
+          data-app
         >
-          <template #icon>
-            <SfButton
-              v-if="!!term"
-              aria-label="Close search"
-              class="sf-search-bar__button sf-button--pure"
-              @click="closeOrFocusSearchBar"
-            >
-              Search
-            </SfButton>
-            <SfButton
-              v-else
-              aria-label="Open search"
-              class="sf-search-bar__button sf-button--pure"
-              @click="
-                isSearchOpen ? (isSearchOpen = false) : (isSearchOpen = true)
-              "
-            >
-              Search
-            </SfButton>
+          <!-- TODO: add mobile view buttons after SFUI team PR 
+          ///// deleted at the sfImage alt property because of causing infinite loop ->  :alt="$t('Ethiolab')" 
+          -->
+          <template #logo>
+            <nuxt-link :to="localePath('/')">
+              <SfImage
+                :src="logo"
+                alt="EthioLab"
+                width="400"
+                class="sf-header__logo-image"
+              />
+            </nuxt-link>
           </template>
-        </SfSearchBar>
-      </template>
-      <template #search>
-        <div></div>
-      </template>
-    </SfHeader>
+          <template #aside>
+            <div class="flex flex-row justify-between">
+              <LocaleSelector class="smartphone-only" />
+              <ThemeChanger class="smartphone-only" />
+            </div>
+          </template>
+          <template #header-icons>
+            <div class="sf-header__icons">
+              <SfButton
+                v-e2e="'app-header-account'"
+                aria-label="Open account button"
+                class="sf-button--pure sf-header__action"
+                @click="handleAccountClick"
+              >
+                <SfIcon :icon="accountIcon" size="1.25rem" color="#3860a7" />
+              </SfButton>
+              <SfButton
+                aria-label="Toggle wishlist sidebar"
+                class="sf-button--pure sf-header__action"
+                @click="toggleWishlistSidebar"
+              >
+                <SfIcon
+                  class="sf-header__icon"
+                  icon="heart"
+                  size="1.25rem"
+                  color="#3860a7"
+                />
+                <SfBadge
+                  v-if="wishlistTotalItems"
+                  class="sf-badge--number cart-badge"
+                  >{{ wishlistTotalItems }}</SfBadge
+                >
+              </SfButton>
+              <SfButton
+                v-e2e="'app-header-cart'"
+                aria-label="Toggle cart sidebar"
+                class="sf-button--pure sf-header__action"
+                @click="toggleCartSidebar"
+              >
+                <SfIcon
+                  class="sf-header__icon"
+                  icon="empty_cart"
+                  size="1.25rem"
+                  color="#3860a7"
+                />
+                <SfBadge
+                  v-if="cartTotalItems"
+                  class="sf-badge--number cart-badge"
+                  >{{ cartTotalItems }}</SfBadge
+                >
+              </SfButton>
+            </div>
+          </template>
+          <template #navigation>
+            <SfSearchBar
+              :aria-label="$t('Search')"
+              :placeholder="$t('Search for items')"
+              :value="term"
+              class="search md:w-[25rem] bg-light_accent rounded-xl border-none"
+              @focus="isSearchOpen = true"
+              @blur="isSearchOpen = false"
+              @input="debounceInput"
+              @keydown.enter="debounceInput"
+              @keydown.esc="closeSearch"
+              v-model="searchText"
+            >
+              <template #icon>
+                <SfButton
+                  v-if="!!term"
+                  aria-label="Close search"
+                  class="sf-search-bar__button sf-button--pure w-20 rounded-r-xl"
+                  @click="closeOrFocusSearchBar"
+                >
+                  <SfIcon icon="search" color="#ffffff" />
+                </SfButton>
+                <SfButton
+                  v-else
+                  aria-label="Open search"
+                  class="sf-search-bar__button sf-button--pure w-16 rounded-r-xl"
+                  @click="
+                    isSearchOpen
+                      ? (isSearchOpen = false)
+                      : (isSearchOpen = true)
+                  "
+                >
+                  <SfIcon icon="search" color="#ffffff" />
+                </SfButton>
+              </template>
+            </SfSearchBar>
+          </template>
+          <template #search>
+            <div></div>
+          </template>
+        </SfHeader>
+      </div>
+    </div>
     <SearchResults
       :result="results"
       :visible="isSearchOpen"
@@ -112,7 +128,7 @@
     />
     <SfOverlay :visible="isSearchOpen" />
 
-    <HeaderNavigation :isMobile="isMobile" />
+    <HeaderNavigation :isMobile="isMobile" class="h-16" />
   </div>
 </template>
 
@@ -532,7 +548,7 @@ export default {
 
 .search {
   width: 800px;
-  height: 50px;
+  height: 40px;
   border-radius: 8px;
   border: 1px solid #aaa;
   padding-left: 10px;

@@ -1,27 +1,15 @@
 <template>
-  <div class="">
+  <div class="wrap">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3> -->
-    <div class="p-3 md:p-20">
-      <div
-        data-aos="slide-up"
-        class="w-full h-24 p-20 before:content-[''] before:mr-8 before:mb-2 before:w-1/6 before:h-2 before:bg-dark_gray before:inline-block after:content-[''] after:ml-8 after:mb-2 after:w-1/6 after:h-2 after:bg-dark_gray after:inline-block text-center"
-      >
-        <span class="text-4xl  w-1/4">Featured</span>
+    <div class="md:p-3">
+      <div class="w-full py-5 md:pt-14 md:text-center">
+        <h1 class="md:text-4xl">Featured</h1>
       </div>
     </div>
-    <div
-      class="grid grid-cols-1 gap-10 mt-10 mb-10 md:grid-cols-3"
-      data-aos="fade-right"
-    >
-      <div v-for="category in headerNavigation" :key="category.label">
+    <div class="grid grid-cols-1 gap-4 md:mt-3 md:mb-7 md:grid-cols-3">
+      <div v-for="category in headerNavigation" :key="category.label" class="">
         <!-- <CategorySingle :title="category.label" :image="category.featuredAsset.preview" /> -->
-        <div
-          :style="!isDarkMode ? '' : 'background-color: #182533'"
-          class="max-w-sm rounded overflow-hidden shadow-xl hover:bg-light_gray hover:text-secondary"
-        >
-          <div class="m-4">
-            <h4 class="">{{ category.label }}</h4>
-          </div>
+        <div class="rounded mx-auto mb-5">
           <nuxt-link :to="`/c/${category.slug}`">
             <img
               :src="
@@ -29,9 +17,12 @@
                   ? category.featuredAsset.preview
                   : '/categories/empty_image.png'
               "
-              class="w-full h-32 sm:h-48 object-cover scale-75 hover:scale-100 ease-in duration-300"
+              class="w-full h-28 md:h-60 object-cover shadow-xl hover:shadow-2xl transition duration-300"
             />
           </nuxt-link>
+          <div class="mt-1">
+            <h4 class="md:text-xl text-secondary">{{ category.label }}</h4>
+          </div>
         </div>
       </div>
     </div>
@@ -117,4 +108,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.wrap {
+  @include for-desktop {
+    max-width: 1250px !important;
+    margin: auto;
+  }
+}
+</style>

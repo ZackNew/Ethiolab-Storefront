@@ -17,11 +17,12 @@ module.exports = {
       dark_secondary: '#568cea',
       white: '#FFFFFF',
       dark_accent: '#182533',
-      light_accent: '#edeef8',
+      light_accent: '#f0f7fc',
       faded_white: '#FFFFFF93',
       faded_black: '#2f2f2f',
-      light_gray: '#EAE8E8',
+      light_gray: '#EfEfEf',
       dark_gray: '#BABABA',
+      whole_bg: '#f0f7fc',
     },
     extend: {
       minHeight: {

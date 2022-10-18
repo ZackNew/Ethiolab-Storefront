@@ -1,6 +1,6 @@
 <template>
   <div
-    class="pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300"
+    :class="`pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300`"
     data-testid="product-card"
   >
     <div class="ssf-product-card__image-wrapper mx-3">
@@ -27,7 +27,7 @@
             <SfImage
               v-for="(picture, key) in image.slice(0, 2)"
               :key="key"
-              :class="`ssf-product-card__picture min-h-[${imageHeight}]`"
+              class="ssf-product-card__picture"
               :src="picture"
               :alt="title"
               :width="imageWidth"
@@ -41,7 +41,8 @@
             v-else
             :src="image"
             :alt="title"
-            :class="`rounded-t-lg rounded-b w-full min-h-[14rem] max-h-[14rem]`"
+
+            :class="`w-full md:min-h-[10rem] md:max-h-[10rem]`"
           /> -->
           <SfImage
             v-else
@@ -177,34 +178,6 @@
       </div>
       -->
     </div>
-    <slot
-      v-bind="{
-        isAddedToCart,
-        showAddedToCartBadge,
-        isAddingToCart,
-        title,
-      }"
-    >
-      <div class="flex mt-2 justify-center">
-        <input
-          type="text"
-          class="w-[20%] bg-light_accent mr-3 h-10 text-center"
-          v-model="numberCart"
-        />
-        <button
-          class="justify-center bg-secondary w-[50%] text-white py-2 font-bold transform transition duration-500"
-          @click="onAddToCart"
-        >
-          <h1 class="text-xs md:text-sm">ADD TO CART</h1>
-        </button>
-      </div>
-    </slot>
-    <h1
-      @click="toggleIsInWishlist"
-      class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
-    >
-      <button>+ Add to List</button>
-    </h1>
     <slot name="title" v-bind="{ title, link }">
       <!-- <SfButton
         :link="link"
@@ -212,20 +185,32 @@
         data-testid="product-link"
         v-on="$listeners"
       >
-        <span class="ssf-product-card__title  md:min-h-[5rem]">
+        <span class="ssf-product-card__title min-h-[5rem]">
           {{ title }}
         </span>
       </SfButton> -->
       <nuxt-link :to="link">
-        <h1
-          :class="`mx-3 mt-1 text-center text-secondary md:min-h-[3rem] text-xs md:text-base text-extrathin md:min-w-${imageWidth}`"
+        <p
+          :class="`mx-3 my-2 mx-auto font-extrabold text-primary md:text-xl text-center md:min-h-[4rem] md:min-w-${imageWidth}`"
         >
           {{ title }}
-        </h1>
+        </p>
       </nuxt-link>
     </slot>
-    <div class="mt-1 mx-3 flex justify-around">
+    <div class="mt-1 flex justify-between mx-3">
+      <slot name="price" v-bind="{ specialPrice, regularPrice }">
+        <!--<SfPrice
+          :class="{ 'display-none': !regularPrice }"
+          class="ssf-product-card__price"
+          :regular="regularPrice"
+          :special="specialPrice"
+        />-->
+        <p class="text-lg mx-auto text-secondary text-xs font-bold">
+          {{ regularPrice }}
+        </p>
+      </slot>
       <slot name="review" v-bind="{ maxRating, scoreRating }">
+        <!--
         <div
           :class="{ 'display-none': !scoreRating }"
           class="ssf-product-card__reviews"
@@ -235,7 +220,6 @@
             class="ssf-product-card__rating"
             :max="maxRating"
             :score="scoreRating"
-            size="4xl"
           />
           <SfButton
             :class="{ 'display-none': !reviewsCount }"
@@ -247,18 +231,26 @@
             ({{ reviewsCount }})
           </SfButton>
         </div>
-      </slot>
-      <slot name="price" v-bind="{ specialPrice, regularPrice }">
-        <!--<SfPrice
-          :class="{ 'display-none': !regularPrice }"
-          class="ssf-product-card__price"
-          :regular="regularPrice"
-          :special="specialPrice"
-        />-->
-        <p class="text-lg text-secondary">{{ regularPrice }}</p>
-        <div class="sf-price"></div>
+        -->
       </slot>
     </div>
+    <slot
+      v-bind="{
+        isAddedToCart,
+        showAddedToCartBadge,
+        isAddingToCart,
+        title,
+      }"
+    >
+      <div class="flex mt-2 justify-center">
+        <button
+          class="justify-center bg-secondary w-[50%] text-white py-1 mb-3 font-bold"
+          @click="onAddToCart"
+        >
+          <h1 class="text-xs md:text-sm">ADD TO CART</h1>
+        </button>
+      </div>
+    </slot>
   </div>
 </template>
 <script>
@@ -276,7 +268,7 @@ import {
 } from '@storefront-ui/vue';
 
 export default {
-  name: 'ProductCard',
+  name: 'RVPCard',
   components: {
     SfPrice,
     SfRating,
@@ -386,7 +378,6 @@ export default {
     return {
       isAddingToCart: false,
       openColorPicker: false,
-      numberCart: 1,
     };
   },
   computed: {
@@ -448,8 +439,8 @@ export default {
   // box-sizing: border-box;
   position: relative;
   z-index: var(--product-card-z-index);
-  max-width: var(--product-card-max-width, 10.625rem);
-  flex: 0 1 var(--product-card-max-width, 10.625rem);
+  max-width: var(--product-card-max-width, 9rem);
+  flex: 0 1 var(--product-card-max-width, 9rem);
   height: var(--product-card-height);
   // padding: var(--product-card-padding, var(--spacer-xs), 0, var(--spacer-xs));
   background-color: var(--product-card-background, var(--c-white));
@@ -481,9 +472,8 @@ export default {
   &__link {
     display: block;
     width: 100%;
-    min-width: 100%;
+    min-width: 95%;
     line-height: 0;
-    min-height: 60%;
     text-decoration: none;
     margin: var(--product-card-link-margin, 0);
     text-align: center;
