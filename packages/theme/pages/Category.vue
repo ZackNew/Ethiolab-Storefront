@@ -957,8 +957,7 @@ export default {
         return {
           name: sub?.name,
           slug: sub?.slug,
-          image:
-            sub.featuredAsset?.preview || '~/static/categories/empty_image.png',
+          image: sub.featuredAsset?.preview || '/categories/empty_image.png',
         };
       });
       return subs;
