@@ -76,7 +76,7 @@
               >{{ $t('Products found') }}:
             </span>
             <span class="desktop-only">{{ allProducts.length }}</span>
-            <span class="navbar__label smartphone-only"
+            <span class="navbar__label smartphone-only text-secondary"
               >{{ allProducts.length }} {{ $t('Items') }}</span
             >
           </div>
@@ -570,10 +570,6 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
-    let sort = '';
-    if (process.env.client) {
-      sort = localStorage.getItem('sort');
-    }
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
@@ -754,7 +750,6 @@ export default {
       itemQuantity,
       rawCategoryTree,
       lastSlug,
-      sort,
     };
   },
   components: {
@@ -946,12 +941,14 @@ export default {
   created() {
     this.getActiveCategory();
     this.getBestSellersCategory();
+    this.sort = localStorage.getItem('sort');
   },
   data() {
     return {
       allProducts: [],
       bestSellings: [],
       currentCategory: null,
+      sort: '',
     };
   },
   computed: {

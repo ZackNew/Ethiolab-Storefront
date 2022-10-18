@@ -193,7 +193,8 @@ h4 {
 }
 .sf-accordion-item__header {
   background-color: #a5c4ea;
-  box-shadow: 2px 2px;
+  box-shadow: 0 4px 8px 0 rgba(128, 122, 122, 0.2),
+    0 6px 20px 0 rgba(139, 134, 134, 0.19);
   font-size: x-large;
   color: white;
   border-radius: 1rem;
