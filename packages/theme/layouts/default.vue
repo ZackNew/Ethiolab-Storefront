@@ -191,6 +191,18 @@ h4 {
 .sf-header__wrapper {
   padding-top: 0.5em;
 }
+.sf-accordion-item__header {
+  background-color: #a5c4ea;
+  box-shadow: 0 4px 8px 0 rgba(128, 122, 122, 0.2),
+    0 6px 20px 0 rgba(139, 134, 134, 0.19);
+  font-size: x-large;
+  color: white;
+  border-radius: 1rem;
+  min-width: 106%;
+  height: 4.7rem;
+  padding: 0 15px;
+  margin-left: -3%;
+}
 .sf-search-bar__input:focus {
   outline: none;
 }

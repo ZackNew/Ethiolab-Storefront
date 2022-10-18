@@ -1,7 +1,7 @@
 <template>
-  <div class="border-b-2 border-light_accent">
+  <div class="border-b-2 border-light_accent wrap">
     <div class="border-b-4 border-light_accent">
-      <div class="md:mx-32">
+      <div class="md:mx-14">
         <SfHeader
           :class="{
             'header-on-top': isSearchOpen,
@@ -81,7 +81,7 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search md:w-[25rem] bg-light_accent rounded-xl border-none"
+              class="search md:w-[23rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none"
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="debounceInput"
@@ -581,5 +581,11 @@ export default {
 .header2 {
   width: fit-content;
   margin: auto;
+}
+.wrap {
+  @include for-desktop {
+    max-width: 1250px !important;
+    margin: auto;
+  }
 }
 </style>

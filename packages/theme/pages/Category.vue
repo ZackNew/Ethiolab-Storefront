@@ -13,7 +13,7 @@
           </li>
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
             <p class="text-secondary font-bold">
-              {{ categoryTreeMain ? categoryTreeMain : 'Loading' }}
+              {{ currentCategory !== null ? currentCategory.name : 'Loading' }}
             </p>
           </li>
         </ol>
@@ -75,9 +75,9 @@
             <span class="navbar__label desktop-only text-secondary"
               >{{ $t('Products found') }}:
             </span>
-            <span class="desktop-only">{{ pagination.totalItems }}</span>
-            <span class="navbar__label smartphone-only"
-              >{{ pagination.totalItems }} {{ $t('Items') }}</span
+            <span class="desktop-only">{{ allProducts.length }}</span>
+            <span class="navbar__label smartphone-only text-secondary"
+              >{{ allProducts.length }} {{ $t('Items') }}</span
             >
           </div>
 
@@ -127,16 +127,16 @@
               "
               :open="activeCategory"
               :show-chevron="true"
-              class="shadow-md w-80 p-2 sticky top-32"
+              class="shadow-md w-80 sticky top-32"
             >
               <SfAccordionItem
-                v-for="(cat, i) in categoryTree && categoryTree"
-                :key="i"
-                :header="cat.label"
+                :header="
+                  currentCategory !== null ? currentCategory.name : 'Loading'
+                "
               >
                 <template>
-                  <SfList class="list">
-                    <SfListItem class="list__item">
+                  <SfList class="list p-2">
+                    <!-- <SfListItem class="list__item">
                       <SfMenuItem :count="cat.count || ''" :label="cat.label">
                         <template #label>
                           <nuxt-link
@@ -150,25 +150,19 @@
                           </nuxt-link>
                         </template>
                       </SfMenuItem>
-                    </SfListItem>
+                    </SfListItem> -->
                     <SfListItem
                       class="list__item"
-                      v-for="(subCat, j) in cat.items"
+                      v-for="(subCat, j) in subcategories"
                       :key="j"
                     >
-                      <SfMenuItem
-                        :count="subCat.count || ''"
-                        :label="subCat.label"
-                      >
-                        <template #label="{ label }">
+                      <SfMenuItem>
+                        <template #label>
                           <nuxt-link
                             :to="'/s/' + subCat.slug"
-                            :class="
-                              subCat.isCurrent ? 'sidebar--cat-selected' : ''
-                            "
-                            class="text-secondary"
+                            class="text-secondary text-xs md:text-lg"
                           >
-                            {{ label }}
+                            {{ subCat.name }}
                           </nuxt-link>
                         </template>
                       </SfMenuItem>
@@ -226,38 +220,31 @@
               </h3>
               <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
               <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
-              <div
+              <!-- <div
                 v-for="(cat, i) in rawCategoryTree && rawCategoryTree"
                 :key="i"
-              >
-                <div
-                  v-if="cat.isCurrent === true && cat.slug === lastSlug"
-                  class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 mb-5"
-                >
-                  <div v-for="(sub, j) in cat.items" :key="j">
-                    <div class="">
-                      <nuxt-link :to="`/s/${sub.slug}`">
-                        <img
-                          :src="
-                            sub.featuredAsset
-                              ? sub.featuredAsset.preview
-                              : '/categories/empty_image.png'
-                          "
-                          class="w-full h-32 sm:h-48 object-cover shadow-xl hover:shadow-2xl transition duration-300"
-                        />
-                      </nuxt-link>
-                      <div class="mt-1">
-                        <h4
-                          :style="!isDarkMode ? '' : 'color: white'"
-                          class="text-secondary font-thin text-lg"
-                        >
-                          {{ sub.label }}
-                        </h4>
-                      </div>
+              > -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 mb-5">
+                <div v-for="subCat in subcategories" :key="subCat.slug">
+                  <div class="">
+                    <nuxt-link :to="`/s/${subCat.slug}`">
+                      <img
+                        :src="subCat.image"
+                        class="w-full h-32 sm:h-48 object-cover shadow-xl hover:shadow-2xl transition duration-300"
+                      />
+                    </nuxt-link>
+                    <div class="mt-1">
+                      <h4
+                        :style="!isDarkMode ? '' : 'color: white'"
+                        class="text-secondary font-thin text-lg"
+                      >
+                        {{ subCat.name }}
+                      </h4>
                     </div>
                   </div>
-                  <!-- </div> -->
-                  <!-- <div :v-for="sub in value.items">
+                </div>
+                <!-- </div> -->
+                <!-- <div :v-for="sub in value.items">
                                   <div class="max-w-sm rouned overflow-hidden shadow-xl">
                               
                                   <div class="m-4">
@@ -268,8 +255,8 @@
                                    
                       
                             </div> -->
-                </div>
               </div>
+              <!-- </div> -->
             </div>
 
             <!-- categoryTree.value[0]?.items -->
@@ -281,7 +268,7 @@
           >
             Products Under This Category
           </h3>
-          <div class="max-h-[53rem] overflow-auto nobar w-full">
+          <div class="max-h-[60rem] overflow-auto nobar w-full">
             <transition-group
               v-if="isCategoryGridView"
               appear
@@ -389,42 +376,6 @@
             </transition-group>
           </div>
 
-          <h3
-            v-if="bestSellings.length !== 0"
-            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
-          >
-            Shop Our Best Sellers
-          </h3>
-
-          <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
-            <div
-              class="card shadow-lg my-3 ml-2"
-              v-for="(i, index) in bestSellings"
-              :key="index"
-            >
-              <a :href="`/v/${i.slug}`">
-                <img
-                  :src="i.preview"
-                  alt=""
-                  class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
-                />
-              </a>
-              <h4 class="text-center m-3">{{ i.name }}</h4>
-              <h4 class="text-center m-3">{{ i.priceWithTax }}</h4>
-              <button>
-                <a :href="`/v/${i.slug}`"> View </a>
-              </button>
-              <!-- <p class="text-center m-3">description</p> -->
-              <div class="text-center">
-                <!-- <button
-                  class="my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-                >
-                  {{ $t('View All') }}
-                </button> -->
-              </div>
-            </div>
-          </div>
-
           <LazyHydrate on-interaction>
             <SfPagination
               v-if="!loading"
@@ -459,6 +410,53 @@
                 </SfSelectOption>
               </SfSelect>
             </LazyHydrate>
+          </div>
+
+          <h3
+            v-if="bestSellings.length !== 0"
+            class="font-bold text-secondary mt-12 pb-2 mb-10"
+          >
+            Shop Our Best Sellers
+          </h3>
+
+          <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
+            <div v-for="product in bestSellings" :key="product._id">
+              <ProductCard
+                v-e2e="'category-product-card'"
+                :title="product.name"
+                :image="product.images[0]"
+                :imageHeight="290"
+                :imageWidth="500"
+                :regular-price="product.price.current + ' ETB'"
+                :max-rating="5"
+                :score-rating="product.rating"
+                :show-add-to-cart-button="true"
+                :isInWishlist="isInWishlist({ product })"
+                :isAddedToCart="isInCart({ product })"
+                :link="localePath(`/v/${product.slug}`)"
+                @click:wishlist="
+                  !isInWishlist({ product })
+                    ? addItemToWishlist({ product })
+                    : removeItemFromWishlist({ product })
+                "
+                @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                class="carousel__item__product mb-5"
+              />
+              <!-- <a :href="`/v/${i.slug}`">
+                <img
+                  :src="i.preview"
+                  alt=""
+                  class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
+                />
+              </a>
+              <h4 class="text-center m-3">{{ i.name }}</h4>
+              <h4 class="text-center m-3">{{ i.priceWithTax }}</h4>
+              <button>
+                <a :href="`/v/${i.slug}`"> View </a>
+              </button>
+              <div class="text-center">
+              </div> -->
+            </div>
           </div>
         </div>
       </SfLoader>
@@ -572,10 +570,6 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
-    let sort = '';
-    if (process.env.client) {
-      sort = localStorage.getItem('sort');
-    }
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
@@ -756,7 +750,6 @@ export default {
       itemQuantity,
       rawCategoryTree,
       lastSlug,
-      sort,
     };
   },
   components: {
@@ -781,13 +774,21 @@ export default {
     ProductCard,
   },
   methods: {
-    async getProducts() {
+    async getActiveCategory() {
       const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
       const body = {
         query: `
         query getCategoriesProducts($slug: String!){
           collection(slug: $slug){
+            name
+            children{
+              name
+              slug
+              featuredAsset{
+                preview
+              }
+            }
             products{
               id
               name
@@ -818,7 +819,9 @@ export default {
         },
       };
       await axios.post(baseUrl, body, options).then((res) => {
-        const products = res.data.data.collection?.products?.map((product) => {
+        this.currentCategory = res.data.data.collection;
+        console.log('mkii', this.currentCategory);
+        const products = this.currentCategory?.products?.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
             cref.push(String(x.id));
@@ -853,10 +856,7 @@ export default {
         query: `
         query{
           bestSellersInCategory{
-            name
-            preview
             slug
-            priceWithTax
           }
         }
         `,
@@ -867,20 +867,101 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      const bestSeller = await axios.post(baseUrl, body, options);
-      this.bestSellings = bestSeller.data.data.bestSellersInCategory;
-      console.log('ddddddddjjjjjjjjjjjj', bestSeller);
+      const bestseller = await axios.post(baseUrl, body, options);
+      const slugs = bestseller.data.data.bestSellersInCategory.map((bs) => {
+        let x = [];
+        x.push(bs?.slug);
+        return x;
+      });
+      const STRSlug = [];
+      const a = slugs.forEach((s) => {
+        STRSlug.push(s[0]);
+      });
+      const pbody = {
+        query: `
+        query BSProducts($in: [String!]!) {
+          products(options: {filter: {slug: {in: $in}}}) {
+            items {
+              id
+              name
+              slug
+              description
+              featuredAsset {
+                preview
+              }
+              variants {
+                id
+                price
+              }
+              collections {
+                id
+              }
+              customFields {
+                reviewRating
+              }
+            }
+          }
+        }`,
+        variables: {
+          in: STRSlug,
+        },
+      };
+      await axios.post(baseUrl, pbody, options).then((res) => {
+        const produ = res.data.data.products?.items.map((product) => {
+          let cref = [];
+          product?.collections?.forEach((x) => {
+            cref.push(String(x.id));
+          });
+          const image = [String(product?.featuredAsset?.preview)];
+          const price =
+            String(product?.variants[0]?.price).slice(0, -2) +
+            '.' +
+            String(product?.variants[0]?.price).slice(-2);
+          const prod = {
+            _id: product?.id,
+            _variantId: product?.variants[0]?.id,
+            _description: product.description,
+            _categoriesRef: cref,
+            name: product.name,
+            images: image,
+            price: {
+              original: price,
+              current: price,
+            },
+            slug: product.slug,
+            rating: product?.customFields?.reviewRating,
+          };
+          return prod;
+        });
+        this.bestSellings = produ;
+        console.log('minini', this.bestSellings);
+      });
     },
   },
   created() {
-    this.getProducts();
+    this.getActiveCategory();
     this.getBestSellersCategory();
+    this.sort = localStorage.getItem('sort');
   },
   data() {
     return {
       allProducts: [],
       bestSellings: [],
+      currentCategory: null,
+      sort: '',
     };
+  },
+  computed: {
+    subcategories() {
+      const subs = this.currentCategory?.children.map((sub) => {
+        return {
+          name: sub?.name,
+          slug: sub?.slug,
+          image: sub.featuredAsset?.preview || '/categories/empty_image.png',
+        };
+      });
+      return subs;
+    },
   },
 };
 </script>
