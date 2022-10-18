@@ -16,10 +16,25 @@
       class="sf-header-navigation-item__item sf-header-navigation-item__item--mobile"
     >
       <slot name="mobile-navigation-item">
-        <SfMenuItem :label="label" @mouseOver = 'hoverHandler(label)' class="sf-header-navigation-item__menu-item">
-          {{ label}}
-        </SfMenuItem>
-        <DropDownMenu class="overlay" :main="label"  :subnavList="$props.subnavList"/>
+        <!-- <SfMenuItem
+          :label="label"
+          @mouseOver="hoverHandler(label)"
+          class="sf-header-navigation-item__menu-item text-lg"
+        >
+          {{ label }}
+        </SfMenuItem> -->
+        <h1
+          @mouseOver="hoverHandler(label)"
+          class="text-lg font-bold text-secondary"
+        >
+          {{ label }}
+        </h1>
+
+        <DropDownMenu
+          class="overlay"
+          :main="label"
+          :subnavList="$props.subnavList"
+        />
         <!-- <div > -->
         <!-- </div> -->
       </slot>
@@ -48,9 +63,9 @@ export default {
     subnavList: Array,
   },
   methods: {
-    hoverHandler:(label)=>{
-      console.log('hover started ***')
-    }
+    hoverHandler: (label) => {
+      console.log('hover started ***');
+    },
   },
 };
 </script>
@@ -109,6 +124,6 @@ export default {
   /* border: 0.1px solid var(--c-bg-primary) !important; */
   box-shadow: 1px rgb(0, 0, 0, 0.2);
   border: solid 1px gray;
-  z-index: 1 !important;
+  z-index: 10 !important;
 }
 </style>

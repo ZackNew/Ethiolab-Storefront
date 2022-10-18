@@ -8,7 +8,7 @@
       v-for="product in filteredProducts"
       :key="product.id"
     >
-      <nuxt-link :to="'/v/' + product.slug">
+      <nuxt-link :to="{ path: '/v/' + product.slug, query: { private: true } }">
         <LazyHydrate>
           <img
             class="object-cover h-52 w-72 md:w-48 rounded-t-lg m-2"
@@ -17,7 +17,7 @@
           />
         </LazyHydrate>
       </nuxt-link>
-      <nuxt-link :to="'/v/' + product.slug">
+      <nuxt-link :to="{ path: '/v/' + product.slug, query: { private: true } }">
         <div class="shadowInner m-1">
           <h4
             class="text-center font-serif m-3 text-xs md:text-xl max-h-[6rem] overflow-scroll nobar"
@@ -33,7 +33,7 @@
         <button class="mb-4">
           <nuxt-link
             class="text-xs md:text-base bg-dark text-white font-bold py-2 px-4 rounded"
-            :to="'/v/' + product.slug"
+            :to="{ path: '/v/' + product.slug, query: { private: true } }"
           >
             {{ $t('View All') }}
           </nuxt-link>

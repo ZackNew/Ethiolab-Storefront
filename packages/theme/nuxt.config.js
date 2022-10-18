@@ -6,10 +6,11 @@ export default {
   server: {
     port: process.env.PORT || 3001,
     host: '0.0.0.0',
-    // protocol:'https'
+    protocol: 'https',
   },
   env: {
-    GRAPHQL_API: process.env.GRAPHQL_API || 'http://localhost:3000/shop-api'
+    GRAPHQL_API: process.env.GRAPHQL_API || 'http://localhost:3000/shop-api',
+    GRAPHQL: process.env.GRAPHQL || 'http://localhost:3000',
   },
   head: {
     title: 'Ethio Labs',
@@ -19,39 +20,34 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
+        content: process.env.npm_package_description || '',
       },
       {
         'http-equiv': 'Content-Security-Policy',
-        content: 'upgrade-insecure-requests'
+        content: 'upgrade-insecure-requests',
       },
-
-
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
-        rel: "preconnect",
-        href: "https://fonts.googleapis.com",
-        crossorigin: "anonymous"
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+        crossorigin: 'anonymous',
       },
       {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com/",
-        crossorigin: "anonymous"
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com/',
+        crossorigin: 'anonymous',
       },
       {
-        rel: "stylesheet",
-        href:
-        "https://fonts.googleapis.com/css2?family=Alumni+Sans+Collegiate+One&family=Dancing+Script&family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap",
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Alumni+Sans+Collegiate+One&family=Dancing+Script&family=Josefin+Sans&family=Roboto&family=Roboto+Slab&display=swap',
       },
-    ]
+    ],
   },
   loading: { color: '#fff' },
   plugins: [],
-  css: [
-    '@/assets/styles.scss'
-  ],
+  css: ['@/assets/styles.scss'],
   buildModules: [
     // to core
     '@nuxt/typescript-build',
@@ -66,9 +62,9 @@ export default {
         // @core-development-only-end
         useRawSource: {
           dev: ['@vue-storefront/vendure', '@vue-storefront/core'],
-          prod: ['@vue-storefront/vendure', '@vue-storefront/core']
-        }
-      }
+          prod: ['@vue-storefront/vendure', '@vue-storefront/core'],
+        },
+      },
     ],
     // @core-development-only-start
     [
@@ -77,33 +73,37 @@ export default {
         generate: {
           replace: {
             apiClient: '@vue-storefront/vendure-api',
-            composables: '@vue-storefront/vendure'
-          }
+            composables: '@vue-storefront/vendure',
+          },
         },
-        routes: false
-      }
+        routes: false,
+      },
     ],
     // @core-development-only-end
     /* project-only-start
     ['@vue-storefront/nuxt-theme'],
     project-only-end */
-    ['@vue-storefront/vendure/nuxt', {
-      i18n: { useNuxtI18nConfig: true }
-    }],
+    [
+      '@vue-storefront/vendure/nuxt',
+      {
+        i18n: { useNuxtI18nConfig: true },
+      },
+    ],
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
-    '@nuxt/postcss8'
+    '@nuxt/postcss8',
   ],
   auth: {
     redirect: false,
     strategies: {
       google: {
-   //   scope: ['profile', 'email'],
-   //accessType: 'offline',
-        clientId: '1026633699260-dsqo7t7ucf6km4ktb1340fs2l7ao97rb.apps.googleusercontent.com',
+        //   scope: ['profile', 'email'],
+        //accessType: 'offline',
+        clientId:
+          '1026633699260-dsqo7t7ucf6km4ktb1340fs2l7ao97rb.apps.googleusercontent.com',
         codeChallengeMethod: '',
-        responseType: 'code' ,
-       redirectUri: 'http://localhost:3001/login'
+        responseType: 'code',
+        redirectUri: 'http://localhost:3001/login',
       },
       facebook: {
         // endpoints: {
@@ -112,32 +112,39 @@ export default {
         responseType: 'code',
         clientId: '980997845873215',
         scope: ['public_profile', 'email'],
-        redirectUri: 'http://localhost:3001/login_facebook'
-      }
-    }
+        redirectUri: 'http://localhost:3001/login_facebook',
+      },
+    },
   },
   modules: [
-    ['nuxt-i18n', {
-      baseUrl: process.env.BASE_URL || 'http://10.10.20.55:3000'
-    }],
+    [
+      'nuxt-i18n',
+      {
+        baseUrl: process.env.BASE_URL || 'http://10.10.20.55:3000',
+      },
+    ],
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
-    'nuxt-user-agent'
+    'nuxt-user-agent',
   ],
   i18n: {
     currency: 'ETB',
     country: 'UETS',
     countries: [
-      { name: 'ET', label: 'Ethiopia', states: ['Tigray', 'Benshangul', 'Amhara', 'Oromia'] }
+      {
+        name: 'ET',
+        label: 'Ethiopia',
+        states: ['Tigray', 'Benshangul', 'Amhara', 'Oromia'],
+      },
     ],
     currencies: [
       { name: 'ETB', label: 'Birr' },
-      { name: 'USD', label: 'Dollar' }
+      { name: 'USD', label: 'Dollar' },
     ],
     locales: [
       { code: 'en', label: 'English', file: 'en.js', iso: 'en' },
-      { code: 'am', label: 'Amharic', file: 'am.js', iso: 'am' }
+      { code: 'am', label: 'Amharic', file: 'am.js', iso: 'am' },
     ],
     defaultLocale: 'en',
     lazy: true,
@@ -151,78 +158,77 @@ export default {
           currency: {
             style: 'currency',
             currency: 'ETB',
-            currencyDisplay: 'symbol'
-          }
+            currencyDisplay: 'symbol',
+          },
         },
         am: {
           currency: {
             style: 'currency',
             currency: 'ETB',
-            currencyDisplay: 'symbol'
-          }
-        }
-      }
-    }
+            currencyDisplay: 'symbol',
+          },
+        },
+      },
+    },
   },
   styleResources: {
     scss: [
       require.resolve('@storefront-ui/shared/styles/_helpers.scss', {
-        paths: [process.cwd()]
-      })
-    ]
+        paths: [process.cwd()],
+      }),
+    ],
   },
   router: {
     extendRoutes(routes) {
-      getRoutes(`${__dirname}/_theme`)
-        .forEach((route) => routes.unshift(route));
+      getRoutes(`${__dirname}/_theme`).forEach((route) =>
+        routes.unshift(route)
+      );
     },
-    middleware: ['checkout']
+    middleware: ['checkout'],
   },
   publicRuntimeConfig: {
-    theme
+    theme,
   },
   build: {
     postcss: {
       plugins: {
         tailwindcss: {},
-        autoprefixer: {}
-      }
+        autoprefixer: {},
+      },
     },
     babel: {
       plugins: [
-        ['@babel/plugin-proposal-private-property-in-object', { loose: true }]
-      ]
+        ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+      ],
     },
-    transpile: [
-      'vee-validate/dist/rules'
-    ],
+    transpile: ['vee-validate/dist/rules'],
     plugins: [
       new webpack.DefinePlugin({
         'process.VERSION': JSON.stringify({
           // eslint-disable-next-line global-require
           version: require('./package.json').version,
-          lastCommit: process.env.LAST_COMMIT || ''
-        })
-      })
-    ]
+          lastCommit: process.env.LAST_COMMIT || '',
+        }),
+      }),
+    ],
   },
   pwa: {
     meta: {
       // eslint-disable-next-line camelcase
-      theme_color: '#5ECE7B'
-    }
+      theme_color: '#5ECE7B',
+    },
   },
   googleFonts: {
     families: {
       Raleway: {
         wght: [300, 400, 500, 600, 700],
-        ital: [400]
+        ital: [400],
       },
       Roboto: {
         wght: [300, 400, 500, 700],
-        ital: [300, 400]
-      }
+        ital: [300, 400],
+      },
     },
-    display: 'swap'
-  }
+    display: 'swap',
+  },
 };

@@ -1,5 +1,8 @@
 <template>
-  <div class="sf-header__navigation desktop" v-if="!isMobile">
+  <div
+    v-if="!isMobile"
+    class="grid grid-cols-4 gap-20 pt-4 w-full desktop pl-[15%] pr-[15%]"
+  >
     <!-- <HeaderNavigationItem
         v-for="(category, index) in categories"
         :key="index"

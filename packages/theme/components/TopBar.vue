@@ -5,7 +5,7 @@
     </template>
     <template #center>
       <div class="flex items-center gap-20">
-        <DropdownNavigationItem
+        <!-- <DropdownNavigationItem
           v-for="category in headerNavigation"
           :key="category.name"
           class="nav-item"
@@ -14,7 +14,35 @@
           :link="localePath(category.link)"
           :link-class="category.linkClass"
           :button="category.button"
-        />
+        /> -->
+        <nuxt-link :to="'/pages/helpAndFAQ/'"
+          ><h1 class="text-sm text-white hover:scale-110 font-semibold">
+            Help
+          </h1></nuxt-link
+        >
+        <nuxt-link :to="'/pages/contact'"
+          ><h1 class="text-sm text-white hover:scale-110 font-semibold">
+            Contact us
+          </h1></nuxt-link
+        >
+        <a href="#">
+          <h1 class="text-sm text-white hover:scale-110 font-semibold">
+            {{ phoneNumber }}
+          </h1>
+        </a>
+        <a href="https://www.ethiolab.et/">
+          <h1
+            class="bg-white text-secondary px-2 py-0.5 rounded text-sm hover:scale-110"
+          >
+            Website
+          </h1>
+        </a>
+        <nuxt-link :to="'#'">
+          <h1 class="text-sm text-white hover:scale-110 flex font-semibold">
+            <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
+            MY ACCOUNT
+          </h1>
+        </nuxt-link>
       </div>
     </template>
     <template #right>
@@ -25,7 +53,7 @@
 </template>
 
 <script>
-import { SfButton, SfTopBar } from '@storefront-ui/vue';
+import { SfButton, SfTopBar, SfIcon } from '@storefront-ui/vue';
 import LocaleSelector from './LocaleSelector.vue';
 import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import ThemeChanger from './ThemeChanger.vue';
@@ -37,6 +65,7 @@ export default {
     SfButton,
     LocaleSelector,
     DropdownNavigationItem,
+    SfIcon,
   },
   computed: {
     headerNavigation() {
@@ -52,6 +81,11 @@ export default {
         { name: 'Request a Quote', link: '/WriteAQuote' },
       ];
       return navigation;
+    },
+    phoneNumber() {
+      return this.$store.state.companyDetails.companyInformation?.phone_number.split(
+        ';'
+      )[0];
     },
   },
   setup() {
