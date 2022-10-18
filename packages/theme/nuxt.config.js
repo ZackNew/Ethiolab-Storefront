@@ -226,9 +226,12 @@ export default {
     },
     display: 'swap'
   },
-  serverMiddleware: [
-    { path: '/api/hook', handler: '~/api/hook.js' },
-    { path: '/api/axios', handler: '~/api/axios.js' }
+  // serverMiddleware: [
+  //   { path: '/api/hook', handler: '~/api/hook.js' },
+  //   { path: '/api/axios', handler: '~/api/axios.js' }
 
-  ]
+  // ]
+  serverMiddleware: [
+    '~/api/index.js'
+  ],
 };

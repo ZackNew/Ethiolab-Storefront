@@ -481,7 +481,7 @@ export default {
           //         });
 
               axios
-                      .post("/api/axios", requestMessage)
+                      .post("/api/test", requestMessage)
                       .then(res => {
                         console.log("local response is ", res);
                           if (res.status == 200 && res.data.data.code == 200) {
