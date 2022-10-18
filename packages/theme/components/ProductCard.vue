@@ -218,7 +218,7 @@
       </SfButton> -->
       <nuxt-link :to="link">
         <h1
-          :class="`mx-3 mt-1 text-center text-secondary md:min-h-[3rem] text-xs md:text-base text-extrathin md:min-w-${imageWidth}`"
+          :class="`mx-3 mt-1 text-center text-secondary md:min-h-[4rem] text-xs md:text-base text-extrathin md:min-w-${imageWidth}`"
         >
           {{ title }}
         </h1>
