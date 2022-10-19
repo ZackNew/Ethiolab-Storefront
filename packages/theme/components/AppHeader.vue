@@ -16,7 +16,7 @@
           <template #logo>
             <nuxt-link :to="localePath('/')">
               <SfImage
-                :src="logo"
+                :src="logo || ''"
                 alt="EthioLab"
                 width="400"
                 class="sf-header__logo-image"

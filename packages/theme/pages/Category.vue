@@ -295,7 +295,7 @@
                       ? addItemToWishlist({ product })
                       : removeItemFromWishlist({ product })
                   "
-                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                  @click:add-to-cart="addItemToCart({ product, quantity: 3 })"
                   class="carousel__item__product mb-5"
                 />
               </div>
@@ -595,6 +595,9 @@ export default {
     const sortBy = computed(() =>
       facetGetters.getSortOptions(searchResult.value)
     );
+    const sorting = function () {
+      th.changeSorting;
+    };
     const facets = computed(() => facetGetters.getGrouped(searchResult.value));
     const products = computed(() =>
       facetGetters.getProducts(searchResult.value)
