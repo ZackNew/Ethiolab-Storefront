@@ -295,7 +295,7 @@
                       ? addItemToWishlist({ product })
                       : removeItemFromWishlist({ product })
                   "
-                  @click:add-to-cart="addItemToCart({ product, quantity: 3 })"
+                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
                   class="carousel__item__product mb-5"
                 />
               </div>
