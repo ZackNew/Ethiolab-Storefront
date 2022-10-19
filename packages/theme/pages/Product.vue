@@ -64,7 +64,7 @@
           ></div>
           <a style="color: blue" href="#full-description">MORE +</a>
           <iframe
-            width="560"
+            width="520"
             height="315"
             :src="`https://www.youtube-nocookie.com/embed/${youtube_link}?playlist=${youtube_link}&loop=1&controls=0`"
             title="YouTube video player"
@@ -214,6 +214,7 @@ import {
   SfColor,
 } from '@storefront-ui/vue';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
+import Gallery from '../components/Gallery.vue';
 import MyReview from '~/components/MyAccount/MyReview.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
@@ -631,6 +632,7 @@ export default {
     MobileStoreBanner,
     LazyHydrate,
     MyReview,
+    Gallery,
   },
   data() {
     return {

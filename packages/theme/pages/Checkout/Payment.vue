@@ -1,10 +1,13 @@
 <template>
-  <div>
-    <SfHeading
+  <div id="checkout">
+    <div class="checkout">
+    <div class="checkout__main"> 
+      <SfHeading
       :level="3"
       :title="$t('Payment')"
       class="sf-heading--left sf-heading--no-underline title"
     />
+
     <SfTable class="sf-table--bordered table desktop-only">
       <SfTableHeading class="table__row">
         <SfTableHeader class="table__header table__image">{{ $t('Item') }}</SfTableHeader>
@@ -84,7 +87,7 @@
             Click me
           </button> -->
 
-          <div v-if="paymentMethod && paymentMethod.name == 'Abyssinia Cybersource Hosted Checkout' " class="cyberForm"> 
+          <div v-if="paymentMethod && paymentMethod.name == 'Cybersource' " class="cyberForm"> 
 
            <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/pay" target="_blank" method="post">
             <input id="access_key" type="hidden"  name="access_key" v-model="paymentDetail.access_key">
@@ -100,7 +103,7 @@
             <input id="currency" type="hidden"  name="currency" v-model="paymentDetail.currency">
             <input id="signature" type="hidden"  name="signature" v-model="paymentDetail.signature">
 
-          <br></br>  <input type="submit" id="submit" name="submit" value="Confirm"  class="box-border relative flex h-16 w-48 align-center justify-center p-4 text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold -mt-12">
+          <br></br>  <input type="submit" id="submit" name="submit" value="PAY WITH CYBERSOURCE"  class="box-border relative flex h-12 pl-4 pr-4  align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold -mt-12">
   
           </form>     
 
@@ -117,11 +120,37 @@
             {{ $t('Pay with Telebirr') }}
           </SfButton>
           </div>
+
+          <div v-if="paymentMethod && paymentMethod.name == 'Cash' " class="box-border relative flex h-12 pl-4 pr-4 pt-2  align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold "> 
+            <p>Pay in Cash with Order ID #{{cart.code}}</p>
+          </div>
       
         </div>
       </div>
     </div>
+    </div>
+
+    <div
+        class="checkout__aside desktop-only"
+      >
+        <transition name="fade">
+          <CartPreview key="order-summary" />
+            
+        </transition>
+        <div class="highlighted promo-code">
+                      <SfInput
+                        v-model="promoCode"
+                        name="promoCode"
+                        :label="$t('Enter promo code')"
+                        class="sf-input--filled promo-code__input"
+                      />
+                      <SfButton class="promo-code__button" @click="applyPromoCode">{{ $t('Apply') }}</SfButton>
+              </div>
+      </div>
+   
   </div>
+  </div>
+  
 </template>
 
 <script>
@@ -136,7 +165,8 @@ import {
   SfPrice,
   SfProperty,
   SfAccordion,
-  SfLink
+  SfLink,
+  SfInput
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
 import { ref, computed, onMounted , onBeforeMount} from '@vue/composition-api';
@@ -151,6 +181,7 @@ import Vue from 'vue';
 // import VueAxios from 'vue-axios';
 import { mapAddressFormToOrderAddress, COUNTRIES, getDefaultAddress, mapAddressToAddressForm } from '~/helpers';
 import NodeRSA from "node-rsa";
+import CartPreview from '~/components/Checkout/CartPreview.vue';
 
 // Vue.use(VueAxios, axios);
 
@@ -169,33 +200,12 @@ export default {
     SfProperty,
     SfAccordion,
     SfLink,
-    VsfPaymentProvider: () => import('~/components/Checkout/VsfPaymentProvider')
-  },
-  async fetch() {
-    console.log("fetchhhhhh");
-
-    if(req.method == "GET"){
-      const body = []
-    req.on('ACCEPT', (chunk) => {
-      body.push(chunk)
-    })
-    console.log("body accept ", body);
-    }
-  //   if(event.type == "ACCEPT"){
-  //     console.log("payment is accepted")
-  //   }
-  //  else if(event.type == "REVIEW"){
-  //     console.log("payment is Review")
-  //   } else if(event.type == "Decline"){
-  //     console.log("payment is delined")
-  //   } else if(event.type == "ERROR"){
-  //     console.log("payment is error")
-  //   } else if(event.type == "CANCEL"){
-  //     console.log("payment is canceled")
-  //   }
-  },
+    SfInput,
+    VsfPaymentProvider: () => import("~/components/Checkout/VsfPaymentProvider"),
+    CartPreview
+},
   setup(props, context) {
-    const { cart, load, setCart } = useCart();
+    const { cart, load, setCart ,applyCoupon} = useCart();
     const { loading } = useMakeOrder();
     const { set } = usePayment();
     
@@ -211,9 +221,13 @@ export default {
     let paymentDetail = {};
     let SECRET_KEY = ""
     let url =""
+    const promoCode = ref('');
+
     onSSR(async () => {
       await load();
     });
+
+ 
 
     onMounted(() => {
       console.log("the usecart cart value is ", cart);
@@ -225,7 +239,6 @@ export default {
     onBeforeMount(() => {
 
      url = "https://testsecureacceptance.cybersource.com/pay";
-    // const date = moment()
      SECRET_KEY = "c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7";
     paymentDetail.access_key = "98e9854d57563c34843c61c09e13f17c";
     paymentDetail.profile_id = "09D76F9D-C5BB-4A5F-8D1E-4E3F2A757AD9";
@@ -235,20 +248,12 @@ export default {
     paymentDetail.signed_date_time = moment.utc(time).format('YYYY-MM-DDTHH:mm:ss[Z]');
     paymentDetail.locale = "en";
     paymentDetail.transaction_type = "authorization";
-    // paymentDetail.reference_number = new Date().getTime();
     paymentDetail.reference_number = cart.value.code;
-
-    
     paymentDetail.amount = (cart?.value?.totalWithTax/100).toFixed(2).toString();
     paymentDetail.currency = "ETB";
     paymentDetail.signature = "";
     paymentDetail.submit = "Submit";
 
-    // let key =  signData(buildDataToSign(paymentDetail), SECRET_KEY);
-    // sign = key;
-    // paymentDetail.signature = "111111aaaa";
-
-    // console.log("finalyyyyy", paymentDetail.signature)
 
     let signedFieldNames = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
       // console.log("the signed field names are ", signedFieldNames)
@@ -274,6 +279,31 @@ export default {
       // console.log("paymentmethod id ", method);
     };
 
+    const applyPromoCode =async () => {
+      console.log("processing promo code ", promoCode);
+    const result  = await applyCoupon({ couponCode: promoCode.value, currentCart: cart.value })
+
+    paymentDetail.amount = (cart?.value?.totalWithTax/100).toFixed(2).toString();
+    paymentDetail.signature = "";
+
+   
+    let signedFieldNames = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
+ 
+      let params = signedFieldNames.split(",");
+      let dataToSign = [];
+
+      params.forEach(param => {
+        dataToSign.push(param+"="+paymentDetail[param]);
+        
+      });
+
+      let data = dataToSign.join();
+
+      var hash = CryptoJS.HmacSHA256(data, SECRET_KEY);
+      var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+      paymentDetail.signature = hashInBase64;
+    
+    }
     const processOrder = async () => {
       const response = await set({
         method: paymentMethod?.value?.code,
@@ -461,24 +491,7 @@ export default {
         ////////////////////////////////STEP 7//////////////////////////////////////
 
         const api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
-              // const options = {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Access-Control-Allow-Origin': '*',
-      //   },
-      // };
-          //       const instance = axios.create({
-          //   baseURL: 'http://196.188.120.3:11443/service-openup/toTradeWebPay',
-          //   // timeout: 1000,
-          //   // headers: {'X-Custom-Header': 'foobar'}
-          // });
 
-          // const instance = axios.create({
-          //           // url: '/service-openup/toTradeWebPay',
-          //           baseURL: 'http://196.188.120.3:11443',
-          //           // method: 'POST',
-          //           // timeout: 1000
-          //         });
 
               axios
                       .post("/api/test", requestMessage)
@@ -495,62 +508,17 @@ export default {
                           console.error(error);
                       });
 
-        //       await this.$axios
-        // .post("/service-openup/toTradeWebPay", requestMessage)
-        // .then((res) => {
-        //   if (res.status == 200 && res.data.code == 200) {
-        //     rsp.redirect(res.data.data.toPayUrl);
-        //   } else {
-        //     console.error(res.data.message);
-        //   }
-        // })
-        // .catch((error) => {
-        //   console.error(error);
-        // });
-    }
-
-    const buildDataToSign = async (paymentDetail) => {
-      let signedFieldNames =await  paymentDetail.signed_field_names;
-      console.log("the signed field names are ", signedFieldNames)
-      let params = signedFieldNames.split(",");
-      let dataToSign = [];
-
-      params.forEach(param => {
-        dataToSign.push(param+"="+paymentDetail[param]);
-        
-      });
-      console.log("before comma", dataToSign)
-      return commaSeparate(dataToSign);
-
 
     }
 
-    const commaSeparate = async (dataToSign) => {
-      console.log("after comma", dataToSign.join())
-      return dataToSign.join();
-      
-    }
-
-    const signData =  (data,key) => {
-      console.log("the incoming value is ", "data", data, "key", key);
-      // const b64 = CryptoJS.AES.encrypt(JSON.stringify(data), key).toString()
-      // const e64 = CryptoJS.enc.Base64.parse(b64)
-
-      // const sign = CryptoJS.HmacSHA256(data, key).toString(CryptoJS.enc.Hex)
-      var hash = CryptoJS.HmacSHA256(data, key);
-  var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
-      // console.log("the final key string value is ", sign.toString(CryptoJS.enc.Hex))
-      return hashInBase64 
-      
-    }
-
-
+   
 
     return {
       terms,
       loading,
       products: computed(() => cartGetters.getItems(cart.value)),
       totals: computed(() => cartGetters.getTotals(cart.value)),
+      cart: computed(() => cart.value),
       tableHeaders: ['Description', 'Quantity', 'Amount'],
       cartGetters,
       processOrder,
@@ -559,7 +527,9 @@ export default {
       paymentDetail,
       url,
       sign,
-      processTelebirr
+      processTelebirr,
+      applyPromoCode,
+      promoCode
     };
   }
 };
@@ -682,6 +652,65 @@ export default {
   }
   &__label {
     font-weight: var(--font-weight--normal);
+  }
+}
+
+#checkout {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+}
+.checkout {
+  @include for-desktop {
+    display: flex;
+  }
+  &__main {
+    @include for-desktop {
+      flex: 1;
+      padding: var(--spacer-xl) 0 0 0;
+      // margin-right: 100px;
+      min-width: 85%;
+    }
+  }
+  &__aside {
+    @include for-desktop {
+      flex: 0 0 25.5rem;
+      margin: 0 0 0 4.25rem;
+    }
+  }
+  // &__steps {
+  //   --steps-content-padding: 0 var(--spacer-base);
+  //   ::v-deep .sf-steps__step.is-done  {
+  //     color: var(--c-primary);
+  //   }
+  //   @include for-desktop {
+  //     --steps-content-padding: 0;
+  //   }
+  // }
+}
+
+.highlighted {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: var(--c-light);
+  padding: var(--spacer-xl) var(--spacer-xl) 0;
+  &:last-child {
+    padding-bottom: var(--spacer-xl);
+  }
+}
+
+.promo-code {
+  display: flex;
+  align-items: flex-start;
+  &__button {
+    --button-width: 6.3125rem;
+    --button-height: var(--spacer-lg);
+  }
+  &__input {
+    --input-background: var(--c-white);
+    flex: 1;
   }
 }
 </style>

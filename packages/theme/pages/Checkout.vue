@@ -23,7 +23,7 @@
         class="checkout__aside desktop-only"
       >
         <transition name="fade">
-          <CartPreview key="order-summary" />
+          <!-- <CartPreview key="order-summary" /> -->
         </transition>
       </div>
     </div>

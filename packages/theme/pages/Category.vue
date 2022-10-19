@@ -1,105 +1,113 @@
 <template>
   <div id="category">
-    <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    />
-    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
-      <ol class="sf-breadcrumbs__list">
-        <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
-            Home
-          </nuxt-link>
-        </li>
-        <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          {{ categoryTreeMain ? categoryTreeMain : 'Loading' }}
-        </li>
-      </ol>
-    </nav>
-    <div class="navbar section">
-      <div class="navbar__aside desktop-only">
-        <LazyHydrate never>
-          <SfHeading
+    <div class="sticky bg-whole_bg">
+      <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+        <ol class="sf-breadcrumbs__list">
+          <li class="sf-breadcrumbs__list-item" :aria-current="false">
+            <nuxt-link
+              class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+              to="/"
+            >
+              Home
+            </nuxt-link>
+          </li>
+          <li class="sf-breadcrumbs__list-item" :aria-current="false">
+            <p class="text-secondary font-bold">
+              {{ currentCategory !== null ? currentCategory.name : 'Loading' }}
+            </p>
+          </li>
+        </ol>
+      </nav>
+      <div class="navbar section">
+        <div class="navbar__aside desktop-only">
+          <LazyHydrate never>
+            <!-- <SfHeading
             :level="3"
             :title="$t('Categories')"
-            class="navbar__title"
-          />
-        </LazyHydrate>
-      </div>
-
-      <div class="navbar__main">
-        <LazyHydrate on-interaction>
-          <SfButton
-            class="sf-button--text navbar__filters-button"
-            :aria-label="$t('Filters')"
-            @click="toggleFilterSidebar"
-          >
-            <SfIcon
-              size="24px"
-              color="dark-secondary"
-              icon="filter2"
-              class="navbar__filters-icon"
-            />
-            {{ $t('Filters') }}
-          </SfButton>
-        </LazyHydrate>
-
-        <div class="navbar__sort desktop-only">
-          <span class="navbar__label">{{ $t('Sort by') }}:</span>
-          <LazyHydrate on-interaction>
-            <SfSelect
-              :style="!isDarkMode ? '' : 'background-color: #182533'"
-              :value="sortBy.selected"
-              :placeholder="sort"
-              class="navbar__select"
-              @input="th.changeSorting"
-            >
-              <SfSelectOption
-                :style="!isDarkMode ? '' : 'background-color: #182533'"
-                v-for="option in sortBy.options"
-                :key="option.id"
-                :value="option.id"
-                class="sort-by__option"
-                >{{ option.value }}</SfSelectOption
-              >
-            </SfSelect>
+            class="navbar__title text-secondary"
+          /> -->
+            <h1 class="text-secondary font-bold text-3xl">Categories</h1>
           </LazyHydrate>
         </div>
 
-        <div class="navbar__counter">
-          <span class="navbar__label desktop-only"
-            >{{ $t('Products found') }}:
-          </span>
-          <span class="desktop-only">{{ pagination.totalItems }}</span>
-          <span class="navbar__label smartphone-only"
-            >{{ pagination.totalItems }} {{ $t('Items') }}</span
-          >
-        </div>
+        <div class="navbar__main">
+          <LazyHydrate on-interaction>
+            <SfButton
+              class="sf-button--text navbar__filters-button text-secondary"
+              :aria-label="$t('Filters')"
+              @click="toggleFilterSidebar"
+            >
+              <SfIcon
+                size="24px"
+                color="dark-secondary"
+                icon="filter2"
+                class="navbar__filters-icon"
+              />
+              {{ $t('Filters') }}
+            </SfButton>
+          </LazyHydrate>
 
-        <div class="navbar__view">
-          <span class="navbar__view-label desktop-only">{{ $t('View') }}</span>
-          <SfIcon
-            v-e2e="'tiles-icon'"
-            class="navbar__view-icon"
-            :color="isCategoryGridView ? '#b6932f' : 'dark-secondary'"
-            icon="tiles"
-            size="12px"
-            role="button"
-            :aria-label="$t('Change to grid view')"
-            :aria-pressed="isCategoryGridView"
-            @click="changeToCategoryGridView"
-          />
-          <SfIcon
-            v-e2e="'list-icon'"
-            class="navbar__view-icon"
-            :color="!isCategoryGridView ? '#b6932f' : 'dark-secondary'"
-            icon="list"
-            size="12px"
-            role="button"
-            :aria-label="$t('Change to list view')"
-            :aria-pressed="!isCategoryGridView"
-            @click="changeToCategoryListView"
-          />
+          <div class="navbar__sort desktop-only">
+            <span class="navbar__label text-secondary"
+              >{{ $t('Sort by') }}:</span
+            >
+            <LazyHydrate on-interaction>
+              <SfSelect
+                :style="!isDarkMode ? '' : 'background-color: #182533'"
+                :value="sortBy.selected"
+                :placeholder="sort"
+                class="navbar__select"
+                @input="th.changeSorting"
+              >
+                <SfSelectOption
+                  :style="!isDarkMode ? '' : 'background-color: #182533'"
+                  v-for="option in sortBy.options"
+                  :key="option.id"
+                  :value="option.id"
+                  class="sort-by__option"
+                  >{{ option.value }}</SfSelectOption
+                >
+              </SfSelect>
+            </LazyHydrate>
+          </div>
+
+          <div class="navbar__counter">
+            <span class="navbar__label desktop-only text-secondary"
+              >{{ $t('Products found') }}:
+            </span>
+            <span class="desktop-only">{{ allProducts.length }}</span>
+            <span class="navbar__label smartphone-only text-secondary"
+              >{{ allProducts.length }} {{ $t('Items') }}</span
+            >
+          </div>
+
+          <div class="navbar__view">
+            <span class="navbar__view-label desktop-only text-secondary">{{
+              $t('View')
+            }}</span>
+            <SfIcon
+              v-e2e="'tiles-icon'"
+              class="navbar__view-icon"
+              :color="isCategoryGridView ? '#b6932f' : 'dark-secondary'"
+              icon="tiles"
+              size="12px"
+              role="button"
+              :aria-label="$t('Change to grid view')"
+              :aria-pressed="isCategoryGridView"
+              @click="changeToCategoryGridView"
+            />
+            <SfIcon
+              v-e2e="'list-icon'"
+              class="navbar__view-icon"
+              :color="!isCategoryGridView ? '#b6932f' : 'dark-secondary'"
+              icon="list"
+              size="12px"
+              role="button"
+              :aria-label="$t('Change to list view')"
+              :aria-pressed="!isCategoryGridView"
+              @click="changeToCategoryListView"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -112,19 +120,23 @@
             :loading="loading"
           >
             <SfAccordion
-              :style="!isDarkMode ? '' : 'background-color: #182533'"
+              :style="
+                !isDarkMode
+                  ? 'background-color: #ffffff'
+                  : 'background-color: #182533'
+              "
               :open="activeCategory"
               :show-chevron="true"
-              class="shadow-md w-80 p-2"
+              class="shadow-md w-80 sticky top-32"
             >
               <SfAccordionItem
-                v-for="(cat, i) in categoryTree && categoryTree"
-                :key="i"
-                :header="cat.label"
+                :header="
+                  currentCategory !== null ? currentCategory.name : 'Loading'
+                "
               >
                 <template>
-                  <SfList class="list">
-                    <SfListItem class="list__item">
+                  <SfList class="list p-2">
+                    <!-- <SfListItem class="list__item">
                       <SfMenuItem :count="cat.count || ''" :label="cat.label">
                         <template #label>
                           <nuxt-link
@@ -132,29 +144,25 @@
                             :class="
                               cat.isCurrent ? 'sidebar--cat-selected' : ''
                             "
+                            class="text-secondary"
                           >
                             All
                           </nuxt-link>
                         </template>
                       </SfMenuItem>
-                    </SfListItem>
+                    </SfListItem> -->
                     <SfListItem
                       class="list__item"
-                      v-for="(subCat, j) in cat.items"
+                      v-for="(subCat, j) in subcategories"
                       :key="j"
                     >
-                      <SfMenuItem
-                        :count="subCat.count || ''"
-                        :label="subCat.label"
-                      >
-                        <template #label="{ label }">
+                      <SfMenuItem>
+                        <template #label>
                           <nuxt-link
                             :to="'/s/' + subCat.slug"
-                            :class="
-                              subCat.isCurrent ? 'sidebar--cat-selected' : ''
-                            "
+                            class="text-secondary text-xs md:text-lg"
                           >
-                            {{ label }}
+                            {{ subCat.name }}
                           </nuxt-link>
                         </template>
                       </SfMenuItem>
@@ -173,20 +181,18 @@
               v-if="cat.isCurrent === true && cat.slug === lastSlug"
               class=""
             >
-              <div
-                class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
-              >
+              <div class="rounded-xl bg-light_gray my-4 flex max-h-40">
                 <img
                   :src="
                     cat.featuredAsset
                       ? cat.featuredAsset.preview
                       : '/categories/cat2.jpeg'
                   "
-                  class="rounded-md my-auto max-h-40 min-h-40 bg-light max-w-[25%]"
+                  class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
                 />
-                <div class="rounded w-full overflow-auto no-scrollbar">
+                <div class="w-full overflow-auto no-scrollbar">
                   <p
-                    class="py-4 ml-4 mr-4 text-white"
+                    class="py-4 ml-4 mr-4 text-secondary text-thin"
                     v-html="cat.description || `Category Description`"
                   ></p>
                 </div>
@@ -207,45 +213,38 @@
             <!-- <CategoryFeature /> -->
             <div>
               <h3
-                class="font-bold mt-12 pb-2 border-b border-gray-200"
+                class="font-bold mt-12 pb-2 text-secondary"
                 :style="!isDarkMode ? '' : 'color: white'"
               >
                 Featured
               </h3>
               <!-- <div class="grid grid-cols-3 gap-10 mt-10 mb-10" > -->
               <!-- <p>my category {{categoryTree?.value.items[0].label}}</p> -->
-              <div
+              <!-- <div
                 v-for="(cat, i) in rawCategoryTree && rawCategoryTree"
                 :key="i"
-              >
-                <div
-                  v-if="cat.isCurrent === true && cat.slug === lastSlug"
-                  class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10 mb-10"
-                >
-                  <div v-for="(sub, j) in cat.items" :key="j">
-                    <div
-                      class="max-w-sm rouned overflow-hidden shadow-xl"
-                      :style="!isDarkMode ? '' : 'background-color: #182533'"
-                    >
-                      <div class="m-4">
-                        <h4 :style="!isDarkMode ? '' : 'color: white'">
-                          {{ sub.label }}
-                        </h4>
-                      </div>
-                      <nuxt-link :to="`/s/${sub.slug}`">
-                        <img
-                          :src="
-                            sub.featuredAsset
-                              ? sub.featuredAsset.preview
-                              : '/categories/empty_image.png'
-                          "
-                          class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
-                        />
-                      </nuxt-link>
+              > -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 mb-5">
+                <div v-for="subCat in subcategories" :key="subCat.slug">
+                  <div class="">
+                    <nuxt-link :to="`/s/${subCat.slug}`">
+                      <img
+                        :src="subCat.image"
+                        class="w-full h-32 sm:h-48 object-cover shadow-xl hover:shadow-2xl transition duration-300"
+                      />
+                    </nuxt-link>
+                    <div class="mt-1">
+                      <h4
+                        :style="!isDarkMode ? '' : 'color: white'"
+                        class="text-secondary font-thin text-lg"
+                      >
+                        {{ subCat.name }}
+                      </h4>
                     </div>
                   </div>
-                  <!-- </div> -->
-                  <!-- <div :v-for="sub in value.items">
+                </div>
+                <!-- </div> -->
+                <!-- <div :v-for="sub in value.items">
                                   <div class="max-w-sm rouned overflow-hidden shadow-xl">
                               
                                   <div class="m-4">
@@ -256,92 +255,49 @@
                                    
                       
                             </div> -->
-                </div>
               </div>
+              <!-- </div> -->
             </div>
 
             <!-- categoryTree.value[0]?.items -->
           </LazyHydrate>
 
           <h3
-            v-if="bestSellings.length !== 0"
-            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
-          >
-            Shop Our Best Sellers
-          </h3>
-
-          <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
-            <div
-              class="card shadow-lg my-3 ml-2"
-              v-for="(i, index) in bestSellings"
-              :key="index"
-            >
-              <a :href="`/v/${slug}`">
-                <img
-                  :src="i.preview"
-                  alt=""
-                  class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
-                />
-              </a>
-              <h4 class="text-center m-3">{{ i.name }}</h4>
-              <!-- <p class="text-center m-3">description</p> -->
-              <div class="text-center">
-                <!-- <button
-                  class="my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-                >
-                  {{ $t('View All') }}
-                </button> -->
-              </div>
-            </div>
-          </div>
-
-          <h3
-            class="font-bold mt-12 pb-2 border-b border-gray-200 mb-10"
+            class="mt-8 pb-2 mb-3 text-center text-secondary"
             :style="!isDarkMode ? '' : 'color: white'"
           >
             Products Under This Category
           </h3>
-          <div
-            class="shadowInner max-h-[53rem] overflow-auto nobar pl-12 rounded-lg hover:border border-light_gray"
-          >
+          <div class="max-h-[60rem] overflow-auto nobar w-full">
             <transition-group
               v-if="isCategoryGridView"
               appear
               name="products__slide"
               tag="div"
-              class="products__grid"
+              class="grid grid-cols-1 md:grid-cols-3 gap-2"
             >
-              <div
-                v-for="(product, i) in products"
-                :key="productGetters.getSlug(product)"
-              >
-                <a :href="`/v/${productGetters.getSlug(product)}`">
-                  <SfProductCard
-                    v-e2e="'category-product-card'"
-                    :style="{ '--index': i }"
-                    :title="productGetters.getName(product)"
-                    :image="productGetters.getCoverImage(product)"
-                    imageHeight="20.25rem"
-                    imageWidth="100%"
-                    :regular-price="
-                      productGetters
-                        .getPrice(product)
-                        .regular.toLocaleString() + ' ETB'
-                    "
-                    :max-rating="5"
-                    :score-rating="productGetters.getAverageRating(product)"
-                    :show-add-to-cart-button="true"
-                    :isInWishlist="isInWishlist({ product })"
-                    :isAddedToCart="isInCart({ product })"
-                    class="products__product-card mr-4 mb-4 -z-1"
-                    @click:wishlist="
-                      !isInWishlist({ product })
-                        ? addItemToWishlist({ product })
-                        : removeItemFromWishlist({ product })
-                    "
-                    @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-                  />
-                </a>
+              <div v-for="product in allProducts" :key="product._id">
+                <ProductCard
+                  v-e2e="'category-product-card'"
+                  :title="product.name"
+                  :image="product.images[0]"
+                  :imageHeight="290"
+                  :imageWidth="500"
+                  :regular-price="product.price.current + ' ETB'"
+                  :max-rating="5"
+                  :score-rating="product.rating"
+                  :show-add-to-cart-button="true"
+                  :isInWishlist="isInWishlist({ product })"
+                  :isAddedToCart="isInCart({ product })"
+                  :link="localePath(`/v/${product.slug}`)"
+                  @click:wishlist="
+                    !isInWishlist({ product })
+                      ? addItemToWishlist({ product })
+                      : removeItemFromWishlist({ product })
+                  "
+                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                  class="carousel__item__product mb-5"
+                />
               </div>
             </transition-group>
             <transition-group
@@ -389,7 +345,7 @@
                   )
                 "
               >
-                <template #configuration>
+                <!-- <template #configuration>
                   <SfProperty
                     class="desktop-only"
                     name="Size"
@@ -397,7 +353,7 @@
                     style="margin: 0 0 1rem 0"
                   />
                   <SfProperty class="desktop-only" name="Color" value="white" />
-                </template>
+                </template> -->
                 <template #actions>
                   <SfButton
                     v-if="!isInWishlist({ product })"
@@ -454,6 +410,53 @@
                 </SfSelectOption>
               </SfSelect>
             </LazyHydrate>
+          </div>
+
+          <h3
+            v-if="bestSellings.length !== 0"
+            class="font-bold text-secondary mt-12 pb-2 mb-10"
+          >
+            Shop Our Best Sellers
+          </h3>
+
+          <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
+            <div v-for="product in bestSellings" :key="product._id">
+              <ProductCard
+                v-e2e="'category-product-card'"
+                :title="product.name"
+                :image="product.images[0]"
+                :imageHeight="290"
+                :imageWidth="500"
+                :regular-price="product.price.current + ' ETB'"
+                :max-rating="5"
+                :score-rating="product.rating"
+                :show-add-to-cart-button="true"
+                :isInWishlist="isInWishlist({ product })"
+                :isAddedToCart="isInCart({ product })"
+                :link="localePath(`/v/${product.slug}`)"
+                @click:wishlist="
+                  !isInWishlist({ product })
+                    ? addItemToWishlist({ product })
+                    : removeItemFromWishlist({ product })
+                "
+                @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                class="carousel__item__product mb-5"
+              />
+              <!-- <a :href="`/v/${i.slug}`">
+                <img
+                  :src="i.preview"
+                  alt=""
+                  class="w-full h-32 sm:h-48 object-cover scale-100 hover:scale-75 ease-out duration-300"
+                />
+              </a>
+              <h4 class="text-center m-3">{{ i.name }}</h4>
+              <h4 class="text-center m-3">{{ i.priceWithTax }}</h4>
+              <button>
+                <a :href="`/v/${i.slug}`"> View </a>
+              </button>
+              <div class="text-center">
+              </div> -->
+            </div>
           </div>
         </div>
       </SfLoader>
@@ -545,6 +548,7 @@ import {
   SfProperty,
 } from '@storefront-ui/vue';
 import { ref, computed, onMounted } from '@vue/composition-api';
+import ProductCard from '~/components/ProductCard.vue';
 import {
   useCategory,
   useCart,
@@ -566,7 +570,6 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
-    let  sort =  localStorage.getItem("sort");
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
@@ -680,7 +683,7 @@ export default {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
       console.log('the onmounted category tree value is ', categoryTree.value);
-     
+
       // sort =  localStorage.getItem("sort");
     });
 
@@ -747,7 +750,6 @@ export default {
       itemQuantity,
       rawCategoryTree,
       lastSlug,
-      sort
     };
   },
   components: {
@@ -769,16 +771,91 @@ export default {
     SfProperty,
     LazyHydrate,
     CategoryFeature,
+    ProductCard,
   },
   methods: {
+    async getActiveCategory() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const slug = this.$route.params.slug_1;
+      const body = {
+        query: `
+        query getCategoriesProducts($slug: String!){
+          collection(slug: $slug){
+            name
+            children{
+              name
+              slug
+              featuredAsset{
+                preview
+              }
+            }
+            products{
+              id
+              name
+              slug
+              description
+              featuredAsset{
+                preview
+              }
+              variants{
+                id
+                price
+              }
+              collections{
+                id
+              }
+              customFields{
+                reviewRating
+              }
+            }
+          }
+        }`,
+        variables: { slug: slug },
+      };
+      let options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(baseUrl, body, options).then((res) => {
+        this.currentCategory = res.data.data.collection;
+        console.log('mkii', this.currentCategory);
+        const products = this.currentCategory?.products?.map((product) => {
+          let cref = [];
+          product?.collections?.forEach((x) => {
+            cref.push(String(x.id));
+          });
+          const image = [String(product?.featuredAsset?.preview)];
+          const price =
+            String(product?.variants[0]?.price).slice(0, -2) +
+            '.' +
+            String(product?.variants[0]?.price).slice(-2);
+          const prod = {
+            _id: product?.id,
+            _variantId: product?.variants[0]?.id,
+            _description: product.description,
+            _categoriesRef: cref,
+            name: product.name,
+            images: image,
+            price: {
+              original: price,
+              current: price,
+            },
+            slug: product.slug,
+            rating: product?.customFields?.reviewRating,
+          };
+          return prod;
+        });
+        this.allProducts = products;
+      });
+    },
     async getBestSellersCategory() {
       const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `
         query{
           bestSellersInCategory{
-            name
-            preview
             slug
           }
         }
@@ -790,18 +867,101 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      const bestSeller = await axios.post(baseUrl, body, options);
-      this.bestSellings = bestSeller.data.data.bestSellersInCategory;
-      console.log('ddddddddjjjjjjjjjjjj', bestSeller);
+      const bestseller = await axios.post(baseUrl, body, options);
+      const slugs = bestseller.data.data.bestSellersInCategory.map((bs) => {
+        let x = [];
+        x.push(bs?.slug);
+        return x;
+      });
+      const STRSlug = [];
+      const a = slugs.forEach((s) => {
+        STRSlug.push(s[0]);
+      });
+      const pbody = {
+        query: `
+        query BSProducts($in: [String!]!) {
+          products(options: {filter: {slug: {in: $in}}}) {
+            items {
+              id
+              name
+              slug
+              description
+              featuredAsset {
+                preview
+              }
+              variants {
+                id
+                price
+              }
+              collections {
+                id
+              }
+              customFields {
+                reviewRating
+              }
+            }
+          }
+        }`,
+        variables: {
+          in: STRSlug,
+        },
+      };
+      await axios.post(baseUrl, pbody, options).then((res) => {
+        const produ = res.data.data.products?.items.map((product) => {
+          let cref = [];
+          product?.collections?.forEach((x) => {
+            cref.push(String(x.id));
+          });
+          const image = [String(product?.featuredAsset?.preview)];
+          const price =
+            String(product?.variants[0]?.price).slice(0, -2) +
+            '.' +
+            String(product?.variants[0]?.price).slice(-2);
+          const prod = {
+            _id: product?.id,
+            _variantId: product?.variants[0]?.id,
+            _description: product.description,
+            _categoriesRef: cref,
+            name: product.name,
+            images: image,
+            price: {
+              original: price,
+              current: price,
+            },
+            slug: product.slug,
+            rating: product?.customFields?.reviewRating,
+          };
+          return prod;
+        });
+        this.bestSellings = produ;
+        console.log('minini', this.bestSellings);
+      });
     },
   },
   created() {
+    this.getActiveCategory();
     this.getBestSellersCategory();
+    this.sort = localStorage.getItem('sort');
   },
   data() {
     return {
+      allProducts: [],
       bestSellings: [],
+      currentCategory: null,
+      sort: '',
     };
+  },
+  computed: {
+    subcategories() {
+      const subs = this.currentCategory?.children.map((sub) => {
+        return {
+          name: sub?.name,
+          slug: sub?.slug,
+          image: sub.featuredAsset?.preview || '/categories/empty_image.png',
+        };
+      });
+      return subs;
+    },
   },
 };
 </script>
@@ -810,7 +970,7 @@ export default {
 #category {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 90%;
+    max-width: 1250px;
     margin: 0 auto;
   }
 }
@@ -968,6 +1128,10 @@ export default {
   padding: var(--spacer-sm);
   border: 1px solid var(--c-light);
   border-width: 0 1px 0 0;
+  display: block;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
 }
 .sidebar-filters {
   --overlay-z-index: 3;
@@ -1135,8 +1299,11 @@ export default {
     margin: var(--spacer-xs) 0 0 0;
   }
 }
-.shadowInner {
-  box-shadow: inset 0 0 10px #b9b9b9;
-  z-index: 1;
+.sticky {
+  display: block;
+  position: -webkit-sticky;
+  position: relative;
+  top: 0px;
+  z-index: 2;
 }
 </style>

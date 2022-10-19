@@ -125,8 +125,8 @@
     </SfFooterColumn> -->
     <SfFooterColumn :title="$t('Social')" class="footer-column">
       <div class="footer__socials">
-        <div v-for="item in social" :key="item.name">
-          <a :href="item.link" target="_blank">
+        <div v-for="item in socials" :key="item.name">
+          <a v-if="item.link.length >= 3" :href="item.link" target="_blank">
             <SfImage
               class="footer__social-image"
               :src="'/icons/' + item.name + '.svg'"
@@ -138,6 +138,7 @@
         </div>
       </div>
     </SfFooterColumn>
+    <!-- {{ socials }} -->
   </SfFooter>
 </template>
 
@@ -151,6 +152,7 @@ import {
 } from '@storefront-ui/vue';
 import { useUser } from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core';
+import axios from 'axios';
 
 export default {
   components: {
@@ -162,22 +164,7 @@ export default {
   },
   data() {
     return {
-      departments: ['Surgery', 'Medical Imagery', 'General Laboratory'],
-      social: [
-        {
-          name: 'facebook',
-          link: 'https://www.facebook.com/Ethiolab-Equipment-Supplies-112293414934486',
-        },
-        {
-          name: 'linkedin',
-          link: 'https://www.linkedin.com/company/ethiolab-plc/',
-        },
-        { name: 'telegram', link: 'https://t.me/ethiolab_official' },
-        {
-          name: 'youtube',
-          link: 'https://www.youtube.com/channel/UC70xfcgu5gNOP2M0fL6PnAw',
-        },
-      ],
+      socialMedia: {},
       isMobile: false,
       desktopMin: 1024,
     };
@@ -191,6 +178,65 @@ export default {
     return {
       isAuthenticated,
     };
+  },
+  computed: {
+    socials() {
+      let name_link = [];
+      // for (let i in this.socialMedia) {
+      //   const j = i.split('_')[0];
+      //   name_link.push({ name: j, link: 'nice' });
+      // }
+      let soci = {
+        facebook_address:
+          this.$store.state.companyDetails.companyInformation?.facebook_address,
+        instagram_address:
+          this.$store.state.companyDetails.companyInformation
+            ?.instagram_address,
+        twitter_address:
+          this.$store.state.companyDetails.companyInformation?.twitter_address,
+        linkdin_address:
+          this.$store.state.companyDetails.companyInformation?.linkdin_address,
+        telegram_address:
+          this.$store.state.companyDetails.companyInformation?.telegram_address,
+        youtube_address:
+          this.$store.state.companyDetails.companyInformation?.youtube_address,
+      };
+      let sm = this.socialMedia;
+      Object.keys(soci).forEach((s) => {
+        const n = s.split('_')[0];
+        name_link.push({ name: n, link: soci[s] });
+      });
+      return name_link;
+    },
+  },
+  methods: {
+    async getScocialMediaLinks() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `query getSocials {
+          getCompanyInfos {
+            facebook_address
+            instagram_address
+            linkdin_address
+            telegram_address
+            twitter_address
+            youtube_address
+          }
+        }`,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const companyScocialMedia = await axios.post(baseUrl, body, options);
+      this.socialMedia = companyScocialMedia?.data.data?.getCompanyInfos;
+      console.log('company social', typeof this.socialMedia);
+    },
+  },
+  created() {
+    this.getScocialMediaLinks();
   },
 };
 </script>

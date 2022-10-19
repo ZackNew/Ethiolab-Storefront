@@ -95,7 +95,7 @@
                   :errorMessage="errors[0]"
                 />
               </ValidationProvider>
-              <ValidationProvider name="firstName" v-slot="{ errors }" slim>
+              <ValidationProvider name="companyName" v-slot="{ errors }" slim>
                 <SfInput
                   v-e2e="'customer-firstName'"
                   v-model="form.customerName"
@@ -107,7 +107,7 @@
                   :errorMessage="errors[0]"
                 />
               </ValidationProvider>
-              <ValidationProvider
+              <!-- <ValidationProvider
                 name="emailAddress"
                 rules="email"
                 v-slot="{ errors }"
@@ -124,7 +124,7 @@
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"
                 />
-              </ValidationProvider>
+              </ValidationProvider> -->
               <ValidationProvider
                 name="message"
                 rules="required"
@@ -138,7 +138,7 @@
                     class="form__element form__element--full"
                     placeholder="Your Message"
                     v-model="form.message"
-                    :cols="50"
+                    :cols="80"
                     :rows="10"
                     wrap="soft"
                     :disabled="false"
@@ -178,7 +178,7 @@
       <SfHeading title="Our Stores" :level="1" />
     </div>
     <div class="contact-location">
-      <SfStoreLocator
+      <StoreLocator
         tileServerUrl="http://mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
         :center="[9.035565, 38.759099]"
         :zoom="6"
@@ -191,6 +191,7 @@
       >
         <div class="flex">
           <SfStore
+            picture="~/static/Logo.png"
             :latlng="[9.035565, 38.759099]"
             :pictureWidth="82"
             :pictureHeight="112"
@@ -200,7 +201,7 @@
             phone="(+251) 111 264 829"
             email="info@ethiolab.et" -->
           <div class="mt-4">
-            <p>Ethiolab Head Office</p>
+            <p>{{ companyName[0] }} Head Office</p>
             <p class="mb-6">
               Adwa Street, Arada Sub-city, Elsi Bldg (881/EBG 407)
             </p>
@@ -212,9 +213,14 @@
                 viewBox="0 0 24 24"
                 :coverage="1"
               />
-              <div class="ml-2 mb-3">
-                <a href="tel:0940024402"><p>(+251) 940 02 44 02</p></a>
-                <a href="tel:0940025502"><p>(+251) 940 02 55 02</p></a>
+              <div
+                class="ml-2 mb-3"
+                v-for="(phone, index) in phoneNumbers"
+                :key="index"
+              >
+                <a :href="`tel:${phone}`">
+                  <p>{{ phone }}</p>
+                </a>
               </div>
             </div>
             <div class="flex">
@@ -225,13 +231,15 @@
                 viewBox="0 0 24 24"
                 :coverage="1"
               />
-              <a href="mailto:info@ethiolab.et"
-                ><p class="ml-2">info@ethiolab.et</p></a
-              >
+              <div v-for="(email, index) in emails" :key="index">
+                <a :href="`mailto:${email}`">
+                  <p class="ml-2">{{ email }}</p>
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </SfStoreLocator>
+      </StoreLocator>
     </div>
   </div>
 </template>
@@ -246,6 +254,7 @@ import {
   SfBanner,
   SfIcon,
 } from '@storefront-ui/vue';
+import StoreLocator from '~/components/StoreLocator.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { ref, onMounted, inject } from '@vue/composition-api';
 import { required, min, digits, email } from 'vee-validate/dist/rules';
@@ -287,6 +296,7 @@ export default {
     SfBanner,
     SfIcon,
     LazyHydrate,
+    StoreLocator,
   },
 
   computed: {
@@ -299,6 +309,25 @@ export default {
         '--_call-to-action-background-color': '#005FB7',
         margin: 'var(--spacer-xl) auto var(--spacer-2xl)',
       };
+    },
+    phoneNumbers() {
+      const phone =
+        this.$store.state.companyDetails.companyInformation?.phone_number.split(
+          ';'
+        );
+      return phone;
+    },
+    emails() {
+      const email =
+        this.$store.state.companyDetails.companyInformation?.email.split(';');
+      return email;
+    },
+    companyName() {
+      const name =
+        this.$store.state.companyDetails.companyInformation?.company_name.split(
+          ';'
+        );
+      return name;
     },
   },
   setup(_, { root }) {
@@ -332,6 +361,13 @@ export default {
         customerEmail: form.value.customerEmail,
       });
       showToast('Sent!');
+      form.value.phoneNumber = '';
+      form.value.firstName = '';
+      form.value.lastName = '';
+      form.value.emailAddress = '';
+      form.value.message = '';
+      form.value.customerName = '';
+      form.value.customerEmail = '';
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
 

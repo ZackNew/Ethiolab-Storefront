@@ -25,19 +25,19 @@
       <slot name="call-to-action" v-bind="{ buttonText }" />
     </component> -->
     <div class="sf-banner__wrapper-desktop" :link="link">
-      <slot name="subtitle" v-bind="{ subtitle }">
+      <!-- <slot name="subtitle" v-bind="{ subtitle }">
         <span
           :class="{ 'display-none': !subtitle }"
           class="sf-banner__subtitle"
         >
           {{ subtitle }}
         </span>
-      </slot>
-      <slot name="title" v-bind="{ title }">
+      </slot> -->
+      <!-- <slot name="title" v-bind="{ title }">
         <span :class="{ 'display-none': !title }" class="sf-banner__title">
           {{ title }}
         </span>
-      </slot>
+      </slot> -->
       <slot name="description" v-bind="{ description }">
         <span
           :class="{ 'display-none': !description }"
@@ -51,7 +51,7 @@
         <SfButton
           v-if="buttonText"
           :link="link"
-          class="sf-banner__call-to-action color-secondary"
+          class="sf-banner__call-to-action color-secondary hover:bg-white rounded"
           data-testid="banner-cta-button"
           v-on="$listeners"
         >
@@ -248,6 +248,14 @@ export default {
   &__call-to-action {
     --button-color: var(--c-light-variant);
     display: var(--banner-display-call-to-action, none);
+    text-decoration: none;
+    @include font(
+      --banner-title-font,
+      var(--font-weight--normal),
+      var(--h4-font-size),
+      1.4,
+      var(--font-family--secondary)
+    );
   }
   @include for-desktop {
     --banner-background-image: var(
@@ -268,7 +276,7 @@ export default {
       }
     }
     &__call-to-action {
-      --button-padding: var(--spacer-sm) var(--spacer-xl);
+      --button-padding: var(--spacer-xs) var(--spacer-xl);
       pointer-events: auto;
     }
     &--right {
