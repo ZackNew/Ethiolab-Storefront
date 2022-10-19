@@ -27,7 +27,7 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy" exact>
+          <router-link to="/policy/warranty-policy" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Warranty Policy')"
@@ -58,14 +58,6 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy/cookie-policy" exact>
-            <SfMenuItem
-              class="sf-footer__menu-item"
-              :label="$t('Cookie Policy')"
-            />
-          </router-link>
-        </SfListItem>
-        <SfListItem class="footer-list-item">
           <router-link to="/pages/helpAndFAQ" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
@@ -87,6 +79,14 @@
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Privacy Policy')"
+            />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/policy/cookie-policy" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Cookie Policy')"
             />
           </router-link>
         </SfListItem>
