@@ -389,14 +389,14 @@ export default {
         const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
         let signObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
                       "nonce":paymentDetail.transaction_uuid,
-                      "notifyUrl":`https://fd47-196-188-51-249.in.ngrok.io/api/hook`,
+                      "notifyUrl":"http://localhost:3000/telebirr",
                       "outTradeNo":cart.value.code,
                       "receiveName":"Ethiolab",
                       "returnUrl":"http://localhost:3001/checkout/thank-you/",
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
-                      "timestamp":paymentDetail.reference_number.toString(),
+                      "timestamp":cart?.value?.code.toString(),
                       "totalAmount":paymentDetail.amount
                     };
 
@@ -439,14 +439,14 @@ export default {
 
               let jsonObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
                       "nonce":paymentDetail.transaction_uuid,
-                      "notifyUrl":`https://fd47-196-188-51-249.in.ngrok.io/api/hook`,
+                      "notifyUrl":"http://localhost:3000/telebirr",
                       "outTradeNo":cart.value.code,
                       "receiveName":"Ethiolab",
                       "returnUrl":"http://localhost:3001/checkout/thank-you/",
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
-                      "timestamp":paymentDetail.reference_number.toString(),
+                      "timestamp":cart?.value?.code.toString(),
                       "totalAmount":paymentDetail.amount
                     };
 
