@@ -595,6 +595,9 @@ export default {
     const sortBy = computed(() =>
       facetGetters.getSortOptions(searchResult.value)
     );
+    const sorting = function () {
+      th.changeSorting;
+    };
     const facets = computed(() => facetGetters.getGrouped(searchResult.value));
     const products = computed(() =>
       facetGetters.getProducts(searchResult.value)

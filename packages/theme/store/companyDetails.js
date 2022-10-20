@@ -8,7 +8,6 @@ export const getters = {};
 export const mutations = {
   SET_COMPANY_INFORMATION(state, payload) {
     state.companyInformation = payload.company;
-    console.log('i commited', state.companyInformation);
   },
 };
 
