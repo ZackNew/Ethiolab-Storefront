@@ -38,6 +38,7 @@
             }}</SfTableHeader>
             <SfTableHeader>{{ $t('Quantity') }}</SfTableHeader>
             <SfTableHeader>{{ $t('Price') }}</SfTableHeader>
+            <SfTableHeader>{{ $t('Reorder') }}</SfTableHeader>
           </SfTableHeading>
           <SfTableRow
             v-for="(item, i) in orderGetters.getItems(currentOrder)"
@@ -51,6 +52,11 @@
             <SfTableData>{{
               orderGetters.getItemPrice(item).toLocaleString() + ' ETB'
             }}</SfTableData>
+            <SfTableData
+              ><button @click="itemsToCart(item)">
+                Reorder Item
+              </button></SfTableData
+            >
           </SfTableRow>
         </SfTable>
         <div class="modal-backdrop" aria-hidden="true"></div>
@@ -101,17 +107,9 @@
               </SfButton>
               <button
                 class="mt-2"
-                @click="
-                  addItemToCart({
-                    product: {
-                      _variantId:
-                        orderGetters.getItems(order)[0].productVariant.id,
-                    },
-                    quantity: 1,
-                  })
-                "
+                @click="itemsToCart(orderGetters.getItems(order))"
               >
-                + Add to cart
+                Reorder All Items
               </button>
             </SfTableData>
           </SfTableRow>
@@ -283,6 +281,32 @@ export default {
       'Actions',
     ];
 
+    const itemsToCart = (items) => {
+      console.log('magi', typeof items);
+      if (items.length >= 1) {
+        for (let item of items) {
+          addItemToCart({
+            product: {
+              _variantId: item?.productVariant?.id,
+            },
+            quantity: 1,
+          });
+        }
+      } else {
+        console.log(items);
+        addItemToCart({
+          product: {
+            _variantId: items?.productVariant?.id,
+          },
+          quantity: 1,
+        });
+      }
+    };
+
+    const reorderItem = (item) => {
+      console.log('ma nigga', item);
+    };
+
     const getStatusTextClass = (order) => {
       const status = orderGetters.getStatus(order);
       switch (status) {
@@ -311,6 +335,8 @@ export default {
       downloadQuote,
       removeQuote,
       addItemToCart,
+      itemsToCart,
+      reorderItem,
     };
   },
 };
