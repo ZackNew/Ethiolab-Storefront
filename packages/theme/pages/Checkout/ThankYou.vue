@@ -76,6 +76,8 @@
 
 <script>
 import { SfHeading, SfButton, SfCallToAction } from '@storefront-ui/vue';
+import { useMakeOrder, useCart, cartGetters, usePayment } from '@vue-storefront/vendure';
+
 export default {
   components: {
     SfHeading,
@@ -84,6 +86,10 @@ export default {
   },
   name: 'ThankYou',
   setup(props, context) {
+
+    const { cart, load, setCart } = useCart();
+
+    console.log("cart value is ", cart?.value?.code);
     return {
       address: {
         name: 'Company Headquarter',

@@ -155,7 +155,7 @@ export default {
   name: 'Shipping',
   components: {
     SfHeading,
-    SfInput,
+    SfInput, 
     SfButton,
     SfSelect,
     ValidationProvider,

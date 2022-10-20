@@ -6,7 +6,7 @@ export default {
   server: {
     port: process.env.PORT || 3001,
     host: '0.0.0.0',
-    protocol: 'https',
+    // protocol:'https'
   },
   env: {
     GRAPHQL_API: process.env.GRAPHQL_API || 'http://localhost:3000/shop-api',
@@ -127,6 +127,7 @@ export default {
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
     'nuxt-user-agent',
+    '@nuxtjs/axios',
   ],
   i18n: {
     currency: 'ETB',
@@ -229,6 +230,14 @@ export default {
         ital: [300, 400],
       },
     },
-    display: 'swap',
+    display: 'swap'
   },
+  // serverMiddleware: [
+  //   { path: '/api/hook', handler: '~/api/hook.js' },
+  //   { path: '/api/axios', handler: '~/api/axios.js' }
+
+  // ]
+  serverMiddleware: [
+    '~/api/index.js'
+  ],
 };
