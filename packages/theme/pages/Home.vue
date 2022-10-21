@@ -426,7 +426,6 @@ export default {
       const a = slugs.forEach((s) => {
         STRSlug.push(s[0]);
       });
-      console.log('ddddddddjjjjjjjjjjjj', slugs);
       const pbody = {
         query: `
         query BSProducts($in: [String!]!) {
@@ -484,12 +483,7 @@ export default {
           return prod;
         });
         this.bestSellings = produ;
-        console.log('minini', this.bestSellings);
       });
-    },
-    mymethod(url) {
-      console.log('button clicked');
-      window.location.href = url;
     },
   },
 
@@ -506,12 +500,8 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
-    //console.log(useTest())
 
     const { writeQuote, load, myQuotes } = useQuote();
-
-    //console.log({comps})
-    // console.log(getCms.value[0] )
 
     const heroSection = computed(() =>
       JSON.parse(getCms.value[0]?.content ?? '{}')
@@ -522,9 +512,6 @@ export default {
     const heroImage = computed(() => getCms.value[0]?.featuredAsset.preview);
     const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
     const headerNavigation = [];
-    // console.log('products',products)
-    //       console.log("the adsection value is ", adSection);
-
     const getTree = () => {
       categories.value.items.forEach((a) => {
         if (a.children.length > 0) {

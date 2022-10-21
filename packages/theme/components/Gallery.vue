@@ -218,10 +218,8 @@ export default {
       // handle slider with swipe and transitions with Glide.js
       // https://glidejs.com/docs/
       // if (this.images.length < 1) return;
-      console.log('image length', this.$route.query.private);
       const glide = new Glide(this.$refs.glide, this.updatedSliderOptions);
       this.go(glide.index);
-      console.log('ppppppppp', glide.index);
       glide.on('run', () => {
         this.go(glide.index);
       });
@@ -257,7 +255,6 @@ export default {
       return '';
     },
     go(index) {
-      console.log('xxxxxxxx', index);
       this.pictureSelected = this.images[index];
       // console.log('xxxxxtttttxxx', index);
       if (!this.glide) return;
@@ -273,7 +270,6 @@ export default {
     },
     startZoom() {
       if (this.enableZoom) {
-        console.log('printttttttttttttt');
         this.isZoomStarted = true;
       }
     },

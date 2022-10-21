@@ -602,7 +602,6 @@ export default {
     const products = computed(() =>
       facetGetters.getProducts(searchResult.value)
     );
-    console.log('product value', products.value);
 
     const rawBreadcrumbs = computed(() =>
       facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug)
@@ -619,8 +618,6 @@ export default {
       ...rawPagination.value,
     }));
     // TODO: Refactor this getter
-    console.log('result value is ', result.value);
-    console.log('search result value is ', searchResult.value);
     const rawCategoryTree = computed(() =>
       searchResult.value?.data?.categories?.map((category) => {
         const tree = facetGetters.getTree(category.collection);
@@ -629,7 +626,6 @@ export default {
       })
     );
 
-    console.log('row category value is ', rawCategoryTree.value);
     const categoryTree = computed(() =>
       getTreeWithoutEmptyCategories(rawCategoryTree.value).filter(
         (cat) => cat.slug === lastSlug || cat.isCurrent === true
@@ -639,10 +635,8 @@ export default {
       return categoryTree.value[0]?.label;
     });
     // categoryTree.filter((cat) => cat.slug === lastSlug);
-    console.log('category tree is ', categoryTree);
     const activeCategory = computed(() => {
       const items = categoryTree.value;
-      // console.log("items value is ", items[0]?.label)
 
       if (!items || !items.length) {
         return '';
@@ -655,15 +649,6 @@ export default {
 
       return category?.label || items[0].label;
     });
-    console.log('search result');
-    console.log(searchResult.value);
-    console.log(' result');
-    console.log(result.value);
-    console.log('raw category tree');
-    console.log(rawCategoryTree);
-    console.log('category Tree');
-    console.log(categoryTree.value);
-    console.log('loading value ', loading);
     const selectedFilters = ref({});
     const setSelectedFilters = () => {
       if (!facets.value.length || Object.keys(selectedFilters.value).length)
@@ -685,7 +670,6 @@ export default {
     onMounted(() => {
       context.root.$scrollTo(context.root.$el, 2000);
       setSelectedFilters();
-      console.log('the onmounted category tree value is ', categoryTree.value);
 
       // sort =  localStorage.getItem("sort");
     });
@@ -823,7 +807,6 @@ export default {
       };
       await axios.post(baseUrl, body, options).then((res) => {
         this.currentCategory = res.data.data.collection;
-        console.log('mkii', this.currentCategory);
         const products = this.currentCategory?.products?.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
@@ -937,7 +920,6 @@ export default {
           return prod;
         });
         this.bestSellings = produ;
-        console.log('minini', this.bestSellings);
       });
     },
   },

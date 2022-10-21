@@ -9,7 +9,10 @@
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+          <nuxt-link
+            class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+            to="/"
+          >
             Home
           </nuxt-link>
         </li>
@@ -18,7 +21,10 @@
             {{ getMainCategory|| '' }}
           </nuxt-link>
         </li> -->
-        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+        <li
+          class="sf-breadcrumbs__list-item text-secondary font-bold"
+          :aria-current="false"
+        >
           {{ products && products.name }}
         </li>
       </ol>
@@ -316,7 +322,6 @@ export default defineComponent({
       };
       const currentProducts = await axios.post(baseUrl, body, options);
       this.productVariants = currentProducts.data.data?.product;
-      console.log('yaaay', this.productVariants);
     },
   },
   computed: {
@@ -402,7 +407,6 @@ export default defineComponent({
     });
     const th = useUiHelpers();
     const lastSlug = th.getLastSlugFromParams();
-    console.log('the lastslug value is ', lastSlug);
 
     let checked = true;
 
@@ -482,18 +486,13 @@ export default defineComponent({
       //   router.push(`/p/${id}/${vid}/${slug}`);
       //   console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', slug, id, vid);
       // }
-      console.log('the product value is ', product.value);
-      console.log('the option value is ', option.value);
       // if (option.value.length === 0) {
       //   console.log('this is slug', route.params);
       // }
       // mainCategory=product[0].collections[0].breadcrumbs[1].slug
       mainCategory = product.value;
-      console.log('the productsss  id value is ', products.value);
-      console.log('configuration value is ', configuration.value);
       //   console.log("the productsss image value is ", products.value.assets[0].preview)
       // console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
-      console.log('product gallery is ', productGallery.value);
     });
 
     return {

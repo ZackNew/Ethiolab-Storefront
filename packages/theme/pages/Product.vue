@@ -245,7 +245,6 @@ export default {
   },
 
   setup(props, context) {
-    console.log('Product Page setup', process.env.GRAPHQL_API);
     const qty = ref(1);
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
@@ -264,12 +263,10 @@ export default {
         attributes: context.root.$route.query,
       })
     );
-    console.log('producttttt', products.value);
 
     const options = computed(() =>
       productGetters.getOptions(products.value, ['color', 'size'])
     );
-    console.log('optionsssss issss thissss', options.value);
     // TODO: Implement reviews
     //const reviews = ref([]);//computed(() => reviewGetters.getItems(productReviews.value));
     const configuration = ref({});
@@ -309,7 +306,6 @@ export default {
         varp.substring(varp.length - 2);
 
     const productGallery = computed(() => {
-      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa', varproduct[0]?.images[0]);
       if (varproduct[0]?.images[0])
         return productGetters.getAllGallery(varproduct[0]).map((img) => ({
           mobile: { url: img.small },
@@ -325,12 +321,8 @@ export default {
           alt: product.value._name || product.value.name,
         }));
     });
-    console.log('gallery', productGallery);
 
-    onMounted(() => {
-      console.log('the productzzzzz value is ', products.value);
-      console.log('the varproduct value is ', varproduct);
-    });
+    onMounted(() => {});
 
     onSSR(async () => {
       await search({ id });
@@ -446,14 +438,6 @@ export default {
       this.optionTableValues = tablular;
       this.variant_description =
         variant.data.data?.product?.variantList?.items[0]?.customFields?.description;
-
-      console.log(
-        '=======================',
-        typeof productId,
-        typeof variantId,
-        variant.data.data?.product?.variantList?.items[0]?.options
-      );
-      console.log('=======bbbbbb===========', tablular);
     },
     async getAccessories() {
       const productId = this.$route.params.id;
@@ -489,13 +473,8 @@ export default {
       const accessories = await axios.post(baseUrl, body, options);
       this.productAccessories =
         accessories.data.data.product?.customFields?.accessories;
-      console.log(
-        'xxxxxxxxxxxxx',
-        accessories.data.data.product?.customFields?.accessories
-      );
     },
     async getProductsReviews() {
-      console.log(this.id);
       const data = JSON.stringify({
         query: `
         query{
@@ -539,21 +518,15 @@ export default {
       if (
         reviewsListResponse.data.product.customFields?.maintenance_fee !== ''
       ) {
-        console.log(
-          `${reviewsListResponse.data.product.customFields?.maintenance_fee} fee`
-        );
         this.properties.push({
           name: 'Maintenance Fee',
           value: reviewsListResponse.data.product.customFields?.maintenance_fee,
         });
-        console.log(this.properties);
       }
       var reviewsList = reviewsListResponse.data.product.reviews.items;
       if (this.isAuthenticated) {
         return this.setThisUsersReview(reviewsList);
       }
-
-      console.log('reviews value is ', reviewsList);
 
       return reviewsList;
     },
@@ -561,9 +534,7 @@ export default {
     setThisUsersReview(reviewsList) {
       var email = this.user.emailAddress;
       for (var review of reviewsList) {
-        console.log(`review['authorLocation'] ${review['authorLocation']}`);
         if (review['authorLocation'] === email) {
-          console.log("review['authorLocation'] === this.email");
           review['authorName'] = 'You';
           this.currentUserHasReview = true;
           var currentItemIndex = reviewsList.indexOf(review);

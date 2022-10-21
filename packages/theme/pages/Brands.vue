@@ -238,7 +238,6 @@ export default {
         }
       });
       const industries = [...new Set(industry)];
-      console.log('insider', this.products);
       return industries;
     },
     collectionList() {
@@ -357,7 +356,6 @@ export default {
       this.brand = brandResult.data.data.brand;
       this.brandImage = brandResult.data.data.brand.icon?.preview;
       this.products = brandResult.data.data.brand.products;
-      console.log('this are the brand', brandResult);
     },
   },
   setup() {

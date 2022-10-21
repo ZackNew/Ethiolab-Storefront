@@ -126,7 +126,7 @@
     <SfFooterColumn :title="$t('Social')" class="footer-column">
       <div class="footer__socials">
         <div v-for="item in socials" :key="item.name">
-          <a v-if="item.link.length >= 3" :href="item.link" target="_blank">
+          <a :href="item.link" target="_blank">
             <SfImage
               class="footer__social-image"
               :src="'/icons/' + item.name + '.svg'"
@@ -232,7 +232,6 @@ export default {
       };
       const companyScocialMedia = await axios.post(baseUrl, body, options);
       this.socialMedia = companyScocialMedia?.data.data?.getCompanyInfos;
-      console.log('company social', typeof this.socialMedia);
     },
   },
   created() {

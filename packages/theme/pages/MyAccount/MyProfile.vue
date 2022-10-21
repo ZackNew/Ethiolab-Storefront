@@ -106,7 +106,6 @@ export default {
     const { updateUser, changePassword, user, load, updateEmail } = useUser();
     const tinNumber = ref('');
     const currentEmail = userGetters.getEmailAddress(user.value);
-    console.log('user=', JSON.stringify(user.value));
     const formHandler = async (fn, onComplete, onError) => {
       try {
         const data = await fn();
@@ -116,7 +115,6 @@ export default {
       }
     };
     function getCookie(cname) {
-      console.log('Getting ' + cname);
       let name = cname + '=';
       let decodedCookie = decodeURIComponent(document.cookie);
       let ca = decodedCookie.split(';');
@@ -131,7 +129,6 @@ export default {
       }
       return '';
     }
-    console.log('user', JSON.stringify(user.value));
 
     const updatePersonalData = ({ form, onComplete, onError }) =>
       formHandler(() => updateUser({ user: form.value }), onComplete, onError);
@@ -170,8 +167,7 @@ export default {
           }
         }
       `;
-      console.log('Token=', getCookie('etech-auth-token'));
-      let baseUrl = process.env.GRAPHQL_API
+      let baseUrl = process.env.GRAPHQL_API;
       axios
         .post(
           baseUrl,
@@ -186,7 +182,6 @@ export default {
         .then((data) => {
           tinNumber.value =
             data.data.data.activeCustomer.customFields.tin_number;
-          console.log(data.data.data.activeCustomer.customFields.tin_number);
         });
     });
     const updateTinNumber = async () => {
@@ -204,7 +199,6 @@ export default {
             }
           }
         `;
-        console.log('Token=', getCookie('etech-auth-token'));
         axios.post(
           'http://localhost:3000/shop-api',
           { query: print(query), variables: { tinNumber: tinNumber.value } },

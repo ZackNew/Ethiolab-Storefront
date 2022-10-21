@@ -81,7 +81,7 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search md:w-[23rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none"
+              class="search md:w-[26rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none"
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="debounceInput"
@@ -275,7 +275,6 @@ export default {
             return prod;
           });
           this.results = results;
-          console.log('hiiiha', results);
         });
       }
     }, 2000),
@@ -317,9 +316,7 @@ export default {
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
 
-    const selectedProd = () => {
-      console.log('selected');
-    };
+    const selectedProd = () => {};
 
     const showQuotation = ref(false);
     const { setTermForUrl, getFacetsFromURL } = useUiHelpers();
@@ -358,8 +355,6 @@ export default {
 
     watch(user, () =>
       (async () => {
-        console.log('Tin Number: ', userGetters.getTinNumber(user));
-        console.log('User %c', 'color: lightblue', user);
         accountIcon.value = isAuthenticated.value ? 'profile_fill' : 'profile';
       })()
     );

@@ -422,8 +422,6 @@ export default {
       this.$emit('click:wishlist', !this.isInWishlist);
     },
     onAddToCart(event) {
-      console.log(event);
-
       event.preventDefault();
       this.isAddingToCart = true;
       setTimeout(() => {
