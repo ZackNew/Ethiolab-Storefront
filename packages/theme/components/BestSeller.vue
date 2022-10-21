@@ -56,6 +56,7 @@
             :alt="product.name"
             :max-rating="5"
             :score-rating="3"
+            :variantId="product._variantId"
             :show-add-to-cart-button="true"
             :isInWishlist="isInWishlist({ product })"
             :isAddedToCart="isInCart({ product })"
@@ -65,7 +66,7 @@
                 ? addItemToWishlist({ product })
                 : removeItemFromWishlist({ product })
             "
-            @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+            @click:add-to-cart="addToCart"
             class="carousel__item__product mr-2"
             style="border-radius: 15px"
           />
@@ -91,6 +92,7 @@ import { useWishlist, useCart } from '@vue-storefront/vendure';
 export default defineComponent({
   data() {
     return {
+      numberCart: 1,
       cats: null,
       bestSellings: [],
       number: 10,
@@ -106,16 +108,7 @@ export default defineComponent({
         centerPadding: '20px',
         responsive: [
           {
-            breakpoint: 2098,
-            settings: {
-              slidesToShow: 4,
-              slidesToScroll: 4,
-              infinite: true,
-              dots: true,
-            },
-          },
-          {
-            breakpoint: 1624,
+            breakpoint: 1024,
             settings: {
               slidesToShow: 3,
               slidesToScroll: 3,
@@ -124,7 +117,7 @@ export default defineComponent({
             },
           },
           {
-            breakpoint: 1024,
+            breakpoint: 800,
             settings: {
               slidesToShow: 2,
               slidesToScroll: 2,
@@ -132,7 +125,7 @@ export default defineComponent({
             },
           },
           {
-            breakpoint: 430,
+            breakpoint: 480,
             settings: {
               slidesToShow: 1,
               slidesToScroll: 1,
@@ -186,6 +179,14 @@ export default defineComponent({
     const toggleWishlist = (index) => {
       products.value[index].isInWishlist = !products.value[index].isInWishlist;
     };
+    const addToCart = (e) => {
+      addItemToCart({
+        product: {
+          _variantId: e._variantId,
+        },
+        quantity: e.quantity,
+      });
+    };
     const categories = [
       { title: 'Balance and Scales', image: '/categories/empty_image.png' },
       { title: 'Calibration', image: '/categories/empty_image.png' },
@@ -202,6 +203,7 @@ export default defineComponent({
       addItemToCart,
       addItemToWishlist,
       removeItemFromWishlist,
+      addToCart,
     };
   },
   methods: {},
