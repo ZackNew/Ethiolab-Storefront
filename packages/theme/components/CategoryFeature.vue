@@ -111,7 +111,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrap {
   @include for-desktop {
-    max-width: 1250px !important;
+    max-width: 1175px !important;
     margin: auto;
   }
 }

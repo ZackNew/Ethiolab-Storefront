@@ -91,7 +91,7 @@
         </div>
       </div>
 
-      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrap">
+      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrapsm">
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
             <!-- <SfHeading title="Recently Viewed Products" :level="2" /> -->
@@ -485,6 +485,12 @@ export default {
         this.bestSellings = produ;
       });
     },
+<<<<<<< Updated upstream
+=======
+    mymethod(url) {
+      window.location.href = url;
+    },
+>>>>>>> Stashed changes
   },
 
   setup() {
@@ -696,7 +702,7 @@ export default {
 }
 .wrapsm {
   @include for-desktop {
-    max-width: 900px !important;
+    max-width: 1100px !important;
     margin: auto;
   }
 }

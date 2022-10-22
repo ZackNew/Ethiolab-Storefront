@@ -222,7 +222,7 @@ export default defineComponent({
 }
 .wrap {
   @include for-desktop {
-    max-width: 1250px !important;
+    max-width: 1100px !important;
     margin: auto;
   }
 }

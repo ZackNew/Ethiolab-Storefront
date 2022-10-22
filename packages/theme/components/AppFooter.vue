@@ -201,10 +201,9 @@ export default {
         youtube_address:
           this.$store.state.companyDetails.companyInformation?.youtube_address,
       };
-      let sm = this.socialMedia;
       Object.keys(soci).forEach((s) => {
         const n = s.split('_')[0];
-        name_link.push({ name: n, link: soci[s] });
+        name_link.push({ name: n, link: soci[s] || '' });
       });
       return name_link;
     },
