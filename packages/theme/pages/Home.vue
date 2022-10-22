@@ -485,12 +485,6 @@ export default {
         this.bestSellings = produ;
       });
     },
-<<<<<<< Updated upstream
-=======
-    mymethod(url) {
-      window.location.href = url;
-    },
->>>>>>> Stashed changes
   },
 
   setup() {

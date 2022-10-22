@@ -1,68 +1,4 @@
 <template>
-<<<<<<< Updated upstream
-  <div>
-    <!-- <SfBreadcrumbs
-          class="breadcrumbs desktop-only"
-          :breadcrumbs="breadcrumbs"
-         />
-         <p>{{breadcrumbs}}</p> -->
-    <!-- <p>{{product[0].collections[0].breadcrumbs}}</p> -->
-    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
-      <ol class="sf-breadcrumbs__list">
-        <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link
-            class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
-            to="/"
-          >
-            Home
-          </nuxt-link>
-        </li>
-        <!-- <li  class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" :to="`/c/${getMainCategory || ''}`">
-            {{ getMainCategory|| '' }}
-          </nuxt-link>
-        </li> -->
-        <li
-          class="sf-breadcrumbs__list-item text-secondary font-bold"
-          :aria-current="false"
-        >
-          {{ products && products.name }}
-        </li>
-      </ol>
-    </nav>
-    <div class="flex mx-10">
-      <div class="w-1/2">
-        <LazyHydrate when-idle>
-          <SfGallery :images="productGallery" thumbWidth="500" enableZoom />
-        </LazyHydrate>
-      </div>
-
-      <div class="w-1/2">
-        <h2 class="text-secondary">{{ productVariants.name }}</h2>
-        <!-- <p class="font-semibold text-2xl">{{products && products.name}}</p> -->
-        <!-- <P class="text-secondary mt-5"></P> -->
-        <div class="text-xl font-bold mt-10" v-if="totalVariants === 1">
-          <span>Price </span>{{ prices }}
-        </div>
-        <div class="text-xl font-bold mt-5" v-else>
-          Price
-          <div class="inline-flex" v-for="(p, index) of prices" :key="index">
-            <div class="mx-2" v-if="index === 1">-</div>
-            <template>{{ p }}ETB </template>
-          </div>
-        </div>
-        <div>
-          <div
-            class="flex items-center justify-center text-center h-10 bg-light_gray mt-10"
-          >
-            <p class="mr-5">
-              {{ totalVariants }} variations of this product are available.
-            </p>
-            <a href="#var-table" class="text-secondary text-sm font-bold"
-              >SEE ALL PRODUCT OPTIONS BELOW
-            </a>
-          </div>
-=======
   <div id="variant">
     <div v-if="product !== null">
       <nav class="sf-breadcrumbs my-4" aria-label="breadcrumbs">
@@ -85,7 +21,6 @@
       <div class="grid grid-cols-12">
         <div class="col-span-6">
           <h1>ma nigga</h1>
->>>>>>> Stashed changes
         </div>
         <div class="col-span-6">
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
@@ -308,14 +243,9 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-<<<<<<< Updated upstream
-      const currentProducts = await axios.post(baseUrl, body, options);
-      this.productVariants = currentProducts.data.data?.product;
-=======
       const productVariant = await axios.post(baseUrl, body, options);
       this.product = productVariant?.data?.data?.product;
       console.log('pppppp', productVariant?.data?.data?.product);
->>>>>>> Stashed changes
     },
   },
   computed: {
@@ -347,135 +277,8 @@ export default {
       return { link: link, document: document };
     },
   },
-<<<<<<< Updated upstream
-  setup(props, context) {
-    const router = context.root.$router;
-    const route = context.root.$route;
-    let maxPrice = '';
-    let minPrice = '';
-    let mainCategory = '';
-
-    const { products, search, loading, error } = useProduct('<UNIQUE_ID>');
-    //  const {featuredAsset} = products.value;
-    // const productImage = computed(() => products.value?.assets[0]?.preview);
-
-    let getMainCategory = computed(() => {
-      return mainCategory;
-    });
-    const th = useUiHelpers();
-    const lastSlug = th.getLastSlugFromParams();
-
-    let checked = true;
-
-    const check = (e) => {
-      let temp = checked;
-      checked = !temp;
-    };
-
-    onSSR(async () => {
-      await search({ slug: lastSlug });
-    });
-
-    const product = computed(() => productGetters.getByFilters(products.value));
-    const breadcrumbs = computed(() => {
-      let temp = productGetters.getBreadcrumbs(product.value);
-      let path = [{ text: 'Home', link: '/' }];
-      if (temp.length > 1) {
-        temp.forEach((cat) => {
-          if (cat.name === '__root_collection__') {
-          } else {
-            path.push({
-              text: cat.name,
-              link: `c/${cat.slug}`,
-            });
-          }
-        });
-      } else {
-        path.push({
-          text: products && products.name,
-          link: `c/${products && products.slug}`,
-        });
-      }
-      return path;
-    });
-    const option = computed(() => productGetters.getOptions(products.value));
-
-    const configuration = computed(() =>
-      productGetters.getCategoryIds(product.value)
-    );
-
-    const productGallery = computed(() =>
-      productGetters.getAllGallery(products.value).map((img) => ({
-        mobile: { url: img.small },
-        desktop: { url: img.normal },
-        big: { url: img.big },
-        alt: products.value.name || products.value._name,
-      }))
-    );
-
-    const originalPrice = [];
-    const currentPrice = [];
-
-    product.value.forEach((element) => {
-      originalPrice.push(element.price.original);
-      currentPrice.push(element.price.current);
-    });
-
-    const maxP = Math.max(...currentPrice).toString();
-    const minP = Math.min(...currentPrice).toString();
-
-    maxPrice =
-      maxP.substring(0, maxP.length - 2) +
-      '.' +
-      maxP.substring(maxP.length - 2);
-    minPrice =
-      minP.substring(0, minP.length - 2) +
-      '.' +
-      minP.substring(minP.length - 2);
-
-    // const attributes = computed(() => productGetters.getAttributes(products.value))
-
-    onMounted(() => {
-      // if (option.value.length === 0) {
-      //   const slug = route.params.slug_1;
-      //   const id = products.value.id;
-      //   const vid = product.value[0]?._id;
-      //   router.push(`/p/${id}/${vid}/${slug}`);
-      //   console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', slug, id, vid);
-      // }
-      // if (option.value.length === 0) {
-      //   console.log('this is slug', route.params);
-      // }
-      // mainCategory=product[0].collections[0].breadcrumbs[1].slug
-      mainCategory = product.value;
-      //   console.log("the productsss image value is ", products.value.assets[0].preview)
-      // console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
-    });
-
-    return {
-      check,
-      checked,
-      loading,
-      error,
-      products,
-      product,
-      option,
-      breadcrumbs,
-      getMainCategory,
-      mainCategory,
-      configuration,
-      minPrice,
-      maxPrice,
-      originalPrice,
-      currentPrice,
-      productGallery,
-      LazyHydrate,
-      // productImage
-    };
-=======
   created() {
     this.getProductVariant();
->>>>>>> Stashed changes
   },
 };
 </script>
