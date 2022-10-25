@@ -4,7 +4,7 @@
       :style="
         !isDarkMode ? 'background-color: #ffffff' : 'background-color: #182533'
       "
-      class="card shadow-lg w-80 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
+      class="card shadow-lg w-80 md:w-52 my-3 mr-16 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
       v-for="product in filteredProducts"
       :key="product.id"
     >

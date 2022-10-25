@@ -3,7 +3,7 @@
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
     <div class="p-2 md:p-3">
       <div v-if="bestSellers.length !== 0" class="w-full text-center">
-        <h1 class="md:text-4xl">Best Seller</h1>
+        <h1 class="md:text-4xl text-secondary">Best Seller</h1>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
             :image="product.images[0]"
             :regular-price="product.price.current + ' ETB'"
             :imageHeight="240"
-            :imageWidth="170"
+            :imageWidth="500"
             :alt="product.name"
             :max-rating="5"
             :score-rating="3"

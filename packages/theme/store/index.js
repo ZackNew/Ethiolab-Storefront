@@ -1,5 +1,5 @@
 export const state = () => ({
-  sortCategory: '',
+  sortCategory: 'NNN',
 });
 
 export const getters = {};

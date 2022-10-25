@@ -18,33 +18,37 @@
           </li>
         </ol>
       </nav>
-      <div class="grid grid-cols-12">
-        <div class="col-span-6">
-          <h1>ma nigga</h1>
+      <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
+        <div class="md:mr-8 md:col-span-6">
+          <Gallery
+            :images="product.assets"
+            :display="
+              product.featuredAsset || {
+                preview: '~/static/categories/empty_image.png',
+              }
+            "
+            class="mb-5 md:mb-0"
+          />
         </div>
-        <div class="col-span-6">
+        <div class="md:col-span-6">
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
           <h3 class="text-secondary text-xl">
             <span class="font-bold mr-2">Price </span>{{ priceRange }}
           </h3>
           <div class="mt-4 bg-[#EAEAEA] rounded py-2 flex justify-around">
             <div v-if="product.variantList.totalItems === 1">
-              <h4>
-                <span class="text-lg">{{ product.variantList.totalItems }}</span
-                >Variant of this product are available.
-              </h4>
+              <h5>1 Variant of this product are available.</h5>
             </div>
             <div v-if="product.variantList.totalItems > 1">
-              <h4 class="text-lg">
+              <h5 class="text-lg">
                 <span>{{ product.variantList.totalItems }}</span>
                 Variants of this product are available.
-              </h4>
+              </h5>
             </div>
-            <a
-              href="#var-table"
-              class="text-secondary font-extrathin text-left text-lg"
-            >
-              SEE ALL PRODUCT OPTIONS BELOW
+            <a href="#var-table">
+              <h5 class="text-secondary font-extrathin">
+                SEE ALL PRODUCT OPTIONS BELOW
+              </h5>
             </a>
           </div>
           <iframe
@@ -82,11 +86,10 @@
         </div>
       </div>
 
-      <div class="mt-8">
-        <h1>hello table</h1>
+      <div class="hidden md:block mt-8">
         <SfTable id="var-table">
           <SfTableHeading class="bg-none">
-            <SfTableHeader class="text-secondary font-bold text-xl mr-10">
+            <SfTableHeader class="text-secondary font-bold text-xl">
               Item
             </SfTableHeader>
             <template v-if="product.variantList.items[0].options.length > 0">
@@ -115,14 +118,14 @@
                 <img
                   :src="variant.featuredAsset.preview"
                   alt=""
-                  class="float-left h-28 w-28 mr-2"
+                  class="float-left h-28 w-28 mr-2 object-cover"
                 />
               </div>
               <div v-else-if="product.featuredAsset">
                 <img
                   :src="product.featuredAsset.preview"
                   alt=""
-                  class="float-left h-28 w-28 mr-2"
+                  class="float-left h-28 w-28 mr-2 object-cover"
                 />
               </div>
               <p class="text-secondary">
@@ -146,8 +149,8 @@
               </p>
             </SfTableData>
             <SfTableData>
-              <div>
-                <div>
+              <div class="flex">
+                <div class="mr-4">
                   <h4 class="text-secondary">
                     <span class="font-bold">
                       {{
@@ -159,20 +162,90 @@
                     ETB
                   </h4>
                 </div>
-                <div>
-                  <input type="number" />
+                <div class="flex">
+                  <input
+                    :value="toCart"
+                    class="bg-light_accent w-14 text-center mr-1"
+                    type="number"
+                    :id="variant.id"
+                  />
                   <SfIcon
-                    icon="add_to_cart"
+                    :icon="
+                      isInCart({ product: { _variantId: variant.id } })
+                        ? 'added_to_cart'
+                        : 'add_to_cart'
+                    "
                     size="lg"
                     color="green-primary"
                     viewBox="0 0 24 24"
                     :coverage="1"
+                    @click="addToCart($event)"
                   />
                 </div>
               </div>
             </SfTableData>
           </SfTableRow>
         </SfTable>
+      </div>
+
+      <div class="md:hidden">
+        <div v-for="variant in product.variantList.items" :key="variant.id">
+          <div class="bg-white rounded-lg m-2 pb-3">
+            <div class="flex">
+              <div v-if="variant.featuredAsset">
+                <img :src="variant.featuredAsset.preview" alt="image" />
+              </div>
+              <div v-else-if="product.featuredAsset">
+                <img
+                  :src="product.featuredAsset.preview"
+                  alt="image"
+                  class="w-20 h-20 object-cover m-2"
+                />
+              </div>
+              <div>
+                <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
+                <h6 class="ml-4 text-secondary">
+                  {{
+                    String(variant.priceWithTax).slice(0, -2) +
+                    '.' +
+                    String(variant.priceWithTax).slice(-2)
+                  }}
+                  ETB
+                </h6>
+              </div>
+            </div>
+            <div class="ml-4">
+              <div v-for="(option, i) in variant.options" :key="i">
+                <h6 class="text-secondary">
+                  {{ option.group.name }} : {{ option.name }}
+                </h6>
+              </div>
+              <h6 class="text-secondary">
+                Availability: {{ variant.stockLevel }}
+              </h6>
+              <div class="flex">
+                <input
+                  :value="toCart"
+                  class="bg-light_accent w-14 text-center mr-1"
+                  type="number"
+                  :id="variant.id"
+                />
+                <SfIcon
+                  :icon="
+                    isInCart({ product: { _variantId: variant.id } })
+                      ? 'added_to_cart'
+                      : 'add_to_cart'
+                  "
+                  size="lg"
+                  color="green-primary"
+                  viewBox="0 0 24 24"
+                  :coverage="1"
+                  @click="addToCart($event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -181,15 +254,20 @@
 <script>
 import axios from 'axios';
 import { SfButton, SfTable, SfIcon } from '@storefront-ui/vue';
+import { useWishlist, useCart } from '@vue-storefront/vendure';
+import Gallery from '~/components/Gallery.vue';
+
 export default {
   components: {
     SfButton,
     SfTable,
     SfIcon,
+    Gallery,
   },
   data() {
     return {
       product: null,
+      toCart: 1,
     };
   },
   methods: {
@@ -277,6 +355,31 @@ export default {
       return { link: link, document: document };
     },
   },
+  setup() {
+    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const addToCart = (e) => {
+      const quantity =
+        Number(e.target.parentElement.parentElement.firstChild.value) ||
+        Number(
+          e.target.parentElement.parentElement.parentElement.firstChild.value
+        );
+      const variantId =
+        e.target.parentElement.parentElement.firstChild.id ||
+        e.target.parentElement.parentElement.parentElement.firstChild.id;
+      console.log('sds', quantity);
+      console.log('mdm', variantId);
+      addItemToCart({
+        product: {
+          _variantId: variantId,
+        },
+        quantity: quantity,
+      });
+    };
+    return {
+      isInCart,
+      addToCart,
+    };
+  },
   created() {
     this.getProductVariant();
   },
@@ -287,7 +390,7 @@ export default {
 #variant {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 1300px !important;
+    max-width: 1250px !important;
     padding: 0;
     margin: 0 auto;
   }

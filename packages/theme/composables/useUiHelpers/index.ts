@@ -13,7 +13,7 @@ const reduceFilters = (query) => (prev, curr) => {
 
   return {
     ...prev,
-    [curr]: makeArray ? query[curr] : [query[curr]]
+    [curr]: makeArray ? query[curr] : [query[curr]],
   };
 };
 
@@ -21,7 +21,9 @@ const getFiltersDataFromUrl = (context, onlyFilters) => {
   const { query } = context.$router.history.current;
 
   return Object.keys(query)
-    .filter(f => onlyFilters ? !nonFilters.includes(f) : nonFilters.includes(f))
+    .filter((f) =>
+      onlyFilters ? !nonFilters.includes(f) : nonFilters.includes(f)
+    )
     .reduce(reduceFilters(query), {});
 };
 
@@ -31,7 +33,10 @@ const useUiHelpers = () => {
 
   const getFacetsFromURL = () => {
     const { query, params } = instance.$router.history.current;
-    const categorySlug = Object.keys(params).reduce((prev, curr) => params[curr] || prev, params.slug_1);
+    const categorySlug = Object.keys(params).reduce(
+      (prev, curr) => params[curr] || prev,
+      params.slug_1
+    );
 
     const sortOptions: any = {};
     if (query.sort?.split('_')[0] === 'PRICE') {
@@ -45,7 +50,7 @@ const useUiHelpers = () => {
       take: parseInt(query.itemsPerPage, 10) || 20,
       groupByProduct: true,
       sort: sortOptions,
-      facetValueIds: query.attributes || []
+      facetValueIds: query.attributes || [],
     };
   };
 
@@ -61,7 +66,7 @@ const useUiHelpers = () => {
       sort: query.sort || 'latest',
       filters: getFiltersDataFromUrl(instance, true),
       itemsPerPage: parseInt(query.itemsPerPage, 10) || 20,
-      phrase: query.phrase
+      phrase: query.phrase,
     };
   };
 
@@ -72,55 +77,52 @@ const useUiHelpers = () => {
 
   const getLastSlugFromParams = () => {
     const params = Object.values(instance.$route.params);
-    const truthySlugs = params.filter(param => Boolean(param));
+    const truthySlugs = params.filter((param) => Boolean(param));
     return truthySlugs[truthySlugs.length - 1];
   };
 
   const getCatLink = (category): string => {
     const urlCategorySlug = instance.$route.params.slug_1;
-    return urlCategorySlug.includes(category.slug) ? `/c/${urlCategorySlug}` : `/c/${urlCategorySlug}/${category.slug}`;
+    return urlCategorySlug.includes(category.slug)
+      ? `/c/${urlCategorySlug}`
+      : `/c/${urlCategorySlug}/${category.slug}`;
   };
 
   const getFormattedBreadcrumbs = (breadcrumbs) => {
     const urlCategorySlug = instance.$route.params.slug_1;
-    return breadcrumbs?.map(breadcrumb => ({
+    return breadcrumbs?.map((breadcrumb) => ({
       text: breadcrumb?.text,
-      link: breadcrumb?.link === urlCategorySlug ? `/c/${breadcrumb?.link}` : breadcrumb?.link
+      link:
+        breadcrumb?.link === urlCategorySlug
+          ? `/c/${breadcrumb?.link}`
+          : breadcrumb?.link,
     }));
   };
 
   const changeSorting = (sort: string) => {
     const { query } = instance.$router.history.current;
     instance.$router.push({ query: { ...query, sort } });
-    if(sort == "NAME_ASC"){
-    localStorage.setItem("sort", "Name from A to Z")
-
+    if (sort == 'NAME_ASC') {
+      process.client ? localStorage.setItem('sort', 'Name from A to Z') : '';
+    } else if (sort == 'NAME_DESC') {
+      process.client ? localStorage.setItem('sort', 'Name from Z to A') : '';
+    } else if (sort == 'PRICE_ASC') {
+      process.client
+        ? localStorage.setItem('sort', 'Price from low to high')
+        : '';
+    } else if (sort == 'PRICE_DESC') {
+      process.client
+        ? localStorage.setItem('sort', 'Price from high to low')
+        : '';
     }
-
-    else if(sort == "NAME_DESC"){
-      localStorage.setItem("sort", "Name from Z to A")
-      
-    }
-
-    else if(sort == "PRICE_ASC"){
-    localStorage.setItem("sort", "Price from low to high")
-      
-    }
-
-   else if(sort == "PRICE_DESC"){
-    localStorage.setItem("sort", "Price from high to low")
-      
-    }
-
-
   };
 
   const changeFilters = (filters: any) => {
     instance.$router.push({
       query: {
         ...getFiltersDataFromUrl(instance, false),
-        ...filters
-      }
+        ...filters,
+      },
     });
   };
 
@@ -128,8 +130,8 @@ const useUiHelpers = () => {
     instance.$router.push({
       query: {
         ...getFiltersDataFromUrl(instance, false),
-        itemsPerPage
-      }
+        itemsPerPage,
+      },
     });
   };
 
@@ -137,8 +139,8 @@ const useUiHelpers = () => {
     instance.$router.push({
       query: {
         ...getFiltersDataFromUrl(instance, false),
-        phrase: term || undefined
-      }
+        phrase: term || undefined,
+      },
     });
   };
 
@@ -158,7 +160,7 @@ const useUiHelpers = () => {
     getSearchTermFromUrl,
     doesUrlIncludesCategory,
     getLastSlugFromParams,
-    getFormattedBreadcrumbs
+    getFormattedBreadcrumbs,
   };
 };
 

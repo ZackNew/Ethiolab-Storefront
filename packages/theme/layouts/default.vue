@@ -214,4 +214,21 @@ h4 {
 .sf-table__heading {
   border-color: #f0f7fc;
 }
+.slick-next:before {
+  display: none;
+}
+.slick-prev:before {
+  display: none;
+}
+.sf-accordion-item__content {
+  max-height: 30rem;
+  overflow: auto;
+}
+.sf-accordion-item__content::-webkit-scrollbar {
+  display: none;
+}
+// .vue-magnifier-container .preview {
+//   width: 150px;
+//   height: 150px;
+// }
 </style>

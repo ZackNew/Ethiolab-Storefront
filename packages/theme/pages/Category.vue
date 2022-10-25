@@ -75,8 +75,12 @@
             <span class="navbar__label desktop-only text-secondary"
               >{{ $t('Products found') }}:
             </span>
-            <span class="desktop-only">{{ allProducts.length }}</span>
-            <span class="navbar__label smartphone-only text-secondary"
+            <span v-if="typeof allProducts === Array" class="desktop-only">{{
+              allProducts.length
+            }}</span>
+            <span
+              v-if="typeof allProducts === Array"
+              class="navbar__label smartphone-only text-secondary"
               >{{ allProducts.length }} {{ $t('Items') }}</span
             >
           </div>
@@ -188,7 +192,7 @@
                       ? cat.featuredAsset.preview
                       : '/categories/cat2.jpeg'
                   "
-                  class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
+                  class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[22%] min-w-[22%]"
                 />
                 <div class="w-full overflow-auto no-scrollbar">
                   <p
@@ -268,7 +272,7 @@
           >
             Products Under This Category
           </h3>
-          <div class="max-h-[60rem] overflow-auto nobar w-full">
+          <div :class="`max-h-[${height}rem] overflow-hidden nobar w-full`">
             <transition-group
               v-if="isCategoryGridView"
               appear
@@ -375,6 +379,9 @@
               </SfProductCardHorizontal>
             </transition-group>
           </div>
+          <button class="text-secondary" @click="increaseHeight">
+            Show More +
+          </button>
 
           <LazyHydrate on-interaction>
             <SfPagination
@@ -416,7 +423,7 @@
             v-if="bestSellings.length !== 0"
             class="font-bold text-secondary mt-12 pb-2 mb-10"
           >
-            Shop Our Best Sellers
+            Shop Our Best Sellers {{ $store.state.sortCategory }}
           </h3>
 
           <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
@@ -595,9 +602,6 @@ export default {
     const sortBy = computed(() =>
       facetGetters.getSortOptions(searchResult.value)
     );
-    const sorting = function () {
-      th.changeSorting;
-    };
     const facets = computed(() => facetGetters.getGrouped(searchResult.value));
     const products = computed(() =>
       facetGetters.getProducts(searchResult.value)
@@ -638,7 +642,7 @@ export default {
     const activeCategory = computed(() => {
       const items = categoryTree.value;
 
-      if (!items || !items.length) {
+      if (!items || !items?.length) {
         return '';
       }
 
@@ -651,7 +655,7 @@ export default {
     });
     const selectedFilters = ref({});
     const setSelectedFilters = () => {
-      if (!facets.value.length || Object.keys(selectedFilters.value).length)
+      if (!facets.value?.length || Object.keys(selectedFilters.value)?.length)
         return;
       selectedFilters.value = facets.value.reduce(
         (prev, curr) => ({
@@ -761,6 +765,11 @@ export default {
     ProductCard,
   },
   methods: {
+    increaseHeight() {
+      console.log('first', this.height);
+      this.height += 64;
+      console.log('second', this.height);
+    },
     async getActiveCategory() {
       const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
@@ -926,7 +935,7 @@ export default {
   created() {
     this.getActiveCategory();
     this.getBestSellersCategory();
-    this.sort = localStorage.getItem('sort');
+    this.sort = process.client ? localStorage.getItem('sort') : '';
   },
   data() {
     return {
@@ -934,6 +943,7 @@ export default {
       bestSellings: [],
       currentCategory: null,
       sort: '',
+      height: 96,
     };
   },
   computed: {
