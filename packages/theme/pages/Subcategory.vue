@@ -1,19 +1,20 @@
 <template>
-  <div class="mt-12">
+  <div class="mt-12" id="subcategory">
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin" to="/">
             Home
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" :to="`/c/${parent}`">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin" :to="`/c/${parent}`">
             {{ parent }}
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          {{ categoryName }}
+          <p class="text-secondary font-bold"> {{ categoryName }} </p>
+         
         </li>
       </ol>
     </nav>
@@ -21,7 +22,7 @@
       <!-- Side filter search or an Ad -->
       <div
         :style="!isDarkMode ? '' : 'background-color: #182533'"
-        class="shadow-xl rounded-lg w-96 h-3/4 hidden md:block"
+        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] h-3/4 hidden md:block mr-4 bg-white border-white"
       >
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
@@ -32,7 +33,7 @@
             :filters="filters"
           />
         </div>
-        <div class="p-3">
+        <!-- <div class="p-3">
           <LazyHydrate>
             <Banner
               :title="adSection.title || 'AD Title'"
@@ -45,23 +46,23 @@
             >
             </Banner>
           </LazyHydrate>
-        </div>
+        </div> -->
       </div>
       <!-- Subcategory name and description -->
-      <div class="ml-6 w-full">
-        <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
+      <div class="ml-6 w-[72%]">
+        <h1 class="sf-heading__title font-medium text-4xl font-sans text-secondary">
           {{ categoryName }}
-        </h2>
+        </h1>
         <div
-          class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
+          class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
-            class="rounded-md my-auto max-h-40 min-h-40 bg-light max-w-[25%]"
+          class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
             :src="categoryImg || '/categories/empty_image.png'"
             alt=""
           />
-          <div class="rounded w-full overflow-auto no-scrollbar">
-            <p class="py-4 ml-4 mr-4 text-white" v-html="description"></p>
+          <div class="w-full overflow-auto no-scrollbar">
+            <p class="py-4 ml-4 mr-4 text-secondary text-thin" v-html="description"></p>
           </div>
         </div>
         <div
@@ -168,7 +169,7 @@
               @filterClicked="filterProducts"
               :filters="filters"
             />
-            <div class="p-3">
+            <!-- <div class="p-3">
               <LazyHydrate>
                 <SfBanner
                   :title="adSection.title || 'AD Title'"
@@ -181,10 +182,27 @@
                 >
                 </SfBanner>
               </LazyHydrate>
-            </div>
+            </div> -->
           </div>
           <!-- Products -->
-          <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
+
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
+    <div
+      :style="
+        !isDarkMode ? 'background-color: #ffffff' : 'background-color: #182533'
+      "
+      class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
+      v-for="product in filteredSearchedProducts"
+      :key="product.id"
+    >
+
+    <!-- <p>{{product.name}}</p> -->
+
+      <SubcatBrandCard :product="product" />
+
+      </div>
+      </div>
+          
           <!-- <div
             style="background-color: #e2e5de"
             class="card mr-16 ml-4 mt-5 w-auto h-12"
@@ -245,7 +263,7 @@ export default {
 
       const lower = this.low || 0;
 
-      const high = this.high || 1000000;
+      const high = this.high || 1000000000;
 
       let searchProduct = this.products.filter((product) =>
         product.name.toLowerCase().includes(this.search.toLowerCase())
@@ -254,7 +272,7 @@ export default {
       searchProduct = searchProduct.filter((product) => {
         let total_price = 0;
         for (const variant of product.variants) {
-          total_price += Number(String(variant.price).slice(0, -2));
+          total_price += Number(String(variant.priceWithTax).slice(0, -2));
         }
         total_price = total_price / product.variants.length;
 
@@ -345,9 +363,12 @@ export default {
       this.search = event;
     },
     maxInput(event) {
+      console.log("maxinput value ", typeof(event))
       this.high = event;
     },
     minInput(event) {
+      console.log("mininput value ", typeof(event))
+
       this.low = event;
     },
     filterProducts(event) {
@@ -414,7 +435,7 @@ export default {
                             slug
                             description
                             variants {
-                              price
+                              priceWithTax
                             }
                             featuredAsset{
                               preview
@@ -444,6 +465,7 @@ export default {
               },
             };
             var prod = await axios.post(baseUrl, pbody, poptions);
+            // console.log("the subcategory prod values are ", prod)
             this.products = prod.data?.data?.products?.items;
           }
           this.loading = false;
@@ -486,8 +508,20 @@ export default {
 };
 </script>
 
-<style scoped>
+<style  lang="scss" scoped>
+
+#subcategory {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1250px;
+    margin: 0 auto;
+  }
+}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.breadcrumbs {
+  margin: var(--spacer-base) auto var(--spacer-lg);
 }
 </style>
