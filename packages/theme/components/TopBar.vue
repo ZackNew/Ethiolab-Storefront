@@ -57,6 +57,7 @@ import { SfButton, SfTopBar, SfIcon } from '@storefront-ui/vue';
 import LocaleSelector from './LocaleSelector.vue';
 import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import ThemeChanger from './ThemeChanger.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -73,7 +74,7 @@ export default {
         { name: 'Help', link: '/pages/helpAndFAQ' },
         { name: 'Contact us', link: '/pages/contact' },
         {
-          name: this.$store.state.companyDetails.companyInformation?.phone_number.split(
+          name: this.$store.state.companyDetails.companyInformation?.phone_number?.split(
             ';'
           )[0],
           link: '#',
@@ -83,7 +84,7 @@ export default {
       return navigation;
     },
     phoneNumber() {
-      return this.$store.state.companyDetails.companyInformation?.phone_number.split(
+      return this.$store.state.companyDetails.companyInformation?.phone_number?.split(
         ';'
       )[0];
     },
@@ -99,8 +100,46 @@ export default {
     //   headerNavigation,
     // };
   },
+  methods: {
+    async getInfos() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `query{
+          getCompanyInfos{
+            id
+            company_name
+            email
+            phone_number
+            icon{
+              preview
+            }
+            facebook_address
+            instagram_address
+            twitter_address 
+            linkdin_address
+            telegram_address
+            youtube_address
+            longitude
+            latitude  
+          }
+        }`,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const compy = await axios.post(baseUrl, body, options);
+      const infos = compy?.data?.data?.getCompanyInfos;
+      console.log('iasdnfaeisbdfia', infos);
+      this.$store.commit('companyDetails/SET_COMPANY_INFORMATION', {
+        company: infos,
+      });
+    },
+  },
   created() {
-    this.$store.dispatch('companyDetails/getCompanyInfo');
+    this.getInfos();
   },
 };
 </script>

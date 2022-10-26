@@ -59,10 +59,7 @@
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
-        <ValidationProvider
-          name="state"
-          slim
-        >
+        <ValidationProvider name="state" slim>
           <SfInput
             v-e2e="'shipping-state'"
             v-model="form.state"
@@ -118,72 +115,77 @@
         >
           {{ $t('Continue to billing') }}
         </SfButton>
-        </div>
+      </div>
     </form>
   </ValidationObserver>
 </template>
 
 <script>
-import {
-  SfHeading,
-  SfInput,
-  SfButton,
-  SfSelect
-} from '@storefront-ui/vue';
+import { SfHeading, SfInput, SfButton, SfSelect } from '@storefront-ui/vue';
 import { ref, onMounted } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import { useShipping, useShippingProvider, useUserShipping } from '@vue-storefront/vendure';
+import {
+  useShipping,
+  useShippingProvider,
+  useUserShipping,
+} from '@vue-storefront/vendure';
 import { required, min, digits } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
-import { mapAddressFormToOrderAddress, COUNTRIES, getDefaultAddress, mapAddressToAddressForm } from '~/helpers';
+import {
+  mapAddressFormToOrderAddress,
+  COUNTRIES,
+  getDefaultAddress,
+  mapAddressToAddressForm,
+} from '~/helpers';
 import '@/helpers';
 
 extend('required', {
   ...required,
-  message: 'This field is required'
+  message: 'This field is required',
 });
 extend('min', {
   ...min,
-  message: 'The field should have at least {length} characters'
+  message: 'The field should have at least {length} characters',
 });
 extend('digits', {
   ...digits,
-  message: 'Please provide a valid phone number'
+  message: 'Please provide a valid phone number',
 });
 
 export default {
   name: 'Shipping',
   components: {
     SfHeading,
-    SfInput, 
+    SfInput,
     SfButton,
     SfSelect,
     ValidationProvider,
     ValidationObserver,
-    VsfShippingProvider: () => import('~/components/Checkout/VsfShippingProvider')
+    VsfShippingProvider: () =>
+      import('~/components/Checkout/VsfShippingProvider'),
   },
-  setup () {
+  setup() {
     const isFormSubmitted = ref(false);
     const { load, save, loading } = useShipping();
     const { loading: loadingShippingProvider } = useShippingProvider();
-    const { shipping: userShipping, load: loadUserShipping } = useUserShipping();
+    const { shipping: userShipping, load: loadUserShipping } =
+      useUserShipping();
     const shouldDisplayButton = ref(false);
 
     const form = ref({
       firstName: '',
       lastName: '',
-     // streetName: '',
+      // streetName: '',
       //apartment: '',
       city: '',
       state: '',
       //country: '',
       //postalCode: '',
-      phone: null
+      phone: null,
     });
 
     const handleFormSubmit = async () => {
       const orderAddress = mapAddressFormToOrderAddress(form.value);
-      console.log(orderAddress);
       await save({ shippingDetails: orderAddress });
       isFormSubmitted.value = true;
     };
@@ -199,7 +201,10 @@ export default {
     onMounted(async () => {
       await loadUserShipping();
       if (userShipping.value) {
-        const defaultAddress = getDefaultAddress(userShipping.value, 'shipping');
+        const defaultAddress = getDefaultAddress(
+          userShipping.value,
+          'shipping'
+        );
         const formAddress = mapAddressToAddressForm(defaultAddress);
         form.value = {
           firstName: formAddress.firstName,
@@ -210,7 +215,7 @@ export default {
           state: formAddress.state,
           country: formAddress.country,
           postalCode: formAddress.postalCode,
-          phone: formAddress.phone
+          phone: formAddress.phone,
         };
       }
     });
@@ -223,9 +228,9 @@ export default {
       handleFormSubmit,
       loadingShippingProvider,
       displayBillingButton,
-      shouldDisplayButton
+      shouldDisplayButton,
     };
-  }
+  },
 };
 </script>
 
@@ -291,7 +296,7 @@ export default {
   &__back-button {
     margin: var(--spacer-xl) 0 var(--spacer-sm);
     &:hover {
-      color:  var(--c-white);
+      color: var(--c-white);
     }
     @include for-desktop {
       margin: 0 var(--spacer-xl) 0 0;
@@ -313,7 +318,7 @@ export default {
 .title {
   margin: var(--spacer-xl) 0 var(--spacer-base) 0;
 }
-.form__action-button{
+.form__action-button {
   color: black;
 }
 </style>

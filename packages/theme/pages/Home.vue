@@ -91,11 +91,11 @@
         </div>
       </div>
 
-      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrap">
+      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrapsm">
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
             <!-- <SfHeading title="Recently Viewed Products" :level="2" /> -->
-            <h1 class="md:text-4xl">Recently Viewed Products</h1>
+            <h1 class="md:text-4xl text-secondary">Recently Viewed Products</h1>
           </div>
         </LazyHydrate>
         <LazyHydrate when-visible>
@@ -426,7 +426,6 @@ export default {
       const a = slugs.forEach((s) => {
         STRSlug.push(s[0]);
       });
-      console.log('ddddddddjjjjjjjjjjjj', slugs);
       const pbody = {
         query: `
         query BSProducts($in: [String!]!) {
@@ -484,12 +483,7 @@ export default {
           return prod;
         });
         this.bestSellings = produ;
-        console.log('minini', this.bestSellings);
       });
-    },
-    mymethod(url) {
-      console.log('button clicked');
-      window.location.href = url;
     },
   },
 
@@ -506,12 +500,8 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
-    //console.log(useTest())
 
     const { writeQuote, load, myQuotes } = useQuote();
-
-    //console.log({comps})
-    // console.log(getCms.value[0] )
 
     const heroSection = computed(() =>
       JSON.parse(getCms.value[0]?.content ?? '{}')
@@ -522,9 +512,6 @@ export default {
     const heroImage = computed(() => getCms.value[0]?.featuredAsset.preview);
     const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
     const headerNavigation = [];
-    // console.log('products',products)
-    //       console.log("the adsection value is ", adSection);
-
     const getTree = () => {
       categories.value.items.forEach((a) => {
         if (a.children.length > 0) {
@@ -709,7 +696,7 @@ export default {
 }
 .wrapsm {
   @include for-desktop {
-    max-width: 900px !important;
+    max-width: 1100px !important;
     margin: auto;
   }
 }

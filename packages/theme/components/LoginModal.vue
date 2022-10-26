@@ -357,11 +357,9 @@ export default {
         error.register = userError.value.register?.message;
         return;
       }
-      console.log('logged or signed', form.value);
       // if (isSubscribe.value === true) {
       // }
       isSubscribe.value ? onSubscribe() : '';
-      console.log('beg', isSubscribe.value);
       toggleLoginModal();
     };
 

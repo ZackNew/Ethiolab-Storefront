@@ -230,10 +230,6 @@ export default {
  
 
     onMounted(() => {
-      console.log("the usecart cart value is ", cart);
-      console.log("the final payment detail value is ", paymentDetail)
-      console.log("amount type", typeof(paymentDetail.transaction_uuid))
-      console.log("the time value is ", time)
     })
 
     onBeforeMount(() => {

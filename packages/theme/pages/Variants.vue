@@ -1,286 +1,291 @@
 <template>
-  <div>
-    <!-- <SfBreadcrumbs
-          class="breadcrumbs desktop-only"
-          :breadcrumbs="breadcrumbs"
-         />
-         <p>{{breadcrumbs}}</p> -->
-    <!-- <p>{{product[0].collections[0].breadcrumbs}}</p> -->
-    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
-      <ol class="sf-breadcrumbs__list">
-        <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
-            Home
-          </nuxt-link>
-        </li>
-        <!-- <li  class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" :to="`/c/${getMainCategory || ''}`">
-            {{ getMainCategory|| '' }}
-          </nuxt-link>
-        </li> -->
-        <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          {{ products && products.name }}
-        </li>
-      </ol>
-    </nav>
-    <div class="flex mx-10">
-      <div class="w-1/2">
-        <LazyHydrate when-idle>
-          <SfGallery :images="productGallery" thumbWidth="500" enableZoom />
-        </LazyHydrate>
-      </div>
-
-      <div class="w-1/2">
-        <h2 class="text-secondary">{{ productVariants.name }}</h2>
-        <!-- <p class="font-semibold text-2xl">{{products && products.name}}</p> -->
-        <!-- <P class="text-secondary mt-5"></P> -->
-        <div class="text-xl font-bold mt-10" v-if="totalVariants === 1">
-          <span>Price </span>{{ prices }}
-        </div>
-        <div class="text-xl font-bold mt-5" v-else>
-          Price
-          <div class="inline-flex" v-for="(p, index) of prices" :key="index">
-            <div class="mx-2" v-if="index === 1">-</div>
-            <template>{{ p }}ETB </template>
-          </div>
-        </div>
-        <div>
-          <div
-            class="flex items-center justify-center text-center h-10 bg-light_gray mt-10"
-          >
-            <p class="mr-5">
-              {{ totalVariants }} variations of this product are available.
-            </p>
-            <a href="#var-table" class="text-secondary text-sm font-bold"
-              >SEE ALL PRODUCT OPTIONS BELOW
-            </a>
-          </div>
-        </div>
-        <div>
-          <div
-            class="overflow-auto nobar hover:border border-light_gray p-1 max-h-72 mt-5"
-          >
-            <p
-              class="text-justify"
-              :class="classes.red"
-              v-html="productVariants.description"
-            ></p>
-          </div>
-          <button
-            v-if="descriptionDocument"
-            class="bg-secondary my-2 p-1 rounded"
-          >
-            <a
-              class="text-white"
-              :href="url + descriptionDocument"
-              target="_blank"
+  <div id="variant">
+    <div v-if="product !== null">
+      <nav class="sf-breadcrumbs my-4" aria-label="breadcrumbs">
+        <ol class="sf-breadcrumbs__list">
+          <li class="sf-breadcrumbs__list-item" :aria-current="false">
+            <nuxt-link
+              class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+              to="/"
             >
-              See full description
+              Home
+            </nuxt-link>
+          </li>
+          <li class="sf-breadcrumbs__list-item" :aria-current="false">
+            <h5 class="text-secondary font-bold">
+              {{ product.name }}
+            </h5>
+          </li>
+        </ol>
+      </nav>
+      <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
+        <div class="md:mr-8 md:col-span-6">
+          <Gallery
+            :images="product.assets"
+            :display="
+              product.featuredAsset || {
+                preview: '~/static/categories/empty_image.png',
+              }
+            "
+            class="mb-5 md:mb-0"
+          />
+        </div>
+        <div class="md:col-span-6">
+          <h2 class="text-secondary font-bold">{{ product.name }}</h2>
+          <h3 class="text-secondary text-xl">
+            <span class="font-bold mr-2">Price </span>{{ priceRange }}
+          </h3>
+          <div class="mt-4 bg-[#EAEAEA] rounded py-2 flex justify-around">
+            <div v-if="product.variantList.totalItems === 1">
+              <h5>1 Variant of this product are available.</h5>
+            </div>
+            <div v-if="product.variantList.totalItems > 1">
+              <h5 class="text-lg">
+                <span>{{ product.variantList.totalItems }}</span>
+                Variants of this product are available.
+              </h5>
+            </div>
+            <a href="#var-table">
+              <h5 class="text-secondary font-extrathin">
+                SEE ALL PRODUCT OPTIONS BELOW
+              </h5>
             </a>
-            <!-- Get documentation -->
-          </button>
+          </div>
           <iframe
             class="mt-4"
-            width="560"
-            height="315"
-            :src="`https://www.youtube-nocookie.com/embed/${link}?playlist=${link}&loop=1&controls=0`"
+            width="545"
+            height="300"
+            :src="`https://www.youtube-nocookie.com/embed/${custom.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${custom.link}&rel=0`"
             title="YouTube video player"
             frameborder="0"
-            v-if="link"
+            v-if="custom.link"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
-          <br />
-          <div
-            class="inline-block mt-4"
-            v-for="(facet, index) in facets"
-            :key="index"
+          <p
+            class="text-justify mt-2"
+            :class="classes.red"
+            v-html="product.description"
+          ></p>
+          <SfButton
+            v-if="custom.document"
+            class="bg-secondary my-2 pb-2 pt-3 rounded"
           >
-            <span class="bg-light_accent p-2 rounded ml-2">
-              {{ facet.name }}
-            </span>
+            <a class="text-white px-1" :href="custom.document" target="_blank">
+              See full description
+            </a>
+            <!-- Get documentation -->
+          </SfButton>
+          <div v-if="product.facetValues !== []" class="flex">
+            <div v-for="(facet, i) in product.facetValues" :key="i">
+              <p class="bg-[#a7c6ed] mr-4 px-3 py-[0.5] rounded">
+                {{ facet.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden md:block mt-8">
+        <SfTable id="var-table">
+          <SfTableHeading class="bg-none">
+            <SfTableHeader class="text-secondary font-bold text-xl">
+              Item
+            </SfTableHeader>
+            <template v-if="product.variantList.items[0].options.length > 0">
+              <SfTableHeader
+                class="text-secondary font-bold text-xl"
+                v-for="(o, index) in product.variantList.items[0].options"
+                :key="index"
+              >
+                {{ o.group.name }}
+              </SfTableHeader>
+            </template>
+            <SfTableHeader class="text-secondary font-bold text-xl">
+              Availability
+            </SfTableHeader>
+            <SfTableHeader class="text-secondary font-bold text-xl">
+              Price
+            </SfTableHeader>
+          </SfTableHeading>
+          <SfTableRow
+            v-for="variant in product.variantList.items"
+            :key="variant.id"
+            class="mb-4"
+          >
+            <SfTableData class="flex">
+              <div v-if="variant.featuredAsset">
+                <img
+                  :src="variant.featuredAsset.preview"
+                  alt=""
+                  class="float-left h-28 w-28 mr-2 object-cover"
+                />
+              </div>
+              <div v-else-if="product.featuredAsset">
+                <img
+                  :src="product.featuredAsset.preview"
+                  alt=""
+                  class="float-left h-28 w-28 mr-2 object-cover"
+                />
+              </div>
+              <p class="text-secondary">
+                <nuxt-link
+                  class="text-secondary"
+                  :to="`/p/${product.id}/${variant.id}/${product.slug}`"
+                >
+                  {{ variant.sku }}
+                </nuxt-link>
+              </p>
+            </SfTableData>
+            <SfTableData
+              v-for="(option, index) in variant.options"
+              :key="index"
+            >
+              <p class="text-secondary">{{ option.name }}</p>
+            </SfTableData>
+            <SfTableData
+              ><p class="text-secondary">
+                {{ variant.stockLevel }}
+              </p>
+            </SfTableData>
+            <SfTableData>
+              <div class="flex">
+                <div class="mr-4">
+                  <h4 class="text-secondary">
+                    <span class="font-bold">
+                      {{
+                        String(variant.priceWithTax).slice(0, -2) +
+                        '.' +
+                        String(variant.priceWithTax).slice(-2)
+                      }}
+                    </span>
+                    ETB
+                  </h4>
+                </div>
+                <div class="flex">
+                  <input
+                    :value="toCart"
+                    class="bg-light_accent w-14 text-center mr-1"
+                    type="number"
+                    :id="variant.id"
+                  />
+                  <SfIcon
+                    :icon="
+                      isInCart({ product: { _variantId: variant.id } })
+                        ? 'added_to_cart'
+                        : 'add_to_cart'
+                    "
+                    size="lg"
+                    color="green-primary"
+                    viewBox="0 0 24 24"
+                    :coverage="1"
+                    @click="addToCart($event)"
+                  />
+                </div>
+              </div>
+            </SfTableData>
+          </SfTableRow>
+        </SfTable>
+      </div>
+
+      <div class="md:hidden">
+        <div v-for="variant in product.variantList.items" :key="variant.id">
+          <div class="bg-white rounded-lg m-2 pb-3">
+            <div class="flex">
+              <div v-if="variant.featuredAsset">
+                <img :src="variant.featuredAsset.preview" alt="image" />
+              </div>
+              <div v-else-if="product.featuredAsset">
+                <img
+                  :src="product.featuredAsset.preview"
+                  alt="image"
+                  class="w-20 h-20 object-cover m-2"
+                />
+              </div>
+              <div>
+                <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
+                <h6 class="ml-4 text-secondary">
+                  {{
+                    String(variant.priceWithTax).slice(0, -2) +
+                    '.' +
+                    String(variant.priceWithTax).slice(-2)
+                  }}
+                  ETB
+                </h6>
+              </div>
+            </div>
+            <div class="ml-4">
+              <div v-for="(option, i) in variant.options" :key="i">
+                <h6 class="text-secondary">
+                  {{ option.group.name }} : {{ option.name }}
+                </h6>
+              </div>
+              <h6 class="text-secondary">
+                Availability: {{ variant.stockLevel }}
+              </h6>
+              <div class="flex">
+                <input
+                  :value="toCart"
+                  class="bg-light_accent w-14 text-center mr-1"
+                  type="number"
+                  :id="variant.id"
+                />
+                <SfIcon
+                  :icon="
+                    isInCart({ product: { _variantId: variant.id } })
+                      ? 'added_to_cart'
+                      : 'add_to_cart'
+                  "
+                  size="lg"
+                  color="green-primary"
+                  viewBox="0 0 24 24"
+                  :coverage="1"
+                  @click="addToCart($event)"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="md:hidden mt-10">
-      <div
-        v-for="(pro, i) in product && product"
-        :key="i"
-        class="flex shadow-lg card mx-3 mt-5 mb-1"
-      >
-        <nuxt-link :to="'/p/' + products.id + '/' + pro._id + '/' + pro.slug">
-          <img
-            class="max-h-[5rem] max-w-[5rem]"
-            :src="
-              pro.images[0] ? pro.images[0] : products.featuredAsset.preview
-            "
-          />
-        </nuxt-link>
-        <nuxt-link :to="'/p/' + products.id + '/' + pro._id + '/' + pro.slug">
-          <div class="ml-2">
-            <p class="text-sm">{{ pro.name }}</p>
-            <p class="font-bold mt-2">
-              {{
-                pro.price.current
-                  .toString()
-                  .substring(0, pro.price.current.toString().length - 2) +
-                '.' +
-                pro.price.current
-                  .toString()
-                  .substring(pro.price.current.toString().length - 2)
-              }}
-              ETB
-            </p>
-          </div>
-        </nuxt-link>
-      </div>
-    </div>
-    <!-- {{ variantss }}
-    <h1>iii</h1> -->
-    <SfTable
-      v-if="productVariants.length !== 0"
-      class="invisible md:visible mt-10"
-      id="var-table"
-    >
-      <SfTableHeading class="bg-primary">
-        <!-- <SfTableHeader class="text-white font-bold text-xl"></SfTableHeader> -->
-        <SfTableHeader class="text-white font-bold text-xl mr-10">
-          Item
-        </SfTableHeader>
-        <template v-if="opt.length > 0">
-          <SfTableHeader
-            class="text-white font-bold text-xl"
-            v-for="(o, index) in opt"
-            :key="index"
-          >
-            {{ o }}
-          </SfTableHeader>
-        </template>
-        <SfTableHeader class="text-white font-bold text-xl">
-          Price
-        </SfTableHeader>
-      </SfTableHeading>
-      <SfTableRow v-for="variant in variantss" :key="variant.id" class="">
-        <SfTableData class="flex mr-10">
-          <img
-            :src="variant.image || productVariants.featuredAsset.preview"
-            alt=""
-            class="float-left h-28 w-28 mr-2"
-          />
-          <p class="text-secondary mt-3">
-            <nuxt-link
-              class="text-secondary"
-              :to="`/p/${productVariants.id}/${variant.id}/${productVariants.slug}`"
-            >
-              {{ productVariants.name }}
-            </nuxt-link>
-          </p>
-        </SfTableData>
-        <SfTableData
-          class="m-auto"
-          v-for="(option, index) in variant.optionValue"
-          :key="index"
-        >
-          {{ option.name }}
-        </SfTableData>
-        <SfTableData class="m-auto">{{ variant.price }}</SfTableData>
-      </SfTableRow>
-    </SfTable>
   </div>
 </template>
 
 <script>
-import {
-  defineComponent,
-  onBeforeMount,
-  onMounted,
-  ref,
-} from '@vue/composition-api';
-import {
-  useCategory,
-  categoryGetters,
-  useProduct,
-  productGetters,
-} from '@vue-storefront/vendure';
-import { onSSR } from '@vue-storefront/core';
-import { computed } from '@vue/composition-api';
-import { useUiHelpers } from '~/composables';
-import { name } from 'file-loader';
-import LazyHydrate from 'vue-lazy-hydration';
 import axios from 'axios';
-import {
-  SfProperty,
-  SfHeading,
-  SfPrice,
-  SfRating,
-  SfSelect,
-  SfAddToCart,
-  SfTabs,
-  SfGallery,
-  SfIcon,
-  SfImage,
-  SfBanner,
-  SfAlert,
-  SfSticky,
-  SfReview,
-  SfBreadcrumbs,
-  SfButton,
-  SfColor,
-  SfTable,
-} from '@storefront-ui/vue';
-import { placeholder } from '@babel/types';
+import { SfButton, SfTable, SfIcon } from '@storefront-ui/vue';
+import { useWishlist, useCart } from '@vue-storefront/vendure';
 import Gallery from '~/components/Gallery.vue';
-export default defineComponent({
+
+export default {
   components: {
-    SfGallery,
-    LazyHydrate,
-    SfBreadcrumbs,
+    SfButton,
     SfTable,
+    SfIcon,
     Gallery,
-  },
-  created() {
-    this.getProducts();
   },
   data() {
     return {
-      url: process.env.GRAPHQL,
-      productVariants: [],
+      product: null,
+      toCart: 1,
     };
   },
   methods: {
-    // getDocument() {
-    //   const fileURL = process.env.GRAPHQL + this.descriptionDocument;
-    //   axios({
-    //     url: fileURL,
-    //     method: 'GET',
-    //     responseType: 'blob',
-    //   }).then((res) => {
-    //     var FILE = window.URL.createObjectURL(new Blob([res.data]));
-    //     var docUrl = document.createElement('x');
-    //     docUrl.href = FILE;
-    //     docUrl.setAttribute('download', 'product_description.pdf');
-    //     document.body.appendChild(docUrl);
-    //     docUrl.click();
-    //   });
-    // },
-    async getProducts() {
+    async getProductVariant() {
       const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
       const body = {
-        query: `query getProducts ($slug: String!){
-          product(slug:$slug){
+        query: `query getProductVariant($slug: String!){
+          product(slug: $slug){
             id
             name
-            slug
             description
+            facetValues{
+              name
+            }
             customFields{
               youtube_link
               documentation
-            }
-            facetValues{
-              name
             }
             featuredAsset{
               preview
@@ -291,8 +296,9 @@ export default defineComponent({
             variantList{
               totalItems
               items{
-                priceWithTax
                 id
+                sku
+                priceWithTax
                 featuredAsset{
                   preview
                 }
@@ -302,6 +308,7 @@ export default defineComponent({
                   }
                   name
                 }
+                stockLevel
               }
             }
           }
@@ -314,27 +321,20 @@ export default defineComponent({
           'Access-Control-Allow-Origin': '*',
         },
       };
-      const currentProducts = await axios.post(baseUrl, body, options);
-      this.productVariants = currentProducts.data.data?.product;
-      console.log('yaaay', this.productVariants);
+      const productVariant = await axios.post(baseUrl, body, options);
+      this.product = productVariant?.data?.data?.product;
+      console.log('pppppp', productVariant?.data?.data?.product);
     },
   },
   computed: {
-    totalVariants() {
-      return this.productVariants?.variantList?.totalItems;
-    },
-    prices() {
-      if (this.productVariants?.variantList?.totalItems === 1) {
-        const price = String(
-          this.productVariants?.variantList?.items[0]?.priceWithTax
-        );
+    priceRange() {
+      if (this.product?.variantList?.totalItems === 1) {
+        const price = String(this.product?.variantList?.items[0]?.priceWithTax);
         const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
-        return fPrice;
-      }
-      if (this.productVariants?.variantList?.totalItems > 1) {
-        let items = this.productVariants?.variantList?.items;
+        return fPrice + ' ETB';
+      } else if (this.product?.variantList?.totalItems > 1) {
         let prices = [];
-        items.forEach((item) => {
+        this.product.variantList?.items.forEach((item) => {
           prices.push(item.priceWithTax);
         });
         const max =
@@ -345,189 +345,56 @@ export default defineComponent({
           String(Math.min(...prices)).slice(0, -2) +
           '.' +
           String(Math.min(...prices)).slice(-2);
-        return [min, max];
+        return min + ' ETB' + ' - ' + max + ' ETB';
       }
     },
-    link() {
-      const splittedLink =
-        this.productVariants?.customFields?.youtube_link.split('?v=')[1];
-      return splittedLink;
-    },
-    opt() {
-      const options = [];
-      this.productVariants?.variantList?.items[0]?.options.forEach((o) => {
-        options.push(o.group.name);
-      });
-      return options;
-    },
-    variantss() {
-      const variants = [];
-      this.productVariants?.variantList?.items.forEach((variant) => {
-        const price =
-          String(variant.priceWithTax).slice(0, -2) +
-          '.' +
-          String(variant.priceWithTax).slice(-2);
-        variants.push({
-          id: variant.id,
-          image: variant.featuredAsset?.preview,
-          optionValue: variant.options,
-          price: price,
-        });
-      });
-      return variants;
-    },
-    featuredImage() {
-      return this.productVariants?.featuredAsset?.preview;
-    },
-    facets() {
-      return this.productVariants?.facetValues;
-    },
-    descriptionDocument() {
-      return this.productVariants?.customFields?.documentation;
+    custom() {
+      const link = this.product?.customFields?.youtube_link.split('?v=')[1];
+      const document =
+        process.env.GRAPHQL + this.product?.customFields?.documentation;
+      return { link: link, document: document };
     },
   },
-  setup(props, context) {
-    const router = context.root.$router;
-    const route = context.root.$route;
-    let maxPrice = '';
-    let minPrice = '';
-    let mainCategory = '';
-
-    const { products, search, loading, error } = useProduct('<UNIQUE_ID>');
-    //  const {featuredAsset} = products.value;
-    // const productImage = computed(() => products.value?.assets[0]?.preview);
-
-    let getMainCategory = computed(() => {
-      return mainCategory;
-    });
-    const th = useUiHelpers();
-    const lastSlug = th.getLastSlugFromParams();
-    console.log('the lastslug value is ', lastSlug);
-
-    let checked = true;
-
-    const check = (e) => {
-      let temp = checked;
-      checked = !temp;
+  setup() {
+    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const addToCart = (e) => {
+      const quantity =
+        Number(e.target.parentElement.parentElement.firstChild.value) ||
+        Number(
+          e.target.parentElement.parentElement.parentElement.firstChild.value
+        );
+      const variantId =
+        e.target.parentElement.parentElement.firstChild.id ||
+        e.target.parentElement.parentElement.parentElement.firstChild.id;
+      console.log('sds', quantity);
+      console.log('mdm', variantId);
+      addItemToCart({
+        product: {
+          _variantId: variantId,
+        },
+        quantity: quantity,
+      });
     };
-
-    onSSR(async () => {
-      await search({ slug: lastSlug });
-    });
-
-    const product = computed(() => productGetters.getByFilters(products.value));
-    const breadcrumbs = computed(() => {
-      let temp = productGetters.getBreadcrumbs(product.value);
-      let path = [{ text: 'Home', link: '/' }];
-      if (temp.length > 1) {
-        temp.forEach((cat) => {
-          if (cat.name === '__root_collection__') {
-          } else {
-            path.push({
-              text: cat.name,
-              link: `c/${cat.slug}`,
-            });
-          }
-        });
-      } else {
-        path.push({
-          text: products && products.name,
-          link: `c/${products && products.slug}`,
-        });
-      }
-      return path;
-    });
-    const option = computed(() => productGetters.getOptions(products.value));
-
-    const configuration = computed(() =>
-      productGetters.getCategoryIds(product.value)
-    );
-
-    const productGallery = computed(() =>
-      productGetters.getAllGallery(products.value).map((img) => ({
-        mobile: { url: img.small },
-        desktop: { url: img.normal },
-        big: { url: img.big },
-        alt: products.value.name || products.value._name,
-      }))
-    );
-
-    const originalPrice = [];
-    const currentPrice = [];
-
-    product.value.forEach((element) => {
-      originalPrice.push(element.price.original);
-      currentPrice.push(element.price.current);
-    });
-
-    const maxP = Math.max(...currentPrice).toString();
-    const minP = Math.min(...currentPrice).toString();
-
-    maxPrice =
-      maxP.substring(0, maxP.length - 2) +
-      '.' +
-      maxP.substring(maxP.length - 2);
-    minPrice =
-      minP.substring(0, minP.length - 2) +
-      '.' +
-      minP.substring(minP.length - 2);
-
-    // const attributes = computed(() => productGetters.getAttributes(products.value))
-
-    onMounted(() => {
-      // if (option.value.length === 0) {
-      //   const slug = route.params.slug_1;
-      //   const id = products.value.id;
-      //   const vid = product.value[0]?._id;
-      //   router.push(`/p/${id}/${vid}/${slug}`);
-      //   console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', slug, id, vid);
-      // }
-      console.log('the product value is ', product.value);
-      console.log('the option value is ', option.value);
-      // if (option.value.length === 0) {
-      //   console.log('this is slug', route.params);
-      // }
-      // mainCategory=product[0].collections[0].breadcrumbs[1].slug
-      mainCategory = product.value;
-      console.log('the productsss  id value is ', products.value);
-      console.log('configuration value is ', configuration.value);
-      //   console.log("the productsss image value is ", products.value.assets[0].preview)
-      // console.log("THE PRODUCT VARIANTS ARE ", productGetters.getGallery(product.value))
-      console.log('product gallery is ', productGallery.value);
-    });
-
     return {
-      check,
-      checked,
-      loading,
-      error,
-      products,
-      product,
-      option,
-      breadcrumbs,
-      getMainCategory,
-      mainCategory,
-      configuration,
-      minPrice,
-      maxPrice,
-      originalPrice,
-      currentPrice,
-      productGallery,
-      LazyHydrate,
-      // productImage
+      isInCart,
+      addToCart,
     };
   },
-});
+  created() {
+    this.getProductVariant();
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-.nobar::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+<style scoped lang="scss">
+#variant {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1250px !important;
+    padding: 0;
+    margin: 0 auto;
+  }
 }
-// .sf-table td {
-//   align-items: center;
-//   justify-content: center;
-// }
 </style>
 
 <style module="classes">

@@ -187,7 +187,7 @@
     >
       <div class="flex mt-2 justify-center">
         <input
-          type="text"
+          type="number"
           class="w-[20%] bg-light_accent mr-3 h-10 text-center"
           v-model="numberCart"
         />
@@ -381,6 +381,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    variantId: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -418,14 +422,15 @@ export default {
       this.$emit('click:wishlist', !this.isInWishlist);
     },
     onAddToCart(event) {
-      console.log(event);
-
       event.preventDefault();
       this.isAddingToCart = true;
       setTimeout(() => {
         this.isAddingToCart = false;
       }, 1000);
-      this.$emit('click:add-to-cart');
+      this.$emit('click:add-to-cart', {
+        _variantId: this.variantId,
+        quantity: Number(this.numberCart),
+      });
     },
     handleSelectedColor(colorIndex) {
       if (this.colors.length > 0) {
