@@ -12,7 +12,7 @@
         <LazyHydrate>
           <img
             class="object-cover h-52 w-72 md:w-48 rounded-t-lg m-2"
-            :src="product.featuredAsset.preview"
+            :src="product.featuredAsset? product.featuredAsset.preview : ''"
             alt="image"
           />
         </LazyHydrate>

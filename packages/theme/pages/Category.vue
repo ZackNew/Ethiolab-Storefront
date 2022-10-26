@@ -423,7 +423,7 @@
             v-if="bestSellings.length !== 0"
             class="font-bold text-secondary mt-12 pb-2 mb-10"
           >
-            Shop Our Best Sellers {{ $store.state.sortCategory }}
+            Shop Our Best Sellers 
           </h3>
 
           <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
