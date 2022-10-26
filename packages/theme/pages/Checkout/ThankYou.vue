@@ -39,9 +39,9 @@
             <p class="contact__email">{{ address.email }}</p>
           </div>
         </div>
-        <SfButton class="order__notifications-button button-size"
-          >{{ $t('Allow order notifications') }}</SfButton
-        >
+        <SfButton class="order__notifications-button button-size">{{
+          $t('Allow order notifications')
+        }}</SfButton>
       </div>
       <div class="additional-info">
         <div>
@@ -70,32 +70,45 @@
         </div>
       </div>
     </section>
-    <SfButton link="/" class="sf-button back-button color-secondary button-size">{{ $t('Back to homepage') }}</SfButton>
+    <SfButton
+      link="/"
+      class="sf-button back-button color-secondary button-size"
+      >{{ $t('Back to homepage') }}</SfButton
+    >
   </div>
 </template>
 
 <script>
 import { SfHeading, SfButton, SfCallToAction } from '@storefront-ui/vue';
+import {
+  useMakeOrder,
+  useCart,
+  cartGetters,
+  usePayment,
+} from '@vue-storefront/vendure';
+
 export default {
   components: {
     SfHeading,
     SfButton,
-    SfCallToAction
+    SfCallToAction,
   },
   name: 'ThankYou',
   setup(props, context) {
+    const { cart, load, setCart } = useCart();
+
     return {
       address: {
         name: 'Company Headquarter',
         street: 'St. Main 17, 53-534',
         city: 'Wroclaw, Poland',
-        email: 'demo@vuestorefront.io'
+        email: 'demo@vuestorefront.io',
       },
       order: {
-        number: `#${context.root.$route.query.order}`
-      }
+        number: `#${context.root.$route.query.order}`,
+      },
     };
-  }
+  },
 };
 </script>
 

@@ -27,7 +27,7 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy" exact>
+          <router-link to="/policy/warranty-policy" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Warranty Policy')"
@@ -58,14 +58,6 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy/cookie-policy" exact>
-            <SfMenuItem
-              class="sf-footer__menu-item"
-              :label="$t('Cookie Policy')"
-            />
-          </router-link>
-        </SfListItem>
-        <SfListItem class="footer-list-item">
           <router-link to="/pages/helpAndFAQ" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
@@ -87,6 +79,14 @@
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Privacy Policy')"
+            />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link to="/policy/cookie-policy" exact>
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Cookie Policy')"
             />
           </router-link>
         </SfListItem>
@@ -126,7 +126,7 @@
     <SfFooterColumn :title="$t('Social')" class="footer-column">
       <div class="footer__socials">
         <div v-for="item in socials" :key="item.name">
-          <a v-if="item.link.length >= 3" :href="item.link" target="_blank">
+          <a :href="item.link" target="_blank">
             <SfImage
               class="footer__social-image"
               :src="'/icons/' + item.name + '.svg'"
@@ -201,10 +201,9 @@ export default {
         youtube_address:
           this.$store.state.companyDetails.companyInformation?.youtube_address,
       };
-      let sm = this.socialMedia;
       Object.keys(soci).forEach((s) => {
         const n = s.split('_')[0];
-        name_link.push({ name: n, link: soci[s] });
+        name_link.push({ name: n, link: soci[s] || '' });
       });
       return name_link;
     },
@@ -232,7 +231,6 @@ export default {
       };
       const companyScocialMedia = await axios.post(baseUrl, body, options);
       this.socialMedia = companyScocialMedia?.data.data?.getCompanyInfos;
-      console.log('company social', typeof this.socialMedia);
     },
   },
   created() {

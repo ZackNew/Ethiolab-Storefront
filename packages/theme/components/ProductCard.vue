@@ -187,7 +187,7 @@
     >
       <div class="flex mt-2 justify-center">
         <input
-          type="text"
+          type="number"
           class="w-[20%] bg-light_accent mr-3 h-10 text-center"
           v-model="numberCart"
         />
@@ -218,7 +218,7 @@
       </SfButton> -->
       <nuxt-link :to="link">
         <h1
-          :class="`mx-3 mt-1 text-center text-secondary md:min-h-[3rem] text-xs md:text-base text-extrathin md:min-w-${imageWidth}`"
+          :class="`mx-3 mt-1 text-center text-secondary md:min-h-[4rem] text-xs md:text-base text-extrathin md:min-w-${imageWidth}`"
         >
           {{ title }}
         </h1>
@@ -381,6 +381,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    variantId: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -418,14 +422,15 @@ export default {
       this.$emit('click:wishlist', !this.isInWishlist);
     },
     onAddToCart(event) {
-      console.log(event);
-
       event.preventDefault();
       this.isAddingToCart = true;
       setTimeout(() => {
         this.isAddingToCart = false;
       }, 1000);
-      this.$emit('click:add-to-cart');
+      this.$emit('click:add-to-cart', {
+        _variantId: this.variantId,
+        quantity: Number(this.numberCart),
+      });
     },
     handleSelectedColor(colorIndex) {
       if (this.colors.length > 0) {

@@ -1,7 +1,7 @@
 <template>
-  <div class="border-b-2 border-light_accent">
+  <div class="border-b-2 border-light_accent wrap">
     <div class="border-b-4 border-light_accent">
-      <div class="md:mx-32">
+      <div class="md:mx-14">
         <SfHeader
           :class="{
             'header-on-top': isSearchOpen,
@@ -16,7 +16,7 @@
           <template #logo>
             <nuxt-link :to="localePath('/')">
               <SfImage
-                :src="logo"
+                :src="logo || ''"
                 alt="EthioLab"
                 width="400"
                 class="sf-header__logo-image"
@@ -81,7 +81,7 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search md:w-[25rem] bg-light_accent rounded-xl border-none"
+              class="search md:w-[26rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none"
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="debounceInput"
@@ -128,7 +128,7 @@
     />
     <SfOverlay :visible="isSearchOpen" />
 
-    <HeaderNavigation :isMobile="isMobile" class="h-16" />
+    <HeaderNavigation :isMobile="isMobile" class="h-12" />
   </div>
 </template>
 
@@ -275,7 +275,6 @@ export default {
             return prod;
           });
           this.results = results;
-          console.log('hiiiha', results);
         });
       }
     }, 2000),
@@ -317,9 +316,7 @@ export default {
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
 
-    const selectedProd = () => {
-      console.log('selected');
-    };
+    const selectedProd = () => {};
 
     const showQuotation = ref(false);
     const { setTermForUrl, getFacetsFromURL } = useUiHelpers();
@@ -358,8 +355,6 @@ export default {
 
     watch(user, () =>
       (async () => {
-        console.log('Tin Number: ', userGetters.getTinNumber(user));
-        console.log('User %c', 'color: lightblue', user);
         accountIcon.value = isAuthenticated.value ? 'profile_fill' : 'profile';
       })()
     );
@@ -581,5 +576,11 @@ export default {
 .header2 {
   width: fit-content;
   margin: auto;
+}
+.wrap {
+  @include for-desktop {
+    max-width: 1250px !important;
+    margin: auto;
+  }
 }
 </style>

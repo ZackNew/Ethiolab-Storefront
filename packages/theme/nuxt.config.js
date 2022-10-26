@@ -127,6 +127,7 @@ export default {
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
     'nuxt-user-agent',
+    '@nuxtjs/axios',
   ],
   i18n: {
     currency: 'ETB',
@@ -229,6 +230,14 @@ export default {
         ital: [300, 400],
       },
     },
-    display: 'swap',
+    display: 'swap'
   },
+  // serverMiddleware: [
+  //   { path: '/api/hook', handler: '~/api/hook.js' },
+  //   { path: '/api/axios', handler: '~/api/axios.js' }
+
+  // ]
+  serverMiddleware: [
+    '~/api/index.js'
+  ],
 };

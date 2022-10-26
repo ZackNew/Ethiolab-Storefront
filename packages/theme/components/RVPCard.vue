@@ -191,7 +191,7 @@
       </SfButton> -->
       <nuxt-link :to="link">
         <p
-          :class="`mx-3 my-2 mx-auto font-extrabold text-primary md:text-xl text-center md:min-h-[4rem] md:min-w-${imageWidth}`"
+          :class="`mx-3 my-2 mx-auto font-extrabold text-primary md:text-xl text-center md:min-h-[5rem] md:min-w-${imageWidth}`"
         >
           {{ title }}
         </p>
@@ -409,8 +409,6 @@ export default {
       this.$emit('click:wishlist', !this.isInWishlist);
     },
     onAddToCart(event) {
-      console.log(event);
-
       event.preventDefault();
       this.isAddingToCart = true;
       setTimeout(() => {

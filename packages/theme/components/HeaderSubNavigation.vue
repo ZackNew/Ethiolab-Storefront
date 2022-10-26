@@ -41,9 +41,7 @@ export default {
     id: anymatch,
   },
   setup() {
-    let hoverHandler = () => {
-      console.log('hover handler activated**');
-    };
+    let hoverHandler = () => {};
     return {
       // hoverHandler
     };

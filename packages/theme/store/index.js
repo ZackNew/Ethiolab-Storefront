@@ -1,9 +1,13 @@
 export const state = () => ({
-  name: 'my name',
+  sortCategory: 'NNN',
 });
 
 export const getters = {};
 
-export const mutations = {};
+export const mutations = {
+  SET_SORT(state, payload) {
+    state.sortCategory = payload.sortBy;
+  },
+};
 
 export const actions = {};

@@ -97,8 +97,6 @@ export default {
         },
       };
       await axios.post(baseUrl, body, options).then((res) => {
-        console.log('===========');
-        console.log(res.data.data.getFaqs);
         this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
       });
     },

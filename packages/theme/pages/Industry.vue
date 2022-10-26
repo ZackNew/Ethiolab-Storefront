@@ -267,7 +267,6 @@ export default {
       if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
 
       if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));
-      // console.log('all clicked filters',filtersClicked)
       return filterProducts;
     },
     brandsList() {
@@ -293,10 +292,8 @@ export default {
     categoriesList() {
       let categories = [];
       this.products.forEach((element) => {
-        // console.log("category names before loop ****", element.collections)
         if (element.collections.length > 0) {
           for (let cat in element.collections) {
-            // console.log("category names in loop ****",element.collections[cat].name)
             if (!categories.includes(element.collections[cat].name)) {
               categories.push(element.collections[cat].name);
             }
@@ -356,7 +353,6 @@ export default {
       this.low = event;
     },
     filterProducts(event) {
-      console.log('filter button clicked ** ', event);
       if (event.checked) {
         this.filtersClicked.push(event.id);
       } else {

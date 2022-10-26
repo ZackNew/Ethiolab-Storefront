@@ -66,14 +66,12 @@ export default {
           preview: filteredObj.featuredAsset?.preview,
         };
       });
-    console.log('pop up *****', popup);
     let contentParsed = JSON.parse(popup[0].content);
     let content = {
       content: contentParsed,
       preview: popup[0].preview,
     };
     const popupContent = content;
-    console.log('pop up content *****', popupContent);
     const { isMobileMenuOpen } = useUiState();
     const disablePopUpMethod = () => {
       if (disablePopUp.value) {

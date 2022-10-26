@@ -26,7 +26,7 @@
       <WishlistSidebar />
       <LoginModal />
       <Notification />
-      <categories-sidebar />
+      <!-- <categories-sidebar /> -->
     </div>
     <LazyHydrate when-visible>
       <AppFooter />
@@ -120,13 +120,13 @@ export default {
     background-color: #f0f7fc;
   }
 }
-// #layout {
-//   box-sizing: border-box;
-//   @include for-desktop {
-//     max-width: 1250px !important;
-//     margin: auto;
-//   }
-// }
+#layout {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 100% !important;
+    margin: auto;
+  }
+}
 .custom-bg {
   background-color: var(--c-secondary) !important;
 }
@@ -191,7 +191,51 @@ h4 {
 .sf-header__wrapper {
   padding-top: 0.5em;
 }
+.sf-accordion-item__header {
+  background-color: #a5c4ea;
+  box-shadow: 0 4px 8px 0 rgba(128, 122, 122, 0.2),
+    0 6px 20px 0 rgba(139, 134, 134, 0.19);
+  font-size: x-large;
+  color: white;
+  border-radius: 1rem;
+  min-width: 106%;
+  height: 4.7rem;
+  padding: 0 15px;
+  margin-left: -3%;
+}
 .sf-search-bar__input:focus {
   outline: none;
 }
+.vsa-item__heading{
+  border: #ffffff !important;
+}
+.vsa-item  {
+  border: #ffffff !important;
+
+}
+.sf-table__row {
+  border-radius: 20px;
+  background-color: white;
+  margin-bottom: 12px;
+}
+.sf-table__heading {
+  border-color: #f0f7fc;
+}
+.slick-next:before {
+  display: none;
+}
+.slick-prev:before {
+  display: none;
+}
+.sf-accordion-item__content {
+  max-height: 30rem;
+  overflow: auto;
+}
+.sf-accordion-item__content::-webkit-scrollbar {
+  display: none;
+}
+// .vue-magnifier-container .preview {
+//   width: 150px;
+//   height: 150px;
+// }
 </style>

@@ -169,7 +169,6 @@ export default {
     const categories = computed(() => {
       return props.result?.value?.data?.collections;
     });
-    console.log('kkkkkkkkkkk', props.result);
 
     watch(
       () => props.visible,
