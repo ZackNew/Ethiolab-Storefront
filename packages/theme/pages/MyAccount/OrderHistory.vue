@@ -215,7 +215,6 @@ export default {
       const currentEmail = userGetters.getEmailAddress(user.value);
       load({ email: currentEmail })
         .then((data) => {
-          console.log('DATA ', myQuotes.value);
           quotes.value = myQuotes.value;
           //console.log("DATA: ", myQuotes.value)
         })
@@ -282,7 +281,6 @@ export default {
     ];
 
     const itemsToCart = (items) => {
-      console.log('magi', typeof items);
       if (items.length >= 1) {
         for (let item of items) {
           addItemToCart({
@@ -293,7 +291,6 @@ export default {
           });
         }
       } else {
-        console.log(items);
         addItemToCart({
           product: {
             _variantId: items?.productVariant?.id,
@@ -301,10 +298,6 @@ export default {
           quantity: 1,
         });
       }
-    };
-
-    const reorderItem = (item) => {
-      console.log('ma nigga', item);
     };
 
     const getStatusTextClass = (order) => {
@@ -336,7 +329,6 @@ export default {
       removeQuote,
       addItemToCart,
       itemsToCart,
-      reorderItem,
     };
   },
 };

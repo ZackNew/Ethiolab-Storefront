@@ -216,7 +216,6 @@ export default {
   },
   methods: {
     categoryClicked(event) {
-      console.log('clicked');
       this.$emit('categoryClicked', event.target);
     },
     maxInput(event) {
@@ -248,9 +247,7 @@ export default {
       this.$emit('filterClicked', event.target);
     },
   },
-  created() {
-    console.log('ffffffffffffff', this.filters);
-  },
+  created() {},
 };
 </script>
 

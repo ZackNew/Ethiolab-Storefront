@@ -426,7 +426,6 @@ export default {
             const productId = productIdString.map((num) => {
               return String(num);
             });
-            console.log('****', productId);
             let pbody = {
               query: `query getProductById($in: [String!]) {
                         products(options: {filter: {id: {in: $in}}}) {

@@ -63,9 +63,7 @@ export default {
     subnavList: Array,
   },
   methods: {
-    hoverHandler: (label) => {
-      console.log('hover started ***');
-    },
+    hoverHandler: (label) => {},
   },
 };
 </script>

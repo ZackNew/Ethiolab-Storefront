@@ -3,7 +3,7 @@
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3> -->
     <div class="md:p-3">
       <div class="w-full py-5 md:pt-14 md:text-center">
-        <h1 class="md:text-4xl">Featured</h1>
+        <h1 class="md:text-4xl text-secondary">Featured</h1>
       </div>
     </div>
     <div class="grid grid-cols-1 gap-4 md:mt-3 md:mb-7 md:grid-cols-3">
@@ -111,7 +111,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrap {
   @include for-desktop {
-    max-width: 1250px !important;
+    max-width: 1175px !important;
     margin: auto;
   }
 }
