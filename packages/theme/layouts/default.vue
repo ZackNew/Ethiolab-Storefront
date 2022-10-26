@@ -206,4 +206,11 @@ h4 {
 .sf-search-bar__input:focus {
   outline: none;
 }
+.vsa-item__heading{
+  border: #ffffff !important;
+}
+.vsa-item  {
+  border: #ffffff !important;
+
+}
 </style>

@@ -13268,7 +13268,7 @@ nuxt-user-agent@^1.2.2:
   dependencies:
     woothee "^1.8.1"
 
-nuxt@^2.15.7, nuxt@^2.15.8:
+nuxt@^2.15.7:
   version "2.15.8"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-2.15.8.tgz#946cba46bdaaf0e3918aa27fd9ea0fed8ed303b0"
   integrity sha512-ceK3qLg/Baj7J8mK9bIxqw9AavrF+LXqwYEreBdY/a4Sj8YV4mIvhqea/6E7VTCNNGvKT2sJ/TTJjtfQ597lTA==
@@ -17950,6 +17950,13 @@ vue-server-renderer@^2.6.12:
     resolve "^1.2.0"
     serialize-javascript "^3.1.0"
     source-map "0.5.6"
+
+vue-simple-accordion@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/vue-simple-accordion/-/vue-simple-accordion-0.1.0.tgz#95b667f78c742719101f858c4e24ba2eb0eea1bc"
+  integrity sha512-y5oovH55smiNkEZ4lWLpE7H9t0TTYofN/zo4/NTap6Va/Ob+WlU7eRA2nzbFIaJUqk4cXHPJbLUblxU1jAL98g==
+  dependencies:
+    lodash.merge "^4.6.2"
 
 vue-slick-carousel@1.0.6:
   version "1.0.6"
