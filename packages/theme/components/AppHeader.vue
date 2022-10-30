@@ -37,7 +37,7 @@
                 class="sf-button--pure sf-header__action"
                 @click="handleAccountClick"
               >
-                <SfIcon :icon="accountIcon" size="1.25rem" color="#3860a7" />
+                <SfIcon :icon="accountIcon" size="1.7rem" color="#3860a7" />
               </SfButton>
               <SfButton
                 aria-label="Toggle wishlist sidebar"
@@ -47,7 +47,7 @@
                 <SfIcon
                   class="sf-header__icon"
                   icon="heart"
-                  size="1.25rem"
+                  size="1.7rem"
                   color="#3860a7"
                 />
                 <SfBadge
@@ -65,7 +65,7 @@
                 <SfIcon
                   class="sf-header__icon"
                   icon="empty_cart"
-                  size="1.25rem"
+                  size="1.7rem"
                   color="#3860a7"
                 />
                 <SfBadge
@@ -81,7 +81,7 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search md:w-[26rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none"
+              class="search md:w-[29rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none md:mr-3"
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="debounceInput"

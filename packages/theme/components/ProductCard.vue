@@ -47,7 +47,7 @@
             v-else
             class=""
             :src="image"
-            :alt="title"
+            alt="image"
             :width="imageWidth"
             :height="imageHeight"
             :image-tag="imageTag"
@@ -330,7 +330,7 @@ export default {
       default: undefined,
     },
     scoreRating: {
-      type: [Number, Boolean],
+      type: [Number, Boolean, String],
       default: false,
     },
     reviewsCount: {

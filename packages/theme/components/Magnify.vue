@@ -194,7 +194,7 @@ $sizes: (
       background: #fff no-repeat;
       display: none;
       pointer-events: none;
-      z-index: 50;
+      z-index: 90;
     }
 
     &:hover {

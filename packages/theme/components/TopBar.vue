@@ -119,7 +119,7 @@ export default {
             linkdin_address
             telegram_address
             youtube_address
-            longitude
+            longtude
             latitude  
           }
         }`,
@@ -130,12 +130,12 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      // const compy = await axios.post(baseUrl, body, options);
-      // const infos = compy?.data?.data?.getCompanyInfos;
-      // console.log('iasdnfaeisbdfia', infos);
-      // this.$store.commit('companyDetails/SET_COMPANY_INFORMATION', {
-      //   company: infos,
-      // });
+      const compy = await axios.post(baseUrl, body, options);
+      const infos = compy?.data?.data?.getCompanyInfos;
+      console.log('iasdnfaeisbdfia', infos);
+      this.$store.commit('companyDetails/SET_COMPANY_INFORMATION', {
+        company: infos,
+      });
     },
   },
   created() {

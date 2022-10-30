@@ -49,9 +49,9 @@
         <div v-for="product in bestSellers" :key="product._id">
           <ProductCard
             :title="product.name"
-            :image="product.images[0]"
+            :image="product.images"
             :regular-price="product.price.current + ' ETB'"
-            :imageHeight="240"
+            :imageHeight="440"
             :imageWidth="500"
             :alt="product.name"
             :max-rating="5"
@@ -166,7 +166,9 @@ export default defineComponent({
   props: {
     bestSellers: {
       type: Array,
-      default: [],
+      default() {
+        return [];
+      },
     },
   },
   setup() {

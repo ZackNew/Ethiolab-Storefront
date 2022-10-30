@@ -206,12 +206,11 @@ h4 {
 .sf-search-bar__input:focus {
   outline: none;
 }
-.vsa-item__heading{
+.vsa-item__heading {
   border: #ffffff !important;
 }
-.vsa-item  {
+.vsa-item {
   border: #ffffff !important;
-
 }
 .sf-table__row {
   border-radius: 20px;
@@ -234,8 +233,7 @@ h4 {
 .sf-accordion-item__content::-webkit-scrollbar {
   display: none;
 }
-// .vue-magnifier-container .preview {
-//   width: 150px;
-//   height: 150px;
-// }
+.sf-add-to-cart__button {
+  background-color: #3860a7;
+}
 </style>

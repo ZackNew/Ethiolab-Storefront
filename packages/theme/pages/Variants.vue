@@ -22,11 +22,7 @@
         <div class="md:mr-8 md:col-span-6">
           <Gallery
             :images="product.assets"
-            :display="
-              product.featuredAsset || {
-                preview: '~/static/categories/empty_image.png',
-              }
-            "
+            :display="product.featuredAsset"
             class="mb-5 md:mb-0"
           />
         </div>
@@ -68,11 +64,11 @@
             v-html="product.description"
           ></p>
           <SfButton
-            v-if="custom.document"
+            v-if="product.customFields.documentation"
             class="bg-secondary my-2 pb-2 pt-3 rounded"
           >
             <a class="text-white px-1" :href="custom.document" target="_blank">
-              See full description
+              DESCRIPTION PDF
             </a>
             <!-- Get documentation -->
           </SfButton>
@@ -279,6 +275,7 @@ export default {
           product(slug: $slug){
             id
             name
+            slug
             description
             facetValues{
               name
