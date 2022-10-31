@@ -5,8 +5,11 @@
       'theme-dark': isDarkMode,
     }"
     id="whole"
+    :style="
+      !isDarkMode ? `background-color: #f0f7fc;` : `background-color: #0e1621;`
+    "
   >
-    <div class="bg-white">
+    <div :class="!isDarkMode ? `bg-white` : `bg-dark_accent`">
       <LazyHydrate when-visible>
         <TopBar class="desktop-only" />
       </LazyHydrate>
@@ -53,7 +56,7 @@ import Toast from '~/components/Toast.vue';
 import { computed, ref, watchEffect, provide } from '@vue/composition-api';
 export default {
   name: 'DefaultLayout',
-  // middleware: "themeChecker",
+  // middleware: 'themeChecker',
 
   components: {
     ToastVue,
@@ -117,7 +120,6 @@ export default {
   @include for-desktop {
     max-width: 100% !important;
     margin: auto;
-    background-color: #f0f7fc;
   }
 }
 #layout {

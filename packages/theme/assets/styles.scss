@@ -45,6 +45,9 @@
   --c-dark: theme('colors.primary');
   --c-white: theme('colors.white');
   --modal-background: theme('colors.light_accent');
+  .sf-header__wrapper {
+    background-color: #ffffff;
+  }
 }
 
 .theme-dark {
@@ -72,5 +75,8 @@
   .sf-content-pages__sidebar {
     background-color: #182533;
     color: white;
+  }
+  .sf-header__wrapper {
+    background-color: #182533;
   }
 }

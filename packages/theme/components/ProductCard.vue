@@ -1,6 +1,7 @@
 <template>
   <div
-    class="pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300"
+    :class="!isDarkMode ? `bg-white` : `bg-dark_accent`"
+    class="pt-3 shadow-lg hover:shadow-2xl duration-300"
     data-testid="product-card"
   >
     <div class="ssf-product-card__image-wrapper mx-3">
@@ -262,6 +263,7 @@
   </div>
 </template>
 <script>
+import { useUiState } from '~/composables';
 import { colorsValues as SF_COLORS } from '@storefront-ui/shared/variables/colors';
 import {
   SfPrice,
@@ -416,6 +418,12 @@ export default {
     showBadge() {
       return this.colors.length > 5;
     },
+  },
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
+    };
   },
   methods: {
     toggleIsInWishlist() {

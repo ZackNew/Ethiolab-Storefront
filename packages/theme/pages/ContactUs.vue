@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="p-20">
+    <div class="mt-20 wrap">
       <!-- <section class="sf-call-to-action rounded" :style="style">
         <div class="sf-call-to-action__text-container">
           <slot name="title">
@@ -174,13 +174,13 @@
         </ValidationObserver>
       </div>
     </div>
-    <div class="similar-products">
+    <div class="similar-products wrap my-10">
       <SfHeading title="Our Stores" :level="1" />
     </div>
-    <div class="contact-location">
+    <div class="contact-location wrap">
       <StoreLocator
         tileServerUrl="http://mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
-        :center="[9.035565, 38.759099]"
+        :center="[location.latitude, location.longtude]"
         :zoom="6"
         :maxZoom="18"
         :markerIconAnchor="[10.5, 0]"
@@ -192,7 +192,7 @@
         <div class="flex">
           <SfStore
             picture="~/static/Logo.png"
-            :latlng="[9.035565, 38.759099]"
+            :latlng="[location.latitude, location.longtude]"
             :pictureWidth="82"
             :pictureHeight="112"
           />
@@ -203,7 +203,7 @@
           <div class="mt-4">
             <p>{{ companyName[0] }} Head Office</p>
             <p class="mb-6">
-              Adwa Street, Arada Sub-city, Elsi Bldg (881/EBG 407)
+              {{ location.locationText }}
             </p>
             <div class="flex">
               <SfIcon
@@ -316,6 +316,19 @@ export default {
           ';'
         );
       return phone;
+    },
+    location() {
+      const locationText =
+        this.$store.state.companyDetails.companyInformation?.location_text;
+      const longtude =
+        this.$store.state.companyDetails.companyInformation?.longtude;
+      const latitude =
+        this.$store.state.companyDetails.companyInformation?.latitude;
+      return {
+        locationText: locationText,
+        longtude: longtude,
+        latitude: latitude,
+      };
     },
     emails() {
       const email =
@@ -507,5 +520,13 @@ export default {
 
 .sf-call-to-action {
   margin-bottom: 10vh !important;
+}
+
+.wrap {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1350px;
+    margin: 0 auto;
+  }
 }
 </style>

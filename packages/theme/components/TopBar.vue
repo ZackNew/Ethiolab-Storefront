@@ -120,7 +120,8 @@ export default {
             telegram_address
             youtube_address
             longtude
-            latitude  
+            latitude
+            location_text  
           }
         }`,
       };

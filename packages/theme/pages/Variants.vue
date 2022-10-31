@@ -58,11 +58,13 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
-          <p
-            class="text-justify mt-2"
-            :class="classes.red"
-            v-html="product.description"
-          ></p>
+          <div :class="isDarkMode ? 'text-white' : ''">
+            <p
+              class="text-justify mt-2"
+              :class="classes.red"
+              v-html="product.description"
+            ></p>
+          </div>
           <SfButton
             v-if="product.customFields.documentation"
             class="bg-secondary my-2 pb-2 pt-3 rounded"
@@ -248,6 +250,7 @@
 </template>
 
 <script>
+import { useUiState } from '~/composables';
 import axios from 'axios';
 import { SfButton, SfTable, SfIcon } from '@storefront-ui/vue';
 import { useWishlist, useCart } from '@vue-storefront/vendure';
@@ -353,6 +356,7 @@ export default {
     },
   },
   setup() {
+    const { isDarkMode } = useUiState();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const addToCart = (e) => {
       const quantity =
@@ -375,6 +379,7 @@ export default {
     return {
       isInCart,
       addToCart,
+      isDarkMode,
     };
   },
   created() {

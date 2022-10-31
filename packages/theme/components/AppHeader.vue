@@ -1,6 +1,6 @@
 <template>
-  <div class="border-b-2 border-light_accent wrap">
-    <div class="border-b-4 border-light_accent">
+  <div class="wrap">
+    <div :class="!isDarkMode ? `border-b-4 border-light_accent` : ''">
       <div class="md:mx-14">
         <SfHeader
           :class="{
@@ -37,7 +37,11 @@
                 class="sf-button--pure sf-header__action"
                 @click="handleAccountClick"
               >
-                <SfIcon :icon="accountIcon" size="1.7rem" color="#3860a7" />
+                <SfIcon
+                  :icon="accountIcon"
+                  size="1.7rem"
+                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
+                />
               </SfButton>
               <SfButton
                 aria-label="Toggle wishlist sidebar"
@@ -48,7 +52,7 @@
                   class="sf-header__icon"
                   icon="heart"
                   size="1.7rem"
-                  color="#3860a7"
+                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
                 />
                 <SfBadge
                   v-if="wishlistTotalItems"
@@ -66,7 +70,7 @@
                   class="sf-header__icon"
                   icon="empty_cart"
                   size="1.7rem"
-                  color="#3860a7"
+                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
                 />
                 <SfBadge
                   v-if="cartTotalItems"
@@ -292,6 +296,7 @@ export default {
       toggleWishlistSidebar,
       toggleLoginModal,
       isMobileMenuOpen,
+      isDarkMode,
     } = useUiState();
     const selectedProds = ref(['Micro']);
     // let selectedProdsNames = null;
@@ -521,6 +526,7 @@ export default {
       tree,
       SfTextarea,
       prodList,
+      isDarkMode,
     };
   },
 };
