@@ -132,16 +132,14 @@
   </vsa-item>
 </vsa-list>
 
-    <p class="text-xl mx-2 mt-2 mb-2">Price Range</p>
+    <p class="text-xl mx-2 mt-2 mb-2 text-secondary mb-4">Price Range</p>
     <ul class="ul_list" >
       <div v-for="list in range" :key="list">
-        <li class="ml-3">
-                  <fieldset id="group1">
-
-                  </fieldset>
+        <li class="ml-3 text-secondary text-lg">
+          
                   <input
                     type="radio"
-                    class="mr-4"
+                    class="mr-4 text-secondary"
                     :checked="false"
                     :id="list"
                     @input="() => bothInput(list)"
@@ -152,24 +150,24 @@
       </div>
        
         </ul>
-    <div class="flex mx-4">
+    <div class="flex mx-2 my-8">
 
 
 
       <input
         v-model="min"
         @input="minInput"
-        class="rounded border border-primary w-20"
+        class="rounded-md border border-primary w-28 bg-[#c3defa]"
         type="number"
-        placeholder="min..."
+        placeholder="Min..."
       />
       <p class="mx-2">to</p>
       <input
         v-model="max"
         @input="maxInput"
-        class="rounded border border-primary w-20"
+        class="rounded-md border border-primary w-28 bg-[#c3defa]"
         type="number"
-        placeholder="max..."
+        placeholder="Max..."
       />
     </div>
   </div>
