@@ -65,14 +65,17 @@ export default {
   },
   computed: {
     prices() {
-      if (this.product?.variants.length === 1) {
-        console.log('single');
-        const price = String(this.product?.variants[0]?.priceWithTax);
+      // console.log('product value is ', this.product)
+      if ( this.product?.variants.length === 1) {
+        // console.log("single")
+        const price = String(
+          this.product?.variants[0]?.priceWithTax
+        );
         const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
         return fPrice;
       }
-      if (this.product?.variants.length > 1) {
-        console.log('multiple');
+      if ( this.product?.variants.length > 1) {
+        // console.log("multiple")
         let items = this.product?.variants;
         let prices = [];
         items.forEach((item) => {
@@ -86,7 +89,7 @@ export default {
           String(Math.min(...prices)).slice(0, -2) +
           '.' +
           String(Math.min(...prices)).slice(-2);
-        console.log('price min max', min, max);
+          // console.log("price min max", min, max)
         return [min, max];
       }
     },
