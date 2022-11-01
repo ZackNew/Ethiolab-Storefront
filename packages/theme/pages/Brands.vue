@@ -1,20 +1,23 @@
 <template>
-  <div class="mt-12">
+  <div class="mt-12" id="brand">
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin" to="/" >
             Home
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          {{ brand.name }}
+          <p class="text-secondary font-bold">
+             {{ brand.name }}
+          </p>
+         
         </li>
       </ol>
     </nav>
     <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-2xl rounded-lg w-96 h-3/4">
+      <div class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] h-3/4 hidden md:block mr-4 bg-white border-white">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
             @maxAdded="maxInput"
@@ -26,7 +29,7 @@
             :categories="collectionList"
           />
         </div>
-        <div class="p-3">
+        <!-- <div class="p-3">
           <LazyHydrate>
             <Banner
               :title="adSection.title || 'AD Title'"
@@ -36,26 +39,26 @@
               background=""
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory"
-            >
+            > 
             </Banner>
           </LazyHydrate>
-        </div>
-      </div>
+        </div> -->
+      </div> 
       <!-- Subcategory name and description -->
       <div class="ml-6 w-full">
-        <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
+        <h1 class="sf-heading__title font-medium text-4xl font-sans text-secondary">
           {{ brand.name }}
-        </h2>
+        </h1>
         <div
-          class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
+        class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
-            class="my-auto rounded-md max-h-40 bg-light max-w-[25%]"
+          class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
             :src="brandImage || '/categories/empty_image.png'"
             alt=""
           />
-          <div class="rounded w-full overflow-auto no-scrollbar">
-            <p class="py-4 ml-4 mr-4 text-white" v-html="brand.description"></p>
+          <div class="w-full overflow-auto no-scrollbar">
+            <p class="py-4 ml-4 mr-4 text-secondary text-thin" v-html="brand.description"></p>
           </div>
         </div>
         <div
@@ -136,7 +139,23 @@
             />
           </div>
           <!-- Products -->
-          <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-4"> 
+                    <div
+            :style="
+              !isDarkMode ? 'background-color: #ffffff' : 'background-color: #182533'
+            "
+          class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
+            v-for="product in filteredSearchedProducts"
+            :key="product.id"
+          >
+
+          <!-- <p>{{product.name}}</p> -->
+
+            <SubcatBrandCard :product="product" />
+
+            </div>
+          </div>
+  
           <!-- <div
             style="background-color: #e2e5de"
             class="card mr-16 ml-4 mt-5 w-auto h-12"
@@ -163,6 +182,7 @@ import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import axios from 'axios';
 import { useCms } from '@vue-storefront/vendure';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
+import useUiState from '~/composables/useUiState';
 
 export default {
   name: 'brand',
@@ -329,6 +349,7 @@ export default {
                       }
                       variants{
                         price
+                        priceWithTax
                       }
                       facetValues{
                         name
@@ -359,6 +380,7 @@ export default {
     },
   },
   setup() {
+    const { isDarkMode } = useUiState();
     const { getCms } = useCms();
     const adSection = computed(() =>
       JSON.parse(getCms.value[3]?.content ?? '{}')
@@ -367,6 +389,7 @@ export default {
     return {
       adSection,
       adImage,
+      isDarkMode
     };
   },
   components: {
@@ -382,7 +405,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+#brand {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1250px;
+    margin: 0 auto;
+  }
+}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

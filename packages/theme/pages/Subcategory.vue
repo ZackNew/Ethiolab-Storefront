@@ -186,7 +186,7 @@
           </div>
           <!-- Products -->
 
-          <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
+    <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
     <div
       :style="
         !isDarkMode ? 'background-color: #ffffff' : 'background-color: #182533'

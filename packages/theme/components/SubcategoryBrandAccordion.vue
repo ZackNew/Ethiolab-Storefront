@@ -12,7 +12,7 @@
           class="w-5 h-5 text-gray-500 dark:text-gray-400"
           fill="none"
           stroke="currentColor"
-          viewBox="0 0 24 24"
+          viewBox="0 0 24 24" 
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -31,11 +31,11 @@
       />
     </div>
     <!-- filter options -->
-    <SfAccordion class="px-2" open="all" showChevron>
+    <!-- <SfAccordion class="px-2" open="all" showChevron>
       <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
         <ul class="ml-3" v-for="category in categories" :key="category">
           <li class="mb-3">
-            <!-- <a href="# ">{{'df'+ category }}</a> -->
+            <a href="# ">{{'df'+ category }}</a>
             <input
               v-on:click="
                 (e) => {
@@ -52,7 +52,48 @@
           </li>
         </ul>
       </SfAccordionItem>
-    </SfAccordion>
+    </SfAccordion> -->
+
+<vsa-list :autoCollapse="false" :initActive="true" :heading="true" v-if="categories">
+  <!-- Here you can use v-for to loop through items  -->
+  <vsa-item  >
+    
+    <vsa-heading class="border-none">
+      <div> 
+        <!-- {{filter.filter_title}}  -->Category
+      </div>
+
+      <div> 
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
+      </div>
+      
+     
+ 
+    </vsa-heading>
+ 
+    <vsa-content >
+      <ul class="ul_list" v-for="category in categories" :key="category">
+          <li class="ml-3">
+            <input
+            v-on:click="
+                (e) => {
+                  checkOne(e, filterClicked);
+                }
+              "
+              type="checkbox"
+              name="categories"
+              class="mr-4"
+              :checked="false"
+              :id="category"
+            />
+            {{ category }}
+          </li>
+        </ul>
+    </vsa-content>
+  </vsa-item>
+</vsa-list>
     
     <!-- <SfAccordion
       v-for="filter in filters"
@@ -115,7 +156,7 @@
  
     </vsa-heading>
  
-    <vsa-content v-for="list in filter.filter_options" :key="list">
+    <vsa-content >
       <ul class="ul_list" v-for="list in filter.filter_options" :key="list">
           <li class="ml-3">
             <input

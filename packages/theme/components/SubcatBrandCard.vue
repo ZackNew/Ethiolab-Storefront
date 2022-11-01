@@ -66,8 +66,9 @@ export default {
   },
   computed : {
     prices() {
+      // console.log('product value is ', this.product)
       if ( this.product?.variants.length === 1) {
-        console.log("single")
+        // console.log("single")
         const price = String(
           this.product?.variants[0]?.priceWithTax
         );
@@ -75,7 +76,7 @@ export default {
         return fPrice;
       }
       if ( this.product?.variants.length > 1) {
-        console.log("multiple")
+        // console.log("multiple")
         let items = this.product?.variants;
         let prices = [];
         items.forEach((item) => {
@@ -89,7 +90,7 @@ export default {
           String(Math.min(...prices)).slice(0, -2) +
           '.' +
           String(Math.min(...prices)).slice(-2);
-          console.log("price min max", min, max)
+          // console.log("price min max", min, max)
         return [min, max];
       }
     },
