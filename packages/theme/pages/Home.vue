@@ -439,7 +439,9 @@ export default {
           product?.collections?.forEach((x) => {
             cref.push(String(x.id));
           });
-          const image = process.env.GRAPHQL + `/assets/${product?.image}`;
+          const url = process.env.GRAPHQL_API;
+
+          const image = url.split('shop')[0] + `assets/${product?.image}`;
           const price =
             String(product?.priceWithTax).slice(0, -2) +
             '.' +
