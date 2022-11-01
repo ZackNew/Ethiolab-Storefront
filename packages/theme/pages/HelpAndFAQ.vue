@@ -23,10 +23,12 @@
                   :style="{ cursor: 'pointer' }"
                   class="flex justify-between"
                 >
-                  <h3 class="text-xl font-bold">
-                    <span class="w-auto mr-8">{{ index + 1 }}</span
-                    >{{ faq.question }}
-                  </h3>
+                  <div class="flex">
+                    <span class="text-xl font-bold w-auto mr-8">{{
+                      index + 1
+                    }}</span>
+                    <h3 class="text-xl font-bold" v-html="faq.question"></h3>
+                  </div>
                   <span
                     class="sf-chevron"
                     :class="isOpen ? '' : 'sf-chevron--right'"
@@ -37,9 +39,7 @@
                 </div>
               </template>
               <div class="mt-6 border-l-2 border-gray-50 pl-10 ml-10">
-                <p class="mb-5 text-xl">
-                  {{ faq.answer }}
-                </p>
+                <p class="mb-5 text-xl" v-html="faq.answer"></p>
                 <!-- <p class="mb-2 text-lg">
                   <span
                     class="inline-block mr-6 h-2 w-2 rounded-full bg-blue-500"
@@ -98,6 +98,7 @@ export default {
       };
       await axios.post(baseUrl, body, options).then((res) => {
         this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
+        console.log('faqing', res.data.data.getFaqs);
       });
     },
   },

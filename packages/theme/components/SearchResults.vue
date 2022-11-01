@@ -7,7 +7,7 @@
           class="search__wrapper-results"
           key="results"
         >
-          <SfMegaMenuColumn
+          <!-- <SfMegaMenuColumn
             title="Categories"
             class="sf-mega-menu-column--pined-content-on-mobile search__categories"
           >
@@ -31,7 +31,7 @@
                 </SfListItem>
               </template>
             </SfList>
-          </SfMegaMenuColumn>
+          </SfMegaMenuColumn> -->
           <SfMegaMenuColumn
             title="Product suggestions"
             class="sf-mega-menu-column--pined-content-on-mobile search__results"
@@ -44,19 +44,19 @@
                 <template #mobile-nav-icon> &#8203; </template>
               </SfMenuItem>
             </template>
-            <SfScrollable
-              class="results--desktop desktop-only"
+            <div
+              class="results--desktop desktop-only overflow-auto"
               show-text=""
               hide-text=""
             >
               <div class="results-listing">
-                <SfProductCard
+                <ProductCard
                   v-for="r in result"
                   :key="r.id"
                   :title="r.name"
                   :image="r.images"
-                  :imageHeight="288"
-                  :imageWidth="216"
+                  :imageHeight="260"
+                  :imageWidth="290"
                   :alt="r.name"
                   :regular-price="r.price.current + ' ETB'"
                   :max-rating="5"
@@ -66,7 +66,7 @@
                   class="products__product-card"
                 />
               </div>
-            </SfScrollable>
+            </div>
             <div class="results--mobile smartphone-only">
               <SfProductCard
                 v-for="r in result"
@@ -137,6 +137,7 @@ import {
 } from '@storefront-ui/vue';
 import { ref, watch, computed } from '@nuxtjs/composition-api';
 import { productGetters } from '@vue-storefront/vendure';
+import ProductCard from './ProductCard.vue';
 
 export default {
   name: 'SearchResults',
@@ -149,6 +150,7 @@ export default {
     SfMenuItem,
     SfButton,
     SfImage,
+    ProductCard,
   },
   props: {
     visible: {

@@ -16,24 +16,6 @@
     <BrandsSubNav />
     <RequestQuoteSubNav />
   </div>
-
-  <!-- <SfModal v-else :visible="isMobileMenuOpen">
-    <HeaderNavigationItem
-      v-for="(category, index) in categories"
-      :key="index"
-      class="nav-item"
-      v-e2e="`app-header-url_${category}`"
-    >
-      <template #mobile-navigation-item>
-        <SfMenuItem
-          :label="category"
-          class="sf-header-navigation-item__menu-item"
-          :link="localePath(`/c/${category}`)"
-          @click="toggleMobileMenu"
-        />
-      </template>
-    </HeaderNavigationItem>
-  </SfModal> -->
 </template>
 
 <script>

@@ -12,7 +12,7 @@
           class="w-5 h-5 text-gray-500 dark:text-gray-400"
           fill="none"
           stroke="currentColor"
-          viewBox="0 0 24 24"
+          viewBox="0 0 24 24" 
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -31,11 +31,11 @@
       />
     </div>
     <!-- filter options -->
-    <SfAccordion class="px-2" open="all" showChevron>
+    <!-- <SfAccordion class="px-2" open="all" showChevron>
       <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
         <ul class="ml-3" v-for="category in categories" :key="category">
           <li class="mb-3">
-            <!-- <a href="# ">{{'df'+ category }}</a> -->
+            <a href="# ">{{'df'+ category }}</a>
             <input
               v-on:click="
                 (e) => {
@@ -52,7 +52,48 @@
           </li>
         </ul>
       </SfAccordionItem>
-    </SfAccordion>
+    </SfAccordion> -->
+
+<vsa-list :autoCollapse="false" :initActive="true" :heading="true" v-if="categories">
+  <!-- Here you can use v-for to loop through items  -->
+  <vsa-item  >
+    
+    <vsa-heading class="border-none">
+      <div> 
+        <!-- {{filter.filter_title}}  -->Category
+      </div>
+
+      <div> 
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
+      </div>
+      
+     
+ 
+    </vsa-heading>
+ 
+    <vsa-content >
+      <ul class="ul_list" v-for="category in categories" :key="category">
+          <li class="ml-3">
+            <input
+            v-on:click="
+                (e) => {
+                  checkOne(e, filterClicked);
+                }
+              "
+              type="checkbox"
+              name="categories"
+              class="mr-4"
+              :checked="false"
+              :id="category"
+            />
+            {{ category }}
+          </li>
+        </ul>
+    </vsa-content>
+  </vsa-item>
+</vsa-list>
     
     <!-- <SfAccordion
       v-for="filter in filters"
@@ -115,8 +156,8 @@
  
     </vsa-heading>
  
-    <vsa-content v-for="list in filter.filter_options" :key="list">
-      <ul class="ul_list" v-for="list in filter.filter_options" :key="list">
+    <vsa-content >
+      <ul class="ul_list" v-for="(list,i) in filter.filter_options" :key="i">
           <li class="ml-3">
             <input
               v-on:click="filterClicked"
@@ -132,16 +173,14 @@
   </vsa-item>
 </vsa-list>
 
-    <p class="text-xl mx-2 mt-2 mb-2">Price Range</p>
+    <p class="text-xl mx-2 mt-2 mb-2 text-secondary mb-4">Price Range</p>
     <ul class="ul_list" >
-      <div v-for="list in range" :key="list">
-        <li class="ml-3">
-                  <fieldset id="group1">
-
-                  </fieldset>
+      <div v-for="(list,i) in range" :key="i">
+        <li class="ml-3 text-secondary text-lg">
+          
                   <input
                     type="radio"
-                    class="mr-4"
+                    class="mr-4 text-secondary"
                     :checked="false"
                     :id="list"
                     @input="() => bothInput(list)"
@@ -152,24 +191,24 @@
       </div>
        
         </ul>
-    <div class="flex mx-4">
+    <div class="flex mx-2 my-8">
 
 
 
       <input
         v-model="min"
         @input="minInput"
-        class="rounded border border-primary w-20"
+        class="rounded-md border border-primary w-28 bg-[#c3defa]"
         type="number"
-        placeholder="min..."
+        placeholder="Min..."
       />
       <p class="mx-2">to</p>
       <input
         v-model="max"
         @input="maxInput"
-        class="rounded border border-primary w-20"
+        class="rounded-md border border-primary w-28 bg-[#c3defa]"
         type="number"
-        placeholder="max..."
+        placeholder="Max..."
       />
     </div>
   </div>

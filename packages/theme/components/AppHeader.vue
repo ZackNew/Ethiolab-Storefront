@@ -1,6 +1,6 @@
 <template>
-  <div class="border-b-2 border-light_accent wrap">
-    <div class="border-b-4 border-light_accent">
+  <div class="wrap">
+    <div :class="!isDarkMode ? `border-b-4 border-light_accent` : ''">
       <div class="md:mx-14">
         <SfHeader
           :class="{
@@ -37,7 +37,11 @@
                 class="sf-button--pure sf-header__action"
                 @click="handleAccountClick"
               >
-                <SfIcon :icon="accountIcon" size="1.25rem" color="#3860a7" />
+                <SfIcon
+                  :icon="accountIcon"
+                  size="1.7rem"
+                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
+                />
               </SfButton>
               <SfButton
                 aria-label="Toggle wishlist sidebar"
@@ -47,8 +51,8 @@
                 <SfIcon
                   class="sf-header__icon"
                   icon="heart"
-                  size="1.25rem"
-                  color="#3860a7"
+                  size="1.7rem"
+                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
                 />
                 <SfBadge
                   v-if="wishlistTotalItems"
@@ -65,8 +69,8 @@
                 <SfIcon
                   class="sf-header__icon"
                   icon="empty_cart"
-                  size="1.25rem"
-                  color="#3860a7"
+                  size="1.7rem"
+                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
                 />
                 <SfBadge
                   v-if="cartTotalItems"
@@ -81,7 +85,7 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search md:w-[26rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none"
+              class="search md:w-[29rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none md:mr-3"
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="debounceInput"
@@ -292,6 +296,7 @@ export default {
       toggleWishlistSidebar,
       toggleLoginModal,
       isMobileMenuOpen,
+      isDarkMode,
     } = useUiState();
     const selectedProds = ref(['Micro']);
     // let selectedProdsNames = null;
@@ -521,6 +526,7 @@ export default {
       tree,
       SfTextarea,
       prodList,
+      isDarkMode,
     };
   },
 };

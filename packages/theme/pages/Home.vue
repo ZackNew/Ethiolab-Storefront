@@ -21,7 +21,7 @@
             </Banner>
           </LazyHydrate>
         </div> -->
-        <div class="grid grid-cols-12 gap-4 wrap">
+        <div class="grid grid-cols-12 gap-4 wrapsm">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -70,9 +70,9 @@
               />
             </template>
           </LazyHydrate> -->
-          <div class="col-span-9" v-if="heroSection.link">
+          <div class="col-span-9 items-center" v-if="heroSection.link">
             <iframe
-              class="w-[100%] md:h-[25rem] justify-end ytplayer"
+              class="w-[90%] md:h-[25rem] justify-end ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
@@ -141,7 +141,11 @@
               <div v-for="product in this.products" :key="product._id">
                 <RVPCard
                   :title="productGetters.getName(product)"
-                  :image="productGetters.getCoverImage(product)"
+                  :image="
+                    productGetters.getCoverImage(product) === ''
+                      ? 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=740'
+                      : productGetters.getCoverImage(product)
+                  "
                   :regular-price="
                     productGetters.getPrice(product).regular.toLocaleString() +
                     ' ETB'
@@ -246,7 +250,7 @@
       </LazyHydrate>
 
       <LazyHydrate when-visible>
-        <Testimonial />
+        <Testimonial :testimonials="testimonials" />
       </LazyHydrate>
 
       <LazyHydrate when-visible>
@@ -311,10 +315,14 @@ export default {
   name: 'Home',
   async created() {
     this.getTree();
+  },
+  created() {
     this.getBestSellers();
+    this.getTestimonials();
   },
   data() {
     return {
+      testimonials: [],
       bestSellings: [],
       settings: {
         dots: false,
@@ -401,88 +409,92 @@ export default {
   methods: {
     async getBestSellers() {
       const baseUrl = process.env.GRAPHQL_API;
-      const body = {
-        query: `
-        query{
-          bestSellingProducts{
-            slug
-          }
-        }
-        `,
-      };
+
       const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
         },
       };
-      const bestSeller = await axios.post(baseUrl, body, options);
-      const slugs = bestSeller.data.data?.bestSellingProducts.map((bs) => {
-        let x = [];
-        x.push(bs?.slug);
-        return x;
-      });
-      const STRSlug = [];
-      const a = slugs.forEach((s) => {
-        STRSlug.push(s[0]);
-      });
       const pbody = {
         query: `
-        query BSProducts($in: [String!]!) {
-          products(options: {filter: {slug: {in: $in}}}) {
-            items {
-              id
-              name
-              slug
-              description
-              featuredAsset {
-                preview
-              }
-              variants {
-                id
-                price
-              }
-              collections {
-                id
-              }
-              customFields {
-                reviewRating
-              }
-            }
+        query{
+          bestSellingProducts{
+            id
+            variantId
+            description
+            collections
+            name
+            image
+            priceWithTax
+            slug
+            sku
+            rating
           }
         }`,
-        variables: {
-          in: STRSlug,
-        },
       };
       await axios.post(baseUrl, pbody, options).then((res) => {
-        const produ = res.data.data.products?.items.map((product) => {
+        const produ = res.data.data?.bestSellingProducts.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
             cref.push(String(x.id));
           });
-          const image = [String(product?.featuredAsset?.preview)];
+          const image = process.env.GRAPHQL + `/assets/${product?.image}`;
           const price =
-            String(product?.variants[0]?.price).slice(0, -2) +
+            String(product?.priceWithTax).slice(0, -2) +
             '.' +
-            String(product?.variants[0]?.price).slice(-2);
+            String(product?.priceWithTax).slice(-2);
           const prod = {
             _id: product?.id,
-            _variantId: product?.variants[0]?.id,
-            _description: product.description,
-            _categoriesRef: cref,
-            name: product.name,
+            _variantId: product?.variantId,
+            _description: product?.description,
+            _categoriesRef: product?.collections,
+            name: product?.name,
             images: image,
             price: {
               original: price,
               current: price,
             },
-            slug: product.slug,
-            rating: product?.customFields?.reviewRating,
+            slug: product?.slug,
+            rating: product?.rating,
           };
           return prod;
         });
         this.bestSellings = produ;
+        console.log('sdadfasdfasdf', this.bestSellings);
+      });
+    },
+    async getTestimonials() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const body = {
+        query: `query{
+          getTestimonials{
+            id
+            name
+            pic_location
+            msg
+            person_position
+          }
+        }`,
+      };
+      await axios.post(baseUrl, body, options).then((res) => {
+        const test = res.data.data.getTestimonials.map((testimony) => {
+          return {
+            id: testimony.id,
+            name: testimony.name,
+            src: testimony.pic_location,
+            content: testimony.msg,
+            title: testimony.person_position,
+          };
+        });
+        this.testimonials = test;
+        console.log('testimonials', this.testimonials);
       });
     },
   },
