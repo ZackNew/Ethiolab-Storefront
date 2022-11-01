@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div class="grid grid-cols-1 md:grid-cols-12">
-      <div class="md:col-span-8">
+    <div
+      class="grid grid-cols-1 md:grid-cols-12 max-h-[550px]"
+      style="overflow-y: clip"
+    >
+      <div class="md:col-span-9">
         <!-- <img
           id="zoomable"
           class="md:col-span-8 md:min-w-[400px] md:max-w-[400px] md:min-h-[600px] md:max-h-[600px] min-w-[355px] max-w-[355px] min-h-[473px] max-h-[473px]"
@@ -13,12 +16,13 @@
         <vue-magnifier :src="bigImage" :src-large="bigImage" />
       </div>
 
-      <div class="md:row-start-1 md:col-span-4">
-        <div v-if="images.length > 0">
+      <div class="md:row-start-1 md:col-span-3">
+        <div v-if="images.length > 0" class="">
           <VueSlickCarousel
             v-bind="settings"
             :vertical="!isMobile()"
-            :verticalSwiping="isMobile()"
+            :verticalSwiping="!isMobile()"
+            ref="carousel"
           >
             <div v-for="(image, i) in images" :key="i">
               <img
@@ -29,6 +33,9 @@
               />
             </div>
           </VueSlickCarousel>
+          <button @click="showNext" class="text-secondary text-center ml-[45%]">
+            +
+          </button>
         </div>
       </div>
     </div>
@@ -54,7 +61,12 @@ export default {
     },
     display: {
       type: Object,
-      default: '',
+      default() {
+        return {
+          preview:
+            'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=740',
+        };
+      },
     },
   },
   data() {
@@ -62,7 +74,7 @@ export default {
       bigImage: '',
       settings: {
         arrows: false,
-        dots: true,
+        dots: false,
         infinite: true,
         slidesToShow: 3,
         slidesToScroll: 1,
@@ -70,15 +82,21 @@ export default {
     };
   },
   methods: {
+    showNext() {
+      this.$refs.carousel.next();
+    },
     changeBigImage(image) {
       this.bigImage = image;
     },
     isMobile() {
-      if (screen.width <= 760) {
-        return true;
-      } else {
-        return false;
+      if (process.client) {
+        if (screen.width <= 760) {
+          return true;
+        } else {
+          return false;
+        }
       }
+      return process.client;
     },
     // zoom() {
     //   const canvas = this.$refs.canvas;
@@ -117,7 +135,7 @@ export default {
   mounted() {
     // this.zoom();
     this.bigImage = this.display.preview;
-    console.log('asdfasdf', this.isMobile());
+    console.log('adddsdfasdf', this.isMobile());
   },
 };
 </script>

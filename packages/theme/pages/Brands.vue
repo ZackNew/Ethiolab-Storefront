@@ -74,7 +74,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="flex card mr-5 w-full h-12 bg-light_accent">
+          <div class="flex card mr-5 w-full h-12 bg-light_accent ">
             <p class="pt-3 mx-3">
               Number of Results | {{ Object.keys(products).length }}
             </p>
@@ -82,11 +82,11 @@
               <button
                 id="dropdownDefault"
                 data-dropdown-toggle="dropdown"
-                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:shadow-2xl font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
+                class="flex justify-between mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:shadow-2xl font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
                 type="button"
                 @click="open = !open"
               >
-                Sort Subcategory by
+                {{sortby}}
                 <svg
                   class="ml-2 w-4 h-4"
                   aria-hidden="true"
@@ -113,6 +113,7 @@
                     A_Z = true;
                     Z_A = false;
                     open = false;
+                    sortby = 'Name from A to Z';
                   "
                   class="hover:bg-light_accent"
                 >
@@ -123,6 +124,8 @@
                     A_Z = false;
                     Z_A = true;
                     open = false;
+                    sortby = 'Name from Z to A';
+
                   "
                   class="hover:bg-light_accent"
                 >
@@ -203,6 +206,7 @@ export default {
       products: [],
       brandImage: '',
       brand: {},
+      sortby: "Sort By"
     };
   },
   computed: {
@@ -225,20 +229,50 @@ export default {
         total_price = total_price / product.variants.length;
 
         return total_price >= lower && total_price <= high;
-      });
+      }
+      );
 
       const filterProducts = searchProduct.filter((product) => {
         if (filtersClicked.length > 0) {
           const facetIndex = product.facetValues.findIndex((facet) =>
             filtersClicked.includes(facet.name)
           );
+
+          let matchFound = false;
+          if (product.collections.length > 0) {
+            for (let collection of product.collections) {
+              matchFound = filtersClicked.includes(collection.name);
+              // console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
+              if (matchFound) {
+                break;
+              }
+            }
+          } else {
+            matchFound = false;
+          }
+          // console.log('product match found collection clicked',product,matchFound,product.collections,filtersClicked)
           return (
-            filtersClicked.includes(product.customFields.industry?.name) ||
-            filtersClicked.includes(product.facetValues[facetIndex]?.name)
+            filtersClicked.includes(product.customFields.brand?.name) ||
+            filtersClicked.includes(product.facetValues[facetIndex]?.name) ||
+            matchFound
           );
         }
         return true;
       });
+
+      // const filterProducts = searchProduct.filter((product) => {
+      //   if (filtersClicked.length > 0) {
+      //     const facetIndex = product.facetValues.findIndex((facet) =>
+      //       filtersClicked.includes(facet.name)
+      //     );
+      //     return (
+      //       filtersClicked.includes(product.customFields.industry?.name) ||
+      //       filtersClicked.includes(product.facetValues[facetIndex]?.name)
+      //     );
+      //   }
+      //   return true;
+      // });
+
       if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
       if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));
       // if (this.clickedCategory) {

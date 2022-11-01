@@ -1,6 +1,6 @@
 <template>
   <div id="category">
-    <div class="sticky bg-whole_bg">
+    <div class="sticky" :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'">
       <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
@@ -55,9 +55,9 @@
               <SfSelect
                 :style="!isDarkMode ? '' : 'background-color: #182533'"
                 :value="sortBy.selected"
-                :placeholder="sort"
+                :placeholder="allSortBy"
                 class="navbar__select"
-                @input="th.changeSorting"
+                @input="sortAllProducts($event)"
               >
                 <SfSelectOption
                   :style="!isDarkMode ? '' : 'background-color: #182533'"
@@ -75,12 +75,10 @@
             <span class="navbar__label desktop-only text-secondary"
               >{{ $t('Products found') }}:
             </span>
-            <span v-if="typeof allProducts === Array" class="desktop-only">{{
+            <span class="desktop-only text-secondary font-bold">{{
               allProducts.length
             }}</span>
-            <span
-              v-if="typeof allProducts === Array"
-              class="navbar__label smartphone-only text-secondary"
+            <span class="navbar__label smartphone-only text-secondary"
               >{{ allProducts.length }} {{ $t('Items') }}</span
             >
           </div>
@@ -129,7 +127,7 @@
                   ? 'background-color: #ffffff'
                   : 'background-color: #182533'
               "
-              :open="activeCategory"
+              open="all"
               :show-chevron="true"
               class="shadow-md w-80 sticky top-32"
             >
@@ -272,7 +270,7 @@
           >
             Products Under This Category
           </h3>
-          <div :class="`max-h-[${height}rem] overflow-hidden nobar w-full`">
+          <div>
             <transition-group
               v-if="isCategoryGridView"
               appear
@@ -280,28 +278,34 @@
               tag="div"
               class="grid grid-cols-1 md:grid-cols-3 gap-2"
             >
-              <div v-for="product in allProducts" :key="product._id">
-                <ProductCard
-                  v-e2e="'category-product-card'"
-                  :title="product.name"
-                  :image="product.images[0]"
-                  :imageHeight="290"
-                  :imageWidth="500"
-                  :regular-price="product.price.current + ' ETB'"
-                  :max-rating="5"
-                  :score-rating="product.rating"
-                  :show-add-to-cart-button="true"
-                  :isInWishlist="isInWishlist({ product })"
-                  :isAddedToCart="isInCart({ product })"
-                  :link="localePath(`/v/${product.slug}`)"
-                  @click:wishlist="
-                    !isInWishlist({ product })
-                      ? addItemToWishlist({ product })
-                      : removeItemFromWishlist({ product })
-                  "
-                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-                  class="carousel__item__product mb-5"
-                />
+              <div v-for="(product, i) in allProducts" :key="product._id">
+                <template v-if="i < limit">
+                  <ProductCard
+                    v-e2e="'category-product-card'"
+                    :title="product.name"
+                    :image="
+                      product.images[0] !== 'undefined'
+                        ? product.images[0]
+                        : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=740'
+                    "
+                    :imageHeight="290"
+                    :imageWidth="500"
+                    :regular-price="product.price + ' ETB'"
+                    :max-rating="5"
+                    :score-rating="product.rating ? product.rating : ''"
+                    :show-add-to-cart-button="true"
+                    :isInWishlist="isInWishlist({ product })"
+                    :isAddedToCart="isInCart({ product })"
+                    :link="localePath(`/v/${product.slug}`)"
+                    @click:wishlist="
+                      !isInWishlist({ product })
+                        ? addItemToWishlist({ product })
+                        : removeItemFromWishlist({ product })
+                    "
+                    @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                    class="carousel__item__product mb-5"
+                  />
+                </template>
               </div>
             </transition-group>
             <transition-group
@@ -312,74 +316,74 @@
               class="products__list"
             >
               <!-- :description="productGetters.getDescription(product)" -->
-              <SfProductCardHorizontal
-                v-e2e="'category-product-card'"
-                v-for="(product, i) in products"
-                :key="productGetters.getSlug(product)"
-                :qty="itemQuantity"
-                :style="{ '--index': i }"
-                :title="productGetters.getName(product)"
-                :image="productGetters.getCoverImage(product)"
-                :regular-price="
-                  productGetters.getPrice(product).regular.toLocaleString() +
-                  ' ETB'
-                "
-                :max-rating="5"
-                :score-rating="3"
-                :isInWishlist="isInWishlist({ product })"
-                class="products__product-card-horizontal"
-                @input="productQuantity[product._id] = $event"
-                @click:wishlist="
-                  !isInWishlist({ product })
-                    ? addItemToWishlist({ product })
-                    : removeItemFromWishlist({ product })
-                "
-                @click:add-to-cart="
-                  addItemToCart({
-                    product,
-                    quantity:
-                      Number(productQuantity[product._id]) || itemQuantity,
-                  })
-                "
-                :link="
-                  localePath(
-                    `/p/${productGetters.getId(
-                      product
-                    )}/${productGetters.getSlug(product)}`
-                  )
-                "
+              <div
+                v-for="(product, i) in allProducts"
+                :key="product._id"
+                class="w-full"
               >
-                <!-- <template #configuration>
-                  <SfProperty
-                    class="desktop-only"
-                    name="Size"
-                    value="XS"
-                    style="margin: 0 0 1rem 0"
-                  />
-                  <SfProperty class="desktop-only" name="Color" value="white" />
-                </template> -->
-                <template #actions>
-                  <SfButton
-                    v-if="!isInWishlist({ product })"
-                    class="sf-button--text desktop-only"
-                    style="margin: 0 0 1rem auto; display: block"
-                    @click="addItemToWishlist({ product })"
+                <template v-if="i < limit">
+                  <SfProductCardHorizontal
+                    v-e2e="'category-product-card'"
+                    :qty="itemQuantity"
+                    :title="productGetters.getName(product)"
+                    :image="productGetters.getCoverImage(product)"
+                    :regular-price="product.price + ' ETB'"
+                    :isInWishlist="isInWishlist({ product })"
+                    class="products__product-card-horizontal"
+                    @input="productQuantity[product._id] = $event"
+                    @click:wishlist="
+                      !isInWishlist({ product })
+                        ? addItemToWishlist({ product })
+                        : removeItemFromWishlist({ product })
+                    "
+                    @click:add-to-cart="
+                      addItemToCart({
+                        product,
+                        quantity:
+                          Number(productQuantity[product._id]) || itemQuantity,
+                      })
+                    "
+                    :link="
+                      localePath(
+                        `/p/${productGetters.getId(
+                          product
+                        )}/${productGetters.getSlug(product)}`
+                      )
+                    "
                   >
-                    {{ $t('Save for later') }}
-                  </SfButton>
-                  <SfButton
-                    v-else
-                    class="sf-button--text desktop-only"
-                    style="margin: 0 0 1rem auto; display: block"
-                    @click="removeItemFromWishlist({ product })"
-                  >
-                    {{ $t('Remove from wishlist') }}
-                  </SfButton>
+                    <!-- <template #configuration>
+                    <SfProperty
+                      class="desktop-only"
+                      name="Size"
+                      value="XS"
+                      style="margin: 0 0 1rem 0"
+                    />
+                    <SfProperty class="desktop-only" name="Color" value="white" />
+                  </template> -->
+                    <template #actions>
+                      <SfButton
+                        v-if="!isInWishlist({ product })"
+                        class="sf-button--text desktop-only"
+                        style="margin: 0 0 1rem auto; display: block"
+                        @click="addItemToWishlist({ product })"
+                      >
+                        {{ $t('Save for later') }}
+                      </SfButton>
+                      <SfButton
+                        v-else
+                        class="sf-button--text desktop-only"
+                        style="margin: 0 0 1rem auto; display: block"
+                        @click="removeItemFromWishlist({ product })"
+                      >
+                        {{ $t('Remove from wishlist') }}
+                      </SfButton>
+                    </template>
+                  </SfProductCardHorizontal>
                 </template>
-              </SfProductCardHorizontal>
+              </div>
             </transition-group>
           </div>
-          <button class="text-secondary" @click="increaseHeight">
+          <button class="text-secondary" @click="increaseLimit">
             Show More +
           </button>
 
@@ -423,7 +427,7 @@
             v-if="bestSellings.length !== 0"
             class="font-bold text-secondary mt-12 pb-2 mb-10"
           >
-            Shop Our Best Sellers 
+            Shop Our Best Sellers
           </h3>
 
           <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
@@ -431,7 +435,7 @@
               <ProductCard
                 v-e2e="'category-product-card'"
                 :title="product.name"
-                :image="product.images[0]"
+                :image="product.images"
                 :imageHeight="290"
                 :imageWidth="500"
                 :regular-price="product.price.current + ' ETB'"
@@ -765,10 +769,8 @@ export default {
     ProductCard,
   },
   methods: {
-    increaseHeight() {
-      console.log('first', this.height);
-      this.height += 64;
-      console.log('second', this.height);
+    increaseLimit() {
+      this.limit += 6;
     },
     async getActiveCategory() {
       const baseUrl = process.env.GRAPHQL_API;
@@ -777,6 +779,7 @@ export default {
         query: `
         query getCategoriesProducts($slug: String!){
           collection(slug: $slug){
+            id
             name
             children{
               name
@@ -833,117 +836,122 @@ export default {
             _categoriesRef: cref,
             name: product.name,
             images: image,
-            price: {
-              original: price,
-              current: price,
-            },
+            price: price,
             slug: product.slug,
             rating: product?.customFields?.reviewRating,
           };
           return prod;
         });
         this.allProducts = products;
+        const pbaseUrl = process.env.GRAPHQL_API;
+        const poptions = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        };
+        const pbody = {
+          query: `
+            query getBestSellerCategory($id:ID!) {
+              bestSellersInCategory(id: $id){
+                id
+                variantId
+                description
+                collections
+                name
+                image
+                priceWithTax
+                sku
+                slug
+                rating
+              }
+            }`,
+          variables: {
+            id: res.data.data.collection.id,
+          },
+        };
+        console.log('myname', res.data.data.collection.id);
+        axios.post(pbaseUrl, pbody, poptions).then((res) => {
+          const produ = res.data.data?.bestSellersInCategory.map((product) => {
+            let cref = [];
+            product?.collections?.forEach((x) => {
+              cref.push(String(x.id));
+            });
+            const image = process.env.GRAPHQL + `/assets/${product?.image}`;
+            const price =
+              String(product?.priceWithTax).slice(0, -2) +
+              '.' +
+              String(product?.priceWithTax).slice(-2);
+            const prod = {
+              _id: product?.id,
+              _variantId: product?.variantId,
+              _description: product?.description,
+              _categoriesRef: product?.collections,
+              name: product?.name,
+              images: image,
+              price: {
+                original: price,
+                current: price,
+              },
+              slug: product?.slug,
+              rating: product?.rating,
+            };
+            return prod;
+          });
+          console.log('myname2', produ);
+          this.bestSellings = produ;
+        });
       });
     },
-    async getBestSellersCategory() {
-      const baseUrl = process.env.GRAPHQL_API;
-      const body = {
-        query: `
-        query{
-          bestSellersInCategory{
-            slug
-          }
+    sortAllProducts(value) {
+      console.log('vvvvvv', value);
+      if (value === 'NAME_ASC') {
+        this.allProducts.sort(this.generateSortFn('name', false, String));
+        this.allSortBy = 'Name from A to Z';
+      }
+      if (value === 'NAME_DESC') {
+        this.allProducts.sort(this.generateSortFn('name', true, String));
+        this.allSortBy = 'Name from Z to A';
+      }
+      if (value === 'PRICE_ASC') {
+        this.allProducts.sort(this.generateSortFn('price', false, Number));
+        this.allSortBy = 'Price from low to high';
+      }
+      if (value === 'PRICE_DESC') {
+        this.allProducts.sort(this.generateSortFn('price', true, Number));
+        this.allSortBy = 'Price from high to low';
+      }
+    },
+    generateSortFn(prop, reverse, type) {
+      return function (a, b) {
+        if (type === String) {
+          if (a[prop].toLowerCase() < b[prop].toLowerCase())
+            return reverse ? 1 : -1;
+          if (a[prop].toLowerCase() > b[prop].toLowerCase())
+            return reverse ? -1 : 1;
+          return 0;
         }
-        `,
+        if (type === Number) {
+          if (Number(a[prop]) < Number(b[prop])) return reverse ? 1 : -1;
+          if (Number(a[prop]) > Number(b[prop])) return reverse ? -1 : 1;
+          return 0;
+        }
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      const bestseller = await axios.post(baseUrl, body, options);
-      const slugs = bestseller.data.data.bestSellersInCategory.map((bs) => {
-        let x = [];
-        x.push(bs?.slug);
-        return x;
-      });
-      const STRSlug = [];
-      const a = slugs.forEach((s) => {
-        STRSlug.push(s[0]);
-      });
-      const pbody = {
-        query: `
-        query BSProducts($in: [String!]!) {
-          products(options: {filter: {slug: {in: $in}}}) {
-            items {
-              id
-              name
-              slug
-              description
-              featuredAsset {
-                preview
-              }
-              variants {
-                id
-                price
-              }
-              collections {
-                id
-              }
-              customFields {
-                reviewRating
-              }
-            }
-          }
-        }`,
-        variables: {
-          in: STRSlug,
-        },
-      };
-      await axios.post(baseUrl, pbody, options).then((res) => {
-        const produ = res.data.data.products?.items.map((product) => {
-          let cref = [];
-          product?.collections?.forEach((x) => {
-            cref.push(String(x.id));
-          });
-          const image = [String(product?.featuredAsset?.preview)];
-          const price =
-            String(product?.variants[0]?.price).slice(0, -2) +
-            '.' +
-            String(product?.variants[0]?.price).slice(-2);
-          const prod = {
-            _id: product?.id,
-            _variantId: product?.variants[0]?.id,
-            _description: product.description,
-            _categoriesRef: cref,
-            name: product.name,
-            images: image,
-            price: {
-              original: price,
-              current: price,
-            },
-            slug: product.slug,
-            rating: product?.customFields?.reviewRating,
-          };
-          return prod;
-        });
-        this.bestSellings = produ;
-      });
     },
   },
   created() {
     this.getActiveCategory();
-    this.getBestSellersCategory();
     this.sort = process.client ? localStorage.getItem('sort') : '';
   },
   data() {
     return {
+      limit: 6,
+      allSortBy: 'Select Sorting',
       allProducts: [],
       bestSellings: [],
       currentCategory: null,
       sort: '',
-      height: 96,
+      heightp: 96,
     };
   },
   computed: {

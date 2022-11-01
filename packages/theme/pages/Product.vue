@@ -1,193 +1,75 @@
 <template>
   <div id="product">
     <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
+      class="breadcrumbs desktop-only text-secondary"
       :breadcrumbs="breadcrumbs"
     />
     <!-- <p>{{breadcrumbs}}</p> -->
-    <div class="product">
-      <LazyHydrate when-idle>
-        <SfGallery
-          :images="productGallery"
-          class="product__gallery w-auto"
-          enableZoom
-        />
-      </LazyHydrate>
-      <div class="product__info mr-20">
-        <div class="product__header">
-          <SfHeading
-            :title="productGetters.getName(varproduct[0])"
-            :level="3"
-            class="sf-heading--no-underline sf-heading--left"
-          />
-          <SfIcon
-            icon="drag"
-            size="xxl"
-            color="var(--c-text-disabled)"
-            class="product__drag-icon smartphone-only"
+    <div>
+      <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
+        <div class="md:col-span-6">
+          <Gallery
+            :images="Svariant.assets ? Svariant.assets : []"
+            :display="Svariant.featuredAsset"
           />
         </div>
-        <div class="product__price-and-rating">
-          <SfPrice
-            :regular="
-              // varproduct[0].price.current
-              // productGetters.getPrice(varproduct).regular.toLocaleString() + ' ETB'
-              varprice + ' ETB'
-            "
-          />
-          <!-- <div>
-            <div class="product__rating">
-              <SfRating :score="5" :max="5" />
-              <a v-if="!!totalReviews" href="#" class="product__count">
-                ({{ totalReviews }})
-              </a>
-            </div>
-            <SfButton class="sf-button--text">{{
-              $t('Read all reviews')
-            }}</SfButton>
-          </div> -->
-        </div>
-        <div>
-          <SfAddToCart
-            v-e2e="'product_add-to-cart'"
-            :stock="stock"
-            v-model="qty"
-            :disabled="loading"
-            :canAddToCart="stock > 0"
-            class="product__add-to-cart -mt-2"
-            @click="addToCart"
-          />
-          <div
-            :class="classes.red"
-            class="product__description desktop-only my-4 max-h-[30rem] overflow-hidden text-justify"
-            v-html="variant_description"
-          ></div>
-          <a style="color: blue" href="#full-description">MORE +</a>
-          <iframe
-            width="520"
-            height="315"
-            :src="`https://www.youtube-nocookie.com/embed/${youtube_link}?playlist=${youtube_link}&loop=1&controls=0`"
-            title="YouTube video player"
-            frameborder="0"
-            v-if="youtube_link !== ''"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-          <!-- <div v-if="options && options.length">
-            <SfSelect
-              v-for="optionGroup in options"
-              :key="optionGroup.id"
-              v-model="configuration[optionGroup.value]"
-              @input="(option) => updateFilter({ [optionGroup.value]: option })"
-              :label="optionGroup.label"
-              class="sf-select--underlined product__select-size"
-              :required="true"
+        <div class="md:col-span-6">
+          <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
+          <h4 class="text-secondary mb-3">
+            {{
+              String(Svariant.priceWithTax).slice(0, -2) +
+              '.' +
+              String(Svariant.priceWithTax).slice(-2)
+            }}
+            ETB
+          </h4>
+          <div class="flex mb-5">
+            <input
+              class="max-w-[55px] text-center mr-4"
+              v-model="qty"
+              type="number"
+            />
+            <SfButton @click="addToCart" class="rounded bg-secondary"
+              >Add To Cart</SfButton
             >
-              <SfSelectOption
-                v-for="option in optionGroup.options"
-                :key="option.id"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </SfSelectOption>
-            </SfSelect>
-          </div> -->
-        </div>
-        <LazyHydrate when-idle> </LazyHydrate>
+          </div>
+          <div
+            v-if="Svariant.customFields"
+            class="max-h-[20rem] overflow-hidden"
+          >
+            <p
+              v-html="Svariant.customFields.description"
+              class="text-justify"
+            ></p>
+          </div>
 
-        <LazyHydrate when-idle>
-          <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
-            <SfTab :title="$t('Read reviews')" :key="reviewKey">
-              <!-- <div v-for="(review, index) in reviews" :key="index">
-                {{review.summary}}
-              </div> -->
-              <SfReview
-                v-for="review in reviews"
-                :key="review.id"
-                :author="review.authorName"
-                :date="new Date(review.createdAt).toLocaleString()"
-                :message="review.summary"
-                :max-rating="5"
-                :rating="review.rating"
-                :char-limit="250"
-                :read-more-text="$t('Read more')"
-                :hide-full-text="$t('Read less')"
-                class="product__review"
-              />
-              <!-- :myReview="currentReview.value" @updateMyReview="updateMyReview" @addNewReview="addNewReview" -->
-              <MyReview
-                :productId="id"
-                :currentUserHasNoReview="!currentUserHasReview"
-              />
-            </SfTab>
-          </SfTabs>
-        </LazyHydrate>
+          <a href="#full" class="text-secondary text-xl">More +</a>
+        </div>
       </div>
     </div>
-    <div>
-      <div
-        id="full-description"
-        class="flex justify-evenly bg-light_accent mt-6 pt-4 pb-10"
-      >
-        <div class="w-1/2">
-          <h3 class="font-thin mb-4 ml-16">Specification and Description</h3>
-
-          <table class="table-auto w-2/3 border ml-16">
-            <tbody>
-              <tr v-for="(option, index) in optionTableValues" :key="index">
-                <td>
-                  {{ option.head }}
-                </td>
-                <td>
-                  {{ option.value }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="w-1/2 -ml-16 mr-8">
-          <h3 class="font-thin">More about this item</h3>
+    <div id="full" class="card rounded-2xl bg-light_gray grid grid-cols-12 p-8">
+      <div class="col-span-6">
+        <h3>Speciﬁcation And Description</h3>
+      </div>
+      <div class="col-span-6">
+        <h3>More About This Item</h3>
+        <div v-if="Svariant.customFields">
           <p
+            v-html="Svariant.customFields.description"
             class="text-justify"
-            :class="classes.red"
-            v-html="variant_description"
           ></p>
         </div>
       </div>
-      <div v-if="productAccessories.length !== 0" class="mx-14 mt-14">
-        <h3 class="font-extralight">Accessories</h3>
-        <SubcatBrandCard :filteredProducts="productAccessories" />
-      </div>
-      <!-- <div class="mx-14 mt-14">
-        <h3 class="font-extralight">Accessories</h3>
-        <div class="grid grid-cols-5">
-          <div
-            class="card shadow-lg w-52 my-3 bg-light_accent"
-            v-for="accessory in productAccessories"
-            :key="accessory.id"
-          >
-            <img src="../static/homepage/testTube.jpg" alt="" />
-            <h3 class="text-center m-3">{{ accessory.name }}</h3>
-            <h4 class="text-center font-serif m-3">
-              {{ accessory.variants[0].price }}
-            </h4>
-            <button
-              class="mx-10 my-4 bg-dark text-white font-bold py-2 px-4 rounded"
-            >
-              View
-            </button>
-          </div>
-        </div>
-      </div> -->
     </div>
 
     <LazyHydrate when-visible>
       <RelatedProducts
         :products="relatedProducts"
         :loading="relatedLoading"
-        title="Related Products"
+        class="related"
       />
     </LazyHydrate>
+
     <!-- <LazyHydrate when-visible> -->
     <!-- </LazyHydrate> -->
   </div>
@@ -249,7 +131,7 @@ export default {
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
     const { products, search } = useProduct('products');
-    const { addItem, loading } = useCart();
+    const { addItem, addItemToCart, loading } = useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
     const {
       relatedProducts,
@@ -391,6 +273,7 @@ export default {
       user,
       varproduct,
       varprice,
+      addItemToCart,
       //reviewKey,
     };
   },
@@ -404,14 +287,16 @@ export default {
                   product(id: $id) {
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {
+                        name
+                        priceWithTax
                         customFields {
                           description
                         }
-                        options {
-                          name
-                          group {
-                            name
-                          }
+                        featuredAsset{
+                          preview
+                        }
+                        assets{
+                          preview
                         }
                       }
                     }
@@ -430,14 +315,9 @@ export default {
         },
       };
       const variant = await axios.post(baseUrl, body, options);
-      var tablular =
-        variant.data.data?.product?.variantList?.items[0]?.options.map((o) => ({
-          value: o.name,
-          head: o.group.name,
-        }));
-      this.optionTableValues = tablular;
-      this.variant_description =
-        variant.data.data?.product?.variantList?.items[0]?.customFields?.description;
+      console.log('manininin', variant);
+      this.Svariant = variant.data.data.product?.variantList?.items[0];
+      console.log('mannna', this.Svariant);
     },
     async getAccessories() {
       const productId = this.$route.params.id;
@@ -607,9 +487,11 @@ export default {
   },
   data() {
     return {
+      quantity: 1,
       variant_description: null,
       productAccessories: [],
       optionTableValues: [],
+      Svariant: [],
       stock: 5,
       brand:
         'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
@@ -636,7 +518,8 @@ export default {
 #product {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 90%;
+    max-width: 1250px !important;
+    padding: 0;
     margin: 0 auto;
   }
 }
