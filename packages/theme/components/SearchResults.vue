@@ -7,7 +7,7 @@
           class="search__wrapper-results"
           key="results"
         >
-          <SfMegaMenuColumn
+          <!-- <SfMegaMenuColumn
             title="Categories"
             class="sf-mega-menu-column--pined-content-on-mobile search__categories"
           >
@@ -31,7 +31,7 @@
                 </SfListItem>
               </template>
             </SfList>
-          </SfMegaMenuColumn>
+          </SfMegaMenuColumn> -->
           <SfMegaMenuColumn
             title="Product suggestions"
             class="sf-mega-menu-column--pined-content-on-mobile search__results"

@@ -250,7 +250,7 @@
       </LazyHydrate>
 
       <LazyHydrate when-visible>
-        <Testimonial />
+        <Testimonial :testimonials="testimonials" />
       </LazyHydrate>
 
       <LazyHydrate when-visible>
@@ -318,9 +318,11 @@ export default {
   },
   created() {
     this.getBestSellers();
+    this.getTestimonials();
   },
   data() {
     return {
+      testimonials: [],
       bestSellings: [],
       settings: {
         dots: false,
@@ -460,6 +462,39 @@ export default {
         });
         this.bestSellings = produ;
         console.log('sdadfasdfasdf', this.bestSellings);
+      });
+    },
+    async getTestimonials() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const body = {
+        query: `query{
+          getTestimonials{
+            id
+            name
+            pic_location
+            msg
+            person_position
+          }
+        }`,
+      };
+      await axios.post(baseUrl, body, options).then((res) => {
+        const test = res.data.data.getTestimonials.map((testimony) => {
+          return {
+            id: testimony.id,
+            name: testimony.name,
+            src: testimony.pic_location,
+            content: testimony.msg,
+            title: testimony.person_position,
+          };
+        });
+        this.testimonials = test;
+        console.log('testimonials', this.testimonials);
       });
     },
   },

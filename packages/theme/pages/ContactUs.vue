@@ -201,7 +201,7 @@
             phone="(+251) 111 264 829"
             email="info@ethiolab.et" -->
           <div class="mt-4">
-            <p>{{ companyName[0] }} Head Office</p>
+            <p>{{ companyName }} Head Office</p>
             <p class="mb-6">
               {{ location.locationText }}
             </p>
@@ -219,7 +219,7 @@
                 :key="index"
               >
                 <a :href="`tel:${phone}`">
-                  <p>{{ phone }}</p>
+                  <p>{{ phone }},</p>
                 </a>
               </div>
             </div>
@@ -233,7 +233,7 @@
               />
               <div v-for="(email, index) in emails" :key="index">
                 <a :href="`mailto:${email}`">
-                  <p class="ml-2">{{ email }}</p>
+                  <p class="ml-2">{{ email }},</p>
                 </a>
               </div>
             </div>
@@ -337,9 +337,7 @@ export default {
     },
     companyName() {
       const name =
-        this.$store.state.companyDetails.companyInformation?.company_name.split(
-          ';'
-        );
+        this.$store.state.companyDetails.companyInformation?.company_name;
       return name;
     },
   },
