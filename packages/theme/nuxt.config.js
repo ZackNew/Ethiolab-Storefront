@@ -129,6 +129,11 @@ export default {
     'nuxt-user-agent',
     '@nuxtjs/axios',
   ],
+  axios: {
+    // Axios options here
+    baseURL: process.env.GRAPHQL_API,
+    https: false,
+  },
   i18n: {
     currency: 'ETB',
     country: 'UETS',
@@ -230,14 +235,12 @@ export default {
         ital: [300, 400],
       },
     },
-    display: 'swap'
+    display: 'swap',
   },
   // serverMiddleware: [
   //   { path: '/api/hook', handler: '~/api/hook.js' },
   //   { path: '/api/axios', handler: '~/api/axios.js' }
 
   // ]
-  serverMiddleware: [
-    '~/api/index.js'
-  ],
+  serverMiddleware: ['~/api/index.js'],
 };

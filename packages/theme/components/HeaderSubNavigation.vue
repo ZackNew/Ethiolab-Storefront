@@ -5,16 +5,16 @@
       @mouseleave="hoverOutHandler()"
       class="content"
     >
-      <nuxt-link :key="-1" :to="this.$props.link">{{
-        this.$props.title
-      }}</nuxt-link>
+      <nuxt-link :key="-1" :to="this.$props.link">
+        <p class="text-secondary text-xl">{{ this.$props.title }}</p>
+      </nuxt-link>
       <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
       <div
-        class="grid grid-rows-4 grid-cols-2 gap-6 overlay"
+        class="grid grid-rows-4 grid-cols-2 gap-6 overlay no-scrollbar"
         v-if="subnavList.length > 0"
       >
         <a
-          class="mb-3"
+          class="mb-4"
           v-for="sub in subnavList"
           :key="sub.id"
           :href="`/s/${sub.slug}`"
@@ -88,8 +88,10 @@ export default {
   top: 25% !important;
   display: block !important;
   width: 250px !important;
-  min-height: 200px !important;
-  border: 0.025px solid var(--c-bg-primary) !important;
+  min-height: 360px !important;
+  border: 0.025px solid rgb(233, 233, 233) !important;
+  border-radius: 15px;
+  box-shadow: 2px 1px 5px rgb(28, 26, 26);
   /* box-shadow: 5px grey; */
   z-index: 2 !important;
   opacity: 1 !important;
@@ -105,6 +107,9 @@ a:hover {
   /* border-bottom:  0.1px solid var(--c-bg-primary) !important; */
   color: var(--c-bg-primary);
   font-weight: bold;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 .content:hover > a {

@@ -46,7 +46,8 @@
     </div> -->
     <div
       id="left"
-      class="form rounded-md p-5 pl-10 w-7/12 text-3xl bg-light_accent"
+      class="form rounded-md p-5 pl-10 w-7/12 text-3xl"
+      :class="isDarkMode ? 'bg-dark_accent' : 'bg-light_accent'"
     >
       Write A Special Quote
       <div class="notice">
@@ -56,37 +57,37 @@
       <SfInput
         label="Your Contact Email"
         v-model="data.fromEmail"
-        class="form__element mt-3 text-white w-8/12"
+        class="form__element mt-3 text-white w-9/12"
       />
       <SfInput
         label="Subject"
-        class="form__element w-8/12"
+        class="form__element w-9/12"
         v-model="data.subject"
       />
 
       <SfInput
         label="Phone Number"
-        class="form__element w-8/12"
+        class="form__element w-9/12"
         v-model="data.fromPhone"
       />
       <SfInput
         label="First Name"
-        class="form__element w-8/12"
+        class="form__element w-9/12"
         v-model="data.firstName"
       />
 
       <SfInput
         label="Last Name"
-        class="form__element w-8/12"
+        class="form__element w-9/12"
         v-model="data.lastName"
       />
       <textarea
         placeholder="Your special quote."
         cols="20"
-        class="form__element tarea text-sm rounded mt-4 text-dark_accent w-8/12"
+        class="form__element tarea text-sm rounded mt-4 text-dark_accent w-9/12"
         v-model="data.msg"
       ></textarea>
-      <SfButton class="btn rounded bg-secondary w-8/12" @click="send"
+      <SfButton class="btn rounded bg-secondary w-9/12" @click="send"
         >Send</SfButton
       >
     </div>
@@ -94,6 +95,7 @@
 </template>
 
 <script>
+import { useUiState } from '~/composables';
 //import {}
 import { SfTabs, SfInput, SfButton, SfTextarea } from '@storefront-ui/vue';
 import { useUser, userGetters, useQuote } from '@vue-storefront/vendure';
@@ -106,6 +108,7 @@ export default {
     SfTextarea,
   },
   setup() {
+    const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
     const { writeQuote } = useQuote();
     const data = ref({
@@ -131,7 +134,7 @@ export default {
       });
       showToast('Quote Sent!');
     };
-    return { data, send };
+    return { data, send, isDarkMode };
   },
 };
 </script>

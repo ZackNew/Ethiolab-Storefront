@@ -2,7 +2,7 @@
   <nuxt-link to="/WriteAQuote">
     <div class="sf-header-navigation-item" v-on="$listeners">
       <div
-        class="sf-header-navigation-item__item sf-header-navigation-item__item--mobile -ml-14"
+        class="sf-header-navigation-item__item sf-header-navigation-item__item--mobile -ml-4"
       >
         <slot name="mobile-navigation-item w-full">
           <!-- <SfMenuItem

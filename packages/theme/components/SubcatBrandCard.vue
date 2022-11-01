@@ -1,52 +1,51 @@
 <template>
-
   <div>
-
-      <nuxt-link :to="{ path: '/v/' + product.slug}">
-        <LazyHydrate>
-          <img
-            class="object-cover h-60 w-72 md:w-48 rounded-t-lg m-2"
-            :src="product.featuredAsset ? product.featuredAsset.preview: ''"
-            alt="image"
-          />
-        </LazyHydrate>
-      </nuxt-link>
-      <nuxt-link :to="{ path: '/v/' + product.slug}">
-        <div class="m-1">
-          <h4
-            class="mx-3 mt-1 text-center text-secondary md:min-h-[4rem] text-xs md:text-base text-extrathin"
-          >
-            {{ product.name }}
-          </h4>
-        </div>
-      </nuxt-link>
- 
-      <div class="text-center ">
-        <button class="my-2 h-4 w-32" >
-          <nuxt-link
-            :to="{ path: '/v/' + product.slug}"
-          >
-           <p             class="text-sm bg-secondary text-white font-bold py-2 px-4  "
->  {{ $t('View All') }}</p>
-          </nuxt-link>
-        </button>
+    <nuxt-link :to="{ path: '/v/' + product.slug }">
+      <LazyHydrate>
+        <img
+          class="object-cover h-60 w-72 md:w-48 rounded-t-lg m-2"
+          :src="product.featuredAsset ? product.featuredAsset.preview : ''"
+          alt="image"
+        />
+      </LazyHydrate>
+    </nuxt-link>
+    <nuxt-link :to="{ path: '/v/' + product.slug }">
+      <div class="m-1">
+        <h4
+          class="mx-3 mt-1 text-center text-secondary md:min-h-[4rem] text-xs md:text-base text-extrathin"
+        >
+          {{ product.name }}
+        </h4>
       </div>
-      <!-- <p class="text-center m-3 text-xs md:text-base"> -->
-        <!-- {{ String(product.variants[0].priceWithTax).slice(0, -2) }}.00 -->
-        <!-- {{minPrice}} - {{maxPrice}}
+    </nuxt-link>
+
+    <div class="text-center">
+      <button class="my-2 h-4 w-32">
+        <nuxt-link :to="{ path: '/v/' + product.slug }">
+          <p class="text-sm bg-secondary text-white font-bold py-2 px-4">
+            {{ $t('View All') }}
+          </p>
+        </nuxt-link>
+      </button>
+    </div>
+    <!-- <p class="text-center m-3 text-xs md:text-base"> -->
+    <!-- {{ String(product.variants[0].priceWithTax).slice(0, -2) }}.00 -->
+    <!-- {{minPrice}} - {{maxPrice}}
       </p> -->
 
-      <div class="text-center m-3 text-xs md:text-base" v-if="product.variants.length === 1">
-          <span> </span>{{ prices }} ETB
-        </div>
-        <div class="text-center m-3 text-xs md:text-base" v-else>
-          
-          <div class="inline-flex" v-for="(p, index) of prices" :key="index">
-            <div class="mx-2" v-if="index === 1">-</div>
-            <template>{{ p }}ETB </template>
-          </div>
-        </div>
+    <div
+      class="text-center m-3 text-xs md:text-base"
+      v-if="product.variants.length === 1"
+    >
+      <span> </span>{{ prices }} ETB
     </div>
+    <div class="text-center m-3 text-xs md:text-base" v-else>
+      <div class="inline-flex" v-for="(p, index) of prices" :key="index">
+        <div class="mx-2" v-if="index === 1">-</div>
+        <template>{{ p }}ETB </template>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -58,24 +57,22 @@ export default {
   props: {
     product: {
       type: Object,
-      required: true,
+      required: false,
     },
   },
   components: {
     LazyHydrate,
   },
-  computed : {
+  computed: {
     prices() {
-      if ( this.product?.variants.length === 1) {
-        console.log("single")
-        const price = String(
-          this.product?.variants[0]?.priceWithTax
-        );
+      if (this.product?.variants.length === 1) {
+        console.log('single');
+        const price = String(this.product?.variants[0]?.priceWithTax);
         const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
         return fPrice;
       }
-      if ( this.product?.variants.length > 1) {
-        console.log("multiple")
+      if (this.product?.variants.length > 1) {
+        console.log('multiple');
         let items = this.product?.variants;
         let prices = [];
         items.forEach((item) => {
@@ -89,7 +86,7 @@ export default {
           String(Math.min(...prices)).slice(0, -2) +
           '.' +
           String(Math.min(...prices)).slice(-2);
-          console.log("price min max", min, max)
+        console.log('price min max', min, max);
         return [min, max];
       }
     },
@@ -109,7 +106,7 @@ export default {
     const maxP = Math.max(...currentPrice).toString();
     const minP = Math.min(...currentPrice).toString();
 
-     maxPrice =
+    maxPrice =
       maxP.substring(0, maxP.length - 2) +
       '.' +
       maxP.substring(maxP.length - 2);
@@ -118,8 +115,8 @@ export default {
       '.' +
       minP.substring(minP.length - 2);
 
-        // console.log("min value is ", minPrice);
-        // console.log("max price is ", maxPrice)
+    // console.log("min value is ", minPrice);
+    // console.log("max price is ", maxPrice)
     return {
       isDarkMode,
       maxPrice,

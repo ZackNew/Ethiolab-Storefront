@@ -22,11 +22,7 @@
         <div class="md:mr-8 md:col-span-6">
           <Gallery
             :images="product.assets"
-            :display="
-              product.featuredAsset || {
-                preview: '~/static/categories/empty_image.png',
-              }
-            "
+            :display="product.featuredAsset"
             class="mb-5 md:mb-0"
           />
         </div>
@@ -62,17 +58,19 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
-          <p
-            class="text-justify mt-2"
-            :class="classes.red"
-            v-html="product.description"
-          ></p>
+          <div :class="isDarkMode ? 'text-white' : ''">
+            <p
+              class="text-justify mt-2"
+              :class="classes.red"
+              v-html="product.description"
+            ></p>
+          </div>
           <SfButton
-            v-if="custom.document"
+            v-if="product.customFields.documentation"
             class="bg-secondary my-2 pb-2 pt-3 rounded"
           >
             <a class="text-white px-1" :href="custom.document" target="_blank">
-              See full description
+              DESCRIPTION PDF
             </a>
             <!-- Get documentation -->
           </SfButton>
@@ -252,6 +250,7 @@
 </template>
 
 <script>
+import { useUiState } from '~/composables';
 import axios from 'axios';
 import { SfButton, SfTable, SfIcon } from '@storefront-ui/vue';
 import { useWishlist, useCart } from '@vue-storefront/vendure';
@@ -279,6 +278,7 @@ export default {
           product(slug: $slug){
             id
             name
+            slug
             description
             facetValues{
               name
@@ -356,6 +356,7 @@ export default {
     },
   },
   setup() {
+    const { isDarkMode } = useUiState();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const addToCart = (e) => {
       const quantity =
@@ -378,6 +379,7 @@ export default {
     return {
       isInCart,
       addToCart,
+      isDarkMode,
     };
   },
   created() {

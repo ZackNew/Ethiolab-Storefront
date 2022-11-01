@@ -29,7 +29,6 @@
         >
           {{ label }}
         </h1>
-
         <DropDownMenu
           class="overlay"
           :main="label"
@@ -68,46 +67,18 @@ export default {
 };
 </script>
 <style scoped>
-/* .sf-header-navigation-item__menu-item:hover{
-  border: 1px solid black;
-} */
-/* .sf-header-navigation-item__menu-item:hover::{
-  border: 1px solid black !important;
-  width: 60% !important;
-  height: 35% !important;
-.sf-header-navigation-item__menu-item:hover .overlay{
-  z-index: 2;
-} */
-.sf-button {
-  display: inline !important;
-  border-top: 0.25px solid transparent !important;
-  border-left: 0.25px solid transparent !important;
-  border-right: 0.25px solid transparent !important;
-  /* border: 0.25px solid transparent !important;*/
-}
 .sf-menu-item__label {
   /* margin: auto !important; */
   display: block !important;
   font-weight: bold;
 }
 
-.sf-button:hover {
-  justify-content: center;
-  /* border-top: 0.1px solid var(--c-bg-primary) !important;
-  border-left: 0.1px solid var(--c-bg-primary) !important;
-  border-right: 0.1px solid var(--c-bg-primary) !important; */
-  border-bottom: 0.1px solid var(--c-bg-primary) !important;
-}
-
 .overlay {
   position: relative;
   display: none !important;
+  border-radius: 12px;
+  border-color: white;
 }
-
-/* .sf-header-navigation-item__menu-item{
-  height: 500% !important;
-  justify-content: baseline !important;
-} */
 
 .sf-header-navigation-item__item:hover .overlay {
   /* margin: 0 auto !important; */
@@ -118,10 +89,10 @@ export default {
   /* bottom: 38vh !important; */
   display: block !important;
   width: 75% !important;
-  height: 40% !important;
+  height: 50% !important;
   /* border: 0.1px solid var(--c-bg-primary) !important; */
-  box-shadow: 1px rgb(0, 0, 0, 0.2);
-  border: solid 1px gray;
+  box-shadow: 6px 3px 5px rgb(139, 139, 139);
+  border: solid 1px rgb(194, 194, 194);
   z-index: 10 !important;
 }
 </style>
