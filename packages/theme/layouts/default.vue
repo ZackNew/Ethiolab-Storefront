@@ -17,7 +17,7 @@
         <AppHeader />
       </LazyHydrate>
     </div>
-
+    <!-- <div class="card shadow-2xl bg-secondary bottomright">magi</div> -->
     <div id="layout">
       <nuxt :key="$route.fullPath" />
 
@@ -237,5 +237,16 @@ h4 {
 }
 .sf-add-to-cart__button {
   background-color: #3860a7;
+}
+.bottomright {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  width: 150px;
+  height: 50px;
+  background-color: lightblue;
+  padding: 5px;
+  border: 1px;
+  border-radius: 40%;
 }
 </style>

@@ -40,6 +40,7 @@
             <p
               v-html="Svariant.customFields.description"
               class="text-justify"
+              :class="classes.red"
             ></p>
           </div>
 
@@ -57,6 +58,7 @@
           <p
             v-html="Svariant.customFields.description"
             class="text-justify"
+            :class="classes.red"
           ></p>
         </div>
       </div>

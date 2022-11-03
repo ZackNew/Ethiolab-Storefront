@@ -798,7 +798,7 @@ export default {
               }
               variants{
                 id
-                price
+                priceWithTax
               }
               collections{
                 id
@@ -826,9 +826,9 @@ export default {
           });
           const image = [String(product?.featuredAsset?.preview)];
           const price =
-            String(product?.variants[0]?.price).slice(0, -2) +
+            String(product?.variants[0]?.priceWithTax).slice(0, -2) +
             '.' +
-            String(product?.variants[0]?.price).slice(-2);
+            String(product?.variants[0]?.priceWithTax).slice(-2);
           const prod = {
             _id: product?.id,
             _variantId: product?.variants[0]?.id,
@@ -843,6 +843,7 @@ export default {
           return prod;
         });
         this.allProducts = products;
+        console.log('ewawa', this.allProducts);
         const pbaseUrl = process.env.GRAPHQL_API;
         const poptions = {
           headers: {
@@ -1305,7 +1306,7 @@ export default {
 .sticky {
   display: block;
   position: -webkit-sticky;
-  position: relative;
+  position: sticky;
   top: 0px;
   z-index: 2;
 }
