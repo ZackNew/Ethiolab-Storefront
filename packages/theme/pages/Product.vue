@@ -1,5 +1,5 @@
 <template>
-  <div id="product">
+  <div id="product" v-if="Svariant !== null">
     <SfBreadcrumbs
       class="breadcrumbs desktop-only text-secondary"
       :breadcrumbs="breadcrumbs"
@@ -7,10 +7,11 @@
     <!-- <p>{{breadcrumbs}}</p> -->
     <div>
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-        <div class="md:col-span-6">
+        <div class="md:col-span-6 max-w[99%] overflow-hidden">
           <Gallery
             :images="Svariant.assets ? Svariant.assets : []"
-            :display="Svariant.featuredAsset"
+            :display="Svariant.featuredAsset ? Svariant.featuredAsset : prImage"
+            class="mb-5 md:mb-0"
           />
         </div>
         <div class="md:col-span-6">
@@ -36,6 +37,7 @@
           <div
             v-if="Svariant.customFields"
             class="max-h-[20rem] overflow-hidden"
+            :class="isDarkMode ? 'text-white' : ''"
           >
             <p
               v-html="Svariant.customFields.description"
@@ -48,9 +50,18 @@
         </div>
       </div>
     </div>
-    <div id="full" class="card rounded-2xl bg-light_gray grid grid-cols-12 p-8">
+    <div
+      id="full"
+      class="card rounded-2xl grid grid-cols-12 p-8"
+      :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
+    >
       <div class="col-span-6">
         <h3>Speciﬁcation And Description</h3>
+        <p
+          class="max-w-[95%]"
+          v-html="Svariant.customFields ? Svariant.customFields.table : ''"
+          :class="classes.red"
+        ></p>
       </div>
       <div class="col-span-6">
         <h3>More About This Item</h3>
@@ -117,6 +128,7 @@ import { onSSR } from '@vue-storefront/core';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { getProductVariantByConfiguration } from '~/helpers';
+import { useUiState } from '~/composables';
 import axios from 'axios';
 
 export default {
@@ -129,6 +141,7 @@ export default {
   },
 
   setup(props, context) {
+    const { isDarkMode } = useUiState();
     const qty = ref(1);
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
@@ -276,6 +289,7 @@ export default {
       varproduct,
       varprice,
       addItemToCart,
+      isDarkMode,
       //reviewKey,
     };
   },
@@ -287,12 +301,16 @@ export default {
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {
+                    featuredAsset{
+                      preview
+                    }
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {
                         name
                         priceWithTax
                         customFields {
                           description
+                          table
                         }
                         featuredAsset{
                           preview
@@ -318,6 +336,7 @@ export default {
       };
       const variant = await axios.post(baseUrl, body, options);
       console.log('manininin', variant);
+      this.prImage = variant.data.data.product?.featuredAsset;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
       console.log('mannna', this.Svariant);
     },
@@ -489,11 +508,12 @@ export default {
   },
   data() {
     return {
+      prImage: '',
       quantity: 1,
       variant_description: null,
       productAccessories: [],
       optionTableValues: [],
-      Svariant: [],
+      Svariant: null,
       stock: 5,
       brand:
         'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',

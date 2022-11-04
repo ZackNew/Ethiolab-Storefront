@@ -614,6 +614,7 @@ export default {
     const rawBreadcrumbs = computed(() =>
       facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug)
     );
+    console.log('rrrrrrrrrrrrrrr', searchResult.value);
     const breadcrumbs = computed(() =>
       th.getFormattedBreadcrumbs(rawBreadcrumbs.value)
     );
@@ -843,7 +844,6 @@ export default {
           return prod;
         });
         this.allProducts = products;
-        console.log('ewawa', this.allProducts);
         const pbaseUrl = process.env.GRAPHQL_API;
         const poptions = {
           headers: {
@@ -871,7 +871,6 @@ export default {
             id: res.data.data.collection.id,
           },
         };
-        console.log('myname', res.data.data.collection.id);
         axios.post(pbaseUrl, pbody, poptions).then((res) => {
           const produ = res.data.data?.bestSellersInCategory.map((product) => {
             let cref = [];

@@ -60,7 +60,7 @@ export default {
       default: [],
     },
     display: {
-      type: Object,
+      // type: Object,
       default() {
         return {
           preview:
@@ -134,8 +134,8 @@ export default {
   },
   mounted() {
     // this.zoom();
+    console.log('asferi', this.display);
     this.bigImage = this.display.preview;
-    console.log('adddsdfasdf', this.isMobile());
   },
 };
 </script>
