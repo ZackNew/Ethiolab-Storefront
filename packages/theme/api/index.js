@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.post('/test',  async function (req, res) {
+app.post('/telebirr',  async function (req, res) {
   console.log("request value is ", req.body);
   const body = req.body;
 
