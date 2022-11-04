@@ -392,7 +392,7 @@ export default {
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
-                      "timestamp":cart?.value?.code.toString(),
+                      "timestamp":cart?.value?.code?.toString(),
                       "totalAmount":paymentDetail.amount
                     };
 
@@ -442,7 +442,7 @@ export default {
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
-                      "timestamp":cart?.value?.code.toString(),
+                      "timestamp":cart?.value?.code?.toString(),
                       "totalAmount":paymentDetail.amount
                     };
 
