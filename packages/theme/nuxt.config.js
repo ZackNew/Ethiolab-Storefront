@@ -242,7 +242,5 @@ export default {
   //   { path: '/api/axios', handler: '~/api/axios.js' }
 
   // ]
-  serverMiddleware: [
-    { path: '/api', handler: '~/api/index.js' },
-  ],
+  serverMiddleware: ['~/api/index.js'],
 };
