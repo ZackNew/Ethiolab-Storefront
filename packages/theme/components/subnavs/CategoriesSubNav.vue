@@ -27,7 +27,7 @@ export default {
     const adSection = computed(() => JSON.parse(getCms.value[3].content));
     const adImage = computed(() => getCms.value[3].featuredAsset.preview);
     const getTree = () => {
-      categories.value.items.forEach((a) => {
+      categories?.value?.items?.forEach((a) => {
         if (a.parent.name === '__root_collection__') {
           headerNavigation.push(facetGetters.getTree(a));
           for (let navItem of headerNavigation) {
