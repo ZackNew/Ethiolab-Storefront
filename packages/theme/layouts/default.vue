@@ -17,7 +17,7 @@
         <AppHeader />
       </LazyHydrate>
     </div>
-    <!-- <div class="card shadow-2xl bg-secondary bottomright">magi</div> -->
+    <Compare class="bottomright" />
     <div id="layout">
       <nuxt :key="$route.fullPath" />
 
@@ -39,6 +39,7 @@
 
 <script>
 import ToastVue from '~/components/Toast.vue';
+import Compare from '~/components/Compare.vue';
 import AppHeader from '~/components/AppHeader.vue';
 import BottomNavigation from '~/components/BottomNavigation.vue';
 import AppFooter from '~/components/AppFooter.vue';
@@ -60,6 +61,7 @@ export default {
 
   components: {
     ToastVue,
+    Compare,
     CategoriesSidebar,
     LazyHydrate,
     TopBar,
@@ -240,13 +242,7 @@ h4 {
 }
 .bottomright {
   position: fixed;
-  right: 10px;
-  bottom: 10px;
-  width: 150px;
-  height: 50px;
-  background-color: lightblue;
   padding: 5px;
-  border: 1px;
-  border-radius: 40%;
+  z-index: 500;
 }
 </style>

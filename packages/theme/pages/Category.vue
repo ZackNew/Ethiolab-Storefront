@@ -62,8 +62,8 @@
                 <SfSelectOption
                   :style="!isDarkMode ? '' : 'background-color: #182533'"
                   v-for="option in sortBy.options"
-                  :key="option.id"
-                  :value="option.id"
+                  :key="option ? option.id : ''"
+                  :value="option ? option.id : ''"
                   class="sort-by__option"
                   >{{ option.value }}</SfSelectOption
                 >
@@ -76,10 +76,11 @@
               >{{ $t('Products found') }}:
             </span>
             <span class="desktop-only text-secondary font-bold">{{
-              allProducts.length
+              allProducts ? allProducts.length : ''
             }}</span>
             <span class="navbar__label smartphone-only text-secondary"
-              >{{ allProducts.length }} {{ $t('Items') }}</span
+              >{{ allProducts ? allProducts.length : '' }}
+              {{ $t('Items') }}</span
             >
           </div>
 
@@ -203,10 +204,10 @@
                   class="text-white col-span-2 pt-5 overflow-auto max-h-40"
                 ></div> -->
                 <!-- <p class="text-white col-span-2 pt-5 ">Get the precision calibration tools you need to maintain the accuracy of your process,
-                                                electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
-                                                  metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
-                                                  Our NIST-traceable calibration services and repairs help you meet your quality, regulatory, 
-                                                  and compliance needs.</p> -->
+                electrical, temperature, pressure, and flow measuring instruments and equipment. In addition, our in-house
+                metrology lab will precalibrate an instrument at time of order or recalibrate equipment already owned. 
+                Our NIST-traceable calibration services and repairs help you meet your quality, regulatory, 
+                and compliance needs.</p> -->
               </div>
             </div>
           </div>
@@ -214,6 +215,9 @@
           <LazyHydrate>
             <!-- <CategoryFeature /> -->
             <div>
+              <p class="text-secondary">
+                Store {{ $store.state.compareList.productsToCompare }}
+              </p>
               <h3
                 class="font-bold mt-12 pb-2 text-secondary"
                 :style="!isDarkMode ? '' : 'color: white'"
@@ -281,6 +285,7 @@
               <div v-for="(product, i) in allProducts" :key="product._id">
                 <template v-if="i < limit">
                   <ProductCard
+                    :id="product._id"
                     v-e2e="'category-product-card'"
                     :title="product.name"
                     :image="
@@ -293,6 +298,7 @@
                     :regular-price="product.price + ' ETB'"
                     :max-rating="5"
                     :score-rating="product.rating ? product.rating : ''"
+                    :variantId="product._variantId"
                     :show-add-to-cart-button="true"
                     :isInWishlist="isInWishlist({ product })"
                     :isAddedToCart="isInCart({ product })"
@@ -329,6 +335,7 @@
                     :image="productGetters.getCoverImage(product)"
                     :regular-price="product.price + ' ETB'"
                     :isInWishlist="isInWishlist({ product })"
+                    :variantId="product._variantId"
                     class="products__product-card-horizontal"
                     @input="productQuantity[product._id] = $event"
                     @click:wishlist="
@@ -665,7 +672,7 @@ export default {
       selectedFilters.value = facets.value.reduce(
         (prev, curr) => ({
           ...prev,
-          [curr.id]: curr.options.filter((o) => o.selected).map((o) => o.id),
+          [curr?.id]: curr.options.filter((o) => o.selected).map((o) => o?.id),
         }),
         {}
       );
@@ -684,16 +691,16 @@ export default {
     });
 
     const isFilterSelected = (facet, option) =>
-      (selectedFilters.value.attributes || []).includes(option.id);
+      (selectedFilters.value.attributes || []).includes(option?.id);
 
     const selectFilter = (facet, option) => {
       if (!selectedFilters.value.attributes) {
         Vue.set(selectedFilters.value, 'attributes', []);
       }
 
-      if (selectedFilters.value?.attributes.find((f) => f === option.id)) {
+      if (selectedFilters.value?.attributes.find((f) => f === option?.id)) {
         const filterIndex = selectedFilters.value?.attributes.indexOf(
-          option.id
+          option?.id
         );
         if (filterIndex > -1) {
           selectedFilters.value?.attributes?.splice(filterIndex, 1);
@@ -701,7 +708,7 @@ export default {
         return;
       }
 
-      selectedFilters.value.attributes.push(option.id);
+      selectedFilters.value.attributes.push(option?.id);
     };
 
     const clearFilters = () => {
@@ -823,7 +830,7 @@ export default {
         const products = this.currentCategory?.products?.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
-            cref.push(String(x.id));
+            cref.push(String(x?.id));
           });
           const image = [String(product?.featuredAsset?.preview)];
           const price =
@@ -875,7 +882,7 @@ export default {
           const produ = res.data.data?.bestSellersInCategory.map((product) => {
             let cref = [];
             product?.collections?.forEach((x) => {
-              cref.push(String(x.id));
+              cref.push(String(x?.id));
             });
             const image = process.env.GRAPHQL + `/assets/${product?.image}`;
             const price =
@@ -904,7 +911,6 @@ export default {
       });
     },
     sortAllProducts(value) {
-      console.log('vvvvvv', value);
       if (value === 'NAME_ASC') {
         this.allProducts.sort(this.generateSortFn('name', false, String));
         this.allSortBy = 'Name from A to Z';
