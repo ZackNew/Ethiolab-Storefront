@@ -13,21 +13,8 @@
         v-for="navs in $props.subnavList"
         :key="navs.id"
       />
-      <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
     </div>
-    <!-- <SfBanner
-      v-if="addVisible"
-      class="ad-banner"
-      :title="adSection.title || 'Ad Titile'"
-      :subtitle="adSection.overview || 'Ad Overview'"
-      :description="adSection.description || 'Ad Description'"
-      :buttonText="adSection.buttonText || 'Ad Button'"
-      background=""
-      :image="adImage || '/homepage/bannerA.webp'"
-      link="/c/clinical-laboratory"
-    >
-      meme
-    </SfBanner> -->
+   
     <div class="detail bg-light_accent pb-3" v-show="showDetail">
       <img
         style="object-fit: cover"

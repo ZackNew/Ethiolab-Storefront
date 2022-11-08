@@ -8,7 +8,6 @@
       <nuxt-link :key="-1" :to="this.$props.link">
         <p class="text-secondary text-xl">{{ this.$props.title }}</p>
       </nuxt-link>
-      <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
       <div
         class="grid grid-rows-4 grid-cols-2 gap-6 overlay no-scrollbar"
         v-if="subnavList.length > 0"
