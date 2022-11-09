@@ -44,11 +44,14 @@
           ></div>
         </div>
       </div>
-      <button
-        class="px-6 bg-secondary rounded h-[45%] text-white font-bold my-auto mr-[5%]"
+      <nuxt-link
+        class="my-auto bg-secondary rounded h-[45%] mr-[5%]"
+        :to="'/compareProduct'"
       >
-        compare
-      </button>
+        <button class="px-6 my-auto text-white font-bold mt-[7%]">
+          compare
+        </button>
+      </nuxt-link>
     </div>
   </div>
 </template>
