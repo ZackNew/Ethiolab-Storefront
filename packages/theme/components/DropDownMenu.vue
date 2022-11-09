@@ -1,6 +1,6 @@
 <template>
   <div class="flex body">
-    <div class="grid grid-rows-6 grid-cols-5 gap-3 grid-flow-col">
+    <div class="grid grid-rows-6 grid-cols-4 gap-4 grid-flow-col">
       <HeaderSubNavigation
         :handler="hoverHandler"
         :hoverOutHandler="hoverOutHandler"
@@ -179,6 +179,7 @@ export default {
   margin-left: 2.5% !important;
   width: 80% !important;
   height: 75% !important;
+  /* background-color: yellow !important; */
 }
 
 .sf-banner {

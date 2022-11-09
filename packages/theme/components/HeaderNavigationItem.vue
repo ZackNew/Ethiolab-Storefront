@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-header-navigation-item" v-on="$listeners">
+  <div class="sf-header-navigation-item nav" v-on="$listeners">
 
     <div
       class="sf-header-navigation-item__item sf-header-navigation-item__item--mobile"
@@ -46,7 +46,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .sf-menu-item__label {
   /* margin: auto !important; */
   display: block !important;
@@ -58,6 +58,15 @@ export default {
   display: none !important;
   border-radius: 12px;
   border-color: white;
+
+  box-sizing: border-box;
+  padding: 0 var(--spacer-sm);
+  @include for-desktop {
+    max-width: 1250px;
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+  }
 }
 
 .sf-header-navigation-item__item:hover .overlay {
@@ -75,4 +84,7 @@ export default {
   border: solid 1px rgb(194, 194, 194);
   z-index: 10 !important;
 }
+
+
+
 </style>
