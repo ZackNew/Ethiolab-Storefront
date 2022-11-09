@@ -13,7 +13,7 @@
       <LazyHydrate when-visible>
         <TopBar class="desktop-only" />
       </LazyHydrate>
-      <LazyHydrate when-idle>
+      <LazyHydrate when-idle >
         <AppHeader />
       </LazyHydrate>
     </div>

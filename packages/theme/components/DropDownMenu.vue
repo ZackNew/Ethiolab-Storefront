@@ -1,6 +1,6 @@
 <template>
   <div class="flex body">
-    <div class="grid grid-rows-6 grid-cols-5 gap-3 grid-flow-col">
+    <div class="grid grid-rows-6 grid-cols-4 gap-4 grid-flow-col">
       <HeaderSubNavigation
         :handler="hoverHandler"
         :hoverOutHandler="hoverOutHandler"
@@ -13,21 +13,8 @@
         v-for="navs in $props.subnavList"
         :key="navs.id"
       />
-      <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
     </div>
-    <!-- <SfBanner
-      v-if="addVisible"
-      class="ad-banner"
-      :title="adSection.title || 'Ad Titile'"
-      :subtitle="adSection.overview || 'Ad Overview'"
-      :description="adSection.description || 'Ad Description'"
-      :buttonText="adSection.buttonText || 'Ad Button'"
-      background=""
-      :image="adImage || '/homepage/bannerA.webp'"
-      link="/c/clinical-laboratory"
-    >
-      meme
-    </SfBanner> -->
+   
     <div class="detail bg-light_accent pb-3" v-show="showDetail">
       <img
         style="object-fit: cover"
@@ -192,6 +179,7 @@ export default {
   margin-left: 2.5% !important;
   width: 80% !important;
   height: 75% !important;
+  /* background-color: yellow !important; */
 }
 
 .sf-banner {

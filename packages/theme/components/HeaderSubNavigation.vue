@@ -8,7 +8,6 @@
       <nuxt-link :key="-1" :to="this.$props.link">
         <p class="text-secondary text-xl">{{ this.$props.title }}</p>
       </nuxt-link>
-      <!-- <a v-for="sub in subnavList" :key="sub.id" :href="localePath(`/c/${sub.slug}`)">{{this.$props.title}}</a> -->
       <div
         class="grid grid-rows-4 grid-cols-2 gap-6 overlay no-scrollbar"
         v-if="subnavList.length > 0"
@@ -52,10 +51,10 @@ export default {
 .overlay {
   display: none !important;
   text-align: 5%;
-  background: rgb(255, 255, 255) !important;
+  background: rgb(245, 230, 230) !important;
   opacity: 1 !important;
-  overflow: auto;
-  max-height: 280px;
+  /* overflow: auto; */
+  min-height: 280px;
   /* width: 300% !important; */
 }
 
@@ -72,6 +71,8 @@ export default {
 .content {
   font-family: var(--font-family--secondary);
   position: absolute;
+  /* background-color: red; */
+  width: 200px;
   /* left: 0%;  */
 }
 
@@ -85,16 +86,17 @@ export default {
 .content:hover > .overlay {
   position: absolute;
   left: 120% !important;
-  top: 25% !important;
+  top: 0% !important;
   display: block !important;
-  width: 250px !important;
-  min-height: 360px !important;
-  border: 0.025px solid rgb(233, 233, 233) !important;
-  border-radius: 15px;
-  box-shadow: 2px 1px 5px rgb(28, 26, 26);
+  min-width: 500px !important;
+
+  border: 0.5px solid rgb(0, 0, 0) !important;
+  /* border-radius: 15px; */
+  /* box-shadow: 2px 1px 5px rgb(28, 26, 26); */
   /* box-shadow: 5px grey; */
   z-index: 2 !important;
   opacity: 1 !important;
+  background-color: rgb(243, 243, 243) !important;
 }
 
 .overlay > a {
