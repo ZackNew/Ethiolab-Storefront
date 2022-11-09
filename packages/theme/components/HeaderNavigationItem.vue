@@ -56,7 +56,7 @@ export default {
 .overlay {
   position: absolute;
   display: none !important;
-  border-radius: 12px;
+  border-radius: 0px;
   border-color: white;
 
   box-sizing: border-box;
