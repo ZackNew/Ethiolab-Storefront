@@ -215,9 +215,6 @@
           <LazyHydrate>
             <!-- <CategoryFeature /> -->
             <div>
-              <p class="text-secondary">
-                Store {{ $store.state.compareList.productsToCompare }}
-              </p>
               <h3
                 class="font-bold mt-12 pb-2 text-secondary"
                 :style="!isDarkMode ? '' : 'color: white'"

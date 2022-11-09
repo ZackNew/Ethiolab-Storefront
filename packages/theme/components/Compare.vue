@@ -1,12 +1,19 @@
 <template>
   <div id="compare" :style="`bottom: ${value}; transition: bottom 0.4s;`">
-    <button
-      @click="toogle"
-      class="ml-10 rounded-t bg-light_gray border border-secondary px-4"
+    <div class="flex">
+      <button
+        @click="toogle"
+        class="flex justify-around ml-10 rounded-t bg-light_gray border border-secondary border-b-0 w-[13%]"
+      >
+        <p class="text-secondary font-bold">Selected Products</p>
+        <p class="counter">
+          {{ $store.state.compareList.productsToCompare.length }}
+        </p>
+      </button>
+    </div>
+    <div
+      class="bg-[#e6e6e6] flex justify-between h-14 md:h-24 border-t border-dark_gray"
     >
-      <p class="text-secondary font-bold">Selected Products</p>
-    </button>
-    <div class="bg-[#e6e6e6] flex justify-between h-14 md:h-24">
       <div class="grid grid-cols-5 gap-3 my-auto ml-[3%]">
         <div
           v-for="image in images"
@@ -45,10 +52,15 @@
         </div>
       </div>
       <nuxt-link
-        class="my-auto bg-secondary rounded h-[45%] mr-[5%]"
+        :style="
+          $store.state.compareList.productsToCompare.length <= 1
+            ? 'background-color: grey; pointer-events: none'
+            : 'background-color: #3860a7'
+        "
+        class="my-auto rounded h-[45%] mr-[5%]"
         :to="'/compareProduct'"
       >
-        <button class="px-6 my-auto text-white font-bold mt-[7%]">
+        <button class="px-6 my-auto text-white font-bold mt-[9%]">
           compare
         </button>
       </nuxt-link>
@@ -106,5 +118,15 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
+}
+.counter {
+  background-color: #f04a00;
+  border: 4px solid white;
+  border-radius: 80%;
+  width: 25px;
+  height: 25px;
+  color: white;
+  font-weight: 700;
+  font-size: small;
 }
 </style>

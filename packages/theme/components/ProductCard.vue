@@ -4,9 +4,6 @@
     class="pt-3 shadow-lg hover:shadow-2xl duration-300"
     data-testid="product-card"
   >
-    <div v-if="toastVisible">
-      <Toast :message="'show this'" show="showm" />
-    </div>
     <div class="ssf-product-card__image-wrapper mx-3">
       <slot
         name="image"
@@ -273,6 +270,7 @@
 </template>
 <script>
 import Toast from '~/components/Toast.vue';
+import { computed, onMounted, inject } from '@vue/composition-api';
 import { useUiState } from '~/composables';
 import { colorsValues as SF_COLORS } from '@storefront-ui/shared/variables/colors';
 import {
@@ -405,7 +403,6 @@ export default {
   },
   data() {
     return {
-      toastVisible: false,
       isAddingToCart: false,
       openColorPicker: false,
       numberCart: 1,
@@ -436,9 +433,14 @@ export default {
     },
   },
   setup() {
+    const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
+    const toastShower = (message) => {
+      showToast(message);
+    };
     return {
       isDarkMode,
+      toastShower,
     };
   },
   methods: {
@@ -492,6 +494,7 @@ export default {
           ).length === 0
         ) {
           console.log('passed the second one');
+          this.toastShower('Added to Compare List');
           this.$store.dispatch('compareList/addToCompareList', {
             product: {
               productID: this.id,
@@ -499,9 +502,11 @@ export default {
               image: this.image,
             },
           });
+        } else {
+          this.toastShower('Item is already in the list');
         }
       } else {
-        this.toastVisible = true;
+        this.toastShower('Limit to Compare Products reached');
         console.log('limit reached');
       }
     },
