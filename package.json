@@ -80,6 +80,7 @@
     "vue-simple-accordion": "^0.1.0",
     "vue-slick-carousel": "1.0.6",
     "vue-truncate-collapsed": "^3.0.1",
-    "vue-uuid": "^3.0.0"
+    "vue-uuid": "^3.0.0",
+    "vuex-persist": "3.1.3"
   }
 }
