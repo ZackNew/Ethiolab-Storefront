@@ -205,6 +205,7 @@
                   />
                 </div>
               </div>
+              <hr class="mt-4" />
             </SfTableData>
           </SfTableRow>
         </SfTable>
@@ -509,6 +510,9 @@ export default {
     padding: 0;
     margin: 0 auto;
   }
+}
+hr {
+  color: lightgray;
 }
 </style>
 

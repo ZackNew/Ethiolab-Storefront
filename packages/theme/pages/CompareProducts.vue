@@ -156,7 +156,11 @@
 
               <template v-for="product in productsToCompare">
                 <!-- {{product.variantList.stockLevel}} -->
-                <td class="py-4 px-4">Accessory</td>
+                <td class="py-4 px-4">
+                  <template v-for="a in product.variantList.accessories">
+                    <p class="text-secondary font-bold">{{ a.name }}</p>
+                  </template>
+                </td>
               </template>
             </tr>
             <tr class="align-top">
@@ -265,7 +269,9 @@ export default {
                     }
                     name
                   }
-                  
+                  accessories{
+                    name
+                  }
                 }
               }
             }

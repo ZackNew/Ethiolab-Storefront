@@ -533,6 +533,7 @@ export default {
         }
       });
     };
+    console.log('Magi cms', getCms.value);
     const onSubscribe = ({ emailAddress, event }) => {
       let baseUrl = process.env.GRAPHQL_API;
       const body = {
