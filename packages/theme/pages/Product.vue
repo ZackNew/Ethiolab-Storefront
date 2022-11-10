@@ -9,7 +9,9 @@
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
         <div class="md:col-span-6 max-w[99%] overflow-hidden">
           <Gallery
-            :images="Svariant.assets ? Svariant.assets : []"
+            :images="
+              Svariant.assets.length > 0 ? Svariant.assets : prImages || []
+            "
             :display="Svariant.featuredAsset ? Svariant.featuredAsset : prImage"
             class="mb-5 md:mb-0"
           />
@@ -315,6 +317,9 @@ export default {
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {
+                    assets{
+                      preview
+                    }
                     featuredAsset{
                       preview
                     }
@@ -351,6 +356,7 @@ export default {
       const variant = await axios.post(baseUrl, body, options);
       console.log('manininin', variant);
       this.prImage = variant.data.data.product?.featuredAsset;
+      this.prImages = variant.data.data.product?.assets;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
     },
     async getProductsReviews() {
@@ -449,12 +455,16 @@ export default {
         ) {
           console.log('passed the second one');
           this.toastShower('Added to Compare List');
+          console.log('Magiii', this.Svariant.assets || ['magica']);
+          console.log('Magiii', this.prImages || ['magica']);
           this.$store.dispatch('compareList/addToCompareList', {
             product: {
               productID: productId,
               variantID: variantId,
               image: this.Svariant.featuredAsset
                 ? this.Svariant.featuredAsset.preview
+                : this.prImage
+                ? this.prImage.preview
                 : '',
             },
           });
