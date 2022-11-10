@@ -28,6 +28,13 @@
         </nuxt-link>
       </button>
     </div>
+    <h1
+      @click="addToCompareList"
+      class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
+    >
+      <button>+ Add to Compare List</button>
+    </h1>
+
     <!-- <p class="text-center m-3 text-xs md:text-base"> -->
     <!-- {{ String(product.variants[0].priceWithTax).slice(0, -2) }}.00 -->
     <!-- {{minPrice}} - {{maxPrice}}
@@ -49,7 +56,9 @@
 </template>
 
 <script>
+import Toast from '~/components/Toast.vue';
 import { useUiState } from '~/composables';
+import { computed, onMounted, inject } from '@vue/composition-api';
 import LazyHydrate from 'vue-lazy-hydration';
 
 export default {
@@ -62,19 +71,63 @@ export default {
   },
   components: {
     LazyHydrate,
+    Toast,
+  },
+  methods: {
+    addToCompareList() {
+      if (
+        this.$store.state.compareList?.productsToCompare?.length < 5 &&
+        this.product.id !== '' &&
+        this.product.variants[0].id !== ''
+      ) {
+        console.log('passed the first one');
+        console.log(
+          'djsfada',
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) =>
+              e?.productID === this.product.id &&
+              e?.variantID === this.product.variants[0].id
+          ).length
+        );
+        if (
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) =>
+              e?.productID === this.product.id &&
+              e?.variantID === this.product.variants[0].id
+          ).length === 0
+        ) {
+          console.log('passed the second one');
+          this.toastShower('Added to Compare List');
+          console.log('Magi Magi', this.product.id);
+          console.log('Magi Magi2', this.product.variants[0].id);
+          this.$store.dispatch('compareList/addToCompareList', {
+            product: {
+              productID: this.product.id,
+              variantID: this.product.variants[0].id,
+              image: this.product.featuredAsset
+                ? this.product.featuredAsset.preview
+                : '',
+            },
+          });
+        } else {
+          this.toastShower('Item is already in the list');
+        }
+      } else {
+        this.toastShower('Limit to Compare Products reached');
+        console.log('limit reached');
+      }
+    },
   },
   computed: {
     prices() {
       // console.log('product value is ', this.product)
-      if ( this.product?.variants.length === 1) {
+      if (this.product?.variants.length === 1) {
         // console.log("single")
-        const price = String(
-          this.product?.variants[0]?.priceWithTax
-        );
+        const price = String(this.product?.variants[0]?.priceWithTax);
         const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
         return fPrice;
       }
-      if ( this.product?.variants.length > 1) {
+      if (this.product?.variants.length > 1) {
         // console.log("multiple")
         let items = this.product?.variants;
         let prices = [];
@@ -89,17 +142,21 @@ export default {
           String(Math.min(...prices)).slice(0, -2) +
           '.' +
           String(Math.min(...prices)).slice(-2);
-          // console.log("price min max", min, max)
+        // console.log("price min max", min, max)
         return [min, max];
       }
     },
   },
   setup(props) {
+    const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
     let maxPrice = '';
     let minPrice = '';
     // const originalPrice = [];
     const currentPrice = [];
+    const toastShower = (message) => {
+      showToast(message);
+    };
 
     props.product?.value?.variants.forEach((element) => {
       // originalPrice.push(element.priceWithTax);
@@ -122,6 +179,7 @@ export default {
     // console.log("max price is ", maxPrice)
     return {
       isDarkMode,
+      toastShower,
       maxPrice,
       minPrice,
     };

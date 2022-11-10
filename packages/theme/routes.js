@@ -68,6 +68,11 @@ export function getRoutes(themeDir = __dirname) {
       component: path.resolve(themeDir, 'pages/ContactUs.vue'),
     },
     {
+      name: 'compareProduct',
+      path: '/compareProduct',
+      component: path.resolve(themeDir, 'pages/CompareProducts.vue'),
+    },
+    {
       name: 'checkout',
       path: '/checkout',
       component: path.resolve(themeDir, 'pages/Checkout.vue'),
@@ -98,6 +103,16 @@ export function getRoutes(themeDir = __dirname) {
           component: path.resolve(themeDir, 'pages/Checkout/ThankYou.vue'),
         },
       ],
+    },
+    {
+      name: 'signup',
+      path: '/pages/signup',
+      component: path.resolve(themeDir, 'pages/signup.vue'),
+    },
+    {
+      name: 'signin',
+      path: '/pages/signin',
+      component: path.resolve(themeDir, 'pages/signin.vue'),
     },
   ];
 }

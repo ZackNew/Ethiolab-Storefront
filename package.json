@@ -79,6 +79,7 @@
     "nuxt-user-agent": "^1.2.2",
     "vue-simple-accordion": "^0.1.0",
     "vue-slick-carousel": "1.0.6",
+    "vue-truncate-collapsed": "^3.0.1",
     "vue-uuid": "^3.0.0"
   }
 }

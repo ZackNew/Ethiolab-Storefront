@@ -204,7 +204,13 @@
       @click="toggleIsInWishlist"
       class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
     >
-      <button>+ Add to List</button>
+      <button>+ Add to Wishlist</button>
+    </h1>
+    <h1
+      @click="addToCompareList"
+      class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
+    >
+      <button>+ Add to Compare List</button>
     </h1>
     <slot name="title" v-bind="{ title, link }">
       <!-- <SfButton
@@ -263,6 +269,8 @@
   </div>
 </template>
 <script>
+import Toast from '~/components/Toast.vue';
+import { computed, onMounted, inject } from '@vue/composition-api';
 import { useUiState } from '~/composables';
 import { colorsValues as SF_COLORS } from '@storefront-ui/shared/variables/colors';
 import {
@@ -289,8 +297,13 @@ export default {
     SfButton,
     SfColorPicker,
     SfColor,
+    Toast,
   },
   props: {
+    id: {
+      type: [Number, String],
+      default: '',
+    },
     image: {
       type: [Array, Object, String],
       default: '',
@@ -420,9 +433,14 @@ export default {
     },
   },
   setup() {
+    const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
+    const toastShower = (message) => {
+      showToast(message);
+    };
     return {
       isDarkMode,
+      toastShower,
     };
   },
   methods: {
@@ -452,6 +470,41 @@ export default {
     },
     toggleColorPicker() {
       this.openColorPicker = !this.openColorPicker;
+    },
+    addToCompareList() {
+      if (
+        this.$store.state.compareList?.productsToCompare?.length < 5 &&
+        this.id !== '' &&
+        this.variantId !== ''
+      ) {
+        console.log('passed the first one');
+        console.log(
+          'djsfada',
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) => e?.productID === this.id && e?.variantID === this.variantId
+          ).length
+        );
+        if (
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) => e?.productID === this.id && e?.variantID === this.variantId
+          ).length === 0
+        ) {
+          console.log('passed the second one');
+          this.toastShower('Added to Compare List');
+          this.$store.dispatch('compareList/addToCompareList', {
+            product: {
+              productID: this.id,
+              variantID: this.variantId,
+              image: this.image,
+            },
+          });
+        } else {
+          this.toastShower('Item is already in the list');
+        }
+      } else {
+        this.toastShower('Limit to Compare Products reached');
+        console.log('limit reached');
+      }
     },
   },
 };

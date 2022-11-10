@@ -19,7 +19,7 @@
         </ol>
       </nav>
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-        <div class="md:mr-8 md:col-span-6">
+        <div class="md:mr-8 md:col-span-6 max-w[99%] overflow-hidden">
           <Gallery
             :images="product.assets"
             :display="product.featuredAsset"
@@ -81,6 +81,30 @@
               </p>
             </div>
           </div>
+
+          <LazyHydrate when-idle>
+            <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
+              <SfTab :title="$t('Read reviews')" :key="reviewKey">
+                <SfReview
+                  v-for="review in reviews"
+                  :key="review.id"
+                  :author="review.authorName"
+                  :date="new Date(review.createdAt).toLocaleString()"
+                  :message="review.summary"
+                  :max-rating="5"
+                  :rating="review.rating"
+                  :char-limit="250"
+                  :read-more-text="$t('Read more')"
+                  :hide-full-text="$t('Read less')"
+                  class="product__review"
+                />
+                <MyReview
+                  :productId="product.id"
+                  :currentUserHasNoReview="!currentUserHasReview"
+                />
+              </SfTab>
+            </SfTabs>
+          </LazyHydrate>
         </div>
       </div>
 
@@ -250,26 +274,103 @@
 </template>
 
 <script>
+import MyReview from '~/components/MyAccount/MyReview.vue';
 import { useUiState } from '~/composables';
+import LazyHydrate from 'vue-lazy-hydration';
 import axios from 'axios';
-import { SfButton, SfTable, SfIcon } from '@storefront-ui/vue';
-import { useWishlist, useCart } from '@vue-storefront/vendure';
+import {
+  SfButton,
+  SfTable,
+  SfIcon,
+  SfTabs,
+  SfReview,
+} from '@storefront-ui/vue';
+import { useWishlist, useCart, useUser } from '@vue-storefront/vendure';
 import Gallery from '~/components/Gallery.vue';
 
 export default {
   components: {
     SfButton,
     SfTable,
+    SfTabs,
     SfIcon,
     Gallery,
+    MyReview,
+    SfReview,
+    LazyHydrate,
   },
   data() {
     return {
+      reviews: [],
       product: null,
       toCart: 1,
+      currentUserHasReview: false,
+      reviewKey: 0,
     };
   },
   methods: {
+    async getProductsReviews() {
+      const slug = this.$route.params.slug_1;
+      const body = {
+        query: `
+        query Reviews($slug:String!){
+          product(slug: $slug){
+            reviews{
+              items{
+                summary
+                body
+                rating
+                authorName
+                authorLocation
+                createdAt
+                id
+              }
+            }
+          }
+        }
+      `,
+        variables: {
+          slug: slug,
+        },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      let baseUrl = process.env.GRAPHQL_API;
+      const reviewsListResponse = await axios.post(baseUrl, body, options);
+
+      var reviewsList = reviewsListResponse.data?.data?.product.reviews.items;
+      if (this.isAuthenticated) {
+        return this.setThisUsersReview(reviewsList);
+      }
+
+      console.log('reviews value is ', reviewsList);
+
+      return reviewsList;
+    },
+
+    setThisUsersReview(reviewsList) {
+      var email = this.user.emailAddress;
+      for (var review of reviewsList) {
+        console.log(`review['authorLocation'] ${review['authorLocation']}`);
+        if (review['authorLocation'] === email) {
+          console.log("review['authorLocation'] === this.email");
+          review['authorName'] = 'You';
+          this.currentUserHasReview = true;
+          var currentItemIndex = reviewsList.indexOf(review);
+          var firstItem = reviewsList[0];
+          var tempItem = { ...review };
+          reviewsList[currentItemIndex] = firstItem;
+          reviewsList[0] = tempItem;
+          break;
+        }
+      }
+      return reviewsList;
+    },
+
     async getProductVariant() {
       const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
@@ -323,7 +424,7 @@ export default {
       };
       const productVariant = await axios.post(baseUrl, body, options);
       this.product = productVariant?.data?.data?.product;
-      console.log('pppppp', productVariant?.data?.data?.product);
+      console.log('pppppp', this.$route);
     },
   },
   computed: {
@@ -356,6 +457,7 @@ export default {
     },
   },
   setup() {
+    const { user, isAuthenticated, load, getU } = useUser();
     const { isDarkMode } = useUiState();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const addToCart = (e) => {
@@ -379,11 +481,22 @@ export default {
     return {
       isInCart,
       addToCart,
+      isAuthenticated,
       isDarkMode,
+      user,
     };
   },
-  created() {
+  async created() {
     this.getProductVariant();
+    this.reviews = await this.getProductsReviews();
+  },
+  watch: {
+    isAuthenticated(newIsAuthenticated, oldIsAuthenticated) {
+      if (newIsAuthenticated) {
+        this.reviews = this.setThisUsersReview(this.reviews);
+        this.reviewKey = this.reviewKey + 1;
+      }
+    },
   },
 };
 </script>

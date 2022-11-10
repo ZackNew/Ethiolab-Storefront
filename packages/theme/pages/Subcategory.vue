@@ -3,18 +3,23 @@
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin" to="/">
+          <nuxt-link
+            class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+            to="/"
+          >
             Home
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin" :to="`/c/${parent}`">
+          <nuxt-link
+            class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+            :to="`/c/${parent}`"
+          >
             {{ parent }}
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <p class="text-secondary font-bold"> {{ categoryName }} </p>
-         
+          <p class="text-secondary font-bold">{{ categoryName }}</p>
         </li>
       </ol>
     </nav>
@@ -50,19 +55,22 @@
       </div>
       <!-- Subcategory name and description -->
       <div class="ml-6 w-[72%]">
-        <h1 class="sf-heading__title font-medium text-4xl font-sans text-secondary">
+        <h1
+          class="sf-heading__title font-medium text-4xl font-sans text-secondary"
+        >
           {{ categoryName }}
         </h1>
-        <div
-          class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40"
-        >
+        <div class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40">
           <img
-          class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
+            class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
             :src="categoryImg || '/categories/empty_image.png'"
             alt=""
           />
           <div class="w-full overflow-auto no-scrollbar">
-            <p class="py-4 ml-4 mr-4 text-secondary text-thin" v-html="description"></p>
+            <p
+              class="py-4 ml-4 mr-4 text-secondary text-thin"
+              v-html="description"
+            ></p>
           </div>
         </div>
         <div
@@ -186,23 +194,23 @@
           </div>
           <!-- Products -->
 
-    <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
-    <div
-      :style="
-        !isDarkMode ? 'background-color: #ffffff' : 'background-color: #182533'
-      "
-      class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
-      v-for="product in filteredSearchedProducts"
-      :key="product.id"
-    >
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
+            <div
+              :style="
+                !isDarkMode
+                  ? 'background-color: #ffffff'
+                  : 'background-color: #182533'
+              "
+              class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
+              v-for="product in filteredSearchedProducts"
+              :key="product.id"
+            >
+              <!-- <p>{{product.name}}</p> -->
 
-    <!-- <p>{{product.name}}</p> -->
+              <SubcatBrandCard :product="product" />
+            </div>
+          </div>
 
-      <SubcatBrandCard :product="product" />
-
-      </div>
-      </div>
-          
           <!-- <div
             style="background-color: #e2e5de"
             class="card mr-16 ml-4 mt-5 w-auto h-12"
@@ -363,11 +371,11 @@ export default {
       this.search = event;
     },
     maxInput(event) {
-      console.log("maxinput value ", typeof(event))
+      console.log('maxinput value ', typeof event);
       this.high = event;
     },
     minInput(event) {
-      console.log("mininput value ", typeof(event))
+      console.log('mininput value ', typeof event);
 
       this.low = event;
     },
@@ -435,6 +443,7 @@ export default {
                             slug
                             description
                             variants {
+                              id
                               priceWithTax
                             }
                             featuredAsset{
@@ -508,8 +517,7 @@ export default {
 };
 </script>
 
-<style  lang="scss" scoped>
-
+<style lang="scss" scoped>
 #subcategory {
   box-sizing: border-box;
   @include for-desktop {

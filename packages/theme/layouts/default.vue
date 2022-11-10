@@ -13,11 +13,11 @@
       <LazyHydrate when-visible>
         <TopBar class="desktop-only" />
       </LazyHydrate>
-      <LazyHydrate when-idle>
+      <LazyHydrate when-idle >
         <AppHeader />
       </LazyHydrate>
     </div>
-
+    <Compare class="bottomright" />
     <div id="layout">
       <nuxt :key="$route.fullPath" />
 
@@ -39,6 +39,7 @@
 
 <script>
 import ToastVue from '~/components/Toast.vue';
+import Compare from '~/components/Compare.vue';
 import AppHeader from '~/components/AppHeader.vue';
 import BottomNavigation from '~/components/BottomNavigation.vue';
 import AppFooter from '~/components/AppFooter.vue';
@@ -60,6 +61,7 @@ export default {
 
   components: {
     ToastVue,
+    Compare,
     CategoriesSidebar,
     LazyHydrate,
     TopBar,
@@ -237,5 +239,10 @@ h4 {
 }
 .sf-add-to-cart__button {
   background-color: #3860a7;
+}
+.bottomright {
+  position: fixed;
+  padding: 5px;
+  z-index: 500;
 }
 </style>

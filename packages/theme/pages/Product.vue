@@ -1,5 +1,5 @@
 <template>
-  <div id="product">
+  <div id="product" v-if="Svariant !== null">
     <SfBreadcrumbs
       class="breadcrumbs desktop-only text-secondary"
       :breadcrumbs="breadcrumbs"
@@ -7,10 +7,13 @@
     <!-- <p>{{breadcrumbs}}</p> -->
     <div>
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-        <div class="md:col-span-6">
+        <div class="md:col-span-6 max-w[99%] overflow-hidden">
           <Gallery
-            :images="Svariant.assets ? Svariant.assets : []"
-            :display="Svariant.featuredAsset"
+            :images="
+              Svariant.assets.length > 0 ? Svariant.assets : prImages || []
+            "
+            :display="Svariant.featuredAsset ? Svariant.featuredAsset : prImage"
+            class="mb-5 md:mb-0"
           />
         </div>
         <div class="md:col-span-6">
@@ -29,17 +32,22 @@
               v-model="qty"
               type="number"
             />
-            <SfButton @click="addToCart" class="rounded bg-secondary"
+            <SfButton @click="addToCart" class="rounded bg-secondary mr-[2%]"
               >Add To Cart</SfButton
+            >
+            <SfButton @click="addToCompareList" class="rounded bg-primary"
+              >Add To Compare List</SfButton
             >
           </div>
           <div
             v-if="Svariant.customFields"
             class="max-h-[20rem] overflow-hidden"
+            :class="isDarkMode ? 'text-white' : ''"
           >
             <p
               v-html="Svariant.customFields.description"
               class="text-justify"
+              :class="classes.red"
             ></p>
           </div>
 
@@ -47,9 +55,18 @@
         </div>
       </div>
     </div>
-    <div id="full" class="card rounded-2xl bg-light_gray grid grid-cols-12 p-8">
+    <div
+      id="full"
+      class="card rounded-2xl grid grid-cols-12 p-8"
+      :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
+    >
       <div class="col-span-6">
         <h3>Speciﬁcation And Description</h3>
+        <p
+          class="max-w-[95%]"
+          v-html="Svariant.customFields ? Svariant.customFields.table : ''"
+          :class="classes.red"
+        ></p>
       </div>
       <div class="col-span-6">
         <h3>More About This Item</h3>
@@ -57,6 +74,7 @@
           <p
             v-html="Svariant.customFields.description"
             class="text-justify"
+            :class="classes.red"
           ></p>
         </div>
       </div>
@@ -76,6 +94,7 @@
 </template>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
+import Toast from '~/components/Toast.vue';
 import {
   SfProperty,
   SfHeading,
@@ -100,7 +119,13 @@ import Gallery from '../components/Gallery.vue';
 import MyReview from '~/components/MyAccount/MyReview.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed, reactive, onMounted } from '@vue/composition-api';
+import {
+  ref,
+  computed,
+  reactive,
+  onMounted,
+  inject,
+} from '@vue/composition-api';
 import {
   useProduct,
   useCart,
@@ -115,6 +140,7 @@ import { onSSR } from '@vue-storefront/core';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { getProductVariantByConfiguration } from '~/helpers';
+import { useUiState } from '~/composables';
 import axios from 'axios';
 
 export default {
@@ -122,11 +148,12 @@ export default {
   transition: 'fade',
   async created() {
     this.getVariants();
-    this.getAccessories();
     this.reviews = await this.getProductsReviews();
   },
 
   setup(props, context) {
+    const showToast = inject('showToast');
+    const { isDarkMode } = useUiState();
     const qty = ref(1);
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
@@ -145,6 +172,9 @@ export default {
         attributes: context.root.$route.query,
       })
     );
+    const toastShower = (message) => {
+      showToast(message);
+    };
 
     const options = computed(() =>
       productGetters.getOptions(products.value, ['color', 'size'])
@@ -274,6 +304,8 @@ export default {
       varproduct,
       varprice,
       addItemToCart,
+      isDarkMode,
+      toastShower,
       //reviewKey,
     };
   },
@@ -285,12 +317,19 @@ export default {
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {
+                    assets{
+                      preview
+                    }
+                    featuredAsset{
+                      preview
+                    }
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {
                         name
                         priceWithTax
                         customFields {
                           description
+                          table
                         }
                         featuredAsset{
                           preview
@@ -316,43 +355,9 @@ export default {
       };
       const variant = await axios.post(baseUrl, body, options);
       console.log('manininin', variant);
+      this.prImage = variant.data.data.product?.featuredAsset;
+      this.prImages = variant.data.data.product?.assets;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
-      console.log('mannna', this.Svariant);
-    },
-    async getAccessories() {
-      const productId = this.$route.params.id;
-      let baseUrl = process.env.GRAPHQL_API;
-      const body = {
-        query: `query getAccessories($id: ID!) {
-                  product(id: $id) {
-                    customFields {
-                      accessories {
-                        slug
-                        id
-                        name
-                        featuredAsset {
-                          preview
-                        }
-                        variants {
-                          price
-                        }
-                      }
-                    }
-                  }
-                }`,
-        variables: {
-          id: productId,
-        },
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      const accessories = await axios.post(baseUrl, body, options);
-      this.productAccessories =
-        accessories.data.data.product?.customFields?.accessories;
     },
     async getProductsReviews() {
       const data = JSON.stringify({
@@ -428,36 +433,49 @@ export default {
       return reviewsList;
     },
 
-    // getYoutubeLinks(){
-    //   const data = JSON.stringify({
-    //     query: `
-    //     query{
-    //       product(id: ${this.id}){
-    //         reviews{
-    //           items{
-    //             summary
-    //             body
-    //             rating
-    //             authorName
-    //             authorLocation
-    //             createdAt
-    //             id
-    //           }
-    //         }
-    //       }
-    //     }
-    //   `
-    //   });
-    //   const response = await fetch("http://localhost:3000/shop-api", {
-    //     method: 'post',
-    //     body: data,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Content-Length': data.length
-    //     }
-    //   });
-    //   const reviewsListResponse = await response.json();
-    // }
+    addToCompareList() {
+      const productId = this.$route.params.id;
+      const variantId = this.$route.params.vid;
+      if (
+        this.$store.state.compareList?.productsToCompare?.length < 5 &&
+        productId !== '' &&
+        variantId !== ''
+      ) {
+        console.log('passed the first one');
+        console.log(
+          'djsfada',
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) => e?.productID === productId && e?.variantID === this.variantId
+          ).length
+        );
+        if (
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) => e?.productID === productId && e?.variantID === variantId
+          ).length === 0
+        ) {
+          console.log('passed the second one');
+          this.toastShower('Added to Compare List');
+          console.log('Magiii', this.Svariant.assets || ['magica']);
+          console.log('Magiii', this.prImages || ['magica']);
+          this.$store.dispatch('compareList/addToCompareList', {
+            product: {
+              productID: productId,
+              variantID: variantId,
+              image: this.Svariant.featuredAsset
+                ? this.Svariant.featuredAsset.preview
+                : this.prImage
+                ? this.prImage.preview
+                : '',
+            },
+          });
+        } else {
+          this.toastShower('Item is already in the list');
+        }
+      } else {
+        this.toastShower('Limit to Compare Products reached');
+        console.log('limit reached');
+      }
+    },
   },
   components: {
     SubcatBrandCard,
@@ -487,11 +505,12 @@ export default {
   },
   data() {
     return {
+      prImage: '',
       quantity: 1,
       variant_description: null,
       productAccessories: [],
       optionTableValues: [],
-      Svariant: [],
+      Svariant: null,
       stock: 5,
       brand:
         'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',

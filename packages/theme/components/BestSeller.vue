@@ -48,6 +48,7 @@
         </template>
         <div v-for="product in bestSellers" :key="product._id">
           <ProductCard
+            :id="product._id"
             :title="product.name"
             :image="product.images"
             :regular-price="product.price.current + ' ETB'"

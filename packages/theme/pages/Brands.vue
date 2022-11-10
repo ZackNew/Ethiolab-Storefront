@@ -1,23 +1,20 @@
 <template>
-  <div class="mt-12" id="brand">
+  <div class="mt-12">
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <nuxt-link class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin" to="/" >
+          <nuxt-link class="sf-breadcrumbs__breadcrumb" to="/">
             Home
           </nuxt-link>
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <p class="text-secondary font-bold">
-             {{ brand.name }}
-          </p>
-         
+          {{ brand.name }}
         </li>
       </ol>
     </nav>
     <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
-      <div class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] h-3/4 hidden md:block mr-4 bg-white border-white">
+      <div class="shadow-2xl rounded-lg w-96 h-3/4">
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
             @maxAdded="maxInput"
@@ -29,7 +26,7 @@
             :categories="collectionList"
           />
         </div>
-        <!-- <div class="p-3">
+        <div class="p-3">
           <LazyHydrate>
             <Banner
               :title="adSection.title || 'AD Title'"
@@ -39,26 +36,26 @@
               background=""
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory"
-            > 
+            >
             </Banner>
           </LazyHydrate>
-        </div> -->
-      </div> 
+        </div>
+      </div>
       <!-- Subcategory name and description -->
       <div class="ml-6 w-full">
-        <h1 class="sf-heading__title font-medium text-4xl font-sans text-secondary">
+        <h2 class="sf-heading__title font-medium text-4xl font-sans text-gray">
           {{ brand.name }}
-        </h1>
+        </h2>
         <div
-        class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40"
+          class="rounded-md bg-dark_secondary card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
-          class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
+            class="my-auto rounded-md max-h-40 bg-light max-w-[25%]"
             :src="brandImage || '/categories/empty_image.png'"
             alt=""
           />
-          <div class="w-full overflow-auto no-scrollbar">
-            <p class="py-4 ml-4 mr-4 text-secondary text-thin" v-html="brand.description"></p>
+          <div class="rounded w-full overflow-auto no-scrollbar">
+            <p class="py-4 ml-4 mr-4 text-white" v-html="brand.description"></p>
           </div>
         </div>
         <div
@@ -74,7 +71,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="flex card mr-5 w-full h-12 bg-light_accent ">
+          <div class="flex card mr-5 w-full h-12 bg-light_accent">
             <p class="pt-3 mx-3">
               Number of Results | {{ Object.keys(products).length }}
             </p>
@@ -82,11 +79,11 @@
               <button
                 id="dropdownDefault"
                 data-dropdown-toggle="dropdown"
-                class="flex justify-between mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:shadow-2xl font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
+                class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:shadow-2xl font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
                 type="button"
                 @click="open = !open"
               >
-                {{sortby}}
+                Sort Subcategory by
                 <svg
                   class="ml-2 w-4 h-4"
                   aria-hidden="true"
@@ -113,7 +110,6 @@
                     A_Z = true;
                     Z_A = false;
                     open = false;
-                    sortby = 'Name from A to Z';
                   "
                   class="hover:bg-light_accent"
                 >
@@ -124,8 +120,6 @@
                     A_Z = false;
                     Z_A = true;
                     open = false;
-                    sortby = 'Name from Z to A';
-
                   "
                   class="hover:bg-light_accent"
                 >
@@ -142,23 +136,7 @@
             />
           </div>
           <!-- Products -->
-          <div class="mt-5 grid grid-cols-1 md:grid-cols-4"> 
-                    <div
-            :style="
-              !isDarkMode ? 'background-color: #ffffff' : 'background-color: #182533'
-            "
-          class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
-            v-for="product in filteredSearchedProducts"
-            :key="product.id"
-          >
-
-          <!-- <p>{{product.name}}</p> -->
-
-            <SubcatBrandCard :product="product" />
-
-            </div>
-          </div>
-  
+          <SubcatBrandCard :filteredProducts="filteredSearchedProducts" />
           <!-- <div
             style="background-color: #e2e5de"
             class="card mr-16 ml-4 mt-5 w-auto h-12"
@@ -185,7 +163,6 @@ import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import axios from 'axios';
 import { useCms } from '@vue-storefront/vendure';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
-import useUiState from '~/composables/useUiState';
 
 export default {
   name: 'brand',
@@ -206,7 +183,6 @@ export default {
       products: [],
       brandImage: '',
       brand: {},
-      sortby: "Sort By"
     };
   },
   computed: {
@@ -229,50 +205,20 @@ export default {
         total_price = total_price / product.variants.length;
 
         return total_price >= lower && total_price <= high;
-      }
-      );
+      });
 
       const filterProducts = searchProduct.filter((product) => {
         if (filtersClicked.length > 0) {
           const facetIndex = product.facetValues.findIndex((facet) =>
             filtersClicked.includes(facet.name)
           );
-
-          let matchFound = false;
-          if (product.collections.length > 0) {
-            for (let collection of product.collections) {
-              matchFound = filtersClicked.includes(collection.name);
-              // console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
-              if (matchFound) {
-                break;
-              }
-            }
-          } else {
-            matchFound = false;
-          }
-          // console.log('product match found collection clicked',product,matchFound,product.collections,filtersClicked)
           return (
-            filtersClicked.includes(product.customFields.brand?.name) ||
-            filtersClicked.includes(product.facetValues[facetIndex]?.name) ||
-            matchFound
+            filtersClicked.includes(product.customFields.industry?.name) ||
+            filtersClicked.includes(product.facetValues[facetIndex]?.name)
           );
         }
         return true;
       });
-
-      // const filterProducts = searchProduct.filter((product) => {
-      //   if (filtersClicked.length > 0) {
-      //     const facetIndex = product.facetValues.findIndex((facet) =>
-      //       filtersClicked.includes(facet.name)
-      //     );
-      //     return (
-      //       filtersClicked.includes(product.customFields.industry?.name) ||
-      //       filtersClicked.includes(product.facetValues[facetIndex]?.name)
-      //     );
-      //   }
-      //   return true;
-      // });
-
       if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
       if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));
       // if (this.clickedCategory) {
@@ -292,6 +238,7 @@ export default {
         }
       });
       const industries = [...new Set(industry)];
+      console.log('insider', this.products);
       return industries;
     },
     collectionList() {
@@ -383,7 +330,6 @@ export default {
                       }
                       variants{
                         price
-                        priceWithTax
                       }
                       facetValues{
                         name
@@ -411,10 +357,10 @@ export default {
       this.brand = brandResult.data.data.brand;
       this.brandImage = brandResult.data.data.brand.icon?.preview;
       this.products = brandResult.data.data.brand.products;
+      console.log('this are the brand', brandResult);
     },
   },
   setup() {
-    const { isDarkMode } = useUiState();
     const { getCms } = useCms();
     const adSection = computed(() =>
       JSON.parse(getCms.value[3]?.content ?? '{}')
@@ -423,7 +369,6 @@ export default {
     return {
       adSection,
       adImage,
-      isDarkMode
     };
   },
   components: {
@@ -439,15 +384,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-
-#brand {
-  box-sizing: border-box;
-  @include for-desktop {
-    max-width: 1250px;
-    margin: 0 auto;
-  }
-}
+<style scoped>
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

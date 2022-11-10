@@ -1,28 +1,11 @@
 <template>
-  <div class="sf-header-navigation-item" v-on="$listeners">
-    <!-- <div
-      class="
-        sf-header-navigation-item__item sf-header-navigation-item__item--dePRODUCTSsktop
-      "
-    >
-      <slot name="desktop-navigation-item">
-        <SfLink class="sf-header-navigation-item__link" :link="link">{{
-          label
-        }}</SfLink>
-      </slot>
-      <slot />
-    </div> -->
+  <div class="sf-header-navigation-item nav" v-on="$listeners">
+
     <div
       class="sf-header-navigation-item__item sf-header-navigation-item__item--mobile"
     >
       <slot name="mobile-navigation-item">
-        <!-- <SfMenuItem
-          :label="label"
-          @mouseOver="hoverHandler(label)"
-          class="sf-header-navigation-item__menu-item text-lg"
-        >
-          {{ label }}
-        </SfMenuItem> -->
+
         <h1
           @mouseOver="hoverHandler(label)"
           class="text-lg font-bold text-secondary"
@@ -34,12 +17,9 @@
           :main="label"
           :subnavList="$props.subnavList"
         />
-        <!-- <div > -->
-        <!-- </div> -->
+
       </slot>
-      <!-- <div class="sf-header-navigation-item__content">
-        <slot />
-      </div> -->
+
     </div>
   </div>
 </template>
@@ -66,7 +46,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .sf-menu-item__label {
   /* margin: auto !important; */
   display: block !important;
@@ -74,25 +54,37 @@ export default {
 }
 
 .overlay {
-  position: relative;
+  position: absolute;
   display: none !important;
-  border-radius: 12px;
+  border-radius: 0px;
   border-color: white;
+
+  box-sizing: border-box;
+  padding: 0 var(--spacer-sm);
+  @include for-desktop {
+    max-width: 1250px;
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+  }
 }
 
 .sf-header-navigation-item__item:hover .overlay {
   /* margin: 0 auto !important; */
   position: absolute;
-  left: 12.5% !important;
+  left: 7.5% !important;
   /* top: 19.5vh !important; */
-  right: 22.5% !important;
+  right: 7.5% !important;
   /* bottom: 38vh !important; */
   display: block !important;
-  width: 75% !important;
-  height: 50% !important;
+  width: 85% !important;
+  height: 60% !important;
   /* border: 0.1px solid var(--c-bg-primary) !important; */
   box-shadow: 6px 3px 5px rgb(139, 139, 139);
   border: solid 1px rgb(194, 194, 194);
   z-index: 10 !important;
 }
+
+
+
 </style>

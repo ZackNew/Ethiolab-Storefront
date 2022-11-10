@@ -131,6 +131,8 @@ export default {
         msg: data.value.msg,
         location: data.value.location,
         productDescr: '',
+        firstName: data.value.firstName,
+        lastName: data.value.firstName,
       });
       showToast('Quote Sent!');
     };
