@@ -46,7 +46,7 @@ export default {
     ],
   },
   loading: { color: '#fff' },
-  plugins: [],
+  plugins: [{ src: '~/plugins/vuex-persist', ssr: false }],
   css: ['@/assets/styles.scss'],
   buildModules: [
     // to core

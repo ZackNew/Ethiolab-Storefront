@@ -3,7 +3,7 @@
     <div class="flex">
       <button
         @click="toogle"
-        class="flex justify-around ml-10 rounded-t bg-light_gray border border-secondary border-b-0 w-[13%]"
+        class="flex justify-around ml-10 rounded-t bg-light_gray border shadower border-dark_gray border-b-0 w-[13%]"
       >
         <p class="text-secondary font-bold">Selected Products</p>
         <p class="counter">
@@ -12,7 +12,7 @@
       </button>
     </div>
     <div
-      class="bg-[#e6e6e6] flex justify-between h-14 md:h-24 border-t border-dark_gray"
+      class="bg-[#e6e6e6] flex justify-between h-14 md:h-[5.5rem] border-t border-dark_gray shadower"
     >
       <div class="grid grid-cols-5 gap-3 my-auto ml-[3%]">
         <div
@@ -60,7 +60,7 @@
         class="my-auto rounded h-[45%] mr-[5%]"
         :to="'/compareProduct'"
       >
-        <button class="px-6 my-auto text-white font-bold mt-[9%]">
+        <button class="px-6 my-auto text-white font-bold mt-[7%]">
           compare
         </button>
       </nuxt-link>
@@ -128,5 +128,8 @@ export default {
   color: white;
   font-weight: 700;
   font-size: small;
+}
+.shadower {
+  box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.2);
 }
 </style>
