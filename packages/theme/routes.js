@@ -99,5 +99,15 @@ export function getRoutes(themeDir = __dirname) {
         },
       ],
     },
+    {
+      name: 'signup',
+      path: '/pages/signup',
+      component: path.resolve(themeDir, 'pages/signup.vue'),
+    },
+    {
+      name: 'signin',
+      path: '/pages/signin',
+      component: path.resolve(themeDir, 'pages/signin.vue'),
+    },
   ];
 }
