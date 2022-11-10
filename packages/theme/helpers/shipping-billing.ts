@@ -19,20 +19,26 @@ enum AddressType {
   Shipping = 'shipping',
 }
 
-export const mapAddressFormToOrderAddress = (addressForm: AddressForm): OrderAddress => ({
+export const mapAddressFormToOrderAddress = (
+  addressForm: AddressForm
+): OrderAddress => ({
   fullName: `${addressForm.firstName} ${addressForm.lastName}`,
-  streetLine1: '',
+  streetLine1: addressForm.streetLine1,
   city: addressForm.city,
   postalCode: '',
   countryCode: 'et',
   phoneNumber: addressForm.phone,
-  province: addressForm.state
+  province: addressForm.state,
 });
 
-export const mapOrderAddressToAddressForm = (orderAddress: OrderAddress): AddressForm => {
+export const mapOrderAddressToAddressForm = (
+  orderAddress: OrderAddress
+): AddressForm => {
   const names = orderAddress?.fullName?.split(' ');
   const address = orderAddress?.streetLine1?.split(' ');
-  const country = COUNTRIES.find(country => country.label === orderAddress?.country);
+  const country = COUNTRIES.find(
+    (country) => country.label === orderAddress?.country
+  );
   return {
     firstName: names?.length ? names[0] : '',
     lastName: names?.length ? names[1] : '',
@@ -42,28 +48,34 @@ export const mapOrderAddressToAddressForm = (orderAddress: OrderAddress): Addres
     state: '',
     country: country?.key,
     postalCode: orderAddress?.postalCode,
-    phone: orderAddress?.phoneNumber
+    phone: orderAddress?.phoneNumber,
   };
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const mapAddressFormToAddress = (addressForm: AddressForm, type: AddressType) => {
+export const mapAddressFormToAddress = (
+  addressForm: AddressForm,
+  type: AddressType
+) => {
   if (type === AddressType.Billing) {
     return {
       id: addressForm?.id,
       defaultBillingAddress: Boolean(addressForm?.isDefault),
-      ...mapAddressFormToOrderAddress(addressForm)
+      ...mapAddressFormToOrderAddress(addressForm),
     };
   } else {
     return {
       id: addressForm?.id,
       defaultShippingAddress: Boolean(addressForm?.isDefault),
-      ...mapAddressFormToOrderAddress(addressForm)
+      ...mapAddressFormToOrderAddress(addressForm),
     };
   }
 };
 
-export const mapAddressToAddressForm = (address: Address, type: AddressType): AddressForm => ({
+export const mapAddressToAddressForm = (
+  address: Address,
+  type: AddressType
+): AddressForm => ({
   id: address?.id,
   firstName: address?.fullName?.split(' ')[0],
   lastName: address?.fullName?.split(' ')[1],
@@ -75,18 +87,24 @@ export const mapAddressToAddressForm = (address: Address, type: AddressType): Ad
   postalCode: address?.postalCode,
   country: address?.country?.code,
   phone: address?.phoneNumber,
-  isDefault: type === AddressType.Billing ? address?.defaultBillingAddress : address?.defaultShippingAddress
+  isDefault:
+    type === AddressType.Billing
+      ? address?.defaultBillingAddress
+      : address?.defaultShippingAddress,
 });
 
 export const getCalculatedPrice = (price: number): number => {
   return price ? price / 100 : 0;
 };
 
-export const getDefaultAddress = (addresses: Address[], type: AddressType): Address => {
+export const getDefaultAddress = (
+  addresses: Address[],
+  type: AddressType
+): Address => {
   if (!addresses) return;
   if (type === AddressType.Billing) {
-    return addresses.find(address => address.defaultBillingAddress);
+    return addresses.find((address) => address.defaultBillingAddress);
   } else {
-    return addresses.find(address => address.defaultShippingAddress);
+    return addresses.find((address) => address.defaultShippingAddress);
   }
 };

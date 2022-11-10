@@ -67,10 +67,7 @@
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
-        <ValidationProvider
-          name="state"
-          slim
-        >
+        <ValidationProvider name="state" slim>
           <SfInput
             v-e2e="'billing-state'"
             v-model="billingDetails.state"
@@ -90,12 +87,54 @@
             v-model="billingDetails.phone"
             :label="$t('Phone number')"
             name="phone"
+            class="form__element form__element--half"
+            required
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
+          />
+        </ValidationProvider>
+        <ValidationProvider name="street-line-1" slim>
+          <SfInput
+            v-e2e="'billing-streetLine1'"
+            v-model="billingDetails.streetLine1"
+            :label="$t('Tin')"
+            name="tin"
+            class="form__element form__element--half form__element--half-even"
+          />
+        </ValidationProvider>
+        <!-- <ValidationProvider
+          name="phone"
+          rules="required|phone"
+          v-slot="{ errors }"
+          slim
+        >
+          <SfInput
+            v-e2e="'billing-phone'"
+            v-model="billingDetails.phone"
+            :label="$t('Phone number')"
+            name="phone"
             class="form__element form__element--half phone-number"
             required
             :valid="!errors[0]"
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
+        <ValidationProvider
+          name="streetLine1"
+          rules=""
+          v-slot="{ errors }"
+          slim
+        >
+          <SfInput
+            v-e2e="'streetLine1'"
+            v-model="billingDetails.streetLine1"
+            :label="$t('Tin')"
+            name="Tin"
+            class="form__element form__element--half"
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
+          />
+        </ValidationProvider> -->
       </div>
       <div class="form">
         <div class="form__action">
@@ -126,27 +165,37 @@ import {
   SfButton,
   SfSelect,
   SfRadio,
-  SfCheckbox
+  SfCheckbox,
 } from '@storefront-ui/vue';
 import { ref, onMounted } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import { useBilling, useShipping, useUserBilling } from '@vue-storefront/vendure';
+import {
+  useBilling,
+  useShipping,
+  useUserBilling,
+} from '@vue-storefront/vendure';
 import { required, min, digits } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
-import { mapAddressFormToOrderAddress, mapOrderAddressToAddressForm, COUNTRIES, getDefaultAddress, mapAddressToAddressForm } from '~/helpers';
+import {
+  mapAddressFormToOrderAddress,
+  mapOrderAddressToAddressForm,
+  COUNTRIES,
+  getDefaultAddress,
+  mapAddressToAddressForm,
+} from '~/helpers';
 import '@/helpers';
 
 extend('required', {
   ...required,
-  message: 'This field is required'
+  message: 'This field is required',
 });
 extend('min', {
   ...min,
-  message: 'The field should have at least {length} characters'
+  message: 'The field should have at least {length} characters',
 });
 extend('digits', {
   ...digits,
-  message: 'Please provide a valid phone number'
+  message: 'Please provide a valid phone number',
 });
 
 export default {
@@ -159,7 +208,7 @@ export default {
     SfRadio,
     SfCheckbox,
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
   setup(props, context) {
     const { load, save, billing } = useBilling();
@@ -176,8 +225,10 @@ export default {
         if (!shippingDetails.value) {
           await loadShipping();
         }
-        oldBilling = {...billingDetails.value};
-        billingDetails.value = {...mapOrderAddressToAddressForm(shippingDetails.value)};
+        oldBilling = { ...billingDetails.value };
+        billingDetails.value = {
+          ...mapOrderAddressToAddressForm(shippingDetails.value),
+        };
         return;
       }
 
@@ -193,11 +244,13 @@ export default {
       state: '',
       //country: '',
       //postalCode: '',
-      phone: null
+      streetLine1: '',
+      phone: null,
     });
 
     const handleFormSubmit = async () => {
       const orderAddress = mapAddressFormToOrderAddress(billingDetails.value);
+      console.log('billingDetails.value', orderAddress);
       await save({ billingDetails: orderAddress });
       context.root.$router.push('/checkout/payment');
       sameAsShipping.value = false;
@@ -220,7 +273,7 @@ export default {
         state: formAddress.state,
         country: formAddress.country,
         postalCode: formAddress.postalCode,
-        phone: formAddress.phone
+        phone: formAddress.phone,
       };
     });
 
@@ -230,9 +283,9 @@ export default {
       handleFormSubmit,
       sameAsShipping,
       handleCheckSameAddress,
-      billingDetails
+      billingDetails,
     };
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -283,7 +336,8 @@ export default {
       display: flex;
     }
   }
-  &__action-button, &__back-button {
+  &__action-button,
+  &__back-button {
     --button-width: 100%;
     @include for-desktop {
       --button-width: auto;
@@ -297,7 +351,7 @@ export default {
         text-align: left;
       }
     }
-     &--add-address {
+    &--add-address {
       width: 100%;
       margin: 0;
       @include for-desktop {
@@ -309,7 +363,7 @@ export default {
   &__back-button {
     margin: var(--spacer-xl) 0 var(--spacer-sm);
     &:hover {
-      color:  white;
+      color: white;
     }
     @include for-desktop {
       margin: 0 var(--spacer-xl) 0 0;
@@ -348,11 +402,7 @@ export default {
   }
 }
 
-.phone-number{
-  width: 17.5% !important;
-}
-
-.form__action-button{
+.form__action-button {
   color: black;
 }
 </style>

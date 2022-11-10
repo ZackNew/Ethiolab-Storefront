@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrap">
     <SfMegaMenu :visible="isSearchOpen" title="Search results" class="search">
       <transition name="sf-fade" mode="out-in">
         <div
@@ -49,26 +49,32 @@
               show-text=""
               hide-text=""
             >
-              <div class="results-listing">
-                <ProductCard
-                  v-for="r in result"
-                  :key="r.id"
-                  :title="r.name"
-                  :image="r.images"
-                  :imageHeight="260"
-                  :imageWidth="290"
-                  :alt="r.name"
-                  :regular-price="r.price.current + ' ETB'"
-                  :max-rating="5"
-                  :score-rating="r.rating"
-                  :show-add-to-cart-button="false"
-                  :link="localePath(`/v/${r.slug}`)"
-                  class="products__product-card"
-                />
-              </div>
+              <SfScrollable
+                class="results--desktop desktop-only"
+                show-text=""
+                hide-text=""
+              >
+                <div class="results-listing">
+                  <ProductCard
+                    v-for="r in result"
+                    :key="r.id"
+                    :title="r.name"
+                    :image="r.images"
+                    :imageHeight="260"
+                    :imageWidth="290"
+                    :alt="r.name"
+                    :regular-price="r.price.current + ' ETB'"
+                    :max-rating="5"
+                    :score-rating="r.rating"
+                    :show-add-to-cart-button="false"
+                    :link="localePath(`/v/${r.slug}`)"
+                    class="products__product-card mr-2 mb-4"
+                  />
+                </div>
+              </SfScrollable>
             </div>
             <div class="results--mobile smartphone-only">
-              <SfProductCard
+              <ProductCard
                 v-for="r in result"
                 :key="r._id"
                 class="result-card"
@@ -195,12 +201,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.wrap {
+  box-sizing: border-box;
+  padding: 0 var(--spacer-sm);
+  @include for-desktop {
+    // max-width: 12400px;
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+  }
+}
 .search {
   position: absolute;
-  right: 0;
-  left: 0;
   z-index: 3;
   height: 100%;
+  width: 1250px;
   --mega-menu-column-header-margin: var(--spacer-sm) 0 var(--spacer-xl);
   --mega-menu-content-padding: 0;
   --mega-menu-height: auto;
