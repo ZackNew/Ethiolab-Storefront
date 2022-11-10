@@ -472,13 +472,10 @@ export default {
       this.openColorPicker = !this.openColorPicker;
     },
     addToCompareList() {
-      this.$emit('addToCompareList');
-    },
-    addToCompareList() {
       if (
         this.$store.state.compareList?.productsToCompare?.length < 5 &&
         this.id !== '' &&
-        this._variantId !== ''
+        this.variantId !== ''
       ) {
         console.log('passed the first one');
         console.log(
@@ -487,7 +484,6 @@ export default {
             (e) => e?.productID === this.id && e?.variantID === this.variantId
           ).length
         );
-
         if (
           this.$store.state.compareList?.productsToCompare?.filter(
             (e) => e?.productID === this.id && e?.variantID === this.variantId

@@ -30,8 +30,11 @@
               v-model="qty"
               type="number"
             />
-            <SfButton @click="addToCart" class="rounded bg-secondary"
+            <SfButton @click="addToCart" class="rounded bg-secondary mr-[2%]"
               >Add To Cart</SfButton
+            >
+            <SfButton @click="addToCompareList" class="rounded bg-primary"
+              >Add To Compare List</SfButton
             >
           </div>
           <div
@@ -89,6 +92,7 @@
 </template>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
+import Toast from '~/components/Toast.vue';
 import {
   SfProperty,
   SfHeading,
@@ -113,7 +117,13 @@ import Gallery from '../components/Gallery.vue';
 import MyReview from '~/components/MyAccount/MyReview.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed, reactive, onMounted } from '@vue/composition-api';
+import {
+  ref,
+  computed,
+  reactive,
+  onMounted,
+  inject,
+} from '@vue/composition-api';
 import {
   useProduct,
   useCart,
@@ -136,11 +146,11 @@ export default {
   transition: 'fade',
   async created() {
     this.getVariants();
-    this.getAccessories();
     this.reviews = await this.getProductsReviews();
   },
 
   setup(props, context) {
+    const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
     const qty = ref(1);
     const { id } = context.root.$route.params;
@@ -160,6 +170,9 @@ export default {
         attributes: context.root.$route.query,
       })
     );
+    const toastShower = (message) => {
+      showToast(message);
+    };
 
     const options = computed(() =>
       productGetters.getOptions(products.value, ['color', 'size'])
@@ -290,6 +303,7 @@ export default {
       varprice,
       addItemToCart,
       isDarkMode,
+      toastShower,
       //reviewKey,
     };
   },
@@ -338,42 +352,6 @@ export default {
       console.log('manininin', variant);
       this.prImage = variant.data.data.product?.featuredAsset;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
-      console.log('mannna', this.Svariant);
-    },
-    async getAccessories() {
-      const productId = this.$route.params.id;
-      let baseUrl = process.env.GRAPHQL_API;
-      const body = {
-        query: `query getAccessories($id: ID!) {
-                  product(id: $id) {
-                    customFields {
-                      accessories {
-                        slug
-                        id
-                        name
-                        featuredAsset {
-                          preview
-                        }
-                        variants {
-                          price
-                        }
-                      }
-                    }
-                  }
-                }`,
-        variables: {
-          id: productId,
-        },
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      const accessories = await axios.post(baseUrl, body, options);
-      this.productAccessories =
-        accessories.data.data.product?.customFields?.accessories;
     },
     async getProductsReviews() {
       const data = JSON.stringify({
@@ -449,36 +427,45 @@ export default {
       return reviewsList;
     },
 
-    // getYoutubeLinks(){
-    //   const data = JSON.stringify({
-    //     query: `
-    //     query{
-    //       product(id: ${this.id}){
-    //         reviews{
-    //           items{
-    //             summary
-    //             body
-    //             rating
-    //             authorName
-    //             authorLocation
-    //             createdAt
-    //             id
-    //           }
-    //         }
-    //       }
-    //     }
-    //   `
-    //   });
-    //   const response = await fetch("http://localhost:3000/shop-api", {
-    //     method: 'post',
-    //     body: data,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Content-Length': data.length
-    //     }
-    //   });
-    //   const reviewsListResponse = await response.json();
-    // }
+    addToCompareList() {
+      const productId = this.$route.params.id;
+      const variantId = this.$route.params.vid;
+      if (
+        this.$store.state.compareList?.productsToCompare?.length < 5 &&
+        productId !== '' &&
+        variantId !== ''
+      ) {
+        console.log('passed the first one');
+        console.log(
+          'djsfada',
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) => e?.productID === productId && e?.variantID === this.variantId
+          ).length
+        );
+        if (
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) => e?.productID === productId && e?.variantID === variantId
+          ).length === 0
+        ) {
+          console.log('passed the second one');
+          this.toastShower('Added to Compare List');
+          this.$store.dispatch('compareList/addToCompareList', {
+            product: {
+              productID: productId,
+              variantID: variantId,
+              image: this.Svariant.featuredAsset
+                ? this.Svariant.featuredAsset.preview
+                : '',
+            },
+          });
+        } else {
+          this.toastShower('Item is already in the list');
+        }
+      } else {
+        this.toastShower('Limit to Compare Products reached');
+        console.log('limit reached');
+      }
+    },
   },
   components: {
     SubcatBrandCard,
