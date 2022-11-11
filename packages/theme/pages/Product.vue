@@ -35,9 +35,11 @@
             <SfButton @click="addToCart" class="rounded bg-secondary mr-[2%]"
               >Add To Cart</SfButton
             >
-            <SfButton @click="addToCompareList" class="rounded bg-primary"
-              >Add To Compare List</SfButton
-            >
+            <button @click="addToCompareList">
+              <p class="text-secondary align-center mt-3">
+                + Add To Compare List
+              </p>
+            </button>
           </div>
           <div
             v-if="Svariant.customFields"
@@ -895,7 +897,6 @@ tr:nth-child(even) {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .red table thead tr {
-  background-color: #568cea;
   color: #ffffff;
   text-align: left;
 }
@@ -911,9 +912,6 @@ tr:nth-child(even) {
   background-color: #f3f3f3;
 }
 
-.red table tbody tr:last-of-type {
-  border-bottom: 2px solid #568cea;
-}
 .red table tbody tr.active-row {
   font-weight: bold;
   color: #0e1621;

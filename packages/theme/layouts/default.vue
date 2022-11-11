@@ -13,13 +13,13 @@
       <LazyHydrate when-visible>
         <TopBar class="desktop-only" />
       </LazyHydrate>
-      <LazyHydrate when-idle >
+      <LazyHydrate when-idle>
         <AppHeader />
       </LazyHydrate>
     </div>
-    <Compare class="bottomright" />
     <div id="layout">
       <nuxt :key="$route.fullPath" />
+      <client-only><Compare class="bottomright" /></client-only>
 
       <ToastVue :show="isToastVisible" :message="toastMessage" />
       <LazyHydrate when-visible>

@@ -12,9 +12,6 @@ export const mutations = {
     state.productsToCompare = state.productsToCompare.filter(function (obj) {
       return obj.variantID !== payload.Vid;
     });
-
-    console.log('lsit', state.productsToCompare);
-    console.log('id', payload.Vid);
   },
 };
 
