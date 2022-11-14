@@ -192,12 +192,12 @@
             :key="index"
             > {{ invoiceHeader }}</SfTableHeader
           >
-          <SfTableHeader class="orders__element--right" />
+          <!-- <SfTableHeader class="orders__element--right" /> -->
         </SfTableHeading>
         <SfTableRow v-for="(invoice,index) in invoices" :key="index">
           <SfTableData>{{ invoice.invoiceNumber }}</SfTableData>
           <SfTableData>{{ invoice.createdAt }}</SfTableData>
-         
+          <SfTableData>{{ invoice.orderCode }}</SfTableData>
           <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
           <SfTableData>
             <!-- <SfButton class="sf-button--text">See Details</SfButton> -->
@@ -211,7 +211,6 @@
               <a :href="invoice.downloadUrl" target="_blank"> Show As Pdf</a> </SfButton
             >
           </SfTableData>
-          <SfTableData>{{ invoice.orderCode }}</SfTableData>
         </SfTableRow>
       </SfTable>
     </SfTab>
@@ -372,7 +371,7 @@ export default {
       'Actions',
     ];
 
-    const InvoiceHeader = ['Invoice Number', 'Created At', 'Document' , 'Order No' ];
+    const InvoiceHeader = ['Invoice Number', 'Created At','Order No' , 'Document'];
 
     const itemsToCart = (items) => {
       if (items.length >= 1) {
