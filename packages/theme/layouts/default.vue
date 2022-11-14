@@ -196,16 +196,16 @@ h4 {
   padding-top: 0.5em;
 }
 .sf-accordion-item__header {
-  background-color: #a5c4ea;
+  background-color: #a5c4ea !important;
   box-shadow: 0 4px 8px 0 rgba(128, 122, 122, 0.2),
-    0 6px 20px 0 rgba(139, 134, 134, 0.19);
-  font-size: x-large;
-  color: white;
-  border-radius: 1rem;
-  min-width: 106%;
-  height: 4.7rem;
-  padding: 0 15px;
-  margin-left: -3%;
+    0 6px 20px 0 rgba(139, 134, 134, 0.19) !important;
+  font-size: x-large !important;
+  color: white !important;
+  border-radius: 1rem !important;
+  min-width: 106% !important;
+  height: 4.7rem !important;
+  padding: 0 15px !important;
+  margin-left: -3% !important;
 }
 .sf-search-bar__input:focus {
   outline: none;
@@ -218,7 +218,7 @@ h4 {
 }
 .sf-table__row {
   border-radius: 20px;
-  background-color: white;
+  background-color: white !important;
   margin-bottom: 12px;
 }
 .sf-table__heading {
@@ -244,5 +244,8 @@ h4 {
   position: fixed;
   padding: 5px;
   z-index: 500;
+}
+.sf-search-bar__input {
+  border: none !important;
 }
 </style>
