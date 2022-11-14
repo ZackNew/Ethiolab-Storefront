@@ -206,6 +206,21 @@
                 </div>
               </div>
               <hr class="mt-4" />
+              <div
+                v-for="(acc, i) in variant.accessories"
+                :key="`'r' + ${i}`"
+                class="mt-3"
+              >
+                <div class="flex">
+                  <img
+                    :src="acc.featuredAsset ? acc.featuredAsset.preview : ''"
+                    alt=""
+                    class="w-10 h-10 mr-2"
+                  />
+                  <h4 class="text-secondary font-bold">{{ acc.name }}</h4>
+                </div>
+                <hr class="mt-2" />
+              </div>
             </SfTableData>
           </SfTableRow>
         </SfTable>
@@ -409,6 +424,13 @@ export default {
                     name
                   }
                   name
+                }
+                accessories{
+                  name
+                  featuredAsset{
+                    preview
+                  }
+                  slug
                 }
                 stockLevel
               }

@@ -59,10 +59,10 @@
     </div>
     <div
       id="full"
-      class="card rounded-2xl grid grid-cols-12 p-8"
+      class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
       :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
     >
-      <div class="col-span-6">
+      <div class="md:col-span-6">
         <h3>Speciﬁcation And Description</h3>
         <p
           class="max-w-[95%]"
@@ -70,7 +70,7 @@
           :class="classes.red"
         ></p>
       </div>
-      <div class="col-span-6">
+      <div class="md:col-span-6">
         <h3>More About This Item</h3>
         <div v-if="Svariant.customFields">
           <p
