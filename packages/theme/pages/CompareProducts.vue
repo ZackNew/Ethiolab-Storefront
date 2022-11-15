@@ -156,7 +156,11 @@
 
               <template v-for="product in productsToCompare">
                 <!-- {{product.variantList.stockLevel}} -->
-                <td class="py-4 px-4">Accessory</td>
+                <td class="py-4 px-4">
+                  <template v-for="a in product.variantList.accessories">
+                    <p class="text-secondary font-bold">{{ a.name }}</p>
+                  </template>
+                </td>
               </template>
             </tr>
             <tr class="align-top">
@@ -174,12 +178,12 @@
                 </td>
               </template>
             </tr>
-            <!-- <tr class="align-top">
+            <tr class="align-top">
               <th
                 scope="row"
                 class="bg-light_gray border-b-4 border-b-white px-4"
               >
-                <h2 class="text-lg font-bold mt-3 text-left ">Specificaton</h2>
+                <h2 class="text-lg font-bold mt-3 text-left">Specificaton</h2>
               </th>
               <template v-for="product in productsToCompare">
                 <td class="py-4 px-4">
@@ -189,7 +193,7 @@
                   ></p>
                 </td>
               </template>
-            </tr> -->
+            </tr>
           </tbody>
         </table>
       </div>
@@ -265,7 +269,9 @@ export default {
                     }
                     name
                   }
-                  
+                  accessories{
+                    name
+                  }
                 }
               }
             }
@@ -345,7 +351,7 @@ hr {
 
 <style module="classes">
 .red {
-  max-width: 100%;
+  max-width: 95%;
 }
 .red ul {
   list-style-type: square;
@@ -355,7 +361,7 @@ hr {
   border-radius: 5px;
   font-size: 0.9em;
   font-family: sans-serif;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 .red table thead tr {
   color: #ffffff;
@@ -363,8 +369,8 @@ hr {
 }
 .red table th,
 .red table td {
-  padding: 12px 12px;
-  max-width: 5px;
+  padding: 6px 6px;
+  display: flex;
 }
 .red table tbody tr {
   border-bottom: 1px solid #dddddd;
