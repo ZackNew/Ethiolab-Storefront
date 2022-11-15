@@ -23,7 +23,7 @@ export const mapAddressFormToOrderAddress = (
   addressForm: AddressForm
 ): OrderAddress => ({
   fullName: `${addressForm.firstName} ${addressForm.lastName}`,
-  streetLine1: addressForm.streetLine1,
+  streetLine1: addressForm.streetLine1 || '',
   city: addressForm.city,
   postalCode: '',
   countryCode: 'et',
