@@ -76,14 +76,14 @@
         <SfTable v-else class="orders">
           <SfTableHeading>
             <SfTableHeader
-              v-for="tableHeader in tableHeaders"
-              :key="tableHeader"
+              v-for="(tableHeader,index) in tableHeaders"
+              :key="index"
               >{{ tableHeader }}</SfTableHeader
             >
             <SfTableHeader class="orders__element--right" />
           </SfTableHeading>
           <SfTableRow
-            v-for="order in orders.items"
+            v-for="(order, index) in orders.items"
             :key="orderGetters.getId(order)"
           >
             <SfTableData v-e2e="'order-number'">{{
@@ -142,13 +142,13 @@
       <SfTable>
         <SfTableHeading>
           <SfTableHeader
-            v-for="tableHeader in quotesHeader"
-            :key="tableHeader"
+            v-for="(tableHeader,index) in quotesHeader"
+            :key="index"
             >{{ tableHeader }}</SfTableHeader
           >
           <SfTableHeader class="orders__element--right" />
         </SfTableHeading>
-        <SfTableRow v-for="quote of quotes">
+        <SfTableRow v-for="(quote,index) in quotes" :key="index">
           <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
           <SfTableData>{{ quote.createdAt }}</SfTableData>
           <SfTableData>{{ quote.subject }}</SfTableData>
@@ -158,12 +158,57 @@
             <SfButton
               class="sf-button--text red-text"
               @click="removeQuote(quotes.indexOf(quote))"
-              >Delete</SfButton
-            >
-            <SfButton
-              class="sf-button--text"
+              >Delete</SfButton       <SfTableData class="orders__view orders__element--right">
+              <SfButton
+                class="sf-button--text desktop-only"
+                @click="currentOrder = order"
+              >
+                {{ $t('View details') }}
+              </SfButton>
+              <button
+                class="mt-2"
+                @click="itemsToCart(orderGetters.getItems(order))"
+              >
+                Reorder All Items
+              </button>
+            </SfTableData>
               @click="downloadQuote(quotes.indexOf(quote))"
               >Download As Pdf</SfButton
+            >
+          </SfTableData>
+        </SfTableRow>
+      </SfTable>
+    </SfTab>
+
+    <SfTab title="My Invoices">
+      <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
+           Message: {{quote.msg}}
+          <SfButton>Delete</SfButton>
+         </div> -->
+      <SfTable>
+        <SfTableHeading>
+          <SfTableHeader
+            v-for="(invoiceHeader,index) in InvoiceHeader"
+            :key="index"
+            > {{ invoiceHeader }}</SfTableHeader
+          >
+          <!-- <SfTableHeader class="orders__element--right" /> -->
+        </SfTableHeading>
+        <SfTableRow v-for="(invoice,index) in invoices" :key="index">
+          <SfTableData>{{ invoice.invoiceNumber }}</SfTableData>
+          <SfTableData>{{ invoice.createdAt }}</SfTableData>
+          <SfTableData>{{ invoice.orderCode }}</SfTableData>
+          <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
+          <SfTableData>
+            <!-- <SfButton class="sf-button--text">See Details</SfButton> -->
+            <!-- <SfButton
+              class="sf-button--text red-text"
+              >Delete</SfButton
+            > -->
+            <SfButton
+              class="sf-button--text"
+              >
+              <a :href="invoice.downloadUrl" target="_blank"> Show As Pdf</a> </SfButton
             >
           </SfTableData>
         </SfTableRow>
@@ -181,7 +226,7 @@ import {
   SfLink,
   SfArrow,
 } from '@storefront-ui/vue';
-import { computed, ref, provide } from '@vue/composition-api';
+import { computed, ref, provide , onMounted} from '@vue/composition-api';
 import {
   useUserOrder,
   orderGetters,
@@ -205,12 +250,25 @@ export default {
     SfLink,
     SfArrow,
   },
+  computed: {
+    custom() {
+      const link = this.product?.customFields?.youtube_link.split('?v=')[1];
+      const document =
+        process.env.GRAPHQL + this.invoices?.customFields?.documentation;
+      return { link: link, document: document };
+    },
+  },
 
   setup() {
     const quotes = ref([]);
+    const invoices = ref([]);
+
     const { load, myQuotes, deleteQuote } = useQuote();
     const { user, load: loadUser } = useUser();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const invoiceEmail = userGetters.getEmailAddress(user.value);
+    const baseUrl = process.env.GRAPHQL_API;
+
     loadUser().then(() => {
       const currentEmail = userGetters.getEmailAddress(user.value);
       load({ email: currentEmail })
@@ -235,25 +293,58 @@ export default {
       doc.save('quote.pdf');
     }
 
+    onMounted(() => {
+      let baseUrl = process.env.GRAPHQL_API;
+    let pbody = {
+              query: `query getInvoices($customerEmail: String!) {
+                       myInvoices(input:{customerEmail: $customerEmail}){
+                          items{
+                            invoiceNumber
+                            downloadUrl
+                            createdAt
+                            orderCode
+                          }
+                        }
+                      }`,
+              variables: {
+                customerEmail: invoiceEmail,
+              },
+            };
+            let poptions = {
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+              },
+            };
+         axios.post(baseUrl, pbody, poptions).then(res => {
+          console.log("result invoice is ", res)
+          invoices.value = res.data.data.myInvoices.items;
+          console.log("invoices.value is ", invoices.value)
+         }).catch(err => {
+          console.log("error invoice is ", err)
+         })
+    })
+
     //    // quotes.value = myQuotes
     // console.log('DATA::',  load)
 
-    //const  mutation = gql`
-    // query getQuotesOf($email: String!){
-    //       getQueryOf(email: $email)    {
-    //         id,
-    //         productDescr,
-    //         #fromEmail,
-    //         msg,
-    //         subject,
-    //         createdAt
+    // const  mutation = gql`
+    //     query getInvoices($invoiceEmail: String!){
+    //       myInvoices(input:{customerEmail: $invoiceEmail}){
+    //         items{
+    //           invoiceNumber
+    //           downloadUrl
+    //         }
     //       }
-    // }`
-    // axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{email: 'eben@gmail.com'}})
+    //     }`
+    // axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{customerEmail:invoiceEmail}})
     // .then(data =>{
-    //   console.log(data)
-    //     quotes.value = data.data.data.getQueryOf
+    //   console.log("invoice data is",data);
+    //     // quotes.value = data.data.data.getQueryOf
+    // }).catch(err => {
+    //   console.log("the error is ", err)
     // })
+
 
     const limit = 10;
     const { orders, search } = useUserOrder();
@@ -279,6 +370,8 @@ export default {
       //   'message',
       'Actions',
     ];
+
+    const InvoiceHeader = ['Invoice Number', 'Created At','Order No' , 'Document'];
 
     const itemsToCart = (items) => {
       if (items.length >= 1) {
@@ -315,6 +408,7 @@ export default {
     return {
       quotesHeader,
       tableHeaders,
+      InvoiceHeader,
       orders: computed(() => orders.value ?? []),
       offset: computed(() => orders.value?.offset ?? 0),
       totalOrders: computed(() => orderGetters.getTotalItems(orders.value)),
@@ -324,6 +418,7 @@ export default {
       orderGetters,
       currentOrder,
       quotes,
+      invoices,
       deleteQuote,
       downloadQuote,
       removeQuote,
