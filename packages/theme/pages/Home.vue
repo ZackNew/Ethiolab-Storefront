@@ -81,11 +81,24 @@
               ng-show="showvideo"
             ></iframe>
           </div>
-          <div class="col-span-3">
+          <div class="col-span-3 my-auto">
             <div class="mt-5 grid grid-rows-3 grid-flow-col gap-4">
-              <img src="~/static/ad1.png" />
-              <img src="~/static/ad2.png" />
-              <img src="~/static/ad3.png" />
+              <div v-for="sale in bigSale" :key="sale.sku">
+                <div class="container mb-2">
+                  <h3 class="font-bold text-overlayer z-10">
+                    <nuxt-link
+                      :to="`/v/${sale.productSlug}`"
+                      class="font-bold text-white"
+                      >{{ sale.buttonText }}</nuxt-link
+                    >
+                  </h3>
+                  <img
+                    :src="imageUrl + sale.banner"
+                    alt="Snow"
+                    class="w-full max-h-[7rem] mb-1"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -533,7 +546,16 @@ export default {
         }
       });
     };
+    const BIG_SALE = computed(() =>
+      JSON.parse(getCms.value[5]?.content ?? '{}')
+    );
+    const bigSale = BIG_SALE.value.map((pro) => {
+      return JSON.parse(pro ?? '{}');
+    });
+    const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
+
     console.log('Magi cms', getCms.value);
+    console.log('Magi big Sale', bigSale);
     const onSubscribe = ({ emailAddress, event }) => {
       let baseUrl = process.env.GRAPHQL_API;
       const body = {
@@ -595,6 +617,8 @@ export default {
       heroImage,
       adSection,
       adImage,
+      bigSale,
+      imageUrl,
     };
   },
 };
@@ -714,5 +738,16 @@ export default {
     max-width: 1100px !important;
     margin: auto;
   }
+}
+
+.container {
+  position: relative;
+}
+
+.text-overlayer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
