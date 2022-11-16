@@ -35,9 +35,11 @@
             <SfButton @click="addToCart" class="rounded bg-secondary mr-[2%]"
               >Add To Cart</SfButton
             >
-            <SfButton @click="addToCompareList" class="rounded bg-primary"
-              >Add To Compare List</SfButton
-            >
+            <button @click="addToCompareList">
+              <p class="text-secondary align-center mt-3">
+                + Add To Compare List
+              </p>
+            </button>
           </div>
           <div
             v-if="Svariant.customFields"
@@ -57,10 +59,10 @@
     </div>
     <div
       id="full"
-      class="card rounded-2xl grid grid-cols-12 p-8"
+      class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
       :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
     >
-      <div class="col-span-6">
+      <div class="md:col-span-6">
         <h3>Speciﬁcation And Description</h3>
         <p
           class="max-w-[95%]"
@@ -68,7 +70,7 @@
           :class="classes.red"
         ></p>
       </div>
-      <div class="col-span-6">
+      <div class="md:col-span-6">
         <h3>More About This Item</h3>
         <div v-if="Svariant.customFields">
           <p
@@ -78,6 +80,77 @@
           ></p>
         </div>
       </div>
+    </div>
+
+    <div v-if="VariantAccessories.length > 0">
+      <h2 class="text-secondary text-center my-10">Accessories</h2>
+      <LazyHydrate when-visible>
+        <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
+          <template #prevArrow>
+            <div class="arrows">
+              <svg
+                class="w-12 h-12 text-secondary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                ></path>
+              </svg>
+            </div>
+          </template>
+          /*...*/
+          <template #nextArrow>
+            <div class="arrows">
+              <svg
+                class="w-12 h-12 text-secondary -ml-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+            </div>
+          </template>
+          <div v-for="product in VariantAccessories" :key="product._id">
+            <ProductCard
+              :id="product._id"
+              :title="product.name"
+              :image="product.images"
+              :regular-price="product.price.current + ' ETB'"
+              :imageHeight="440"
+              :imageWidth="500"
+              :alt="product.name"
+              :max-rating="5"
+              :score-rating="3"
+              :variantId="product._variantId"
+              :show-add-to-cart-button="true"
+              :isInWishlist="isInWishlist({ product })"
+              :isAddedToCart="isInCart({ product })"
+              :link="localePath(`/v/${product.slug}`)"
+              @click:wishlist="
+                !isInWishlist({ product })
+                  ? addItemToWishlist({ product })
+                  : removeItemFromWishlist({ product })
+              "
+              @click:add-to-cart="addToCart"
+              class="carousel__item__product mr-2"
+              style="border-radius: 15px"
+            />
+          </div>
+        </VueSlickCarousel>
+      </LazyHydrate>
     </div>
 
     <LazyHydrate when-visible>
@@ -94,6 +167,10 @@
 </template>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
+import ProductCard from '~/components/ProductCard.vue';
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import Toast from '~/components/Toast.vue';
 import {
   SfProperty,
@@ -114,7 +191,7 @@ import {
   SfButton,
   SfColor,
 } from '@storefront-ui/vue';
-import SubcatBrandCard from '../components/SubcatBrandCard.vue';
+import SubcatBrandCard from '/components/SubcatBrandCard.vue';
 import Gallery from '../components/Gallery.vue';
 import MyReview from '~/components/MyAccount/MyReview.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
@@ -135,6 +212,7 @@ import {
   useRelatedProducts,
   useUser,
   userGetters,
+  useWishlist,
 } from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
@@ -152,13 +230,18 @@ export default {
   },
 
   setup(props, context) {
+    const {
+      addItem: addItemToWishlist,
+      isInWishlist,
+      removeItem: removeItemFromWishlist,
+    } = useWishlist();
     const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
     const qty = ref(1);
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
     const { products, search } = useProduct('products');
-    const { addItem, addItemToCart, loading } = useCart();
+    const { addItem, addItemToCart, isInCart, loading } = useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
     const {
       relatedProducts,
@@ -213,9 +296,9 @@ export default {
     const varp = varproduct[0]?.price.current.toString();
     const varprice =
       varp &&
-      varp.substring(0, varp.length - 2) +
+      varp.substring(0, varp?.length - 2) +
         '.' +
-        varp.substring(varp.length - 2);
+        varp.substring(varp?.length - 2);
 
     const productGallery = computed(() => {
       if (varproduct[0]?.images[0])
@@ -240,7 +323,7 @@ export default {
       await search({ id });
       await load();
       const currentCollectionId =
-        product.value._categoriesRef[product.value._categoriesRef.length - 1];
+        product.value._categoriesRef[product.value._categoriesRef?.length - 1];
       await searchRelatedProducts({
         input: {
           collectionId: currentCollectionId,
@@ -257,7 +340,9 @@ export default {
     };
 
     const addToCart = () => {
-      const isConfigurationSelected = Object.values(configuration.value).length;
+      const isConfigurationSelected = Object.values(
+        configuration.value
+      )?.length;
       if (isConfigurationSelected) {
         const productVariant = getProductVariantByConfiguration(
           products.value,
@@ -307,6 +392,9 @@ export default {
       isDarkMode,
       toastShower,
       //reviewKey,
+      removeItemFromWishlist,
+      isInWishlist,
+      isInCart,
     };
   },
   methods: {
@@ -325,6 +413,19 @@ export default {
                     }
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {
+                        accessories{
+                          id
+                          name
+                          slug
+                          variants{
+                            id
+                            sku
+                            priceWithTax
+                          }
+                          featuredAsset{
+                            preview
+                          }
+                        }
                         name
                         priceWithTax
                         customFields {
@@ -354,10 +455,29 @@ export default {
         },
       };
       const variant = await axios.post(baseUrl, body, options);
-      console.log('manininin', variant);
       this.prImage = variant.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.product?.assets;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
+      console.log('Magi Magi', this.Svariant.accessories);
+      this.VariantAccessories = this.Svariant.accessories.map((p) => {
+        const image = p.featuredAsset ? p.featuredAsset.preview : '';
+        const price =
+          String(p?.variants[0]?.priceWithTax).slice(0, -2) +
+          '.' +
+          String(p?.variants[0]?.priceWithTax).slice(-2);
+        return {
+          _id: p.id,
+          _variantId: p?.variants[0]?.id,
+          name: p.name,
+          images: image,
+          price: {
+            original: price,
+            current: price,
+          },
+          slug: p?.slug,
+        };
+      });
+      console.log('manininin', this.VariantAccessories);
     },
     async getProductsReviews() {
       const data = JSON.stringify({
@@ -389,7 +509,7 @@ export default {
         body: data,
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': data.length,
+          'Content-Length': data?.length,
         },
       });
       const reviewsListResponse = await response.json();
@@ -397,7 +517,7 @@ export default {
         reviewsListResponse.data.product.customFields?.youtube_link.split(
           '?v='
         );
-      if (splitted.length == 2) {
+      if (splitted?.length == 2) {
         this.youtube_link = splitted[1];
       }
       if (
@@ -445,18 +565,16 @@ export default {
         console.log(
           'djsfada',
           this.$store.state.compareList?.productsToCompare?.filter(
-            (e) => e?.productID === productId && e?.variantID === this.variantId
-          ).length
+            (e) => e?.productID === productId && e?.variantID === variantId
+          )?.length
         );
         if (
           this.$store.state.compareList?.productsToCompare?.filter(
             (e) => e?.productID === productId && e?.variantID === variantId
-          ).length === 0
+          )?.length === 0
         ) {
           console.log('passed the second one');
           this.toastShower('Added to Compare List');
-          console.log('Magiii', this.Svariant.assets || ['magica']);
-          console.log('Magiii', this.prImages || ['magica']);
           this.$store.dispatch('compareList/addToCompareList', {
             product: {
               productID: productId,
@@ -502,6 +620,8 @@ export default {
     LazyHydrate,
     MyReview,
     Gallery,
+    VueSlickCarousel,
+    ProductCard,
   },
   data() {
     return {
@@ -510,6 +630,7 @@ export default {
       variant_description: null,
       productAccessories: [],
       optionTableValues: [],
+      VariantAccessories: [],
       Svariant: null,
       stock: 5,
       brand:
@@ -520,6 +641,43 @@ export default {
       currentUserHasReview: false,
       youtube_link: '',
       reviewKey: 0,
+      settings: {
+        dots: true,
+        focusOnSelect: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        touchThreshold: 5,
+        centerMode: true,
+        centerPadding: '20px',
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 3,
+              infinite: true,
+              dots: true,
+            },
+          },
+          {
+            breakpoint: 800,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2,
+              initialSlide: 2,
+            },
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+            },
+          },
+        ],
+      },
     };
   },
   watch: {
@@ -739,7 +897,6 @@ tr:nth-child(even) {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .red table thead tr {
-  background-color: #568cea;
   color: #ffffff;
   text-align: left;
 }
@@ -755,9 +912,6 @@ tr:nth-child(even) {
   background-color: #f3f3f3;
 }
 
-.red table tbody tr:last-of-type {
-  border-bottom: 2px solid #568cea;
-}
 .red table tbody tr.active-row {
   font-weight: bold;
   color: #0e1621;

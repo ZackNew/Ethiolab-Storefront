@@ -1,5 +1,9 @@
 <template>
-  <div id="compare" :style="`bottom: ${value}; transition: bottom 0.4s;`">
+  <div
+    id="compare"
+    :style="`bottom: ${value}; transition: bottom 0.4s;`"
+    class="hidden md:block"
+  >
     <div class="flex">
       <button
         @click="toogle"
@@ -120,7 +124,7 @@ export default {
   right: 0;
 }
 .counter {
-  background-color: #f04a00;
+  background-color: #3860a7;
   border: 4px solid white;
   border-radius: 80%;
   width: 25px;

@@ -19,7 +19,9 @@
         </ol>
       </nav>
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-        <div class="md:mr-8 md:col-span-6 max-w[99%] overflow-hidden">
+        <div
+          class="md:mr-8 md:col-span-6 max-w[99%] overflow-x-hidden overflow-y-visible"
+        >
           <Gallery
             :images="product.assets"
             :display="product.featuredAsset"
@@ -204,6 +206,22 @@
                     @click="addToCart($event)"
                   />
                 </div>
+              </div>
+              <hr class="mt-4" />
+              <div
+                v-for="(acc, i) in variant.accessories"
+                :key="`'r' + ${i}`"
+                class="mt-3"
+              >
+                <div class="flex">
+                  <img
+                    :src="acc.featuredAsset ? acc.featuredAsset.preview : ''"
+                    alt=""
+                    class="w-10 h-10 mr-2"
+                  />
+                  <h4 class="text-secondary font-bold">{{ acc.name }}</h4>
+                </div>
+                <hr class="mt-2" />
               </div>
             </SfTableData>
           </SfTableRow>
@@ -409,6 +427,13 @@ export default {
                   }
                   name
                 }
+                accessories{
+                  name
+                  featuredAsset{
+                    preview
+                  }
+                  slug
+                }
                 stockLevel
               }
             }
@@ -509,6 +534,9 @@ export default {
     padding: 0;
     margin: 0 auto;
   }
+}
+hr {
+  color: lightgray;
 }
 </style>
 

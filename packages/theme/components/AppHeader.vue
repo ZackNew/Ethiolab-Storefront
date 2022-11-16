@@ -554,6 +554,7 @@ export default {
   border: 1px solid #aaa;
   padding-left: 10px;
   color: var(--c-text);
+  text-decoration: none;
 }
 @media (max-width: 800px) {
   .search {

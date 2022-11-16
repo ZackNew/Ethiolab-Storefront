@@ -21,7 +21,7 @@
             </Banner>
           </LazyHydrate>
         </div> -->
-        <div class="grid grid-cols-12 gap-4 wrapsm">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 wrapsm mt-7">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -70,9 +70,9 @@
               />
             </template>
           </LazyHydrate> -->
-          <div class="col-span-9 items-center" v-if="heroSection.link">
+          <div class="md:col-span-9" v-if="heroSection.link">
             <iframe
-              class="w-[90%] md:h-[25rem] justify-end ytplayer"
+              class="w-[86.5%] md:h-[25rem] ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
@@ -81,11 +81,26 @@
               ng-show="showvideo"
             ></iframe>
           </div>
-          <div class="col-span-3">
-            <div class="mt-5 grid grid-rows-3 grid-flow-col gap-4">
-              <img src="~/static/ad1.png" />
-              <img src="~/static/ad2.png" />
-              <img src="~/static/ad3.png" />
+          <div class="md:col-span-3 my-auto">
+            <div
+              class="mt-5 flex md:grid md:grid-rows-3 md:grid-flow-col gap-4"
+            >
+              <div v-for="sale in bigSale" :key="sale.sku">
+                <div class="container mb-2">
+                  <h3 class="font-bold text-overlayer z-[2] text-xs md:text-xl">
+                    <nuxt-link
+                      :to="`/v/${sale.productSlug}`"
+                      class="font-bold text-white"
+                      >{{ sale.buttonText }}</nuxt-link
+                    >
+                  </h3>
+                  <img
+                    :src="imageUrl + sale.banner"
+                    alt="Image"
+                    class="w-full max-h-[7rem] mb-1"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -533,6 +548,16 @@ export default {
         }
       });
     };
+    const BIG_SALE = computed(() =>
+      JSON.parse(getCms.value[5]?.content ?? '{}')
+    );
+    const bigSale = BIG_SALE.value.map((pro) => {
+      return JSON.parse(pro ?? '{}');
+    });
+    const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
+
+    console.log('Magi cms', getCms.value);
+    console.log('Magi big Sale', bigSale);
     const onSubscribe = ({ emailAddress, event }) => {
       let baseUrl = process.env.GRAPHQL_API;
       const body = {
@@ -594,6 +619,8 @@ export default {
       heroImage,
       adSection,
       adImage,
+      bigSale,
+      imageUrl,
     };
   },
 };
@@ -713,5 +740,16 @@ export default {
     max-width: 1100px !important;
     margin: auto;
   }
+}
+
+.container {
+  position: relative;
+}
+
+.text-overlayer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
