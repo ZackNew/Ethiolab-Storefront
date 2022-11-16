@@ -14,14 +14,10 @@
         :key="navs.id"
       />
     </div>
-   
+
     <div class="detail bg-light_accent pb-3" v-show="showDetail">
-      <img
-        style="object-fit: cover"
-        alt="Industry Image"
-        :src="cPrev"
-        class="w-full min-h-[50%] max-h-[70%]"
-      />
+      <!-- style="object-fit: cover" -->
+      <img alt="Industry Image" :src="cPrev" class="w-auto max-h-[80%]" />
       <h4 class="text-primary font-bold">{{ cTitle }}</h4>
       <p v-html="cDisc" class="mx-3"></p>
     </div>

@@ -19,7 +19,9 @@
         </ol>
       </nav>
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-        <div class="md:mr-8 md:col-span-6 max-w[99%] overflow-hidden">
+        <div
+          class="md:mr-8 md:col-span-6 max-w[99%] overflow-x-hidden overflow-y-visible"
+        >
           <Gallery
             :images="product.assets"
             :display="product.featuredAsset"

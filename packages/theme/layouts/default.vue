@@ -108,6 +108,7 @@ export default {
         'STATIC',
         'ADVERTISEMENT',
         'POLICIES',
+        'BIG_SALE',
       ]);
     });
     return { isDarkMode, isToastVisible, showToast, toastMessage };

@@ -118,7 +118,7 @@
         v-slot="{ errors }"
         class="form__element"
       >
-        <SfInput
+        <!-- <SfInput
           type="number"
           v-model="form.phone"
           name="phone"
@@ -126,6 +126,14 @@
           required
           :valid="!errors[0]"
           :errorMessage="errors[0]"
+        /> -->
+        <VuePhoneNumberInput
+          required
+          color="#000000"
+          valid-color="#3860a7"
+          default-country-code="ET"
+          :errorMessage="errors[0]"
+          v-model="form.phone"
         />
       </ValidationProvider>
       <SfCheckbox
@@ -142,6 +150,8 @@
 </template>
 
 <script>
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { SfInput, SfButton, SfSelect, SfCheckbox } from '@storefront-ui/vue';
 import { required, min, oneOf } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
@@ -174,6 +184,7 @@ export default {
     SfCheckbox,
     ValidationProvider,
     ValidationObserver,
+    VuePhoneNumberInput,
   },
 
   props: {

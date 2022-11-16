@@ -74,7 +74,7 @@
           v-slot="{ errors }"
           slim
         >
-          <SfInput
+          <!-- <SfInput
             v-e2e="'shipping-phone'"
             v-model="form.phone"
             :label="$t('Phone number')"
@@ -83,6 +83,15 @@
             required
             :valid="!errors[0]"
             :errorMessage="errors[0]"
+          /> -->
+          <VuePhoneNumberInput
+            required
+            color="#000000"
+            valid-color="#3860a7"
+            default-country-code="ET"
+            :errorMessage="errors[0]"
+            v-model="form.phone"
+            class="w-[80%]"
           />
         </ValidationProvider>
       </div>
@@ -121,6 +130,8 @@
 </template>
 
 <script>
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { SfHeading, SfInput, SfButton, SfSelect } from '@storefront-ui/vue';
 import { ref, onMounted } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
@@ -161,6 +172,7 @@ export default {
     SfSelect,
     ValidationProvider,
     ValidationObserver,
+    VuePhoneNumberInput,
     VsfShippingProvider: () =>
       import('~/components/Checkout/VsfShippingProvider'),
   },
