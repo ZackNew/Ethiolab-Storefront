@@ -97,6 +97,7 @@ export default {
   z-index: 2 !important;
   opacity: 1 !important;
   background-color: rgb(243, 243, 243) !important;
+  column-count: 2;
 }
 
 .overlay > a {

@@ -1,6 +1,7 @@
 <template>
   <div>
     <SfHeading title="Testimonials" :level="2" />
+
     <SfCarousel
       class="carousel"
       :settings="{
@@ -9,26 +10,21 @@
         breakpoints: { 1023: { peek: 0, perView: 1 } },
       }"
     >
-      <SfCarouselItem
-        v-for="testimony in testimonials"
-        :key="testimony.id"
-        class="carousel__item"
+    <!-- <div v-for="testimony in tes" :key="testimony.id">  -->
+      <!-- <p>{{testimony.id}}</p> -->
+  <SfCarouselItem
+        class="carousel__item" 
       >
         <div
-          class="max-w-3xl p-4 ml-2 text-gray-800 rounded-lg shadow testimonial_card"
+          class="max-w-3xl p-4 ml-2 text-gray-800 rounded-lg shadow testimonial_card" v-for="testimony in testimonials" :key="testimony.id"
         >
-          <div class="h-3 text-3xl text-left quote">“</div>
-          <p
-            class="px-4 text-center testimonies"
-            v-html="testimony.content"
-          ></p>
-          <div class="h-3 text-3xl text-right quote">”</div>
+ 
           <div class="flex flex-col items-center text-center">
             <div
               class="w-12 h-12 overflow-hidden bg-gray-100 border-2 border-indigo-100 rounded-full"
             >
               <img
-                src="https://cdn.pixabay.com/photo/2017/05/19/12/38/entrepreneur-2326419__340.jpg"
+                :src= "`${path}${testimony.src}` || ` https://cdn.pixabay.com/photo/2017/05/19/12/38/entrepreneur-2326419__340.jpg`"
                 alt="img"
                 class="object-cover object-center w-full h-full"
               />
@@ -36,8 +32,16 @@
             <h5 class="font-bold quote">{{ testimony.name }}</h5>
             <p class="text-sm testimonies">{{ testimony.title }}</p>
           </div>
+          <div class="h-3 text-3xl text-left quote">“</div>
+          <p
+            class="px-4 text-center testimonies"
+            v-html="testimony.content"
+          ></p>
+          <div class="h-3 text-3xl text-right quote">”</div>
         </div>
       </SfCarouselItem>
+    <!-- </div> -->
+    
     </SfCarousel>
     <!-- {{ testimonials }} +++++++++++++++++++++++++
     {{ testimonies }} -->
@@ -48,6 +52,9 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import { SfCarousel, SfDivider, SfHeading } from '@storefront-ui/vue';
+import { computed, ref, provide , onMounted} from '@vue/composition-api';
+import axios from "axios";
+
 export default {
   components: {
     SfCarousel,
@@ -62,6 +69,54 @@ export default {
         return [];
       },
     },
+  },
+  setup() {
+    const tes = ref([]);
+    const baseUrl = process.env.GRAPHQL_API;
+    const path =baseUrl.split("/shop-api")[0]+"/assets/"
+    console.log("path value is ", path)
+    console.log("the base url i s", baseUrl.split("/shop-api")[0])
+    onMounted(() =>{
+      // async getTestimonials() {
+      
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      const body = {
+        query: `query{
+          getTestimonials{
+            id
+            name
+            pic_location
+            msg
+            person_position
+          }
+        }`,
+      };
+       axios.post(baseUrl, body, options).then((res) => {
+        const test = res.data.data.getTestimonials.map((testimony) => {
+          console.log("testimony")
+          return {
+            id: testimony.id,
+            name: testimony.name,
+            src: testimony.pic_location,
+            content: testimony.msg,
+            title: testimony.person_position,
+          };
+        });
+        tes.value = test;
+        console.log('testimonials MOUNTED', this.testimonials);  
+      });
+    })
+    // }
+
+    return {
+      tes,
+      path
+    }
   },
   data() {
     return {
