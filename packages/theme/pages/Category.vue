@@ -347,23 +347,21 @@
                           Number(productQuantity[product._id]) || itemQuantity,
                       })
                     "
-                    :link="
-                      localePath(
-                        `/p/${productGetters.getId(
-                          product
-                        )}/${productGetters.getSlug(product)}`
-                      )
-                    "
+                    :link="localePath(`/v/${productGetters.getSlug(product)}`)"
                   >
                     <!-- <template #configuration>
-                    <SfProperty
-                      class="desktop-only"
-                      name="Size"
-                      value="XS"
-                      style="margin: 0 0 1rem 0"
-                    />
-                    <SfProperty class="desktop-only" name="Color" value="white" />
-                  </template> -->
+                      <SfProperty
+                        class="desktop-only"
+                        name="Size"
+                        value="XS"
+                        style="margin: 0 0 1rem 0"
+                      />
+                      <SfProperty
+                        class="desktop-only"
+                        name="Color"
+                        value="white"
+                      />
+                    </template> -->
                     <template #actions>
                       <SfButton
                         v-if="!isInWishlist({ product })"
