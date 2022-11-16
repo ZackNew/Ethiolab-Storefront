@@ -129,7 +129,7 @@ export default {
   align-items: center;
   margin: 0.5em;
   box-sizing: border-box;
-  height: 75%;
+  height: 95%;
   width: 20%;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -148,7 +148,7 @@ export default {
   flex-direction: column;
   margin: 0.5em;
   box-sizing: border-box;
-  height: 75%;
+  height: 95%;
   width: 20%;
   background-position: center bottom;
   background-repeat: no-repeat;
