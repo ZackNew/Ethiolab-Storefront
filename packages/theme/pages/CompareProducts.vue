@@ -215,6 +215,10 @@ export default {
   },
   created() {
     this.getItemsToCompare();
+    this.$root.$on('now', () => {
+      console.log('recieved');
+      this.getItemsToCompare();
+    });
   },
   components: {
     SfRating,
@@ -291,6 +295,7 @@ export default {
         },
       };
       await axios.post(baseUrl, body, options).then((res) => {
+        console.log('magi results', res.data.data?.products?.items);
         const result = res.data.data?.products?.items;
         const prod = [];
         result?.forEach((element) => {

@@ -55,7 +55,7 @@
           ></div>
         </div>
       </div>
-      <nuxt-link
+      <!-- <nuxt-link
         :style="
           $store.state.compareList.productsToCompare.length <= 1
             ? 'background-color: grey; pointer-events: none'
@@ -63,11 +63,19 @@
         "
         class="my-auto rounded h-[45%] mr-[5%]"
         :to="'/compareProduct'"
+      > -->
+      <button
+        :style="
+          $store.state.compareList.productsToCompare.length <= 1
+            ? 'background-color: grey; pointer-events: none'
+            : 'background-color: #3860a7'
+        "
+        class="px-6 my-auto text-white font-bold rounded h-[45%] mr-[5%]"
+        @click="compareProducts"
       >
-        <button class="px-6 my-auto text-white font-bold mt-[7%]">
-          Compare
-        </button>
-      </nuxt-link>
+        compare
+      </button>
+      <!-- </nuxt-link> -->
     </div>
   </div>
 </template>
@@ -92,6 +100,15 @@ export default {
       this.$store.dispatch('compareList/removeCompareList', {
         Vid: Rid,
       });
+    },
+    compareProducts() {
+      if (this.$route.path !== '/compareProducts') {
+        console.log('Maji not in compare');
+        this.$router.push('/compareProducts');
+      } else {
+        console.log('emited');
+        this.$root.$emit('now');
+      }
     },
   },
   computed: {
