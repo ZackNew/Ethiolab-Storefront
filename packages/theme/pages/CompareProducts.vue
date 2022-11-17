@@ -291,7 +291,6 @@ export default {
         },
       };
       await axios.post(baseUrl, body, options).then((res) => {
-        console.log('magi results', res.data.data?.products?.items);
         const result = res.data.data?.products?.items;
         const prod = [];
         result?.forEach((element) => {

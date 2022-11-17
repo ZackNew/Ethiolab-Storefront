@@ -65,7 +65,7 @@
         :to="'/compareProduct'"
       >
         <button class="px-6 my-auto text-white font-bold mt-[7%]">
-          compare
+          Compare
         </button>
       </nuxt-link>
     </div>
