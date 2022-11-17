@@ -5,7 +5,7 @@
   "engines": {
     "node": ">=16.14.0",
     "npm": ">=8.3.1",
-    "yarn": ">=1.22.17"
+    "yarn": ">=1.22.17" 
   },
   "scripts": {
     "build": "yarn build:api-client && yarn build:composables && yarn build:theme",
@@ -72,7 +72,7 @@
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
     "express": "^4.18.1",
-    "fs": "^0.0.1",
+    "fs": "^0.0.2",
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
     "node-rsa": "^1.1.1",
