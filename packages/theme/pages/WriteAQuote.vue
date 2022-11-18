@@ -57,37 +57,42 @@
       <SfInput
         label="Your Contact Email"
         v-model="data.fromEmail"
-        class="form__element mt-3 text-white w-9/12"
+        class="form__element mt-3 text-white w-[80%]"
+      />
+      <SfInput
+        label="Company Name"
+        v-model="data.fromName"
+        class="form__element mt-3 text-white w-[80%]"
       />
       <SfInput
         label="Subject"
-        class="form__element w-9/12"
+        class="form__element w-[80%]"
         v-model="data.subject"
       />
 
       <SfInput
         label="Phone Number"
-        class="form__element w-9/12"
+        class="form__element w-[80%]"
         v-model="data.fromPhone"
       />
       <SfInput
         label="First Name"
-        class="form__element w-9/12"
+        class="form__element w-[80%]"
         v-model="data.firstName"
       />
 
       <SfInput
         label="Last Name"
-        class="form__element w-9/12"
+        class="form__element w-[80%]"
         v-model="data.lastName"
       />
       <textarea
         placeholder="Your special quote."
         cols="20"
-        class="form__element tarea text-sm rounded mt-4 text-dark_accent w-9/12"
+        class="form__element tarea text-sm rounded mt-4 text-dark_accent w-[80%]"
         v-model="data.msg"
       ></textarea>
-      <SfButton class="btn rounded bg-secondary w-9/12" @click="send"
+      <SfButton class="btn rounded bg-secondary w-[80%]" @click="send"
         >Send</SfButton
       >
     </div>
@@ -112,6 +117,7 @@ export default {
     const showToast = inject('showToast');
     const { writeQuote } = useQuote();
     const data = ref({
+      fromName: '',
       fromEmail: '',
       subject: '',
       fromPhone: '',
@@ -125,7 +131,7 @@ export default {
       writeQuote({
         isSpecial: true,
         fromEmail: data.value.fromEmail,
-
+        fromName: data.value.fromName,
         subject: data.value.subject,
         fromPhone: data.value.fromPhone,
         msg: data.value.msg,

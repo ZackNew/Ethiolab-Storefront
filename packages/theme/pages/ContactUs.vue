@@ -95,6 +95,7 @@
                   :errorMessage="errors[0]"
                 /> -->
                 <VuePhoneNumberInput
+                  @update="memepls"
                   required
                   color="#000000"
                   valid-color="#3860a7"
@@ -111,7 +112,6 @@
                   :label="$t('Company Name')"
                   name="company_name"
                   class="form__element form__element--half"
-                  required
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"
                 />
@@ -384,13 +384,7 @@ export default {
         customerEmail: form.value.customerEmail,
       });
       showToast('Sent!');
-      form.value.phoneNumber = '';
-      form.value.firstName = '';
-      form.value.lastName = '';
-      form.value.emailAddress = '';
-      form.value.message = '';
-      form.value.customerName = '';
-      form.value.customerEmail = '';
+
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
 
@@ -435,6 +429,11 @@ export default {
       handleFormSubmit,
       errorMessage,
     };
+  },
+  methods: {
+    memepls(payload) {
+      console.log(payload);
+    },
   },
 };
 </script>
