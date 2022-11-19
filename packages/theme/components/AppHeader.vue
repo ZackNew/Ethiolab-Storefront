@@ -293,7 +293,7 @@ export default {
     const unSeenMessagesLen = computed(()=>{
        let len =0;
       messages.value.forEach(message =>{
-        if(!message.isSeen)len++;
+        if(!message.isSeen && !message.isFromAdmin)len++;
       })
       return len
     })

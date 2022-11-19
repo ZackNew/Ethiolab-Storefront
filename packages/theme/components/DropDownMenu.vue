@@ -1,27 +1,6 @@
 <template>
-  <div class="body">
-    <div class="grid grid-rows-6 grid-flow-col">
-      <HeaderSubNavigation
-        :title="navs.label"
-        :link="navs.link"
-        :subnavList="navs.items"
-        v-for="navs in $props.subnavList"
-        :key="navs.id"
-      />
-      <!-- <HeaderSubNavigation :title="navs.label" :subnavList="navs.items" v-for="navs in headerNavigation" :key="navs.id"/> -->
-    </div>
-    <SfBanner
-      class="ad-banner"
-      :title="adSection.title || 'Ad Titile'"
-      :subtitle="adSection.overview || 'Ad Overview'"
-      :description="adSection.description || 'Ad Description'"
-      :buttonText="adSection.buttonText || 'Ad Button'"
-      background=""
-      :image="adImage || '/homepage/bannerA.webp'"
-      link="/c/clinical-laboratory"
-    >
-    </SfBanner>
-  </div>
+  <div></div>
+  
 </template>
 <script>
 import HeaderSubNavigation from './HeaderSubNavigation.vue';
@@ -43,24 +22,7 @@ export default {
     subnavList: Array,
   },
   setup() {
-    // const headerNavigation = [];
-    // const {categories} = useCategory();
-    const { getCms } = useCms();
-    const adSection = computed(() => JSON.parse(getCms.value[3].content));
-    const adImage = computed(() => getCms.value[3].featuredAsset.preview);
-    // const getTree = ()=>{
-    // // categories.value.items.forEach((a)=>{
-    // //     if (a.parent.name === "__root_collection__") {
-    // //         headerNavigation.push(facetGetters.getTree(a));
-    // //    }
-    // // });
-    // };
-    return {
-      // getTree,
-      // headerNavigation,
-      adSection,
-      adImage,
-    };
+        return {}
   },
 };
 </script>
