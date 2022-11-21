@@ -517,7 +517,6 @@ export default {
   },
 
   setup() {
-    const showToast = inject('showToast');
     const { toggleNewsletterModal } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();

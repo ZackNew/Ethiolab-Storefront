@@ -1,5 +1,5 @@
 <template>
-  <div id="cart xxx">
+  <div id="cart">
     <SfSidebar
       v-e2e="'sidebar-menu'"
       :visible="isMobileMenuOpen"

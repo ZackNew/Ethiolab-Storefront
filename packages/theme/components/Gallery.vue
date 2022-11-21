@@ -2,7 +2,7 @@
   <div>
     <div
       class="grid grid-cols-1 md:grid-cols-12 max-h-[550px]"
-      style="overflow-y: clip"
+      style="clip: rect(-100px, -100px, auto, -100px)"
     >
       <div class="md:col-span-9">
         <!-- <img
@@ -28,7 +28,7 @@
               <img
                 :src="image.preview"
                 alt="image"
-                class="min-w-[90px] max-w-[90px] min-h-[90px] max-h-[90px] md:min-w-[120px] md:max-w-[120px] md:min-h-[120px] md:max-h-[120px] object-cover mb-3 mx-auto"
+                class="min-w-[90px] max-w-[90px] min-h-[90px] max-h-[90px] md:min-w-[96%] md:max-w-[96%] md:min-h-[120px] md:max-h-[120px] object-cover mb-3 mx-auto"
                 @click="changeBigImage(image.preview)"
               />
             </div>

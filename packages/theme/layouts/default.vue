@@ -239,7 +239,7 @@ h4 {
   display: none;
 }
 .sf-add-to-cart__button {
-  background-color: #3860a7;
+  background-color: #3860a7 !important;
 }
 .bottomright {
   position: fixed;
@@ -248,5 +248,8 @@ h4 {
 }
 .sf-search-bar__input {
   border: none !important;
+}
+.sf-image {
+  object-fit: contain !important;
 }
 </style>

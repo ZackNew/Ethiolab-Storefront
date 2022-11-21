@@ -29,7 +29,7 @@
                     :src="
                       product.variantList.featuredAsset
                         ? product.variantList.featuredAsset.preview
-                        : '' || product.featuredAsset
+                        : undefined || product.featuredAsset
                         ? product.featuredAsset.preview
                         : ''
                     "

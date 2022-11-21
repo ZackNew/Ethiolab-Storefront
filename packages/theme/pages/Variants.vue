@@ -19,9 +19,7 @@
         </ol>
       </nav>
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-        <div
-          class="md:mr-8 md:col-span-6 max-w[99%] overflow-x-hidden overflow-y-visible"
-        >
+        <div class="md:mr-8 md:col-span-6 max-w[99%]">
           <Gallery
             :images="product.assets"
             :display="product.featuredAsset"
@@ -450,6 +448,7 @@ export default {
       const productVariant = await axios.post(baseUrl, body, options);
       this.product = productVariant?.data?.data?.product;
       console.log('pppppp', this.$route);
+      console.log('pppppp Maji', this.product);
     },
   },
   computed: {

@@ -1,5 +1,12 @@
 <template>
-  <div class="flex body">
+  <div
+    class="flex body"
+    :style="
+      !isDarkMode
+        ? 'background: white !important'
+        : 'background: #182533 !important'
+    "
+  >
     <div class="grid grid-rows-6 grid-cols-4 gap-4 grid-flow-col">
       <HeaderSubNavigation
         :handler="hoverHandler"
@@ -42,6 +49,7 @@
   </div>
 </template>
 <script>
+import { useUiState } from '~/composables';
 import HeaderSubNavigation from './HeaderSubNavigation.vue';
 import { useCms } from '@vue-storefront/vendure';
 import { computed, ref } from '@vue/composition-api';
@@ -67,6 +75,7 @@ export default {
     const { getCms } = useCms();
     let adSection = computed(() => JSON.parse(getCms.value[3].content));
     const adImage = computed(() => getCms.value[3].featuredAsset.preview);
+    const { isDarkMode } = useUiState();
     // const getTree = ()=>{
     // // categories.value.items.forEach((a)=>{
     // //     if (a.parent.name === "__root_collection__") {
@@ -113,6 +122,7 @@ export default {
       hoverOutHandler,
       addVisible,
       showDetail,
+      isDarkMode,
     };
   },
 };
@@ -166,7 +176,7 @@ export default {
   /* display: flex!important; */
   /* flex-direction: row!important; */
   /* flex-wrap: nowrap!important; */
-  background: rgb(255, 255, 255, 1) !important;
+
   height: 100% !important;
 }
 
