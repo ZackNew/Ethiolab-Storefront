@@ -5,7 +5,7 @@
   "engines": {
     "node": ">=16.14.0",
     "npm": ">=8.3.1",
-    "yarn": ">=1.22.17" 
+    "yarn": ">=1.22.17"
   },
   "scripts": {
     "build": "yarn build:api-client && yarn build:composables && yarn build:theme",
@@ -82,6 +82,7 @@
     "vue-slick-carousel": "1.0.6",
     "vue-truncate-collapsed": "^3.0.1",
     "vue-uuid": "^3.0.0",
-    "vuex-persist": "^3.1.3"
+    "vuex-persist": "^3.1.3",
+    "yup": "^0.32.11"
   }
 }

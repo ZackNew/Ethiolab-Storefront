@@ -100,7 +100,7 @@
                   valid-color="#3860a7"
                   default-country-code="ET"
                   :errorMessage="errors[0]"
-                  v-model="form.phone"
+                  v-bind="form.phoneNumber"
                   class="form__element form__element--half form__element--half-even"
                 />
               </ValidationProvider>

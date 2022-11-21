@@ -37,21 +37,21 @@
             Website
           </h1>
         </a>
-        <nuxt-link :to="'#'">
-          <!-- <h1 class="text-sm text-white hover:scale-110 flex font-semibold">
+        <nuxt-link to='/signup'>
+          <h1 class="text-sm text-white hover:scale-110 flex font-semibold">
             <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
             MY ACCOUNT
-          </h1> -->
+          </h1> 
           <!-- <span class=" text-dark_gray text-sm font-bold mb-2">  
               <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
               MY ACCOUNT
-          </span> -->
-                        <select onChange="window.location.href=this.value"  class=" text-sm font-bold text-secondary m-1 ml-4 w-32 h-8 border border-primary bg-white font-semibold rounded">
+          </span>
+                         <select onChange="window.location.href=this.value"  class=" text-sm font-bold text-secondary m-1 ml-4 w-32 h-8 border border-primary bg-white font-semibold rounded">
                                 <option value="#" class=" text-primary text-md font-bold ">MY ACCOUNT</option>
                                 <option value="/signin" class=" text-primary text-md font-bold "> SIGN IN</option>
                                 <option value="/signup" class=" text-primary text-md font-bold ">SIGN UP</option>
 
-                        </select>
+                        </select> -->
         </nuxt-link>
       </div>
     </template>

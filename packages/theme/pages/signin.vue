@@ -1,6 +1,6 @@
 <template>
 <div class="signup text-secondary ">
-    <h1 class="ml-[25%]">Sign In </h1>
+    <h1 class="ml-[15%]">Sign In </h1>
     
     <div class="grid grid-cols-12 gap-4">
 
@@ -44,13 +44,12 @@
             <div class="right">
                 <h4 class="px-10 py-6 uppercase font-bold">Why Register?</h4 >
                     <h4 class="px-10 ">Register today and enjoy these benefits</h4>
-
                     <ul class="mx-16 my-4">
-                        <li>Full account records, order history, invoices & tracking</li>
-                        <li>Wishlist organized saved items to order later</li>
-                        <li>Create & track quotes</li>
-                        <li>Keep a record of payment transactions</li>
-                        <li>Discounts & special packages</li>
+                        <li>✅Full account records, order history, invoices & tracking</li>
+                        <li>✅Wishlist organized saved items to order later</li>
+                        <li>✅Create & track quotes</li>
+                        <li>✅Keep a record of payment transactions</li>
+                        <li>✅Discounts & special packages</li>
 
 
                     </ul>
@@ -112,14 +111,14 @@
     background-color: rgb(81, 180, 16);
 }
 
-ul li::before {
-  content: "✅";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
-  color: red; /* Change the color */
-  font-weight: bold; /* If you want it to be bold */
-  display: inline-block; /* Needed to add space between the bullet and the text */
-  width: 1em; /* Also needed for space (tweak if needed) */
-  margin-right: 1em; /* Also needed for space (tweak if needed) */
-}
+// ul li::before {
+//   content: "✅";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+//   color: red; /* Change the color */
+//   font-weight: bold; /* If you want it to be bold */
+//   display: inline-block; /* Needed to add space between the bullet and the text */
+//   width: 1em; /* Also needed for space (tweak if needed) */
+//   margin-right: 1em; /* Also needed for space (tweak if needed) */
+// }
 .but{
     position:relative;
     -webkit-transition-duration: 0.4s; /* Safari */
