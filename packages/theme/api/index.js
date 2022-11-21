@@ -7,14 +7,14 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.post('/test',  async function (req, res) {
+app.post('/telebirr',  async function (req, res) {
   console.log("request value is ", req.body);
   const body = req.body;
 
    
 
   try{
-      await axios.post("http://196.188.120.3:10443/service-openup/toTradeWebPay",body).then((resp) => {
+      await axios.post("http://196.188.120.3:11443/service-openup/toTradeWebPay",body).then((resp) => {
               console.log("response value is ", resp.data)
               res.status(200).json({data: resp.data});
           })

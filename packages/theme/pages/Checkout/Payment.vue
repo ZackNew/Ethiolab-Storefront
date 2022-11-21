@@ -392,7 +392,7 @@ export default {
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
-                      "timestamp":cart?.value?.code.toString(),
+                      "timestamp":cart?.value?.code?.toString(),
                       "totalAmount":paymentDetail.amount
                     };
 
@@ -442,7 +442,7 @@ export default {
                       "shortCode":"220322",
                       "subject":"Goods Name",
                       "timeoutExpress":"30",
-                      "timestamp":cart?.value?.code.toString(),
+                      "timestamp":cart?.value?.code?.toString(),
                       "totalAmount":paymentDetail.amount
                     };
 
@@ -490,7 +490,7 @@ export default {
 
 
               axios
-                      .post("/api/test", requestMessage)
+                      .post("/api/telebirr", requestMessage)
                       .then(res => {
                         console.log("local response is ", res);
                           if (res.status == 200 && res.data.data.code == 200) {

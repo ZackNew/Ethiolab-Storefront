@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <div id="home" class="">
-      <PopupNotification />
+      <!-- <PopupNotification /> -->
       <div class="">
         <!--        categories-->
         <!-- <div
