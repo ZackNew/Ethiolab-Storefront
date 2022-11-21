@@ -74,7 +74,7 @@ export default {
     // const {categories} = useCategory();
     const { getCms } = useCms();
     let adSection = computed(() => JSON.parse(getCms.value[3].content));
-    const adImage = computed(() => getCms.value[3].featuredAsset.preview);
+    const adImage = computed(() => getCms.value[3].featuredAsset?.preview);
     const { isDarkMode } = useUiState();
     // const getTree = ()=>{
     // // categories.value.items.forEach((a)=>{
