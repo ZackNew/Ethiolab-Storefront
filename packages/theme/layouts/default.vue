@@ -253,4 +253,9 @@ h4 {
 .sf-image {
   object-fit: contain !important;
 }
+.sf-product-card-horizontal__title {
+  color: #3860a7 !important;
+  font-weight: 800 !important;
+  font-size: 170% !important;
+}
 </style>

@@ -349,19 +349,11 @@
                     "
                     :link="localePath(`/v/${productGetters.getSlug(product)}`)"
                   >
-                    <!-- <template #configuration>
-                      <SfProperty
-                        class="desktop-only"
-                        name="Size"
-                        value="XS"
-                        style="margin: 0 0 1rem 0"
-                      />
-                      <SfProperty
-                        class="desktop-only"
-                        name="Color"
-                        value="white"
-                      />
-                    </template> -->
+                    <template v-if="product.options.length > 0" #configuration>
+                      <div v-for="(option, i) in product.options" :key="i">
+                        <p class="text-secondary">{{ option.code }}</p>
+                      </div>
+                    </template>
                     <template #actions>
                       <SfButton
                         v-if="!isInWishlist({ product })"
@@ -814,6 +806,9 @@ export default {
               name
               slug
               description
+              optionGroups{
+                code
+              }
               featuredAsset{
                 preview
               }
@@ -860,6 +855,7 @@ export default {
             price: price,
             slug: product.slug,
             rating: product?.customFields?.reviewRating,
+            options: product?.optionGroups,
           };
           return prod;
         });
