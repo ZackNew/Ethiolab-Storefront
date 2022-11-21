@@ -27,6 +27,7 @@
       </LazyHydrate>
       <CartSidebar />
       <WishlistSidebar />
+      <CategoriesSidebar />
       <LoginModal />
       <Notification />
       <!-- <categories-sidebar /> -->

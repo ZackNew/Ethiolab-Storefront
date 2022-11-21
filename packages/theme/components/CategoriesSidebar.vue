@@ -4,17 +4,13 @@
       v-e2e="'sidebar-menu'"
       :visible="isMobileMenuOpen"
       :title="$t('Categories')"
-      class="sf-sidebar--right overflow-scroll"
+      class="sf-sidebar--right"
       :class="scroll.scroller"
       @close="toggleMobileMenu"
       overlay
     >
-      <template #content-top>
+      <template>
         <CategoriesAccordion />
-        <SfAccordion>
-          <SfAccordionItem header="Brands"> </SfAccordionItem>
-          <SfAccordionItem header="Industries"> </SfAccordionItem>
-        </SfAccordion>
       </template>
     </SfSidebar>
   </div>

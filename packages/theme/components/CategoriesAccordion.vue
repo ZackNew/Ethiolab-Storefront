@@ -16,7 +16,9 @@
                   <nuxt-link
                     :to="'/c/' + category.slug"
                     :class="
-                      category.isCurrent ? 'sidebar--cat-selected cl ' : 'mb-3 cl '
+                      category.isCurrent
+                        ? 'sidebar--cat-selected cl '
+                        : 'mb-3 cl '
                     "
                     @click.native="closeSideNav()"
                   >
@@ -34,7 +36,11 @@
                 <template #label="{ label }">
                   <nuxt-link
                     :to="'/s/' + subCat.slug"
-                    :class="subCat.isCurrent ? 'sidebar--cat-selected cl ' : 'mb-3 cl '"
+                    :class="
+                      subCat.isCurrent
+                        ? 'sidebar--cat-selected cl '
+                        : 'mb-3 cl '
+                    "
                     @click.native="closeSideNav()"
                   >
                     {{ label }}
@@ -46,22 +52,66 @@
         </SfAccordionItem>
       </SfAccordion>
     </div>
+    <SfAccordion>
+      <SfAccordionItem header="Brands">
+        <SfList>
+          <SfListItem v-for="brand in brands" :key="brand.id">
+            <SfMenuItem :label="brand.name">
+              <template #label="{ label }">
+                <nuxt-link
+                  :to="`/b/${label.toLowerCase()}/${brand.id}`"
+                  class="mb-3 cl"
+                  @click.native="closeSideNav()"
+                >
+                  {{ label }}
+                </nuxt-link>
+              </template>
+            </SfMenuItem>
+          </SfListItem>
+        </SfList>
+      </SfAccordionItem>
+      <SfAccordionItem header="Industries">
+        <SfList>
+          <SfListItem v-for="industry in industries" :key="industry.id">
+            <SfMenuItem :label="industry.name">
+              <template #label>
+                <nuxt-link
+                  :to="`/i/${industry.name.toLowerCase()}/${industry.id}`"
+                  class="mb-3 cl"
+                  @click.native="closeSideNav()"
+                >
+                  {{ industry.name }}
+                </nuxt-link>
+              </template>
+            </SfMenuItem>
+          </SfListItem>
+        </SfList>
+      </SfAccordionItem>
+    </SfAccordion>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import { SfAccordion, SfList, SfMenuItem } from '@storefront-ui/vue';
 import { facetGetters, useCategory } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 
 export default {
   name: 'CategoriesAccordion',
+  data() {
+    return {
+      brands: [],
+      industries: [],
+    };
+  },
   components: {
     SfAccordion,
     SfMenuItem,
     SfList,
   },
   created() {
+    this.getBrandAndIndustry();
     this.getTree();
   },
   props: {
@@ -104,17 +154,45 @@ export default {
       getTree,
     };
   },
+  methods: {
+    async getBrandAndIndustry() {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `query{
+          brands{
+            id
+            name
+          }
+          industries{
+            id
+            name
+          }
+        }`,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(baseUrl, body, options).then((res) => {
+        console.log('Maji Mobile brand industry', res);
+        this.brands = res.data.data?.brands;
+        this.industries = res.data.data?.industries;
+      });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .accordion {
-  font-family:var(--font-family--secondary) ;
+  font-family: var(--font-family--secondary);
   --accordion-item-header-font: 10px;
   --accordion-item-header-color: var(--c-secondary);
   --accordion-item-content-font-size: 5px;
 }
-.cl{
-  color:var(--c-secondary)
+.cl {
+  color: var(--c-secondary);
 }
 </style>
