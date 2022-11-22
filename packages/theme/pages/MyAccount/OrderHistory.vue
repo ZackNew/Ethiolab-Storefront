@@ -148,11 +148,31 @@
           >
           <SfTableHeader class="orders__element--right" />
         </SfTableHeading>
+
         <SfTableRow v-for="(quote,index) in quotes" :key="index">
           <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
           <SfTableData>{{ quote.createdAt }}</SfTableData>
           <SfTableData>{{ quote.subject }}</SfTableData>
           <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
+          <SfTableData>
+            <SfButton class="sf-button--text">See Details</SfButton>
+            <SfButton
+              class="sf-button--text red-text"
+              @click="removeQuote(quotes.indexOf(quote))"
+              >Delete</SfButton
+            >
+            <SfButton
+              class="sf-button--text"
+              @click="downloadQuote(quotes.indexOf(quote))"
+              >Download As Pdf</SfButton
+            >
+          </SfTableData>
+        </SfTableRow>
+
+        <!-- <SfTableRow v-for="(quote,index) in quotes" :key="index">
+          <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
+          <SfTableData>{{ quote.createdAt }}</SfTableData>
+          <SfTableData>{{ quote.subject }}</SfTableData>
           <SfTableData>
             <SfButton class="sf-button--text">See Details</SfButton>
             <SfButton
@@ -176,7 +196,7 @@
               >Download As Pdf</SfButton
             >
           </SfTableData>
-        </SfTableRow>
+        </SfTableRow> -->
       </SfTable>
     </SfTab>
 
@@ -208,7 +228,7 @@
             <SfButton
               class="sf-button--text"
               >
-              <a :href="invoice.downloadUrl" target="_blank"> Show As Pdf</a> </SfButton
+              <a :href="document" target="_blank"> Show As Pdf</a> </SfButton
             >
           </SfTableData>
         </SfTableRow>
@@ -254,7 +274,7 @@ export default {
     custom() {
       const link = this.product?.customFields?.youtube_link.split('?v=')[1];
       const document =
-        process.env.GRAPHQL + this.invoices?.customFields?.documentation;
+        process.env.GRAPHQL.split('/shop-api')[0] + this.invoices?.customFields?.documentation;
       return { link: link, document: document };
     },
   },
@@ -296,10 +316,14 @@ export default {
     onMounted(() => {
       let baseUrl = process.env.GRAPHQL_API;
     let pbody = {
-              query: `query getInvoices($email: String!, $password: String!,$firstName: String!,$lastName: String!,$phoneNumber: String!,$fax: String!,
-              $company: String!,$country: String!,$city: String!,$state: String!,$street: String!,$job: String!,$tin: String!) {
+              query: `query getInvoices($customerEmail: String!) {
                        myInvoices(input:{customerEmail: $customerEmail}){
-                         success
+                          items{
+                            invoiceNumber
+                            downloadUrl
+                            createdAt
+                            orderCode
+                          }
                         }
                       }`,
               variables: {
