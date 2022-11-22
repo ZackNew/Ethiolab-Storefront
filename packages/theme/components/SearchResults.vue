@@ -264,7 +264,7 @@ export default {
 }
 .results {
   &--desktop {
-    --scrollable-max-height: 35vh;
+    --scrollable-max-height: 65vh;
   }
   &--mobile {
     display: flex;
