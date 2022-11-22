@@ -549,7 +549,7 @@
                                                     name="categories"
                                                     class="ml-8 t-4 w-6 h-6 mb-4"
                                                     :checked="isIndividual"
-                                                    v-model="form.company"
+                                                    v-model="isIndividual"
                                                     @click="checkIndividual"
                                                     />
 
@@ -785,7 +785,7 @@ import { required, min, digits, email } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend, ErrorMessage } from 'vee-validate';
 import { useVSFContext } from '@vue-storefront/core';
 import VuePhoneNumberInput from 'vue-phone-number-input';
-
+import axios from "axios"
 import {
   SfHeading,
   SfInput,
@@ -843,7 +843,6 @@ export default defineComponent({
         tin: '',
         fax: '',
         company: '',
-        isIndividual: '',
         country: '',
         city: '',
         state: '',
@@ -852,11 +851,64 @@ export default defineComponent({
     });
 
     const handleFormSubmit = () => {
+        if(isIndividual.value){
+            form.value.company = 'Individual'
+        }
         console.log("form submitted is ", form);
         if(form.value.email === form.value.confirmEmail && form.value.password === form.value.confirmPassword){
             console.log("email and password match")
             // if(form.value.company === )
-            showToast("Perfect!")
+            // showToast("Perfect!")
+
+            let baseUrl = process.env.GRAPHQL_API;
+    let pbody = {
+              query: `mutation signUp($email: String!, $password: String!,$firstName: String!,$lastName: String!,$phoneNumber: String!,$fax: String!,$company: String!,
+              $country: String!,$city: String!,$state: String!,$street: String!,$job: String!,$tin: String!) {
+                registerEtechCustomer(input:{email: $email, password: $password,firstName: $firstName,lastName: $lastName,phoneNumber: $phoneNumber,fax: $fax,company: $company,
+                    country: $country,city: $city,state: $state,street: $street,job: $job,tin: $tin}){
+                            success
+                          }
+                      }`,
+              variables: {
+                email: form.value.email,
+                password: form.value.password,
+                firstName: form.value.firstName,
+                lastName: form.value.lastName,
+                phoneNumber: form.value.phoneNumber,
+                fax: form.value.fax,
+                company: form.value.company,
+                country: form.value.country,
+                city: form.value.city,
+                state: form.value.state,
+                street: form.value.street,
+                job: form.value.job,
+                tin: form.value.tin,
+
+              },
+            };
+            let poptions = {
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+              },
+            };
+         axios.post(baseUrl, pbody, poptions).then(res => {
+          console.log("result signup is ", res)
+          if(res.data.data.registerEtechCustomer.success){
+            showToast("Registration Successfull")
+            window.location.href = '/signin';
+          }
+          else {
+            showToast("Registration Failed");
+
+          }
+        //   invoices.value = res.data.data.myInvoices.items;
+        //   console.log("invoices.value is ", invoices.value)
+         }).catch(err => {
+          console.log("error signup is ", err)
+          showToast("Registration Failed");
+
+         })
 
         }
 
@@ -893,7 +945,7 @@ export default defineComponent({
         }
         else{
             isIndividual.value = true;
-            form.value.company = "Individual";
+            // form.value.company = "Individual";
             isOrganization.value = false;
         }
     }
