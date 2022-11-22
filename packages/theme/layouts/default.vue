@@ -27,6 +27,7 @@
       </LazyHydrate>
       <CartSidebar />
       <WishlistSidebar />
+      <CategoriesSidebar />
       <LoginModal />
       <Notification />
       <!-- <categories-sidebar /> -->
@@ -113,6 +114,9 @@ export default {
     });
     return { isDarkMode, isToastVisible, showToast, toastMessage };
   },
+  created(){
+    this.$store.dispatch("companyDetails/setInfo")
+  }
 };
 </script>
 
@@ -239,7 +243,7 @@ h4 {
   display: none;
 }
 .sf-add-to-cart__button {
-  background-color: #3860a7;
+  background-color: #3860a7 !important;
 }
 .bottomright {
   position: fixed;
@@ -248,5 +252,13 @@ h4 {
 }
 .sf-search-bar__input {
   border: none !important;
+}
+.sf-image {
+  object-fit: contain !important;
+}
+.sf-product-card-horizontal__title {
+  color: #3860a7 !important;
+  font-weight: 800 !important;
+  font-size: 170% !important;
 }
 </style>

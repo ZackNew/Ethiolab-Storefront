@@ -46,12 +46,20 @@
               <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
               MY ACCOUNT
           </span> -->
-                        <select onChange="window.location.href=this.value"  class=" text-sm font-bold text-secondary m-1 ml-4 w-32 h-8 border border-primary bg-white font-semibold rounded">
-                                <option value="#" class=" text-primary text-md font-bold ">MY ACCOUNT</option>
-                                <option value="/signin" class=" text-primary text-md font-bold "> SIGN IN</option>
-                                <option value="/signup" class=" text-primary text-md font-bold ">SIGN UP</option>
-
-                        </select>
+          <select
+            onChange="window.location.href=this.value"
+            class="text-sm font-bold text-secondary m-1 ml-4 w-32 h-8 border border-primary bg-white font-semibold rounded"
+          >
+            <option value="#" class="text-primary text-md font-bold">
+              MY ACCOUNT
+            </option>
+            <option value="/signin" class="text-primary text-md font-bold">
+              SIGN IN
+            </option>
+            <option value="/signup" class="text-primary text-md font-bold">
+              SIGN UP
+            </option>
+          </select>
         </nuxt-link>
       </div>
     </template>
@@ -61,8 +69,6 @@
     </template>
   </SfTopBar>
 </template>
-
-
 
 <script>
 import { SfButton, SfTopBar, SfIcon } from '@storefront-ui/vue';
@@ -113,46 +119,45 @@ export default {
     // };
   },
   methods: {
-    async getInfos() {
-      const baseUrl = process.env.GRAPHQL_API;
-      const body = {
-        query: `query{
-          getCompanyInfos{
-            id
-            company_name
-            email
-            phone_number
-            icon{
-              preview
-            }
-            facebook_address
-            instagram_address
-            twitter_address 
-            linkdin_address
-            telegram_address
-            youtube_address
-            longtude
-            latitude
-            location_text  
-          }
-        }`,
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      const compy = await axios.post(baseUrl, body, options);
-      const infos = compy?.data?.data?.getCompanyInfos;
-      console.log('iasdnfaeisbdfia', infos);
-      this.$store.commit('companyDetails/SET_COMPANY_INFORMATION', {
-        company: infos,
-      });
-    },
+    // async getInfos() {
+    //   const baseUrl = process.env.GRAPHQL_API;
+    //   const body = {
+    //     query: `query{
+    //       getCompanyInfos{
+    //         id
+    //         company_name
+    //         email
+    //         phone_number
+    //         icon{
+    //           preview
+    //         }
+    //         facebook_address
+    //         instagram_address
+    //         twitter_address
+    //         linkdin_address
+    //         telegram_address
+    //         youtube_address
+    //         longtude
+    //         latitude
+    //         location_text
+    //       }
+    //     }`,
+    //   };
+    //   const options = {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Access-Control-Allow-Origin': '*',
+    //     },
+    //   };
+    //   const compy = await axios.post(baseUrl, body, options);
+    //   const infos = compy?.data?.data?.getCompanyInfos;
+    //   this.$store.commit('companyDetails/SET_COMPANY_INFORMATION', {
+    //     company: infos,
+    //   });
+    // },
   },
   created() {
-    this.getInfos();
+    // this.getInfos();
   },
 };
 </script>

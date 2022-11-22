@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueCompositionAPI, { reactive, computed } from '@vue/composition-api';
-import * as process from "process";
+import * as process from 'process';
 
 // We need to register it again because of Vue instance instantiation issues
 Vue.use(VueCompositionAPI);
@@ -14,24 +14,27 @@ const state = reactive({
   isFilterSidebarOpen: false,
   isMobileMenuOpen: false,
   isDarkMode: false,
-  isQuoteModalOpen:false,
-  enablePopUp:!(process.browser && localStorage.getItem('popup')),
+  isQuoteModalOpen: false,
+  enablePopUp: !(process.browser && localStorage.getItem('popup')),
 });
 
 const useUiState = () => {
-  const enablePopUp=computed(()=>state.enablePopUp);
-  const togglePopUp=()=>{state.enablePopUp=!state.enablePopUp};
-  const isQuoteModalOpen=computed(()=>state.isQuoteModalOpen);
-  const toggleQuoteModal=()=>{
-    state.isQuoteModalOpen=!state.isQuoteModalOpen;
-  }
-  const isDarkMode = computed(()=>state.isDarkMode);
-  const toggleDarkMode=()=>{
-    state.isDarkMode=!state.isDarkMode;
-  }
+  const enablePopUp = computed(() => state.enablePopUp);
+  const togglePopUp = () => {
+    state.enablePopUp = !state.enablePopUp;
+  };
+  const isQuoteModalOpen = computed(() => state.isQuoteModalOpen);
+  const toggleQuoteModal = () => {
+    state.isQuoteModalOpen = !state.isQuoteModalOpen;
+  };
+  const isDarkMode = computed(() => state.isDarkMode);
+  const toggleDarkMode = () => {
+    state.isDarkMode = !state.isDarkMode;
+  };
   const isMobileMenuOpen = computed(() => state.isMobileMenuOpen);
   const toggleMobileMenu = () => {
     state.isMobileMenuOpen = !state.isMobileMenuOpen;
+    console.log('mobile toogled', state.isMobileMenuOpen);
   };
 
   const isCartSidebarOpen = computed(() => state.isCartSidebarOpen);
@@ -91,7 +94,7 @@ const useUiState = () => {
     changeToCategoryGridView,
     changeToCategoryListView,
     toggleFilterSidebar,
-    toggleMobileMenu
+    toggleMobileMenu,
   };
 };
 

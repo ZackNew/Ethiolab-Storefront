@@ -7,7 +7,7 @@
     <!-- <p>{{breadcrumbs}}</p> -->
     <div>
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-        <div class="md:col-span-6 max-w[99%] overflow-hidden">
+        <div class="md:col-span-6 max-w[99%]">
           <Gallery
             :images="
               Svariant.assets.length > 0 ? Svariant.assets : prImages || []
