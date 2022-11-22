@@ -58,7 +58,7 @@ import Toast from '~/components/Toast.vue';
 import { computed, ref, watchEffect, provide } from '@vue/composition-api';
 export default {
   name: 'DefaultLayout',
-  middleware: 'themeChecker',
+  // middleware: 'themeChecker',
 
   components: {
     ToastVue,
@@ -114,6 +114,9 @@ export default {
     });
     return { isDarkMode, isToastVisible, showToast, toastMessage };
   },
+  created(){
+    this.$store.dispatch("companyDetails/setInfo")
+  }
 };
 </script>
 
