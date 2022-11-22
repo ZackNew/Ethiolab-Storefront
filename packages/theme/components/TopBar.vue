@@ -30,36 +30,28 @@
             {{ phoneNumber }}
           </h1>
         </a>
-        <a href="https://www.ethiolab.et/">
+        <a href="https://www.ethiolab.et/" target="_blank">
           <h1
             class="bg-white text-secondary px-2 py-0.5 rounded text-sm hover:scale-110"
           >
-            Website
+            Find Us
           </h1>
         </a>
-        <nuxt-link :to="'#'">
-          <!-- <h1 class="text-sm text-white hover:scale-110 flex font-semibold">
+        <nuxt-link to='/signin'>
+          <p class="text-sm text-white flex font-semibold">
             <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
             MY ACCOUNT
-          </h1> -->
+          </p> 
           <!-- <span class=" text-dark_gray text-sm font-bold mb-2">  
               <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
               MY ACCOUNT
-          </span> -->
-          <select
-            onChange="window.location.href=this.value"
-            class="text-sm font-bold text-secondary m-1 ml-4 w-32 h-8 border border-primary bg-white font-semibold rounded"
-          >
-            <option value="#" class="text-primary text-md font-bold">
-              MY ACCOUNT
-            </option>
-            <option value="/signin" class="text-primary text-md font-bold">
-              SIGN IN
-            </option>
-            <option value="/signup" class="text-primary text-md font-bold">
-              SIGN UP
-            </option>
-          </select>
+          </span>
+                         <select onChange="window.location.href=this.value"  class=" text-sm font-bold text-secondary m-1 ml-4 w-32 h-8 border border-primary bg-white font-semibold rounded">
+                                <option value="#" class=" text-primary text-md font-bold ">MY ACCOUNT</option>
+                                <option value="/signin" class=" text-primary text-md font-bold "> SIGN IN</option>
+                                <option value="/signup" class=" text-primary text-md font-bold ">SIGN UP</option>
+
+                        </select> -->
         </nuxt-link>
       </div>
     </template>
