@@ -95,13 +95,13 @@
                   :errorMessage="errors[0]"
                 /> -->
                 <VuePhoneNumberInput
-                  @update="memepls"
+                  @update="phoneInputHandler"
                   required
                   color="#000000"
+                  v-model="formPhoneNumber"
                   valid-color="#3860a7"
                   default-country-code="ET"
                   :errorMessage="errors[0]"
-                  v-model="form.phone"
                   class="form__element form__element--half form__element--half-even"
                 />
               </ValidationProvider>
@@ -324,7 +324,7 @@ export default {
     },
     phoneNumbers() {
       const phone =
-        this.$store.state.companyDetails.companyInformation?.phone_number.split(
+        this.$store.state.companyDetails.companyInformation?.phone_number?.split(
           ';'
         );
       return phone;
@@ -344,7 +344,7 @@ export default {
     },
     emails() {
       const email =
-        this.$store.state.companyDetails.companyInformation?.email.split(';');
+        this.$store.state.companyDetails.companyInformation?.email?.split(';');
       return email;
     },
     companyName() {
@@ -430,9 +430,16 @@ export default {
       errorMessage,
     };
   },
+  data() {
+    return {
+      formPhoneNumber: '',
+    };
+  },
   methods: {
-    memepls(payload) {
-      console.log(payload);
+    phoneInputHandler(payload) {
+      this.formPhoneNumber = payload?.formattedNumber;
+      this.form.phoneNumber = this.formPhoneNumber;
+      console.log('Maji phone', this.form.phoneNumber);
     },
   },
 };

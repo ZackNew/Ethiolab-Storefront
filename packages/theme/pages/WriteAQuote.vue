@@ -69,12 +69,20 @@
         class="form__element w-[80%]"
         v-model="data.subject"
       />
-
-      <SfInput
+      <VuePhoneNumberInput
+        @update="phoneInputHandler"
+        required
+        color="#000000"
+        v-model="formPhoneNumber"
+        valid-color="#3860a7"
+        default-country-code="ET"
+        class="form__element form__element--half form__element--half-even my-3 w-[80%]"
+      />
+      <!-- <SfInput
         label="Phone Number"
         class="form__element w-[80%]"
         v-model="data.fromPhone"
-      />
+      /> -->
       <SfInput
         label="First Name"
         class="form__element w-[80%]"
@@ -100,8 +108,9 @@
 </template>
 
 <script>
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { useUiState } from '~/composables';
-//import {}
 import { SfTabs, SfInput, SfButton, SfTextarea } from '@storefront-ui/vue';
 import { useUser, userGetters, useQuote } from '@vue-storefront/vendure';
 import { ref, inject } from '@vue/composition-api';
@@ -111,6 +120,18 @@ export default {
     SfInput,
     SfButton,
     SfTextarea,
+    VuePhoneNumberInput,
+  },
+  data() {
+    return {
+      formPhoneNumber: '',
+    };
+  },
+  methods: {
+    phoneInputHandler(payload) {
+      this.formPhoneNumber = payload?.formattedNumber;
+      this.data.fromPhone = this.formPhoneNumber;
+    },
   },
   setup() {
     const { isDarkMode } = useUiState();
