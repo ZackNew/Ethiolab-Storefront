@@ -154,7 +154,7 @@ export default defineComponent({
 
         const form = ref({});
         const { register, login, loading, error: userError } = useUser();
-
+        const showToast = inject('showToast');
  
         const error = reactive({
         login: null,
@@ -176,12 +176,15 @@ export default defineComponent({
             if (hasUserErrors) {
                 error.login = userError.value.login?.message;
                 error.register = userError.value.register?.message;
+                showToast("login failed")
                 return;
             }
             // if (isSubscribe.value === true) {
             // }
             // isSubscribe.value ? onSubscribe() : '';
             // toggleLoginModal();
+            showToast("login successfull")
+
             window.location.href = '/';
         };
 

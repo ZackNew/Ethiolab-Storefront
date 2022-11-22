@@ -9,6 +9,11 @@
         <p class="text-secondary text-xl">{{ this.$props.title }}</p>
       </nuxt-link>
       <div
+        :style="
+          !isDarkMode
+            ? 'background: white !important'
+            : 'background: #182533 !important'
+        "
         class="grid grid-rows-4 grid-cols-2 gap-6 overlay no-scrollbar"
         v-if="subnavList.length > 0"
       >
@@ -24,6 +29,7 @@
   </div>
 </template>
 <script>
+import { useUiState } from '~/composables';
 import anymatch from 'anymatch';
 
 export default {
@@ -40,9 +46,9 @@ export default {
     id: anymatch,
   },
   setup() {
-    let hoverHandler = () => {};
+    const { isDarkMode } = useUiState();
     return {
-      // hoverHandler
+      isDarkMode,
     };
   },
 };

@@ -1,8 +1,8 @@
 <template>
   <client-only>
-    <div id="home" class="">
+    <div id="home">
       <!-- <PopupNotification /> -->
-      <div class="">
+      <div>
         <!--        categories-->
         <!-- <div
           class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container max-h-screen overflow-auto"
@@ -517,7 +517,6 @@ export default {
   },
 
   setup() {
-    const showToast = inject('showToast');
     const { toggleNewsletterModal } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();

@@ -29,7 +29,7 @@
                     :src="
                       product.variantList.featuredAsset
                         ? product.variantList.featuredAsset.preview
-                        : '' || product.featuredAsset
+                        : undefined || product.featuredAsset
                         ? product.featuredAsset.preview
                         : ''
                     "
@@ -215,6 +215,10 @@ export default {
   },
   created() {
     this.getItemsToCompare();
+    this.$root.$on('now', () => {
+      console.log('recieved');
+      this.getItemsToCompare();
+    });
   },
   components: {
     SfRating,

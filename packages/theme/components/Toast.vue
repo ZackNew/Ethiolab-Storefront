@@ -22,13 +22,16 @@ export default {
 <style lang="scss" scoped>
 #container {
   position: sticky;
-  left: 50%;
-  bottom: 10%;
-  background: rgba(10, 10, 10, 0.4);
+  max-width: 50%;
+  margin: auto;
+  bottom: 15%;
+  background: rgba(0, 80, 149, 0.8);
   color: white;
   padding-right: 0%;
   font-weight: bold;
   transition: opacity 5s ease-in-out;
+  border-radius: 5px;
+  font-size: 1.3rem;
   //  box-shadow: black
   //  border-radius: 10%;
   #toast-body {

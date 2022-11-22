@@ -1,125 +1,124 @@
 <template>
   <div>
-    <RequestAQuote/>
-     <div id="cart">
-    <SfSidebar
-      v-e2e="'sidebar-cart'"
-      :visible="isCartSidebarOpen"
-      :title="$t('My Cart')"
-      class="sf-sidebar--right"
-      @close="toggleCartSidebar"
-    >
-
-      <template #content-top>
-      <div style="display:flex; justify-content: space-between;">
-        <SfProperty
-          v-if="totalItems"
-          class="sf-property--large cart-summary desktop-only"
-          :name="$t('Total items')"
-          :value="totalItems"
-        />
-        </div>
-      </template>
-      <transition name="sf-fade" mode="out-in">
-        <div v-if="totalItems" key="my-cart" class="my-cart">
-          <div class="collected-product-list">
-            <transition-group name="sf-fade" tag="div">
-              <SfCollectedProduct
-                v-for="product in products"
-                v-e2e="'collected-product'"
-                :key="cartGetters.getItemSku(product)"
-                :image="cartGetters.getItemImage(product)"
-                :title="cartGetters.getItemName(product)"
-                :regular-price="cartGetters.getItemPrice(product).regular.toLocaleString() + ' ETB'"
-                :stock="99999"
-                @click:remove="removeItem({ product })"
-                class="collected-product"
-              >
-                <template #configuration>
-                  <div class="collected-product__properties">
-                    <SfProperty
-                      v-for="attribute in cartGetters.getItemOptions(product)"
-                      :key="`${attribute.label}-${attribute.value}`"
-                      :name="attribute.label"
-                      :value="attribute.value"
-                    />
-                  </div>
-                </template>
-                <template #input>
-                  <div class="sf-collected-product__quantity-wrapper">
-                    <SfQuantitySelector
-                      :disabled="loading"
-                      :qty="cartGetters.getItemQty(product)"
-                      class="sf-collected-product__quantity-selector"
-                      @input="updateItemQty({ product, quantity: $event })"
-                    />
-                  </div>
-                </template>
-              </SfCollectedProduct>
-            </transition-group>
-          </div>
-        </div>
-        <div v-else key="empty-cart" class="empty-cart">
-          <div class="empty-cart__banner">
-            <SfImage
-              :alt="$t('Empty bag')"
-              class="empty-cart__image"
-              src="/icons/empty-cart.svg"
-            />
-            <SfHeading
-              :title="$t('Your cart is empty')"
-              :level="2"
-              class="empty-cart__heading"
-              :description="$t('Empty')"
-            />
-          </div>
-        </div>
-      </transition>
-      <template #content-bottom>
-
-        <transition name="sf-fade">
-          <div v-if="totalItems">
+    <RequestAQuote />
+    <div id="cart">
+      <SfSidebar
+        v-e2e="'sidebar-cart'"
+        :visible="isCartSidebarOpen"
+        :title="$t('My Cart')"
+        class="sf-sidebar--right"
+        @close="toggleCartSidebar"
+      >
+        <template #content-top>
+          <div style="display: flex; justify-content: space-between">
             <SfProperty
-              :name="$t('Subtotal price')"
-              class="sf-property--full-width sf-property--large my-cart__total-price"
-            >
-              <template #value>
-                <SfPrice
-                  :regular="totals.subtotal.toLocaleString() + ' ETB'"
-                />
-              </template>
-            </SfProperty>
-            <nuxt-link :to="localePath({ name: 'customer' })">
-              <SfButton
-                v-e2e="'go-to-checkout-btn'"
-                class="sf-button--full-width color-secondary"
-                @click="toggleCartSidebar"
-              >
-                {{ $t('Go to checkout') }}
-              </SfButton>
-            </nuxt-link>
-            <SfButton
-                class="sf-button--full-width color-secondary mt-3"
-                      @click="toggleQuoteDialog"
-            >Request a Quote</SfButton>
+              v-if="totalItems"
+              class="sf-property--large cart-summary desktop-only"
+              :name="$t('Total items')"
+              :value="totalItems"
+            />
           </div>
-          <div v-else>
-            <SfButton
-              class="sf-button--full-width color-primary"
-              @click="toggleCartSidebar"
-            >{{ $t('Go back shopping') }}</SfButton
-            >
+        </template>
+        <transition name="sf-fade" mode="out-in">
+          <div v-if="totalItems" key="my-cart" class="my-cart">
+            <div class="collected-product-list">
+              <transition-group name="sf-fade" tag="div">
+                <SfCollectedProduct
+                  v-for="product in products"
+                  v-e2e="'collected-product'"
+                  :key="cartGetters.getItemSku(product)"
+                  :image="cartGetters.getItemImage(product)"
+                  :title="cartGetters.getItemName(product)"
+                  :regular-price="
+                    cartGetters.getItemPrice(product).regular.toLocaleString() +
+                    ' ETB'
+                  "
+                  :stock="99999"
+                  @click:remove="removeItem({ product })"
+                  class="collected-product"
+                >
+                  <template #configuration>
+                    <div class="collected-product__properties">
+                      <SfProperty
+                        v-for="attribute in cartGetters.getItemOptions(product)"
+                        :key="`${attribute.label}-${attribute.value}`"
+                        :name="attribute.label"
+                        :value="attribute.value"
+                      />
+                    </div>
+                  </template>
+                  <template #input>
+                    <div class="sf-collected-product__quantity-wrapper">
+                      <SfQuantitySelector
+                        :disabled="loading"
+                        :qty="cartGetters.getItemQty(product)"
+                        class="sf-collected-product__quantity-selector"
+                        @input="updateItemQty({ product, quantity: $event })"
+                      />
+                    </div>
+                  </template>
+                </SfCollectedProduct>
+              </transition-group>
+            </div>
+          </div>
+          <div v-else key="empty-cart" class="empty-cart">
+            <div class="empty-cart__banner">
+              <SfImage
+                :alt="$t('Empty bag')"
+                class="empty-cart__image"
+                src="/icons/empty-cart.svg"
+              />
+              <SfHeading
+                :title="$t('Your cart is empty')"
+                :level="2"
+                class="empty-cart__heading"
+                :description="$t('Empty')"
+              />
+            </div>
           </div>
         </transition>
-
-      </template>
-
-    </SfSidebar>
+        <template #content-bottom>
+          <transition name="sf-fade">
+            <div v-if="totalItems">
+              <SfProperty
+                :name="$t('Subtotal price')"
+                class="sf-property--full-width sf-property--large my-cart__total-price"
+              >
+                <template #value>
+                  <SfPrice
+                    :regular="totals.subtotal.toLocaleString() + ' ETB'"
+                  />
+                </template>
+              </SfProperty>
+              <nuxt-link :to="localePath({ name: 'customer' })">
+                <SfButton
+                  v-e2e="'go-to-checkout-btn'"
+                  class="sf-button--full-width color-secondary"
+                  @click="toggleCartSidebar"
+                >
+                  {{ $t('Go to checkout') }}
+                </SfButton>
+              </nuxt-link>
+              <SfButton
+                class="sf-button--full-width color-secondary mt-3"
+                @click="toggleQuoteDialog"
+                >Request a Quote</SfButton
+              >
+            </div>
+            <div v-else>
+              <SfButton
+                class="sf-button--full-width color-primary"
+                @click="toggleCartSidebar"
+                >{{ $t('Go back shopping') }}</SfButton
+              >
+            </div>
+          </transition>
+        </template>
+      </SfSidebar>
     </div>
   </div>
 </template>
 <script>
-
 import {
   SfSidebar,
   SfHeading,
@@ -130,13 +129,13 @@ import {
   SfCollectedProduct,
   SfImage,
   SfQuantitySelector,
-  SfInput
+  SfInput,
 } from '@storefront-ui/vue';
 import { computed, watchEffect } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { ref } from '@vue/composition-api';
-import RequestAQuote from "~/components/RequestAQuote";
+import RequestAQuote from '~/components/RequestAQuote';
 export default {
   name: 'Cart',
   components: {
@@ -150,19 +149,20 @@ export default {
     SfPrice,
     SfCollectedProduct,
     SfImage,
-    SfQuantitySelector
+    SfQuantitySelector,
   },
   setup() {
-    const { isCartSidebarOpen, toggleQuoteModal,toggleCartSidebar } = useUiState();
+    const { isCartSidebarOpen, toggleQuoteModal, toggleCartSidebar } =
+      useUiState();
     const { cart, removeItem, updateItemQty, loading } = useCart();
     const { isAuthenticated } = useUser();
     const products = computed(() => cartGetters.getItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
-    const toggleQuoteDialog = ()=>{
+    const toggleQuoteDialog = () => {
       toggleCartSidebar();
       toggleQuoteModal();
-    }
+    };
     return {
       toggleQuoteDialog,
       loading,
@@ -174,19 +174,18 @@ export default {
       toggleCartSidebar,
       totals,
       totalItems,
-      cartGetters
+      cartGetters,
     };
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-#t-area > textarea{
+#t-area > textarea {
   height: 20%;
   width: 100%;
   max-width: 100%;
   min-width: 100%;
-
 }
 #cart {
   --sidebar-z-index: 3;

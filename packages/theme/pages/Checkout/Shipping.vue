@@ -63,7 +63,7 @@
           <SfInput
             v-e2e="'shipping-state'"
             v-model="form.state"
-            :label="$t('Region')"
+            :label="'Region'"
             name="state"
             class="form__element form__element--half form__element--half-even"
           />
@@ -74,7 +74,7 @@
           v-slot="{ errors }"
           slim
         >
-          <SfInput
+          <!-- <SfInput
             v-e2e="'shipping-phone'"
             v-model="form.phone"
             :label="$t('Phone number')"
@@ -83,6 +83,16 @@
             required
             :valid="!errors[0]"
             :errorMessage="errors[0]"
+          /> -->
+          <VuePhoneNumberInput
+            @update="phoneInputHandler"
+            required
+            color="#000000"
+            v-model="formPhoneNumber"
+            valid-color="#3860a7"
+            default-country-code="ET"
+            :errorMessage="errors[0]"
+            class="form__element"
           />
         </ValidationProvider>
       </div>
@@ -121,6 +131,8 @@
 </template>
 
 <script>
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { SfHeading, SfInput, SfButton, SfSelect } from '@storefront-ui/vue';
 import { ref, onMounted } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
@@ -161,8 +173,20 @@ export default {
     SfSelect,
     ValidationProvider,
     ValidationObserver,
+    VuePhoneNumberInput,
     VsfShippingProvider: () =>
       import('~/components/Checkout/VsfShippingProvider'),
+  },
+  data() {
+    return {
+      formPhoneNumber: '',
+    };
+  },
+  methods: {
+    phoneInputHandler(payload) {
+      this.formPhoneNumber = payload?.formattedNumber;
+      this.form.phone = this.formPhoneNumber;
+    },
   },
   setup() {
     const isFormSubmitted = ref(false);

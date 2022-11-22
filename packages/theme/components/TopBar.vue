@@ -30,18 +30,18 @@
             {{ phoneNumber }}
           </h1>
         </a>
-        <a href="https://www.ethiolab.et/">
+        <a href="https://www.ethiolab.et/" target="_blank">
           <h1
             class="bg-white text-secondary px-2 py-0.5 rounded text-sm hover:scale-110"
           >
-            Website
+            Find Us
           </h1>
         </a>
-        <nuxt-link to='/signup'>
-          <h1 class="text-sm text-white hover:scale-110 flex font-semibold">
+        <nuxt-link to='/signin'>
+          <p class="text-sm text-white flex font-semibold">
             <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
             MY ACCOUNT
-          </h1> 
+          </p> 
           <!-- <span class=" text-dark_gray text-sm font-bold mb-2">  
               <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
               MY ACCOUNT
@@ -61,8 +61,6 @@
     </template>
   </SfTopBar>
 </template>
-
-
 
 <script>
 import { SfButton, SfTopBar, SfIcon } from '@storefront-ui/vue';
@@ -113,46 +111,45 @@ export default {
     // };
   },
   methods: {
-    async getInfos() {
-      const baseUrl = process.env.GRAPHQL_API;
-      const body = {
-        query: `query{
-          getCompanyInfos{
-            id
-            company_name
-            email
-            phone_number
-            icon{
-              preview
-            }
-            facebook_address
-            instagram_address
-            twitter_address 
-            linkdin_address
-            telegram_address
-            youtube_address
-            longtude
-            latitude
-            location_text  
-          }
-        }`,
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      const compy = await axios.post(baseUrl, body, options);
-      const infos = compy?.data?.data?.getCompanyInfos;
-      console.log('iasdnfaeisbdfia', infos);
-      this.$store.commit('companyDetails/SET_COMPANY_INFORMATION', {
-        company: infos,
-      });
-    },
+    // async getInfos() {
+    //   const baseUrl = process.env.GRAPHQL_API;
+    //   const body = {
+    //     query: `query{
+    //       getCompanyInfos{
+    //         id
+    //         company_name
+    //         email
+    //         phone_number
+    //         icon{
+    //           preview
+    //         }
+    //         facebook_address
+    //         instagram_address
+    //         twitter_address
+    //         linkdin_address
+    //         telegram_address
+    //         youtube_address
+    //         longtude
+    //         latitude
+    //         location_text
+    //       }
+    //     }`,
+    //   };
+    //   const options = {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Access-Control-Allow-Origin': '*',
+    //     },
+    //   };
+    //   const compy = await axios.post(baseUrl, body, options);
+    //   const infos = compy?.data?.data?.getCompanyInfos;
+    //   this.$store.commit('companyDetails/SET_COMPANY_INFORMATION', {
+    //     company: infos,
+    //   });
+    // },
   },
   created() {
-    this.getInfos();
+    // this.getInfos();
   },
 };
 </script>

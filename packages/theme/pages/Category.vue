@@ -349,19 +349,11 @@
                     "
                     :link="localePath(`/v/${productGetters.getSlug(product)}`)"
                   >
-                    <!-- <template #configuration>
-                      <SfProperty
-                        class="desktop-only"
-                        name="Size"
-                        value="XS"
-                        style="margin: 0 0 1rem 0"
-                      />
-                      <SfProperty
-                        class="desktop-only"
-                        name="Color"
-                        value="white"
-                      />
-                    </template> -->
+                    <template v-if="product.options.length > 0" #configuration>
+                      <div v-for="(option, i) in product.options" :key="i">
+                        <p class="text-secondary">{{ option.code }}</p>
+                      </div>
+                    </template>
                     <template #actions>
                       <SfButton
                         v-if="!isInWishlist({ product })"
@@ -378,6 +370,19 @@
                         @click="removeItemFromWishlist({ product })"
                       >
                         {{ $t('Remove from wishlist') }}
+                      </SfButton>
+                      <SfButton
+                        class="sf-button--text desktop-only"
+                        style="margin: 0 0 1rem auto; display: block"
+                        @click="
+                          addToCompareList(
+                            product._variantId,
+                            product._id,
+                            productGetters.getCoverImage(product)
+                          )
+                        "
+                      >
+                        {{ $t('Add to compare list') }}
                       </SfButton>
                     </template>
                   </SfProductCardHorizontal>
@@ -560,7 +565,7 @@ import {
   SfColor,
   SfProperty,
 } from '@storefront-ui/vue';
-import { ref, computed, onMounted } from '@vue/composition-api';
+import { ref, computed, onMounted, inject } from '@vue/composition-api';
 import ProductCard from '~/components/ProductCard.vue';
 import {
   useCategory,
@@ -583,6 +588,7 @@ export default {
   name: 'Category',
   transition: 'fade',
   setup(props, context) {
+    const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
     const productQuantity = ref({});
     const itemQuantity = ref(1);
@@ -605,6 +611,9 @@ export default {
       facetGetters.getAgnosticSearchResult(result.value)
     );
 
+    const toastShower = (message) => {
+      showToast(message);
+    };
     const sortBy = computed(() =>
       facetGetters.getSortOptions(searchResult.value)
     );
@@ -748,6 +757,7 @@ export default {
       itemQuantity,
       rawCategoryTree,
       lastSlug,
+      toastShower,
     };
   },
   components: {
@@ -796,6 +806,9 @@ export default {
               name
               slug
               description
+              optionGroups{
+                code
+              }
               featuredAsset{
                 preview
               }
@@ -842,6 +855,7 @@ export default {
             price: price,
             slug: product.slug,
             rating: product?.customFields?.reviewRating,
+            options: product?.optionGroups,
           };
           return prod;
         });
@@ -938,6 +952,42 @@ export default {
           return 0;
         }
       };
+    },
+    addToCompareList(vid, pid, img) {
+      console.log('Maji Maji', vid, pid, img);
+      if (
+        this.$store.state.compareList?.productsToCompare?.length < 5 &&
+        pid !== '' &&
+        vid !== ''
+      ) {
+        console.log('passed the first one');
+        console.log(
+          'djsfada',
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) => e?.productID === pid && e?.variantID === vid
+          ).length
+        );
+        if (
+          this.$store.state.compareList?.productsToCompare?.filter(
+            (e) => e?.productID === pid && e?.variantID === vid
+          ).length === 0
+        ) {
+          console.log('passed the second one');
+          this.toastShower('Added to Compare List');
+          this.$store.dispatch('compareList/addToCompareList', {
+            product: {
+              productID: pid,
+              variantID: vid,
+              image: img,
+            },
+          });
+        } else {
+          this.toastShower('Item is already in the list');
+        }
+      } else {
+        this.toastShower('Limit to Compare Products reached');
+        console.log('limit reached');
+      }
     },
   },
   created() {
@@ -1210,7 +1260,7 @@ export default {
       margin: var(--spacer-xl) 0 0 0;
     }
     &__product-card-horizontal {
-      margin: var(--spacer-lg) 0;
+      margin: var(--spacer-sm) 0;
     }
     &__product-card {
       flex: 1 1 25%;

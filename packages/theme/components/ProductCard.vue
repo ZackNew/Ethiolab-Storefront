@@ -477,7 +477,12 @@ export default {
         this.id !== '' &&
         this.variantId !== ''
       ) {
-        console.log('passed the first one');
+        console.log(
+          'passed the first one',
+          this.id,
+          this.variantId,
+          this.image
+        );
         console.log(
           'djsfada',
           this.$store.state.compareList?.productsToCompare?.filter(
@@ -703,5 +708,8 @@ export default {
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
+}
+.sf-image {
+  object-fit: contain !important;
 }
 </style>

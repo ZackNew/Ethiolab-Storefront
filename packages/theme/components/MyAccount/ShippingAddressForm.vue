@@ -113,11 +113,7 @@
           />
         </ValidationProvider>
       </div>
-      <ValidationProvider
-        rules="required"
-        v-slot="{ errors }"
-        class="form__element"
-      >
+      <ValidationProvider rules="required" class="form__element">
         <!-- <SfInput
           type="number"
           v-model="form.phone"
@@ -132,8 +128,8 @@
           color="#000000"
           valid-color="#3860a7"
           default-country-code="ET"
-          :errorMessage="errors[0]"
-          v-model="form.phone"
+          @update="phoneInputHandler"
+          v-model="formPhoneNumber"
         />
       </ValidationProvider>
       <SfCheckbox
@@ -209,7 +205,17 @@ export default {
       required: true,
     },
   },
-
+  data() {
+    return {
+      formPhoneNumber: '',
+    };
+  },
+  methods: {
+    phoneInputHandler(payload) {
+      this.formPhoneNumber = payload?.formattedNumber;
+      this.form.phone = this.formPhoneNumber;
+    },
+  },
   setup(props, { emit }) {
     const form = reactive({
       id: props.address.id,

@@ -95,12 +95,13 @@
                   :errorMessage="errors[0]"
                 /> -->
                 <VuePhoneNumberInput
+                  @update="phoneInputHandler"
                   required
                   color="#000000"
+                  v-model="formPhoneNumber"
                   valid-color="#3860a7"
                   default-country-code="ET"
                   :errorMessage="errors[0]"
-                  v-bind="form.phoneNumber"
                   class="form__element form__element--half form__element--half-even"
                 />
               </ValidationProvider>
@@ -111,7 +112,6 @@
                   :label="$t('Company Name')"
                   name="company_name"
                   class="form__element form__element--half"
-                  required
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"
                 />
@@ -324,7 +324,7 @@ export default {
     },
     phoneNumbers() {
       const phone =
-        this.$store.state.companyDetails.companyInformation?.phone_number.split(
+        this.$store.state.companyDetails.companyInformation?.phone_number?.split(
           ';'
         );
       return phone;
@@ -344,7 +344,7 @@ export default {
     },
     emails() {
       const email =
-        this.$store.state.companyDetails.companyInformation?.email.split(';');
+        this.$store.state.companyDetails.companyInformation?.email?.split(';');
       return email;
     },
     companyName() {
@@ -384,13 +384,7 @@ export default {
         customerEmail: form.value.customerEmail,
       });
       showToast('Sent!');
-      form.value.phoneNumber = '';
-      form.value.firstName = '';
-      form.value.lastName = '';
-      form.value.emailAddress = '';
-      form.value.message = '';
-      form.value.customerName = '';
-      form.value.customerEmail = '';
+
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
 
@@ -435,6 +429,18 @@ export default {
       handleFormSubmit,
       errorMessage,
     };
+  },
+  data() {
+    return {
+      formPhoneNumber: '',
+    };
+  },
+  methods: {
+    phoneInputHandler(payload) {
+      this.formPhoneNumber = payload?.formattedNumber;
+      this.form.phoneNumber = this.formPhoneNumber;
+      console.log('Maji phone', this.form.phoneNumber);
+    },
   },
 };
 </script>

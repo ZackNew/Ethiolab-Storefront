@@ -206,7 +206,7 @@ export default {
   padding: 0 var(--spacer-sm);
   @include for-desktop {
     // max-width: 12400px;
-    width: 100%;
+    width: 91%;
     padding: 0;
     margin: 0 auto;
   }
@@ -215,7 +215,7 @@ export default {
   position: absolute;
   z-index: 3;
   height: 100%;
-  width: 1250px;
+  width: 1140px;
   --mega-menu-column-header-margin: var(--spacer-sm) 0 var(--spacer-xl);
   --mega-menu-content-padding: 0;
   --mega-menu-height: auto;
