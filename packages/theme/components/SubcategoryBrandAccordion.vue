@@ -396,6 +396,5 @@ export default {
   }
 }
 .vsa-list {
-  --vsa-bg-color: rgba(255, 0, 0, 1);
 }
 </style>
