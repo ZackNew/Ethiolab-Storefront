@@ -49,7 +49,7 @@
       class="form rounded-md p-5 pl-10 w-7/12 text-3xl"
       :class="isDarkMode ? 'bg-dark_accent' : 'bg-light_accent'"
     >
-      Write A Special Quote
+      <h2 class="text-secondary">Write A Special Quote</h2>
       <div class="notice">
         NOTICE* If you didn't find what you want on this website, you can
         mention it here.
