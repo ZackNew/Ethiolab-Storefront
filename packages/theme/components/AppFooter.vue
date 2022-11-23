@@ -243,11 +243,11 @@ export default {
 .sf-footer__menu-item,
 .sf-footer-column__title,
 .footer-list-item {
-  background-color: inherit;
+  background-color: inherit !important;
 }
 .footer {
   margin-bottom: 3.75rem;
-  background-color: var(--c-footer);
+  background-color: var(--c-footer) !important;
   border-top-color: var(--c-bg-primary);
   @include for-desktop {
     margin-bottom: 0;
@@ -274,7 +274,7 @@ export default {
     font-weight: bold !important;
   }
   // justify-content: space-between;
-  background-color: inherit;
+  background-color: inherit !important;
 }
 .sf-footer {
   // background-color: inherit;

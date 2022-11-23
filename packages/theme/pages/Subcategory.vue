@@ -3,38 +3,34 @@
     <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <span class="text-black"> 
-
-               <nuxt-link
-            class="sf-breadcrumbs__breadcrumb font-exrathin"
-            to="/"
-          >
-            Home
-          </nuxt-link>
+          <span class="text-black">
+            <nuxt-link class="sf-breadcrumbs__breadcrumb font-exrathin" to="/">
+              Home
+            </nuxt-link>
           </span>
-       
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <span class="text-black"> 
-                <nuxt-link
-          class="sf-breadcrumbs__breadcrumb  font-exrathin"
-            :to="`/c/${parent}`"
-          >
-            {{ parent }}
-          </nuxt-link>
+          <span class="text-black">
+            <nuxt-link
+              class="sf-breadcrumbs__breadcrumb font-exrathin"
+              :to="`/c/${parent}`"
+            >
+              {{ parent }}
+            </nuxt-link>
           </span>
-      
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
-          <p class="text-secondary ">{{ categoryName }}</p>
+          <p class="text-secondary">{{ categoryName }}</p>
         </li>
       </ol>
     </nav>
     <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
       <div
-        :style="!isDarkMode ? '' : 'background-color: #182533'"
-        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] h-3/4 hidden md:block mr-4 bg-white border-white"
+        :style="
+          !isDarkMode ? 'background-color: white' : 'background-color: #182533'
+        "
+        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] h-3/4 hidden md:block mr-4 border-white"
       >
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion

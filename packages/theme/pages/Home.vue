@@ -478,7 +478,6 @@ export default {
           return prod;
         });
         this.bestSellings = produ;
-        console.log('sdadfasdfasdf', this.bestSellings);
       });
     },
     async getTestimonials() {
@@ -517,6 +516,7 @@ export default {
   },
 
   setup() {
+    const showToast = inject('showToast');
     const { toggleNewsletterModal } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
@@ -528,6 +528,8 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+
+    console.log('this maji', products);
 
     const { writeQuote, load, myQuotes } = useQuote();
 
@@ -555,8 +557,6 @@ export default {
     });
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
 
-    console.log('Magi cms', getCms.value);
-    console.log('Magi big Sale', bigSale);
     const onSubscribe = ({ emailAddress, event }) => {
       let baseUrl = process.env.GRAPHQL_API;
       const body = {

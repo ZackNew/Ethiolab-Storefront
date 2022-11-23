@@ -4,15 +4,14 @@
       <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
-            <span class="text-black "> 
+            <span class="text-black">
               <nuxt-link
-              class="sf-breadcrumbs__breadcrumb font-exrathin"
-              to="/"
-            >
-              Home
-            </nuxt-link>
+                class="sf-breadcrumbs__breadcrumb font-exrathin"
+                to="/"
+              >
+                Home
+              </nuxt-link>
             </span>
-            
           </li>
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
             <p class="text-secondary">
@@ -364,7 +363,7 @@
                         style="margin: 0 0 1rem auto; display: block"
                         @click="addItemToWishlist({ product })"
                       >
-                        {{ $t('Save for later') }}
+                        {{ $t('Add to Wishlist') }}
                       </SfButton>
                       <SfButton
                         v-else
@@ -397,7 +396,7 @@
             Show More +
           </button>
 
-          <LazyHydrate on-interaction>
+          <!-- <LazyHydrate on-interaction>
             <SfPagination
               v-if="!loading"
               class="products__pagination desktop-only"
@@ -431,7 +430,7 @@
                 </SfSelectOption>
               </SfSelect>
             </LazyHydrate>
-          </div>
+          </div> -->
 
           <h3
             v-if="bestSellings.length !== 0"
@@ -1361,6 +1360,6 @@ export default {
   position: -webkit-sticky;
   position: sticky;
   top: 0px;
-  z-index: 2;
+  z-index: 1;
 }
 </style>
