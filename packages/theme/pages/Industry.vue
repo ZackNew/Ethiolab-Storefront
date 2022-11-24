@@ -25,7 +25,12 @@
           </ol>
         </nav>
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block bg-white border-white"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white"
+          :style="
+            !isDarkMode
+              ? 'background-color: white !important'
+              : 'background-color: #182533 !important'
+          "
         >
           <div v-if="products.length > 0" class="py-[2%]">
             <SubcategoryBrandAccordion
@@ -204,7 +209,7 @@ import {
 } from '@storefront-ui/vue';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import { useCms } from '@vue-storefront/vendure';
-import { useUiHelpers } from '~/composables';
+import { useUiHelpers, useUiState } from '~/composables';
 import axios from 'axios';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
 
@@ -520,6 +525,7 @@ export default {
     },
   },
   setup(props, { root }) {
+    const { isDarkMode } = useUiState();
     const th = useUiHelpers();
     const { getCms } = useCms();
     const adSection = computed(() =>
@@ -531,6 +537,7 @@ export default {
       th,
       adSection,
       adImage,
+      isDarkMode,
     };
   },
   components: {

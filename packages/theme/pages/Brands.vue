@@ -24,7 +24,12 @@
         </nav>
 
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block bg-white border-white"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white"
+          :style="
+            !isDarkMode
+              ? 'background-color: white'
+              : 'background-color: #182533'
+          "
         >
           <div v-if="products.length > 0" class="py-[2%]">
             <SubcategoryBrandAccordion

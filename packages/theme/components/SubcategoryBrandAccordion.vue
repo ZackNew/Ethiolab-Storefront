@@ -30,41 +30,27 @@
         @input="sendChanges"
       />
     </div>
-    <!-- filter options -->
-    <!-- <SfAccordion class="px-2" open="all" showChevron>
-      <SfAccordionItem v-if="categories" header="category" class="sf-accordion">
-        <ul class="ml-3" v-for="category in categories" :key="category">
-          <li class="mb-3">
-            <a href="# ">{{'df'+ category }}</a>
-            <input
-              v-on:click="
-                (e) => {
-                  checkOne(e, filterClicked);
-                }
-              "
-              type="checkbox"
-              name="categories"
-              class="mr-4"
-              :checked="false"
-              :id="category"
-            />
-            {{ category }}
-          </li>
-        </ul>
-      </SfAccordionItem>
-    </SfAccordion> -->
 
-    <vsa-list
+    <!-- <vsa-list
       :autoCollapse="false"
       :initActive="true"
       :heading="true"
       v-if="categories"
       class="w-[100%]"
+      :style="
+        !isDarkMode ? 'background-color: white' : 'background-color: #182533'
+      "
     >
-      <!-- Here you can use v-for to loop through items  -->
       <vsa-item class="w-[100%]">
-        <vsa-heading class="border-none">
-          <div><!-- {{filter.filter_title}}  -->Category</div>
+        <vsa-heading
+          class="border-none"
+          :style="
+            !isDarkMode
+              ? 'background-color: white'
+              : 'background-color: #182533'
+          "
+        >
+          <div>Category</div>
 
           <div>
             <svg
@@ -85,7 +71,16 @@
         </vsa-heading>
 
         <vsa-content>
-          <ul class="ul_list" v-for="category in categories" :key="category">
+          <ul
+            class="ul_list"
+            v-for="category in categories"
+            :key="category"
+            :style="
+              !isDarkMode
+                ? 'background-color: white'
+                : 'background-color: #182533'
+            "
+          >
             <li class="ml-3">
               <input
                 v-on:click="
@@ -104,82 +99,56 @@
           </ul>
         </vsa-content>
       </vsa-item>
-    </vsa-list>
+    </vsa-list> -->
 
-    <!-- <SfAccordion
-      v-for="filter in filters"
-      :key="$t(filter.filter_title)"
-      class="mb-2 px-2 accordion-bg"
-      open="all"
-      showChevron
-    >
-      <SfAccordionItem
-        v-if="filter.filter_options.length !== 0"
-        :header="filter.filter_title"
-        class="sf-accordion -mb-4 bg-primary"
-      >
-        <ul v-for="list in filter.filter_options" :key="list">
-          <li class="ml-3">
-            <input
-              v-on:click="filterClicked"
-              type="checkbox"
-              class="mr-4"
-              :checked="false"
-              :id="list"
-            />
-            {{ list }}
-          </li>
-        </ul>
-      </SfAccordionItem>
-    </SfAccordion> -->
-
-    <vsa-list :autoCollapse="false" :initActive="true" :heading="true">
-      <!-- Here you can use v-for to loop through items  -->
-      <vsa-item v-for="filter in filters" :key="$t(filter.filter_title)">
-        <vsa-heading class="border-none bg-[pink]">
-          <div>
-            {{ filter.filter_title }}
-          </div>
-
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+    <div class="ml-2">
+      <Accordion v-if="categories" class="mb-[6%]">
+      <template v-slot:title>
+        <span>Category</span>
+      </template>
+      <template v-slot:content>
+        <ul
+            class="ul_list mt-[2%]"
+            v-for="category in categories"
+            :key="category"
+            :style="
+              !isDarkMode
+                ? 'background-color: white'
+                : 'background-color: #182533'
+            "
+          >
+            <li class="ml-3 text-secondary">
+              <input
+                v-on:click="
+                  (e) => {
+                    checkOne(e, filterClicked);
+                  }
+                "
+                type="checkbox"
+                name="categories"
+                class="mr-4"
+                :checked="false"
+                :id="category"
               />
-            </svg>
-          </div>
-          <!-- <table>
-                    <tr >
-                      <td  colspan="4">{{filter.filter_title}} </td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+              {{ category }}
+            </li>
+          </ul>
+      </template>
+    </Accordion>
 
-                      <td colspan="1">   
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                    </svg>
-              </td>
-                    </tr>
-                  </table> -->
-        </vsa-heading>
-
-        <vsa-content>
-          <ul
-            class="ul_list"
+    <div v-for="filter in filters" :key="filter.filter_title">
+      <Accordion class="mb-[6%]" v-if="filter.filter_options.length > 0">
+        <template v-slot:title>
+          <span>{{ filter.filter_title }}</span>
+        </template>
+        <template v-slot:content>
+          <p>
+            <ul
+            class="ul_list mt-[2%]"
             v-for="(list, i) in filter.filter_options"
             :key="i"
           >
-            <li class="ml-3">
+            <li class="mx-3 flex">
               <input
                 v-on:click="filterClicked"
                 type="checkbox"
@@ -187,14 +156,16 @@
                 :checked="false"
                 :id="list"
               />
-              {{ list }}
+              <h4 class="text-secondary">{{ list }}</h4>
             </li>
           </ul>
-        </vsa-content>
-      </vsa-item>
-    </vsa-list>
+          </p>
+        </template>
+      </Accordion>
+    </div>
+    </div>
 
-    <p class="text-xl mx-2 mt-2 mb-2 text-secondary mb-4">Price Range</p>
+    <h4 class="text-xl mx-2 mt-2 mb-6 text-secondary font-bold">Price Range</h4>
     <ul class="ul_list">
       <div v-for="(list, i) in range" :key="i">
         <li class="ml-3 text-secondary text-lg">
@@ -231,6 +202,7 @@
 </template>
 
 <script>
+import { useUiHelpers, useUiState } from '~/composables';
 import { SfAccordion, SfSearchBar } from '@storefront-ui/vue';
 import {
   VsaList,
@@ -240,6 +212,7 @@ import {
   VsaIcon,
 } from 'vue-simple-accordion';
 import 'vue-simple-accordion/dist/vue-simple-accordion.css';
+import Accordion from './Accordion.vue';
 
 export default {
   name: 'SubcategoryBrandAccordion',
@@ -251,6 +224,7 @@ export default {
     VsaHeading,
     VsaContent,
     VsaIcon,
+    Accordion,
   },
   data() {
     return {
@@ -306,7 +280,12 @@ export default {
       this.$emit('filterClicked', event.target);
     },
   },
-  created() {},
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
+    };
+  },
 };
 </script>
 
@@ -394,7 +373,5 @@ export default {
       border-bottom: var(--vsa-border);
     }
   }
-}
-.vsa-list {
 }
 </style>
