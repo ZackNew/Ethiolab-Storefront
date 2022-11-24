@@ -49,7 +49,7 @@
 
                                             <ValidationProvider
                                                 name="password"
-                                                rules="required|min:6"
+                                                rules="required|min:4"
                                                v-slot="{ errors }"
                                                 slim
                                             > 

@@ -228,7 +228,7 @@
             <SfButton
               class="sf-button--text"
               >
-              <a :href="document" target="_blank"> Show As Pdf</a> </SfButton
+              <a :href="inv_download + invoice.downloadUrl" target="_blank"> Show As Pdf</a> </SfButton
             >
           </SfTableData>
         </SfTableRow>
@@ -274,9 +274,16 @@ export default {
     custom() {
       const link = this.product?.customFields?.youtube_link.split('?v=')[1];
       const document =
-        process.env.GRAPHQL.split('/shop-api')[0] + this.invoices?.customFields?.documentation;
+        process.env.GRAPHQL.split('/shop-api')[0];
       return { link: link, document: document };
     },
+  },
+
+  computed: {
+    inv_download(){
+    return process.env.GRAPHQL.split('/shop-api')[0];
+
+    }
   },
 
   setup() {

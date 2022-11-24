@@ -515,8 +515,8 @@
 
                                                     <ValidationProvider
                                                 name="state"
-                                                rules="required|min:2"
-                                               v-slot="{ errors }"
+                                             
+                                        
                                                 slim
                                             > 
                                             <SfInput
@@ -524,8 +524,7 @@
                                                 :placeholder ="$t('state')"
                                                 name="state"
                                                 class="sf-input--filled"
-                                                :valid="!errors[0]"
-                                                :errorMessage="errors[0]"  
+                                           
                                                 />
                                             </ValidationProvider>
 
@@ -665,8 +664,7 @@
 
                                             <ValidationProvider
                                                 name="fax"
-                                                rules="required|min:2"
-                                               v-slot="{ errors }"
+                                        
                                                 slim
                                             > 
                                             <SfInput
@@ -674,8 +672,7 @@
                                                 :placeholder ="$t('fax')"
                                                 name="fax"
                                                 class="sf-input--filled"
-                                                :valid="!errors[0]"
-                                                :errorMessage="errors[0]"  
+                                         
                                                 />
                                             </ValidationProvider>
                                         </div>
