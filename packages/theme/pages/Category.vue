@@ -230,8 +230,8 @@
                 :key="i"
               > -->
               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 mb-5">
-                <div v-for="subCat in subcategories" :key="subCat.slug">
-                  <div class="">
+                <div v-for="(subCat, i) in subcategories" :key="subCat.slug">
+                  <div v-if="i < limitSub">
                     <nuxt-link :to="`/s/${subCat.slug}`">
                       <img
                         :src="subCat.image"
@@ -248,6 +248,13 @@
                     </div>
                   </div>
                 </div>
+                <button
+                  v-if="subcategories.length > limitSub"
+                  class="text-secondary text-left"
+                  @click="increaseSubLimit"
+                >
+                  Show More +
+                </button>
                 <!-- </div> -->
                 <!-- <div :v-for="sub in value.items">
                                   <div class="max-w-sm rouned overflow-hidden shadow-xl">
@@ -392,7 +399,11 @@
               </div>
             </transition-group>
           </div>
-          <button class="text-secondary" @click="increaseLimit">
+          <button
+            v-if="allProducts.length > limit"
+            class="text-secondary"
+            @click="increaseLimit"
+          >
             Show More +
           </button>
 
@@ -787,6 +798,9 @@ export default {
     increaseLimit() {
       this.limit += 6;
     },
+    increaseSubLimit() {
+      this.limitSub += 6;
+    },
     async getActiveCategory() {
       const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
@@ -999,6 +1013,7 @@ export default {
   data() {
     return {
       limit: 6,
+      limitSub: 6,
       allSortBy: 'Select Sorting',
       allProducts: [],
       bestSellings: [],
@@ -1016,7 +1031,7 @@ export default {
           image: sub.featuredAsset?.preview || '/categories/empty_image.png',
         };
       });
-      return subs;
+      return subs || [];
     },
   },
 };

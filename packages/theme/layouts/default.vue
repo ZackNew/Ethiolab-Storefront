@@ -114,9 +114,9 @@ export default {
     });
     return { isDarkMode, isToastVisible, showToast, toastMessage };
   },
-  created(){
-    this.$store.dispatch("companyDetails/setInfo")
-  }
+  created() {
+    this.$store.dispatch('companyDetails/setInfo');
+  },
 };
 </script>
 

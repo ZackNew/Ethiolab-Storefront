@@ -3,8 +3,8 @@
     <div class="grid grid-cols-11 mt-6">
       <!-- Side filter search or an Ad -->
 
-      <div class="col-span-3 h-[90%] sticky">
-        <nav class="sf-breadcrumbs" aria-label="breadcrumbs">
+      <div class="col-span-3 h-[90%]">
+        <nav class="sf-breadcrumbs sticky mb-2" aria-label="breadcrumbs">
           <ol class="sf-breadcrumbs__list">
             <li class="sf-breadcrumbs__list-item" :aria-current="false">
               <nuxt-link
@@ -15,8 +15,8 @@
               </nuxt-link>
             </li>
             <!-- <li class="sf-breadcrumbs__list-item" :aria-current="false">
-  {{ 'Industries' }}
-  </li> -->
+                {{ 'Industries' }}
+                </li> -->
             <li class="sf-breadcrumbs__list-item" :aria-current="false">
               <p class="text-secondary font-bold">
                 {{ industryName }}
@@ -25,7 +25,7 @@
           </ol>
         </nav>
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white sticky max-h-[35%] overflow-auto top-[5%] no-scrollbar"
           :style="
             !isDarkMode
               ? 'background-color: white !important'
@@ -42,36 +42,36 @@
               :categories="categoriesList"
             />
             <!-- <p class="text-xl mx-4 mt-2 mb-2">Price Range</p>
-  <div class="flex mx-4">
-  <input
-  v-model="low"
-  class="rounded border border-primary w-12"
-  type="number"
-  placeholder="min..."
-  />
-  <p class="mx-2">to</p>
-  <input
-  v-model="high"
-  class="rounded border border-primary w-12"
-  type="number"
-  placeholder="max..."
-  />
-  </div> -->
+              <div class="flex mx-4">
+              <input
+              v-model="low"
+              class="rounded border border-primary w-12"
+              type="number"
+              placeholder="min..."
+              />
+              <p class="mx-2">to</p>
+              <input
+              v-model="high"
+              class="rounded border border-primary w-12"
+              type="number"
+              placeholder="max..."
+              />
+              </div> -->
           </div>
           <!-- <div class="p-3">
-  <LazyHydrate>
-  <Banner
-  :title="adSection.title || 'AD Title'"
-  :subtitle="adSection.overview || 'AD Overview'"
-  :description="adSection.description || 'AD Description'"
-  :buttonText="adSection.buttonText || 'AD Button'"
-  background=""
-  :image="adImage || '/homepage/bannerA.webp'"
-  link="/c/clinical-laboratory"
-  >
-  </Banner>
-  </LazyHydrate>
-  </div> -->
+              <LazyHydrate>
+              <Banner
+              :title="adSection.title || 'AD Title'"
+              :subtitle="adSection.overview || 'AD Overview'"
+              :description="adSection.description || 'AD Description'"
+              :buttonText="adSection.buttonText || 'AD Button'"
+              background=""
+              :image="adImage || '/homepage/bannerA.webp'"
+              link="/c/clinical-laboratory"
+              >
+              </Banner>
+              </LazyHydrate>
+              </div> -->
         </div>
       </div>
       <!-- Subcategory name and description -->
@@ -169,27 +169,19 @@
           <!-- Products -->
           <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
             <div
-              :style="
-                !isDarkMode
-                  ? 'background-color: #ffffff'
-                  : 'background-color: #182533'
-              "
-              class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
-              v-for="product in filteredSearchedProducts"
+              v-for="(product, i) in filteredSearchedProducts"
               :key="product.id"
             >
-              <!-- <p>{{product.name}}</p> -->
-
-              <SubcatBrandCard :product="product" />
+              <SubcatBrandCard v-if="i < limit" :product="product" />
             </div>
           </div>
-
-          <!-- <div
-  style="background-color: #e2e5de"
-  class="card mr-16 ml-4 mt-5 w-auto h-12"
-  >
-  <p class="float-left pt-3 ml-3">Showing 1-10 of 10</p>
-  </div> -->
+          <button
+            v-if="filteredSearchedProducts.length > limit"
+            class="text-secondary text-left"
+            @click="increaseLimit"
+          >
+            Show More +
+          </button>
         </div>
       </div>
     </div>
@@ -220,6 +212,7 @@ export default {
   },
   data() {
     return {
+      limit: 12,
       low: '',
       high: '',
       A_Z: null,
@@ -380,6 +373,9 @@ export default {
       this.A_Z = !this.A_Z;
       this.Z_A = !this.Z_A;
       this.open = !this.open;
+    },
+    increaseLimit() {
+      this.limit += 8;
     },
     generateSortFn(prop, reverse) {
       return function (a, b) {
@@ -566,11 +562,17 @@ export default {
 .sticky {
   display: block;
   position: -webkit-sticky;
-  position: relative;
+  position: sticky;
   top: 0px;
-  z-index: 2;
+  z-index: 1;
 }
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
 }
 </style>

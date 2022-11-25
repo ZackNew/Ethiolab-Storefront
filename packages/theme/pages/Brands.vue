@@ -3,9 +3,9 @@
     <div class="grid grid-cols-11 mt-6">
       <!-- Side filter search or an Ad -->
 
-      <div class="col-span-3 h-[90%] sticky">
+      <div class="col-span-3 h-[90%]">
         <!-- {{overflow-auto no-scrollbar}} -->
-        <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+        <nav class="sf-breadcrumbs m-4 sticky" aria-label="breadcrumbs">
           <ol class="sf-breadcrumbs__list">
             <li class="sf-breadcrumbs__list-item" :aria-current="false">
               <nuxt-link
@@ -24,7 +24,7 @@
         </nav>
 
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white max-h-[43rem] overflow-auto top-[5%] no-scrollbar sticky"
           :style="
             !isDarkMode
               ? 'background-color: white'
@@ -160,20 +160,20 @@
           <!-- Products -->
           <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
             <div
-              :style="
-                !isDarkMode
-                  ? 'background-color: #ffffff'
-                  : 'background-color: #182533'
-              "
-              class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
-              v-for="product in filteredSearchedProducts"
+              v-for="(product, i) in filteredSearchedProducts"
               :key="product.id"
             >
               <!-- <p>{{product.name}}</p> -->
-
-              <SubcatBrandCard :product="product" />
+              <SubcatBrandCard v-if="i < limit" :product="product" />
             </div>
           </div>
+          <button
+            v-if="filteredSearchedProducts.length > limit"
+            class="text-secondary text-left"
+            @click="increaseLimit"
+          >
+            Show More +
+          </button>
           <!-- <div
   style="background-color: #e2e5de"
   class="card mr-16 ml-4 mt-5 w-auto h-12"
@@ -209,6 +209,7 @@ export default {
   },
   data() {
     return {
+      limit: 12,
       clickedCategory: '',
       open: false,
       A_Z: null,
@@ -355,6 +356,9 @@ export default {
     minInput(event) {
       this.low = event;
     },
+    increaseLimit() {
+      this.limit += 8;
+    },
     filterProducts(event) {
       if (event.checked) {
         this.filtersClicked.push(event.id);
@@ -462,14 +466,20 @@ export default {
   }
 }
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
 }
 
 .sticky {
   display: block;
   position: -webkit-sticky;
-  position: relative;
+  position: sticky;
   top: 0px;
-  z-index: 2;
+  z-index: 1;
 }
 </style>
