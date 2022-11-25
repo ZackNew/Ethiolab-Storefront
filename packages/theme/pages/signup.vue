@@ -79,7 +79,7 @@
 
                                             <ValidationProvider
                                                 name="password"
-                                                rules="required|min:6"
+                                                rules="required|min:6|max:12:regex:/\.(js|ts)$/"
                                                v-slot="{ errors }"
                                                 slim
                                             > 
@@ -778,7 +778,7 @@
 <script>
 import { defineComponent } from '@vue/composition-api'
 import { ref, onMounted, inject } from '@vue/composition-api';
-import { required, min, digits, email } from 'vee-validate/dist/rules';
+import { required, min, digits, email, regex, max } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend, ErrorMessage } from 'vee-validate';
 import { useVSFContext } from '@vue-storefront/core';
 import VuePhoneNumberInput from 'vue-phone-number-input';
@@ -800,6 +800,11 @@ extend('min', {
   ...min,
   message: 'The field should have at least {length} characters',
 });
+
+extend('max', {
+  ...max,
+  message: 'The field should have at most {length} characters',
+});
 extend('digits', {
   ...digits,
   message: 'Please provide a valid phone number',
@@ -808,6 +813,12 @@ extend('digits', {
 extend('email', {
   ...email,
   message: 'Invalid email',
+});
+
+
+extend('regex', {
+  ...regex,
+  message: 'Invalid regex',
 });
 export default defineComponent({
     components: {
