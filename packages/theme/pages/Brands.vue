@@ -9,14 +9,14 @@
           <ol class="sf-breadcrumbs__list">
             <li class="sf-breadcrumbs__list-item" :aria-current="false">
               <nuxt-link
-                class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+                class="sf-breadcrumbs__breadcrumb font-exrathin"
                 to="/"
               >
                 Home
               </nuxt-link>
             </li>
             <li class="sf-breadcrumbs__list-item" :aria-current="false">
-              <p class="text-secondary font-bold">
+              <p class="text-secondary">
                 {{ brand.name }}
               </p>
             </li>
