@@ -1,6 +1,9 @@
 <template>
   <div id="comparision">
-    <div class="p-[2%] bg-white border border-secondary">
+    <div v-if="loading" class="mt-48">
+      <Loading />
+    </div>
+    <div v-else class="p-[2%] bg-white border border-secondary">
       <h3 class="font-bold text-secondary">Horizontal Matrix</h3>
       <hr />
 
@@ -202,6 +205,7 @@
 </template>
 
 <script>
+import Loading from '~/components/Loading.vue';
 import axios from 'axios';
 import truncate from 'vue-truncate-collapsed';
 import { SfRating } from '@storefront-ui/vue';
@@ -210,19 +214,22 @@ export default {
   name: 'compareProduct',
   data() {
     return {
+      loading: false,
       productsToCompare: [],
     };
   },
   created() {
+    this.loading = true;
     this.getItemsToCompare();
     this.$root.$on('now', () => {
-      console.log('recieved');
+      this.loading = true;
       this.getItemsToCompare();
     });
   },
   components: {
     SfRating,
     truncate,
+    Loading,
   },
   methods: {
     async getItemsToCompare() {
@@ -322,6 +329,7 @@ export default {
         this.productsToCompare = prod;
         console.log('magi2 results', this.productsToCompare);
       });
+      this.loading = false;
     },
   },
 };

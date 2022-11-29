@@ -124,6 +124,7 @@
       </div>
     </div>
     <SearchResults
+      :loading="loading"
       :result="results"
       :visible="isSearchOpen"
       @close="closeSearch"
@@ -228,7 +229,7 @@ export default {
             }
             variants{
               id
-              price
+              priceWithTax
             }
             collections{
               id
@@ -258,9 +259,9 @@ export default {
             });
             const image = [String(result?.featuredAsset?.preview)];
             const price =
-              String(result?.variants[0]?.price).slice(0, -2) +
+              String(result?.variants[0]?.priceWithTax).slice(0, -2) +
               '.' +
-              String(result?.variants[0]?.price).slice(-2);
+              String(result?.variants[0]?.priceWithTax).slice(-2);
 
             const prod = {
               _id: result.id,
@@ -280,14 +281,17 @@ export default {
           });
           this.results = results;
         });
+        this.loading = false;
+        console.log('maji load2', this.loading);
       }
-    }, 2000),
+    }, 1000),
   },
   directives: { clickOutside },
   data() {
     return {
       searchText: '',
       results: null,
+      loading: null,
     };
   },
   setup(props, { root }) {

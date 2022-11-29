@@ -4,7 +4,15 @@
       <!-- Side filter search or an Ad -->
 
       <div class="col-span-3 h-[90%]">
-        <nav class="sf-breadcrumbs sticky mb-2" aria-label="breadcrumbs">
+        <nav
+          class="sf-breadcrumbs sticky mb-2"
+          aria-label="breadcrumbs"
+          :style="
+            !isDarkMode
+              ? 'background-color: #f0f7fc !important'
+              : 'background-color: #0e1621 !important'
+          "
+        >
           <ol class="sf-breadcrumbs__list">
             <li class="sf-breadcrumbs__list-item" :aria-current="false">
               <nuxt-link
@@ -25,7 +33,7 @@
           </ol>
         </nav>
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white sticky max-h-[35%] overflow-auto top-[5%] no-scrollbar"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white sticky max-h-[52%] overflow-auto top-[5%] no-scrollbar"
           :style="
             !isDarkMode
               ? 'background-color: white !important'
@@ -81,7 +89,14 @@
         >
           {{ industryName }}
         </h2>
-        <div class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40">
+        <div
+          :style="
+            !isDarkMode
+              ? 'background-color: #EfEfEf; color: #3860a7'
+              : 'background-color: #182533; color: white'
+          "
+          class="rounded-md shadow-lg my-4 flex mr-5 max-h-40"
+        >
           <img
             class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
             :src="industryImg || '/categories/empty_image.png'"
@@ -89,13 +104,14 @@
           />
           <div class="rounded w-full overflow-auto no-scrollbar">
             <p
-              class="py-4 ml-4 mr-4 text-secondary text-thin"
+              :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
+              class="py-4 ml-4 mr-4 text-thin"
               v-html="description"
             ></p>
           </div>
         </div>
         <div
-          v-if="products.length === 0"
+          v-if="products.length === 0 && !loading"
           class="border border-light_accent shadow-md bg-white rounded-lg"
         >
           <div class="justify-end">
@@ -107,8 +123,18 @@
           </div>
         </div>
         <div v-else>
-          <div class="flex card mr-5 w-auto h-12 bg-light_accent">
-            <p class="pt-3 mx-3">
+          <div
+            class="flex card mr-5 w-auto h-12"
+            :style="
+              !isDarkMode
+                ? 'background-color: #f0f7fc'
+                : 'background-color: #182533'
+            "
+          >
+            <p
+              class="pt-3 mx-3"
+              :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
+            >
               Number of Results | {{ Object.keys(products).length }}
             </p>
             <div class="ml-8">
@@ -166,6 +192,9 @@
               </div>
             </div>
           </div>
+          <div v-if="loading" class="mt-[7%]">
+            <Loading />
+          </div>
           <!-- Products -->
           <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
             <div
@@ -192,6 +221,7 @@
 import Banner from '~/components/Banner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { computed, ref } from '@vue/composition-api';
+import Loading from '~/components/Loading.vue';
 import {
   SfRange,
   SfAccordion,
@@ -212,6 +242,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       limit: 12,
       low: '',
       high: '',
@@ -407,18 +438,18 @@ export default {
       // const slug = this.$route.params.slug_1;
       let body2 = {
         query: `query getIndustryById($id:ID){
-  industry(id:$id){
-  name
-  description
-  icon{
-  preview
-  }
-  products{
-  id
-  }
-  id
-  }
-  }`,
+          industry(id:$id){
+          name
+          description
+          icon{
+          preview
+          }
+          products{
+          id
+          }
+          id
+          }
+          }`,
         variables: {
           id: this.$route.params.id,
         },
@@ -426,23 +457,23 @@ export default {
 
       const body = {
         query: `query getCategoryBySlug($slug: String!){
-  collection(slug: $slug){
-  parent{
-  name
-  }
-  name
-  featuredAsset{
-  preview
-  }
-  description
-  filters{
-  args{
-  name
-  value
-  }
-  }
-  }
-  }`,
+          collection(slug: $slug){
+          parent{
+          name
+          }
+          name
+          featuredAsset{
+          preview
+          }
+          description
+          filters{
+          args{
+          name
+          value
+          }
+          }
+          }
+          }`,
         variables: {
           // slug: slug,
         },
@@ -468,36 +499,36 @@ export default {
             });
             let pbody = {
               query: `query getProductById($in: [String!]) {
-  products(options: {filter: {id: {in: $in}}}) {
-  items {
-  name
-  id
-  slug
-  description
-  collections{
-  name
-  }
-  variants {
-  price
-  priceWithTax
-  }
-  featuredAsset{
-  preview
-  }
-  facetValues{
-  name
-  }
-  customFields{
-  industry{
-  name
-  }
-  brand{
-  name
-  }
-  }
-  }
-  }
-  }`,
+                products(options: {filter: {id: {in: $in}}}) {
+                items {
+                name
+                id
+                slug
+                description
+                collections{
+                name
+                }
+                variants {
+                price
+                priceWithTax
+                }
+                featuredAsset{
+                preview
+                }
+                facetValues{
+                name
+                }
+                customFields{
+                industry{
+                name
+                }
+                brand{
+                name
+                }
+                }
+                }
+                }
+                }`,
               variables: {
                 in: productId,
               },
@@ -517,6 +548,7 @@ export default {
           this.industryName = res.data?.data?.industry?.name;
           this.industryImg = res.data?.data?.industry?.icon?.preview;
           this.description = res.data?.data?.industry?.description;
+          this.loading = false;
         });
     },
   },
@@ -546,6 +578,7 @@ export default {
     SubcatBrandCard,
     SfRange,
     Banner,
+    Loading,
   },
 };
 </script>

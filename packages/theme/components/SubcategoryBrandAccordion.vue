@@ -8,8 +8,13 @@
         class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
       >
         <svg
+          :style="
+            !isDarkMode
+              ? 'color: black !important'
+              : 'color: white !important'
+          "
           aria-hidden="true"
-          class="w-5 h-5 text-gray-500 dark:text-gray-400"
+          class="w-5 h-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -25,7 +30,12 @@
       </div>
       <input
         type="text"
-        class="max-w-[100%] block p-2 pl-10 mt-12 h-14 rounded-2xl border bg-light_gray border-white focus:ring-faded_black focus:border-light_accent dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="max-w-[100%] block p-2 pl-10 mt-12 h-14 rounded-2xl border border-white focus:border-light_accent"
+        :style="
+        !isDarkMode
+          ? 'background-color: #f0f7fc !important '
+          : 'background-color: #0e1621 !important; color: white'
+        "
         placeholder="Search for product"
         @input="sendChanges"
       />
@@ -117,7 +127,7 @@
                 : 'background-color: #182533'
             "
           >
-            <li class="ml-3 text-secondary">
+            <li class="ml-3 flex">
               <input
                 v-on:click="
                   (e) => {
@@ -130,7 +140,7 @@
                 :checked="false"
                 :id="category"
               />
-              {{ category }}
+              <h4 class="text-secondary">{{ category }}</h4>
             </li>
           </ul>
       </template>

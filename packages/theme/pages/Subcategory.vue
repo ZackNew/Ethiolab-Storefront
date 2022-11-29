@@ -1,8 +1,13 @@
 <template>
   <div class="mt-12" id="subcategory">
     <nav
-      class="sf-breadcrumbs m-4 sticky bg-[#f0f7fc]"
+      class="sf-breadcrumbs m-4 sticky"
       aria-label="breadcrumbs"
+      :style="
+        !isDarkMode
+          ? 'background-color: #f0f7fc !important'
+          : 'background-color: #0e1621 !important'
+      "
     >
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
@@ -33,7 +38,7 @@
         :style="
           !isDarkMode ? 'background-color: white' : 'background-color: #182533'
         "
-        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] hidden md:block border-white sticky max-h-[43rem] overflow-auto top-[5%] no-scrollbar"
+        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] hidden md:block border-white sticky max-h-[53rem] overflow-auto top-[5%] no-scrollbar"
       >
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
@@ -66,17 +71,21 @@
         >
           {{ categoryName }}
         </h1>
-        <div class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40">
+        <div
+          :style="
+            !isDarkMode
+              ? 'background-color: #EfEfEf; color: #3860a7'
+              : 'background-color: #182533; color: white'
+          "
+          class="rounded-md card shadow-lg my-4 flex mr-5 max-h-40"
+        >
           <img
-            class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
+            class="rounded-xl my-auto max-h-40 min-h-40 max-w-[25%] min-w-[25%]"
             :src="categoryImg || '/categories/empty_image.png'"
             alt=""
           />
           <div class="w-full overflow-auto no-scrollbar">
-            <p
-              class="py-4 ml-4 mr-4 text-secondary text-thin"
-              v-html="description"
-            ></p>
+            <p class="py-4 ml-4 mr-4 text-thin" v-html="description"></p>
           </div>
         </div>
         <div
@@ -93,9 +102,17 @@
         </div>
         <div v-else>
           <div
-            class="flex card mr-5 w-full h-12 bg-light_accent text-sm md:text-base"
+            class="flex card mr-5 w-full h-12 text-sm md:text-base"
+            :style="
+              !isDarkMode
+                ? 'background-color: #f0f7fc'
+                : 'background-color: #182533'
+            "
           >
-            <p class="pt-1 md:pt-3 mx-3">
+            <p
+              class="pt-1 md:pt-3 mx-3"
+              :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
+            >
               Number of Results | {{ Object.keys(products).length }}
             </p>
 
@@ -152,12 +169,8 @@
               </div>
             </div>
           </div>
-          <div v-if="loading">
-            <img
-              class="mt-16 w-20 h-20 mx-auto"
-              src="~/assets/Loading_icon.gif"
-              alt=""
-            />
+          <div v-if="loading" class="mt-[7%]">
+            <Loading />
           </div>
           <button
             class="flex my-5 visible md:invisible text-sm px-2"
@@ -244,6 +257,7 @@ import {
   SfIcon,
 } from '@storefront-ui/vue';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
+import Loading from '~/components/Loading.vue';
 import { useCms } from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import axios from 'axios';
@@ -525,6 +539,7 @@ export default {
     SfRange,
     SfIcon,
     Banner,
+    Loading,
   },
 };
 </script>

@@ -366,7 +366,7 @@
                     <template #actions>
                       <SfButton
                         v-if="!isInWishlist({ product })"
-                        class="sf-button--text desktop-only"
+                        class="sf-button--text text-secondary desktop-only"
                         style="margin: 0 0 1rem auto; display: block"
                         @click="addItemToWishlist({ product })"
                       >
@@ -374,14 +374,14 @@
                       </SfButton>
                       <SfButton
                         v-else
-                        class="sf-button--text desktop-only"
+                        class="sf-button--text text-secondary desktop-only"
                         style="margin: 0 0 1rem auto; display: block"
                         @click="removeItemFromWishlist({ product })"
                       >
                         {{ $t('Remove from wishlist') }}
                       </SfButton>
                       <SfButton
-                        class="sf-button--text desktop-only"
+                        class="sf-button--text text-secondary desktop-only"
                         style="margin: 0 0 1rem auto; display: block"
                         @click="
                           addToCompareList(
