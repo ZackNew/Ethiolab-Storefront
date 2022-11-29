@@ -770,32 +770,38 @@
                     class="text-sm font-bold mb-2 ml-4 w-1/2 h-10 border border-primary"
                   >
                     <option value="Adminstrative">Adminstrative</option>
-                    <option value="Adminstrative">Calibration</option>
-                    <option value="Adminstrative">Purchasing</option>
-                    <option value="Adminstrative">Technical Support</option>
-                    <option value="Adminstrative">Engineer</option>
-                    <option value="Adminstrative">Equipment Technician</option>
-                    <option value="Adminstrative">Executive/Director</option>
-                    <option value="Adminstrative">
+                    <option value="Calibration">Calibration</option>
+                    <option value="Purchasing">Purchasing</option>
+                    <option value="Technical Support">Technical Support</option>
+                    <option value="Engineer">Engineer</option>
+                    <option value="Equipment Technician">
+                      Equipment Technician
+                    </option>
+                    <option value="Executive/Director">
+                      Executive/Director
+                    </option>
+                    <option value="Healthcare Professional">
                       Healthcare Professional
                     </option>
-                    <option value="Adminstrative">Human Resources</option>
-                    <option value="Adminstrative">Laboratory/R&D</option>
-                    <option value="Adminstrative">Maintenance</option>
-                    <option value="Adminstrative">
+                    <option value="Human Resources">Human Resources</option>
+                    <option value="Laboratory/R&D">Laboratory/R&D</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Operations/Plant Management">
                       Operations/Plant Management
                     </option>
-                    <option value="Adminstrative">Owner</option>
-                    <option value="Adminstrative">
+                    <option value="Owner">Owner</option>
+                    <option value="Production Maintenance">
                       Production Maintenance
                     </option>
-                    <option value="Adminstrative">Production Management</option>
-                    <option value="Adminstrative">
+                    <option value="Production Management">
+                      Production Management
+                    </option>
+                    <option value="Quality Assurance/Control">
                       Quality Assurance/Control
                     </option>
-                    <option value="Adminstrative">Safety</option>
-                    <option value="Adminstrative">Student</option>
-                    <option value="Adminstrative">Researcher</option>
+                    <option value="Safety">Safety</option>
+                    <option value="Student">Student</option>
+                    <option value="Researcher">Researcher</option>
                   </select>
                 </ValidationProvider>
               </div>

@@ -1,6 +1,6 @@
 <template>
   <div id="comparision">
-    <div v-if="loading" class="mt-48">
+    <div v-if="loading" class="mt-28">
       <Loading />
     </div>
     <div v-else class="p-[2%] bg-white border border-secondary">

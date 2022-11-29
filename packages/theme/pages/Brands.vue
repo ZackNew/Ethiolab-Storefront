@@ -406,37 +406,38 @@ export default {
       const id = this.$route.params.id;
       const body = {
         query: `query getProductByBrand($id: ID!){
-  brand(id: $id){
-  name
-  description
-  icon{
-  preview
-  }
-  products{
-  id
-  name
-  slug
-  collections {
-  name
-  }
-  featuredAsset{
-  preview
-  }
-  variants{
-  price
-  priceWithTax
-  }
-  facetValues{
-  name
-  }
-  customFields{
-  industry{
-  name
-  }
-  }
-  }
-  }
-  }`,
+          brand(id: $id){
+          name
+          description
+          icon{
+          preview
+          }
+          products{
+          id
+          name
+          slug
+          collections {
+          name
+          }
+          featuredAsset{
+          preview
+          }
+          variants{
+          id
+          price
+          priceWithTax
+          }
+          facetValues{
+          name
+          }
+          customFields{
+          industry{
+          name
+          }
+          }
+          }
+          }
+          }`,
         variables: {
           id: id,
         },

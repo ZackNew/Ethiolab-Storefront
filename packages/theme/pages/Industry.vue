@@ -509,6 +509,7 @@ export default {
                 name
                 }
                 variants {
+                id
                 price
                 priceWithTax
                 }
