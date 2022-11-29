@@ -1,6 +1,14 @@
 <template>
   <div class="mt-12" id="subcategory">
-    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+    <nav
+      class="sf-breadcrumbs m-4 sticky"
+      aria-label="breadcrumbs"
+      :style="
+        !isDarkMode
+          ? 'background-color: #f0f7fc !important'
+          : 'background-color: #0e1621 !important'
+      "
+    >
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
           <span class="text-black">
@@ -30,7 +38,7 @@
         :style="
           !isDarkMode ? 'background-color: white' : 'background-color: #182533'
         "
-        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] h-3/4 hidden md:block mr-4 border-white"
+        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] hidden md:block border-white sticky max-h-[53rem] overflow-auto top-[5%] no-scrollbar"
       >
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
@@ -63,17 +71,21 @@
         >
           {{ categoryName }}
         </h1>
-        <div class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40">
+        <div
+          :style="
+            !isDarkMode
+              ? 'background-color: #EfEfEf; color: #3860a7'
+              : 'background-color: #182533; color: white'
+          "
+          class="rounded-md card shadow-lg my-4 flex mr-5 max-h-40"
+        >
           <img
-            class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
+            class="rounded-xl my-auto max-h-40 min-h-40 max-w-[25%] min-w-[25%]"
             :src="categoryImg || '/categories/empty_image.png'"
             alt=""
           />
           <div class="w-full overflow-auto no-scrollbar">
-            <p
-              class="py-4 ml-4 mr-4 text-secondary text-thin"
-              v-html="description"
-            ></p>
+            <p class="py-4 ml-4 mr-4 text-thin" v-html="description"></p>
           </div>
         </div>
         <div
@@ -90,9 +102,17 @@
         </div>
         <div v-else>
           <div
-            class="flex card mr-5 w-full h-12 bg-light_accent text-sm md:text-base"
+            class="flex card mr-5 w-full h-12 text-sm md:text-base"
+            :style="
+              !isDarkMode
+                ? 'background-color: #f0f7fc'
+                : 'background-color: #182533'
+            "
           >
-            <p class="pt-1 md:pt-3 mx-3">
+            <p
+              class="pt-1 md:pt-3 mx-3"
+              :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
+            >
               Number of Results | {{ Object.keys(products).length }}
             </p>
 
@@ -149,12 +169,8 @@
               </div>
             </div>
           </div>
-          <div v-if="loading">
-            <img
-              class="mt-16 w-20 h-20 mx-auto"
-              src="~/assets/Loading_icon.gif"
-              alt=""
-            />
+          <div v-if="loading" class="mt-[7%]">
+            <Loading />
           </div>
           <button
             class="flex my-5 visible md:invisible text-sm px-2"
@@ -197,21 +213,23 @@
           </div>
           <!-- Products -->
 
-          <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
-            <div
-              :style="
-                !isDarkMode
-                  ? 'background-color: #ffffff'
-                  : 'background-color: #182533'
-              "
-              class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
-              v-for="product in filteredSearchedProducts"
-              :key="product.id"
-            >
+          <div class="mt-5">
+            <div class="grid grid-cols-1 md:grid-cols-4">
               <!-- <p>{{product.name}}</p> -->
-
-              <SubcatBrandCard :product="product" />
+              <div
+                v-for="(product, i) in filteredSearchedProducts"
+                :key="product.id"
+              >
+                <SubcatBrandCard v-if="i < limit" :product="product" />
+              </div>
             </div>
+            <button
+              v-if="filteredSearchedProducts.length > limit"
+              class="text-secondary text-left"
+              @click="increaseLimit"
+            >
+              Show More +
+            </button>
           </div>
 
           <!-- <div
@@ -239,6 +257,7 @@ import {
   SfIcon,
 } from '@storefront-ui/vue';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
+import Loading from '~/components/Loading.vue';
 import { useCms } from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import axios from 'axios';
@@ -251,6 +270,7 @@ export default {
   },
   data() {
     return {
+      limit: 12,
       showFilter: false,
       loading: true,
       low: '',
@@ -369,6 +389,9 @@ export default {
           return reverse ? -1 : 1;
         return 0;
       };
+    },
+    increaseLimit() {
+      this.limit += 8;
     },
     searchBox(event) {
       this.search = event;
@@ -516,6 +539,7 @@ export default {
     SfRange,
     SfIcon,
     Banner,
+    Loading,
   },
 };
 </script>
@@ -529,10 +553,24 @@ export default {
   }
 }
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
 }
 
 .breadcrumbs {
   margin: var(--spacer-base) auto var(--spacer-lg);
+}
+
+.sticky {
+  display: block;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  z-index: 1;
 }
 </style>

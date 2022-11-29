@@ -100,6 +100,9 @@
           </div>
         </div>
         <div v-else key="no-results" class="before-results">
+          <div v-if="loading" class="mt-[7%]">
+            <Loading />
+          </div>
           <SfImage
             :src="'/error/error.svg'"
             class="before-results__picture"
@@ -142,6 +145,7 @@ import {
   SfImage,
 } from '@storefront-ui/vue';
 import { ref, watch, computed } from '@nuxtjs/composition-api';
+import Loading from '~/components/Loading.vue';
 import { productGetters } from '@vue-storefront/vendure';
 import ProductCard from './ProductCard.vue';
 
@@ -157,6 +161,7 @@ export default {
     SfButton,
     SfImage,
     ProductCard,
+    Loading,
   },
   props: {
     visible: {
@@ -169,6 +174,9 @@ export default {
     term: {
       type: String,
       default: '',
+    },
+    loading: {
+      type: Boolean,
     },
   },
   setup(props, { emit }) {

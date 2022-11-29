@@ -114,9 +114,9 @@ export default {
     });
     return { isDarkMode, isToastVisible, showToast, toastMessage };
   },
-  created(){
-    this.$store.dispatch("companyDetails/setInfo")
-  }
+  created() {
+    this.$store.dispatch('companyDetails/setInfo');
+  },
 };
 </script>
 
@@ -207,10 +207,9 @@ h4 {
   font-size: x-large !important;
   color: white !important;
   border-radius: 1rem !important;
-  min-width: 106% !important;
+  min-width: 100% !important;
   height: 4.7rem !important;
   padding: 0 15px !important;
-  margin-left: -3% !important;
 }
 .sf-search-bar__input:focus {
   outline: none;

@@ -4,15 +4,12 @@
       <nav class="sf-breadcrumbs my-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
-            <nuxt-link
-              class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
-              to="/"
-            >
+            <nuxt-link class="sf-breadcrumbs__breadcrumb font-exrathin" to="/">
               Home
             </nuxt-link>
           </li>
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
-            <h5 class="text-secondary font-bold">
+            <h5 class="text-secondary">
               {{ product.name }}
             </h5>
           </li>

@@ -1,7 +1,7 @@
 <template>
   <div class="sub-body">
     <div
-      @mouseover="handler(id, title, disc, prev)"
+      @mouseover="handler(id, title, disc, prev, preview)"
       @mouseleave="hoverOutHandler()"
       class="content"
     >
@@ -17,12 +17,12 @@
         class="grid grid-rows-4 grid-cols-2 gap-6 overlay no-scrollbar"
         v-if="subnavList.length > 0"
       >
-        <a
+        <nuxt-link
           class="mb-4"
           v-for="sub in subnavList"
           :key="sub.id"
-          :href="`/s/${sub.slug}`"
-          >{{ sub.label }}</a
+          :to="`/s/${sub.slug}`"
+          >{{ sub.label }}</nuxt-link
         >
       </div>
     </div>
@@ -43,6 +43,7 @@ export default {
     hoverOutHandler: Function,
     disc: String,
     prev: String,
+    preview: Object,
     id: anymatch,
   },
   setup() {
