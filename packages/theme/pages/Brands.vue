@@ -3,20 +3,28 @@
     <div class="grid grid-cols-11 mt-6">
       <!-- Side filter search or an Ad -->
 
-      <div class="col-span-3 h-[90%] sticky">
+      <div class="col-span-3 h-[90%]">
         <!-- {{overflow-auto no-scrollbar}} -->
-        <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+        <nav
+          class="sf-breadcrumbs m-4 sticky"
+          aria-label="breadcrumbs"
+          :style="
+            !isDarkMode
+              ? 'background-color: #f0f7fc !important'
+              : 'background-color: #0e1621 !important'
+          "
+        >
           <ol class="sf-breadcrumbs__list">
             <li class="sf-breadcrumbs__list-item" :aria-current="false">
               <nuxt-link
-                class="sf-breadcrumbs__breadcrumb text-secondary font-exrathin"
+                class="sf-breadcrumbs__breadcrumb font-exrathin"
                 to="/"
               >
                 Home
               </nuxt-link>
             </li>
             <li class="sf-breadcrumbs__list-item" :aria-current="false">
-              <p class="text-secondary font-bold">
+              <p class="text-secondary">
                 {{ brand.name }}
               </p>
             </li>
@@ -24,7 +32,12 @@
         </nav>
 
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block bg-white border-white"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white max-h-[53rem] overflow-auto top-[5%] no-scrollbar sticky"
+          :style="
+            !isDarkMode
+              ? 'background-color: white'
+              : 'background-color: #182533'
+          "
         >
           <div v-if="products.length > 0" class="py-[2%]">
             <SubcategoryBrandAccordion
@@ -60,7 +73,14 @@
         >
           {{ brand.name }}
         </h1>
-        <div class="rounded-md bg-light card shadow-lg my-4 flex mr-5 max-h-40">
+        <div
+          :style="
+            !isDarkMode
+              ? 'background-color: #EfEfEf; color: #3860a7'
+              : 'background-color: #182533; color: white'
+          "
+          class="rounded-md card shadow-lg my-4 flex mr-5 max-h-40"
+        >
           <img
             class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[25%] min-w-[25%]"
             :src="brandImage || '/categories/empty_image.png'"
@@ -68,7 +88,8 @@
           />
           <div class="w-full overflow-auto no-scrollbar">
             <p
-              class="py-4 ml-4 mr-4 text-secondary text-thin"
+              :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
+              class="py-4 ml-4 mr-4 text-thin"
               v-html="brand.description"
             ></p>
           </div>
@@ -86,8 +107,18 @@
           </div>
         </div>
         <div v-else>
-          <div class="flex card mr-5 w-full h-12 bg-light_accent">
-            <p class="pt-3 mx-3">
+          <div
+            class="flex card mr-5 w-full h-12"
+            :style="
+              !isDarkMode
+                ? 'background-color: #f0f7fc'
+                : 'background-color: #182533'
+            "
+          >
+            <p
+              class="pt-3 mx-3"
+              :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
+            >
               Number of Results | {{ Object.keys(products).length }}
             </p>
             <div class="ml-8">
@@ -145,30 +176,26 @@
               </div>
             </div>
           </div>
-          <div v-if="loading">
-            <img
-              class="mt-16 w-20 h-20 mx-auto"
-              src="~/assets/Loading_icon.gif"
-              alt=""
-            />
+          <div v-if="loading" class="mt-[7%]">
+            <Loading />
           </div>
           <!-- Products -->
           <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
             <div
-              :style="
-                !isDarkMode
-                  ? 'background-color: #ffffff'
-                  : 'background-color: #182533'
-              "
-              class="card shadow-lg w-60 md:w-52 my-3 mr-5 rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent"
-              v-for="product in filteredSearchedProducts"
+              v-for="(product, i) in filteredSearchedProducts"
               :key="product.id"
             >
               <!-- <p>{{product.name}}</p> -->
-
-              <SubcatBrandCard :product="product" />
+              <SubcatBrandCard v-if="i < limit" :product="product" />
             </div>
           </div>
+          <button
+            v-if="filteredSearchedProducts.length > limit"
+            class="text-secondary text-left"
+            @click="increaseLimit"
+          >
+            Show More +
+          </button>
           <!-- <div
   style="background-color: #e2e5de"
   class="card mr-16 ml-4 mt-5 w-auto h-12"
@@ -191,6 +218,7 @@ import {
   SfBanner,
 } from '@storefront-ui/vue';
 import { computed, onMounted, ref, onBeforeMount } from '@vue/composition-api';
+import Loading from '~/components/Loading.vue';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import axios from 'axios';
 import { useCms } from '@vue-storefront/vendure';
@@ -204,6 +232,7 @@ export default {
   },
   data() {
     return {
+      limit: 12,
       clickedCategory: '',
       open: false,
       A_Z: null,
@@ -350,6 +379,9 @@ export default {
     minInput(event) {
       this.low = event;
     },
+    increaseLimit() {
+      this.limit += 8;
+    },
     filterProducts(event) {
       if (event.checked) {
         this.filtersClicked.push(event.id);
@@ -444,6 +476,7 @@ export default {
     SfBreadcrumbs,
     SubcategoryBrandAccordion,
     Banner,
+    Loading,
   },
 };
 </script>
@@ -457,14 +490,20 @@ export default {
   }
 }
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
 }
 
 .sticky {
   display: block;
   position: -webkit-sticky;
-  position: relative;
+  position: sticky;
   top: 0px;
-  z-index: 2;
+  z-index: 1;
 }
 </style>

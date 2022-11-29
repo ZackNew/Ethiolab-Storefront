@@ -17,14 +17,23 @@
         :disc="navs.description"
         :prev="navs.preview"
         :subnavList="navs.items"
+        :preview="navs.featuredAsset"
         v-for="navs in $props.subnavList"
         :key="navs.id"
       />
     </div>
 
-    <div class="detail bg-light_accent pb-3" v-show="showDetail">
+    <div
+      :style="
+        !isDarkMode
+          ? 'background: white !important'
+          : 'background: #182533 !important'
+      "
+      class="detail bg-light_accent pb-3"
+      v-show="showDetail"
+    >
       <!-- style="object-fit: cover" -->
-      <img alt="Industry Image" :src="cPrev" class="w-auto max-h-[80%]" />
+      <img :alt="cPrev" :src="cPrev" class="w-auto max-h-[80%]" />
       <h4 class="text-primary font-bold">{{ cTitle }}</h4>
       <p v-html="cDisc" class="mx-3"></p>
     </div>
@@ -33,6 +42,7 @@
       class="ad text-dark_accent pl-8 pt-16"
       :style="{
         backgroundImage: `url(${adImage || '/homepage/bannerA.webp'})`,
+        background: !isDarkMode ? 'white !important' : '#182533 !important',
       }"
     >
       <p class="text-dark_gray uppercase pr-1">
@@ -88,7 +98,7 @@ export default {
     let cTitle = ref('');
     let cDisc = ref('');
     let cPrev = ref('');
-    let hoverHandler = (item, title, disc, prev) => {
+    let hoverHandler = (item, title, disc, prev, preview) => {
       // console.log('**hovered over the items',props.main,item,title,disc,prev)
       if (props.main === 'INDUSTRIES' || props.main == 'BRANDS') {
         addVisible.value = false;
@@ -104,12 +114,27 @@ export default {
         }
         cDisc.value = disc;
         cPrev.value = prev;
+      } else if (props.main === 'PRODUCTS') {
+        addVisible.value = false;
+        showDetail.value = true;
+        cTitle.value = title;
+        let a = '';
+        a.len;
+        disc = disc.replace(/<[^>]+>/g, '');
+        if (disc.length > 120) {
+          disc = disc.slice(0, 120);
+          disc += ' ...';
+          // disc = disc.replace(/<[^>]+>/g, '');
+        }
+        cDisc.value = disc;
+        cPrev.value = preview?.preview;
       }
     };
     let hoverOutHandler = () => {
       addVisible.value = true;
       showDetail.value = false;
     };
+
     return {
       // getTree,
       // headerNavigation,

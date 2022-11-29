@@ -136,9 +136,7 @@ export default {
     };
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
     const getSubCategory = (category) => {
-      return isMobileMenuOpen.value
-        ? category.items.slice(0, 6)
-        : category.items;
+      return isMobileMenuOpen.value ? category.items : category.items;
     };
     const closeSideNav = () => {
       if (isMobileMenuOpen.value) {

@@ -65,7 +65,6 @@
       <div class="md:col-span-6">
         <h3>Speciﬁcation And Description</h3>
         <p
-          class="max-w-[95%]"
           v-html="Svariant.customFields ? Svariant.customFields.table : ''"
           :class="classes.red"
         ></p>
@@ -75,7 +74,7 @@
         <div v-if="Svariant.customFields">
           <p
             v-html="Svariant.customFields.description"
-            class="text-justify"
+            class="text-justify w-[100%]"
             :class="classes.red"
           ></p>
         </div>
@@ -888,12 +887,14 @@ tr:nth-child(even) {
   color: blue;
 }
 .red table {
+  table-layout: fixed;
   border-radius: 10px;
   margin: 15px 5px;
   font-size: 0.9em;
   font-family: sans-serif;
-  width: 100%;
-  min-width: 400px;
+  width: 90%;
+  max-width: 90%;
+  overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .red table thead tr {
@@ -915,5 +916,15 @@ tr:nth-child(even) {
 .red table tbody tr.active-row {
   font-weight: bold;
   color: #0e1621;
+}
+
+.red::-webkit-scrollbar {
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+.red::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
 }
 </style>

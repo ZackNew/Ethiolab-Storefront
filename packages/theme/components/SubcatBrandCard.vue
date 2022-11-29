@@ -1,9 +1,14 @@
 <template>
-  <div>
+  <div
+    class="shadow-lg rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent mr-3 mb-6"
+    :style="
+      !isDarkMode ? 'background-color: white' : 'background-color: #182533'
+    "
+  >
     <nuxt-link :to="{ path: '/v/' + product.slug }">
       <LazyHydrate>
         <img
-          class="object-cover h-60 w-72 md:w-48 rounded-t-lg m-2"
+          class="object-cover h-60 w-[88%] md:w-[93%] rounded-t-lg my-2 mx-auto"
           :src="product.featuredAsset ? product.featuredAsset.preview : ''"
           alt="image"
         />
