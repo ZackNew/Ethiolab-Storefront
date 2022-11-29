@@ -378,7 +378,8 @@ export default {
       if (isAuthenticated.value) {
         return root.$router.push('/my-account');
       }
-      toggleLoginModal();
+      // toggleLoginModal();
+      return root.$router.push('/signin');
     };
     onSSR(async () => {
       await loadUser();
