@@ -5,7 +5,7 @@
     <div class="grid grid-cols-12 gap-4">
       <div class="left col-span-6 mt-10">
         <!-- <p>*Required</p> -->
-        <div class="field">
+        <div class="field pb-10">
           <h4 class="px-10 py-6 uppercase font-bold">Returning Customers</h4>
           <p class="px-10 py-4">Please Sign In</p>
 
@@ -77,10 +77,8 @@
           </ValidationObserver>
 
           <div class="justify-center flex">
-            <nuxt-link to="#">
-              <span class="text-secondary w-1/3 h-16 mb-8 ml-16">
-                forgot password?</span
-              >
+            <nuxt-link to="forgotPassword">
+              <span class="text-secondary"> forgot password?</span>
             </nuxt-link>
             <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
           </div>
