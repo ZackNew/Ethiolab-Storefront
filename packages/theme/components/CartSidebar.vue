@@ -26,7 +26,7 @@
                 <SfCollectedProduct
                   v-for="product in products"
                   v-e2e="'collected-product'"
-                  :key="cartGetters.getItemSku(product)"
+                  :key="cartGetters.getItemName(product) + 'woman'"
                   :image="cartGetters.getItemImage(product)"
                   :title="cartGetters.getItemName(product)"
                   :regular-price="
