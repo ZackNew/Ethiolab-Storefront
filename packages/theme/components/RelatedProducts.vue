@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <h2 class="text-secondary text-center my-10">Related Products</h2>
       <div v-if="products.length > 0">
+        <h2 class="text-secondary text-center my-10">Related Products</h2>
         <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
           <template #prevArrow>
             <div class="arrows">

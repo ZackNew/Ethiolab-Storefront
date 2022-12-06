@@ -1,10 +1,10 @@
 <template>
-  <div id="comparision">
+  <div id="Comparison">
     <div v-if="loading" class="mt-28">
       <Loading />
     </div>
     <div v-else class="p-[2%] bg-white border border-secondary">
-      <h3 class="font-bold text-secondary">Horizontal Matrix</h3>
+      <h3 class="font-bold text-secondary">Product Comparison</h3>
       <hr />
 
       <!-- <div class="overflow-x-auto relative" v-if="productsToCompare.length > 0">
@@ -37,7 +37,7 @@
                         : ''
                     "
                     alt=""
-                    class="w-28 h-28"
+                    class="object-cover w-36 h-36"
                   />
                 </td>
               </template>
@@ -349,7 +349,7 @@ th {
     margin: 0 auto;
   }
 }
-#comparision {
+#Comparison {
   box-sizing: border-box;
   @include for-desktop {
     max-width: 1250px;

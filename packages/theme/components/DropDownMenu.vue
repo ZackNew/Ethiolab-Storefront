@@ -35,7 +35,7 @@
       <!-- style="object-fit: cover" -->
       <img :alt="cPrev" :src="cPrev" class="w-auto max-h-[80%]" />
       <h4 class="text-primary font-bold">{{ cTitle }}</h4>
-      <p v-html="cDisc" class="mx-3"></p>
+      <!-- <p v-html="cDisc" class="mx-3"></p> -->
     </div>
     <div
       v-show="!showDetail"
