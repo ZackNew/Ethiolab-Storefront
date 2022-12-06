@@ -81,8 +81,10 @@
               ng-show="showvideo"
             ></iframe>
           </div>
-          <div class="md:col-span-3 my-auto">
-            <div class="flex md:grid md:grid-rows-3 md:grid-flow-col gap-1">
+          <div class="md:col-span-3">
+            <div
+              class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col gap-1"
+            >
               <div v-for="sale in bigSale" :key="sale.sku">
                 <!-- <div class="container">
                   <h3 class="font-bold text-overlayer z-[2] text-xs md:text-xl">
