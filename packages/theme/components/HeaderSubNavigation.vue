@@ -92,7 +92,7 @@ export default {
 
 .content:hover > .overlay {
   position: absolute;
-  left: 120% !important;
+  left: 100% !important;
   top: 0% !important;
   display: block !important;
   min-width: 500px !important;

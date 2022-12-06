@@ -88,8 +88,8 @@
               class="search md:w-[29rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none md:mr-3"
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
-              @input="debounceInput"
-              @keydown.enter="debounceInput"
+              @input="searchInputHandle"
+              @keydown.enter="searchInputHandle"
               @keydown.esc="closeSearch"
               v-model="searchText"
             >
@@ -212,6 +212,11 @@ export default {
     },
   },
   methods: {
+    searchInputHandle() {
+      this.loading = true;
+      console.log('maji load1', this.loading);
+      this.debounceInput();
+    },
     debounceInput: debounce(function async() {
       if (this.searchText === '') {
         return;
@@ -281,6 +286,7 @@ export default {
           });
           this.results = results;
         });
+
         this.loading = false;
         console.log('maji load2', this.loading);
       }
@@ -291,7 +297,7 @@ export default {
     return {
       searchText: '',
       results: null,
-      loading: null,
+      loading: false,
     };
   },
   setup(props, { root }) {

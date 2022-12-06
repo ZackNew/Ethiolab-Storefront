@@ -21,7 +21,7 @@
             </Banner>
           </LazyHydrate>
         </div> -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 wrapsm mt-7">
+        <div class="grid grid-cols-1 md:grid-cols-11 gap-4 wrapsm mt-7">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -72,7 +72,7 @@
           </LazyHydrate> -->
           <div class="md:col-span-8" v-if="heroSection.link">
             <iframe
-              class="w-[98%] md:h-[25rem] ytplayer"
+              class="w-[90%] md:h-[25rem] ytplayer mx-auto"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
