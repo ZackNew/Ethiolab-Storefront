@@ -97,6 +97,15 @@
             class="form__element form__element--half form__element--half-even"
           />
         </ValidationProvider>
+        <ValidationProvider name="street-line-1" slim>
+          <SfInput
+            v-e2e="'billing-streetLine1'"
+            v-model="billingDetails.streetLine1"
+            :label="$t('Tin')"
+            name="tin"
+            class="form__element form__element--half form__element--half-even"
+          />
+        </ValidationProvider>
       </div>
       <div class="form">
         <div class="form__action">
@@ -137,6 +146,7 @@ import {
   useBilling,
   useShipping,
   useUserBilling,
+  useCart,
 } from '@vue-storefront/vendure';
 import { required, min, digits } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
@@ -188,6 +198,7 @@ export default {
   },
   setup(props, context) {
     const { load, save, billing } = useBilling();
+    const { cart, load: loadCart, setCart, applyCoupon } = useCart();
     const { shipping: shippingDetails, load: loadShipping } = useShipping();
     const { billing: userBilling, load: loadUserBilling } = useUserBilling();
     const billingDetails = ref(billing.value || {});
@@ -220,15 +231,16 @@ export default {
       state: '',
       //country: '',
       //postalCode: '',
+      streetLine1: '',
       phone: null,
     });
 
     const handleFormSubmit = async () => {
-      console.log('naninanina');
       const orderAddress = mapAddressFormToOrderAddress(billingDetails.value);
       await save({ billingDetails: orderAddress });
       context.root.$router.push('/checkout/payment');
       sameAsShipping.value = false;
+      await setCart();
     };
 
     onSSR(async () => {

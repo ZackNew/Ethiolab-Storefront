@@ -16,7 +16,11 @@
       <SfProperty
         :name="$t('Subtotal')"
         :value="$n(totals.subtotal, 'currency')"
-        :class="['sf-property--full-width', 'sf-property--large property', { discounted: hasSpecialPrice }]"
+        :class="[
+          'sf-property--full-width',
+          'sf-property--large property',
+          { discounted: hasSpecialPrice },
+        ]"
       />
       <SfProperty
         v-for="discount in discounts"
@@ -25,7 +29,7 @@
         :value="'-' + $n(discount.value, 'currency')"
         class="sf-property--full-width sf-property--small"
       />
-     <SfProperty
+      <SfProperty
         v-if="hasSpecialPrice"
         :value="$n(totals.special, 'currency')"
         class="sf-property--full-width sf-property--small property special-price"
@@ -63,7 +67,6 @@
   </div>
 </template>
 <script>
-
 import {
   SfHeading,
   SfButton,
@@ -71,7 +74,7 @@ import {
   SfProperty,
   SfCharacteristic,
   SfInput,
-  SfCircleIcon
+  SfCircleIcon,
 } from '@storefront-ui/vue';
 import { computed, ref } from '@vue/composition-api';
 import { useCart, cartGetters } from '@vue-storefront/vendure';
@@ -86,9 +89,9 @@ export default {
     SfProperty,
     SfCharacteristic,
     SfInput,
-    SfCircleIcon
+    SfCircleIcon,
   },
-  setup () {
+  setup() {
     const { cart, removeItem, updateItemQty, applyCoupon } = useCart();
 
     const listIsHidden = ref(false);
@@ -99,7 +102,9 @@ export default {
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const discounts = computed(() => cartGetters.getDiscounts(cart.value));
-    const shippingCost = computed(() => getCalculatedPrice(cart?.value?.shipping));
+    const shippingCost = computed(() =>
+      getCalculatedPrice(cart?.value?.shipping)
+    );
 
     return {
       discounts,
@@ -118,26 +123,30 @@ export default {
         {
           title: 'Safety',
           description: 'It carefully packaged with a personal touch',
-          icon: 'safety'
+          icon: 'safety',
         },
         {
           title: 'Easy shipping',
           description:
             'You’ll receive dispatch confirmation and an arrival date',
-          icon: 'shipping'
+          icon: 'shipping',
         },
         {
           title: 'Changed your mind?',
           description: 'Rest assured, we offer free returns within 30 days',
-          icon: 'return'
-        }
+          icon: 'return',
+        },
       ],
 
       shippingCost,
-      hasSpecialPrice: computed(() => totals.value.special > 0 && totals.value.special < totals.value.subtotal),
-      getCalculatedPrice
+      hasSpecialPrice: computed(
+        () =>
+          totals.value.special > 0 &&
+          totals.value.special < totals.value.subtotal
+      ),
+      getCalculatedPrice,
     };
-  }
+  },
 };
 </script>
 
@@ -201,5 +210,4 @@ export default {
     display: none;
   }
 }
-
 </style>

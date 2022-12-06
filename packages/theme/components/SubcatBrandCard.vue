@@ -85,15 +85,6 @@ export default {
         this.product.id !== '' &&
         this.product.variants[0].id !== ''
       ) {
-        console.log('passed the first one');
-        console.log(
-          'djsfada',
-          this.$store.state.compareList?.productsToCompare?.filter(
-            (e) =>
-              e?.productID === this.product.id &&
-              e?.variantID === this.product.variants[0].id
-          ).length
-        );
         if (
           this.$store.state.compareList?.productsToCompare?.filter(
             (e) =>
@@ -101,10 +92,7 @@ export default {
               e?.variantID === this.product.variants[0].id
           ).length === 0
         ) {
-          console.log('passed the second one');
           this.toastShower('Added to Compare List');
-          console.log('Magi Magi', this.product.id);
-          console.log('Magi Magi2', this.product.variants[0].id);
           this.$store.dispatch('compareList/addToCompareList', {
             product: {
               productID: this.product.id,
@@ -119,7 +107,6 @@ export default {
         }
       } else {
         this.toastShower('Limit to Compare Products reached');
-        console.log('limit reached');
       }
     },
   },

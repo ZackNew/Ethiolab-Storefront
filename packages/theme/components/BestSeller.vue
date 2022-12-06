@@ -52,7 +52,7 @@
             :title="product.name"
             :image="product.images"
             :regular-price="product.price.current + ' ETB'"
-            :imageHeight="440"
+            :imageHeight="340"
             :imageWidth="500"
             :alt="product.name"
             :max-rating="5"

@@ -3,7 +3,7 @@
     <SfMegaMenu :visible="isSearchOpen" title="Search results" class="search">
       <transition name="sf-fade" mode="out-in">
         <div
-          v-if="result !== null"
+          v-if="result !== null && result.length > 0 && loading === false"
           class="search__wrapper-results"
           key="results"
         >
@@ -102,19 +102,26 @@
         <div v-else key="no-results" class="before-results">
           <div v-if="loading" class="mt-[7%]">
             <Loading />
+            <h1 class="text-light_accent">_</h1>
           </div>
-          <SfImage
-            :src="'/error/error.svg'"
-            class="before-results__picture"
-            alt="error"
-            loading="lazy"
-          />
-          <template v-if="term">
+          <template v-else-if="result !== null && result.length === 0">
+            <SfImage
+              :src="'/error/error.svg'"
+              class="before-results__picture"
+              alt="error"
+              loading="lazy"
+            />
             <p class="before-results__paragraph">
               We haven’t found any results for given phrase
             </p>
           </template>
           <template v-else>
+            <SfImage
+              :src="'/error/error.svg'"
+              class="before-results__picture"
+              alt="error"
+              loading="lazy"
+            />
             <p class="before-results__paragraph">
               You haven’t searched for items yet
             </p>
@@ -223,6 +230,7 @@ export default {
   position: absolute;
   z-index: 3;
   height: 100%;
+  min-height: 50%;
   width: 1140px;
   --mega-menu-column-header-margin: var(--spacer-sm) 0 var(--spacer-xl);
   --mega-menu-content-padding: 0;

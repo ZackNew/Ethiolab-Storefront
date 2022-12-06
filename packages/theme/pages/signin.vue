@@ -1,13 +1,12 @@
 <template>
   <div class="signup text-secondary">
-    <h1 class="ml-[15%]">Sign In</h1>
+    <h1 class="ml-[10%]">Sign In</h1>
 
     <div class="grid grid-cols-12 gap-4">
       <div class="left col-span-6 mt-10">
         <!-- <p>*Required</p> -->
-        <div class="field">
-          <h4 class="px-10 py-6 uppercase font-bold">Returning Customers</h4>
-          <p class="px-10 py-4">Please Sign In</p>
+        <div class="field pb-10">
+          <h4 class="px-10 py-6 uppercase font-bold">Please Sign IN</h4>
 
           <ValidationObserver v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(handleLogin)">
@@ -66,7 +65,7 @@
 
               <div class="justify-center flex">
                 <button
-                  class="bg-secondary text-white w-1/3 h-16 font-bold mb-8 but"
+                  class="bg-secondary text-white w-1/4 h-12 font-bold mb-8 but"
                   type="submit"
                 >
                   SIGN IN
@@ -77,10 +76,8 @@
           </ValidationObserver>
 
           <div class="justify-center flex">
-            <nuxt-link to="#">
-              <span class="text-secondary w-1/3 h-16 mb-8 ml-16">
-                forgot password?</span
-              >
+            <nuxt-link to="forgotPassword">
+              <span class="text-secondary"> Forgot Password?</span>
             </nuxt-link>
             <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
           </div>
@@ -91,18 +88,100 @@
           <h4 class="px-10 py-6 uppercase font-bold">Why Register?</h4>
           <h4 class="px-10">Register today and enjoy these benefits</h4>
           <ul class="mx-16 my-4">
-            <li>✅Full account records, order history, invoices & tracking</li>
-            <li>✅Wishlist organized saved items to order later</li>
-            <li>✅Create & track quotes</li>
-            <li>✅Keep a record of payment transactions</li>
-            <li>✅Discounts & special packages</li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span
+                >Full account records, order history, invoices & tracking</span
+              >
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Wishlist organized saved items to order later</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Create & track quotes</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Keep a record of payment transactions</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Discounts & special packages</span>
+            </li>
           </ul>
 
           <h4 class="px-16 pt-10">Don't hava an account?</h4>
           <div class="mx-16">
             <nuxt-link to="/signup">
               <button
-                class="bg-secondary text-white w-1/3 h-16 font-bold mb-8 but"
+                class="bg-secondary text-white w-1/3 h-12 font-bold mb-8 but"
               >
                 REGISTER
               </button>
@@ -178,7 +257,11 @@ export default defineComponent({
       if (hasUserErrors) {
         error.login = userError.value.login?.message;
         error.register = userError.value.register?.message;
-        showToast('login failed');
+        if ((userError.value.errorCode = 'INVALID_CREDENTIALS_ERROR')) {
+          showToast(error.login);
+        } else {
+          showToast('Error occured while trying to login.');
+        }
         return;
       }
       // if (isSubscribe.value === true) {

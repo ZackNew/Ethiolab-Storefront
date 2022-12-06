@@ -47,6 +47,7 @@
         </SfTableData>
       </SfTableRow>
     </SfTable>
+    {{totals}}
     <div class="summary">
       <div class="summary__group">
         <div class="summary__total">
@@ -224,12 +225,13 @@ export default {
     const promoCode = ref('');
 
     onSSR(async () => {
-      await load();
+      await load()
     });
 
  
 
     onMounted(() => {
+
     })
 
     onBeforeMount(() => {

@@ -1,13 +1,12 @@
 <template>
   <div class="signup text-secondary">
-    <h1 class="ml-[15%]">Create an Account</h1>
+    <h1 class="ml-[10%]">Create an Account</h1>
 
     <div class="grid grid-cols-12 gap-4">
       <div class="left col-span-6 mt-10">
         <!-- <p>*Required</p> -->
         <div class="field">
-          <h4 class="px-10 py-6 uppercase font-bold">Returning Customers</h4>
-          <h4 class="px-10 py-4">Please Sign UP</h4>
+          <h4 class="px-10 py-6 uppercase font-bold">Please Sign UP</h4>
 
           <ValidationObserver v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(handleFormSubmit)">
@@ -618,6 +617,31 @@
                       />
                     </ValidationProvider>
                   </div>
+
+                  <div class="m-8">
+                    <label
+                      class="block text-dark_gray text-sm font-bold mb-2"
+                      for="tin"
+                    >
+                      TIN
+                    </label>
+
+                    <ValidationProvider
+                      name="tin"
+                      :rules="isOrganization && 'required'"
+                      v-slot="{ errors }"
+                      slim
+                    >
+                      <SfInput
+                        v-model="form.tin"
+                        :placeholder="$t('tin')"
+                        name="tin"
+                        class="sf-input--filled"
+                        :valid="!errors[0]"
+                        :errorMessage="errors[0]"
+                      />
+                    </ValidationProvider>
+                  </div>
                 </div>
                 <div class="col-span-1">
                   <div class="m-8">
@@ -638,24 +662,24 @@
                   <!-- <div class="m-8"> -->
 
                   <!-- <div class="m-8">
-                <div class=" text-dark_gray text-sm font-bold mb-2 "> INDIVIDUAL</div>
+                          <div class=" text-dark_gray text-sm font-bold mb-2 "> INDIVIDUAL</div>
 
-                <ValidationProvider
-            name="company"
-            rules="required|min:2"
-            v-slot="{ errors }"
-            slim
-        > 
-        <SfInput
-            v-model="form.company"
-            :placeholder ="$t('company')"
-            name="company"
-            class="sf-input--filled"
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"  
-            />
-        </ValidationProvider>
-                </div> -->
+                          <ValidationProvider
+                      name="company"
+                      rules="required|min:2"
+                      v-slot="{ errors }"
+                      slim
+                  > 
+                  <SfInput
+                      v-model="form.company"
+                      :placeholder ="$t('company')"
+                      name="company"
+                      class="sf-input--filled"
+                      :valid="!errors[0]"
+                      :errorMessage="errors[0]"  
+                      />
+                  </ValidationProvider>
+                          </div> -->
 
                   <div class="m-8">
                     <div
@@ -692,7 +716,7 @@
 
                     <ValidationProvider
                       name="street"
-                      rules="required|min:2"
+                      rules="min:2"
                       v-slot="{ errors }"
                       slim
                     >
@@ -706,50 +730,24 @@
                       />
                     </ValidationProvider>
                   </div>
+                  <div class="m-8">
+                    <label
+                      class="block text-dark_gray text-sm font-bold mb-2"
+                      for="fax"
+                    >
+                      FAX
+                    </label>
+
+                    <ValidationProvider name="fax" slim>
+                      <SfInput
+                        v-model="form.fax"
+                        :placeholder="$t('fax')"
+                        name="fax"
+                        class="sf-input--filled"
+                      />
+                    </ValidationProvider>
+                  </div>
                 </div>
-              </div>
-
-              <div class="m-8">
-                <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
-                  for="tin"
-                >
-                  TIN
-                </label>
-
-                <ValidationProvider
-                  name="tin"
-                  rules=""
-                  v-slot="{ errors }"
-                  slim
-                >
-                  <SfInput
-                    v-model="form.tin"
-                    :placeholder="$t('tin')"
-                    name="tin"
-                    class="sf-input--filled"
-                    :valid="!errors[0]"
-                    :errorMessage="errors[0]"
-                  />
-                </ValidationProvider>
-              </div>
-
-              <div class="m-8">
-                <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
-                  for="fax"
-                >
-                  FAX
-                </label>
-
-                <ValidationProvider name="fax" slim>
-                  <SfInput
-                    v-model="form.fax"
-                    :placeholder="$t('fax')"
-                    name="fax"
-                    class="sf-input--filled"
-                  />
-                </ValidationProvider>
               </div>
 
               <div class="m-8">
@@ -758,7 +756,7 @@
                 >
                 <ValidationProvider
                   name="job"
-                  rules="required|min:2"
+                  rules="min:2"
                   v-slot="{ errors }"
                   slim
                 >
@@ -770,32 +768,38 @@
                     class="text-sm font-bold mb-2 ml-4 w-1/2 h-10 border border-primary"
                   >
                     <option value="Adminstrative">Adminstrative</option>
-                    <option value="Adminstrative">Calibration</option>
-                    <option value="Adminstrative">Purchasing</option>
-                    <option value="Adminstrative">Technical Support</option>
-                    <option value="Adminstrative">Engineer</option>
-                    <option value="Adminstrative">Equipment Technician</option>
-                    <option value="Adminstrative">Executive/Director</option>
-                    <option value="Adminstrative">
+                    <option value="Calibration">Calibration</option>
+                    <option value="Purchasing">Purchasing</option>
+                    <option value="Technical Support">Technical Support</option>
+                    <option value="Engineer">Engineer</option>
+                    <option value="Equipment Technician">
+                      Equipment Technician
+                    </option>
+                    <option value="Executive/Director">
+                      Executive/Director
+                    </option>
+                    <option value="Healthcare Professional">
                       Healthcare Professional
                     </option>
-                    <option value="Adminstrative">Human Resources</option>
-                    <option value="Adminstrative">Laboratory/R&D</option>
-                    <option value="Adminstrative">Maintenance</option>
-                    <option value="Adminstrative">
+                    <option value="Human Resources">Human Resources</option>
+                    <option value="Laboratory/R&D">Laboratory/R&D</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Operations/Plant Management">
                       Operations/Plant Management
                     </option>
-                    <option value="Adminstrative">Owner</option>
-                    <option value="Adminstrative">
+                    <option value="Owner">Owner</option>
+                    <option value="Production Maintenance">
                       Production Maintenance
                     </option>
-                    <option value="Adminstrative">Production Management</option>
-                    <option value="Adminstrative">
+                    <option value="Production Management">
+                      Production Management
+                    </option>
+                    <option value="Quality Assurance/Control">
                       Quality Assurance/Control
                     </option>
-                    <option value="Adminstrative">Safety</option>
-                    <option value="Adminstrative">Student</option>
-                    <option value="Adminstrative">Researcher</option>
+                    <option value="Safety">Safety</option>
+                    <option value="Student">Student</option>
+                    <option value="Researcher">Researcher</option>
                   </select>
                 </ValidationProvider>
               </div>
@@ -818,7 +822,7 @@
               <p v-if="errorMessage">{{ errorMessage }}aaa</p>
               <div class="justify-center flex mt-8">
                 <button
-                  class="bg-secondary text-white w-1/3 h-16 font-bold mb-8 but"
+                  class="bg-secondary text-white w-1/4 h-12 font-bold mb-8"
                   type="submit"
                 >
                   REGISTER
@@ -834,18 +838,100 @@
           <h4 class="px-10">Register today and enjoy these benefits</h4>
 
           <ul class="mx-16 my-4">
-            <li>✅Full account records, order history, invoices & tracking</li>
-            <li>✅Wishlist organized saved items to order later</li>
-            <li>✅Create & track quotes</li>
-            <li>✅Keep a record of payment transactions</li>
-            <li>✅Discounts & special packages</li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span
+                >Full account records, order history, invoices & tracking</span
+              >
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Wishlist organized saved items to order later</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Create & track quotes</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Keep a record of payment transactions</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Discounts & special packages</span>
+            </li>
           </ul>
 
           <h4 class="px-16 pt-10">Already have an account?</h4>
           <div class="mx-16">
             <nuxt-link to="/signin">
               <button
-                class="bg-secondary text-white w-1/3 h-16 font-bold mb-8 but"
+                class="bg-secondary text-white w-1/3 h-12 font-bold mb-8 but"
               >
                 SIGN IN
               </button>
@@ -911,7 +997,7 @@ extend('email', {
 
 extend('regex', {
   ...regex,
-  message: 'Password Must Contain Uppercase, Lowercase, Number and Character',
+  message: 'Password must contain uppercase, lowercase, number and character',
 });
 export default defineComponent({
   components: {

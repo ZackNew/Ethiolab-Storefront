@@ -21,7 +21,7 @@
             </Banner>
           </LazyHydrate>
         </div> -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 wrapsm mt-7">
+        <div class="grid grid-cols-1 md:grid-cols-11 gap-4 wrapsm mt-7">
           <!-- <LazyHydrate when-visible>
           <div class="similar-products">
             <SfHeading title="New Products" :level="2" />
@@ -70,9 +70,9 @@
               />
             </template>
           </LazyHydrate> -->
-          <div class="md:col-span-9" v-if="heroSection.link">
+          <div class="md:col-span-8" v-if="heroSection.link">
             <iframe
-              class="w-[86.5%] md:h-[25rem] ytplayer"
+              class="w-[90%] md:h-[25rem] ytplayer mx-auto"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
@@ -81,12 +81,12 @@
               ng-show="showvideo"
             ></iframe>
           </div>
-          <div class="md:col-span-3 my-auto">
+          <div class="md:col-span-3">
             <div
-              class="mt-5 flex md:grid md:grid-rows-3 md:grid-flow-col gap-4"
+              class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col gap-1"
             >
               <div v-for="sale in bigSale" :key="sale.sku">
-                <div class="container mb-2">
+                <!-- <div class="container">
                   <h3 class="font-bold text-overlayer z-[2] text-xs md:text-xl">
                     <nuxt-link
                       :to="`/v/${sale.productSlug}`"
@@ -97,12 +97,25 @@
                   <img
                     :src="imageUrl + sale.banner"
                     alt="Image"
-                    class="w-full max-h-[7rem] mb-1"
+                    class="w-full max-h-[8rem] min-h-[8rem]"
                   />
+                </div> -->
+                <div class="container">
+                  <nuxt-link
+                    :to="`/v/${sale.productSlug}`"
+                    class="font-bold text-white"
+                  >
+                    <img
+                      :src="imageUrl + sale.banner"
+                      alt="Image"
+                      class="w-full max-h-[8rem] min-h-[8rem]"
+                    />
+                  </nuxt-link>
                 </div>
               </div>
             </div>
           </div>
+          <!-- <div class="md:col-span-1"></div> -->
         </div>
       </div>
 
@@ -115,7 +128,11 @@
         </LazyHydrate>
         <LazyHydrate when-visible>
           <div v-if="this.products.length !== 0">
-            <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
+            <VueSlickCarousel
+              class="carousel-wrapper"
+              v-bind="settings"
+              :slidesToShow="4"
+            >
               <template #prevArrow>
                 <div class="arrows">
                   <svg
@@ -162,7 +179,9 @@
                       : productGetters.getCoverImage(product)
                   "
                   :regular-price="
-                    productGetters.getPrice(product).regular.toLocaleString() +
+                    String(product.priceWithTax.min).slice(0, -2) +
+                    '.' +
+                    String(product.priceWithTax.min).slice(-2) +
                     ' ETB'
                   "
                   :imageHeight="290"
@@ -178,7 +197,7 @@
                       ? addItemToWishlist({ product })
                       : removeItemFromWishlist({ product })
                   "
-                  @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                  @click:add-to-cart="itemsToCart(product, 1)"
                   class="carousel__item__product mr-2"
                 />
               </div>
@@ -264,9 +283,82 @@
         </SfCallToAction>
       </LazyHydrate>
 
-      <LazyHydrate when-visible>
+      <!-- <LazyHydrate when-visible>
         <Testimonial :testimonials="testimonials" />
-      </LazyHydrate>
+      </LazyHydrate> -->
+
+      <VueSlickCarousel
+        v-if="testimonials.length > 0"
+        class="carousel-wrapper wraplg"
+        v-bind="settings"
+        :slidesToShow="3"
+      >
+        <template #prevArrow>
+          <div class="arrows">
+            <svg
+              class="w-12 h-12 text-secondary -ml-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </div>
+        </template>
+        /*...*/
+        <template #nextArrow>
+          <div class="arrows">
+            <svg
+              class="w-12 h-12 text-secondary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </div>
+        </template>
+        <div v-for="testimony in testimonials" :key="testimony.id" cl>
+          <div class="testimonial_card mr-2 noScrollbar">
+            <div class="flex flex-col">
+              <div
+                class="mx-auto w-12 h-12 overflow-hidden bg-gray-100 border-2 border-indigo-100 rounded-full"
+              >
+                <img
+                  :src="
+                    `${path}${testimony.src}` ||
+                    ` https://cdn.pixabay.com/photo/2017/05/19/12/38/entrepreneur-2326419__340.jpg`
+                  "
+                  alt="img"
+                  class="object-cover object-center w-full h-full"
+                />
+              </div>
+              <h5 class="font-bold quote text-center">{{ testimony.name }}</h5>
+              <p class="text-sm testimonies text-center">
+                {{ testimony.title }}
+              </p>
+              <div class="h-3 text-3xl text-left quote">“</div>
+              <p
+                class="px-4 text-center testimonies"
+                v-html="testimony.content"
+              ></p>
+              <div class="h-3 text-3xl text-right quote">”</div>
+            </div>
+          </div>
+        </div>
+      </VueSlickCarousel>
 
       <LazyHydrate when-visible>
         <NewsletterModal @email-submitted="onSubscribe" />
@@ -344,30 +436,30 @@ export default {
         focusOnSelect: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 4,
+
         slidesToScroll: 4,
         touchThreshold: 5,
         centerMode: true,
         centerPadding: '30px',
         responsive: [
-          {
-            breakpoint: 2098,
-            settings: {
-              slidesToShow: 4,
-              slidesToScroll: 4,
-              infinite: true,
-              dots: true,
-            },
-          },
-          {
-            breakpoint: 1624,
-            settings: {
-              slidesToShow: 4,
-              slidesToScroll: 4,
-              infinite: true,
-              dots: true,
-            },
-          },
+          // {
+          //   breakpoint: 2098,
+          //   settings: {
+          //     slidesToShow: 4,
+          //     slidesToScroll: 4,
+          //     infinite: true,
+          //     dots: true,
+          //   },
+          // },
+          // {
+          //   breakpoint: 1624,
+          //   settings: {
+          //     slidesToShow: 4,
+          //     slidesToScroll: 4,
+          //     infinite: true,
+          //     dots: true,
+          //   },
+          // },
           {
             breakpoint: 1024,
             settings: {
@@ -500,7 +592,7 @@ export default {
         }`,
       };
       await axios.post(baseUrl, body, options).then((res) => {
-        const test = res.data.data.getTestimonials.map((testimony) => {
+        const testim = res.data.data.getTestimonials.map((testimony) => {
           return {
             id: testimony.id,
             name: testimony.name,
@@ -509,13 +601,15 @@ export default {
             title: testimony.person_position,
           };
         });
-        this.testimonials = test;
-        console.log('testimonials', this.testimonials);
+        this.testimonials = testim;
+        console.log('Maji testimonials', this.testimonials);
       });
     },
   },
 
   setup() {
+    const baseUrl = process.env.GRAPHQL_API;
+    const path = baseUrl.split('/shop-api')[0] + '/assets/';
     const showToast = inject('showToast');
     const { toggleNewsletterModal } = useUiState();
     const { categories } = useCategory();
@@ -585,6 +679,16 @@ export default {
         });
       toggleNewsletterModal();
     };
+
+    const itemsToCart = (product, quantity) => {
+      addItemToCart({
+        product: {
+          _variantId: product?.productVariantId,
+        },
+        quantity: quantity,
+      });
+    };
+
     const toggleWishlist = (index) => {
       products.value[index].isInWishlist = !products.value[index].isInWishlist;
     };
@@ -620,6 +724,8 @@ export default {
       adImage,
       bigSale,
       imageUrl,
+      itemsToCart,
+      path,
     };
   },
 };
@@ -740,6 +846,12 @@ export default {
     margin: auto;
   }
 }
+.wraplg {
+  @include for-desktop {
+    max-width: 93% !important;
+    margin: auto;
+  }
+}
 
 .container {
   position: relative;
@@ -750,5 +862,33 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.quote {
+  color: var(--c-secondary);
+}
+
+.testimonies {
+  color: var(--c-primary);
+  font-family: 'Josefin Sans', sans-serif;
+  --font-family--primary: 'Josefin Sans', sans-serif;
+}
+
+.testimonies p {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.testimonial_card {
+  background-color: var(--c-accent);
+  padding: 5%;
+  box-shadow: 1px 1px 3px #bbbbbb;
+  min-height: 15rem;
+  max-height: 18rem;
+  overflow: auto;
+}
+
+.noScrollbar::-webkit-scrollbar {
+  display: none;
 }
 </style>

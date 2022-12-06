@@ -136,6 +136,7 @@ import {
   useUserShipping,
 } from '@vue-storefront/vendure';
 import { required, min, digits } from 'vee-validate/dist/rules';
+import axios from 'axios';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import {
   mapAddressFormToOrderAddress,
@@ -181,6 +182,14 @@ export default {
       this.formPhoneNumber = payload?.formattedNumber;
       this.form.phone = this.formPhoneNumber;
     },
+    getUser() {
+      axios.get('https://randomuser.me/api').then((res) => {
+        console.log('maji random user', res);
+      });
+    },
+  },
+  created() {
+    this.getUser();
   },
   setup() {
     const isFormSubmitted = ref(false);
