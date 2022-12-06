@@ -23,6 +23,7 @@ module.exports = {
       light_gray: '#EfEfEf',
       dark_gray: '#BABABA',
       whole_bg: '#f0f7fc',
+      red: '#c71a42'
     },
     extend: {
       minHeight: {
