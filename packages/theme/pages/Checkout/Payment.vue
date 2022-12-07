@@ -276,12 +276,25 @@ export default {
       console.log("order is about to be cancelled")
 
             const body = {
-        query: `mutation cancelOrder {
-                 cancelActiveOrder {
+        query: `mutation cancelOrder($orderCode: String!) {
+          cancelMyOrder (orderCode: $orderCode){
                   success
                 }
-              }`
+              }`,
+          variables: {
+            orderCode: cart.value.code,
+        },
       };
+      //   query: `mutation transitionOrderToState($state: String!) {
+      //           transitionOrderToState(input : {state: $state}) {
+               
+      //           }
+      //         }`,
+      //   variables: {
+      //     state: state,
+      //   },
+      // };
+
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -294,6 +307,8 @@ export default {
         .post(baseUrl, body, options)
         .then(async (res) => {
           console.log("the  cancel response value is ", res);
+          modalOpen.value = false;
+          window.location.href = "/";
         }).catch(err => {
           console.log("the catch err is ", err)
         })
