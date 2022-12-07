@@ -1,172 +1,180 @@
 <template>
-  <div id="product" v-if="Svariant !== null">
-    <SfBreadcrumbs
-      class="breadcrumbs desktop-only text-secondary"
-      :breadcrumbs="breadcrumbs"
-    />
-    <!-- <p>{{breadcrumbs}}</p> -->
-    <div>
-      <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-        <div class="md:col-span-6 max-w[99%]">
-          <Gallery
-            :images="
-              Svariant.assets.length > 0 ? Svariant.assets : prImages || []
-            "
-            :display="Svariant.featuredAsset ? Svariant.featuredAsset : prImage"
-            class="mb-5 md:mb-0"
-          />
-        </div>
-        <div class="md:col-span-6">
-          <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
-          <h4 class="text-secondary mb-3">
-            {{
-              String(Svariant.priceWithTax).slice(0, -2) +
-              '.' +
-              String(Svariant.priceWithTax).slice(-2)
-            }}
-            ETB
-          </h4>
-          <div class="flex mb-5">
-            <input
-              class="max-w-[55px] text-center mr-4"
-              v-model="qty"
-              type="number"
-            />
-            <SfButton @click="addToCart" class="rounded bg-secondary mr-[2%]"
-              >Add To Cart</SfButton
-            >
-            <button @click="addToCompareList">
-              <p class="text-secondary align-center mt-3">
-                + Add To Compare List
-              </p>
-            </button>
-          </div>
-          <div
-            v-if="Svariant.customFields"
-            class="max-h-[20rem] overflow-hidden"
-            :class="isDarkMode ? 'text-white' : ''"
-          >
-            <p
-              v-html="Svariant.customFields.description"
-              class="text-justify"
-              :class="classes.red"
-            ></p>
-          </div>
-
-          <a href="#full" class="text-secondary text-xl">More +</a>
-        </div>
-      </div>
+  <div>
+    <div class="my-[3%]" v-if="loading">
+      <Loading />
     </div>
-    <div
-      id="full"
-      class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
-      :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
-    >
-      <div class="md:col-span-6">
-        <h3>Speciﬁcation And Description</h3>
-        <p
-          v-html="Svariant.customFields ? Svariant.customFields.table : ''"
-          :class="classes.red"
-        ></p>
+    <div id="product" v-if="Svariant !== null">
+      <SfBreadcrumbs
+        class="breadcrumbs desktop-only text-secondary"
+        :breadcrumbs="breadcrumbs"
+      />
+      <!-- <p>{{breadcrumbs}}</p> -->
+      <div>
+        <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
+          <div class="md:col-span-6 max-w[99%]">
+            <Gallery
+              :images="
+                Svariant.assets.length > 0 ? Svariant.assets : prImages || []
+              "
+              :display="
+                Svariant.featuredAsset ? Svariant.featuredAsset : prImage
+              "
+              class="mb-5 md:mb-0"
+            />
+          </div>
+          <div class="md:col-span-6">
+            <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
+            <h4 class="text-secondary mb-3">
+              {{
+                String(Svariant.priceWithTax).slice(0, -2) +
+                '.' +
+                String(Svariant.priceWithTax).slice(-2)
+              }}
+              ETB
+            </h4>
+            <div class="flex mb-5">
+              <input
+                class="max-w-[55px] text-center mr-4"
+                v-model="qty"
+                type="number"
+              />
+              <SfButton @click="addToCart" class="rounded bg-secondary mr-[2%]"
+                >Add To Cart</SfButton
+              >
+              <button @click="addToCompareList">
+                <p class="text-secondary align-center mt-3">
+                  + Add To Compare List
+                </p>
+              </button>
+            </div>
+            <div
+              v-if="Svariant.customFields"
+              class="max-h-[20rem] overflow-hidden"
+              :class="isDarkMode ? 'text-white' : ''"
+            >
+              <p
+                v-html="Svariant.customFields.description"
+                class="text-justify"
+                :class="classes.red"
+              ></p>
+            </div>
+
+            <a href="#full" class="text-secondary text-xl">More +</a>
+          </div>
+        </div>
       </div>
-      <div class="md:col-span-6">
-        <h3>More About This Item</h3>
-        <div v-if="Svariant.customFields">
+      <div
+        id="full"
+        class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
+        :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
+      >
+        <div class="md:col-span-6">
+          <h3>Speciﬁcation And Description</h3>
           <p
-            v-html="Svariant.customFields.description"
-            class="text-justify w-[100%]"
+            v-html="Svariant.customFields ? Svariant.customFields.table : ''"
             :class="classes.red"
           ></p>
         </div>
-      </div>
-    </div>
-
-    <div v-if="VariantAccessories.length > 0">
-      <h2 class="text-secondary text-center my-10">Accessories</h2>
-      <LazyHydrate when-visible>
-        <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
-          <template #prevArrow>
-            <div class="arrows">
-              <svg
-                class="w-12 h-12 text-secondary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 19l-7-7 7-7"
-                ></path>
-              </svg>
-            </div>
-          </template>
-          /*...*/
-          <template #nextArrow>
-            <div class="arrows">
-              <svg
-                class="w-12 h-12 text-secondary -ml-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                ></path>
-              </svg>
-            </div>
-          </template>
-          <div v-for="product in VariantAccessories" :key="product._id">
-            <ProductCard
-              :id="product._id"
-              :title="product.name"
-              :image="product.images"
-              :regular-price="product.price.current + ' ETB'"
-              :imageHeight="440"
-              :imageWidth="500"
-              :alt="product.name"
-              :max-rating="5"
-              :score-rating="3"
-              :variantId="product._variantId"
-              :show-add-to-cart-button="true"
-              :isInWishlist="isInWishlist({ product })"
-              :isAddedToCart="isInCart({ product })"
-              :link="localePath(`/v/${product.slug}`)"
-              @click:wishlist="
-                !isInWishlist({ product })
-                  ? addItemToWishlist({ product })
-                  : removeItemFromWishlist({ product })
-              "
-              @click:add-to-cart="addToCart"
-              class="carousel__item__product mr-2"
-              style="border-radius: 15px"
-            />
+        <div class="md:col-span-6">
+          <h3>More About This Item</h3>
+          <div v-if="Svariant.customFields">
+            <p
+              v-html="Svariant.customFields.description"
+              class="text-justify w-[100%]"
+              :class="classes.red"
+            ></p>
           </div>
-        </VueSlickCarousel>
+        </div>
+      </div>
+
+      <div v-if="VariantAccessories.length > 0">
+        <h2 class="text-secondary text-center my-10">Accessories</h2>
+        <LazyHydrate when-visible>
+          <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
+            <template #prevArrow>
+              <div class="arrows">
+                <svg
+                  class="w-12 h-12 text-secondary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+              </div>
+            </template>
+            /*...*/
+            <template #nextArrow>
+              <div class="arrows">
+                <svg
+                  class="w-12 h-12 text-secondary -ml-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </div>
+            </template>
+            <div v-for="product in VariantAccessories" :key="product._id">
+              <ProductCard
+                :id="product._id"
+                :title="product.name"
+                :image="product.images"
+                :regular-price="product.price.current + ' ETB'"
+                :imageHeight="440"
+                :imageWidth="500"
+                :alt="product.name"
+                :max-rating="5"
+                :score-rating="3"
+                :variantId="product._variantId"
+                :show-add-to-cart-button="true"
+                :isInWishlist="isInWishlist({ product })"
+                :isAddedToCart="isInCart({ product })"
+                :link="localePath(`/v/${product.slug}`)"
+                @click:wishlist="
+                  !isInWishlist({ product })
+                    ? addItemToWishlist({ product })
+                    : removeItemFromWishlist({ product })
+                "
+                @click:add-to-cart="addToCart"
+                class="carousel__item__product mr-2"
+                style="border-radius: 15px"
+              />
+            </div>
+          </VueSlickCarousel>
+        </LazyHydrate>
+      </div>
+
+      <LazyHydrate when-visible>
+        <RelatedProducts
+          :products="relatedProducts"
+          :loading="relatedLoading"
+          class="related"
+        />
       </LazyHydrate>
+
+      <!-- <LazyHydrate when-visible> -->
+      <!-- </LazyHydrate> -->
     </div>
-
-    <LazyHydrate when-visible>
-      <RelatedProducts
-        :products="relatedProducts"
-        :loading="relatedLoading"
-        class="related"
-      />
-    </LazyHydrate>
-
-    <!-- <LazyHydrate when-visible> -->
-    <!-- </LazyHydrate> -->
   </div>
 </template>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 import ProductCard from '~/components/ProductCard.vue';
+import Loading from '~/components/Loading.vue';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
@@ -224,6 +232,7 @@ export default {
   name: 'Product',
   transition: 'fade',
   async created() {
+    this.loading = true;
     this.getVariants();
     this.reviews = await this.getProductsReviews();
   },
@@ -476,7 +485,7 @@ export default {
           slug: p?.slug,
         };
       });
-      console.log('manininin', this.VariantAccessories);
+      this.loading = false;
     },
     async getProductsReviews() {
       const data = JSON.stringify({
@@ -621,9 +630,11 @@ export default {
     Gallery,
     VueSlickCarousel,
     ProductCard,
+    Loading,
   },
   data() {
     return {
+      loading: false,
       prImage: '',
       quantity: 1,
       variant_description: null,
