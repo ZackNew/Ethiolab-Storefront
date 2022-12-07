@@ -37,12 +37,20 @@
             Find Us
           </h1>
         </a>
-        <nuxt-link to='/signin'>
+        <SfButton
+                v-e2e="'app-header-account'"
+                aria-label="Open account button"
+                class="sf-button--pure sf-header__action text-white"
+                @click="handleAccountClick"
+              >
+            My Account
+              </SfButton>
+        <!-- <nuxt-link to='/signin'>
           <p class="text-sm text-white flex font-semibold">
             <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
             MY ACCOUNT
           </p> 
-          <!-- <span class=" text-dark_gray text-sm font-bold mb-2">  
+          <span class=" text-dark_gray text-sm font-bold mb-2">  
               <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
               MY ACCOUNT
           </span>
@@ -51,8 +59,8 @@
                                 <option value="/signin" class=" text-primary text-md font-bold "> SIGN IN</option>
                                 <option value="/signup" class=" text-primary text-md font-bold ">SIGN UP</option>
 
-                        </select> -->
-        </nuxt-link>
+                        </select> 
+        </nuxt-link>-->
       </div>
     </template>
     <template #right>
@@ -68,6 +76,7 @@ import LocaleSelector from './LocaleSelector.vue';
 import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import ThemeChanger from './ThemeChanger.vue';
 import axios from 'axios';
+import {useUser} from '@vue-storefront/vendure';
 
 export default {
   components: {
@@ -99,7 +108,18 @@ export default {
       )[0];
     },
   },
-  setup() {
+  setup(props, { root }) {
+
+    const { isAuthenticated, load: loadUser, user } = useUser();
+
+    const handleAccountClick = async () => {
+      await loadUser();
+      if (isAuthenticated.value) {
+        return root.$router.push('/my-account');
+      }
+      // toggleLoginModal();
+      return root.$router.push('/signin');
+    };
     // const headerNavigation = [
     //   { name: 'Help', link: '/pages/helpAndFAQ' },
     //   { name: 'Contact us', link: '/pages/contact' },
@@ -109,6 +129,9 @@ export default {
     // return {
     //   headerNavigation,
     // };
+    return {
+      handleAccountClick
+    }
   },
   methods: {
     // async getInfos() {
