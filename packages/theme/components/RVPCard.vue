@@ -34,6 +34,7 @@
               :height="imageHeight"
               :image-tag="imageTag"
               :nuxt-img-config="nuxtImgConfig"
+              placeholder="image"
             />
           </template>
           <!-- <img
@@ -53,6 +54,7 @@
             :height="imageHeight"
             :image-tag="imageTag"
             :nuxt-img-config="nuxtImgConfig"
+            placeholder="image"
           />
         </SfButton>
       </slot>

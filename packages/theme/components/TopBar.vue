@@ -38,13 +38,14 @@
           </h1>
         </a>
         <SfButton
-                v-e2e="'app-header-account'"
-                aria-label="Open account button"
-                class="sf-button--pure sf-header__action text-white"
-                @click="handleAccountClick"
-              >
-            My Account
-              </SfButton>
+          v-e2e="'app-header-account'"
+          aria-label="Open account button"
+          class="sf-button--pure sf-header__action text-white"
+          @click="handleAccountClick"
+        >
+          <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
+          My Account
+        </SfButton>
         <!-- <nuxt-link to='/signin'>
           <p class="text-sm text-white flex font-semibold">
             <SfIcon icon="profile_fill" color="white" size="xs" class="mr-1" />
@@ -76,7 +77,7 @@ import LocaleSelector from './LocaleSelector.vue';
 import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import ThemeChanger from './ThemeChanger.vue';
 import axios from 'axios';
-import {useUser} from '@vue-storefront/vendure';
+import { useUser } from '@vue-storefront/vendure';
 
 export default {
   components: {
@@ -109,7 +110,6 @@ export default {
     },
   },
   setup(props, { root }) {
-
     const { isAuthenticated, load: loadUser, user } = useUser();
 
     const handleAccountClick = async () => {
@@ -130,8 +130,8 @@ export default {
     //   headerNavigation,
     // };
     return {
-      handleAccountClick
-    }
+      handleAccountClick,
+    };
   },
   methods: {
     // async getInfos() {
