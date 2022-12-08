@@ -68,8 +68,10 @@ export default {
     const handleAccountClick = async () => {
       if (isAuthenticated.value) {
         return root.$router.push('/my-account');
+      } else {
+        return root.$router.push('/signin');
       }
-      toggleLoginModal();
+      // toggleLoginModal();
     };
     const handleHomeClick = () => {
       isMobileMenuOpen.value ? toggleMobileMenu() : false;

@@ -2,10 +2,17 @@
   <div class="signup text-secondary">
     <h1 class="ml-[10%]">Sign In</h1>
 
-    <div class="grid grid-cols-12 gap-4">
-      <div class="left col-span-6 mt-10">
+    <div class="md:grid grid-cols-12 gap-4">
+      <div class="left col-span-6 md:mt-10">
         <!-- <p>*Required</p> -->
-        <div class="field pb-10">
+        <div
+          class="field pb-10"
+          :style="
+            !isDarkMode
+              ? 'background-color: white'
+              : 'background-color: #182533'
+          "
+        >
           <h4 class="px-10 py-6 uppercase font-bold">Please Sign IN</h4>
 
           <ValidationObserver v-slot="{ handleSubmit }">
@@ -83,11 +90,18 @@
           </div>
         </div>
       </div>
-      <div class="col-span-6 mt-10">
-        <div class="right">
-          <h4 class="px-10 py-6 uppercase font-bold">Why Register?</h4>
-          <h4 class="px-10">Register today and enjoy these benefits</h4>
-          <ul class="mx-16 my-4">
+      <div class="col-span-6 mt-3 md:mt-10">
+        <div
+          class="right"
+          :style="
+            !isDarkMode
+              ? 'background-color: white'
+              : 'background-color: #182533'
+          "
+        >
+          <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Why Register?</h4>
+          <h4 class="px-2 md:px-10">Register today and enjoy these benefits</h4>
+          <ul class="mx-3 md:mx-16 my-4">
             <li class="flex">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -177,11 +191,11 @@
             </li>
           </ul>
 
-          <h4 class="px-16 pt-10">Don't hava an account?</h4>
-          <div class="mx-16">
+          <h4 class="px-2 md:px-16 pt-10">Don't hava an account?</h4>
+          <div class="mx-2 md:mx-16">
             <nuxt-link to="/signup">
               <button
-                class="bg-secondary text-white w-1/3 h-12 font-bold mb-8 but"
+                class="bg-secondary text-white w-1/3 h-12 font-bold mb-8 but text-xs md:text-base"
               >
                 REGISTER
               </button>
@@ -233,6 +247,7 @@ export default defineComponent({
     ErrorMessage,
   },
   setup() {
+    const { isDarkMode } = useUiState();
     const form = ref({});
     const { register, login, loading, error: userError } = useUser();
     const showToast = inject('showToast');
@@ -278,6 +293,7 @@ export default defineComponent({
     return {
       handleLogin,
       form,
+      isDarkMode,
     };
   },
 });
@@ -307,12 +323,10 @@ export default defineComponent({
 
 .field {
   min-height: 500px;
-  background-color: white;
 }
 
 .right {
   min-height: 400px;
-  background-color: white;
   font-size: large;
   top: 0px;
   position: sticky;
