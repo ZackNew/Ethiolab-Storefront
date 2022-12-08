@@ -54,22 +54,23 @@
                 show-text=""
                 hide-text=""
               >
-                <div class="results-listing">
+                <div class="results-listing grid grid-cols-1 md:grid-cols-3">
                   <ProductCard
                     v-for="r in result"
                     :key="r.id"
                     :title="r.name"
                     :image="r.images"
                     :imageHeight="260"
-                    :imageWidth="290"
+                    :imageWidth="300"
                     :alt="r.name"
                     :regular-price="r.price.current + ' ETB'"
                     :max-rating="5"
                     :score-rating="r.rating"
                     :show-add-to-cart-button="false"
                     :link="localePath(`/v/${r.slug}`)"
-                    class="products__product-card mr-2 mb-4"
+                    class="carousel__item__product mr-2 mb-4"
                   />
+                  <!-- class="products__product-card mr-2 mb-4" -->
                 </div>
               </SfScrollable>
             </div>

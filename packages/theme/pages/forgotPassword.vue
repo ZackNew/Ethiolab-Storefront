@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import Toast from '~/components/Toast.vue';
 import { defineComponent } from '@vue/composition-api';
 import { ref, onMounted, inject, reactive } from '@vue/composition-api';
 import { required, min, digits, email } from 'vee-validate/dist/rules';
@@ -118,6 +119,7 @@ export default defineComponent({
     SfLoader,
   },
   setup() {
+    const showToast = inject('showToast');
     const {
       request,
       error: forgotPasswordError,
@@ -128,7 +130,7 @@ export default defineComponent({
 
     const handleForgotten = async () => {
       await request({ email: userEmail.value });
-
+      showToast('A password reset link has been sent to your email');
       // if (!forgotPasswordError.value.request) {
       //   setCurrentScreen(SCREEN_THANK_YOU);
       // }

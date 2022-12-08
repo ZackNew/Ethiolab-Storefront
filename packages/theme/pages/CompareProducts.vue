@@ -3,7 +3,13 @@
     <div v-if="loading" class="mt-28">
       <Loading />
     </div>
-    <div v-else class="p-[2%] bg-white border border-secondary">
+    <div
+      v-else
+      class="p-[2%] border border-secondary"
+      :style="
+        !isDarkMode ? 'background-color: white' : 'background-color: #182533'
+      "
+    >
       <h3 class="font-bold text-secondary">Product Comparison</h3>
       <hr />
 
@@ -209,6 +215,7 @@ import Loading from '~/components/Loading.vue';
 import axios from 'axios';
 import truncate from 'vue-truncate-collapsed';
 import { SfRating } from '@storefront-ui/vue';
+import { useUiState } from '~/composables';
 
 export default {
   name: 'compareProduct',
@@ -230,6 +237,12 @@ export default {
     SfRating,
     truncate,
     Loading,
+  },
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
+    };
   },
   methods: {
     async getItemsToCompare() {

@@ -266,13 +266,14 @@ import SubcatBrandCard from '../components/SubcatBrandCard.vue';
 export default {
   name: 'Subcategory',
   created() {
+    this.loading = true;
     this.getCategory();
   },
   data() {
     return {
       limit: 12,
       showFilter: false,
-      loading: true,
+      loading: false,
       low: '',
       high: '',
       A_Z: null,

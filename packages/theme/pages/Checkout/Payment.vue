@@ -1,189 +1,327 @@
 <template>
   <div id="checkout">
     <div class="checkout">
-    <div class="checkout__main"> 
-      <SfHeading
-      :level="3"
-      :title="$t('Payment')"
-      class="sf-heading--left sf-heading--no-underline title"
-    />
-
-    <SfTable class="sf-table--bordered table desktop-only">
-      <SfTableHeading class="table__row">
-        <SfTableHeader class="table__header table__image">{{ $t('Item') }}</SfTableHeader>
-        <SfTableHeader
-          v-for="tableHeader in tableHeaders"
-          :key="tableHeader"
-          class="table__header"
-          :class="{ table__description: tableHeader === 'Description' }"
-        >
-          {{ tableHeader }}
-        </SfTableHeader>
-      </SfTableHeading>
-      <SfTableRow
-        v-for="(product, index) in products"
-        :key="index"
-        class="table__row"
-      >
-        <SfTableData class="table__image">
-          <SfImage :src="cartGetters.getItemImage(product)" :alt="cartGetters.getItemName(product)" />
-        </SfTableData>
-        <SfTableData class="table__data table__description table__data">
-          <div class="product-title">{{ cartGetters.getItemName(product) }}</div>
-          <div class="product-sku">{{ cartGetters.getItemSku(product) }}</div>
-          <SfProperty
-            v-for="(attribute, key) in cartGetters.getItemOptions(product)"
-            :key="key"
-            :name="attribute.label"
-            :value="attribute.value"
-          />
-        </SfTableData>
-        <SfTableData class="table__data">{{ cartGetters.getItemQty(product) }}</SfTableData>
-        <SfTableData class="table__data price">
-          <SfPrice
-            :regular="cartGetters.getItemPrice(product).regular.toLocaleString() + ' ETB'"
-            class="product-price"
-          />
-        </SfTableData>
-      </SfTableRow>
-    </SfTable>
-    {{totals}}
-    <div class="summary">
-      <div class="summary__group">
-        <div class="summary__total">
-          <SfProperty
-            :name="$t('Subtotal')"
-            :value="(totals.special > 0 ? totals.special : totals.subtotal).toLocaleString() + ' ETB'"
-            class="sf-property--full-width property"
-          />
-        </div>
-
-        <SfDivider />
-
-        <SfProperty
-          :name="$t('Total price')"
-          :value="totals.subtotal.toLocaleString() + ' ETB'"
-          class="sf-property--full-width sf-property--large summary__property-total"
+      <div class="checkout__main">
+        <SfHeading
+          :level="3"
+          :title="$t('Payment')"
+          class="sf-heading--left sf-heading--no-underline title"
         />
 
-        <VsfPaymentProvider @paymentMethodSelected="updatePaymentMethod"/>
-
-        <SfCheckbox v-e2e="'terms'" v-model="terms" name="terms" class="summary__terms">
-          <template #label>
-            <div class="sf-checkbox__label">
-              {{ $t('I agree to') }} <SfLink href="/policy/terms-and-conditions"> {{ $t('Terms and conditions') }}</SfLink>
-            </div>
-          </template>
-        </SfCheckbox>
-
-        <div class="summary__action">
-          <SfButton
-            type="button"
-            class="sf-button color-secondary summary__back-button"
-            @click="$router.push('/checkout/billing')"
+        <SfTable class="sf-table--bordered table desktop-only">
+          <SfTableHeading class="table__row">
+            <SfTableHeader class="table__header table__image">{{
+              $t('Item')
+            }}</SfTableHeader>
+            <SfTableHeader
+              v-for="tableHeader in tableHeaders"
+              :key="tableHeader"
+              class="table__header"
+              :class="{ table__description: tableHeader === 'Description' }"
+            >
+              {{ tableHeader }}
+            </SfTableHeader>
+          </SfTableHeading>
+          <SfTableRow
+            v-for="(product, index) in products"
+            :key="index"
+            class="table__row"
           >
-            {{ $t('Go back') }}
-          </SfButton>
-          <!-- <button v-on:click="sendData">
+            <SfTableData class="table__image">
+              <SfImage
+                :src="cartGetters.getItemImage(product)"
+                :alt="cartGetters.getItemName(product)"
+              />
+            </SfTableData>
+            <SfTableData class="table__data table__description table__data">
+              <div class="product-title">
+                {{ cartGetters.getItemName(product) }}
+              </div>
+              <div class="product-sku">
+                {{ cartGetters.getItemSku(product) }}
+              </div>
+              <SfProperty
+                v-for="(attribute, key) in cartGetters.getItemOptions(product)"
+                :key="key"
+                :name="attribute.label"
+                :value="attribute.value"
+              />
+            </SfTableData>
+            <SfTableData class="table__data">{{
+              cartGetters.getItemQty(product)
+            }}</SfTableData>
+            <SfTableData class="table__data price">
+              <SfPrice
+                :regular="
+                  cartGetters.getItemPrice(product).regular.toLocaleString() +
+                  ' ETB'
+                "
+                class="product-price"
+              />
+            </SfTableData>
+          </SfTableRow>
+        </SfTable>
+        <div class="summary">
+          <div class="summary__group">
+            <div class="summary__total">
+              <SfProperty
+                :name="$t('Subtotal')"
+                :value="
+                  (totals.special > 0
+                    ? totals.special
+                    : totals.subtotal
+                  ).toLocaleString() + ' ETB'
+                "
+                class="sf-property--full-width property"
+              />
+            </div>
+
+            <SfDivider />
+
+            <SfProperty
+              :name="$t('Total price')"
+              :value="totals.subtotal.toLocaleString() + ' ETB'"
+              class="sf-property--full-width sf-property--large summary__property-total"
+            />
+
+            <VsfPaymentProvider @paymentMethodSelected="updatePaymentMethod" />
+
+            <SfCheckbox
+              v-e2e="'terms'"
+              v-model="terms"
+              name="terms"
+              class="summary__terms"
+            >
+              <template #label>
+                <div class="sf-checkbox__label">
+                  {{ $t('I agree to') }}
+                  <SfLink href="/policy/terms-and-conditions">
+                    {{ $t('Terms and conditions') }}</SfLink
+                  >
+                </div>
+              </template>
+            </SfCheckbox>
+
+            <div class="summary__action">
+              <SfButton
+                type="button"
+                class="sf-button color-secondary summary__back-button"
+                @click="$router.push('/checkout/billing')"
+              >
+                {{ $t('Go back') }}
+              </SfButton>
+              <!-- <button v-on:click="sendData">
             Click me
           </button> -->
 
-          <div v-if="paymentMethod && paymentMethod.name == 'Cybersource' " class="cyberForm"> 
+              <div
+                v-if="paymentMethod && paymentMethod.name == 'Cybersource'"
+                class="cyberForm"
+              >
+                <form
+                  id="payment_confirmation"
+                  action="https://testsecureacceptance.cybersource.com/pay"
+                  target="_blank"
+                  method="post"
+                >
+                  <input
+                    id="access_key"
+                    type="hidden"
+                    name="access_key"
+                    v-model="paymentDetail.access_key"
+                  />
+                  <input
+                    id="profile_id"
+                    type="hidden"
+                    name="profile_id"
+                    v-model="paymentDetail.profile_id"
+                  />
+                  <input
+                    id="transaction_uuid"
+                    type="hidden"
+                    name="transaction_uuid"
+                    v-model="paymentDetail.transaction_uuid"
+                  />
+                  <input
+                    id="signed_field_names"
+                    type="hidden"
+                    name="signed_field_names"
+                    v-model="paymentDetail.signed_field_names"
+                  />
+                  <input
+                    id="unsigned_field_names"
+                    type="hidden"
+                    name="unsigned_field_names"
+                    v-model="paymentDetail.unsigned_field_names"
+                  />
+                  <input
+                    id="signed_date_time"
+                    type="hidden"
+                    name="signed_date_time"
+                    v-model="paymentDetail.signed_date_time"
+                  />
+                  <input
+                    id="locale"
+                    type="hidden"
+                    name="locale"
+                    v-model="paymentDetail.locale"
+                  />
+                  <input
+                    id="transaction_type"
+                    type="hidden"
+                    name="transaction_type"
+                    v-model="paymentDetail.transaction_type"
+                  />
+                  <input
+                    id="reference_number"
+                    type="hidden"
+                    name="reference_number"
+                    v-model="paymentDetail.reference_number"
+                  />
+                  <input
+                    id="amount"
+                    type="hidden"
+                    name="amount"
+                    v-model.lazy="paymentDetail.amount"
+                  />
+                  <input
+                    id="currency"
+                    type="hidden"
+                    name="currency"
+                    v-model="paymentDetail.currency"
+                  />
+                  <input
+                    id="signature"
+                    type="hidden"
+                    name="signature"
+                    v-model="paymentDetail.signature"
+                  />
 
-           <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/pay" target="_blank" method="post">
-            <input id="access_key" type="hidden"  name="access_key" v-model="paymentDetail.access_key">
-            <input id="profile_id" type="hidden"  name="profile_id" v-model="paymentDetail.profile_id">
-            <input id="transaction_uuid" type="hidden"  name="transaction_uuid" v-model="paymentDetail.transaction_uuid">
-            <input id="signed_field_names" type="hidden"  name="signed_field_names" v-model="paymentDetail.signed_field_names">
-            <input id="unsigned_field_names" type="hidden"  name="unsigned_field_names" v-model="paymentDetail.unsigned_field_names">
-            <input id="signed_date_time" type="hidden"  name="signed_date_time" v-model="paymentDetail.signed_date_time">
-            <input id="locale" type="hidden"  name="locale" v-model="paymentDetail.locale">
-            <input id="transaction_type" type="hidden"  name="transaction_type" v-model="paymentDetail.transaction_type">
-            <input id="reference_number" type="hidden"  name="reference_number" v-model="paymentDetail.reference_number">
-            <input id="amount" type="hidden"  name="amount" v-model.lazy="paymentDetail.amount">
-            <input id="currency" type="hidden"  name="currency" v-model="paymentDetail.currency">
-            <input id="signature" type="hidden"  name="signature" v-model="paymentDetail.signature">
+                  <input
+                    type="submit"
+                    id="submit"
+                    name="submit"
+                    value="PAY WITH CYBERSOURCE"
+                    class="box-border relative flex h-12 pl-4 pr-4 align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold -mt-12"
+                  />
+                </form>
+              </div>
 
-      <input type="submit" id="submit" name="submit" value="PAY WITH CYBERSOURCE"  class="box-border relative flex h-12 pl-4 pr-4  align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold -mt-12">
-  
-          </form>     
+              <div v-if="paymentMethod && paymentMethod.name == 'Telebirr'">
+                <SfButton
+                  v-e2e="'make-an-order'"
+                  :disabled="!paymentMethod"
+                  class="summary__action-button"
+                  @click="processTelebirr"
+                >
+                  {{ $t('Pay with Telebirr') }}
+                </SfButton>
+              </div>
 
+              <div
+                v-if="paymentMethod && paymentMethod.name == 'Cash'"
+                class="box-border relative flex h-12 pl-4 pr-4 pt-2 align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold"
+              >
+                <p>Pay in Cash with Order ID #{{ cart.code }}</p>
+              </div>
+            </div>
           </div>
- 
+        </div>
+      </div>
 
-          <div v-if="paymentMethod && paymentMethod.name == 'Telebirr'">
-            <SfButton
-            v-e2e="'make-an-order'"
-            :disabled="!paymentMethod"
-            class="summary__action-button"
-            @click="processTelebirr"
-          >
-            {{ $t('Pay with Telebirr') }}
-          </SfButton>
-          </div>
+      <div class="checkout__aside desktop-only">
+        <transition name="fade">
+          <CartPreview key="order-summary" />
+        </transition>
+        <div class="highlighted promo-code">
+          <SfInput
+            v-model="promoCode"
+            name="promoCode"
+            :label="$t('Enter promo code')"
+            class="sf-input--filled promo-code__input"
+          />
+          <SfButton class="promo-code__button" @click="applyPromoCode">{{
+            $t('Apply')
+          }}</SfButton>
+        </div>
 
-          <div v-if="paymentMethod && paymentMethod.name == 'Cash' " class="box-border relative flex h-12 pl-4 pr-4 pt-2  align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold "> 
-            <p>Pay in Cash with Order ID #{{cart.code}}</p>
-          </div>
-      
+        <div>
+          <SfButton class="w-full mt-10" @click="handleModalOpen">{{
+            $t('Cancel Order')
+          }}</SfButton>
+        </div>
+      </div>
+      <div>
+        <div v-if="modalOpen">
+          <SfModal title="My title" visible :persistent="false">
+            <div class="relative w-full h-full max-w-md md:h-auto">
+              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button
+                  type="button"
+                  class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                  data-modal-toggle="popup-modal"
+                  @click="handleModalOpen"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <!-- <span class="sr-only">Close modal</span> -->
+                </button>
+                <div class="p-6 text-center">
+                  <svg
+                    aria-hidden="true"
+                    class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <h3
+                    class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"
+                  >
+                    Are you sure you want to cancel this order?
+                  </h3>
+                  <button
+                    @click="handleCancelOrder"
+                    data-modal-toggle="popup-modal"
+                    type="button"
+                    class="text-white bg-red hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                  >
+                    Yes, I'm sure
+                  </button>
+                  <button
+                    data-modal-toggle="popup-modal"
+                    type="button"
+                    class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                    @click="handleModalOpen"
+                  >
+                    No, cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </SfModal>
         </div>
       </div>
     </div>
-    </div>
-
-    <div
-        class="checkout__aside desktop-only"
-      >
-        <transition name="fade">
-          <CartPreview key="order-summary" />
-            
-        </transition>
-        <div class="highlighted promo-code">
-                      <SfInput
-                        v-model="promoCode"
-                        name="promoCode"
-                        :label="$t('Enter promo code')"
-                        class="sf-input--filled promo-code__input"
-                      />
-                      <SfButton class="promo-code__button" @click="applyPromoCode">{{ $t('Apply') }}</SfButton>
-          </div>
-
-          <div>
-            <SfButton class="w-full mt-10" @click="handleModalOpen">{{ $t('Cancel Order') }}</SfButton>
-          </div>
-    
-      </div>
-      <div>
-       
-                  <div v-if="modalOpen">
-                        <SfModal title="My title" visible  :persistent="false">
-    <div class="relative w-full h-full max-w-md md:h-auto">
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-toggle="popup-modal" @click="handleModalOpen">
-                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                <!-- <span class="sr-only">Close modal</span> -->
-            </button>
-            <div class="p-6 text-center">
-                <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to cancel this order?</h3>
-                <button @click="handleCancelOrder" data-modal-toggle="popup-modal" type="button" class="text-white bg-red hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
-                    Yes, I'm sure
-                </button>
-                <button data-modal-toggle="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600" @click="handleModalOpen">
-                  No, cancel</button>
-            </div>
-    </div>
-</div>
-                    </SfModal>
-                  </div>
-             
-            </div>
-
-   
-   
   </div>
-  </div>
-  
 </template>
 
 <script>
@@ -200,25 +338,34 @@ import {
   SfAccordion,
   SfLink,
   SfInput,
-  SfModal
+  SfModal,
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
-import { ref, computed, onMounted , onBeforeMount} from '@vue/composition-api';
-import { useMakeOrder, useCart, cartGetters, usePayment } from '@vue-storefront/vendure';
+import { ref, computed, onMounted, onBeforeMount } from '@vue/composition-api';
+import {
+  useMakeOrder,
+  useCart,
+  cartGetters,
+  usePayment,
+} from '@vue-storefront/vendure';
 // import { useBilling, useShipping, useUserBilling } from '@vue-storefront/vendure';
-import { uuid } from 'vue-uuid'; 
+import { uuid } from 'vue-uuid';
 import * as crypto from 'crypto';
-import CryptoJS from 'crypto-js'
-import moment from "moment";
+import CryptoJS from 'crypto-js';
+import moment from 'moment';
 import axios from 'axios';
 import Vue from 'vue';
 // import VueAxios from 'vue-axios';
-import { mapAddressFormToOrderAddress, COUNTRIES, getDefaultAddress, mapAddressToAddressForm } from '~/helpers';
-import NodeRSA from "node-rsa";
+import {
+  mapAddressFormToOrderAddress,
+  COUNTRIES,
+  getDefaultAddress,
+  mapAddressToAddressForm,
+} from '~/helpers';
+import NodeRSA from 'node-rsa';
 import CartPreview from '~/components/Checkout/CartPreview.vue';
 
 // Vue.use(VueAxios, axios);
-
 
 export default {
   name: 'ReviewOrder',
@@ -236,32 +383,33 @@ export default {
     SfLink,
     SfInput,
     SfModal,
-    VsfPaymentProvider: () => import("~/components/Checkout/VsfPaymentProvider"),
-    CartPreview
-},
+    VsfPaymentProvider: () =>
+      import('~/components/Checkout/VsfPaymentProvider'),
+    CartPreview,
+  },
   setup(props, context) {
-    const { cart, load, setCart ,applyCoupon} = useCart();
+    const { cart, load, setCart, applyCoupon } = useCart();
     const { loading } = useMakeOrder();
     const { set } = usePayment();
-    
-    
 
     const terms = ref(false);
     const paymentMethod = ref(null);
     const modalOpen = ref(false);
 
+    let time = new Date().getTime();
 
-     let time = new Date().getTime();
-
-
-    let sign = ref("")
+    let sign = ref('');
     let paymentDetail = {};
-    let SECRET_KEY = ""
-    let url =""
+    let SECRET_KEY = '';
+    let url = '';
     const promoCode = ref('');
 
     const handleModalOpen = () => {
-      console.log("MODAL OPEN CLICKED" , modalOpen.value, typeof modalOpen.value)
+      console.log(
+        'MODAL OPEN CLICKED',
+        modalOpen.value,
+        typeof modalOpen.value
+      );
       let temp = modalOpen.value;
       modalOpen.value = !temp;
 
@@ -271,24 +419,24 @@ export default {
       // else {
       //   modalOpen.value = true
       // }
-    }
+    };
 
-    const handleCancelOrder = async() => {
-      console.log("order is about to be cancelled")
+    const handleCancelOrder = async () => {
+      console.log('order is about to be cancelled');
 
-            const body = {
+      const body = {
         query: `mutation cancelOrder($orderCode: String!) {
           cancelMyOrder (orderCode: $orderCode){
                   success
                 }
               }`,
-          variables: {
-            orderCode: cart.value.code,
+        variables: {
+          orderCode: cart.value.code,
         },
       };
       //   query: `mutation transitionOrderToState($state: String!) {
       //           transitionOrderToState(input : {state: $state}) {
-               
+
       //           }
       //         }`,
       //   variables: {
@@ -304,26 +452,23 @@ export default {
       };
       let baseUrl = process.env.GRAPHQL_API;
 
-           const acat = await axios
+      const acat = await axios
         .post(baseUrl, body, options)
         .then(async (res) => {
-          console.log("the  cancel response value is ", res);
+          console.log('the  cancel response value is ', res);
           modalOpen.value = false;
-          window.location.href = "/";
-        }).catch(err => {
-          console.log("the catch err is ", err)
+          window.location.href = '/';
         })
-    }
+        .catch((err) => {
+          console.log('the catch err is ', err);
+        });
+    };
 
     onSSR(async () => {
-      await load()
+      await load();
     });
 
- 
-
-    onMounted(() => {
-
-    })
+    onMounted(() => {});
 
     onBeforeMount(() => {
 
@@ -346,44 +491,11 @@ export default {
 
     let signedFieldNames = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
       // console.log("the signed field names are ", signedFieldNames)
-      let params = signedFieldNames.split(",");
+      let params = signedFieldNames.split(',');
       let dataToSign = [];
 
-      params.forEach(param => {
-        dataToSign.push(param+"="+paymentDetail[param]);
-        
-      });
-
-      let data = dataToSign.join();
-
-      var hash = CryptoJS.HmacSHA256(data, SECRET_KEY);
-  var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
-  paymentDetail.signature = hashInBase64;
-      // console.log("before comma", dataToSign)
-      // return commaSeparate(dataToSign);
-    })
-
-    const updatePaymentMethod = method => {
-      paymentMethod.value = method;
-      // console.log("paymentmethod id ", method);
-    };
-
-    const applyPromoCode =async () => {
-      console.log("processing promo code ", promoCode);
-    const result  = await applyCoupon({ couponCode: promoCode.value, currentCart: cart.value })
-
-    paymentDetail.amount = (cart?.value?.totalWithTax/100).toFixed(2).toString();
-    paymentDetail.signature = "";
-
-   
-    let signedFieldNames = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
- 
-      let params = signedFieldNames.split(",");
-      let dataToSign = [];
-
-      params.forEach(param => {
-        dataToSign.push(param+"="+paymentDetail[param]);
-        
+      params.forEach((param) => {
+        dataToSign.push(param + '=' + paymentDetail[param]);
       });
 
       let data = dataToSign.join();
@@ -391,19 +503,53 @@ export default {
       var hash = CryptoJS.HmacSHA256(data, SECRET_KEY);
       var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
       paymentDetail.signature = hashInBase64;
-    
-    }
+      // console.log("before comma", dataToSign)
+      // return commaSeparate(dataToSign);
+    });
+
+    const updatePaymentMethod = (method) => {
+      paymentMethod.value = method;
+      // console.log("paymentmethod id ", method);
+    };
+
+    const applyPromoCode = async () => {
+      console.log('processing promo code ', promoCode);
+      const result = await applyCoupon({
+        couponCode: promoCode.value,
+        currentCart: cart.value,
+      });
+
+      paymentDetail.amount = (cart?.value?.totalWithTax / 100)
+        .toFixed(2)
+        .toString();
+      paymentDetail.signature = '';
+
+      let signedFieldNames =
+        'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency';
+
+      let params = signedFieldNames.split(',');
+      let dataToSign = [];
+
+      params.forEach((param) => {
+        dataToSign.push(param + '=' + paymentDetail[param]);
+      });
+
+      let data = dataToSign.join();
+
+      var hash = CryptoJS.HmacSHA256(data, SECRET_KEY);
+      var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+      paymentDetail.signature = hashInBase64;
+    };
     const processOrder = async () => {
       const response = await set({
         method: paymentMethod?.value?.code,
         metadata: {
           // Here you would pass data from an external Payment Provided after successful payment process like payment id.
-        }
-
+        },
       });
-        console.log("the final payment response value is ", response)
+      console.log('the final payment response value is ', response);
 
-        const state = "Completed";
+      const state = 'Completed';
 
       //   const body = {
       //   query: `mutation{
@@ -435,11 +581,10 @@ export default {
       //     console.log("error occured while updating the state and err is ", err);
       //   })
 
-
       //   const body = {
       //   query: `mutation transitionOrderToState($state: String!) {
       //           transitionOrderToState(input : {state: $state}) {
-               
+
       //           }
       //         }`,
       //   variables: {
@@ -462,7 +607,7 @@ export default {
       //     console.log("the catch err is ", err)
       //   })
 
-      // const thankYouPath = { name: 'thank-you', query: { order: response?.code }}; 
+      // const thankYouPath = { name: 'thank-you', query: { order: response?.code }};
       // const thankYouPath = { name: 'thank-you', query: { order:11256 }}; // order number is to be getted from the response later
 
       // context.root.$router.push(context.root.localePath(thankYouPath));
@@ -470,8 +615,8 @@ export default {
       // setCart(null);
     };
 
-    const processTelebirr =  async() => {
-      console.log("telebirr next");
+    const processTelebirr = async () => {
+      console.log('telebirr next');
 
       ////////////////////////////////STEP 1//////////////////////////////////////
 
@@ -495,112 +640,107 @@ export default {
         function jsonSort(jsonObj) {
         let arr = [];
         for (var key in jsonObj) {
-        arr.push(key);
+          arr.push(key);
         }
         arr.sort();
         let str = '';
         for (var i in arr) {
-        str += arr[i] + "=" + jsonObj[arr[i]] + "&";
+          str += arr[i] + '=' + jsonObj[arr[i]] + '&';
         }
         return str.substr(0, str.length - 1);
+      }
+
+      console.log('string A vlaue is ', StringA);
+
+      ////////////////////////////////STEP 2//////////////////////////////////////
+
+      let StringB = sha256(StringA);
+
+      function sha256(data) {
+        var hash = crypto.createHash('sha256');
+        hash.update(data);
+        return hash.digest('hex');
+      }
+      ////////////////////////////////STEP 3//////////////////////////////////////
+      console.log('string B vlaue is ', StringB);
+
+      let sign = StringB.toUpperCase();
+
+      console.log('sign vlaue is ', sign);
+
+      ////////////////////////////////STEP 4//////////////////////////////////////
+
+      let jsonObj = {
+        appId: '4ae7217b4e7149fdac877852e7fd87db',
+        nonce: paymentDetail.transaction_uuid,
+        notifyUrl: 'http://localhost:3000/telebirr',
+        outTradeNo: cart.value.code,
+        receiveName: 'Ethiolab',
+        returnUrl: 'http://localhost:3001/checkout/thank-you/',
+        shortCode: '220322',
+        subject: 'Goods Name',
+        timeoutExpress: '30',
+        timestamp: cart?.value?.code?.toString(),
+        totalAmount: paymentDetail.amount,
+      };
+
+      // console.log("jsonobj is ", jsonObj)
+
+      let ussdjson = JSON.stringify(jsonObj);
+
+      ////////////////////////////////STEP 5//////////////////////////////////////
+
+      let ussd = rsa_encrypt(ussdjson);
+
+      function rsa_encrypt(data) {
+        let publicKey =
+          'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhu+JrZMv17Ah5joHaBWWOl2NOZruM6M0ZMQLpRDfvobwZhK46mDH+b9nej1PnM4mSqQ8TlDIQJ5Y27vIyc2KWksxdLb59+POd3wUv455npMeK2RCBL5KDSam+eets6XoO6dRZv00eWMQ+SOHaK48XlftIUghfeOfZs/LdWK6EksgXaOKQsQzhqOnmsGdJkMe3YMqm10SBuWqkaZcmt+DUUzd2j1rvDr8B8Tu24FkmMbpSKhfRYI3HBIBG1tB6nefXT3A7ouwnuEMqwe1XCHaHWUMErmvr4bs3o3ZzJvEinIi5LX7mTG/+OB/OI4AyAbjrHad77Vb5RyGSFrpCr5TEwIDAQAB';
+        let key = new NodeRSA(getPublicKey(publicKey));
+        key.setOptions({ encryptionScheme: 'pkcs1' });
+        let encryptKey = key.encrypt(data, 'base64');
+        return encryptKey;
+      }
+
+      function insertStr(str, insertStr, sn) {
+        var newstr = '';
+        for (var i = 0; i < str.length; i += sn) {
+          var tmp = str.substring(i, i + sn);
+          newstr += tmp + insertStr;
         }
+        return newstr;
+      }
 
-        console.log("string A vlaue is ", StringA)
+      function getPublicKey(key) {
+        const result = insertStr(key, '\n', 64);
+        return (
+          '-----BEGIN PUBLIC KEY-----\n' + result + '-----END PUBLIC KEY-----'
+        );
+      }
 
-              ////////////////////////////////STEP 2//////////////////////////////////////
+      ////////////////////////////////STEP 6//////////////////////////////////////
 
-              let StringB = sha256(StringA);
+      const appId = '4ae7217b4e7149fdac877852e7fd87db';
+      let requestMessage = { appid: signObj.appId, sign: sign, ussd: ussd };
 
-        function sha256(data) {
-            var hash = crypto.createHash('sha256');
-            hash.update(data);
-            return hash.digest('hex');
-        }
-              ////////////////////////////////STEP 3//////////////////////////////////////
-              console.log("string B vlaue is ", StringB)
+      ////////////////////////////////STEP 7//////////////////////////////////////
 
-       let sign = StringB.toUpperCase();
+      const api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
 
-
-       console.log("sign vlaue is ", sign)
-
-              ////////////////////////////////STEP 4//////////////////////////////////////
-
-              let jsonObj = {"appId":"4ae7217b4e7149fdac877852e7fd87db",
-                      "nonce":paymentDetail.transaction_uuid,
-                      "notifyUrl":"http://localhost:3000/telebirr",
-                      "outTradeNo":cart.value.code,
-                      "receiveName":"Ethiolab",
-                      "returnUrl":"http://localhost:3001/checkout/thank-you/",
-                      "shortCode":"220322",
-                      "subject":"Goods Name",
-                      "timeoutExpress":"30",
-                      "timestamp":cart?.value?.code?.toString(),
-                      "totalAmount":paymentDetail.amount
-                    };
-
-                    
-
-                    // console.log("jsonobj is ", jsonObj)
-                    
-                    let ussdjson = JSON.stringify(jsonObj);
-
-              ////////////////////////////////STEP 5//////////////////////////////////////
-
-              let ussd = rsa_encrypt(ussdjson);
-
-          function rsa_encrypt (data) {
-            let publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhu+JrZMv17Ah5joHaBWWOl2NOZruM6M0ZMQLpRDfvobwZhK46mDH+b9nej1PnM4mSqQ8TlDIQJ5Y27vIyc2KWksxdLb59+POd3wUv455npMeK2RCBL5KDSam+eets6XoO6dRZv00eWMQ+SOHaK48XlftIUghfeOfZs/LdWK6EksgXaOKQsQzhqOnmsGdJkMe3YMqm10SBuWqkaZcmt+DUUzd2j1rvDr8B8Tu24FkmMbpSKhfRYI3HBIBG1tB6nefXT3A7ouwnuEMqwe1XCHaHWUMErmvr4bs3o3ZzJvEinIi5LX7mTG/+OB/OI4AyAbjrHad77Vb5RyGSFrpCr5TEwIDAQAB";
-              let key = new NodeRSA(getPublicKey(publicKey));
-              key.setOptions({encryptionScheme: 'pkcs1'});
-              let encryptKey = key.encrypt(data, 'base64'); 
-              return encryptKey;
+      axios
+        .post('/api/telebirr', requestMessage)
+        .then((res) => {
+          console.log('local response is ', res);
+          if (res.status == 200 && res.data.data.code == 200) {
+            // rsp.redirect(res.data.data.toPayUrl);
+            window.location.href = res.data.data.data.toPayUrl;
+          } else {
+            console.error(res.data.message);
           }
-
-          function insertStr(str, insertStr, sn) {
-              var newstr = '';
-              for (var i = 0; i < str.length; i += sn) {
-                  var tmp = str.substring(i, i + sn);
-                  newstr += tmp + insertStr;
-              }
-              return newstr;
-          }
-
-          function getPublicKey (key) {
-              const result = insertStr(key, '\n', 64);
-              return '-----BEGIN PUBLIC KEY-----\n' + result + '-----END PUBLIC KEY-----';
-          };
-
-                    ////////////////////////////////STEP 6//////////////////////////////////////
-
-          const appId = '4ae7217b4e7149fdac877852e7fd87db';
-        let requestMessage = {appid: signObj.appId, sign: sign, ussd: ussd};
-
-
-        ////////////////////////////////STEP 7//////////////////////////////////////
-
-        const api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
-
-
-              axios
-                      .post("/api/telebirr", requestMessage)
-                      .then(res => {
-                        console.log("local response is ", res);
-                          if (res.status == 200 && res.data.data.code == 200) {
-                              // rsp.redirect(res.data.data.toPayUrl);
-                              window.location.href = res.data.data.data.toPayUrl
-                          } else {
-                              console.error(res.data.message);
-                          }
-                      })
-                      .catch(error => {
-                          console.error(error);
-                      });
-
-
-    }
-
-   
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
 
     return {
       terms,
@@ -621,16 +761,16 @@ export default {
       promoCode,
       handleModalOpen,
       modalOpen,
-      handleCancelOrder
+      handleCancelOrder,
     };
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-  .cyberForm {
-    max-height: 50px;
-  }
+.cyberForm {
+  max-height: 50px;
+}
 .title {
   margin: var(--spacer-xl) 0 var(--spacer-base) 0;
 }
@@ -708,9 +848,9 @@ export default {
       margin: 0 var(--spacer-xl) 0 0;
       width: auto;
     }
-    color:  var(--c-white);
+    color: var(--c-white);
     &:hover {
-      color:  var(--c-white);
+      color: var(--c-white);
     }
   }
   &__property-total {

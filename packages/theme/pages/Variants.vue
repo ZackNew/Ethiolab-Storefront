@@ -1,5 +1,8 @@
 <template>
   <div id="variant">
+    <div class="my-[3%]" v-if="product === null && loading">
+      <Loading />
+    </div>
     <div v-if="product !== null">
       <nav class="sf-breadcrumbs my-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
@@ -288,6 +291,7 @@
 
 <script>
 import MyReview from '~/components/MyAccount/MyReview.vue';
+import Loading from '~/components/Loading.vue';
 import { useUiState } from '~/composables';
 import LazyHydrate from 'vue-lazy-hydration';
 import axios from 'axios';
@@ -311,9 +315,11 @@ export default {
     MyReview,
     SfReview,
     LazyHydrate,
+    Loading,
   },
   data() {
     return {
+      loading: false,
       reviews: [],
       product: null,
       toCart: 1,
@@ -444,8 +450,7 @@ export default {
       };
       const productVariant = await axios.post(baseUrl, body, options);
       this.product = productVariant?.data?.data?.product;
-      console.log('pppppp', this.$route);
-      console.log('pppppp Maji', this.product);
+      this.loading = false;
     },
   },
   computed: {
@@ -508,6 +513,7 @@ export default {
     };
   },
   async created() {
+    this.loading = true;
     this.getProductVariant();
     this.reviews = await this.getProductsReviews();
   },

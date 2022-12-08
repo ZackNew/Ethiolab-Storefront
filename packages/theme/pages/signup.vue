@@ -2,11 +2,18 @@
   <div class="signup text-secondary">
     <h1 class="ml-[10%]">Create an Account</h1>
 
-    <div class="grid grid-cols-12 gap-4">
-      <div class="left col-span-6 mt-10">
+    <div class="md:grid grid-cols-12 gap-4">
+      <div class="left col-span-6 md:mt-10">
         <!-- <p>*Required</p> -->
-        <div class="field">
-          <h4 class="px-10 py-6 uppercase font-bold">Please Sign UP</h4>
+        <div
+          class="field"
+          :style="
+            !isDarkMode
+              ? 'background-color: white'
+              : 'background-color: #182533'
+          "
+        >
+          <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Please Sign UP</h4>
 
           <ValidationObserver v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(handleFormSubmit)">
@@ -218,20 +225,39 @@
                 </ValidationProvider>
               </div>
 
-              <div class="grid grid-cols-2">
+              <div class="md:grid grid-cols-2">
                 <div class="col-span-1">
                   <div class="m-8">
-                    <div class="text-dark_gray text-sm font-bold mb-2">
-                      ORGANIZATION
-                    </div>
+                    <div class="flex justify-between">
+                      <div>
+                        <div class="text-dark_gray text-sm font-bold mb-2">
+                          ORGANIZATION
+                        </div>
 
-                    <input
-                      type="checkbox"
-                      name="categories"
-                      class="ml-8 t-4 w-6 h-6 mb-4"
-                      :checked="isOrganization"
-                      @click="checkOrganization"
-                    />
+                        <input
+                          type="checkbox"
+                          name="categories"
+                          class="ml-8 t-4 w-6 h-6 mb-4"
+                          :checked="isOrganization"
+                          @click="checkOrganization"
+                        />
+                      </div>
+                      <div class="block md:hidden">
+                        <div class="">
+                          <div class="text-dark_gray text-sm font-bold mb-2">
+                            INDIVIDUAL
+                          </div>
+                          <input
+                            type="checkbox"
+                            name="categories"
+                            class="ml-8 t-4 w-6 h-6 mb-4"
+                            :checked="isIndividual"
+                            v-model="isIndividual"
+                            @click="checkIndividual"
+                          />
+                        </div>
+                      </div>
+                    </div>
                     <div v-if="isOrganization">
                       <div
                         class="text-dark_gray text-sm font-bold mb-2"
@@ -644,7 +670,7 @@
                   </div>
                 </div>
                 <div class="col-span-1">
-                  <div class="m-8">
+                  <div class="m-8 hidden md:block">
                     <div class="text-dark_gray text-sm font-bold mb-2">
                       INDIVIDUAL
                     </div>
@@ -832,12 +858,19 @@
           </ValidationObserver>
         </div>
       </div>
-      <div class="col-span-6 mt-10">
-        <div class="right">
-          <h4 class="px-10 py-6 uppercase font-bold">Why Register?</h4>
-          <h4 class="px-10">Register today and enjoy these benefits</h4>
+      <div class="col-span-6 mt-3 md:mt-10">
+        <div
+          class="right"
+          :style="
+            !isDarkMode
+              ? 'background-color: white'
+              : 'background-color: #182533'
+          "
+        >
+          <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Why Register?</h4>
+          <h4 class="px-2 md:px-10">Register today and enjoy these benefits</h4>
 
-          <ul class="mx-16 my-4">
+          <ul class="mx-2 md:mx-16 my-4">
             <li class="flex">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -927,8 +960,8 @@
             </li>
           </ul>
 
-          <h4 class="px-16 pt-10">Already have an account?</h4>
-          <div class="mx-16">
+          <h4 class="px-2 md:px-16 pt-10">Already have an account?</h4>
+          <div class="mx-2 md:mx-16">
             <nuxt-link to="/signin">
               <button
                 class="bg-secondary text-white w-1/3 h-12 font-bold mb-8 but"
@@ -944,6 +977,7 @@
   </div>
 </template>
 <script>
+import { useUiState } from '~/composables';
 import { defineComponent } from '@vue/composition-api';
 import { ref, onMounted, inject } from '@vue/composition-api';
 import {
@@ -1019,6 +1053,7 @@ export default defineComponent({
     },
   },
   setup() {
+    const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
     const isFormSubmitted = ref(false);
 
@@ -1149,6 +1184,7 @@ export default defineComponent({
       isOrganization,
       isIndividual,
       checkIndividual,
+      isDarkMode,
     };
   },
 });
@@ -1178,12 +1214,10 @@ export default defineComponent({
 
 .field {
   min-height: 500px;
-  background-color: white;
 }
 
 .right {
   min-height: 400px;
-  background-color: white;
   font-size: large;
   top: 0px;
   position: sticky;
