@@ -10,7 +10,12 @@ export default {
   },
   env: {
     GRAPHQL_API: process.env.GRAPHQL_API || 'http://localhost:3000/shop-api',
-    GRAPHQL: process.env.GRAPHQL || 'http://localhost:3000',
+    SECRET_KEY: process.env.SECRET_KEY,
+    ACCESS_KEY:process.env.ACCESS_KEY,
+    PROFILE_ID: process.env.PROFILE_ID,
+    TELEBIRR_APPKEY: process.env.TELEBIRR_APPKEY,
+    TELEBIRR_APPID: process.env.TELEBIRR_APPID
+
   },
   head: {
     title: 'Ethio Labs',
