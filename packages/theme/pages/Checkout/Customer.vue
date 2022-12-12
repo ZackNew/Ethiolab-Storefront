@@ -79,12 +79,7 @@
 </template>
 
 <script>
-import {
-  SfHeading,
-  SfInput,
-  SfButton,
-  SfSelect
-} from '@storefront-ui/vue';
+import { SfHeading, SfInput, SfButton, SfSelect } from '@storefront-ui/vue';
 import { ref, onMounted } from '@vue/composition-api';
 import { required, min, digits, email } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
@@ -94,20 +89,20 @@ import { EMAIL_ADDRESS_CONFLICT_ERROR } from '~/helpers';
 
 extend('required', {
   ...required,
-  message: 'This field is required'
+  message: 'This field is required',
 });
 extend('min', {
   ...min,
-  message: 'The field should have at least {length} characters'
+  message: 'The field should have at least {length} characters',
 });
 extend('digits', {
   ...digits,
-  message: 'Please provide a valid phone number'
+  message: 'Please provide a valid phone number',
 });
 
 extend('email', {
   ...email,
-  message: 'Invalid email'
+  message: 'Invalid email',
 });
 
 export default {
@@ -118,9 +113,9 @@ export default {
     SfButton,
     SfSelect,
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
-  setup (_, { root }) {
+  setup(_, { root }) {
     const isFormSubmitted = ref(false);
     const { $vendure } = useVSFContext();
     const { cart, load } = useCart();
@@ -129,12 +124,15 @@ export default {
     const form = ref({
       firstName: '',
       lastName: '',
-      emailAddress: ''
+      emailAddress: '',
     });
 
     const handleFormSubmit = async () => {
       const response = await $vendure.api.setCustomerForOrder(form.value);
-      if (response?.data?.setCustomerForOrder?.errorCode === EMAIL_ADDRESS_CONFLICT_ERROR) {
+      if (
+        response?.data?.setCustomerForOrder?.errorCode ===
+        EMAIL_ADDRESS_CONFLICT_ERROR
+      ) {
         errorMessage.value = response?.data?.setCustomerForOrder?.message;
         return;
       }
@@ -145,11 +143,12 @@ export default {
     onMounted(async () => {
       await load();
       const customer = cart?.value.customer;
+      console.log('Maji customer', cart?.value);
       if (customer) {
         form.value = {
           firstName: customer?.firstName,
           lastName: customer?.lastName,
-          emailAddress: customer?.emailAddress
+          emailAddress: customer?.emailAddress,
         };
       }
     });
@@ -158,9 +157,9 @@ export default {
       isFormSubmitted,
       form,
       handleFormSubmit,
-      errorMessage
+      errorMessage,
     };
-  }
+  },
 };
 </script>
 
@@ -226,7 +225,7 @@ export default {
   &__back-button {
     margin: var(--spacer-xl) 0 var(--spacer-sm);
     &:hover {
-      color:  var(--c-white);
+      color: var(--c-white);
     }
     @include for-desktop {
       margin: 0 var(--spacer-xl) 0 0;
@@ -249,7 +248,7 @@ export default {
   margin: var(--spacer-xl) 0 var(--spacer-base) 0;
 }
 
-.form__action-button{
+.form__action-button {
   color: black;
 }
 </style>
