@@ -272,16 +272,16 @@ export default {
   },
   computed: {
     custom() {
-      const link = this.product?.customFields?.youtube_link.split('?v=')[1];
+      const link = this.product?.customFields?.youtube_link?.split('?v=')[1];
       const document =
-        process.env.GRAPHQL.split('/shop-api')[0];
+        process.env.GRAPHQL?.split('/shop-api')[0];
       return { link: link, document: document };
     },
   },
 
   computed: {
     inv_download(){
-    return process.env.GRAPHQL.split('/shop-api')[0];
+    return process.env.GRAPHQL?.split('/shop-api')[0];
 
     }
   },
