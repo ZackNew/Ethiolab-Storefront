@@ -471,30 +471,25 @@ export default {
     onMounted(() => {});
 
     onBeforeMount(() => {
-      url = 'https://testsecureacceptance.cybersource.com/pay';
-      SECRET_KEY =
-        'c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7';
-      paymentDetail.access_key = '98e9854d57563c34843c61c09e13f17c';
-      paymentDetail.profile_id = '09D76F9D-C5BB-4A5F-8D1E-4E3F2A757AD9';
-      paymentDetail.transaction_uuid = uuid.v4();
-      paymentDetail.signed_field_names =
-        'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency';
-      paymentDetail.unsigned_field_names = '';
-      paymentDetail.signed_date_time = moment
-        .utc(time)
-        .format('YYYY-MM-DDTHH:mm:ss[Z]');
-      paymentDetail.locale = 'en';
-      paymentDetail.transaction_type = 'authorization';
-      paymentDetail.reference_number = cart.value.code;
-      paymentDetail.amount = (cart?.value?.totalWithTax / 100)
-        .toFixed(2)
-        .toString();
-      paymentDetail.currency = 'ETB';
-      paymentDetail.signature = '';
-      paymentDetail.submit = 'Submit';
 
-      let signedFieldNames =
-        'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency';
+     url = "https://testsecureacceptance.cybersource.com/pay";
+     SECRET_KEY = process.env.SECRET_KEY;
+    paymentDetail.access_key = process.env.ACCESS_KEY;
+    paymentDetail.profile_id = process.env.PROFILE_ID;
+    paymentDetail.transaction_uuid = uuid.v4();
+    paymentDetail.signed_field_names = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
+    paymentDetail.unsigned_field_names = "";
+    paymentDetail.signed_date_time = moment.utc(time).format('YYYY-MM-DDTHH:mm:ss[Z]');
+    paymentDetail.locale = "en";
+    paymentDetail.transaction_type = "authorization";
+    paymentDetail.reference_number = cart.value.code;
+    paymentDetail.amount = (cart?.value?.totalWithTax/100).toFixed(2).toString();
+    paymentDetail.currency = "ETB";
+    paymentDetail.signature = "";
+    paymentDetail.submit = "Submit";
+
+
+    let signedFieldNames = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
       // console.log("the signed field names are ", signedFieldNames)
       let params = signedFieldNames.split(',');
       let dataToSign = [];
@@ -625,25 +620,24 @@ export default {
 
       ////////////////////////////////STEP 1//////////////////////////////////////
 
-      const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
-      let signObj = {
-        appId: '4ae7217b4e7149fdac877852e7fd87db',
-        nonce: paymentDetail.transaction_uuid,
-        notifyUrl: 'http://localhost:3000/telebirr',
-        outTradeNo: cart.value.code,
-        receiveName: 'Ethiolab',
-        returnUrl: 'http://localhost:3001/checkout/thank-you/',
-        shortCode: '220322',
-        subject: 'Goods Name',
-        timeoutExpress: '30',
-        timestamp: cart?.value?.code?.toString(),
-        totalAmount: paymentDetail.amount,
-      };
+        const appKey = process.env.TELEBIRR_APPKEY;
+        let signObj = {"appId":process.env.TELEBIRR_APPID,
+                      "nonce":paymentDetail.transaction_uuid,
+                      "notifyUrl":"http://localhost:3000/telebirr",
+                      "outTradeNo":cart.value.code,
+                      "receiveName":"Ethiolab",
+                      "returnUrl":"http://localhost:3001/checkout/thank-you/",
+                      "shortCode":"220322",
+                      "subject":"Goods Name",
+                      "timeoutExpress":"30",
+                      "timestamp":cart?.value?.code?.toString(),
+                      "totalAmount":paymentDetail.amount
+                    };
 
-      signObj.appKey = appKey;
-      let StringA = jsonSort(signObj);
+        signObj.appKey = appKey;
+        let StringA = jsonSort(signObj);
 
-      function jsonSort(jsonObj) {
+        function jsonSort(jsonObj) {
         let arr = [];
         for (var key in jsonObj) {
           arr.push(key);
