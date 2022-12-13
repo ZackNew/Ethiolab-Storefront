@@ -198,6 +198,7 @@ export default {
         country: '',
         phone: '',
         isDefault: false,
+        streetLine2: 'Shipping',
       }),
     },
     isNew: {
@@ -229,6 +230,7 @@ export default {
       country: props.address.country,
       phone: props.address.phone,
       isDefault: props.address.isDefault,
+      streetLine2: 'Shipping',
     });
 
     const submitForm = () => {

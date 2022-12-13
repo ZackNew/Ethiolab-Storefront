@@ -25,37 +25,41 @@
           {{ $t('Manage billing addresses') }}
         </p>
         <transition-group tag="div" name="fade" class="billing-list">
-          <div
-            v-for="address in addresses"
-            :key="userBillingGetters.getId(address)"
-            class="billing"
-          >
-            <div class="billing__content">
-              <div class="billing__address">
-                <UserBillingAddress :address="address" />
-              </div>
-            </div>
-            <div class="billing__actions">
-              <SfIcon
-                icon="cross"
-                color="gray"
-                size="14px"
-                role="button"
-                class="smartphone-only"
-                @click="removeAddress(address)"
-              />
-              <SfButton @click="changeAddress(address)">
-                {{ $t('Change') }}
-              </SfButton>
+          <template v-for="address in addresses">
+            <div
+              :key="userBillingGetters.getId(address)"
+              v-if="address.streetLine2 === 'Billing'"
+              class="billing"
+            >
+              <template v-if="address.streetLine2 === 'Billing'">
+                <div class="billing__content">
+                  <div class="billing__address">
+                    <UserBillingAddress :address="address" />
+                  </div>
+                </div>
+                <div class="billing__actions">
+                  <SfIcon
+                    icon="cross"
+                    color="gray"
+                    size="14px"
+                    role="button"
+                    class="smartphone-only"
+                    @click="removeAddress(address)"
+                  />
+                  <SfButton @click="changeAddress(address)">
+                    {{ $t('Change') }}
+                  </SfButton>
 
-              <SfButton
-                class="color-light billing__button-delete desktop-only"
-                @click="removeAddress(address)"
-              >
-                {{ $t('Delete') }}
-              </SfButton>
+                  <SfButton
+                    class="color-light billing__button-delete desktop-only"
+                    @click="removeAddress(address)"
+                  >
+                    {{ $t('Delete') }}
+                  </SfButton>
+                </div>
+              </template>
             </div>
-          </div>
+          </template>
         </transition-group>
         <SfButton class="action-button" @click="changeAddress()">
           {{ $t('Add new address') }}
@@ -93,7 +97,7 @@ export default {
     const addresses = computed(() =>
       userBillingGetters.getAddresses(billing.value)
     );
-    console.log('Maji billing address ', billing.value);
+    console.log('Maji billing address ', addresses.value);
     const edittingAddress = ref(false);
     const activeAddress = ref(undefined);
     const isNewAddress = computed(() => !activeAddress.value);

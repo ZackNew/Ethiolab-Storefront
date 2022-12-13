@@ -25,37 +25,39 @@
           {{ $t('Manage shipping addresses') }}
         </p>
         <transition-group tag="div" name="fade" class="shipping-list">
-          <div
-            v-for="address in addresses"
-            :key="userShippingGetters.getId(address)"
-            class="shipping"
-          >
-            <div class="shipping__content">
-              <div class="shipping__address">
-                <UserShippingAddress :address="address" />
+          <template v-for="address in addresses">
+            <div
+              :key="userShippingGetters.getId(address)"
+              v-if="address.streetLine2 === 'Shipping'"
+              class="shipping"
+            >
+              <div class="shipping__content">
+                <div class="shipping__address">
+                  <UserShippingAddress :address="address" />
+                </div>
+              </div>
+              <div class="shipping__actions">
+                <SfIcon
+                  icon="cross"
+                  color="gray"
+                  size="14px"
+                  role="button"
+                  class="smartphone-only"
+                  @click="removeAddress(address)"
+                />
+                <SfButton @click="changeAddress(address)">
+                  {{ $t('Change') }}
+                </SfButton>
+
+                <SfButton
+                  class="color-light shipping__button-delete desktop-only"
+                  @click="removeAddress(address)"
+                >
+                  {{ $t('Delete') }}
+                </SfButton>
               </div>
             </div>
-            <div class="shipping__actions">
-              <SfIcon
-                icon="cross"
-                color="gray"
-                size="14px"
-                role="button"
-                class="smartphone-only"
-                @click="removeAddress(address)"
-              />
-              <SfButton @click="changeAddress(address)">
-                {{ $t('Change') }}
-              </SfButton>
-
-              <SfButton
-                class="color-light shipping__button-delete desktop-only"
-                @click="removeAddress(address)"
-              >
-                {{ $t('Delete') }}
-              </SfButton>
-            </div>
-          </div>
+          </template>
         </transition-group>
         <SfButton class="action-button" @click="changeAddress()">
           {{ $t('Add new address') }}

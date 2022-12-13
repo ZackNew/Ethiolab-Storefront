@@ -215,6 +215,7 @@ export default {
         phone: '',
         tin: '',
         isDefault: false,
+        streetLine2: 'Billing',
       }),
     },
     isNew: {
@@ -247,6 +248,7 @@ export default {
       phone: props.address.phone,
       tin: props.address.tin,
       isDefault: props.address.isDefault,
+      streetLine2: 'Billing',
     });
 
     const submitForm = () => {
