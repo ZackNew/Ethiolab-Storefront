@@ -520,7 +520,7 @@ export default {
                 name
                 }
                 customFields{
-                industry{
+                industries{
                 name
                 }
                 brand{

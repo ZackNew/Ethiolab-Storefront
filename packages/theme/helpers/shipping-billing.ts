@@ -29,6 +29,7 @@ export const mapAddressFormToOrderAddress = (
   countryCode: 'et',
   phoneNumber: addressForm.phone,
   province: addressForm.state,
+  streetLine2: addressForm.streetLine2,
 });
 
 export const mapOrderAddressToAddressForm = (
@@ -91,6 +92,7 @@ export const mapAddressToAddressForm = (
     type === AddressType.Billing
       ? address?.defaultBillingAddress
       : address?.defaultShippingAddress,
+  streetLine2: address?.streetLine2,
 });
 
 export const getCalculatedPrice = (price: number): number => {
