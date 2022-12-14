@@ -233,16 +233,17 @@ export default {
           'shipping'
         );
         const formAddress = mapAddressToAddressForm(defaultAddress);
+        console.log('majic defship', formAddress);
         form.value = {
-          firstName: formAddress.firstName,
-          lastName: formAddress.lastName,
-          streetName: formAddress.streetName,
-          apartment: formAddress.streetNumber,
-          city: formAddress.city,
-          state: formAddress.state,
-          country: formAddress.country,
-          postalCode: formAddress.postalCode,
-          phone: formAddress.phone,
+          firstName: formAddress?.firstName,
+          lastName: formAddress?.lastName,
+          streetName: formAddress?.streetName,
+          apartment: formAddress?.streetNumber,
+          city: formAddress?.city,
+          state: formAddress?.state,
+          country: formAddress?.country,
+          postalCode: formAddress?.postalCode,
+          phone: formAddress?.phone,
         };
       }
     });
