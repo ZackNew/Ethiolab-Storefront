@@ -42,12 +42,94 @@
         <div class="right">
           <h4 class="px-10 py-6 uppercase font-bold">Why Register?</h4>
           <h4 class="px-10">Register today and enjoy these benefits</h4>
-          <ul class="mx-16 my-4">
-            <li>✅Full account records, order history, invoices & tracking</li>
-            <li>✅Wishlist organized saved items to order later</li>
-            <li>✅Create & track quotes</li>
-            <li>✅Keep a record of payment transactions</li>
-            <li>✅Discounts & special packages</li>
+          <ul class="mx-3 md:mx-16 my-4">
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span
+                >Full account records, order history, invoices & tracking</span
+              >
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Wishlist organized saved items to order later</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Create & track quotes</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Keep a record of payment transactions</span>
+            </li>
+            <li class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-secondary font-bold"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Discounts & special packages</span>
+            </li>
           </ul>
 
           <h4 class="px-16 pt-3">Don't have an account?</h4>

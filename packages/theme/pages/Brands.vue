@@ -32,7 +32,7 @@
         </nav>
 
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white max-h-[53rem] overflow-auto top-[5%] no-scrollbar sticky"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white max-h-[40%] overflow-auto top-[5%] no-scrollbar sticky"
           :style="
             !isDarkMode
               ? 'background-color: white'
@@ -325,9 +325,9 @@ export default {
     industryList() {
       let industry = [];
       this.products.forEach((product) => {
-        if (product.customFields.industry?.name) {
-          industry.push(product.customFields.industry?.name);
-        }
+        product.customFields.industries.forEach((i) => {
+          industry.push(i?.name);
+        });
       });
       const industries = [...new Set(industry)];
       return industries;
