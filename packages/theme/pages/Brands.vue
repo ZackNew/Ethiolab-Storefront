@@ -288,9 +288,14 @@ export default {
           } else {
             matchFound = false;
           }
+          const industries = [];
+          product?.customFields?.industries?.forEach((i) =>
+            industries.push(i.name)
+          );
           // console.log('product match found collection clicked',product,matchFound,product.collections,filtersClicked)
           return (
-            filtersClicked.includes(product.customFields.brand?.name) ||
+            // filtersClicked.includes(product.customFields.brand?.name) ||
+            filtersClicked.some((r) => industries.indexOf(r) >= 0) ||
             filtersClicked.includes(product.facetValues[facetIndex]?.name) ||
             matchFound
           );

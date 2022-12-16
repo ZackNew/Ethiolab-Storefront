@@ -316,10 +316,14 @@ export default {
           const facetIndex = product.facetValues.findIndex((facet) =>
             filtersClicked.includes(facet.name)
           );
-
+          const industries = [];
+          product?.customFields?.industries?.forEach((i) =>
+            industries.push(i.name)
+          );
+          console.log('industries', industries);
           return (
             filtersClicked.includes(product.customFields.brand?.name) ||
-            filtersClicked.includes(product.customFields.industry?.name) ||
+            filtersClicked.some((r) => industries.indexOf(r) >= 0) ||
             filtersClicked.includes(product.facetValues[facetIndex]?.name)
           );
         }
