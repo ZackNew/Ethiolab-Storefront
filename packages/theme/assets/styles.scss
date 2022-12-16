@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 :root {
+  --font-family--lora: 'Lora';
   --font-family--secondary: 'Roboto';
   --font-family--primary: 'Roboto Slab';
   --c-primary: theme('colors.primary');

@@ -320,7 +320,6 @@ export default {
           product?.customFields?.industries?.forEach((i) =>
             industries.push(i.name)
           );
-          console.log('industries', industries);
           return (
             filtersClicked.includes(product.customFields.brand?.name) ||
             filtersClicked.some((r) => industries.indexOf(r) >= 0) ||
