@@ -686,7 +686,16 @@ export default {
           _variantId: product?.productVariantId,
         },
         quantity: quantity,
-      });
+      }).then(res =>{
+        console.log("best seller updated cart value is ", cart.value)
+        if(cart?.value?.errorCode && cart.value.errorCode != ''){
+          showToast(cart.value.message)
+        }
+        else{
+          showToast("Product added to cart!")
+        }
+      } 
+      );
     };
 
     const toggleWishlist = (index) => {
