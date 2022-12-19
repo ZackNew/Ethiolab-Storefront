@@ -1,7 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Lora';
+  src: local('Lora'), url(~assets/fonts/Lora-Regular.woff) format('truetype');
+}
+
+html {
+  font-family: 'Oxygen';
+}
+
 :root {
+  --font-family--lora: 'Lora';
   --font-family--secondary: 'Roboto';
   --font-family--primary: 'Roboto Slab';
   --c-primary: theme('colors.primary');

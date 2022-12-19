@@ -870,14 +870,14 @@ export default {
 
 .testimonies {
   color: var(--c-primary);
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: var(--font-family--lora);
   --font-family--primary: 'Josefin Sans', sans-serif;
 }
 
-.testimonies p {
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
+// .testimonies p {
+//   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+//     'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+// }
 
 .testimonial_card {
   background-color: var(--c-accent);

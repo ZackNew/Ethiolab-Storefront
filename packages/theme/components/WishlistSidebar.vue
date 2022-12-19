@@ -29,26 +29,18 @@
               <SfCollectedProduct
                 v-for="product in products"
                 :key="product._id"
-                :image="
-                  product.productId
-                    ? product.productAsset.preview
-                    : wishlistGetters.getItemImage(product)
-                "
-                :title="
-                  wishlistGetters.getItemName(product) || product.productName
-                "
+                :image="product.images"
+                :title="product.name"
                 :regular-price="
-                  product._id
-                    ? $n(
-                        wishlistGetters.getItemPrice(product).regular,
-                        'currency'
-                      )
-                    : $n(getCalculatedPrice(product.price.value), 'currency')
+                  product.price.original &&
+                  String(product.price.original).slice(0, -2) +
+                    '.' +
+                    String(product.price.original).slice(-2)
                 "
                 :stock="99999"
                 image-width="180"
                 image-height="200"
-                @click:remove="removeItem({ product })"
+                @click:remove="removeFromList(product)"
                 class="collected-product sf-collected-product"
               >
                 <template #configuration>
@@ -71,16 +63,16 @@
             </transition-group>
           </div>
           <div class="sidebar-bottom">
-            <SfProperty
+            <!-- <SfProperty
               class="sf-property--full-width my-wishlist__total-price"
             >
               <template #name>
                 <span class="my-wishlist__total-price-label">Total price:</span>
               </template>
               <template #value>
-                <SfPrice :regular="totals.subtotal.toLocaleString() + ' ETB'" />
+                <SfPrice :regular="totals + ' ETB'" />
               </template>
-            </SfProperty>
+            </SfProperty> -->
           </div>
         </div>
         <div v-else class="empty-wishlist" key="empty-wishlist">
@@ -111,6 +103,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 import {
   SfSidebar,
   SfHeading,
@@ -121,7 +114,7 @@ import {
   SfCollectedProduct,
   SfImage,
 } from '@storefront-ui/vue';
-import { computed } from '@vue/composition-api';
+import { computed, onMounted, ref } from '@vue/composition-api';
 import { useWishlist, useUser, wishlistGetters } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { getCalculatedPrice } from '~/helpers';
@@ -138,15 +131,111 @@ export default {
     SfCollectedProduct,
     SfImage,
   },
-  setup() {
+  setup(props, ctx) {
     const { isWishlistSidebarOpen, toggleWishlistSidebar } = useUiState();
     const { wishlist, removeItem, load: loadWishlist } = useWishlist();
     const { isAuthenticated } = useUser();
-    const products = computed(() => wishlistGetters.getItems(wishlist.value));
-    const totals = computed(() => wishlistGetters.getTotals(wishlist.value));
+    const products = ref([]);
+    const totals = computed(() => {
+      const wishList = wishlistGetters.getItems(wishlist.value);
+      let total = parseFloat('0');
+      wishList.forEach((p) => {
+        total += parseFloat(String(p.price.original));
+      });
+      return total.toFixed(2);
+    });
     const totalItems = computed(() =>
       wishlistGetters.getTotalItems(wishlist.value)
     );
+    const getWishList = async (ids, vIds) => {
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `
+        query getProductById($in: [String!], $eq: [String!]) {
+          products(options: { filter: { id: { in: $in } } }) {
+            items {
+              id
+              name
+              slug
+              featuredAsset{
+                preview
+              }
+              variantList(options: { filter: { id: { in: $eq } } }) {
+                items {
+                  id
+                  priceWithTax
+                }
+              }
+            }
+          }
+        }
+        `,
+        variables: { in: ids, eq: vIds },
+      };
+      let options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(baseUrl, body, options).then((res) => {
+        const productsList = res.data.data.products.items;
+        const empArray = [];
+        productsList.forEach((p) => {
+          empArray.push({
+            _id: p.id,
+            _variantId: p.variantList.items[0].id,
+            _description: '',
+            _categoriesRef: [''],
+            name: p.name,
+            sku: '',
+            slug: p.slug,
+            images: p.featuredAsset && p.featuredAsset.preview,
+            price: {
+              original: p.variantList.items[0].priceWithTax,
+              current: p.variantList.items[0].priceWithTax,
+            },
+          });
+        });
+        products.value = empArray;
+      });
+    };
+
+    const removeFromList = (product) => {
+      removeItem({ product });
+      // loadWishlist();
+      const ids = [];
+      const vIds = [];
+      const wishList = wishlistGetters.getItems(wishlist.value);
+      wishList.forEach((p) => {
+        ids.push(p?._id);
+        vIds.push(p?._variantId);
+      });
+      getWishList(ids, vIds);
+    };
+
+    onMounted(() => {
+      loadWishlist();
+      const ids = [];
+      const vIds = [];
+      const wishList = wishlistGetters.getItems(wishlist.value);
+      wishList.forEach((p) => {
+        ids.push(p?._id);
+        vIds.push(p?._variantId);
+      });
+      getWishList(ids, vIds);
+    });
+    ctx.root.$on('emitWishList', () => {
+      loadWishlist();
+      const ids = [];
+      const vIds = [];
+      const wishList = wishlistGetters.getItems(wishlist.value);
+      wishList.forEach((p) => {
+        ids.push(p?._id);
+        vIds.push(p?._variantId);
+      });
+      getWishList(ids, vIds);
+    });
 
     loadWishlist();
 
@@ -160,6 +249,7 @@ export default {
       totalItems,
       wishlistGetters,
       getCalculatedPrice,
+      removeFromList,
     };
   },
 };

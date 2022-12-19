@@ -103,11 +103,9 @@ export default {
     },
     compareProducts() {
       if (this.$route.path !== '/compareProducts') {
-        console.log('Maji not in compare');
         this.$router.push('/compareProducts');
       } else {
-        console.log('emited');
-        this.$root.$emit('now');
+        this.$root.$emit('emitCompare');
       }
     },
   },

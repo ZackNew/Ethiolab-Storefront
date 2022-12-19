@@ -185,23 +185,27 @@ export default {
     ValidationObserver,
     VuePhoneNumberInput,
   },
-  data() {
-    return {
-      formPhoneNumber: '',
-    };
-  },
-  methods: {
-    phoneInputHandler(payload) {
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.billingDetails.phone = this.formPhoneNumber;
-    },
-  },
+  // data() {
+  //   return {
+  //     formPhoneNumber: '',
+  //   };
+  // },
+  // methods: {
+  //   phoneInputHandler(payload) {
+  //     this.formPhoneNumber = payload?.formattedNumber;
+  //     this.billingDetails.phone = this.formPhoneNumber;
+  //   },
+  // },
+  // mounted() {
+  //   this.formPhoneNumber = this.billingDetails.phone || '';
+  // },
   setup(props, context) {
     const { load, save, billing } = useBilling();
     const { cart, load: loadCart, setCart, applyCoupon } = useCart();
     const { shipping: shippingDetails, load: loadShipping } = useShipping();
     const { billing: userBilling, load: loadUserBilling } = useUserBilling();
     const billingDetails = ref(billing.value || {});
+    const formPhoneNumber = ref('');
     let oldBilling = null;
 
     const sameAsShipping = ref(false);
@@ -220,6 +224,14 @@ export default {
       }
 
       billingDetails.value = mapOrderAddressToAddressForm(oldBilling);
+    };
+
+    const phoneInputHandler = (payload) => {
+      formPhoneNumber.value = payload?.formattedNumber;
+      billingDetails.value = {
+        ...billingDetails.value,
+        phone: formPhoneNumber.value,
+      };
     };
 
     const form = ref({
@@ -251,17 +263,20 @@ export default {
       await loadUserBilling();
       const defaultAddress = getDefaultAddress(userBilling.value, 'billing');
       const formAddress = mapAddressToAddressForm(defaultAddress);
-      form.value = {
-        firstName: formAddress.firstName,
-        lastName: formAddress.lastName,
-        streetName: formAddress.streetName,
-        apartment: formAddress.streetNumber,
-        city: formAddress.city,
-        state: formAddress.state,
-        country: formAddress.country,
-        postalCode: formAddress.postalCode,
-        phone: formAddress.phone,
+      console.log('Majican', defaultAddress);
+      billingDetails.value = {
+        firstName: defaultAddress?.fullName.split(' ')[0],
+        lastName: defaultAddress?.fullName.split(' ')[1],
+        streetLine1: defaultAddress?.streetLine1,
+        apartment: defaultAddress?.streetLine1,
+        city: defaultAddress?.city,
+        state: defaultAddress?.province,
+        country: defaultAddress?.country?.name,
+        postalCode: defaultAddress?.postalCode,
+        phone: defaultAddress?.phoneNumber,
       };
+
+      console.log('Maji Majican', billingDetails.value);
     });
 
     return {
@@ -271,6 +286,8 @@ export default {
       sameAsShipping,
       handleCheckSameAddress,
       billingDetails,
+      phoneInputHandler,
+      formPhoneNumber,
     };
   },
 };

@@ -293,9 +293,13 @@ export default {
       },
     ]);
 
-    const breadcrumbs = computed(() =>
-      productGetters.getBreadcrumbs(product.value)
-    );
+    const breadcrumbs = computed(() => {
+      let bcumb = productGetters.getBreadcrumbs(product.value);
+      if (bcumb.length > 3) {
+        bcumb[2].link = bcumb[2].link.replace('/c/', '/s/');
+      }
+      return bcumb;
+    });
 
     const allvarproduct = computed(() =>
       productGetters.getByFilters(products.value)

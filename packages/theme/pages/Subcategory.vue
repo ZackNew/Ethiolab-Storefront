@@ -38,7 +38,7 @@
         :style="
           !isDarkMode ? 'background-color: white' : 'background-color: #182533'
         "
-        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] hidden md:block border-white sticky max-h-[53rem] overflow-auto top-[5%] no-scrollbar"
+        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] hidden md:block border-white sticky max-h-[40rem] overflow-auto top-[5%] no-scrollbar"
       >
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
@@ -316,10 +316,13 @@ export default {
           const facetIndex = product.facetValues.findIndex((facet) =>
             filtersClicked.includes(facet.name)
           );
-
+          const industries = [];
+          product?.customFields?.industries?.forEach((i) =>
+            industries.push(i.name)
+          );
           return (
             filtersClicked.includes(product.customFields.brand?.name) ||
-            filtersClicked.includes(product.customFields.industry?.name) ||
+            filtersClicked.some((r) => industries.indexOf(r) >= 0) ||
             filtersClicked.includes(product.facetValues[facetIndex]?.name)
           );
         }
@@ -345,9 +348,9 @@ export default {
     industryList() {
       let industry = [];
       this.products.forEach((element) => {
-        if (element.customFields.industry?.name) {
-          industry.push(element.customFields.industry?.name);
-        }
+        element.customFields.industries.forEach((i) => {
+          industry.push(i?.name);
+        });
       });
       const industries = [...new Set(industry)];
       return industries;

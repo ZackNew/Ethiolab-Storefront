@@ -447,6 +447,7 @@ export default {
   methods: {
     toggleIsInWishlist() {
       this.$emit('click:wishlist', !this.isInWishlist);
+      this.$root.$emit('emitWishList');
     },
     onAddToCart(event) {
       event.preventDefault();
@@ -478,24 +479,11 @@ export default {
         this.id !== '' &&
         this.variantId !== ''
       ) {
-        console.log(
-          'passed the first one',
-          this.id,
-          this.variantId,
-          this.image
-        );
-        console.log(
-          'djsfada',
-          this.$store.state.compareList?.productsToCompare?.filter(
-            (e) => e?.productID === this.id && e?.variantID === this.variantId
-          ).length
-        );
         if (
           this.$store.state.compareList?.productsToCompare?.filter(
             (e) => e?.productID === this.id && e?.variantID === this.variantId
           ).length === 0
         ) {
-          console.log('passed the second one');
           this.toastShower('Added to Compare List');
           this.$store.dispatch('compareList/addToCompareList', {
             product: {
@@ -509,7 +497,6 @@ export default {
         }
       } else {
         this.toastShower('Limit to Compare Products reached');
-        console.log('limit reached');
       }
     },
   },

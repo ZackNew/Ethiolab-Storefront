@@ -228,7 +228,7 @@ export default {
   created() {
     this.loading = true;
     this.getItemsToCompare();
-    this.$root.$on('now', () => {
+    this.$root.$on('emitCompare', () => {
       this.loading = true;
       this.getItemsToCompare();
     });
@@ -253,8 +253,6 @@ export default {
       const variantIds = products.map((p) => {
         return p.variantID;
       });
-      console.log('Magi vid', variantIds);
-      console.log('Magi pid', productIds);
       const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `
@@ -315,7 +313,6 @@ export default {
         },
       };
       await axios.post(baseUrl, body, options).then((res) => {
-        console.log('magi results', res.data.data?.products?.items);
         const result = res.data.data?.products?.items;
         const prod = [];
         result?.forEach((element) => {
@@ -340,7 +337,6 @@ export default {
           }
         });
         this.productsToCompare = prod;
-        console.log('magi2 results', this.productsToCompare);
       });
       this.loading = false;
     },
