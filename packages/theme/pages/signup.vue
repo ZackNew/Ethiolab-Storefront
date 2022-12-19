@@ -603,7 +603,7 @@
                       </select>
                     </ValidationProvider>
                   </div>
-                  <div class="m-8">
+                  <div class="mx-8 mt-12 mb-8">
                     <div
                       class="text-dark_gray text-sm font-bold mb-2"
                       for="state"
@@ -756,12 +756,12 @@
               </div>
 
               <div v-if="isOrganization">
-                    <div class="m-8"> 
+                    <div class="mx-8"> 
                        <label
                       class="block text-dark_gray text-sm font-bold mb-2"
                       for="tin"
                     >
-                      Organization Name
+                     ORGANIZATION NAME
                     </label>
                       <!-- <div
                         class="text-dark_gray text-sm font-bold mb-2"
@@ -856,7 +856,7 @@
               />
               <!-- </ValidationProvider> -->
               <span class="text-dark_gray text-sm font-bold mb-2">
-                Sign up to receive the latest news, Events & Offers</span
+                Sign up to receive the latest news, events & offers</span
               >
               <p v-if="errorMessage">{{ errorMessage }}aaa</p>
               <div class="justify-center flex mt-8">
@@ -885,7 +885,7 @@
 
           <ul class="mx-2 md:mx-16 my-4">
             <li class="flex">
-              <svg
+              <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -898,13 +898,13 @@
                   stroke-linejoin="round"
                   d="M4.5 12.75l6 6 9-13.5"
                 />
-              </svg>
+              </svg> -->
               <span
                 >Full account records, order history, invoices & tracking</span
               >
             </li>
             <li class="flex">
-              <svg
+              <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -917,11 +917,11 @@
                   stroke-linejoin="round"
                   d="M4.5 12.75l6 6 9-13.5"
                 />
-              </svg>
-              <span>Wishlist organized saved items to order later</span>
+              </svg> -->
+              <span>Wishlist-organized saved items to order later</span>
             </li>
             <li class="flex">
-              <svg
+              <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -934,11 +934,11 @@
                   stroke-linejoin="round"
                   d="M4.5 12.75l6 6 9-13.5"
                 />
-              </svg>
+              </svg> -->
               <span>Create & track quotes</span>
             </li>
             <li class="flex">
-              <svg
+              <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -951,11 +951,11 @@
                   stroke-linejoin="round"
                   d="M4.5 12.75l6 6 9-13.5"
                 />
-              </svg>
+              </svg> -->
               <span>Keep a record of payment transactions</span>
             </li>
             <li class="flex">
-              <svg
+              <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -968,7 +968,7 @@
                   stroke-linejoin="round"
                   d="M4.5 12.75l6 6 9-13.5"
                 />
-              </svg>
+              </svg> -->
               <span>Discounts & special packages</span>
             </li>
           </ul>
