@@ -258,35 +258,12 @@
                         </div>
                       </div>
                     </div>
-                    <div v-if="isOrganization">
-                      <div
-                        class="text-dark_gray text-sm font-bold mb-2"
-                        for="company"
-                      >
-                        ORGANIZATION NAME
-                      </div>
-
-                      <ValidationProvider
-                        name="company"
-                        rules="required|min:2"
-                        v-slot="{ errors }"
-                        slim
-                      >
-                        <SfInput
-                          v-model="form.company"
-                          :placeholder="$t('company')"
-                          name="company"
-                          class="sf-input--filled"
-                          :valid="!errors[0]"
-                          :errorMessage="errors[0]"
-                        />
-                      </ValidationProvider>
-                    </div>
+                
                   </div>
 
                   <div class="m-8">
                     <div class="text-dark_gray text-sm font-bold mb-2">
-                      *Country
+                      *COUNTRY
                     </div>
 
                     <ValidationProvider
@@ -668,6 +645,8 @@
                       />
                     </ValidationProvider>
                   </div>
+
+              
                 </div>
                 <div class="col-span-1">
                   <div class="m-8 hidden md:block">
@@ -775,6 +754,40 @@
                   </div>
                 </div>
               </div>
+
+              <div v-if="isOrganization">
+                    <div class="m-8"> 
+                       <label
+                      class="block text-dark_gray text-sm font-bold mb-2"
+                      for="tin"
+                    >
+                      Organization Name
+                    </label>
+                      <!-- <div
+                        class="text-dark_gray text-sm font-bold mb-2"
+                        for="company"
+                      >
+                        ORGANIZATION NAME
+                      </div> -->
+
+                      <ValidationProvider
+                        name="company"
+                        rules="required|min:2"
+                        v-slot="{ errors }"
+                        slim
+                      >
+                        <SfInput
+                          v-model="form.company"
+                          :placeholder="$t('company')"
+                          name="company"
+                          class="sf-input--filled"
+                          :valid="!errors[0]"
+                          :errorMessage="errors[0]"
+                        />
+                      </ValidationProvider>
+
+                    </div>
+                                       </div>
 
               <div class="m-8">
                 <span class="text-dark_gray text-sm font-bold mb-2">

@@ -249,7 +249,7 @@ export default {
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
     const { products, search } = useProduct('products');
-    const { addItem, addItemToCart, isInCart, loading } = useCart();
+    const { addItem, addItemToCart, isInCart, loading,cart } = useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
     const {
       relatedProducts,
@@ -366,9 +366,27 @@ export default {
         addItem({
           product: agnosticProductVariant.value,
           quantity: parseInt(qty.value),
-        });
+        }).then(res =>{
+        console.log("best seller updated cart value is ", cart.value)
+        if(cart.value.errorCode && cart.value.errorCode != ''){
+          showToast(cart.value.message)
+        }
+        else{
+          showToast("Product added to cart!")
+        }
+      } 
+      );
       } else {
-        addItem({ product: product.value, quantity: parseInt(qty.value) });
+        addItem({ product: product.value, quantity: parseInt(qty.value) }).then(res =>{
+        console.log("best seller updated cart value is ", cart.value)
+        if(cart.value.errorCode && cart.value.errorCode != ''){
+          showToast(cart.value.message)
+        }
+        else{
+          showToast("Product added to cart!")
+        }
+      } 
+      );
       }
     };
 
