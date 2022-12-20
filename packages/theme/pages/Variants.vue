@@ -513,7 +513,7 @@ export default {
   setup() {
     const { user, isAuthenticated, load, getU } = useUser();
     const { isDarkMode } = useUiState();
-    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
+    const { addItem: addItemToCart, isInCart, cart } = useCart();
     const accessoriesToCart = ref([]);
 
     const accessoryClicked = (accId) => {
@@ -554,8 +554,6 @@ export default {
           quantity: 1,
         });
       }
-
-      setCart();
     };
     return {
       isInCart,

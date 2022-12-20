@@ -2,7 +2,11 @@
   <ValidationObserver v-slot="{ handleSubmit, reset }">
     <form class="form" @submit.prevent="handleSubmit(submitForm(reset))">
       <div class="form__horizontal">
-        <ValidationProvider rules="required|min:2" v-slot="{ errors }" class="form__element">
+        <ValidationProvider
+          rules="required|min:2"
+          v-slot="{ errors }"
+          class="form__element"
+        >
           <SfInput
             v-e2e="'myaccount-firstName'"
             v-model="form.firstName"
@@ -13,7 +17,11 @@
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
-        <ValidationProvider rules="required|min:2" v-slot="{ errors }" class="form__element">
+        <ValidationProvider
+          rules="required|min:2"
+          v-slot="{ errors }"
+          class="form__element"
+        >
           <SfInput
             v-e2e="'myaccount-lastName'"
             v-model="form.lastName"
@@ -27,9 +35,9 @@
       </div>
       <SfButton
         v-e2e="'myaccount-update-personal-data-btn'"
-        class="form__button"
+        class="bg-secondary w-[33%] py-3"
       >
-        {{ $t('Update personal data') }}
+        <h4 class="text-white font-bold text-base">UPDATE PERSONAL DATA</h4>
       </SfButton>
     </form>
   </ValidationObserver>
@@ -48,7 +56,7 @@ export default {
     SfInput,
     SfButton,
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
 
   setup(_, { emit }) {
@@ -56,7 +64,7 @@ export default {
 
     const resetForm = () => ({
       firstName: userGetters.getFirstName(user.value),
-      lastName: userGetters.getLastName(user.value)
+      lastName: userGetters.getLastName(user.value),
     });
 
     const form = ref(resetForm());
@@ -83,13 +91,13 @@ export default {
 
     return {
       form,
-      submitForm
+      submitForm,
     };
-  }
+  },
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .form {
   &__element {
     display: block;

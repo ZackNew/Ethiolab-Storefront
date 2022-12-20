@@ -41,8 +41,15 @@
       <PasswordResetForm @submit="updatePassword" />
     </SfTab>
     <SfTab title="TIN">
-      Tin Number: <SfInput pplaceholder="Your tin number" v-model="tinNumber" />
-      <SfButton @click="updateTinNumber">Update Tin Number</SfButton>
+      Tin Number:
+      <SfInput
+        class="w-[60%]"
+        pplaceholder="Your tin number"
+        v-model="tinNumber"
+      />
+      <SfButton class="bg-secondary w-[33%] py-3" @click="updateTinNumber">
+        <h4 class="text-white font-bold text-base">UPDATE TIN NUMBER</h4>
+      </SfButton>
     </SfTab>
   </SfTabs>
 </template>
@@ -242,5 +249,8 @@ export default {
 .notice {
   margin: var(--spacer-lg) 0 0 0;
   font-size: var(--font-size--sm);
+}
+.sf-tabs__title.is-active {
+  color: red !important;
 }
 </style>
