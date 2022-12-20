@@ -205,22 +205,45 @@
                   />
                 </div>
               </div>
-              <hr class="mt-4" />
-              <div
-                v-for="(acc, i) in variant.accessories"
-                :key="`'r' + ${i}`"
-                class="mt-3"
-              >
-                <div class="flex">
-                  <img
-                    :src="acc.featuredAsset ? acc.featuredAsset.preview : ''"
-                    alt=""
-                    class="w-10 h-10 mr-2"
-                  />
-                  <h4 class="text-secondary font-bold">{{ acc.name }}</h4>
-                </div>
-                <hr class="mt-2" />
+              <div class="flex mt-[5%]">
+                <input
+                  type="checkbox"
+                  v-model="isAccessories"
+                  class="mr-[3%]"
+                />
+                <h3 class="text-secondary font-bold text-lg">accessories</h3>
               </div>
+              <hr class="mt-4" />
+              <template v-if="isAccessories">
+                <div
+                  v-for="(acc, i) in variant.accessories"
+                  :key="`'r' + ${i}`"
+                  class="mt-3"
+                >
+                  <div class="flex accessories">
+                    <input
+                      @change="accessoryClicked(acc.variants[0].id)"
+                      type="checkbox"
+                      class="mr-[3%]"
+                    />
+                    <nuxt-link :to="`/v/${acc.slug}`">
+                      <img
+                        :src="
+                          acc.featuredAsset ? acc.featuredAsset.preview : ''
+                        "
+                        alt=""
+                        class="w-8 h-8 mr-2"
+                      />
+                    </nuxt-link>
+                    <nuxt-link :to="`/v/${acc.slug}`">
+                      <h4 class="text-secondary font-bold text-base">
+                        {{ acc.name }}
+                      </h4>
+                    </nuxt-link>
+                  </div>
+                  <hr class="mt-2" />
+                </div>
+              </template>
             </SfTableData>
           </SfTableRow>
         </SfTable>
@@ -302,6 +325,7 @@ import {
   SfTabs,
   SfReview,
 } from '@storefront-ui/vue';
+import { ref } from '@vue/composition-api';
 import { useWishlist, useCart, useUser } from '@vue-storefront/vendure';
 import Gallery from '~/components/Gallery.vue';
 
@@ -319,6 +343,7 @@ export default {
   },
   data() {
     return {
+      isAccessories: false,
       loading: false,
       reviews: [],
       product: null,
@@ -434,6 +459,9 @@ export default {
                     preview
                   }
                   slug
+                  variants{
+                    id
+                  }
                 }
                 stockLevel
               }
@@ -486,6 +514,20 @@ export default {
     const { user, isAuthenticated, load, getU } = useUser();
     const { isDarkMode } = useUiState();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const accessoriesToCart = ref([]);
+
+    const accessoryClicked = (accId) => {
+      if (!accessoriesToCart.value.includes(accId)) {
+        accessoriesToCart.value.push(accId);
+      } else {
+        accessoriesToCart.value.splice(
+          accessoriesToCart.value.indexOf(accId),
+          1
+        );
+      }
+      console.log('maji checked', accessoriesToCart.value);
+    };
+
     const addToCart = (e) => {
       const quantity =
         Number(e.target.parentElement.parentElement.firstChild.value) ||
@@ -495,14 +537,23 @@ export default {
       const variantId =
         e.target.parentElement.parentElement.firstChild.id ||
         e.target.parentElement.parentElement.parentElement.firstChild.id;
-      console.log('sds', quantity);
-      console.log('mdm', variantId);
+
       addItemToCart({
         product: {
           _variantId: variantId,
         },
         quantity: quantity,
       });
+
+      for (let vId of accessoriesToCart.value) {
+        console.log('majica', vId);
+        addItemToCart({
+          product: {
+            _variantId: vId,
+          },
+          quantity: 1,
+        });
+      }
     };
     return {
       isInCart,
@@ -510,6 +561,8 @@ export default {
       isAuthenticated,
       isDarkMode,
       user,
+      accessoryClicked,
+      accessoriesToCart,
     };
   },
   async created() {
