@@ -73,7 +73,7 @@
         class="px-6 my-auto text-white font-bold rounded h-[45%] mr-[5%]"
         @click="compareProducts"
       >
-        compare
+        Compare
       </button>
       <!-- </nuxt-link> -->
     </div>

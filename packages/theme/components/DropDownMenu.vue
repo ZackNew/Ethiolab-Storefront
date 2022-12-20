@@ -37,7 +37,7 @@
       <h4 class="text-primary font-bold">{{ cTitle }}</h4>
       <!-- <p v-html="cDisc" class="mx-3"></p> -->
     </div>
-    <div
+    <!-- <div
       v-show="!showDetail"
       class="ad text-dark_accent pl-8 pt-16"
       :style="{
@@ -55,7 +55,7 @@
       >
         {{ adSection.buttonText || 'Ad Button' }}
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
