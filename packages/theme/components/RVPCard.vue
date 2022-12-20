@@ -207,7 +207,7 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <p class="text-lg mx-auto text-secondary text-xs font-bold">
+        <p v-if="regularPrice" class="text-lg mx-auto text-secondary text-xs font-bold">
           {{ regularPrice }}
         </p>
       </slot>
