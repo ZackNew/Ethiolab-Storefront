@@ -179,9 +179,13 @@
                       : productGetters.getCoverImage(product)
                   "
                   :regular-price="
-                    String(product.priceWithTax.min).slice(0, -2) +
+                    String(
+                      product.priceWithTax.min || product.priceWithTax.value
+                    ).slice(0, -2) +
                     '.' +
-                    String(product.priceWithTax.min).slice(-2) +
+                    String(
+                      product.priceWithTax.min || product.priceWithTax.value
+                    ).slice(-2) +
                     ' ETB'
                   "
                   :imageHeight="290"
@@ -646,7 +650,7 @@ export default {
     const BIG_SALE = computed(() =>
       JSON.parse(getCms.value[5]?.content ?? '{}')
     );
-    const bigSale = BIG_SALE.value.map((pro) => {
+    const bigSale = BIG_SALE?.value?.map((pro) => {
       return JSON.parse(pro ?? '{}');
     });
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
@@ -686,6 +690,13 @@ export default {
           _variantId: product?.productVariantId,
         },
         quantity: quantity,
+      }).then((res) => {
+        console.log('best seller updated cart value is ', cart.value);
+        if (cart?.value?.errorCode && cart.value.errorCode != '') {
+          showToast(cart.value.message);
+        } else {
+          showToast('Product added to cart!');
+        }
       });
     };
 

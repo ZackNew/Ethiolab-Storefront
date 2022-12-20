@@ -187,13 +187,17 @@
         data-testid="product-link"
         v-on="$listeners"
       >
+<<<<<<< HEAD
         <span class="ssf-product-card__title min-h-[5rem] font-[0.5rem]">
+=======
+        <span class="ssf-product-card__title min-h-[5rem] text-[0.5rem] overflow-hidden">
+>>>>>>> 4f52a85f1dfccfed322fbd189b215b2e550a188e
           {{ title }}
         </span>
       </SfButton> -->
       <nuxt-link :to="link">
         <p
-          :class="`mx-3 my-2 mx-auto font-extrabold text-primary md:text-xl text-center md:min-h-[7rem] md:min-w-${imageWidth}`"
+          :class="`truncate-overflow mx-3 my-2 mx-auto font-extrabold text-primary md:text-lg text-center md:min-h-[7rem] md:min-w-${imageWidth}`"
         >
           {{ title }}
         </p>
@@ -620,12 +624,11 @@ export default {
     }
   }
 }
-.truncate-3-lines {
-  max-height: 4rem; /* double the size of line-height */
-  min-height: 4rem;
-  line-height: 1.3rem;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
+.truncate-overflow {
+  display: -webkit-box;
+  max-width: 200px;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 </style>

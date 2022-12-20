@@ -28,6 +28,8 @@ const params: UseCartFactoryParams<Order, OrderLine, AgnosticProductVariant> = {
   addItem: async (context: Context, { currentCart, product, quantity, customQuery }): Promise<Order> => {
     const productVariantId = product?._variantId || product?._id || product?.productId;
     const response = await context.$vendure.api.addToCart({ productVariantId, quantity }, customQuery);
+    console.log("add item to cartttt", response.data);
+    
 
     return response?.data?.addItemToOrder as Order;
   },

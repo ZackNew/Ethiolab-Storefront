@@ -314,7 +314,7 @@
                         ? addItemToWishlist({ product })
                         : removeItemFromWishlist({ product })
                     "
-                    @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+                    @click:add-to-cart="addToCart"
                     class="carousel__item__product mb-5"
                   />
                 </template>
@@ -620,6 +620,26 @@ export default {
     // TODO: Refactor this to work on path rather than slugs because slug params are undefined so we have to filter them.
     const lastSlug = th.getLastSlugFromParams();
 
+    const addToCart = (e) => {
+      
+      addItemToCart({
+        product: {
+          _variantId: e._variantId,
+        },
+        quantity: e.quantity,
+      }).then(res =>{
+        console.log("best seller updated cart value is ", cart.value)
+        if(cart.value.errorCode && cart.value.errorCode != ''){
+          showToast(cart.value.message)
+        }
+        else{
+          showToast("Product added to cart!")
+        }
+      } 
+      )
+      
+    };
+
     const searchResult = computed(() =>
       facetGetters.getAgnosticSearchResult(result.value)
     );
@@ -771,6 +791,7 @@ export default {
       rawCategoryTree,
       lastSlug,
       toastShower,
+      addToCart
     };
   },
   components: {
