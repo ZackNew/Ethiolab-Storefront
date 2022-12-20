@@ -35,7 +35,7 @@
                   d="M4.5 12.75l6 6 9-13.5"
                 />
               </svg>
-              <span>Wishlist organized saved items to order later</span>
+              <span>Wishlist-organized saved items to order later</span>
             </li>
             <li class="flex">
               <svg

@@ -603,7 +603,7 @@
                       </select>
                     </ValidationProvider>
                   </div>
-                  <div class="m-8">
+                  <div class="mx-8 mt-12">
                     <div
                       class="text-dark_gray text-sm font-bold mb-2"
                       for="state"

@@ -29,7 +29,7 @@ export default {
   color: white;
   padding-right: 0%;
   font-weight: bold;
-  transition: opacity 5s ease-in-out;
+  transition: opacity 10s ease-in-out;
   border-radius: 5px;
   font-size: 1.3rem;
   //  box-shadow: black
