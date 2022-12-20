@@ -193,12 +193,9 @@
           class="w-[20%] bg-light_accent mr-3 h-10 text-center"
           v-model="numberCart"
         />
-        <button
-          class="justify-center bg-secondary w-[50%] text-white py-2 font-bold transform transition duration-500"
-          @click="onAddToCart"
-        >
-          <h1 class="text-xs md:text-sm">ADD TO CART</h1>
-        </button>
+         <SfButton @click="onAddToCart" class="rounded bg-secondary mr-[2%]"
+                >Add To Cart</SfButton
+              >
       </div>
     </slot>
     <h1

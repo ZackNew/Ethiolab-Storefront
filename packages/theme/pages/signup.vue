@@ -603,7 +603,7 @@
                       </select>
                     </ValidationProvider>
                   </div>
-                  <div class="mx-8 mt-12 mb-8">
+                  <div class="mx-8 mt-12">
                     <div
                       class="text-dark_gray text-sm font-bold mb-2"
                       for="state"
@@ -761,7 +761,7 @@
                       class="block text-dark_gray text-sm font-bold mb-2"
                       for="tin"
                     >
-                     ORGANIZATION NAME
+                      ORGANIZATION NAME
                     </label>
                       <!-- <div
                         class="text-dark_gray text-sm font-bold mb-2"
@@ -883,95 +883,7 @@
           <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Why Register?</h4>
           <h4 class="px-2 md:px-10">Register today and enjoy these benefits</h4>
 
-          <ul class="mx-2 md:mx-16 my-4">
-            <li class="flex">
-              <!-- <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg> -->
-              <span
-                >Full account records, order history, invoices & tracking</span
-              >
-            </li>
-            <li class="flex">
-              <!-- <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg> -->
-              <span>Wishlist-organized saved items to order later</span>
-            </li>
-            <li class="flex">
-              <!-- <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg> -->
-              <span>Create & track quotes</span>
-            </li>
-            <li class="flex">
-              <!-- <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg> -->
-              <span>Keep a record of payment transactions</span>
-            </li>
-            <li class="flex">
-              <!-- <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg> -->
-              <span>Discounts & special packages</span>
-            </li>
-          </ul>
+        <RegisterMessage />
 
           <h4 class="px-2 md:px-16 pt-10">Already have an account?</h4>
           <div class="mx-2 md:mx-16">
@@ -1019,6 +931,7 @@ import {
   SfBanner,
   SfIcon,
 } from '@storefront-ui/vue';
+import RegisterMessage from "../components/RegisterMessage.vue"
 extend('required', {
   ...required,
   message: 'This field is required',
@@ -1053,6 +966,7 @@ export default defineComponent({
     SfInput,
     ErrorMessage,
     VuePhoneNumberInput,
+    RegisterMessage
   },
   data() {
     return {
