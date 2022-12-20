@@ -42,118 +42,32 @@
         <div class="right">
           <h4 class="px-10 py-6 uppercase font-bold">Why Register?</h4>
           <h4 class="px-10">Register today and enjoy these benefits</h4>
-          <ul class="mx-3 md:mx-16 my-4">
-            <li class="flex">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg>
-              <span
-                >Full account records, order history, invoices & tracking</span
-              >
-            </li>
-            <li class="flex">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg>
-              <span>Wishlist organized saved items to order later</span>
-            </li>
-            <li class="flex">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg>
-              <span>Create & track quotes</span>
-            </li>
-            <li class="flex">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg>
-              <span>Keep a record of payment transactions</span>
-            </li>
-            <li class="flex">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-secondary font-bold"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg>
-              <span>Discounts & special packages</span>
-            </li>
-          </ul>
-
-          <h4 class="px-16 pt-3">Don't have an account?</h4>
-          <div class="mx-16">
+        <RegisterMessage />
+          
+          <div class="mx-8 float-left w-1/3">
+            <h4 class=" pt-3">Don't have an account?</h4>
             <nuxt-link to="/signup">
               <button
-                class="bg-secondary text-white w-1/3 h-14 font-bold rounded"
+                class="bg-secondary text-white  w-full h-14 font-bold rounded"
               >
                 REGISTER
               </button>
             </nuxt-link>
             <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
           </div>
-          <h4 class="px-16 pt-3">Already have an account?</h4>
-          <div class="mx-16">
+
+          <div class="mx-4 float-left ">
+            <h4 class=" pt-3">Already have an account?</h4>
             <nuxt-link to="/signin">
               <button
-                class="bg-secondary text-white w-1/3 h-14 font-bold mb-8 rounded"
+                class="bg-secondary text-white  w-full h-14 font-bold rounded"
               >
                 SIGN IN
               </button>
             </nuxt-link>
             <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
           </div>
+   
         </div>
       </div>
     </div>
@@ -174,6 +88,7 @@ import {
 import { SfInput, SfButton, SfLoader } from '@storefront-ui/vue';
 import { useUser, useForgotPassword } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
+import RegisterMessage from "../components/RegisterMessage.vue"
 extend('required', {
   ...required,
   message: 'This field is required',
@@ -199,6 +114,7 @@ export default defineComponent({
     ErrorMessage,
     SfButton,
     SfLoader,
+    RegisterMessage
   },
   setup() {
     const showToast = inject('showToast');

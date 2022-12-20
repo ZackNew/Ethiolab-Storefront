@@ -55,40 +55,60 @@
                 hide-text=""
               >
                 <div class="results-listing grid grid-cols-1 md:grid-cols-3">
-                  <ProductCard
-                    v-for="r in result"
-                    :key="r.id"
-                    :title="r.name"
-                    :image="r.images"
-                    :imageHeight="260"
-                    :imageWidth="300"
-                    :alt="r.name"
-                    :regular-price="r.price.current + ' ETB'"
-                    :max-rating="5"
-                    :score-rating="r.rating"
-                    :show-add-to-cart-button="false"
-                    :link="localePath(`/v/${r.slug}`)"
-                    class="carousel__item__product mr-2 mb-4"
-                  />
+                  <div v-for="product in result" :key="product._id">
+                    <ProductCard
+                    :id="product._id"
+                      v-e2e="'category-product-card'"
+                      :title="product.name"
+                      :image="product.images"
+                      :imageHeight="260"
+                      :imageWidth="300"
+                      :alt="product.name"
+                      :regular-price="product.price.current + ' ETB'"
+                      :max-rating="5"
+                      :score-rating="product.rating"
+                      :show-add-to-cart-button="true"
+                      :link="localePath(`/v/${product.slug}`)"
+                      class="carousel__item__product mr-2 mb-4"
+                      @click:add-to-cart="addToCart"
+                      :variantId="product._variantId"
+                      @click:wishlist="
+                      !isInWishlist({ product })
+                        ? addItemToWishlist({ product })
+                        : removeItemFromWishlist({ product })
+                    "
+                    />
+                  </div>
+                  
                   <!-- class="products__product-card mr-2 mb-4" -->
                 </div>
               </SfScrollable>
             </div>
             <div class="results--mobile smartphone-only">
-              <ProductCard
-                v-for="r in result"
-                :key="r._id"
-                class="result-card"
-                :regular-price="r.price.current + ' ETB'"
-                :score-rating="r.rating"
-                :image="r.images"
-                :alt="r.name"
-                :title="r.name"
-                :max-rating="5"
-                :imageHeight="198"
-                :imageWidth="128"
-                :link="localePath(`/v/${r.slug}`)"
-              />
+              <div v-for="product in result" :key="product._id">
+                <ProductCard
+                :id="product._id"
+                  v-e2e="'category-product-card'"
+                  class="result-card"
+                  :regular-price="product.price.current + ' ETB'"
+                  :score-rating="product.rating"
+                  :image="product.images"
+                  :alt="product.name"
+                  :title="product.name"
+                  :max-rating="5"
+                  :imageHeight="198"
+                  :imageWidth="128"
+                  :link="localePath(`/v/${product.slug}`)"
+                  @click:add-to-cart="addToCart"
+                      :variantId="product._variantId"
+                      @click:wishlist="
+                      !isInWishlist({ product })
+                        ? addItemToWishlist({ product })
+                        : removeItemFromWishlist({ product })
+                    "
+                />
+              </div>
+             
             </div>
           </SfMegaMenuColumn>
           <div class="action-buttons smartphone-only">
@@ -152,9 +172,9 @@ import {
   SfButton,
   SfImage,
 } from '@storefront-ui/vue';
-import { ref, watch, computed } from '@nuxtjs/composition-api';
+import { ref, watch, computed,inject } from '@nuxtjs/composition-api';
 import Loading from '~/components/Loading.vue';
-import { productGetters } from '@vue-storefront/vendure';
+import { productGetters, useCart, useWishlist } from '@vue-storefront/vendure';
 import ProductCard from './ProductCard.vue';
 
 export default {
@@ -188,11 +208,42 @@ export default {
     },
   },
   setup(props, { emit }) {
+    const showToast = inject('showToast');
     const isSearchOpen = ref(props.visible);
     const products = computed(() => props.result?.value?.data?.items);
+    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const {
+      addItem: addItemToWishlist,
+      isInWishlist,
+      removeItem: removeItemFromWishlist,
+    } = useWishlist();
+
+    const toggleWishlist = (index) => {
+      products.value[index].isInWishlist = !products.value[index].isInWishlist;
+    };
     const categories = computed(() => {
       return props.result?.value?.data?.collections;
     });
+
+    const addToCart = (e) => {
+      
+      addItemToCart({
+        product: {
+          _variantId: e._variantId,
+        },
+        quantity: e.quantity,
+      }).then(res =>{
+        console.log("best seller updated cart value is ", cart.value)
+        if(cart.value.errorCode && cart.value.errorCode != ''){
+          showToast(cart.value.message)
+        }
+        else{
+          showToast("Product added to cart!")
+        }
+      } 
+      )
+      
+    };
 
     watch(
       () => props.visible,
@@ -212,6 +263,12 @@ export default {
       productGetters,
       products,
       categories,
+      addToCart,
+      addItemToCart,
+      isInWishlist,
+      toggleWishlist,
+      addItemToWishlist,
+      removeItemFromWishlist,
     };
   },
 };
