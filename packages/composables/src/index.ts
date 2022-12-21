@@ -20,7 +20,7 @@ export { useRelatedProducts } from './composables/useRelatedProducts';
 export {useTest} from './composables/useTest'
 export {useAnotherTest} from './composables/useAnotherTest';
 export {useQuote} from './composables/useQuote';
-
+export {useInstantMessage} from './composables/useInstantMessage';
 
 export {useTinNumber} from './composables/useTinNumber';
 export {useContactUs} from './composables/useContactUs';

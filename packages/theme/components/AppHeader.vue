@@ -2,6 +2,26 @@
   <div class="wrap">
     <div :class="!isDarkMode ? `border-b-4 border-light_accent` : ''">
       <div class="md:mx-14">
+
+        <SfSidebar
+      v-e2e="'sidebar-cart'"
+      :visible="isMessageSideBarOpen"
+      :title="$t('Messages')"
+      class="sf-sidebar--right"
+      @close="toggleMessageSideBar"
+    >
+      <div id="messages-wrapper">
+        <div v-for="message of messages">
+            <div class="msg-from-me" v-if="!message.isFromAdmin">From You <br />{{message.msg}}</div>
+            <div class="msg-from-admin" v-else>From The Admin <br />{{message.msg}}</div>
+        </div>
+      </div> 
+      <div id="sendmessage">
+         <input id='msg-to-send' type="text" v-model="messageToSend" placeholder="Message to Send" />
+         <SfButton id="send-btn" @click="sendMessageToAdmin">Send</SfButton>
+      </div>
+    </SfSidebar>
+
         <SfHeader
           :class="{
             'header-on-top': isSearchOpen,
@@ -78,6 +98,14 @@
                   >{{ cartTotalItems }}</SfBadge
                 >
               </SfButton>
+
+              <SfButton class="sf-button--pure sf-header__action" @click="toggleMessageSideBar" v-if="isAuthenticated">
+                <SfIcon class="sf-header__icon" icon="message" size="1.25rem" />
+                <SfBadge
+           
+              class="sf-badge--number cart-badge"
+              >{{unSeenMessagesLen}}</SfBadge>
+          </SfButton>
             </div>
           </template>
           <template #navigation>
@@ -151,6 +179,7 @@ import {
   SfSearchBar,
   SfTextarea,
   SfModal,
+  SfSidebar
 } from '@storefront-ui/vue';
 import { useUiHelpers, useUiState } from '~/composables';
 import {
@@ -163,6 +192,7 @@ import {
   useWishlist,
   wishlistGetters,
   userGetters,
+  useInstantMessage
 } from '@vue-storefront/vendure';
 import {
   computed,
@@ -188,6 +218,7 @@ import { useProduct } from '@vue-storefront/vendure';
 import { load } from 'mime';
 export default {
   components: {
+    SfSidebar,
     SfInput,
     SfHeader,
     SfImage,
@@ -301,6 +332,31 @@ export default {
     };
   },
   setup(props, { root }) {
+     const messages = ref([
+   //   {isFromAdmin: true, msg: 'hi', isSeen: false},
+     // {isFromAdmin: false, msg: 'Hello sir', isSeen: true}
+    ]) 
+    const {sendMessage, getUserInstantMessage} = useInstantMessage()
+    const { isAuthenticated, load: loadUser, user } = useUser();
+    //getUserInstantMessage()
+    const refreshMessages = async ()=>{
+      await loadUser();
+      // messages.value = [...messages.value]
+      const data = await getUserInstantMessage({userEmail: userGetters.getEmailAddress(user.value)})
+      console.log(JSON.stringify(data.data.getUserInstantMessage))
+      messages.value = data.data.getUserInstantMessage;
+      
+    }
+    setInterval(()=>{
+         console.log(`hello`)
+         refreshMessages()
+    }, 2000)
+   
+    const isMessageSideBarOpen = ref(false);
+    const toggleMessageSideBar = ()=>{
+      console.log('called toggle messages ' + isMessageSideBarOpen.value);
+      isMessageSideBarOpen.value = !isMessageSideBarOpen.value
+    }
     const {
       toggleCartSidebar,
       toggleWishlistSidebar,
@@ -330,12 +386,43 @@ export default {
       }
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
+    const messageToSend = ref('')
+    const selectedProd = () => {
+      console.log('selected');
+    };
+  
+    const sendMessageToAdmin = async ()=>{
+         await loadUser()
+         const userEmail = userGetters.getEmailAddress(user.value);
+         const userFirstName = userGetters.getFirstName(user.value);
+         const userLastName = userGetters.getLastName(user.value);
+          
+         console.log(`Sending ${messageToSend.value} from ${userFirstName} ${userLastName} ${userEmail}`)
+         await sendMessage({
+              msg: messageToSend.value,
+              lastName: userLastName,
+              firstName: userFirstName,
+              userEmail: userEmail
+           })
+         messageToSend.value = ''
+    }
+//a list of {isFromAdmin, and msg}
+    const unSeenMessagesLen = computed(()=>{
+       let len =0;
+      messages.value.forEach(message =>{
+        if(!message.isSeen && !message.isFromAdmin)len++;
+      })
+      return len
+    })
+    
+    // watch(messages, ()=>{
+     
+    // })
 
-    const selectedProd = () => {};
 
     const showQuotation = ref(false);
     const { setTermForUrl, getFacetsFromURL } = useUiHelpers();
-    const { isAuthenticated, load: loadUser, user } = useUser();
+    
     const { cart, load: loadCart } = useCart();
     const { wishlist, load: loadWishlist } = useWishlist();
     const { search, categories } = useCategory();
@@ -428,20 +515,21 @@ export default {
       await searchTerm({ term: term.value });
       result.value = searchResult;
     }, 1000);
-
-    const isMobile = ref(false);
-    onMounted(() => {
-      if (
-        navigator.userAgent.match(/Android/i) ||
-        navigator.userAgent.match(/webOS/i) ||
-        navigator.userAgent.match(/iPhone/i) ||
-        navigator.userAgent.match(/iPad/i) ||
-        navigator.userAgent.match(/iPod/i) ||
-        navigator.userAgent.match(/BlackBerry/i) ||
-        navigator.userAgent.match(/Windows Phone/i)
-      ) {
-        isMobile.value = true;
-      }
+    
+    
+    const isMobile = ref(false)
+    onMounted(()=>{
+           if (navigator.userAgent.match(/Android/i)
+                || navigator.userAgent.match(/webOS/i)
+                || navigator.userAgent.match(/iPhone/i) 
+                || navigator.userAgent.match(/iPad/i) 
+                || navigator.userAgent.match(/iPod/i)
+                || navigator.userAgent.match(/BlackBerry/i)
+                || navigator.userAgent.match(/Windows Phone/i)){
+                  isMobile.value = true;
+                 console.log("it is a mobile")
+           }
+           else isMobile.value = false;
     });
 
     const closeOrFocusSearchBar = () => {
@@ -499,6 +587,9 @@ export default {
     });
 
     return {
+      messages,
+      isMessageSideBarOpen,
+      toggleMessageSideBar,
       selectedProd,
       selectedProds,
       addProd,
@@ -538,6 +629,10 @@ export default {
       SfTextarea,
       prodList,
       isDarkMode,
+      messageToSend,
+      sendMessageToAdmin,
+      isAuthenticated,
+      unSeenMessagesLen
     };
   },
 };
@@ -573,8 +668,26 @@ export default {
     margin-left: 40px;
   }
 }
+#messages-wrapper{
+   display: flex;
+   flex-direction: column;
+   justify-content: space-evenly;
+   overflow-y: scroll;
+}
+.msg-from-admin{
+   background-color: lightblue;
+}
+.msg-from-me{
+   background-color: lightyellow;
+}
 .header-on-top {
   z-index: 2;
+}
+#msg-to-send{
+  width: 75%;
+}
+#send-btn{
+  width: 25%;
 }
 .cart-badge {
   position: absolute;
@@ -600,5 +713,12 @@ export default {
     max-width: 1250px !important;
     margin: auto;
   }
+}
+#sendmessage{
+  position: fixed;
+   bottom: 1%;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-evenly;
 }
 </style>
