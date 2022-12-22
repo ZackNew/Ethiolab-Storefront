@@ -9,10 +9,10 @@ const useInstantMessage = function(){
        //     console.log(context.$vendure.api.writeContactUsMessage)
            console.log('sendMessage Called')
            await context.$vendure.api.writeInstantMessage({...params})
-            console.log('helloxxxxxxx')
+            // console.log('helloxxxxxxx')
         },
         async getUserInstantMessage(params){
-            console.log('get all user\'s called');
+            // console.log('get all user\'s called');
             return await context.$vendure.api.getUserInstantMessage({...params});
         }
     }
