@@ -391,13 +391,13 @@ export default {
     }
 
     const handleCartSidebar =  () => {
-      isMessageSideBarOpen.value = true
+      isMessageSideBarOpen.value = false
 
       toggleCartSidebar();
     }
 
     const handleWishlistSidebar =  () => {
-      isMessageSideBarOpen.value = true
+      isMessageSideBarOpen.value = false
 
       toggleWishlistSidebar();
     }
