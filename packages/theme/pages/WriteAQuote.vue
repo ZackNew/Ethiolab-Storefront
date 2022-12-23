@@ -1,9 +1,9 @@
 <template>
-  <div id="main" class="flex mt-8 mx-24">
+  <div id="main" class="flex mt-8">
     <div
-      class="card shadow-lg w-1/3 font-bold p-3 rounded text-white bg-primary mr-5"
+      class="card shadow-lg w-2/5 font-bold p-3 rounded text-white bg-secondary mr-5 ml-10"
     >
-      <h4 class="text-6xl mb-5 mt-10 font-bold">Request a Quote</h4>
+      <h4 class="text-6xl mb-5 mt-10  font-bold">Request a Quote</h4>
       <p class="mt-5">
         Follow this steps to request a quote and out team will get back to you.
       </p>
@@ -168,7 +168,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .tarea {
   height: 140px;
   width: 91%;
@@ -187,6 +187,15 @@ export default {
   color: red;
   font-style: italic;
   font-size: 0.7rem;
+}
+
+#main {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1250px !important;
+    padding: 0;
+    margin: 0 auto;
+  }
 }
 /*
 #main{

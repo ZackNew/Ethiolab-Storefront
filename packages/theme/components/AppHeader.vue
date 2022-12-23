@@ -377,10 +377,10 @@ export default {
       messages.value = data.data.getUserInstantMessage;
       
     }
-    setInterval(()=>{
-        //  console.log(`hello`)
-         refreshMessages()
-    }, 2000)
+    // setInterval(()=>{
+    //     //  console.log(`hello`)
+    //      refreshMessages()
+    // }, 2000)
    
     const isMessageSideBarOpen = ref(false);
 
