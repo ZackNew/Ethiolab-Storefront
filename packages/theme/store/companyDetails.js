@@ -22,6 +22,7 @@ export const actions = {
           company_name
           email
           phone_number
+          commercial_bank
           icon{
             preview
           }
