@@ -3,11 +3,35 @@
     <div :class="!isDarkMode ? `border-b-4 border-light_accent` : ''">
       <div class="md:mx-14">
 
-        <SfSidebar
+        <div class="chat rounded-xl shadow-lg" v-if="isMessageSideBarOpen">
+          <div class="h-16 w-full bg-[#000000] text-white rounded-xl chat-top"> 
+            <img src="Favicon.png" alt="logo" height="50px" width="50px" class="float-left bg-white mx-4 my-2 rounded-md" />
+            <h3 class="font-bold ">Ethiolab Support</h3>
+          </div>
+          <div v-for="message of messages"> 
+            <div v-if="!message.isFromAdmin" class="bg-light_gray  min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"> 
+             <p class="text-right mr-4"> {{message.msg}}</p> 
+            </div>
+            <div v-else class="bg-secondary  min-h-[50px] my-2 w-[75%]   rounded-lg"> 
+             <p class="text-left ml-4 text-white"> {{message.msg}}</p> 
+            </div>
+
+          </div>
+
+          <div class="chat-bottom"> 
+            <!-- <p>dfhdiusfhsd</p> -->
+            <input type="text" v-model="messageToSend"  placeholder="write a message" class="w-[85%] h-12 px-4 rounded-xl shadow-md float-left" />
+          <button @click="sendMessageToAdmin"> <img src="sendr.png" alt="send icon " height="50px" width="50px" /></button>  
+          </div>
+
+          
+        </div>
+
+        <!-- <SfSidebar
       v-e2e="'sidebar-cart'"
       :visible="isMessageSideBarOpen"
       :title="$t('Messages')"
-      class="sf-sidebar--right"
+      class="sf-sidebar--right z-300"
       @close="toggleMessageSideBar"
     >
       <div id="messages-wrapper">
@@ -20,7 +44,7 @@
          <input id='msg-to-send' type="text" v-model="messageToSend" placeholder="Message to Send" />
          <SfButton id="send-btn" @click="sendMessageToAdmin">Send</SfButton>
       </div>
-    </SfSidebar>
+    </SfSidebar> -->
 
         <SfHeader
           :class="{
@@ -66,7 +90,7 @@
               <SfButton
                 aria-label="Toggle wishlist sidebar"
                 class="sf-button--pure sf-header__action"
-                @click="toggleWishlistSidebar"
+                @click="handleWishlistSidebar"
               >
                 <SfIcon
                   class="sf-header__icon"
@@ -84,7 +108,7 @@
                 v-e2e="'app-header-cart'"
                 aria-label="Toggle cart sidebar"
                 class="sf-button--pure sf-header__action"
-                @click="toggleCartSidebar"
+                @click="handleCartSidebar"
               >
                 <SfIcon
                   class="sf-header__icon"
@@ -99,12 +123,18 @@
                 >
               </SfButton>
 
-              <SfButton class="sf-button--pure sf-header__action" @click="toggleMessageSideBar" v-if="isAuthenticated">
-                <SfIcon class="sf-header__icon" icon="message" size="1.25rem" />
-                <SfBadge
+              <SfButton class="sf-button--pure sf-header__action chatcss" @click="toggleMessageSideBar" v-if="isAuthenticated && !isMessageSideBarOpen">
+                <!-- <SfIcon class="sf-header__icon" icon="message" size="1.25rem" /> -->
+                <img src="chatr.png" alt="chat image" height="50px" width="50px"/>
+                <!-- <SfBadge
            
-              class="sf-badge--number cart-badge"
-              >{{unSeenMessagesLen}}</SfBadge>
+              class="sf-badge--number cart-badge ml-4"
+              >{{unSeenMessagesLen}}</SfBadge> -->
+          </SfButton>
+          <SfButton class="sf-button--pure sf-header__action chatcss" @click="toggleMessageSideBar" v-if="isAuthenticated && isMessageSideBarOpen">
+                <!-- <SfIcon class="sf-header__icon" icon="message" size="1.25rem" /> -->
+                <img src="xicon.png" alt="chat image" height="50px" width="50px"/>
+             
           </SfButton>
             </div>
           </template>
@@ -343,19 +373,33 @@ export default {
       await loadUser();
       // messages.value = [...messages.value]
       const data = await getUserInstantMessage({userEmail: userGetters.getEmailAddress(user.value)})
-      console.log(JSON.stringify(data.data.getUserInstantMessage))
+      // console.log(JSON.stringify(data.data.getUserInstantMessage))
       messages.value = data.data.getUserInstantMessage;
       
     }
-    setInterval(()=>{
-         console.log(`hello`)
-         refreshMessages()
-    }, 2000)
+    // setInterval(()=>{
+    //     //  console.log(`hello`)
+    //      refreshMessages()
+    // }, 2000)
    
     const isMessageSideBarOpen = ref(false);
+
     const toggleMessageSideBar = ()=>{
       console.log('called toggle messages ' + isMessageSideBarOpen.value);
-      isMessageSideBarOpen.value = !isMessageSideBarOpen.value
+      let temp = isMessageSideBarOpen.value;
+      isMessageSideBarOpen.value = !temp
+    }
+
+    const handleCartSidebar =  () => {
+      isMessageSideBarOpen.value = false
+
+      toggleCartSidebar();
+    }
+
+    const handleWishlistSidebar =  () => {
+      isMessageSideBarOpen.value = false
+
+      toggleWishlistSidebar();
     }
     const {
       toggleCartSidebar,
@@ -632,7 +676,9 @@ export default {
       messageToSend,
       sendMessageToAdmin,
       isAuthenticated,
-      unSeenMessagesLen
+      unSeenMessagesLen,
+      handleCartSidebar,
+      handleWishlistSidebar
     };
   },
 };
@@ -650,6 +696,11 @@ export default {
 
   &__logo-image {
     height: 200%;
+  }
+
+  &__title {
+    // height: 200%;
+    color: green;
   }
 }
 
@@ -721,4 +772,39 @@ export default {
    flex-direction: row;
    justify-content: space-evenly;
 }
+
+.chatcss {
+  position: fixed;
+  // padding: 50px;
+  z-index: 500;
+  top: 90vh;
+  left: 95%;
+  // bottom: 0;
+}
+
+.chat {
+  min-height: 500px;
+  max-height: 600px;
+  width: 350px;
+  background-color: rgb(255, 255, 255);
+  position: fixed;
+  bottom: 100px;
+  left: 80%;
+  z-index: 500;
+  overflow: auto;
+  // box-shadow: 10px;
+  // border-radius: 10px 10px 10px 10px;
+}
+
+.chat-top{
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.chat-bottom{
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+}
+
 </style>

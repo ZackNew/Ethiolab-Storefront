@@ -25,7 +25,7 @@ const writeQuote = async (context: Context, params: writeInstantMessageParams, c
   const removeCartCouponVariables = {
     ...params
   };
-  console.log('Called to calle')
+  // console.log('Called to calle')
   const { removeCouponCode } = context.extendQuery(
     customQuery, { removeCouponCode: { query: mutation, variables: removeCartCouponVariables } }
   );

@@ -257,7 +257,7 @@
                       <div> 
                         <p>Dear customer, you can complete your order by directly depositing to one of the accounts below: </p>
                         <ul>
-                          <li>CBE- 100000000021654684</li>
+                          <li>CBE- {{ CBE }}</li>
                           <li>ABAY- 2165412564</li>
                           <li>BERHAN- 49874598415</li>
                           <li>Please write the order ID #{{cart.code}}  in 'Reason for payment' and contact the admin {{phoneNumber}} for further instructions.</li>
@@ -522,6 +522,9 @@ export default {
       return this.$store.state.companyDetails.companyInformation?.phone_number?.split(
         ';'
       )[0];
+    },
+    CBE() {
+      return this.$store.state.companyDetails.companyInformation?.commercial_bank
     },
   },
   setup(props, context) {
