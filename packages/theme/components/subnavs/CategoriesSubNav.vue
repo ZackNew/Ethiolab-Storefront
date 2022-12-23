@@ -28,7 +28,7 @@ export default {
     const adImage = computed(() => getCms.value[3].featuredAsset.preview);
     const getTree = () => {
       categories?.value?.items?.forEach((a) => {
-        if (a.parent.name === '__root_collection__') {
+        if (a?.parent?.name === '__root_collection__') {
           headerNavigation.push(facetGetters.getTree(a));
           for (let navItem of headerNavigation) {
             navItem.link = '/c/' + navItem.slug;

@@ -21,8 +21,6 @@
       <nuxt :key="$route.fullPath" />
       <client-only><Compare class="bottomright" /></client-only>
 
-    <div id="layout" >
-      <nuxt :key="$route.fullPath"/>
       
       <ToastVue :show="isToastVisible" :message='toastMessage'/>
       <LazyHydrate when-visible>
@@ -39,7 +37,7 @@
       <AppFooter />
     </LazyHydrate>
   </div>
-  </div>
+
 </template>
 
 <script>
