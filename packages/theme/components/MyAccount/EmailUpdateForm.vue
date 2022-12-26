@@ -1,7 +1,11 @@
 <template>
   <ValidationObserver v-slot="{ handleSubmit, reset }">
     <form class="form" @submit.prevent="handleSubmit(submitForm(reset))">
-      <ValidationProvider rules="required|email" v-slot="{ errors }" class="form__element">
+      <ValidationProvider
+        rules="required|email"
+        v-slot="{ errors }"
+        class="form__element"
+      >
         <SfInput
           v-e2e="'myaccount-email'"
           v-model="form.email"
@@ -11,9 +15,15 @@
           required
           :valid="!errors[0]"
           :errorMessage="errors[0]"
+          class="w-[60%]"
         />
       </ValidationProvider>
-      <ValidationProvider rules="required|password" v-slot="{ errors }" vid="password" class="form__element">
+      <ValidationProvider
+        rules="required|password"
+        v-slot="{ errors }"
+        vid="password"
+        class="form__element"
+      >
         <SfInput
           v-e2e="'myaccount-password'"
           v-model="form.password"
@@ -23,14 +33,15 @@
           required
           :valid="!errors[0]"
           :errorMessage="errors[0]"
+          class="w-[60%]"
         />
       </ValidationProvider>
 
       <SfButton
         v-e2e="'myaccount-update-personal-data-btn'"
-        class="form__button"
+        class="bg-secondary w-[33%] py-3"
       >
-        {{ $t('Update email') }}
+        <h4 class="text-white font-bold text-base">UPDATE EMAIL</h4>
       </SfButton>
     </form>
   </ValidationObserver>
@@ -48,14 +59,14 @@ export default {
     SfInput,
     SfButton,
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
   setup(_, { emit }) {
     const { user, load } = useUser();
 
     const resetForm = () => ({
       email: userGetters.getEmailAddress(user.value),
-      password: ''
+      password: '',
     });
 
     const form = ref(resetForm());
@@ -77,13 +88,13 @@ export default {
 
     return {
       form,
-      submitForm
+      submitForm,
     };
-  }
+  },
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .form {
   &__element {
     display: block;

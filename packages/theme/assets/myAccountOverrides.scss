@@ -1,0 +1,52 @@
+.accountPage .sf-content-pages {
+  &__section {
+    border-radius: 2%;
+    background: white;
+  }
+  &__sidebar {
+    min-height: 100%;
+    border-radius: 2% 0 0 2%;
+    background: #e7efff !important;
+  }
+  &__title {
+    color: #3860a7;
+    font-weight: 700;
+  }
+  &__category-title {
+    color: #3860a7;
+  }
+}
+.sf-content-pages__content::-webkit-scrollbar {
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+.sf-content-pages__content::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
+}
+.accountPage .sf-tabs__title.is-active + .sf-tabs__content {
+  border: none !important;
+}
+.accountPage .sf-menu-item.is-active {
+  padding: 5px;
+  background-color: #f8fbff;
+  color: #b6932f;
+}
+
+.myTabs .sf-tabs {
+  padding-top: 3%;
+  border-top: 1px solid rgb(205, 205, 205);
+  &__title {
+    font-weight: 800;
+  }
+}
+
+.profileTabs .is-active {
+  // background-color: pink !important;
+  border-radius: 0% !important;
+  box-shadow: 0px 1px 0px 0px #3860a7 !important;
+  color: #3860a7;
+}
+
+// sf-content-pages__content
