@@ -10,7 +10,7 @@
       </section> -->
       <div class="flex">
         <div
-          class="card shadow-lg w-2/3 font-bold p-3 rounded text-white bg-primary"
+          class="card shadow-lg w-2/3 font-bold p-3 rounded text-white bg-secondary"
         >
           <h4 class="text-7xl mb-5 mt-10">HOW CAN WE HELP?</h4>
           <p>
@@ -541,7 +541,7 @@ export default {
 .wrap {
   box-sizing: border-box;
   @include for-desktop {
-    max-width: 1350px;
+    max-width: 1250px;
     margin: 0 auto;
   }
 }
