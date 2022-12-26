@@ -39,11 +39,11 @@
                 type="number"
               />
               <SfButton @click="addToCart" class="rounded bg-secondary mr-[2%]"
-                >Add To Cart</SfButton
+                >Add to Cart</SfButton
               >
               <button @click="addToCompareList">
                 <p class="text-secondary align-center mt-3">
-                  + Add To Compare List
+                  + Add to Compare List
                 </p>
               </button>
             </div>
@@ -67,15 +67,16 @@
         id="full"
         class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
         :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
+        v-if="Svariant.customFields && (Svariant.customFields.table || Svariant.customFields.description )  "
       >
-        <div class="md:col-span-6">
+        <div class="md:col-span-6"         v-if="Svariant.customFields && Svariant.customFields.table  ">
           <h3>Speciﬁcation And Description</h3>
           <p
             v-html="Svariant.customFields ? Svariant.customFields.table : ''"
             :class="classes.red"
           ></p>
         </div>
-        <div class="md:col-span-6">
+        <div class="md:col-span-6"         v-if="Svariant.customFields && Svariant.customFields.description  ">
           <h3>More About This Item</h3>
           <div v-if="Svariant.customFields">
             <p

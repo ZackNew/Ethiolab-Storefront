@@ -20,6 +20,11 @@
     <div id="layout">
       <nuxt :key="$route.fullPath" />
       <client-only><Compare class="bottomright" /></client-only>
+      <!-- <client-only><img src="chatr.png" alt="chat image" height="50px" width="50px" class="chatcss" /></client-only> -->
+
+      <!-- 
+    <div id="layout" >
+      <nuxt :key="$route.fullPath"/> -->
 
       <ToastVue :show="isToastVisible" :message="toastMessage" />
       <LazyHydrate when-visible>
@@ -36,6 +41,7 @@
       <AppFooter />
     </LazyHydrate>
   </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -201,5 +207,13 @@ h4 {
   position: fixed;
   padding: 5px;
   z-index: 500;
+}
+.chatcss {
+  position: fixed;
+  // padding: 50px;
+  z-index: 500;
+  top: 90vh;
+  left: 95%;
+  // bottom: 0;
 }
 </style>

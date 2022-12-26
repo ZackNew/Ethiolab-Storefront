@@ -83,7 +83,28 @@
           </div>
 
           <LazyHydrate when-idle>
-            <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
+            <div> 
+              <h4 class=" my-8 text-secondary">Product Reviews </h4>
+                  <SfReview
+                  v-for="review in reviews"
+                  :key="review.id"
+                  :author="review.authorName"
+                  :date="new Date(review.createdAt).toLocaleString()"
+                  :message="review.summary"
+                  :max-rating="5"
+                  :rating="review.rating"
+                  :char-limit="250"
+                  :read-more-text="$t('Read more')"
+                  :hide-full-text="$t('Read less')"
+                  class="product__review"
+                />
+                <MyReview
+                  :productId="product.id"
+                  :currentUserHasNoReview="!currentUserHasReview"
+                />
+            </div>
+        
+            <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
               <SfTab :title="$t('Read reviews')" :key="reviewKey">
                 <SfReview
                   v-for="review in reviews"
@@ -103,7 +124,7 @@
                   :currentUserHasNoReview="!currentUserHasReview"
                 />
               </SfTab>
-            </SfTabs>
+            </SfTabs> -->
           </LazyHydrate>
         </div>
       </div>
