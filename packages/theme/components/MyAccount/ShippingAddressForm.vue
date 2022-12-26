@@ -138,7 +138,7 @@
         :label="$t('Set as default')"
         class="form__checkbox-isDefault"
       />
-      <SfButton class="form__button">
+      <SfButton class="bg-secondary form__button">
         {{ isNew ? $t('Add the address') : $t('Update the address') }}
       </SfButton>
     </form>

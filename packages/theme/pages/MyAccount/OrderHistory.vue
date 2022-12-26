@@ -1,240 +1,250 @@
 <template>
-  <SfTabs :open-tab="1">
-    <SfTab title="My orders">
-      <div v-if="currentOrder">
-        <SfButton
-          class="sf-button--text all-orders"
-          @click="currentOrder = null"
-          >All Orders</SfButton
-        >
-        <div class="highlighted highlighted--total">
-          <SfProperty
-            name="Order ID"
-            :value="orderGetters.getId(currentOrder)"
-            class="sf-property--full-width property"
-          />
-          <SfProperty
-            name="Date"
-            :value="orderGetters.getDate(currentOrder)"
-            class="sf-property--full-width property"
-          />
-          <SfProperty
-            name="Status"
-            :value="orderGetters.getStatus(currentOrder)"
-            class="sf-property--full-width property"
-          />
-          <SfProperty
-            name="Total"
-            :value="
-              orderGetters.getPrice(currentOrder).toLocaleString() + ' ETB'
-            "
-            class="sf-property--full-width property"
-          />
-        </div>
-        <SfTable class="products">
-          <SfTableHeading>
-            <SfTableHeader class="products__name">{{
-              $t('Product')
-            }}</SfTableHeader>
-            <SfTableHeader>{{ $t('Quantity') }}</SfTableHeader>
-            <SfTableHeader>{{ $t('Price') }}</SfTableHeader>
-            <SfTableHeader>{{ $t('Reorder') }}</SfTableHeader>
-          </SfTableHeading>
-          <SfTableRow
-            v-for="(item, i) in orderGetters.getItems(currentOrder)"
-            class="review-bar"
-            :key="i"
+  <div>
+    <h3 class="text-secondary font-bold mb-[3%]">Billing Details</h3>
+    <hr class="mb-4" />
+    <SfTabs :open-tab="1">
+      <SfTab class="profileTabs" title="My orders">
+        <div v-if="currentOrder">
+          <SfButton
+            class="sf-button--text all-orders"
+            @click="currentOrder = null"
+            >All Orders</SfButton
           >
-            <SfTableData class="products__name">
-              {{ orderGetters.getItemName(item) }}
-            </SfTableData>
-            <SfTableData>{{ orderGetters.getItemQty(item) }}</SfTableData>
-            <SfTableData>{{
-              orderGetters.getItemPrice(item).toLocaleString() + ' ETB'
-            }}</SfTableData>
-            <SfTableData
-              ><button @click="itemsToCart(item)">
-                Reorder Item
-              </button></SfTableData
+          <div class="highlighted highlighted--total">
+            <SfProperty
+              name="Order ID"
+              :value="orderGetters.getId(currentOrder)"
+              class="sf-property--full-width property"
+            />
+            <SfProperty
+              name="Date"
+              :value="orderGetters.getDate(currentOrder)"
+              class="sf-property--full-width property"
+            />
+            <SfProperty
+              name="Status"
+              :value="orderGetters.getStatus(currentOrder)"
+              class="sf-property--full-width property"
+            />
+            <SfProperty
+              name="Total"
+              :value="
+                orderGetters.getPrice(currentOrder).toLocaleString() + ' ETB'
+              "
+              class="sf-property--full-width property"
+            />
+          </div>
+          <SfTable class="products">
+            <SfTableHeading>
+              <SfTableHeader class="products__name">{{
+                $t('Product')
+              }}</SfTableHeader>
+              <SfTableHeader>{{ $t('Quantity') }}</SfTableHeader>
+              <SfTableHeader>{{ $t('Price') }}</SfTableHeader>
+              <SfTableHeader>{{ $t('Reorder') }}</SfTableHeader>
+            </SfTableHeading>
+            <SfTableRow
+              v-for="(item, i) in orderGetters.getItems(currentOrder)"
+              class="review-bar"
+              :key="i"
             >
-          </SfTableRow>
-        </SfTable>
-        <div class="modal-backdrop" aria-hidden="true"></div>
-      </div>
-      <div v-else>
-        <p class="message">
-          {{ $t('Details and status orders') }}
-        </p>
-        <div v-if="orders.length === 0" class="no-orders">
-          <p class="no-orders__title">
-            {{ $t('You currently have no orders') }}
-          </p>
-          <SfButton class="no-orders__button">{{
-            $t('Start shopping')
-          }}</SfButton>
+              <SfTableData class="products__name">
+                {{ orderGetters.getItemName(item) }}
+              </SfTableData>
+              <SfTableData>{{ orderGetters.getItemQty(item) }}</SfTableData>
+              <SfTableData>{{
+                orderGetters.getItemPrice(item).toLocaleString() + ' ETB'
+              }}</SfTableData>
+              <SfTableData
+                ><button @click="itemsToCart(item)">
+                  Reorder Item
+                </button></SfTableData
+              >
+            </SfTableRow>
+          </SfTable>
+          <div class="modal-backdrop" aria-hidden="true"></div>
         </div>
-        <SfTable v-else class="orders">
+        <div v-else>
+          <p class="message">
+            {{ $t('Details and status orders') }}
+          </p>
+          <div v-if="orders.length === 0" class="no-orders">
+            <p class="no-orders__title">
+              {{ $t('You currently have no orders') }}
+            </p>
+            <SfButton class="no-orders__button">{{
+              $t('Start shopping')
+            }}</SfButton>
+          </div>
+          <SfTable v-else class="orders">
+            <SfTableHeading>
+              <SfTableHeader
+                v-for="(tableHeader, index) in tableHeaders"
+                :key="index"
+              >
+                <h4 class="text-lg font-bold text-secondary">
+                  {{ tableHeader }}
+                </h4>
+              </SfTableHeader>
+              <SfTableHeader class="orders__element--right" />
+            </SfTableHeading>
+            <SfTableRow
+              v-for="(order, index) in orders.items"
+              :key="orderGetters.getId(order)"
+            >
+              <SfTableData v-e2e="'order-number'">{{
+                orderGetters.getId(order)
+              }}</SfTableData>
+              <SfTableData>{{ orderGetters.getDate(order) }}</SfTableData>
+              <SfTableData>{{
+                orderGetters.getPrice(order).toLocaleString() + ' ETB'
+              }}</SfTableData>
+              <SfTableData>
+                <span :class="getStatusTextClass(order)">{{
+                  orderGetters.getStatus(order)
+                }}</span>
+              </SfTableData>
+              <SfTableData class="orders__view orders__element--right">
+                <SfButton
+                  class="text-secondary sf-button--text desktop-only"
+                  @click="currentOrder = order"
+                >
+                  {{ $t('View details') }}
+                </SfButton>
+                <button
+                  class="mt-2"
+                  @click="itemsToCart(orderGetters.getItems(order))"
+                >
+                  <h4 class="text-secondary text-base">Reorder All Items</h4>
+                </button>
+              </SfTableData>
+            </SfTableRow>
+          </SfTable>
+          <div class="pagination" v-if="orders.length < totalOrders">
+            <SfArrow
+              aria-label="prev"
+              class="sf-arrow--left sf-arrow--transparent"
+              :disabled="offset === 0"
+              @click="goPrev(offset)"
+            />
+            <div class="pagination-count">
+              {{ orders.length > 1 ? `${offset + 1} - ` : '' }}
+              {{ offset + orders.length }} <strong>of</strong> {{ totalOrders }}
+            </div>
+            <SfArrow
+              aria-label="next"
+              class="sf-arrow--right sf-arrow--transparent"
+              :disabled="offset + orders.length === totalOrders"
+              @click="goNext(offset)"
+            />
+          </div>
+        </div>
+      </SfTab>
+      <SfTab class="profileTabs" title="My Quotes">
+        <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
+            Message: {{quote.msg}}
+            <SfButton>Delete</SfButton>
+          </div> -->
+        <SfTable>
           <SfTableHeading>
             <SfTableHeader
-              v-for="(tableHeader,index) in tableHeaders"
+              v-for="(tableHeader, index) in quotesHeader"
               :key="index"
               >{{ tableHeader }}</SfTableHeader
             >
             <SfTableHeader class="orders__element--right" />
           </SfTableHeading>
-          <SfTableRow
-            v-for="(order, index) in orders.items"
-            :key="orderGetters.getId(order)"
-          >
-            <SfTableData v-e2e="'order-number'">{{
-              orderGetters.getId(order)
-            }}</SfTableData>
-            <SfTableData>{{ orderGetters.getDate(order) }}</SfTableData>
-            <SfTableData>{{
-              orderGetters.getPrice(order).toLocaleString() + ' ETB'
-            }}</SfTableData>
+
+          <SfTableRow v-for="(quote, index) in quotes" :key="index">
+            <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
+            <SfTableData>{{ quote.createdAt }}</SfTableData>
+            <SfTableData>{{ quote.subject }}</SfTableData>
+            <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
             <SfTableData>
-              <span :class="getStatusTextClass(order)">{{
-                orderGetters.getStatus(order)
-              }}</span>
-            </SfTableData>
-            <SfTableData class="orders__view orders__element--right">
+              <SfButton class="sf-button--text">See Details</SfButton>
               <SfButton
-                class="sf-button--text desktop-only"
-                @click="currentOrder = order"
+                class="sf-button--text red-text"
+                @click="removeQuote(quotes.indexOf(quote))"
+                >Delete</SfButton
               >
-                {{ $t('View details') }}
+              <SfButton
+                class="sf-button--text"
+                @click="downloadQuote(quotes.indexOf(quote))"
+                >Download As Pdf</SfButton
+              >
+            </SfTableData>
+          </SfTableRow>
+
+          <!-- <SfTableRow v-for="(quote,index) in quotes" :key="index">
+            <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
+            <SfTableData>{{ quote.createdAt }}</SfTableData>
+            <SfTableData>{{ quote.subject }}</SfTableData>
+            <SfTableData>
+              <SfButton class="sf-button--text">See Details</SfButton>
+              <SfButton
+                class="sf-button--text red-text"
+                @click="removeQuote(quotes.indexOf(quote))"
+                >Delete</SfButton       <SfTableData class="orders__view orders__element--right">
+                <SfButton
+                  class="sf-button--text desktop-only"
+                  @click="currentOrder = order"
+                >
+                  {{ $t('View details') }}
+                </SfButton>
+                <button
+                  class="mt-2"
+                  @click="itemsToCart(orderGetters.getItems(order))"
+                >
+                  Reorder All Items
+                </button>
+              </SfTableData>
+                @click="downloadQuote(quotes.indexOf(quote))"
+                >Download As Pdf</SfButton
+              >
+            </SfTableData>
+          </SfTableRow> -->
+        </SfTable>
+      </SfTab>
+
+      <SfTab class="profileTabs" title="My Invoices">
+        <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
+            Message: {{quote.msg}}
+            <SfButton>Delete</SfButton>
+          </div> -->
+        <SfTable>
+          <SfTableHeading>
+            <SfTableHeader
+              v-for="(invoiceHeader, index) in InvoiceHeader"
+              :key="index"
+            >
+              <h4 class="text-lg font-bold text-secondary">
+                {{ invoiceHeader }}
+              </h4>
+            </SfTableHeader>
+            <!-- <SfTableHeader class="orders__element--right" /> -->
+          </SfTableHeading>
+          <SfTableRow v-for="(invoice, index) in invoices" :key="index">
+            <SfTableData>{{ invoice.invoiceNumber }}</SfTableData>
+            <SfTableData>{{ invoice.createdAt }}</SfTableData>
+            <SfTableData>{{ invoice.orderCode }}</SfTableData>
+            <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
+            <SfTableData>
+              <!-- <SfButton class="sf-button--text">See Details</SfButton> -->
+              <!-- <SfButton
+                class="sf-button--text red-text"
+                >Delete</SfButton
+              > -->
+              <SfButton class="sf-button--text">
+                <a :href="inv_download + invoice.downloadUrl" target="_blank">
+                  Show As Pdf</a
+                >
               </SfButton>
-              <button
-                class="mt-2"
-                @click="itemsToCart(orderGetters.getItems(order))"
-              >
-                Reorder All Items
-              </button>
             </SfTableData>
           </SfTableRow>
         </SfTable>
-        <div class="pagination" v-if="orders.length < totalOrders">
-          <SfArrow
-            aria-label="prev"
-            class="sf-arrow--left sf-arrow--transparent"
-            :disabled="offset === 0"
-            @click="goPrev(offset)"
-          />
-          <div class="pagination-count">
-            {{ orders.length > 1 ? `${offset + 1} - ` : '' }}
-            {{ offset + orders.length }} <strong>of</strong> {{ totalOrders }}
-          </div>
-          <SfArrow
-            aria-label="next"
-            class="sf-arrow--right sf-arrow--transparent"
-            :disabled="offset + orders.length === totalOrders"
-            @click="goNext(offset)"
-          />
-        </div>
-      </div>
-    </SfTab>
-    <SfTab title="My Quotes">
-      <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
-           Message: {{quote.msg}}
-          <SfButton>Delete</SfButton>
-         </div> -->
-      <SfTable>
-        <SfTableHeading>
-          <SfTableHeader
-            v-for="(tableHeader,index) in quotesHeader"
-            :key="index"
-            >{{ tableHeader }}</SfTableHeader
-          >
-          <SfTableHeader class="orders__element--right" />
-        </SfTableHeading>
-
-        <SfTableRow v-for="(quote,index) in quotes" :key="index">
-          <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
-          <SfTableData>{{ quote.createdAt }}</SfTableData>
-          <SfTableData>{{ quote.subject }}</SfTableData>
-          <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
-          <SfTableData>
-            <SfButton class="sf-button--text">See Details</SfButton>
-            <SfButton
-              class="sf-button--text red-text"
-              @click="removeQuote(quotes.indexOf(quote))"
-              >Delete</SfButton
-            >
-            <SfButton
-              class="sf-button--text"
-              @click="downloadQuote(quotes.indexOf(quote))"
-              >Download As Pdf</SfButton
-            >
-          </SfTableData>
-        </SfTableRow>
-
-        <!-- <SfTableRow v-for="(quote,index) in quotes" :key="index">
-          <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
-          <SfTableData>{{ quote.createdAt }}</SfTableData>
-          <SfTableData>{{ quote.subject }}</SfTableData>
-          <SfTableData>
-            <SfButton class="sf-button--text">See Details</SfButton>
-            <SfButton
-              class="sf-button--text red-text"
-              @click="removeQuote(quotes.indexOf(quote))"
-              >Delete</SfButton       <SfTableData class="orders__view orders__element--right">
-              <SfButton
-                class="sf-button--text desktop-only"
-                @click="currentOrder = order"
-              >
-                {{ $t('View details') }}
-              </SfButton>
-              <button
-                class="mt-2"
-                @click="itemsToCart(orderGetters.getItems(order))"
-              >
-                Reorder All Items
-              </button>
-            </SfTableData>
-              @click="downloadQuote(quotes.indexOf(quote))"
-              >Download As Pdf</SfButton
-            >
-          </SfTableData>
-        </SfTableRow> -->
-      </SfTable>
-    </SfTab>
-
-    <SfTab title="My Invoices">
-      <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
-           Message: {{quote.msg}}
-          <SfButton>Delete</SfButton>
-         </div> -->
-      <SfTable>
-        <SfTableHeading>
-          <SfTableHeader
-            v-for="(invoiceHeader,index) in InvoiceHeader"
-            :key="index"
-            > {{ invoiceHeader }}</SfTableHeader
-          >
-          <!-- <SfTableHeader class="orders__element--right" /> -->
-        </SfTableHeading>
-        <SfTableRow v-for="(invoice,index) in invoices" :key="index">
-          <SfTableData>{{ invoice.invoiceNumber }}</SfTableData>
-          <SfTableData>{{ invoice.createdAt }}</SfTableData>
-          <SfTableData>{{ invoice.orderCode }}</SfTableData>
-          <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
-          <SfTableData>
-            <!-- <SfButton class="sf-button--text">See Details</SfButton> -->
-            <!-- <SfButton
-              class="sf-button--text red-text"
-              >Delete</SfButton
-            > -->
-            <SfButton
-              class="sf-button--text"
-              >
-              <a :href="inv_download + invoice.downloadUrl" target="_blank"> Show As Pdf</a> </SfButton
-            >
-          </SfTableData>
-        </SfTableRow>
-      </SfTable>
-    </SfTab>
-  </SfTabs>
+      </SfTab>
+    </SfTabs>
+  </div>
 </template>
 
 <script>
@@ -246,7 +256,7 @@ import {
   SfLink,
   SfArrow,
 } from '@storefront-ui/vue';
-import { computed, ref, provide , onMounted} from '@vue/composition-api';
+import { computed, ref, provide, onMounted } from '@vue/composition-api';
 import {
   useUserOrder,
   orderGetters,
@@ -273,17 +283,15 @@ export default {
   computed: {
     custom() {
       const link = this.product?.customFields?.youtube_link?.split('?v=')[1];
-      const document =
-        process.env.GRAPHQL?.split('/shop-api')[0];
+      const document = process.env.GRAPHQL?.split('/shop-api')[0];
       return { link: link, document: document };
     },
   },
 
   computed: {
-    inv_download(){
-    return process.env.GRAPHQL?.split('/shop-api')[0];
-
-    }
+    inv_download() {
+      return process.env.GRAPHQL?.split('/shop-api')[0];
+    },
   },
 
   setup() {
@@ -322,8 +330,8 @@ export default {
 
     onMounted(() => {
       let baseUrl = process.env.GRAPHQL_API;
-    let pbody = {
-              query: `query getInvoices($customerEmail: String!) {
+      let pbody = {
+        query: `query getInvoices($customerEmail: String!) {
                        myInvoices(input:{customerEmail: $customerEmail}){
                           items{
                             invoiceNumber
@@ -333,24 +341,27 @@ export default {
                           }
                         }
                       }`,
-              variables: {
-                customerEmail: invoiceEmail,
-              },
-            };
-            let poptions = {
-              headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-              },
-            };
-         axios.post(baseUrl, pbody, poptions).then(res => {
-          console.log("result invoice is ", res)
+        variables: {
+          customerEmail: invoiceEmail,
+        },
+      };
+      let poptions = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      axios
+        .post(baseUrl, pbody, poptions)
+        .then((res) => {
+          console.log('result invoice is ', res);
           invoices.value = res.data.data.myInvoices.items;
-          console.log("invoices.value is ", invoices.value)
-         }).catch(err => {
-          console.log("error invoice is ", err)
-         })
-    })
+          console.log('invoices.value is ', invoices.value);
+        })
+        .catch((err) => {
+          console.log('error invoice is ', err);
+        });
+    });
 
     //    // quotes.value = myQuotes
     // console.log('DATA::',  load)
@@ -371,7 +382,6 @@ export default {
     // }).catch(err => {
     //   console.log("the error is ", err)
     // })
-
 
     const limit = 10;
     const { orders, search } = useUserOrder();
@@ -398,7 +408,12 @@ export default {
       'Actions',
     ];
 
-    const InvoiceHeader = ['Invoice Number', 'Created At','Order No' , 'Document'];
+    const InvoiceHeader = [
+      'Invoice Number',
+      'Created At',
+      'Order No',
+      'Document',
+    ];
 
     const itemsToCart = (items) => {
       if (items.length >= 1) {
@@ -568,5 +583,8 @@ export default {
 }
 .red-text {
   color: red;
+}
+hr {
+  color: lightgray;
 }
 </style>

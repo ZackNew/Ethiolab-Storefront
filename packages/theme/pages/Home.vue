@@ -86,20 +86,6 @@
               class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col gap-1"
             >
               <div v-for="sale in bigSale" :key="sale.sku">
-                <!-- <div class="container">
-                  <h3 class="font-bold text-overlayer z-[2] text-xs md:text-xl">
-                    <nuxt-link
-                      :to="`/v/${sale.productSlug}`"
-                      class="font-bold text-white"
-                      >{{ sale.buttonText }}</nuxt-link
-                    >
-                  </h3>
-                  <img
-                    :src="imageUrl + sale.banner"
-                    alt="Image"
-                    class="w-full max-h-[8rem] min-h-[8rem]"
-                  />
-                </div> -->
                 <div class="container">
                   <nuxt-link
                     :to="`/v/${sale.productSlug}`"

@@ -1,50 +1,61 @@
 <template>
-  <SfTabs :open-tab="1">
-    <!-- Personal data update -->
-    <SfTab title="Personal data">
-      <p class="message">
-        {{ $t('Feel free to edit') }}
-      </p>
+  <div class="myTabs">
+    <h3 class="text-secondary font-bold mb-[3%]">My Profile</h3>
+    <hr class="mb-4" />
+    <SfTabs :open-tab="1">
+      <!-- Personal data update -->
+      <SfTab class="profileTabs" title="Personal data">
+        <p class="message text-secondary">
+          {{ $t('Feel free to edit') }}
+        </p>
 
-      <ProfileUpdateForm @submit="updatePersonalData" />
+        <ProfileUpdateForm @submit="updatePersonalData" />
 
-      <p class="notice">
-        {{ $t('Use your personal data') }}
-        <a href="">{{ $t('Privacy Policy') }}</a>
-      </p>
-    </SfTab>
+        <p class="notice text-secondary">
+          {{ $t('Use your personal data') }}
+          <a href="">{{ $t('Privacy Policy') }}</a>
+        </p>
+      </SfTab>
 
-    <!-- Email update -->
-    <SfTab title="Email data">
-      <p class="message">
-        {{ $t('Feel free to edit') }}
-      </p>
+      <!-- Email update -->
+      <SfTab class="profileTabs" title="Email data">
+        <p class="message text-secondary">
+          {{ $t('Feel free to edit') }}
+        </p>
 
-      <EmailUpdateForm @submit="updateEmailData" />
+        <EmailUpdateForm @submit="updateEmailData" />
 
-      <p class="notice">
-        {{ $t('Use your personal data') }}
-        <a href="">{{ $t('Privacy Policy') }}</a>
-      </p>
-    </SfTab>
+        <p class="notice text-secondary">
+          {{ $t('Use your personal data') }}
+          <a href="">{{ $t('Privacy Policy') }}</a>
+        </p>
+      </SfTab>
 
-    <!-- Password reset -->
-    <SfTab title="Password change">
-      <p class="message">
-        {{ $t('Change password your account') }}:<br />
-        {{ $t('Your current email address is') }}
-        <span v-e2e="'myaccount-message-email'" class="message__label">
-          {{ currentEmail }}
-        </span>
-      </p>
+      <!-- Password reset -->
+      <SfTab class="profileTabs" title="Password change">
+        <p class="message text-secondary">
+          {{ $t('Change password your account') }}:<br />
+          {{ $t('Your current email address is') }}
+          <span v-e2e="'myaccount-message-email'" class="message__label">
+            {{ currentEmail }}
+          </span>
+        </p>
 
-      <PasswordResetForm @submit="updatePassword" />
-    </SfTab>
-    <SfTab title="TIN">
-      Tin Number: <SfInput pplaceholder="Your tin number" v-model="tinNumber" />
-      <SfButton @click="updateTinNumber">Update Tin Number</SfButton>
-    </SfTab>
-  </SfTabs>
+        <PasswordResetForm @submit="updatePassword" />
+      </SfTab>
+      <SfTab class="profileTabs" title="TIN">
+        <h4 class="text-secondary text-lg">Tin Number:</h4>
+        <SfInput
+          class="max-w-[60%]"
+          placeholder="Your tin number"
+          v-model="tinNumber"
+        />
+        <SfButton class="bg-secondary" @click="updateTinNumber"
+          >Update Tin Number</SfButton
+        >
+      </SfTab>
+    </SfTabs>
+  </div>
 </template>
 
 <script>
@@ -242,5 +253,8 @@ export default {
 .notice {
   margin: var(--spacer-lg) 0 0 0;
   font-size: var(--font-size--sm);
+}
+hr {
+  color: lightgray;
 }
 </style>

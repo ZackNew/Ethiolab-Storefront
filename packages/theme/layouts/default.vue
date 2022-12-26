@@ -22,11 +22,11 @@
       <client-only><Compare class="bottomright" /></client-only>
       <!-- <client-only><img src="chatr.png" alt="chat image" height="50px" width="50px" class="chatcss" /></client-only> -->
 
-<!-- 
+      <!-- 
     <div id="layout" >
       <nuxt :key="$route.fullPath"/> -->
-      
-      <ToastVue :show="isToastVisible" :message='toastMessage'/>
+
+      <ToastVue :show="isToastVisible" :message="toastMessage" />
       <LazyHydrate when-visible>
         <BottomNavigation />
       </LazyHydrate>
@@ -127,6 +127,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../assets/myAccountOverrides.scss';
+@import '../assets/overrides.scss';
 @import '~@storefront-ui/vue/styles';
 @import './assets/styles';
 #whole {
@@ -200,62 +202,12 @@ h4 {
   line-height: 1.6;
   margin: 0;
 }
-.sf-search-bar__input {
-  border-width: 0 0 0 0;
-}
-.sf-header__wrapper {
-  padding-top: 0.5em;
-}
-.sf-accordion-item__header {
-  background-color: #a5c4ea !important;
-  box-shadow: 0 4px 8px 0 rgba(128, 122, 122, 0.2),
-    0 6px 20px 0 rgba(139, 134, 134, 0.19) !important;
-  font-size: x-large !important;
-  color: white !important;
-  border-radius: 1rem !important;
-  min-width: 100% !important;
-  height: 4.7rem !important;
-  padding: 0 15px !important;
-}
-.sf-search-bar__input:focus {
-  outline: none;
-}
-.vsa-item__heading {
-  border: #ffffff !important;
-}
-.vsa-item {
-  border: #ffffff !important;
-}
-.sf-table__row {
-  border-radius: 20px;
-  background-color: white !important;
-  margin-bottom: 12px;
-}
-.sf-table__heading {
-  border-color: #f0f7fc;
-}
-.slick-next:before {
-  display: none;
-}
-.slick-prev:before {
-  display: none;
-}
-.sf-accordion-item__content {
-  max-height: 30rem;
-  overflow: auto;
-}
-.sf-accordion-item__content::-webkit-scrollbar {
-  display: none;
-}
-.sf-add-to-cart__button {
-  background-color: #3860a7 !important;
-}
+
 .bottomright {
   position: fixed;
   padding: 5px;
   z-index: 500;
 }
-
 .chatcss {
   position: fixed;
   // padding: 50px;
@@ -263,16 +215,5 @@ h4 {
   top: 90vh;
   left: 95%;
   // bottom: 0;
-}
-.sf-search-bar__input {
-  border: none !important;
-}
-.sf-image {
-  object-fit: contain !important;
-}
-.sf-product-card-horizontal__title {
-  color: #3860a7 !important;
-  font-weight: 800 !important;
-  font-size: 170% !important;
 }
 </style>
