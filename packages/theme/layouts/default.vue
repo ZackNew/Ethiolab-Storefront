@@ -131,6 +131,7 @@ export default {
 @import '../assets/overrides.scss';
 @import '~@storefront-ui/vue/styles';
 @import './assets/styles';
+
 #whole {
   @include for-desktop {
     max-width: 100% !important;
