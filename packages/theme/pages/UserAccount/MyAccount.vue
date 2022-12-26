@@ -137,15 +137,6 @@ export default {
     margin: 0 auto;
   }
 }
-#my-account::-webkit-scrollbar {
-  width: 30px;
-  background-color: none;
-  width: 7px;
-}
-#my-account::-webkit-scrollbar-thumb {
-  background-color: #acacac;
-  border-radius: 100px;
-}
 
 .my-account {
   @include for-mobile {

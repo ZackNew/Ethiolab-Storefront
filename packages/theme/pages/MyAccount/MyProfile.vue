@@ -1,6 +1,6 @@
 <template>
   <div class="myTabs">
-    <h3 class="text-secondary font-bold">My Profile</h3>
+    <h3 class="text-secondary font-bold mb-[3%]">My Profile</h3>
     <hr class="mb-4" />
     <SfTabs :open-tab="1">
       <!-- Personal data update -->
