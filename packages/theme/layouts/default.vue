@@ -129,7 +129,6 @@ export default {
 <style lang="scss">
 @import '~@storefront-ui/vue/styles';
 @import './assets/styles';
-@import './assets/faqOverrides';
 
 #whole {
   @include for-desktop {
