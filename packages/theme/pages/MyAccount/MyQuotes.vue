@@ -1,6 +1,6 @@
 <template>
   <SfTabs :open-tab="1" class="tab-orphan">
-    <SfTab title="My Quotes"> This is Your Quote</SfTab>
+    <SfTab class="profileTabs" title="My Quotes"> This is Your Quote</SfTab>
   </SfTabs>
 </template>
 

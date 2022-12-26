@@ -79,7 +79,7 @@ export default defineComponent({
 
     const getTree = () => {
       categories.value.items.forEach((a) => {
-        if (a.parent.name === '__root_collection__') {
+        if (a?.parent?.name === '__root_collection__') {
           headerNavigation.push(facetGetters.getTree(a));
           // console.log("category featured asset  val is ", a.featuredAsset.preview)
         }

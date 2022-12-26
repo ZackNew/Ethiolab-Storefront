@@ -1,72 +1,82 @@
 <template>
-  <transition name="fade">
-    <SfTabs
-      v-if="edittingAddress"
-      key="edit-address"
-      :open-tab="1"
-      class="tab-orphan"
-    >
-      <SfTab :title="isNewAddress ? 'Add the address' : 'Update the address'">
-        <p class="message">
-          {{ $t('Contact details updated') }}
-        </p>
+  <div>
+    <h3 class="text-secondary font-bold mb-[3%]">Billing Details</h3>
+    <hr class="mb-4" />
+    <transition name="fade">
+      <SfTabs
+        v-if="edittingAddress"
+        key="edit-address"
+        :open-tab="1"
+        class="tab-orphan"
+      >
+        <SfTab
+          class="profileTabs"
+          :title="isNewAddress ? 'Add the address' : 'Update the address'"
+        >
+          <p class="message">
+            {{ $t('Contact details updated') }}
+          </p>
 
-        <BillingAddressForm
-          :address="mapAddressToAddressForm(activeAddress, 'billing')"
-          :isNew="isNewAddress"
-          @submit="saveAddress"
-        />
-      </SfTab>
-    </SfTabs>
+          <BillingAddressForm
+            :address="mapAddressToAddressForm(activeAddress, 'billing')"
+            :isNew="isNewAddress"
+            @submit="saveAddress"
+          />
+        </SfTab>
+      </SfTabs>
 
-    <SfTabs v-else :open-tab="1" key="address-list" class="tab-orphan">
-      <SfTab title="Billing details">
-        <p class="message">
-          {{ $t('Manage billing addresses') }}
-        </p>
-        <transition-group tag="div" name="fade" class="billing-list">
-          <template v-for="address in addresses">
-            <div
-              :key="userBillingGetters.getId(address)"
-              v-if="address.streetLine2 === 'Billing'"
-              class="billing"
-            >
-              <template v-if="address.streetLine2 === 'Billing'">
-                <div class="billing__content">
-                  <div class="billing__address">
-                    <UserBillingAddress :address="address" />
+      <SfTabs v-else :open-tab="1" key="address-list" class="tab-orphan">
+        <SfTab class="profileTabs" title="Billing details">
+          <p class="text-secondary message">
+            {{ $t('Manage billing addresses') }}
+          </p>
+          <transition-group tag="div" name="fade" class="billing-list">
+            <template v-for="address in addresses">
+              <div
+                :key="userBillingGetters.getId(address)"
+                v-if="address.streetLine2 === 'Billing'"
+                class="billing"
+              >
+                <template v-if="address.streetLine2 === 'Billing'">
+                  <div class="billing__content">
+                    <div class="billing__address">
+                      <UserBillingAddress :address="address" />
+                    </div>
                   </div>
-                </div>
-                <div class="billing__actions">
-                  <SfIcon
-                    icon="cross"
-                    color="gray"
-                    size="14px"
-                    role="button"
-                    class="smartphone-only"
-                    @click="removeAddress(address)"
-                  />
-                  <SfButton @click="changeAddress(address)">
-                    {{ $t('Change') }}
-                  </SfButton>
+                  <div class="billing__actions">
+                    <SfIcon
+                      icon="cross"
+                      color="gray"
+                      size="14px"
+                      role="button"
+                      class="smartphone-only"
+                      @click="removeAddress(address)"
+                    />
+                    <SfButton
+                      class="bg-secondary"
+                      @click="changeAddress(address)"
+                    >
+                      {{ $t('Change') }}
+                    </SfButton>
 
-                  <SfButton
-                    class="color-light billing__button-delete desktop-only"
-                    @click="removeAddress(address)"
-                  >
-                    {{ $t('Delete') }}
-                  </SfButton>
-                </div>
-              </template>
-            </div>
-          </template>
-        </transition-group>
-        <SfButton class="action-button" @click="changeAddress()">
-          {{ $t('Add new address') }}
-        </SfButton>
-      </SfTab>
-    </SfTabs>
-  </transition>
+                    <SfButton
+                      class="color-light billing__button-delete desktop-only"
+                      @click="removeAddress(address)"
+                    >
+                      {{ $t('Delete') }}
+                    </SfButton>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </transition-group>
+          <SfButton class="bg-secondary action-button" @click="changeAddress()">
+            {{ $t('Add new address') }}
+          </SfButton>
+        </SfTab>
+      </SfTabs>
+    </transition>
+  </div>
 </template>
 <script>
 import { SfTabs, SfButton, SfIcon } from '@storefront-ui/vue';
@@ -218,5 +228,8 @@ export default {
       }
     }
   }
+}
+hr {
+  color: lightgray;
 }
 </style>
