@@ -1,70 +1,80 @@
 <template>
-  <transition name="fade">
-    <SfTabs
-      v-if="edittingAddress"
-      key="edit-address"
-      :open-tab="1"
-      class="tab-orphan"
-    >
-      <SfTab :title="isNewAddress ? 'Add the address' : 'Update the address'">
-        <p class="message">
-          {{ $t('Contact details updated') }}
-        </p>
+  <div class="myTabs">
+    <h3 class="text-secondary font-bold mb-[3%]">Shipping Details</h3>
+    <hr class="mb-4" />
+    <transition name="fade">
+      <SfTabs
+        v-if="edittingAddress"
+        key="edit-address"
+        :open-tab="1"
+        class="tab-orphan"
+      >
+        <SfTab
+          class="profileTabs"
+          :title="isNewAddress ? 'Add the address' : 'Update the address'"
+        >
+          <p class="text-secondary message">
+            {{ $t('Contact details updated') }}
+          </p>
 
-        <ShippingAddressForm
-          :address="mapAddressToAddressForm(activeAddress, 'shipping')"
-          :isNew="isNewAddress"
-          @submit="saveAddress"
-        />
-      </SfTab>
-    </SfTabs>
+          <ShippingAddressForm
+            :address="mapAddressToAddressForm(activeAddress, 'shipping')"
+            :isNew="isNewAddress"
+            @submit="saveAddress"
+          />
+        </SfTab>
+      </SfTabs>
 
-    <SfTabs v-else :open-tab="1" key="address-list" class="tab-orphan">
-      <SfTab title="Shipping details">
-        <p class="message">
-          {{ $t('Manage shipping addresses') }}
-        </p>
-        <transition-group tag="div" name="fade" class="shipping-list">
-          <template v-for="address in addresses">
-            <div
-              :key="userShippingGetters.getId(address)"
-              v-if="address.streetLine2 === 'Shipping'"
-              class="shipping"
-            >
-              <div class="shipping__content">
-                <div class="shipping__address">
-                  <UserShippingAddress :address="address" />
+      <SfTabs v-else :open-tab="1" key="address-list" class="tab-orphan">
+        <SfTab class="profileTabs" title="Shipping details">
+          <p class="text-secondary message">
+            {{ $t('Manage shipping addresses') }}
+          </p>
+          <transition-group tag="div" name="fade" class="shipping-list">
+            <template v-for="address in addresses">
+              <div
+                :key="userShippingGetters.getId(address)"
+                v-if="address.streetLine2 === 'Shipping'"
+                class="shipping"
+              >
+                <div class="shipping__content">
+                  <div class="shipping__address">
+                    <UserShippingAddress :address="address" />
+                  </div>
+                </div>
+                <div class="shipping__actions">
+                  <SfIcon
+                    icon="cross"
+                    color="gray"
+                    size="14px"
+                    role="button"
+                    class="smartphone-only"
+                    @click="removeAddress(address)"
+                  />
+                  <SfButton
+                    class="bg-secondary"
+                    @click="changeAddress(address)"
+                  >
+                    {{ $t('Change') }}
+                  </SfButton>
+
+                  <SfButton
+                    class="color-light shipping__button-delete desktop-only"
+                    @click="removeAddress(address)"
+                  >
+                    {{ $t('Delete') }}
+                  </SfButton>
                 </div>
               </div>
-              <div class="shipping__actions">
-                <SfIcon
-                  icon="cross"
-                  color="gray"
-                  size="14px"
-                  role="button"
-                  class="smartphone-only"
-                  @click="removeAddress(address)"
-                />
-                <SfButton @click="changeAddress(address)">
-                  {{ $t('Change') }}
-                </SfButton>
-
-                <SfButton
-                  class="color-light shipping__button-delete desktop-only"
-                  @click="removeAddress(address)"
-                >
-                  {{ $t('Delete') }}
-                </SfButton>
-              </div>
-            </div>
-          </template>
-        </transition-group>
-        <SfButton class="action-button" @click="changeAddress()">
-          {{ $t('Add new address') }}
-        </SfButton>
-      </SfTab>
-    </SfTabs>
-  </transition>
+            </template>
+          </transition-group>
+          <SfButton class="bg-secondary action-button" @click="changeAddress()">
+            {{ $t('Add new address') }}
+          </SfButton>
+        </SfTab>
+      </SfTabs>
+    </transition>
+  </div>
 </template>
 <script>
 import { SfTabs, SfButton, SfIcon } from '@storefront-ui/vue';
@@ -215,5 +225,9 @@ export default {
       }
     }
   }
+}
+
+hr {
+  color: lightgray;
 }
 </style>

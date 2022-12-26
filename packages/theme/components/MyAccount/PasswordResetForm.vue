@@ -1,7 +1,11 @@
 <template>
   <ValidationObserver v-slot="{ handleSubmit, reset }">
     <form class="form" @submit.prevent="handleSubmit(submitForm(reset))">
-      <ValidationProvider rules="required" v-slot="{ errors }" class="form__element">
+      <ValidationProvider
+        rules="required"
+        v-slot="{ errors }"
+        class="form__element"
+      >
         <SfInput
           v-e2e="'myaccount-current-password'"
           v-model="form.currentPassword"
@@ -11,39 +15,49 @@
           required
           :valid="!errors[0]"
           :errorMessage="errors[0]"
+          class="w-[60%]"
         />
       </ValidationProvider>
-      <div class="form__horizontal">
-        <ValidationProvider rules="required|password" v-slot="{ errors }" vid="password" class="form__element">
-          <SfInput
-            v-e2e="'myaccount-new-password'"
-            v-model="form.newPassword"
-            type="password"
-            name="newPassword"
-            label="New Password"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <ValidationProvider rules="required|confirmed:password" v-slot="{ errors }" class="form__element">
-          <SfInput
-            v-e2e="'myaccount-repeat-password'"
-            v-model="form.repeatPassword"
-            type="password"
-            name="repeatPassword"
-            label="Repeat Password"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-      </div>
+      <ValidationProvider
+        rules="required|password"
+        v-slot="{ errors }"
+        vid="password"
+        class="form__element"
+      >
+        <SfInput
+          v-e2e="'myaccount-new-password'"
+          v-model="form.newPassword"
+          type="password"
+          name="newPassword"
+          label="New Password"
+          required
+          :valid="!errors[0]"
+          :errorMessage="errors[0]"
+          class="w-[60%]"
+        />
+      </ValidationProvider>
+      <ValidationProvider
+        rules="required|confirmed:password"
+        v-slot="{ errors }"
+        class="form__element"
+      >
+        <SfInput
+          v-e2e="'myaccount-repeat-password'"
+          v-model="form.repeatPassword"
+          type="password"
+          name="repeatPassword"
+          label="Repeat Password"
+          required
+          :valid="!errors[0]"
+          :errorMessage="errors[0]"
+          class="w-[60%]"
+        />
+      </ValidationProvider>
       <SfButton
         v-e2e="'myaccount-update-password-btn'"
-        class="form__button"
+        class="bg-secondary w-[33%] py-3"
       >
-        {{ $t('Update password') }}
+        <h4 class="text-white font-bold text-base">UPDATE PASSWORD</h4>
       </SfButton>
     </form>
   </ValidationObserver>
@@ -61,14 +75,14 @@ export default {
     SfInput,
     SfButton,
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
 
   setup(_, { emit }) {
     const resetForm = () => ({
       currentPassword: '',
       newPassword: '',
-      repeatPassword: ''
+      repeatPassword: '',
     });
 
     const form = ref(resetForm());
@@ -90,13 +104,13 @@ export default {
 
     return {
       form,
-      submitForm
+      submitForm,
     };
-  }
+  },
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .form {
   &__element {
     display: block;

@@ -8,7 +8,7 @@
       v-e2e="'my-account-content-pages'"
       title="My Account"
       :active="activePage"
-      class="my-account"
+      class="my-account accountPage"
       @click:change="changeActivePage"
     >
       <SfContentCategory title="Personal Details">
@@ -24,9 +24,9 @@
           <BillingDetails />
         </SfContentPage>
 
-        <SfContentPage title="My newsletter">
+        <!-- <SfContentPage title="My newsletter">
           <MyNewsletter />
-        </SfContentPage>
+        </SfContentPage> -->
 
         <SfContentPage title="My Quotes">
           <MyQuotes />
@@ -137,6 +137,7 @@ export default {
     margin: 0 auto;
   }
 }
+
 .my-account {
   @include for-mobile {
     --content-pages-sidebar-category-title-font-weight: var(
