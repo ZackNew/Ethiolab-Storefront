@@ -131,7 +131,6 @@ export default {
 @import '../assets/overrides.scss';
 @import '~@storefront-ui/vue/styles';
 @import './assets/styles';
-
 #whole {
   @include for-desktop {
     max-width: 100% !important;
@@ -211,10 +210,8 @@ h4 {
 }
 .chatcss {
   position: fixed;
-  // padding: 50px;
   z-index: 500;
   top: 90vh;
   left: 95%;
-  // bottom: 0;
 }
 </style>
