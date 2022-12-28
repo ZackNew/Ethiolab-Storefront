@@ -1,9 +1,9 @@
 <template>
   <div>
-    <section class="py-20 2xl:py-40 faq">
+    <section class="py-5 2xl:py-10 faq">
       <div class="container px-4 mx-auto">
         <div class="mb-20 text-center">
-          <h2 class="mt-8 text-7xl font-bold font-heading">FAQ&apos;s</h2>
+          <h2 class="mt-8 text-7xl font-bold font-heading text-secondary ">FAQ&apos;s</h2>
         </div>
         <div class="max-w-4xl mx-auto">
           <SfAccordion
@@ -109,7 +109,11 @@ export default {
 h2 {
   color: var(--c-text);
 }
+
+.faq{
+  
+}
 .accordion-bg {
-  background-color: var(--c-accent);
+  background-color: white;
 }
 </style>

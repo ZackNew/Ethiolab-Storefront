@@ -1,7 +1,7 @@
 <template>
-  <div id="main" class="flex mt-8 mx-24">
+  <div id="main" class="flex mt-8">
     <div
-      class="card shadow-lg w-1/3 font-bold p-3 rounded text-white bg-primary mr-5"
+      class="card shadow-lg w-2/5 font-bold p-3 rounded text-white bg-secondary mr-5 ml-10"
     >
       <h4 class="text-6xl mb-5 mt-10 font-bold">Request a Quote</h4>
       <p class="mt-5">
@@ -54,55 +54,114 @@
         NOTICE* If you didn't find what you want on this website, you can
         mention it here.
       </div>
-      <SfInput
-        label="Your Contact Email"
-        v-model="data.fromEmail"
-        class="form__element mt-3 text-white w-[80%]"
-      />
-      <SfInput
-        label="Company Name"
-        v-model="data.fromName"
-        class="form__element mt-3 text-white w-[80%]"
-      />
-      <SfInput
-        label="Subject"
-        class="form__element w-[80%]"
-        v-model="data.subject"
-      />
-      <VuePhoneNumberInput
-        @update="phoneInputHandler"
-        required
-        color="#000000"
-        v-model="formPhoneNumber"
-        valid-color="#3860a7"
-        default-country-code="ET"
-        class="form__element form__element--half form__element--half-even my-3 w-[80%]"
-      />
-      <!-- <SfInput
-        label="Phone Number"
-        class="form__element w-[80%]"
-        v-model="data.fromPhone"
-      /> -->
-      <SfInput
-        label="First Name"
-        class="form__element w-[80%]"
-        v-model="data.firstName"
-      />
+      <ValidationObserver v-slot="{ handleSubmit }">
+        <form @submit.prevent="handleSubmit(send)">
+          <ValidationProvider
+            name="fromEmail"
+            rules="required|email"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="Your Contact Email"
+              v-model="data.fromEmail"
+              class="form__element mt-6 text-white w-[80%]"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
 
-      <SfInput
-        label="Last Name"
-        class="form__element w-[80%]"
-        v-model="data.lastName"
-      />
-      <textarea
-        placeholder="Your special quote."
-        cols="20"
-        class="form__element tarea text-sm rounded mt-4 text-dark_accent w-[80%]"
-        v-model="data.msg"
-      ></textarea>
-      <SfButton class="btn rounded bg-secondary w-[80%]" @click="send"
-        >Send</SfButton
-      >
+          <ValidationProvider
+            name="fromName"
+            rules="required"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="Company Name"
+              v-model="data.fromName"
+              class="form__element mt-3 text-white w-[80%]"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+
+          <ValidationProvider
+            name="subject"
+            rules="required"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="Subject"
+              class="form__element w-[80%]"
+              v-model="data.subject"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+
+          <VuePhoneNumberInput
+            @update="phoneInputHandler"
+            required
+            color="#000000"
+            v-model="formPhoneNumber"
+            valid-color="#3860a7"
+            default-country-code="ET"
+            class="form__element form__element--half form__element--half-even my-3 w-[80%]"
+          />
+          <!-- <SfInput
+          label="Phone Number"
+          class="form__element w-[80%]"
+          v-model="data.fromPhone"
+          /> -->
+
+          <ValidationProvider
+            name="firstName"
+            rules="required"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="First Name"
+              class="form__element w-[80%]"
+              v-model="data.firstName"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+
+          <ValidationProvider
+            name="lastName"
+            rules="required"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="Last Name"
+              class="form__element w-[80%]"
+              v-model="data.lastName"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+
+          <textarea
+            placeholder="Your special quote."
+            cols="20"
+            class="form__element tarea text-sm rounded mt-4 text-dark_accent w-[80%]"
+            v-model="data.msg"
+            required
+          ></textarea>
+          <!-- <SfButton class="btn rounded bg-secondary w-[80%]" @click="send"
+          >Send</SfButton  > -->
+          <div class="justify-center flex">
+            <button class="btn rounded bg-secondary w-[40%]" type="submit">
+              <h4 class="text-white font-bold">SEND</h4>
+            </button>
+          </div>
+        </form>
+      </ValidationObserver>
     </div>
   </div>
 </template>
@@ -114,6 +173,28 @@ import { useUiState } from '~/composables';
 import { SfTabs, SfInput, SfButton, SfTextarea } from '@storefront-ui/vue';
 import { useUser, userGetters, useQuote } from '@vue-storefront/vendure';
 import { ref, inject } from '@vue/composition-api';
+import {
+  ValidationProvider,
+  ValidationObserver,
+  extend,
+  ErrorMessage,
+} from 'vee-validate';
+import {
+  required,
+  min,
+  digits,
+  email,
+  regex,
+  max,
+} from 'vee-validate/dist/rules';
+extend('required', {
+  ...required,
+  message: 'This field is required',
+});
+extend('email', {
+  ...email,
+  message: 'Invalid email',
+});
 export default {
   components: {
     SfTabs,
@@ -121,6 +202,8 @@ export default {
     SfButton,
     SfTextarea,
     VuePhoneNumberInput,
+    ValidationProvider,
+    ValidationObserver,
   },
   data() {
     return {
@@ -168,7 +251,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .tarea {
   height: 140px;
   width: 91%;
@@ -187,6 +270,15 @@ export default {
   color: red;
   font-style: italic;
   font-size: 0.7rem;
+}
+
+#main {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1250px !important;
+    padding: 0;
+    margin: 0 auto;
+  }
 }
 /*
 #main{

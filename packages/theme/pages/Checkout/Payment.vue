@@ -218,51 +218,64 @@
                 </SfButton>
               </div>
 
-              <div
-                v-if="paymentMethod && paymentMethod.name == 'Cash' "
-              >
+              <div v-if="paymentMethod && paymentMethod.name == 'Cash'">
                 <!-- <p>Pay in Cash with Order ID #{{ cart.code }}</p> -->
                 <SfModal title="My title" visible :persistent="false">
-                <div class="relative  h-full max-w-md md:h-auto -mr-4">
-                  <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <button
-                      type="button"
-                      class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                      data-modal-toggle="popup-modal"
-                      @click="handleModalCashOpen"
+                  <div class="relative h-full max-w-md md:h-auto -mr-4">
+                    <div
+                      class="relative bg-white rounded-lg shadow dark:bg-gray-700"
                     >
-                      <svg
-                        aria-hidden="true"
-                        class="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
+                      <button
+                        type="button"
+                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                        data-modal-toggle="popup-modal"
+                        @click="handleModalCashOpen"
                       >
-                        <path
-                          fill-rule="evenodd"
-                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                      <!-- <span class="sr-only">Close modal</span> -->
-                    </button>
-                    <div class="p-6 text-center">
-                      <img class="m-auto" src="https://res.cloudinary.com/dh6muae8v/image/upload/v1666180438/cash2-removebg-preview_e2wbqm.png" alt="image here" width="100" height="100" />
+                        <svg
+                          aria-hidden="true"
+                          class="w-5 h-5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                        <!-- <span class="sr-only">Close modal</span> -->
+                      </button>
+                      <div class="p-6 text-center">
+                        <img
+                          class="m-auto"
+                          src="https://res.cloudinary.com/dh6muae8v/image/upload/v1666180438/cash2-removebg-preview_e2wbqm.png"
+                          alt="image here"
+                          width="100"
+                          height="100"
+                        />
 
-                  <h3
-                        class="mb-5 text-lg font-bold text-gray-500 dark:text-gray-400"
-                      >
-                        Cash Payment
-                      </h3>
-                      <div> 
-                        <p>Dear customer, you can complete your order by directly depositing to one of the accounts below: </p>
-                        <ul>
-                          <li>CBE- 100000000021654684</li>
-                          <li>ABAY- 2165412564</li>
-                          <li>BERHAN- 49874598415</li>
-                          <li>Please write the order ID #{{cart.code}}  in 'Reason for payment' and contact the admin {{phoneNumber}} for further instructions.</li>
-                        </ul>
-                      </div>
+                        <h3
+                          class="mb-5 text-lg font-bold text-gray-500 dark:text-gray-400"
+                        >
+                          Cash Payment
+                        </h3>
+                        <div>
+                          <p>
+                            Dear customer, you can complete your order by
+                            directly depositing to one of the accounts below:
+                          </p>
+                          <ul>
+                            <li>CBE- {{ CBE }}</li>
+                            <li>ABAY- 2165412564</li>
+                            <li>BERHAN- 49874598415</li>
+                            <li>
+                              Please write the order ID #{{ cart.code }} in
+                              'Reason for payment' and contact the admin
+                              {{ phoneNumber }} for further instructions.
+                            </li>
+                          </ul>
+                        </div>
                         <!--  <button
                         @click="handleCancelOrder"
                         data-modal-toggle="popup-modal"
@@ -279,10 +292,10 @@
                       >
                         No, cancel
                       </button> -->
+                      </div>
                     </div>
                   </div>
-                </div>
-              </SfModal>
+                </SfModal>
               </div>
             </div>
           </div>
@@ -314,7 +327,7 @@
       <div>
         <div v-if="modalOpen">
           <SfModal title="My title" visible :persistent="false">
-            <div class="relative  h-full max-w-md md:h-auto -mr-4">
+            <div class="relative h-full max-w-md md:h-auto -mr-4">
               <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <button
                   type="button"
@@ -384,7 +397,7 @@
       <div>
         <div v-if="modalCashOpen">
           <SfModal title="My title" visible :persistent="false">
-            <div class="relative  h-full max-w-md md:h-auto -mr-4">
+            <div class="relative h-full max-w-md md:h-auto -mr-4">
               <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <button
                   type="button"
@@ -423,12 +436,12 @@
                       d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                   </svg>
-               <h3
+                  <h3
                     class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"
                   >
                     Cash Payment
                   </h3>
-                    <!--  <button
+                  <!--  <button
                     @click="handleCancelOrder"
                     data-modal-toggle="popup-modal"
                     type="button"
@@ -517,11 +530,15 @@ export default {
       import('~/components/Checkout/VsfPaymentProvider'),
     CartPreview,
   },
-  computed : {
+  computed: {
     phoneNumber() {
       return this.$store.state.companyDetails.companyInformation?.phone_number?.split(
         ';'
       )[0];
+    },
+    CBE() {
+      return this.$store.state.companyDetails.companyInformation
+        ?.commercial_bank;
     },
   },
   setup(props, context) {
@@ -533,7 +550,6 @@ export default {
     const paymentMethod = ref(null);
     const modalOpen = ref(false);
     const modalCashOpen = ref(false);
-
 
     let time = new Date().getTime();
 
@@ -560,9 +576,8 @@ export default {
       // }
     };
 
-
     const handleModalCashOpen = () => {
-       paymentMethod.value = null;
+      paymentMethod.value = null;
       // console.log(
       //   'MODAL cash OPEN CLICKED',
       //   modalCashOpen.value,
@@ -629,25 +644,29 @@ export default {
     onMounted(() => {});
 
     onBeforeMount(() => {
+      url = 'https://testsecureacceptance.cybersource.com/pay';
+      SECRET_KEY = process.env.SECRET_KEY;
+      paymentDetail.access_key = process.env.ACCESS_KEY;
+      paymentDetail.profile_id = process.env.PROFILE_ID;
+      paymentDetail.transaction_uuid = uuid.v4();
+      paymentDetail.signed_field_names =
+        'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency';
+      paymentDetail.unsigned_field_names = '';
+      paymentDetail.signed_date_time = moment
+        .utc(time)
+        .format('YYYY-MM-DDTHH:mm:ss[Z]');
+      paymentDetail.locale = 'en';
+      paymentDetail.transaction_type = 'authorization';
+      paymentDetail.reference_number = cart.value.code;
+      paymentDetail.amount = (cart?.value?.totalWithTax / 100)
+        .toFixed(2)
+        .toString();
+      paymentDetail.currency = 'ETB';
+      paymentDetail.signature = '';
+      paymentDetail.submit = 'Submit';
 
-     url = "https://testsecureacceptance.cybersource.com/pay";
-     SECRET_KEY = process.env.SECRET_KEY;
-    paymentDetail.access_key = process.env.ACCESS_KEY;
-    paymentDetail.profile_id = process.env.PROFILE_ID;
-    paymentDetail.transaction_uuid = uuid.v4();
-    paymentDetail.signed_field_names = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
-    paymentDetail.unsigned_field_names = "";
-    paymentDetail.signed_date_time = moment.utc(time).format('YYYY-MM-DDTHH:mm:ss[Z]');
-    paymentDetail.locale = "en";
-    paymentDetail.transaction_type = "authorization";
-    paymentDetail.reference_number = cart.value.code;
-    paymentDetail.amount = (cart?.value?.totalWithTax/100).toFixed(2).toString();
-    paymentDetail.currency = "ETB";
-    paymentDetail.signature = "";
-    paymentDetail.submit = "Submit";
-
-
-    let signedFieldNames = "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency";
+      let signedFieldNames =
+        'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency';
       // console.log("the signed field names are ", signedFieldNames)
       let params = signedFieldNames.split(',');
       let dataToSign = [];
@@ -778,24 +797,25 @@ export default {
 
       ////////////////////////////////STEP 1//////////////////////////////////////
 
-        const appKey = process.env.TELEBIRR_APPKEY;
-        let signObj = {"appId":process.env.TELEBIRR_APPID,
-                      "nonce":paymentDetail.transaction_uuid,
-                      "notifyUrl":"http://localhost:3000/telebirr",
-                      "outTradeNo":cart.value.code,
-                      "receiveName":"Ethiolab",
-                      "returnUrl":"http://localhost:3001/checkout/thank-you/",
-                      "shortCode":"220322",
-                      "subject":"Goods Name",
-                      "timeoutExpress":"30",
-                      "timestamp":cart?.value?.code?.toString(),
-                      "totalAmount":paymentDetail.amount
-                    };
+      const appKey = process.env.TELEBIRR_APPKEY;
+      let signObj = {
+        appId: process.env.TELEBIRR_APPID,
+        nonce: paymentDetail.transaction_uuid,
+        notifyUrl: 'http://localhost:3000/telebirr',
+        outTradeNo: cart.value.code,
+        receiveName: 'Ethiolab',
+        returnUrl: 'http://localhost:3001/checkout/thank-you/',
+        shortCode: '220322',
+        subject: 'Goods Name',
+        timeoutExpress: '30',
+        timestamp: cart?.value?.code?.toString(),
+        totalAmount: paymentDetail.amount,
+      };
 
-        signObj.appKey = appKey;
-        let StringA = jsonSort(signObj);
+      signObj.appKey = appKey;
+      let StringA = jsonSort(signObj);
 
-        function jsonSort(jsonObj) {
+      function jsonSort(jsonObj) {
         let arr = [];
         for (var key in jsonObj) {
           arr.push(key);
@@ -921,7 +941,7 @@ export default {
       modalOpen,
       handleCancelOrder,
       handleModalCashOpen,
-      modalCashOpen
+      modalCashOpen,
     };
   },
 };

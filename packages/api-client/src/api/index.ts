@@ -1,3 +1,5 @@
+import exp from 'constants';
+
 export { default as getProduct } from './getProduct';
 export { default as getCategory } from './getCategory';
 export { default as getFacet } from './getFacet';
@@ -33,3 +35,5 @@ export { default as writeQuote} from './writeQuote'
 export {default as getQueryOf} from './getQueryOf';
 export {default as deleteQuote} from './deleteQuote';
 export {default as writeContactUsMessage} from './writeContactUs'
+export {default as writeInstantMessage} from './writeInstantMessage';
+export {default as getUserInstantMessage} from './getUserInstantMessage';
