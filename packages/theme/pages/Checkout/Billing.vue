@@ -118,7 +118,7 @@
           </SfButton>
           <SfButton
             v-e2e="'continue-to-payment'"
-            class="form__action-button"
+            class="bg-secondary text-white form__action-button"
             type="submit"
           >
             {{ $t('Continue to payment') }}

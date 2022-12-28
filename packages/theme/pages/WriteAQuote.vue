@@ -3,7 +3,7 @@
     <div
       class="card shadow-lg w-2/5 font-bold p-3 rounded text-white bg-secondary mr-5 ml-10"
     >
-      <h4 class="text-6xl mb-5 mt-10  font-bold">Request a Quote</h4>
+      <h4 class="text-6xl mb-5 mt-10 font-bold">Request a Quote</h4>
       <p class="mt-5">
         Follow this steps to request a quote and out team will get back to you.
       </p>
@@ -55,121 +55,113 @@
         mention it here.
       </div>
       <ValidationObserver v-slot="{ handleSubmit }">
-        <form @submit.prevent="handleSubmit(send)"> 
+        <form @submit.prevent="handleSubmit(send)">
           <ValidationProvider
-                  name="fromEmail"
-                  rules="required|email"
-                  v-slot="{ errors }"
-                  slim
-                >
-                <SfInput
-                  label="Your Contact Email"
-                  v-model="data.fromEmail"
-                  class="form__element mt-6 text-white w-[80%]"
-                  :valid="!errors[0]"
-                  :errorMessage="errors[0]"
-                />
-              </ValidationProvider>
+            name="fromEmail"
+            rules="required|email"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="Your Contact Email"
+              v-model="data.fromEmail"
+              class="form__element mt-6 text-white w-[80%]"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
 
-              <ValidationProvider
-                  name="fromName"
-                  rules="required"
-                  v-slot="{ errors }"
-                  slim
-                >
-                
-                  <SfInput
-                    label="Company Name"
-                    v-model="data.fromName"
-                    class="form__element mt-3 text-white w-[80%]"
-                    :valid="!errors[0]"
-                  :errorMessage="errors[0]"
-                  />
-                </ValidationProvider>
+          <ValidationProvider
+            name="fromName"
+            rules="required"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="Company Name"
+              v-model="data.fromName"
+              class="form__element mt-3 text-white w-[80%]"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
 
-                <ValidationProvider
-                  name="subject"
-                  rules="required"
-                  v-slot="{ errors }"
-                  slim
-                >  
-                        <SfInput
-                          label="Subject"
-                          class="form__element w-[80%]"
-                          v-model="data.subject"
-                          :valid="!errors[0]"
-                         :errorMessage="errors[0]"
-                        />
-                </ValidationProvider>
-  
+          <ValidationProvider
+            name="subject"
+            rules="required"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="Subject"
+              class="form__element w-[80%]"
+              v-model="data.subject"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
 
-                  <VuePhoneNumberInput
-                    @update="phoneInputHandler"
-                    required
-                    color="#000000"
-                    v-model="formPhoneNumber"
-                    valid-color="#3860a7"
-                    default-country-code="ET"
-                    class="form__element form__element--half form__element--half-even my-3 w-[80%]"
-                  />
-        <!-- <SfInput
+          <VuePhoneNumberInput
+            @update="phoneInputHandler"
+            required
+            color="#000000"
+            v-model="formPhoneNumber"
+            valid-color="#3860a7"
+            default-country-code="ET"
+            class="form__element form__element--half form__element--half-even my-3 w-[80%]"
+          />
+          <!-- <SfInput
           label="Phone Number"
           class="form__element w-[80%]"
           v-model="data.fromPhone"
-        /> -->
+          /> -->
 
-        <ValidationProvider
-                  name="firstName"
-                  rules="required"
-                  v-slot="{ errors }"
-                  slim
-                >
+          <ValidationProvider
+            name="firstName"
+            rules="required"
+            v-slot="{ errors }"
+            slim
+          >
             <SfInput
-                    label="First Name"
-                    class="form__element w-[80%]"
-                    v-model="data.firstName"
-                    :valid="!errors[0]"
-                  :errorMessage="errors[0]"
-                  />
+              label="First Name"
+              class="form__element w-[80%]"
+              v-model="data.firstName"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
 
-                </ValidationProvider>
+          <ValidationProvider
+            name="lastName"
+            rules="required"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              label="Last Name"
+              class="form__element w-[80%]"
+              v-model="data.lastName"
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
 
-                <ValidationProvider
-                  name="lastName"
-                  rules="required"
-                  v-slot="{ errors }"
-                  slim
-                >
-        
-                <SfInput
-                  label="Last Name"
-                  class="form__element w-[80%]"
-                  v-model="data.lastName"
-                  :valid="!errors[0]"
-                  :errorMessage="errors[0]"
-                />
-                </ValidationProvider>
-    
-        <textarea
-          placeholder="Your special quote."
-          cols="20"
-          class="form__element tarea text-sm rounded mt-4 text-dark_accent w-[80%]"
-          v-model="data.msg"
-          required
-        ></textarea>
-        <!-- <SfButton class="btn rounded bg-secondary w-[80%]" @click="send"
+          <textarea
+            placeholder="Your special quote."
+            cols="20"
+            class="form__element tarea text-sm rounded mt-4 text-dark_accent w-[80%]"
+            v-model="data.msg"
+            required
+          ></textarea>
+          <!-- <SfButton class="btn rounded bg-secondary w-[80%]" @click="send"
           >Send</SfButton  > -->
-          <div class="justify-center flex ">
-                  <button
-                  class="btn rounded bg-secondary w-[40%] text-white"
-                    type="submit"
-                  >
-                    SEND
-                  </button>
-                </div>
+          <div class="justify-center flex">
+            <button class="btn rounded bg-secondary w-[40%]" type="submit">
+              <h4 class="text-white font-bold">SEND</h4>
+            </button>
+          </div>
         </form>
       </ValidationObserver>
-    
     </div>
   </div>
 </template>
