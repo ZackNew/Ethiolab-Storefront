@@ -96,7 +96,7 @@
             v-e2e="'select-shipping'"
             v-if="!isFormSubmitted"
             :disabled="loading"
-            class="form__action-button"
+            class="bg-secondary text-white form__action-button"
             type="submit"
           >
             {{ $t('Select shipping method') }}

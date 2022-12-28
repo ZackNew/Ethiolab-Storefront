@@ -65,7 +65,7 @@
           <SfButton
             v-e2e="'continue-to-shipping'"
             v-if="!isFormSubmitted"
-            class="form__action-button"
+            class="bg-secondary text-white form__action-button"
             :disabled="!(form.firstName && form.lastName && form.emailAddress)"
             type="submit"
           >
