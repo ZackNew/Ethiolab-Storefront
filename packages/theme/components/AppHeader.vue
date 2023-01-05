@@ -12,16 +12,15 @@
             <div v-if="!message.isFromAdmin" class="bg-light_gray  min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"> 
              <p class="text-right mr-4"> {{message.msg}}</p> 
             </div>
-            <div v-else class="bg-secondary  min-h-[50px] my-2 w-[75%]   rounded-lg"> 
+            <div v-else class="bg-secondary  min-h-[50px] my-2 w-[75%] rounded-lg"> 
              <p class="text-left ml-4 text-white"> {{message.msg}}</p> 
             </div>
 
           </div>
 
           <div class="chat-bottom"> 
-            <!-- <p>dfhdiusfhsd</p> -->
-            <input type="text" v-model="messageToSend"  placeholder="write a message" class="w-[85%] h-12 px-4 rounded-xl shadow-md float-left" />
-          <button @click="sendMessageToAdmin"> <img src="sendr.png" alt="send icon " height="50px" width="50px" /></button>  
+            <input type="text" v-model="messageToSend"  placeholder="write a message" class="w-[85%] h-12 px-[2%] rounded-xl shadow-md float-left" />
+          <button @click="sendMessageToAdmin" class="w-[13%]"> <img src="sendr.png" alt="send icon " /></button>  
           </div>
 
           
@@ -377,10 +376,10 @@ export default {
       messages.value = data.data.getUserInstantMessage;
       
     }
-    // setInterval(()=>{
-    //     //  console.log(`hello`)
-    //      refreshMessages()
-    // }, 2000)
+    setInterval(()=>{
+        //  console.log(`hello`)
+         refreshMessages()
+    }, 2000)
    
     const isMessageSideBarOpen = ref(false);
 
@@ -779,21 +778,44 @@ export default {
   z-index: 500;
   top: 90vh;
   left: 95%;
+
+  @media screen and (max-width: 2000px) {
+    // width: 50%;
+    left: 95%;
+
+   }
+
+  @media screen and (max-width: 1500px) {
+    // width: 50%;
+    left: 90%;
+
+   }
+
+   @media screen and (max-width: 1200px) {
+    // width: 5%;
+    left: 90%;
+
+   }
+  
   // bottom: 0;
 }
 
 .chat {
   min-height: 500px;
   max-height: 600px;
-  width: 350px;
+  width: 20%;
   background-color: rgb(255, 255, 255);
   position: fixed;
   bottom: 100px;
   left: 80%;
   z-index: 500;
   overflow: auto;
-  // box-shadow: 10px;
-  // border-radius: 10px 10px 10px 10px;
+
+  @media screen and (max-width: 1024px) {
+display: none;
+
+   }
+
 }
 
 .chat-top{
@@ -805,6 +827,11 @@ export default {
   position: sticky;
   bottom: 0;
   z-index: 1;
+
+  @media screen and (max-width: 2000px) {
+  // display: none;
+
+   }
 }
 
 </style>
