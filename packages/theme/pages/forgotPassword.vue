@@ -5,7 +5,7 @@
     <div class="grid grid-cols-12 gap-4">
       <div class="left col-span-6 mt-10">
         <!-- <p>*Required</p> -->
-        <div class="field">
+        <!-- <div class="field">
           <ValidationObserver v-slot="{ handleSubmit }" key="log-in">
             <form
               class="form justify-center"
@@ -22,11 +22,50 @@
                   class="form__element width-[80%]"
                 />
               </ValidationProvider>
-              <!-- <div v-if="forgotPasswordError.request">
-                {{ forgotPasswordError.request.message }}
-              </div> -->
+       
               <SfButton type="submit" class="width-[80%] bg-secondary">
-                <!-- Reset Password -->
+                <SfLoader
+                  :class="{ loader: forgotPasswordLoading }"
+                  :loading="forgotPasswordLoading"
+                >
+                  <div>{{ $t('Reset Password') }}</div>
+                </SfLoader>
+              </SfButton>
+            </form>
+          </ValidationObserver>
+        </div> -->
+
+        <div class="field">
+          <ValidationObserver v-slot="{ handleSubmit }" key="log-in">
+            <form
+              class="form justify-center"
+              @submit.prevent="handleSubmit(handleForgotten)"
+            >
+              <ValidationProvider rules="required|email" v-slot="{ errors }">
+                <SfInput
+                  v-e2e="'forgot-modal-email'"
+                  v-model="userEmail"
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                  name="email"
+                  :label="$t('Code')"
+                  class="form__element width-[80%]"
+                />
+              </ValidationProvider>
+
+              <ValidationProvider rules="required|email" v-slot="{ errors }">
+                <SfInput
+                  v-e2e="'forgot-modal-email'"
+                  v-model="userEmail"
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                  name="email"
+                  :label="$t('New Password')"
+                  class="form__element width-[80%]"
+                />
+              </ValidationProvider>
+       
+              <SfButton type="submit" class="width-[80%] bg-secondary">
                 <SfLoader
                   :class="{ loader: forgotPasswordLoading }"
                   :loading="forgotPasswordLoading"
