@@ -250,9 +250,7 @@
                       />
                       <nuxt-link :to="`/v/${acc.slug}`">
                         <img
-                          :src="
-                            acc.featuredAsset ? acc.featuredAsset.preview : ''
-                          "
+                          :src="acc.featuredAsset && acc.featuredAsset.preview"
                           alt=""
                           class="w-8 h-8 mr-2"
                         />

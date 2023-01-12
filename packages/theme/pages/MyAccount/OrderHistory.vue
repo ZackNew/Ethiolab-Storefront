@@ -391,7 +391,6 @@ export default {
 
     onSSR(async () => {
       await search({ limit, offset: 0, sort: 'createdAt desc' });
-      console.log('maji orders', orders.value);
     });
 
     const goNext = (offset) => {
