@@ -1,7 +1,7 @@
 <template>
   <div class="myTabs">
     <h3 class="text-secondary font-bold mb-[3%]">Shipping Details</h3>
-    <hr class="mb-4" />
+    <!-- <hr class="mb-4" /> -->
     <transition name="fade">
       <SfTabs
         v-if="edittingAddress"

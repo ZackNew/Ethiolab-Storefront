@@ -88,37 +88,39 @@
               </SfTableHeader>
               <SfTableHeader class="orders__element--right" />
             </SfTableHeading>
-            <SfTableRow
-              v-for="(order, index) in orders.items"
-              :key="orderGetters.getId(order)"
-            >
-              <SfTableData v-e2e="'order-number'">{{
-                orderGetters.getId(order)
-              }}</SfTableData>
-              <SfTableData>{{ orderGetters.getDate(order) }}</SfTableData>
-              <SfTableData>{{
-                orderGetters.getPrice(order).toLocaleString() + ' ETB'
-              }}</SfTableData>
-              <SfTableData>
-                <span :class="getStatusTextClass(order)">{{
-                  orderGetters.getStatus(order)
-                }}</span>
-              </SfTableData>
-              <SfTableData class="orders__view orders__element--right">
-                <SfButton
-                  class="text-secondary sf-button--text desktop-only"
-                  @click="currentOrder = order"
-                >
-                  {{ $t('View details') }}
-                </SfButton>
-                <button
-                  class="mt-2"
-                  @click="itemsToCart(orderGetters.getItems(order))"
-                >
-                  <h4 class="text-secondary text-base">Reorder All Items</h4>
-                </button>
-              </SfTableData>
-            </SfTableRow>
+            <template v-if="orders.items">
+              <SfTableRow
+                v-for="order in orders.items.slice().reverse()"
+                :key="order.code"
+              >
+                <SfTableData v-e2e="'order-number'">{{
+                  order.code
+                }}</SfTableData>
+                <SfTableData>{{ orderGetters.getDate(order) }}</SfTableData>
+                <SfTableData>{{
+                  orderGetters.getPrice(order).toLocaleString() + ' ETB'
+                }}</SfTableData>
+                <SfTableData>
+                  <span :class="getStatusTextClass(order)">{{
+                    orderGetters.getStatus(order)
+                  }}</span>
+                </SfTableData>
+                <SfTableData class="orders__view orders__element--right">
+                  <SfButton
+                    class="text-secondary sf-button--text desktop-only"
+                    @click="currentOrder = order"
+                  >
+                    {{ $t('View details') }}
+                  </SfButton>
+                  <button
+                    class="mt-2"
+                    @click="itemsToCart(orderGetters.getItems(order))"
+                  >
+                    <h4 class="text-secondary text-base">Reorder All Items</h4>
+                  </button>
+                </SfTableData>
+              </SfTableRow>
+            </template>
           </SfTable>
           <div class="pagination" v-if="orders.length < totalOrders">
             <SfArrow
@@ -300,7 +302,7 @@ export default {
 
     const { load, myQuotes, deleteQuote } = useQuote();
     const { user, load: loadUser } = useUser();
-    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
     const invoiceEmail = userGetters.getEmailAddress(user.value);
     const baseUrl = process.env.GRAPHQL_API;
 
@@ -389,6 +391,7 @@ export default {
 
     onSSR(async () => {
       await search({ limit, offset: 0, sort: 'createdAt desc' });
+      console.log('maji orders', orders.value);
     });
 
     const goNext = (offset) => {
@@ -433,6 +436,7 @@ export default {
           quantity: 1,
         });
       }
+      setTimeout(() => setCart(), 5000);
     };
 
     const getStatusTextClass = (order) => {

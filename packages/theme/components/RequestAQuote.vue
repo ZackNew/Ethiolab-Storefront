@@ -39,7 +39,7 @@
         errorMessage="This is a required field"
       />
       <SfTextarea
-        cols="120"
+        cols="70"
         rows="7"
         v-model="qBody"
         id="t-area"
@@ -157,7 +157,7 @@ export default {
       let pIds = '[';
       items.forEach((item) => {
         //  productIds.push(item['id'])
-        pIds += items['id'] + ',';
+        pIds += item.id + ', ';
         descr += 'Product Name: ' + item['productVariant']['name'] + '<br />';
         descr += 'Unit Price: ' + item['unitPrice'] + '<br />';
         descr +=
@@ -244,10 +244,21 @@ export default {
 
 <style lang="scss" scoped>
 #qu-pop {
-  --modal-width: 50vw;
+  --modal-width: 70vw;
   /* width: 70%; */
   --modal-height: 50vh;
   --modal-padding: 0;
   padding: 0;
+  border-radius: 5px;
+}
+
+#qu-pop::-webkit-scrollbar {
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+#qu-pop::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
 }
 </style>

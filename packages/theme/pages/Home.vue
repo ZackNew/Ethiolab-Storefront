@@ -1,7 +1,6 @@
 <template>
   <client-only>
     <div id="home">
-      <!-- <PopupNotification /> -->
       <div>
         <!--        categories-->
         <!-- <div
@@ -93,8 +92,8 @@
                   >
                     <img
                       :src="imageUrl + sale.banner"
-                      alt="Image"
-                      class="w-full max-h-[8rem] min-h-[8rem]"
+                      alt="image"
+                      class="min-w-full max-h-[8rem] min-h-[8rem]"
                     />
                   </nuxt-link>
                 </div>
@@ -276,7 +275,7 @@
       <!-- <LazyHydrate when-visible>
         <Testimonial :testimonials="testimonials" />
       </LazyHydrate> -->
-
+      <h1 class="md:text-4xl text-secondary text-center">Testimonials</h1>
       <VueSlickCarousel
         v-if="testimonials.length > 0"
         class="carousel-wrapper wraplg"
@@ -335,7 +334,9 @@
                   class="object-cover object-center w-full h-full"
                 />
               </div>
-              <h5 class="font-bold quote text-center">{{ testimony.name }}</h5>
+              <h5 class="font-bold quote text-center">
+                {{ testimony.name }}
+              </h5>
               <p class="text-sm testimonies text-center">
                 {{ testimony.title }}
               </p>
@@ -426,30 +427,10 @@ export default {
         focusOnSelect: false,
         infinite: true,
         speed: 500,
-
-        slidesToScroll: 4,
         touchThreshold: 5,
         centerMode: true,
         centerPadding: '30px',
         responsive: [
-          // {
-          //   breakpoint: 2098,
-          //   settings: {
-          //     slidesToShow: 4,
-          //     slidesToScroll: 4,
-          //     infinite: true,
-          //     dots: true,
-          //   },
-          // },
-          // {
-          //   breakpoint: 1624,
-          //   settings: {
-          //     slidesToShow: 4,
-          //     slidesToScroll: 4,
-          //     infinite: true,
-          //     dots: true,
-          //   },
-          // },
           {
             breakpoint: 1024,
             settings: {
@@ -591,7 +572,7 @@ export default {
             title: testimony.person_position,
           };
         });
-        this.testimonials = testim;
+        this.testimonials = testim.slice(0, 3);
         console.log('Maji testimonials', this.testimonials);
       });
     },
