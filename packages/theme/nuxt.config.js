@@ -11,11 +11,10 @@ export default {
   env: {
     GRAPHQL_API: process.env.GRAPHQL_API || 'http://localhost:3000/shop-api',
     SECRET_KEY: process.env.SECRET_KEY,
-    ACCESS_KEY:process.env.ACCESS_KEY,
+    ACCESS_KEY: process.env.ACCESS_KEY,
     PROFILE_ID: process.env.PROFILE_ID,
     TELEBIRR_APPKEY: process.env.TELEBIRR_APPKEY,
-    TELEBIRR_APPID: process.env.TELEBIRR_APPID
-
+    TELEBIRR_APPID: process.env.TELEBIRR_APPID,
   },
   head: {
     title: 'Ethio Labs',
@@ -97,6 +96,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     '@nuxt/postcss8',
+    '@nuxtjs/svg',
   ],
   auth: {
     redirect: false,
@@ -248,4 +248,15 @@ export default {
 
   // ]
   serverMiddleware: ['~/api/index.js'],
+  svg: {
+    vueSvgLoader: {
+      // vue-svg-loader options
+    },
+    svgSpriteLoader: {
+      // svg-sprite-loader options
+    },
+    fileLoader: {
+      // file-loader options
+    },
+  },
 };

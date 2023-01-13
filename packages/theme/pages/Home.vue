@@ -354,6 +354,31 @@
       <LazyHydrate when-visible>
         <NewsletterModal @email-submitted="onSubscribe" />
       </LazyHydrate>
+      <div class="hidden lg:block">
+        <SfButton
+          class="sf-button--pure sf-header__action chatIcon"
+          v-if="isMessageSideBarOpen"
+          @click="toggleMessageSidebar()"
+        >
+          <div v-if="isAuthenticated && isMessageSideBarOpen">
+            <img src="~/assets/close-circle-svgrepo-com.svg" alt="image" />
+          </div>
+        </SfButton>
+        <SfButton
+          class="sf-button--pure sf-header__action chatIcon"
+          v-if="isAuthenticated && !isMessageSideBarOpen"
+          @click="toggleMessageSidebar()"
+        >
+          <div>
+            <img src="~/assets/chat1-svgrepo-com.svg" alt="image" />
+          </div>
+        </SfButton>
+      </div>
+      <MessageSideBar
+        class="lg:w-[25%] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500]"
+        :messages="messages"
+        @sendMessageToAdmin="sendMessageToAdmin"
+      />
     </div>
   </client-only>
 </template>
@@ -380,6 +405,7 @@ import {
 } from '@storefront-ui/vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import Testimonial from '~/components/Testimonial.vue';
+import MessageSideBar from '~/components/MessageSideBar.vue';
 import NewsletterModal from '~/components/NewsletterModal.vue';
 import Carousel from '~/components/carousel.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
@@ -396,11 +422,14 @@ import {
   useFacet,
   useCms,
   useQuote,
+  useUser,
+  userGetters,
+  useInstantMessage,
 } from '@vue-storefront/vendure';
 import CategoriesAccordion from '~/components/CategoriesAccordion';
 import Banner from '~/components/Banner';
 import { onSSR } from '@vue-storefront/core';
-import { computed, onMounted, inject } from '@vue/composition-api';
+import { computed, onMounted, inject, ref } from '@vue/composition-api';
 import { getCalculatedPrice } from '~/helpers';
 import getCms from '@vue-storefront/vendure-api/src/api/cms';
 import CategoryFeature from '../components/CategoryFeature.vue';
@@ -483,6 +512,7 @@ export default {
     RVPCard,
     NewCarousel,
     VueSlickCarousel,
+    MessageSideBar,
   },
   methods: {
     async getBestSellers() {
@@ -579,10 +609,15 @@ export default {
   },
 
   setup() {
+    const { user, load: loadUser, isAuthenticated } = useUser();
     const baseUrl = process.env.GRAPHQL_API;
     const path = baseUrl.split('/shop-api')[0] + '/assets/';
     const showToast = inject('showToast');
-    const { toggleNewsletterModal } = useUiState();
+    const {
+      toggleNewsletterModal,
+      isMessageSideBarOpen,
+      toggleMessageSidebar,
+    } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
@@ -593,8 +628,20 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+    loadUser();
 
-    console.log('this maji', products);
+    const messages = ref([]);
+    const refreshMessages = async () => {
+      await loadUser();
+      const data = await getUserInstantMessage({
+        userEmail: userGetters.getEmailAddress(user.value),
+      });
+      messages.value = data.data.getUserInstantMessage;
+    };
+    // setInterval(() => {
+    //   console.log('you are genius');
+    //   refreshMessages();
+    // }, 1000);
 
     const { writeQuote, load, myQuotes } = useQuote();
 
@@ -621,6 +668,21 @@ export default {
       return JSON.parse(pro ?? '{}');
     });
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
+    const { sendMessage, getUserInstantMessage } = useInstantMessage();
+
+    const sendMessageToAdmin = async (messageToSend) => {
+      console.log('emit accepted', messageToSend);
+      await loadUser();
+      const userEmail = userGetters.getEmailAddress(user.value);
+      const userFirstName = userGetters.getFirstName(user.value);
+      const userLastName = userGetters.getLastName(user.value);
+      await sendMessage({
+        msg: messageToSend,
+        lastName: userLastName,
+        firstName: userFirstName,
+        userEmail: userEmail,
+      });
+    };
 
     const onSubscribe = ({ emailAddress, event }) => {
       let baseUrl = process.env.GRAPHQL_API;
@@ -704,6 +766,11 @@ export default {
       imageUrl,
       itemsToCart,
       path,
+      isMessageSideBarOpen,
+      toggleMessageSidebar,
+      isAuthenticated,
+      sendMessageToAdmin,
+      messages,
     };
   },
 };
@@ -868,5 +935,14 @@ export default {
 
 .noScrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.chatIcon {
+  position: fixed;
+  z-index: 600;
+  bottom: 30px;
+  right: 20px;
+  width: 3%;
+  height: 3%;
 }
 </style>

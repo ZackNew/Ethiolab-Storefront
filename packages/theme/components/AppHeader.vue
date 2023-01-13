@@ -2,37 +2,12 @@
   <div class="wrap">
     <div :class="!isDarkMode ? `border-b-4 border-light_accent` : ''">
       <div class="md:mx-14">
-
-        <div class="chat rounded-xl shadow-lg" v-if="isMessageSideBarOpen">
-          <div class="h-16 w-full bg-[#000000] text-white rounded-xl chat-top"> 
-            <img src="Favicon.png" alt="logo" height="50px" width="50px" class="float-left bg-white mx-4 my-2 rounded-md" />
-            <h3 class="font-bold ">Ethiolab Support</h3>
-          </div>
-          <div v-for="message of messages"> 
-            <div v-if="!message.isFromAdmin" class="bg-light_gray  min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"> 
-             <p class="text-right mr-4"> {{message.msg}}</p> 
-            </div>
-            <div v-else class="bg-secondary  min-h-[50px] my-2 w-[75%]   rounded-lg"> 
-             <p class="text-left ml-4 text-white"> {{message.msg}}</p> 
-            </div>
-
-          </div>
-
-          <div class="chat-bottom"> 
-            <!-- <p>dfhdiusfhsd</p> -->
-            <input type="text" v-model="messageToSend"  placeholder="write a message" class="w-[85%] h-12 px-4 rounded-xl shadow-md float-left" />
-          <button @click="sendMessageToAdmin"> <img src="sendr.png" alt="send icon " height="50px" width="50px" /></button>  
-          </div>
-
-          
-        </div>
-
         <!-- <SfSidebar
       v-e2e="'sidebar-cart'"
       :visible="isMessageSideBarOpen"
       :title="$t('Messages')"
       class="sf-sidebar--right z-300"
-      @close="toggleMessageSideBar"
+      @close="toggleMessageSidebar"
     >
       <div id="messages-wrapper">
         <div v-for="message of messages">
@@ -122,20 +97,6 @@
                   >{{ cartTotalItems }}</SfBadge
                 >
               </SfButton>
-
-              <SfButton class="sf-button--pure sf-header__action chatcss" @click="toggleMessageSideBar" v-if="isAuthenticated && !isMessageSideBarOpen">
-                <!-- <SfIcon class="sf-header__icon" icon="message" size="1.25rem" /> -->
-                <img src="chatr.png" alt="chat image" height="50px" width="50px"/>
-                <!-- <SfBadge
-           
-              class="sf-badge--number cart-badge ml-4"
-              >{{unSeenMessagesLen}}</SfBadge> -->
-          </SfButton>
-          <SfButton class="sf-button--pure sf-header__action chatcss" @click="toggleMessageSideBar" v-if="isAuthenticated && isMessageSideBarOpen">
-                <!-- <SfIcon class="sf-header__icon" icon="message" size="1.25rem" /> -->
-                <img src="xicon.png" alt="chat image" height="50px" width="50px"/>
-             
-          </SfButton>
             </div>
           </template>
           <template #navigation>
@@ -209,7 +170,7 @@ import {
   SfSearchBar,
   SfTextarea,
   SfModal,
-  SfSidebar
+  SfSidebar,
 } from '@storefront-ui/vue';
 import { useUiHelpers, useUiState } from '~/composables';
 import {
@@ -222,7 +183,7 @@ import {
   useWishlist,
   wishlistGetters,
   userGetters,
-  useInstantMessage
+  useInstantMessage,
 } from '@vue-storefront/vendure';
 import {
   computed,
@@ -362,47 +323,42 @@ export default {
     };
   },
   setup(props, { root }) {
-     const messages = ref([
-   //   {isFromAdmin: true, msg: 'hi', isSeen: false},
-     // {isFromAdmin: false, msg: 'Hello sir', isSeen: true}
-    ]) 
-    const {sendMessage, getUserInstantMessage} = useInstantMessage()
+    const messages = ref([
+      //   {isFromAdmin: true, msg: 'hi', isSeen: false},
+      // {isFromAdmin: false, msg: 'Hello sir', isSeen: true}
+    ]);
+    const { sendMessage, getUserInstantMessage } = useInstantMessage();
     const { isAuthenticated, load: loadUser, user } = useUser();
     //getUserInstantMessage()
-    const refreshMessages = async ()=>{
+    const refreshMessages = async () => {
       await loadUser();
       // messages.value = [...messages.value]
-      const data = await getUserInstantMessage({userEmail: userGetters.getEmailAddress(user.value)})
+      const data = await getUserInstantMessage({
+        userEmail: userGetters.getEmailAddress(user.value),
+      });
       // console.log(JSON.stringify(data.data.getUserInstantMessage))
       messages.value = data.data.getUserInstantMessage;
-      
-    }
+    };
     // setInterval(()=>{
     //     //  console.log(`hello`)
     //      refreshMessages()
     // }, 2000)
-   
-    const isMessageSideBarOpen = ref(false);
 
-    const toggleMessageSideBar = ()=>{
-      console.log('called toggle messages ' + isMessageSideBarOpen.value);
-      let temp = isMessageSideBarOpen.value;
-      isMessageSideBarOpen.value = !temp
-    }
-
-    const handleCartSidebar =  () => {
-      isMessageSideBarOpen.value = false
+    const handleCartSidebar = () => {
+      isMessageSideBarOpen.value = false;
 
       toggleCartSidebar();
-    }
+    };
 
-    const handleWishlistSidebar =  () => {
-      isMessageSideBarOpen.value = false
+    const handleWishlistSidebar = () => {
+      isMessageSideBarOpen.value = false;
 
       toggleWishlistSidebar();
-    }
+    };
     const {
+      isMessageSideBarOpen,
       toggleCartSidebar,
+      toggleMessageSidebar,
       toggleWishlistSidebar,
       toggleLoginModal,
       isMobileMenuOpen,
@@ -430,43 +386,40 @@ export default {
       }
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
-    const messageToSend = ref('')
+    const messageToSend = ref('');
     const selectedProd = () => {
       console.log('selected');
     };
-  
-    const sendMessageToAdmin = async ()=>{
-         await loadUser()
-         const userEmail = userGetters.getEmailAddress(user.value);
-         const userFirstName = userGetters.getFirstName(user.value);
-         const userLastName = userGetters.getLastName(user.value);
-          
-         console.log(`Sending ${messageToSend.value} from ${userFirstName} ${userLastName} ${userEmail}`)
-         await sendMessage({
-              msg: messageToSend.value,
-              lastName: userLastName,
-              firstName: userFirstName,
-              userEmail: userEmail
-           })
-         messageToSend.value = ''
-    }
-//a list of {isFromAdmin, and msg}
-    const unSeenMessagesLen = computed(()=>{
-       let len =0;
-      messages.value.forEach(message =>{
-        if(!message.isSeen && !message.isFromAdmin)len++;
-      })
-      return len
-    })
-    
-    // watch(messages, ()=>{
-     
-    // })
 
+    const sendMessageToAdmin = async () => {
+      await loadUser();
+      const userEmail = userGetters.getEmailAddress(user.value);
+      const userFirstName = userGetters.getFirstName(user.value);
+      const userLastName = userGetters.getLastName(user.value);
+      await sendMessage({
+        msg: messageToSend.value,
+        lastName: userLastName,
+        firstName: userFirstName,
+        userEmail: userEmail,
+      });
+      messageToSend.value = '';
+    };
+    //a list of {isFromAdmin, and msg}
+    const unSeenMessagesLen = computed(() => {
+      let len = 0;
+      messages.value.forEach((message) => {
+        if (!message.isSeen && !message.isFromAdmin) len++;
+      });
+      return len;
+    });
+
+    // watch(messages, ()=>{
+
+    // })
 
     const showQuotation = ref(false);
     const { setTermForUrl, getFacetsFromURL } = useUiHelpers();
-    
+
     const { cart, load: loadCart } = useCart();
     const { wishlist, load: loadWishlist } = useWishlist();
     const { search, categories } = useCategory();
@@ -559,21 +512,21 @@ export default {
       await searchTerm({ term: term.value });
       result.value = searchResult;
     }, 1000);
-    
-    
-    const isMobile = ref(false)
-    onMounted(()=>{
-           if (navigator.userAgent.match(/Android/i)
-                || navigator.userAgent.match(/webOS/i)
-                || navigator.userAgent.match(/iPhone/i) 
-                || navigator.userAgent.match(/iPad/i) 
-                || navigator.userAgent.match(/iPod/i)
-                || navigator.userAgent.match(/BlackBerry/i)
-                || navigator.userAgent.match(/Windows Phone/i)){
-                  isMobile.value = true;
-                 console.log("it is a mobile")
-           }
-           else isMobile.value = false;
+
+    const isMobile = ref(false);
+    onMounted(() => {
+      if (
+        navigator.userAgent.match(/Android/i) ||
+        navigator.userAgent.match(/webOS/i) ||
+        navigator.userAgent.match(/iPhone/i) ||
+        navigator.userAgent.match(/iPad/i) ||
+        navigator.userAgent.match(/iPod/i) ||
+        navigator.userAgent.match(/BlackBerry/i) ||
+        navigator.userAgent.match(/Windows Phone/i)
+      ) {
+        isMobile.value = true;
+        console.log('it is a mobile');
+      } else isMobile.value = false;
     });
 
     const closeOrFocusSearchBar = () => {
@@ -633,7 +586,7 @@ export default {
     return {
       messages,
       isMessageSideBarOpen,
-      toggleMessageSideBar,
+      toggleMessageSidebar,
       selectedProd,
       selectedProds,
       addProd,
@@ -678,7 +631,7 @@ export default {
       isAuthenticated,
       unSeenMessagesLen,
       handleCartSidebar,
-      handleWishlistSidebar
+      handleWishlistSidebar,
     };
   },
 };
@@ -719,25 +672,25 @@ export default {
     margin-left: 40px;
   }
 }
-#messages-wrapper{
-   display: flex;
-   flex-direction: column;
-   justify-content: space-evenly;
-   overflow-y: scroll;
+#messages-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  overflow-y: scroll;
 }
-.msg-from-admin{
-   background-color: lightblue;
+.msg-from-admin {
+  background-color: lightblue;
 }
-.msg-from-me{
-   background-color: lightyellow;
+.msg-from-me {
+  background-color: lightyellow;
 }
 .header-on-top {
   z-index: 2;
 }
-#msg-to-send{
+#msg-to-send {
   width: 75%;
 }
-#send-btn{
+#send-btn {
   width: 25%;
 }
 .cart-badge {
@@ -765,20 +718,19 @@ export default {
     margin: auto;
   }
 }
-#sendmessage{
+#sendmessage {
   position: fixed;
-   bottom: 1%;
-   display: flex;
-   flex-direction: row;
-   justify-content: space-evenly;
+  bottom: 1%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .chatcss {
-  position: fixed;
   // padding: 50px;
   z-index: 500;
-  top: 90vh;
-  left: 95%;
+  bottom: 50px;
+  right: 30px;
   // bottom: 0;
 }
 
@@ -796,15 +748,13 @@ export default {
   // border-radius: 10px 10px 10px 10px;
 }
 
-.chat-top{
+.chat-top {
   position: sticky;
   top: 0;
   z-index: 1;
 }
-.chat-bottom{
-  position: sticky;
+.chat-bottom {
   bottom: 0;
   z-index: 1;
 }
-
 </style>
