@@ -85,7 +85,7 @@
               class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col gap-1"
             >
               <div v-for="sale in bigSale" :key="sale.sku">
-                <div class="container">
+                <div>
                   <nuxt-link
                     :to="`/v/${sale.productSlug}`"
                     class="font-bold text-white"
@@ -93,7 +93,7 @@
                     <img
                       :src="imageUrl + sale.banner"
                       alt="image"
-                      class="min-w-full max-h-[8rem] min-h-[8rem]"
+                      class="min-w-[100%] max-h-[8rem] min-h-[8rem]"
                     />
                   </nuxt-link>
                 </div>
@@ -898,9 +898,9 @@ export default {
   }
 }
 
-.container {
-  position: relative;
-}
+// .container {
+//   position: relative;
+// }
 
 .text-overlayer {
   position: absolute;

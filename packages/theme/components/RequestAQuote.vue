@@ -103,6 +103,7 @@ export default {
     const isMessageValid = ref(true);
     const isLocationValid = ref(true);
     const isEmailValid = ref(true);
+    const { isAuthenticated, load: loadUser, user } = useUser();
 
     const showToast = inject('showToast');
     const { writeQuote } = useQuote();
@@ -153,60 +154,15 @@ export default {
       //fetch("data: ",qTitle.value, " ", qEmail.value, " ", qBody.value, " ", qPhone.value, quoteCity.value)
 
       const items = cartGetters.getItems(cart.value);
-      let descr = 'Product Description:: ';
-      let pIds = '[';
-      items.forEach((item) => {
-        //  productIds.push(item['id'])
-        pIds += item.id + ', ';
-        descr += 'Product Name: ' + item['productVariant']['name'] + '<br />';
-        descr += 'Unit Price: ' + item['unitPrice'] + '<br />';
-        descr +=
-          'Unit Price With Tax ' +
-          item['unitPriceWithTax'] +
-          '<br /><br /><br />';
+      let descr = '';
+      if (isAuthenticated) {
+        descr = user?.value?.emailAddress;
+      }
+      let pIds = [];
+      cart?.value?.lines.forEach((product) => {
+        pIds.push(String(product?.productVariant?.id));
       });
-      pIds += ']';
 
-      //   console.log("%c sent!", "color: red", pIds)
-      //  console.log("Title: ",qTitle.value, " Email:", qEmail.value, " Body:", qBody.value, " Phone", qPhone.value, " city:",quoteCity.value);
-      //  console.log( " Desc2 ", descr, "/");
-      //    const mutation = gql`
-
-      //                   mutation writeQuote($msg: String!, $subject: String!, $fromEmail: String!, $fromPhone: String!, $location:String!, $productDescr: String!, $productIds: [String]!){
-      //                     writeQuote(args:{msg:$msg,
-      //                       subject: $subject,
-      //                       fromEmail: $fromEmail,
-      //                       fromPhone: $fromPhone,
-      //                       location: $location,
-      //                       productDescr: $productDescr,
-      //                       productIds: $productIds
-      //                     }){
-      //                       location,
-      //                       msg,
-      //                       id,
-      //                       subject,
-      //                       productDescr,
-      //                       forProducts{
-      //                         name
-      //                       }
-      //                     }
-      //                   }
-      //                   `;
-
-      //  (
-      //    async () =>{
-      //      const data = await axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{
-      //        msg: qBody.value,
-      //        subject: qTitle.value,
-      //        fromEmail: qEmail.value,
-      //        fromPhone: qPhone.value,
-      //        location: quoteCity.value,
-      //        productDescr: descr,
-      //        productIds: pIds
-      //      }});
-      //      console.log(data);
-      //    }
-      //  )()
       writeQuote({
         msg: qBody.value,
         subject: qTitle.value,
@@ -216,7 +172,7 @@ export default {
         productDescr: descr,
         productIds: pIds,
       });
-      showToast('Sent!');
+      showToast('Santa!');
       toggleQuoteModal();
     };
     return {

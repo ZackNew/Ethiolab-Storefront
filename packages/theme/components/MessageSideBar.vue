@@ -1,7 +1,7 @@
 <template>
   <div class="chat rounded-xl shadow-lg bg-white" v-if="isMessageSideBarOpen">
     <div
-      class="h-14 w-full bg-[#000000] text-white rounded-lg flex items-center"
+      class="invisible lg:visible h-14 w-full bg-[#000000] text-white rounded-lg flex items-center"
     >
       <img
         src="Favicon.png"

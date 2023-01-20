@@ -621,23 +621,18 @@ export default {
     const lastSlug = th.getLastSlugFromParams();
 
     const addToCart = (e) => {
-      
       addItemToCart({
         product: {
           _variantId: e._variantId,
         },
         quantity: e.quantity,
-      }).then(res =>{
-        console.log("best seller updated cart value is ", cart.value)
-        if(cart.value.errorCode && cart.value.errorCode != ''){
-          showToast(cart.value.message)
+      }).then((res) => {
+        if (cart.value.errorCode && cart.value.errorCode != '') {
+          showToast(cart.value.message);
+        } else {
+          showToast('Product added to cart!');
         }
-        else{
-          showToast("Product added to cart!")
-        }
-      } 
-      )
-      
+      });
     };
 
     const searchResult = computed(() =>
@@ -791,7 +786,7 @@ export default {
       rawCategoryTree,
       lastSlug,
       toastShower,
-      addToCart
+      addToCart,
     };
   },
   components: {
@@ -930,7 +925,9 @@ export default {
             product?.collections?.forEach((x) => {
               cref.push(String(x?.id));
             });
-            const image = process.env.GRAPHQL + `/assets/${product?.image}`;
+            const image =
+              process.env.GRAPHQL_API.split('/shop-api')[0] +
+              `/assets/${product?.image}`;
             const price =
               String(product?.priceWithTax).slice(0, -2) +
               '.' +
