@@ -737,15 +737,17 @@ export default {
 .chat {
   min-height: 500px;
   max-height: 600px;
-  width: 350px;
+  width: 20%;
   background-color: rgb(255, 255, 255);
   position: fixed;
   bottom: 100px;
   left: 80%;
   z-index: 500;
   overflow: auto;
-  // box-shadow: 10px;
-  // border-radius: 10px 10px 10px 10px;
+
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
 }
 
 .chat-top {
@@ -756,5 +758,9 @@ export default {
 .chat-bottom {
   bottom: 0;
   z-index: 1;
+
+  @media screen and (max-width: 2000px) {
+    // display: none;
+  }
 }
 </style>
