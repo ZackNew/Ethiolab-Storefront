@@ -172,7 +172,7 @@ export default {
         productDescr: descr,
         productIds: pIds,
       });
-      showToast('Santa!');
+      showToast('Sent!');
       toggleQuoteModal();
     };
     return {
