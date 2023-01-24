@@ -26,7 +26,7 @@
           >
             <div v-for="(image, i) in images" :key="i">
               <img
-                :src="image.preview"
+                :src="image.preview && image.preview"
                 alt="image"
                 class="min-w-[90px] max-w-[90px] min-h-[90px] max-h-[90px] md:min-w-[96%] md:max-w-[96%] md:min-h-[120px] md:max-h-[120px] object-cover mb-3 mx-auto"
                 @click="changeBigImage(image.preview)"
@@ -134,8 +134,7 @@ export default {
   },
   mounted() {
     // this.zoom();
-    console.log('asferi', this.display);
-    this.bigImage = this.display.preview;
+    this.bigImage = this.display?.preview;
   },
 };
 </script>

@@ -187,7 +187,11 @@
         data-testid="product-link"
         v-on="$listeners"
       >
+<<<<<<< HEAD
+        <span class="ssf-product-card__title min-h-[5rem] font-[0.5rem]">
+=======
         <span class="ssf-product-card__title min-h-[5rem] text-[0.5rem] overflow-hidden">
+>>>>>>> 4f52a85f1dfccfed322fbd189b215b2e550a188e
           {{ title }}
         </span>
       </SfButton> -->

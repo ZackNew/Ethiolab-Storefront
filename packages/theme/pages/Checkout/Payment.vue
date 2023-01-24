@@ -219,7 +219,6 @@
               </div>
 
               <div v-if="paymentMethod && paymentMethod.name == 'Cash'">
-                <!-- <p>Pay in Cash with Order ID #{{ cart.code }}</p> -->
                 <SfModal title="My title" visible :persistent="false">
                   <div class="relative h-full max-w-md md:h-auto -mr-4">
                     <div
@@ -276,22 +275,6 @@
                             </li>
                           </ul>
                         </div>
-                        <!--  <button
-                        @click="handleCancelOrder"
-                        data-modal-toggle="popup-modal"
-                        type="button"
-                        class="text-white bg-red hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-                      >
-                        Yes, I'm sure
-                      </button>
-                      <button
-                        data-modal-toggle="popup-modal"
-                        type="button"
-                        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                        @click="handleModalOpen"
-                      >
-                        No, cancel
-                      </button> -->
                       </div>
                     </div>
                   </div>
@@ -327,7 +310,7 @@
       <div>
         <div v-if="modalOpen">
           <SfModal title="My title" visible :persistent="false">
-            <div class="relative h-full max-w-md md:h-auto -mr-4">
+            <div class="relative w-full h-full max-w-md md:h-auto">
               <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <button
                   type="button"
@@ -385,7 +368,7 @@
                     class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                     @click="handleModalOpen"
                   >
-                    No, return
+                    No, cancel
                   </button>
                 </div>
               </div>
@@ -394,7 +377,7 @@
         </div>
       </div>
 
-      <div>
+      <!-- <div>
         <div v-if="modalCashOpen">
           <SfModal title="My title" visible :persistent="false">
             <div class="relative h-full max-w-md md:h-auto -mr-4">
@@ -418,7 +401,6 @@
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                  <!-- <span class="sr-only">Close modal</span> -->
                 </button>
                 <div class="p-6 text-center">
                   <svg
@@ -441,28 +423,12 @@
                   >
                     Cash Payment
                   </h3>
-                  <!--  <button
-                    @click="handleCancelOrder"
-                    data-modal-toggle="popup-modal"
-                    type="button"
-                    class="text-white bg-red hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-                  >
-                    Yes, I'm sure
-                  </button>
-                  <button
-                    data-modal-toggle="popup-modal"
-                    type="button"
-                    class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                    @click="handleModalOpen"
-                  >
-                    No, cancel
-                  </button> -->
                 </div>
               </div>
             </div>
           </SfModal>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -645,9 +611,10 @@ export default {
 
     onBeforeMount(() => {
       url = 'https://testsecureacceptance.cybersource.com/pay';
-      SECRET_KEY = process.env.SECRET_KEY;
-      paymentDetail.access_key = process.env.ACCESS_KEY;
-      paymentDetail.profile_id = process.env.PROFILE_ID;
+      SECRET_KEY =
+        'c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7';
+      paymentDetail.access_key = '98e9854d57563c34843c61c09e13f17c';
+      paymentDetail.profile_id = '09D76F9D-C5BB-4A5F-8D1E-4E3F2A757AD9';
       paymentDetail.transaction_uuid = uuid.v4();
       paymentDetail.signed_field_names =
         'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency';
@@ -797,9 +764,9 @@ export default {
 
       ////////////////////////////////STEP 1//////////////////////////////////////
 
-      const appKey = process.env.TELEBIRR_APPKEY;
+      const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
       let signObj = {
-        appId: process.env.TELEBIRR_APPID,
+        appId: '4ae7217b4e7149fdac877852e7fd87db',
         nonce: paymentDetail.transaction_uuid,
         notifyUrl: 'http://localhost:3000/telebirr',
         outTradeNo: cart.value.code,
@@ -940,8 +907,6 @@ export default {
       handleModalOpen,
       modalOpen,
       handleCancelOrder,
-      handleModalCashOpen,
-      modalCashOpen,
     };
   },
 };

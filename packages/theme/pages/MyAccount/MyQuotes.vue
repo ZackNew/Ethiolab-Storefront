@@ -3,64 +3,31 @@
     <SfTab class="profileTabs" title="My Quotes">
       <SfTable>
         <SfTableHeading>
-          <SfTableHeader
-            v-for="(tableHeader, index) in quotesHeader"
-            :key="index"
-          >
+          <SfTableHeader v-for="tableHeader in quotesHeader" :key="tableHeader">
             <h4 class="text-lg font-bold text-secondary">
               {{ tableHeader }}
             </h4>
           </SfTableHeader>
-          <SfTableHeader class="orders__element--right" />
         </SfTableHeading>
 
-        <!-- <SfTableRow v-for="(quote, index) in quotes" :key="index">
-            <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
-            <SfTableData>{{ quote.createdAt }}</SfTableData>
-            <SfTableData>{{ quote.subject }}</SfTableData>
-            <SfTableData>
-              <SfButton class="sf-button--text">See Details</SfButton>
-              <SfButton
-                class="sf-button--text red-text"
-                @click="removeQuote(quotes.indexOf(quote))"
-                >Delete</SfButton
+        <SfTableRow v-for="quote in quotes" :key="quote.id">
+          <SfTableData>{{ quote.id }}</SfTableData>
+          <SfTableData class="pr-2">{{
+            quote.createdAt && quote.createdAt.split('T')[0]
+          }}</SfTableData>
+          <SfTableData class="pr-2">{{ quote.subject }}</SfTableData>
+          <SfTableData>
+            <SfButton class="sf-button--text">
+              <a
+                class="text-secondary px-1"
+                :href="quote.assetUrl"
+                target="_blank"
               >
-              <SfButton
-                class="sf-button--text"
-                @click="downloadQuote(quotes.indexOf(quote))"
-                >Download As Pdf</SfButton
-              >
-            </SfTableData>
-          </SfTableRow> -->
-
-        <!-- <SfTableRow v-for="(quote,index) in quotes" :key="index">
-            <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
-            <SfTableData>{{ quote.createdAt }}</SfTableData>
-            <SfTableData>{{ quote.subject }}</SfTableData>
-            <SfTableData>
-              <SfButton class="sf-button--text">See Details</SfButton>
-              <SfButton
-                class="sf-button--text red-text"
-                @click="removeQuote(quotes.indexOf(quote))"
-                >Delete</SfButton       <SfTableData class="orders__view orders__element--right">
-                <SfButton
-                  class="sf-button--text desktop-only"
-                  @click="currentOrder = order"
-                >
-                  {{ $t('View details') }}
-                </SfButton>
-                <button
-                  class="mt-2"
-                  @click="itemsToCart(orderGetters.getItems(order))"
-                >
-                  Reorder All Items
-                </button>
-              </SfTableData>
-                @click="downloadQuote(quotes.indexOf(quote))"
-                >Download As Pdf</SfButton
-              >
-            </SfTableData>
-          </SfTableRow> -->
+                download pdf
+              </a>
+            </SfButton>
+          </SfTableData>
+        </SfTableRow>
       </SfTable>
     </SfTab>
   </SfTabs>
@@ -74,6 +41,9 @@ import {
   SfLink,
   SfTable,
 } from '@storefront-ui/vue';
+import { ref, computed, onMounted, inject } from '@vue/composition-api';
+import { useUser } from '@vue-storefront/vendure';
+import axios from 'axios';
 export default {
   name: 'MyQuotes',
   components: {
@@ -83,18 +53,38 @@ export default {
     SfLink,
     SfTable,
   },
-  data() {
-    return { newsletter: [] };
-  },
   setup() {
-    const quotesHeader = [
-      'Id',
-      'Sent At',
-      'Subject',
-      //   'message',
-      'Actions',
-    ];
+    const { isAuthenticated, load: loadUser, user } = useUser();
+    const quotesHeader = ['Id', 'Sent At', 'Subject', 'Response'];
+    const quotes = ref([]);
+    const getMyuotes = async () => {
+      loadUser();
+      const baseUrl = process.env.GRAPHQL_API;
+      const body = {
+        query: `
+          query getMyuotes($email: String!) {
+            getQueryOf(email: $email){
+              id
+              createdAt
+              subject
+              assetUrl
+            }
+          }`,
+        variables: { email: user?.value?.emailAddress },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(baseUrl, body, options).then((res) => {
+        quotes.value = res.data.data.getQueryOf.reverse();
+      });
+    };
+    getMyuotes();
     return {
+      quotes,
       quotesHeader,
     };
   },

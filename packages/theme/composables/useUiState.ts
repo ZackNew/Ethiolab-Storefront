@@ -15,6 +15,7 @@ const state = reactive({
   isMobileMenuOpen: false,
   isDarkMode: false,
   isQuoteModalOpen: false,
+  isMessageSideBarOpen: false,
   enablePopUp: !(process.browser && localStorage.getItem('popup')),
 });
 
@@ -47,6 +48,10 @@ const useUiState = () => {
   const toggleWishlistSidebar = () => {
     if (state.isMobileMenuOpen) toggleMobileMenu();
     state.isWishlistSidebarOpen = !state.isWishlistSidebarOpen;
+  };
+  const isMessageSideBarOpen = computed(() => state.isMessageSideBarOpen);
+  const toggleMessageSidebar = () => {
+    state.isMessageSideBarOpen = !state.isMessageSideBarOpen;
   };
 
   const isLoginModalOpen = computed(() => state.isLoginModalOpen);
@@ -83,6 +88,7 @@ const useUiState = () => {
     isMobileMenuOpen,
     isDarkMode,
     isQuoteModalOpen,
+    isMessageSideBarOpen,
     enablePopUp,
     togglePopUp,
     toggleQuoteModal,
@@ -95,6 +101,7 @@ const useUiState = () => {
     changeToCategoryListView,
     toggleFilterSidebar,
     toggleMobileMenu,
+    toggleMessageSidebar,
   };
 };
 

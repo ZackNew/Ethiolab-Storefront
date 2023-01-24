@@ -46,7 +46,7 @@
 <script>
 import { SfBreadcrumbs, SfContentPages } from '@storefront-ui/vue';
 import { computed, onBeforeUnmount } from '@vue/composition-api';
-import { useUser } from '@vue-storefront/vendure';
+import { useUser, useCart } from '@vue-storefront/vendure';
 import MyProfile from '../MyAccount/MyProfile';
 import ShippingDetails from '../MyAccount/ShippingDetails';
 import BillingDetails from '../MyAccount/BillingDetails';
@@ -74,6 +74,7 @@ export default {
   setup(props, context) {
     console.log('maji my accounts');
     const { $router, $route } = context.root;
+    const { cart, load: loadCart, setCart, applyCoupon } = useCart();
     const { logout } = useUser();
     const isMobile = computed(() => mapMobileObserver().isMobile.get());
     const activePage = computed(() => {
@@ -94,6 +95,8 @@ export default {
     const changeActivePage = async (title) => {
       if (title === 'Log out') {
         await logout();
+        // await loadCart();
+        setCart();
         $router.push(context.root.localePath({ name: 'home' }));
         return;
       }

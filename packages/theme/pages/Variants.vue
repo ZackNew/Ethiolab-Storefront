@@ -83,27 +83,27 @@
           </div>
 
           <LazyHydrate when-idle>
-            <div> 
-              <h4 class=" my-8 text-secondary">Product Reviews </h4>
-                  <SfReview
-                  v-for="review in reviews"
-                  :key="review.id"
-                  :author="review.authorName"
-                  :date="new Date(review.createdAt).toLocaleString()"
-                  :message="review.summary"
-                  :max-rating="5"
-                  :rating="review.rating"
-                  :char-limit="250"
-                  :read-more-text="$t('Read more')"
-                  :hide-full-text="$t('Read less')"
-                  class="product__review"
-                />
-                <MyReview
-                  :productId="product.id"
-                  :currentUserHasNoReview="!currentUserHasReview"
-                />
+            <div>
+              <h4 class="my-8 text-secondary">Product Reviews</h4>
+              <SfReview
+                v-for="review in reviews"
+                :key="review.id"
+                :author="review.authorName"
+                :date="new Date(review.createdAt).toLocaleString()"
+                :message="review.summary"
+                :max-rating="5"
+                :rating="review.rating"
+                :char-limit="250"
+                :read-more-text="$t('Read more')"
+                :hide-full-text="$t('Read less')"
+                class="product__review"
+              />
+              <MyReview
+                :productId="product.id"
+                :currentUserHasNoReview="!currentUserHasReview"
+              />
             </div>
-        
+
             <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
               <SfTab :title="$t('Read reviews')" :key="reviewKey">
                 <SfReview
@@ -226,45 +226,45 @@
                   />
                 </div>
               </div>
-              <div class="flex mt-[5%]">
-                <input
-                  type="checkbox"
-                  v-model="isAccessories"
-                  class="mr-[3%]"
-                />
-                <h3 class="text-secondary font-bold text-lg">accessories</h3>
-              </div>
-              <hr class="mt-4" />
-              <template v-if="isAccessories">
-                <div
-                  v-for="(acc, i) in variant.accessories"
-                  :key="`'r' + ${i}`"
-                  class="mt-3"
-                >
-                  <div class="flex accessories">
-                    <input
-                      @change="accessoryClicked(acc.variants[0].id)"
-                      type="checkbox"
-                      class="mr-[3%]"
-                    />
-                    <nuxt-link :to="`/v/${acc.slug}`">
-                      <img
-                        :src="
-                          acc.featuredAsset ? acc.featuredAsset.preview : ''
-                        "
-                        alt=""
-                        class="w-8 h-8 mr-2"
-                      />
-                    </nuxt-link>
-                    <nuxt-link :to="`/v/${acc.slug}`">
-                      <h4 class="text-secondary font-bold text-base">
-                        {{ acc.name }}
-                      </h4>
-                    </nuxt-link>
-                  </div>
-                  <hr class="mt-2" />
+              <div v-if="variant.accessories.length > 0">
+                <div class="flex mt-[5%]">
+                  <input
+                    type="checkbox"
+                    v-model="isAccessories"
+                    class="mr-[3%]"
+                  />
+                  <h3 class="text-secondary font-bold text-lg">accessories</h3>
                 </div>
-              </template>
+                <hr class="mt-4" />
+                <template v-if="isAccessories">
+                  <div
+                    v-for="(acc, i) in variant.accessories"
+                    :key="`'r' + ${i}`"
+                    class="mt-3"
+                  >
+                    <div class="flex accessories">
+                      <input
+                        @change="accessoryClicked(acc.variants[0].id)"
+                        type="checkbox"
+                        class="mr-[3%]"
+                      />
+                      <nuxt-link :to="`/v/${acc.slug}`">
+                        <img
+                          :src="acc.featuredAsset && acc.featuredAsset.preview"
+                          alt=""
+                          class="w-8 h-8 mr-2"
+                        />
+                      </nuxt-link>
+                      <nuxt-link :to="`/v/${acc.slug}`">
+                        <h4 class="text-secondary font-bold text-base">
+                          {{ acc.name }}
+                        </h4>
+                      </nuxt-link>
+                    </div>
+                    <hr class="mt-2" />
+                  </div>
+                </template>
+              </div>
             </SfTableData>
           </SfTableRow>
         </SfTable>
@@ -534,7 +534,7 @@ export default {
   setup() {
     const { user, isAuthenticated, load, getU } = useUser();
     const { isDarkMode } = useUiState();
-    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
     const accessoriesToCart = ref([]);
 
     const accessoryClicked = (accId) => {
@@ -575,6 +575,8 @@ export default {
           quantity: 1,
         });
       }
+
+      setTimeout(() => setCart(), 5000);
     };
     return {
       isInCart,
