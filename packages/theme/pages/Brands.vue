@@ -30,9 +30,9 @@
             </li>
           </ol>
         </nav>
-
+        <!-- sidebar -->
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white max-h-[40%] overflow-auto top-[5%] no-scrollbar sticky"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white max-h-[44rem] overflow-auto top-[5%] no-scrollbar sticky"
           :style="
             !isDarkMode
               ? 'background-color: white'
@@ -50,20 +50,6 @@
               :categories="collectionList"
             />
           </div>
-          <!-- <div class="p-3">
-  <LazyHydrate>
-  <Banner
-  :title="adSection.title || 'AD Title'"
-  :subtitle="adSection.overview || 'AD Overview'"
-  :description="adSection.description || 'AD Description'"
-  :buttonText="adSection.buttonText || 'AD Button'"
-  background=""
-  :image="adImage || '/homepage/bannerA.webp'"
-  link="/c/clinical-laboratory"
-  > 
-  </Banner>
-  </LazyHydrate>
-  </div> -->
         </div>
       </div>
       <!-- Subcategory name and description -->

@@ -23,7 +23,7 @@
                 :href="quote.assetUrl"
                 target="_blank"
               >
-                download pdf
+                view pdf
               </a>
             </SfButton>
           </SfTableData>

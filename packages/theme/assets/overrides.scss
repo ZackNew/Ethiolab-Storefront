@@ -55,3 +55,8 @@
 .sf-search-bar__input:focus {
   outline: none;
 }
+.sf-modal__container {
+  border-radius: 6px !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}
