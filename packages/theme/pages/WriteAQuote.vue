@@ -220,6 +220,7 @@ export default {
     const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
     const { writeQuote } = useQuote();
+    const { isAuthenticated, load: loadUser, user } = useUser();
     const data = ref({
       fromName: '',
       fromEmail: '',
@@ -231,6 +232,10 @@ export default {
       firstName: '',
       lastName: '',
     });
+    if (isAuthenticated) {
+      data.value.productDescr = user?.value?.emailAddress;
+      console.log('maji user email', data.value.productDescr);
+    }
     const send = () => {
       writeQuote({
         isSpecial: true,
@@ -240,7 +245,7 @@ export default {
         fromPhone: data.value.fromPhone,
         msg: data.value.msg,
         location: data.value.location,
-        productDescr: '',
+        productDescr: data.value.productDescr,
         firstName: data.value.firstName,
         lastName: data.value.firstName,
       });

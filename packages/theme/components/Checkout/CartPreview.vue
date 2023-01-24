@@ -73,6 +73,7 @@ import {
   SfCollectedProduct,
   SfProperty,
   SfCharacteristic,
+
   SfInput,
   SfCircleIcon,
 } from '@storefront-ui/vue';
@@ -132,8 +133,8 @@ export default {
           icon: 'shipping',
         },
         {
-          title: 'Changed your mind?',
-          description: 'Rest assured, we offer free returns within 30 days',
+          title: 'Online payment',
+          description: 'Safe and secure online payment methods',
           icon: 'return',
         },
       ],

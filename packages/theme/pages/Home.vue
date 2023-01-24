@@ -1,7 +1,6 @@
 <template>
   <client-only>
     <div id="home">
-      <!-- <PopupNotification /> -->
       <div>
         <!--        categories-->
         <!-- <div
@@ -86,15 +85,15 @@
               class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col gap-1"
             >
               <div v-for="sale in bigSale" :key="sale.sku">
-                <div class="container">
+                <div>
                   <nuxt-link
                     :to="`/v/${sale.productSlug}`"
                     class="font-bold text-white"
                   >
                     <img
                       :src="imageUrl + sale.banner"
-                      alt="Image"
-                      class="w-full max-h-[8rem] min-h-[8rem]"
+                      alt="image"
+                      class="min-w-[100%] max-h-[8rem] min-h-[8rem]"
                     />
                   </nuxt-link>
                 </div>
@@ -276,7 +275,7 @@
       <!-- <LazyHydrate when-visible>
         <Testimonial :testimonials="testimonials" />
       </LazyHydrate> -->
-
+      <h1 class="md:text-4xl text-secondary text-center">Testimonials</h1>
       <VueSlickCarousel
         v-if="testimonials.length > 0"
         class="carousel-wrapper wraplg"
@@ -335,7 +334,9 @@
                   class="object-cover object-center w-full h-full"
                 />
               </div>
-              <h5 class="font-bold quote text-center">{{ testimony.name }}</h5>
+              <h5 class="font-bold quote text-center">
+                {{ testimony.name }}
+              </h5>
               <p class="text-sm testimonies text-center">
                 {{ testimony.title }}
               </p>
@@ -353,6 +354,31 @@
       <LazyHydrate when-visible>
         <NewsletterModal @email-submitted="onSubscribe" />
       </LazyHydrate>
+      <div class="hidden lg:block">
+        <SfButton
+          class="sf-button--pure sf-header__action chatIcon"
+          v-if="isMessageSideBarOpen"
+          @click="toggleMessageSidebar()"
+        >
+          <div v-if="isAuthenticated && isMessageSideBarOpen">
+            <img src="~/assets/close-circle-svgrepo-com.svg" alt="image" />
+          </div>
+        </SfButton>
+        <SfButton
+          class="sf-button--pure sf-header__action chatIcon"
+          v-if="isAuthenticated && !isMessageSideBarOpen"
+          @click="toggleMessageSidebar()"
+        >
+          <div>
+            <img src="~/assets/chat1-svgrepo-com.svg" alt="image" />
+          </div>
+        </SfButton>
+      </div>
+      <MessageSideBar
+        class="lg:w-[25%] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500]"
+        :messages="messages"
+        @sendMessageToAdmin="sendMessageToAdmin"
+      />
     </div>
   </client-only>
 </template>
@@ -379,6 +405,7 @@ import {
 } from '@storefront-ui/vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import Testimonial from '~/components/Testimonial.vue';
+import MessageSideBar from '~/components/MessageSideBar.vue';
 import NewsletterModal from '~/components/NewsletterModal.vue';
 import Carousel from '~/components/carousel.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
@@ -395,11 +422,14 @@ import {
   useFacet,
   useCms,
   useQuote,
+  useUser,
+  userGetters,
+  useInstantMessage,
 } from '@vue-storefront/vendure';
 import CategoriesAccordion from '~/components/CategoriesAccordion';
 import Banner from '~/components/Banner';
 import { onSSR } from '@vue-storefront/core';
-import { computed, onMounted, inject } from '@vue/composition-api';
+import { computed, onMounted, inject, ref } from '@vue/composition-api';
 import { getCalculatedPrice } from '~/helpers';
 import getCms from '@vue-storefront/vendure-api/src/api/cms';
 import CategoryFeature from '../components/CategoryFeature.vue';
@@ -426,30 +456,10 @@ export default {
         focusOnSelect: false,
         infinite: true,
         speed: 500,
-
-        slidesToScroll: 4,
         touchThreshold: 5,
         centerMode: true,
         centerPadding: '30px',
         responsive: [
-          // {
-          //   breakpoint: 2098,
-          //   settings: {
-          //     slidesToShow: 4,
-          //     slidesToScroll: 4,
-          //     infinite: true,
-          //     dots: true,
-          //   },
-          // },
-          // {
-          //   breakpoint: 1624,
-          //   settings: {
-          //     slidesToShow: 4,
-          //     slidesToScroll: 4,
-          //     infinite: true,
-          //     dots: true,
-          //   },
-          // },
           {
             breakpoint: 1024,
             settings: {
@@ -502,6 +512,7 @@ export default {
     RVPCard,
     NewCarousel,
     VueSlickCarousel,
+    MessageSideBar,
   },
   methods: {
     async getBestSellers() {
@@ -591,17 +602,22 @@ export default {
             title: testimony.person_position,
           };
         });
-        this.testimonials = testim;
+        this.testimonials = testim.slice(0, 3);
         console.log('Maji testimonials', this.testimonials);
       });
     },
   },
 
   setup() {
+    const { user, load: loadUser, isAuthenticated } = useUser();
     const baseUrl = process.env.GRAPHQL_API;
     const path = baseUrl.split('/shop-api')[0] + '/assets/';
     const showToast = inject('showToast');
-    const { toggleNewsletterModal } = useUiState();
+    const {
+      toggleNewsletterModal,
+      isMessageSideBarOpen,
+      toggleMessageSidebar,
+    } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
     const { addItem: addItemToCart, isInCart, cart } = useCart();
@@ -612,8 +628,20 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+    loadUser();
 
-    console.log('this maji', products);
+    const messages = ref([]);
+    const refreshMessages = async () => {
+      await loadUser();
+      const data = await getUserInstantMessage({
+        userEmail: userGetters.getEmailAddress(user.value),
+      });
+      messages.value = data.data.getUserInstantMessage;
+    };
+    // setInterval(() => {
+    //   console.log('you are genius');
+    //   refreshMessages();
+    // }, 1000);
 
     const { writeQuote, load, myQuotes } = useQuote();
 
@@ -640,6 +668,21 @@ export default {
       return JSON.parse(pro ?? '{}');
     });
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
+    const { sendMessage, getUserInstantMessage } = useInstantMessage();
+
+    const sendMessageToAdmin = async (messageToSend) => {
+      console.log('emit accepted', messageToSend);
+      await loadUser();
+      const userEmail = userGetters.getEmailAddress(user.value);
+      const userFirstName = userGetters.getFirstName(user.value);
+      const userLastName = userGetters.getLastName(user.value);
+      await sendMessage({
+        msg: messageToSend,
+        lastName: userLastName,
+        firstName: userFirstName,
+        userEmail: userEmail,
+      });
+    };
 
     const onSubscribe = ({ emailAddress, event }) => {
       let baseUrl = process.env.GRAPHQL_API;
@@ -723,6 +766,11 @@ export default {
       imageUrl,
       itemsToCart,
       path,
+      isMessageSideBarOpen,
+      toggleMessageSidebar,
+      isAuthenticated,
+      sendMessageToAdmin,
+      messages,
     };
   },
 };
@@ -850,9 +898,9 @@ export default {
   }
 }
 
-.container {
-  position: relative;
-}
+// .container {
+//   position: relative;
+// }
 
 .text-overlayer {
   position: absolute;
@@ -887,5 +935,14 @@ export default {
 
 .noScrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.chatIcon {
+  position: fixed;
+  z-index: 600;
+  bottom: 30px;
+  right: 20px;
+  width: 3%;
+  height: 3%;
 }
 </style>
