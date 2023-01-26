@@ -3,7 +3,9 @@
     <section class="py-5 2xl:py-10 faq">
       <div class="container px-4 mx-auto">
         <div class="mb-20 text-center">
-          <h2 class="mt-8 text-7xl font-bold font-heading text-secondary ">FAQ&apos;s</h2>
+          <h2 class="mt-8 text-7xl font-bold font-heading text-secondary">
+            FAQ&apos;s
+          </h2>
         </div>
         <div class="max-w-4xl mx-auto">
           <SfAccordion
@@ -98,7 +100,6 @@ export default {
       };
       await axios.post(baseUrl, body, options).then((res) => {
         this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
-        console.log('faqing', res.data.data.getFaqs);
       });
     },
   },
@@ -110,8 +111,7 @@ h2 {
   color: var(--c-text);
 }
 
-.faq{
-  
+.faq {
 }
 .accordion-bg {
   background-color: white;

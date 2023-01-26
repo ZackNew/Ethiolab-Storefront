@@ -44,72 +44,56 @@ const getPrice = (product: AgnosticProductVariant): AgnosticPrice => {
   };
 };
 
-const getGallery = (product: AgnosticProductVariant): AgnosticMediaGalleryItem[] => {
-  if (!product?.assets){
-    
-    // console.log("no product image", product)
+const getGallery = (
+  product: AgnosticProductVariant
+): AgnosticMediaGalleryItem[] => {
+  if (!product?.assets) {
     return [];
-  } 
-  // else{
-  //   // console.log("product has an image")
-  // }
-
-  let gallery  = []
-
-product.assets.map(asset => {
-  console.log("asset value ", asset.preview)
-  let temp =  {
-    small: asset.preview,
-    normal: asset.preview,
-    big: asset.preview
   }
-  gallery.push(temp);
 
-})
+  let gallery = [];
+
+  product.assets.map((asset) => {
+    let temp = {
+      small: asset.preview,
+      normal: asset.preview,
+      big: asset.preview,
+    };
+    gallery.push(temp);
+  });
 
   return gallery;
 };
 
-const getAllGallery = (product: AgnosticProductVariant): AgnosticMediaGalleryItem[] => {
-  let gallery  = []
+const getAllGallery = (
+  product: AgnosticProductVariant
+): AgnosticMediaGalleryItem[] => {
+  let gallery = [];
 
-  if(product?.images){
-    console.log("rightttttt")
-    product.images.map(img => {
-      console.log("img value ", img)
-      let temp =  {
+  if (product?.images) {
+    product.images.map((img) => {
+      let temp = {
         small: img,
         normal: img,
-        big: img
-      }
+        big: img,
+      };
       gallery.push(temp);
-    
-    })
-    return gallery
-
-  }
-  else if (product?.assets){
-    product.assets.map(asset => {
-      console.log("asset value ", asset.preview)
-      let temp =  {
+    });
+    return gallery;
+  } else if (product?.assets) {
+    product.assets.map((asset) => {
+      let temp = {
         small: asset.preview,
         normal: asset.preview,
-        big: asset.preview
-      }
+        big: asset.preview,
+      };
       gallery.push(temp);
-    
-    })
-    
-      return gallery;
-  } 
+    });
 
-  else {
-    return []
+    return gallery;
+  } else {
+    return [];
   }
-
-
-
-
 };
 
 const getCoverImage = (product: AgnosticProductVariant): string => {
@@ -165,9 +149,6 @@ const getByFilters = (
   filters?: ProductFilter
 ): AgnosticProductVariant[] | AgnosticProductVariant => {
   const { variants, collections, featuredAsset, ...masterVariant } = product;
-  console.log("inside filter method vriants value is ", variants);
-  console.log("inside filter method mastervariant value is ", masterVariant);
-
 
   if (!variants?.length) return [];
   const productVariants = variants.map((variant) => ({
@@ -177,7 +158,11 @@ const getByFilters = (
     name: variant?.name,
     sku: variant?.sku,
     slug: masterVariant?.slug,
-    collections: collections?.map(collection => ({id: collection.id, name: collection.name, breadcrumbs: collection.breadcrumbs})),
+    collections: collections?.map((collection) => ({
+      id: collection.id,
+      name: collection.name,
+      breadcrumbs: collection.breadcrumbs,
+    })),
     images: [variant?.featuredAsset?.preview],
     price: {
       original: variant?.price,

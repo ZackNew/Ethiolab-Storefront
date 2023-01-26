@@ -73,7 +73,6 @@ export default {
   },
   created() {
     // this.getTree();
-    // console.log(this.headerNavigation);
   },
   props: {
     subnavList: Array,
@@ -99,7 +98,6 @@ export default {
     let cDisc = ref('');
     let cPrev = ref('');
     let hoverHandler = (item, title, disc, prev, preview) => {
-      // console.log('**hovered over the items',props.main,item,title,disc,prev)
       if (props.main === 'INDUSTRIES' || props.main == 'BRANDS') {
         addVisible.value = false;
         showDetail.value = true;

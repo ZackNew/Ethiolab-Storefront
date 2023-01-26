@@ -266,7 +266,6 @@ export default {
           if (product.collections.length > 0) {
             for (let collection of product.collections) {
               matchFound = filtersClicked.includes(collection.name);
-              // console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
               if (matchFound) {
                 break;
               }
@@ -278,7 +277,6 @@ export default {
           product?.customFields?.industries?.forEach((i) =>
             industries.push(i.name)
           );
-          // console.log('product match found collection clicked',product,matchFound,product.collections,filtersClicked)
           return (
             // filtersClicked.includes(product.customFields.brand?.name) ||
             filtersClicked.some((r) => industries.indexOf(r) >= 0) ||

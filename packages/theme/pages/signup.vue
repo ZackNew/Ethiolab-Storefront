@@ -258,7 +258,6 @@
                         </div>
                       </div>
                     </div>
-                
                   </div>
 
                   <div class="m-8">
@@ -645,8 +644,6 @@
                       />
                     </ValidationProvider>
                   </div>
-
-              
                 </div>
                 <div class="col-span-1">
                   <div class="m-8 hidden md:block">
@@ -756,38 +753,37 @@
               </div>
 
               <div v-if="isOrganization">
-                    <div class="mx-8"> 
-                       <label
-                      class="block text-dark_gray text-sm font-bold mb-2"
-                      for="tin"
-                    >
-                      ORGANIZATION NAME
-                    </label>
-                      <!-- <div
+                <div class="mx-8">
+                  <label
+                    class="block text-dark_gray text-sm font-bold mb-2"
+                    for="tin"
+                  >
+                    ORGANIZATION NAME
+                  </label>
+                  <!-- <div
                         class="text-dark_gray text-sm font-bold mb-2"
                         for="company"
                       >
                         ORGANIZATION NAME
                       </div> -->
 
-                      <ValidationProvider
-                        name="company"
-                        rules="required|min:2"
-                        v-slot="{ errors }"
-                        slim
-                      >
-                        <SfInput
-                          v-model="form.company"
-                          :placeholder="$t('company')"
-                          name="company"
-                          class="sf-input--filled"
-                          :valid="!errors[0]"
-                          :errorMessage="errors[0]"
-                        />
-                      </ValidationProvider>
-
-                    </div>
-                                       </div>
+                  <ValidationProvider
+                    name="company"
+                    rules="required|min:2"
+                    v-slot="{ errors }"
+                    slim
+                  >
+                    <SfInput
+                      v-model="form.company"
+                      :placeholder="$t('company')"
+                      name="company"
+                      class="sf-input--filled"
+                      :valid="!errors[0]"
+                      :errorMessage="errors[0]"
+                    />
+                  </ValidationProvider>
+                </div>
+              </div>
 
               <div class="m-8">
                 <span class="text-dark_gray text-sm font-bold mb-2">
@@ -883,7 +879,7 @@
           <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Why Register?</h4>
           <h4 class="px-2 md:px-10">Register today and enjoy these benefits</h4>
 
-        <RegisterMessage />
+          <RegisterMessage />
 
           <h4 class="px-2 md:px-16 pt-10">Already have an account?</h4>
           <div class="mx-2 md:mx-16">
@@ -931,7 +927,7 @@ import {
   SfBanner,
   SfIcon,
 } from '@storefront-ui/vue';
-import RegisterMessage from "../components/RegisterMessage.vue"
+import RegisterMessage from '../components/RegisterMessage.vue';
 extend('required', {
   ...required,
   message: 'This field is required',
@@ -966,7 +962,7 @@ export default defineComponent({
     SfInput,
     ErrorMessage,
     VuePhoneNumberInput,
-    RegisterMessage
+    RegisterMessage,
   },
   data() {
     return {
@@ -1010,12 +1006,10 @@ export default defineComponent({
       if (isIndividual.value) {
         form.value.company = 'Individual';
       }
-      console.log('form submitted is ', form);
       if (
         form.value.email === form.value.confirmEmail &&
         form.value.password === form.value.confirmPassword
       ) {
-        console.log('email and password match');
         // if(form.value.company === )
         // showToast("Perfect!")
 
@@ -1053,7 +1047,6 @@ export default defineComponent({
         axios
           .post(baseUrl, pbody, poptions)
           .then((res) => {
-            console.log('result signup is ', res);
             if (res.data.data.registerEtechCustomer.success) {
               showToast('Registration Successfull');
               window.location.href = '/signin';
@@ -1061,10 +1054,9 @@ export default defineComponent({
               showToast('Registration Failed');
             }
             //   invoices.value = res.data.data.myInvoices.items;
-            //   console.log("invoices.value is ", invoices.value)
+            //   console.lg("invoices.value is ", invoices.value)
           })
           .catch((err) => {
-            console.log('error signup is ', err);
             showToast('Registration Failed');
           });
       }
@@ -1082,7 +1074,6 @@ export default defineComponent({
     };
 
     const checkOrganization = () => {
-      console.log('organization is checked');
       if (isOrganization.value) {
         isOrganization.value = false;
       } else {

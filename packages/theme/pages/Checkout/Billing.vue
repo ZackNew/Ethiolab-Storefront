@@ -263,7 +263,6 @@ export default {
       await loadUserBilling();
       const defaultAddress = getDefaultAddress(userBilling.value, 'billing');
       const formAddress = mapAddressToAddressForm(defaultAddress);
-      console.log('Majican', defaultAddress);
       billingDetails.value = {
         firstName: defaultAddress?.fullName.split(' ')[0],
         lastName: defaultAddress?.fullName.split(' ')[1],
@@ -275,8 +274,6 @@ export default {
         postalCode: defaultAddress?.postalCode,
         phone: defaultAddress?.phoneNumber,
       };
-
-      console.log('Maji Majican', billingDetails.value);
     });
 
     return {

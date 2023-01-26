@@ -174,7 +174,6 @@ export default {
         },
       };
       await axios.post(baseUrl, body, options).then((res) => {
-        console.log('Maji Mobile brand industry', res);
         this.brands = res.data.data?.brands;
         this.industries = res.data.data?.industries;
       });

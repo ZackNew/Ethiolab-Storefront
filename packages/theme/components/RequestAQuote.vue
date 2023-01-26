@@ -5,6 +5,7 @@
     title="Request A Quote"
     :visible="isQuoteModalOpen"
     isOpen="Boolean(showQuotation)"
+    class="quoteWrite"
     :persistent="true"
     overlay
   >
@@ -44,7 +45,7 @@
         errorMessage="This is a required field"
       />
       <SfTextarea
-        cols="90"
+        cols="95"
         rows="7"
         v-model="qBody"
         id="t-area"
@@ -52,7 +53,6 @@
         :valid="Boolean(isMessageValid)"
         errorMessage="This is a required field"
       />
-      <v-autocomplete :items="cities" v-model="quoteCity" />
       <span style="color: red" class="text-red-500" v-if="!isLocationValid"
         >Invalid location please make sure it's in Ethiopia</span
       >
@@ -64,8 +64,10 @@
           margin-bottom: 2px;
         "
       >
-        <SfButton @click="sendQuote">Submit!</SfButton>
-        <SfButton @click="toggleQuotationDialog()">Close</SfButton>
+        <SfButton @click="sendQuote" class="bg-secondary">Submit!</SfButton>
+        <SfButton @click="toggleQuotationDialog()" class="bg-secondary"
+          >Close</SfButton
+        >
       </div>
     </div>
   </SfModal>
@@ -151,11 +153,9 @@ export default {
       toggleCartSidebar();
       toggleQuoteModal();
     };
-    //  watchEffect(()=> console.log("data: ",qTitle, " ", qEmail.value, " ", qBody.value, " ", qPhone.value, quoteCity.value))
     const sendQuote = () => {
       if (!checkInputs()) return;
 
-      //console.log("clicked")
       //fetch("data: ",qTitle.value, " ", qEmail.value, " ", qBody.value, " ", qPhone.value, quoteCity.value)
 
       const items = cartGetters.getItems(cart.value);
@@ -211,5 +211,14 @@ export default {
   --modal-padding: 0;
   padding: 0;
   border-radius: 15px !important;
+}
+.no-scrollbar::-webkit-scrollbar {
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
 }
 </style>

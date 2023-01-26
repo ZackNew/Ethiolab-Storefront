@@ -81,7 +81,7 @@
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
-import { defineComponent, mounted, inject} from '@vue/composition-api';
+import { defineComponent, mounted, inject } from '@vue/composition-api';
 import Carousel from './carousel.vue';
 import NewCarousel from './NewCarousel.vue';
 import BestSellerSingle from './BestSellerSingle.vue';
@@ -184,23 +184,18 @@ export default defineComponent({
       products.value[index].isInWishlist = !products.value[index].isInWishlist;
     };
     const addToCart = (e) => {
-      
       addItemToCart({
         product: {
           _variantId: e._variantId,
         },
         quantity: e.quantity,
-      }).then(res =>{
-        console.log("best seller updated cart value is ", cart.value)
-        if(cart.value.errorCode && cart.value.errorCode != ''){
-          showToast(cart.value.message)
+      }).then((res) => {
+        if (cart.value.errorCode && cart.value.errorCode != '') {
+          showToast(cart.value.message);
+        } else {
+          showToast('Product added to cart!');
         }
-        else{
-          showToast("Product added to cart!")
-        }
-      } 
-      )
-      
+      });
     };
     const categories = [
       { title: 'Balance and Scales', image: '/categories/empty_image.png' },

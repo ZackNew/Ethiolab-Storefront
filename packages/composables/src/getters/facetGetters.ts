@@ -154,7 +154,6 @@ const getBreadcrumbsFromSlug = (
 };
 
 const getTree = (category: Collection): AgnosticCategoryTree | null => {
-  // console.log('inside getTree category value is ', category.featuredAsset)
   if (!category || !category.id) return null;
 
   return {

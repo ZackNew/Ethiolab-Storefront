@@ -2,25 +2,6 @@
   <div class="wrap">
     <div :class="!isDarkMode ? `border-b-4 border-light_accent` : ''">
       <div class="md:mx-14">
-        <!-- <SfSidebar
-      v-e2e="'sidebar-cart'"
-      :visible="isMessageSideBarOpen"
-      :title="$t('Messages')"
-      class="sf-sidebar--right z-300"
-      @close="toggleMessageSidebar"
-    >
-      <div id="messages-wrapper">
-        <div v-for="message of messages">
-            <div class="msg-from-me" v-if="!message.isFromAdmin">From You <br />{{message.msg}}</div>
-            <div class="msg-from-admin" v-else>From The Admin <br />{{message.msg}}</div>
-        </div>
-      </div> 
-      <div id="sendmessage">
-         <input id='msg-to-send' type="text" v-model="messageToSend" placeholder="Message to Send" />
-         <SfButton id="send-btn" @click="sendMessageToAdmin">Send</SfButton>
-      </div>
-    </SfSidebar> -->
-
         <SfHeader
           :class="{
             'header-on-top': isSearchOpen,
@@ -236,7 +217,6 @@ export default {
   methods: {
     searchInputHandle() {
       this.loading = true;
-      console.log('maji load1', this.loading);
       this.debounceInput();
     },
     debounceInput: debounce(function async() {
@@ -310,7 +290,6 @@ export default {
         });
 
         this.loading = false;
-        console.log('maji load2', this.loading);
       }
     }, 1000),
   },
@@ -336,25 +315,9 @@ export default {
       const data = await getUserInstantMessage({
         userEmail: userGetters.getEmailAddress(user.value),
       });
-      // console.log(JSON.stringify(data.data.getUserInstantMessage))
       messages.value = data.data.getUserInstantMessage;
     };
-    // setInterval(()=>{
-    //     //  console.log(`hello`)
-    //      refreshMessages()
-    // }, 2000)
 
-    const handleCartSidebar = () => {
-      isMessageSideBarOpen.value = false;
-
-      toggleCartSidebar();
-    };
-
-    const handleWishlistSidebar = () => {
-      isMessageSideBarOpen.value = false;
-
-      toggleWishlistSidebar();
-    };
     const {
       isMessageSideBarOpen,
       toggleCartSidebar,
@@ -364,6 +327,19 @@ export default {
       isMobileMenuOpen,
       isDarkMode,
     } = useUiState();
+    const handleCartSidebar = () => {
+      if (isMessageSideBarOpen.value) {
+        toggleMessageSidebar();
+      }
+      toggleCartSidebar();
+    };
+
+    const handleWishlistSidebar = () => {
+      if (isMessageSideBarOpen.value) {
+        toggleMessageSidebar();
+      }
+      toggleWishlistSidebar();
+    };
     const selectedProds = ref(['Micro']);
     // let selectedProdsNames = null;
 
@@ -387,9 +363,7 @@ export default {
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
     const messageToSend = ref('');
-    const selectedProd = () => {
-      console.log('selected');
-    };
+    const selectedProd = () => {};
 
     const sendMessageToAdmin = async () => {
       await loadUser();
@@ -486,9 +460,9 @@ export default {
       { name: 'Help center', link: '/pages/helpAndFAQ' },
     ];
 
-    const currentRoute = computed(() => {
-      return root.$route.name === 'home';
-    });
+    // const currentRoute = computed(() => {
+    //   return root.$route.name === 'home';
+    // });
 
     const tree = computed(() => {
       return searchResult.value.data ? searchResult.value.data.collections : [];
@@ -525,7 +499,6 @@ export default {
         navigator.userAgent.match(/Windows Phone/i)
       ) {
         isMobile.value = true;
-        console.log('it is a mobile');
       } else isMobile.value = false;
     });
 
@@ -603,7 +576,7 @@ export default {
       onCategory,
       subCategory,
       onsubCataSelected,
-      currentRoute,
+      // currentRoute,
       accountIcon,
       cartTotalItems,
       handleAccountClick,

@@ -105,7 +105,6 @@ export default {
     const addresses = computed(() =>
       userShippingGetters.getAddresses(shipping.value)
     );
-    console.log('Maji shp address ', addresses);
     const edittingAddress = ref(false);
     const activeAddress = ref(undefined);
     const isNewAddress = computed(() => !activeAddress.value);
@@ -133,7 +132,6 @@ export default {
 
     onSSR(async () => {
       await loadUserShipping();
-      console.log('Maji shipper', shipping);
     });
 
     return {

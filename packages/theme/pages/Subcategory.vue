@@ -401,12 +401,9 @@ export default {
       this.search = event;
     },
     maxInput(event) {
-      console.log('maxinput value ', typeof event);
       this.high = event;
     },
     minInput(event) {
-      console.log('mininput value ', typeof event);
-
       this.low = event;
     },
     filterProducts(event) {
@@ -504,7 +501,6 @@ export default {
               },
             };
             var prod = await axios.post(baseUrl, pbody, poptions);
-            // console.log("the subcategory prod values are ", prod)
             this.products = prod.data?.data?.products?.items;
           }
           this.loading = false;

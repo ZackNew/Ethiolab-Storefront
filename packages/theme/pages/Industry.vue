@@ -292,7 +292,6 @@ export default {
           if (product.collections.length > 0) {
             for (let collection of product.collections) {
               matchFound = filtersClicked.includes(collection.name);
-              // console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
               if (matchFound) {
                 break;
               }
@@ -300,7 +299,6 @@ export default {
           } else {
             matchFound = false;
           }
-          // console.log('product match found collection clicked',product,matchFound,product.collections,filtersClicked)
           return (
             filtersClicked.includes(product.customFields.brand?.name) ||
             filtersClicked.includes(product.facetValues[facetIndex]?.name) ||
@@ -309,32 +307,6 @@ export default {
         }
         return true;
       });
-
-      // console.log('running again **',filtersClicked,filtersClicked.length)
-      // let filteredBasedOnCategory = filterProducts.filter(product=>{
-      // // console.log('product***',product,filtersClicked)
-
-      // if(filtersClicked.length>0){
-      // console.log('running now **')
-      // // console.log('product vs filters ** ',product.collections,filtersClicked)
-      // if(product.collections.length>0){
-      // for (let collection of product.collections){
-      // let matchFound = filtersClicked.includes(collection.name)
-      // console.log('coolection in product***',product,collection.name,filtersClicked,matchFound)
-      // if(matchFound){
-      // return true
-      // }
-      // }
-      // return false
-      // }else{
-      // return true
-      // }
-      // }else{
-      // return true
-      // }
-
-      // return true
-      // })
       if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
 
       if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));

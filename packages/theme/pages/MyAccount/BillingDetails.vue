@@ -107,7 +107,6 @@ export default {
     const addresses = computed(() =>
       userBillingGetters.getAddresses(billing.value)
     );
-    console.log('Maji billing address ', addresses.value);
     const edittingAddress = ref(false);
     const activeAddress = ref(undefined);
     const isNewAddress = computed(() => !activeAddress.value);
@@ -135,7 +134,6 @@ export default {
 
     onSSR(async () => {
       await loadUserBilling();
-      console.log('Maji biller', billing);
     });
 
     return {

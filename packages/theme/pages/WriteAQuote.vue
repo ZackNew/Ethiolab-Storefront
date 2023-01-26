@@ -234,7 +234,6 @@ export default {
     });
     if (isAuthenticated) {
       data.value.productDescr = user?.value?.emailAddress;
-      console.log('maji user email', data.value.productDescr);
     }
     const send = () => {
       writeQuote({

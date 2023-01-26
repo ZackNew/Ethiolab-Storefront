@@ -32,7 +32,7 @@
               }}
               ETB
             </h4>
-            <div class="flex mb-5">
+            <div class="flex mb-5 items-center">
               <input
                 class="max-w-[55px] text-center mr-4"
                 v-model="qty"
@@ -59,7 +59,12 @@
               ></p>
             </div>
 
-            <a href="#full" class="text-secondary text-xl">More +</a>
+            <a
+              v-if="Svariant.customFields.description"
+              href="#full"
+              class="text-secondary text-xl"
+              >More +</a
+            >
           </div>
         </div>
       </div>
@@ -67,16 +72,25 @@
         id="full"
         class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
         :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
-        v-if="Svariant.customFields && (Svariant.customFields.table || Svariant.customFields.description )  "
+        v-if="
+          Svariant.customFields &&
+          (Svariant.customFields.table || Svariant.customFields.description)
+        "
       >
-        <div class="md:col-span-6"         v-if="Svariant.customFields && Svariant.customFields.table  ">
+        <div
+          class="md:col-span-6"
+          v-if="Svariant.customFields && Svariant.customFields.table"
+        >
           <h3>Speciﬁcation And Description</h3>
           <p
             v-html="Svariant.customFields ? Svariant.customFields.table : ''"
             :class="classes.red"
           ></p>
         </div>
-        <div class="md:col-span-6"         v-if="Svariant.customFields && Svariant.customFields.description  ">
+        <div
+          class="md:col-span-6"
+          v-if="Svariant.customFields && Svariant.customFields.description"
+        >
           <h3>More About This Item</h3>
           <div v-if="Svariant.customFields">
             <p
@@ -250,7 +264,7 @@ export default {
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
     const { products, search } = useProduct('products');
-    const { addItem, addItemToCart, isInCart, loading,cart } = useCart();
+    const { addItem, addItemToCart, isInCart, loading, cart } = useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
     const {
       relatedProducts,
@@ -367,27 +381,23 @@ export default {
         addItem({
           product: agnosticProductVariant.value,
           quantity: parseInt(qty.value),
-        }).then(res =>{
-        console.log("best seller updated cart value is ", cart.value)
-        if(cart.value.errorCode && cart.value.errorCode != ''){
-          showToast(cart.value.message)
-        }
-        else{
-          showToast("Product added to cart!")
-        }
-      } 
-      );
+        }).then((res) => {
+          if (cart.value.errorCode && cart.value.errorCode != '') {
+            showToast(cart.value.message);
+          } else {
+            showToast('Product added to cart!');
+          }
+        });
       } else {
-        addItem({ product: product.value, quantity: parseInt(qty.value) }).then(res =>{
-        console.log("best seller updated cart value is ", cart.value)
-        if(cart.value.errorCode && cart.value.errorCode != ''){
-          showToast(cart.value.message)
-        }
-        else{
-          showToast("Product added to cart!")
-        }
-      } 
-      );
+        addItem({ product: product.value, quantity: parseInt(qty.value) }).then(
+          (res) => {
+            if (cart.value.errorCode && cart.value.errorCode != '') {
+              showToast(cart.value.message);
+            } else {
+              showToast('Product added to cart!');
+            }
+          }
+        );
       }
     };
 
@@ -489,7 +499,6 @@ export default {
       this.prImage = variant.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.product?.assets;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
-      console.log('Magi Magi', this.Svariant.accessories);
       this.VariantAccessories = this.Svariant.accessories.map((p) => {
         const image = p.featuredAsset ? p.featuredAsset.preview : '';
         const price =
@@ -592,19 +601,11 @@ export default {
         productId !== '' &&
         variantId !== ''
       ) {
-        console.log('passed the first one');
-        console.log(
-          'djsfada',
-          this.$store.state.compareList?.productsToCompare?.filter(
-            (e) => e?.productID === productId && e?.variantID === variantId
-          )?.length
-        );
         if (
           this.$store.state.compareList?.productsToCompare?.filter(
             (e) => e?.productID === productId && e?.variantID === variantId
           )?.length === 0
         ) {
-          console.log('passed the second one');
           this.toastShower('Added to Compare List');
           this.$store.dispatch('compareList/addToCompareList', {
             product: {
@@ -622,7 +623,6 @@ export default {
         }
       } else {
         this.toastShower('Limit to Compare Products reached');
-        console.log('limit reached');
       }
     },
   },

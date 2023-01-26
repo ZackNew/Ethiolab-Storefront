@@ -1,18 +1,13 @@
-import { useVSFContext } from "@vue-storefront/core";
-import { ref } from "@vue/composition-api";
+import { useVSFContext } from '@vue-storefront/core';
+import { ref } from '@vue/composition-api';
 
-export  function useTinNumber(){
-    const context = useVSFContext();
-    const tinNumber = ref('');
-    
+export function useTinNumber() {
+  const context = useVSFContext();
+  const tinNumber = ref('');
 
-    return {
-         setTinNumber(params){
-             console.log()
-         },
-         load(){
-
-         },
-         tinNumber
-    }
+  return {
+    setTinNumber(params) {},
+    load() {},
+    tinNumber,
+  };
 }

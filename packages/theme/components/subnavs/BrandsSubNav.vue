@@ -62,7 +62,6 @@ export default {
               link: `/b/${value.name.toLowerCase()}/${value.id}`,
             };
           });
-          //   console.log(this.)
         });
     },
   },

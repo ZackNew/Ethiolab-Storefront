@@ -246,7 +246,6 @@ export default {
       load({ email: currentEmail })
         .then((data) => {
           quotes.value = myQuotes.value;
-          //console.log("DATA: ", myQuotes.value)
         })
         .catch((err) => console.warn(err));
     });
@@ -291,17 +290,12 @@ export default {
       axios
         .post(baseUrl, pbody, poptions)
         .then((res) => {
-          console.log('result invoice is ', res);
           invoices.value = res.data.data.myInvoices.items;
-          console.log('invoices.value is ', invoices.value);
         })
-        .catch((err) => {
-          console.log('error invoice is ', err);
-        });
+        .catch((err) => {});
     });
 
     //    // quotes.value = myQuotes
-    // console.log('DATA::',  load)
 
     // const  mutation = gql`
     //     query getInvoices($invoiceEmail: String!){
@@ -314,10 +308,8 @@ export default {
     //     }`
     // axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{customerEmail:invoiceEmail}})
     // .then(data =>{
-    //   console.log("invoice data is",data);
     //     // quotes.value = data.data.data.getQueryOf
     // }).catch(err => {
-    //   console.log("the error is ", err)
     // })
 
     const limit = 10;
