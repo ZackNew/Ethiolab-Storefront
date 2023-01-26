@@ -18,7 +18,12 @@
       <span class="block text-md"
         >This form will take objects from your cart</span
       >
-      <p style="justify-self: center; font-size: 2em">Request a Quote</p>
+      <h2
+        class="font-bold text-secondary"
+        style="justify-self: center; font-size: 2em"
+      >
+        Request a Quote
+      </h2>
       <SfInput
         v-model="qTitle"
         placeholder="Subject"
@@ -39,7 +44,7 @@
         errorMessage="This is a required field"
       />
       <SfTextarea
-        cols="70"
+        cols="90"
         rows="7"
         v-model="qBody"
         id="t-area"
@@ -200,21 +205,11 @@ export default {
 
 <style lang="scss" scoped>
 #qu-pop {
-  --modal-width: 70vw;
+  --modal-width: 60vw;
   /* width: 70%; */
   --modal-height: 50vh;
   --modal-padding: 0;
   padding: 0;
-  border-radius: 5px;
-}
-
-#qu-pop::-webkit-scrollbar {
-  width: 30px;
-  background-color: none;
-  width: 7px;
-}
-#qu-pop::-webkit-scrollbar-thumb {
-  background-color: #acacac;
-  border-radius: 100px;
+  border-radius: 15px !important;
 }
 </style>

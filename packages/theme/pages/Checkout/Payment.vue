@@ -202,7 +202,7 @@
                     id="submit"
                     name="submit"
                     value="PAY WITH CYBERSOURCE"
-                    class="box-border relative flex h-12 pl-4 pr-4 align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold -mt-12"
+                    class="box-border relative flex h-12 pl-4 pr-4 align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold rounded-lg"
                   />
                 </form>
               </div>
