@@ -6,6 +6,7 @@ const useForgotPasswordFactoryParams: UseForgotPasswordFactoryParams<ForgotPassw
   resetPassword: async (context: Context, { email, currentResult, customQuery }) => {
     try {
       const resetPasswordResult = await context.$vendure.api.requestPasswordReset({emailAddress: email}, customQuery);
+      console.log("resetPasswordResult is", resetPasswordResult)
       return {
         ...currentResult,
         resetPasswordResult
@@ -19,6 +20,7 @@ const useForgotPasswordFactoryParams: UseForgotPasswordFactoryParams<ForgotPassw
   setNewPassword: async (context: Context, { tokenValue, newPassword, currentResult, customQuery }) => {
     try {
       const setNewPasswordResult = await context.$vendure.api.resetPassword({ tokenValue, newPassword }, customQuery);
+      console.log("setNewPasswordResult is ",setNewPasswordResult)
       return {
         ...currentResult,
         setNewPasswordResult
