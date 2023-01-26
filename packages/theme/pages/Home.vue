@@ -429,7 +429,7 @@ import {
 import CategoriesAccordion from '~/components/CategoriesAccordion';
 import Banner from '~/components/Banner';
 import { onSSR } from '@vue-storefront/core';
-import { computed, onMounted, inject, ref } from '@vue/composition-api';
+import { computed, onMounted, inject, ref , onUnmounted} from '@vue/composition-api';
 import { getCalculatedPrice } from '~/helpers';
 import getCms from '@vue-storefront/vendure-api/src/api/cms';
 import CategoryFeature from '../components/CategoryFeature.vue';
@@ -632,16 +632,17 @@ export default {
 
     const messages = ref([]);
     const refreshMessages = async () => {
-      await loadUser();
+      // await loadUser();
       const data = await getUserInstantMessage({
         userEmail: userGetters.getEmailAddress(user.value),
       });
       messages.value = data.data.getUserInstantMessage;
     };
-    // setInterval(() => {
-    //   console.log('you are genius');
-    //   refreshMessages();
-    // }, 1000);
+    let intervalId
+    intervalId= setInterval(() => { 
+      console.log('chat is running');
+      refreshMessages();
+    }, 5000);
 
     const { writeQuote, load, myQuotes } = useQuote();
 
@@ -672,7 +673,7 @@ export default {
 
     const sendMessageToAdmin = async (messageToSend) => {
       console.log('emit accepted', messageToSend);
-      await loadUser();
+      // await loadUser();
       const userEmail = userGetters.getEmailAddress(user.value);
       const userFirstName = userGetters.getFirstName(user.value);
       const userLastName = userGetters.getLastName(user.value);
@@ -742,6 +743,8 @@ export default {
     onMounted(() => {
       localStorage.setItem('sort', 'Select Sorting');
     });
+
+    onUnmounted(() => clearInterval(intervalId))
     return {
       productGetters,
       tabs,
