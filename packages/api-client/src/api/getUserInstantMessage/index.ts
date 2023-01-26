@@ -34,7 +34,7 @@ const writeQuote = async (context: Context, params: getUserInstantMessageParams,
     fetchPolicy: NO_CACHE_FETCH_POLICY
   }) as writeInstantMessageResult;
 
-  return request;
+  return request;  
 };
 
 export default writeQuote;

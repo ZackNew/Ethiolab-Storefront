@@ -5,7 +5,7 @@
     <div class="grid grid-cols-12 gap-4">
       <div class="left col-span-6 mt-10">
         <!-- <p>*Required</p> -->
-        <!-- <div class="field">
+        <div class="field" v-if="emailReset">
           <ValidationObserver v-slot="{ handleSubmit }" key="log-in">
             <form
               class="form justify-center"
@@ -28,38 +28,38 @@
                   :class="{ loader: forgotPasswordLoading }"
                   :loading="forgotPasswordLoading"
                 >
-                  <div>{{ $t('Reset Password') }}</div>
+                  <div>{{ $t('Get Code') }}</div>
                 </SfLoader>
               </SfButton>
             </form>
           </ValidationObserver>
-        </div> -->
+        </div>
 
-        <div class="field">
+        <div class="field" v-else>
           <ValidationObserver v-slot="{ handleSubmit }" key="log-in">
             <form
               class="form justify-center"
-              @submit.prevent="handleSubmit(handleForgotten)"
+              @submit.prevent="handleSubmit(handleReset)"
             >
-              <ValidationProvider rules="required|email" v-slot="{ errors }">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <SfInput
                   v-e2e="'forgot-modal-email'"
-                  v-model="userEmail"
+                  v-model="tokenValue"
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"
-                  name="email"
-                  :label="$t('Code')"
+                  name="tokenValue"
+                  :label="$t('Token Value')"
                   class="form__element width-[80%]"
                 />
               </ValidationProvider>
 
-              <ValidationProvider rules="required|email" v-slot="{ errors }">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <SfInput
                   v-e2e="'forgot-modal-email'"
-                  v-model="userEmail"
+                  v-model="password"
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"
-                  name="email"
+                  name="password"
                   :label="$t('New Password')"
                   class="form__element width-[80%]"
                 />
@@ -73,8 +73,15 @@
                   <div>{{ $t('Reset Password') }}</div>
                 </SfLoader>
               </SfButton>
+              
             </form>
           </ValidationObserver>
+              <button
+                class=" text-secondary  font-bold "
+                @click="handleNotReceived"
+              >
+                Didn`t get the code?
+              </button>
         </div>
       </div>
       <div class="col-span-6 mt-10">
@@ -128,6 +135,7 @@ import { SfInput, SfButton, SfLoader } from '@storefront-ui/vue';
 import { useUser, useForgotPassword } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import RegisterMessage from "../components/RegisterMessage.vue"
+// import { log } from 'console';
 extend('required', {
   ...required,
   message: 'This field is required',
@@ -161,22 +169,45 @@ export default defineComponent({
       request,
       error: forgotPasswordError,
       loading: forgotPasswordLoading,
+      setNew
     } = useForgotPassword();
 
     const userEmail = ref('');
+    const tokenValue = ref('');
+    const password = ref('');
+
+    let emailReset = ref(true);
 
     const handleForgotten = async () => {
-      await request({ email: userEmail.value });
-      showToast('A password reset link has been sent to your email');
+      emailReset.value = false;
+      await request({ email: userEmail.value }).then(res => {
+        console.log("email response is ", res)
+      })
+      showToast('A password reset token has been sent to your email');
       // if (!forgotPasswordError.value.request) {
       //   setCurrentScreen(SCREEN_THANK_YOU);
       // }
     };
 
+    const handleNotReceived = async() => {
+      console.log("handle code clicked")
+      emailReset.value = true;
+    }
+
+    const handleReset = async() => {
+      console.log("reset clicked password" , password.value, tokenValue.value);
+      await setNew({tokenValue:tokenValue.value, newPassword: password.value});
+    }
+
     return {
       forgotPasswordLoading,
       handleForgotten,
       userEmail,
+      emailReset,
+      handleNotReceived,
+      handleReset,
+      tokenValue,
+      password
     };
   },
 });

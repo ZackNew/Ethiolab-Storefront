@@ -1,7 +1,7 @@
 <template>
-  <div class="chat rounded-xl shadow-lg bg-white" v-if="isMessageSideBarOpen">
+  <div class="chat rounded-xl shadow-lg bg-white max-h-96 overflow-auto no-scrollbar" v-if="isMessageSideBarOpen">
     <div
-      class="invisible lg:visible h-14 w-full bg-[#000000] text-white rounded-lg flex items-center"
+      class="invisible lg:visible h-14 max-w-[25%] w-full bg-[#000000] text-white rounded-lg flex items-center fixed"
     >
       <img
         src="Favicon.png"
@@ -10,9 +10,10 @@
         width="40px"
         class="bg-white mx-4 my-2 rounded-full"
       />
-      <h3 class="font-bold text-base whitespace-nowrap">Ethiolab Support</h3>
+      <h3 class="font-bold text-base whitespace-nowrap ">Ethiolab Support</h3>
     </div>
-    <div class="mx-3" v-for="(message, i) of messages" :key="i">
+    <div class="mb-14">
+      <div class="mx-3" v-for="(message, i) of messages" :key="i">
       <div
         v-if="!message.isFromAdmin"
         class="bg-light_gray min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"
@@ -23,19 +24,20 @@
         <p class="text-left ml-4 text-white">{{ message.msg }}</p>
       </div>
     </div>
+    </div>
 
     <div
-      class="mx-4 flex items-center absolute invisible lg:visible min-w-full bottom-1"
+      class="flex items-center fixed invisible lg:visible min-w-full -mb-[6.5rem] bottom-1"
     >
       <!-- <p>dfhdiusfhsd</p> -->
       <input
         type="text"
         v-model="messageToSend"
         placeholder="write a message"
-        class="min-w-[80%] h-10 px-4 rounded-xl shadow-md"
+        class="min-w-[22%] h-12 px-4 rounded-xl shadow-md"
       />
       <button class="sendButton" @click="sendMessageToAdmin()">
-        <img class="w-[90%]" src="sendr.png" alt="send icon" />
+        <img class="w-[14%]" src="sendr.png" alt="send icon" />
       </button>
     </div>
   </div>
@@ -74,4 +76,14 @@ export default {
 .sendButton {
   aspect-ratio: 1/1;
 }
+.no-scrollbar::-webkit-scrollbar {
+  width: 30px;
+  background-color: none;
+  width: 7px;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 100px;
+}
+
 </style>

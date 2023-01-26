@@ -768,7 +768,7 @@ export default {
       let signObj = {
         appId: '4ae7217b4e7149fdac877852e7fd87db',
         nonce: paymentDetail.transaction_uuid,
-        notifyUrl: 'http://localhost:3000/telebirr',
+        notifyUrl: 'https://admin.ethiolab.et/telebirr',
         outTradeNo: cart.value.code,
         receiveName: 'Ethiolab',
         returnUrl: 'http://localhost:3001/checkout/thank-you/',
@@ -818,7 +818,7 @@ export default {
       let jsonObj = {
         appId: '4ae7217b4e7149fdac877852e7fd87db',
         nonce: paymentDetail.transaction_uuid,
-        notifyUrl: 'http://localhost:3000/telebirr',
+        notifyUrl: 'https://admin.ethiolab.et/telebirr',
         outTradeNo: cart.value.code,
         receiveName: 'Ethiolab',
         returnUrl: 'http://localhost:3001/checkout/thank-you/',
