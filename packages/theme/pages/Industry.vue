@@ -3,7 +3,7 @@
     <div class="grid grid-cols-11 mt-6">
       <!-- Side filter search or an Ad -->
 
-      <div class="col-span-3 h-[90%]">
+      <div class="col-span-3">
         <nav
           class="sf-breadcrumbs sticky mb-2"
           aria-label="breadcrumbs"
@@ -33,7 +33,7 @@
           </ol>
         </nav>
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white sticky max-h-[40%] overflow-auto top-[5%] no-scrollbar"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white sticky h-[40rem] overflow-auto top-[5%] no-scrollbar"
           :style="
             !isDarkMode
               ? 'background-color: white !important'
