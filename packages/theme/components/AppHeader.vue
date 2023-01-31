@@ -133,7 +133,7 @@
     />
     <SfOverlay :visible="isSearchOpen" />
 
-    <HeaderNavigation :isMobile="isMobile" class="h-12" />
+    <HeaderNavigation :isMobile="isMobile" />
   </div>
 </template>
 

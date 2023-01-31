@@ -1,7 +1,7 @@
 <template>
   <HeaderNavigationItem
     :subnavList="headerNavigation"
-    class="nav-item ml-2"
+    class="nav-item"
     v-e2e="`app-header-url_BRANDS`"
     :label="$t('BRANDS')"
     :link="localePath(`/c/BRANDS`)"
