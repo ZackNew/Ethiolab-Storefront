@@ -39,7 +39,9 @@
           <div class="p-3 nameLists">
             <div v-for="child in hoveredChildren" :key="child.id">
               <nuxt-link :to="`/s/${child.slug}`">
-                <h4 class="text-sm text-[#616161] mb-1 mr-4 hover:text-primary">
+                <h4
+                  class="text-sm text-[#616161] mb-1 mr-4 hover:text-primary w-[12rem] truncate"
+                >
                   {{ child.name }}
                 </h4>
               </nuxt-link>
