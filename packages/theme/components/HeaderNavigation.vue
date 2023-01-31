@@ -153,7 +153,7 @@ export default {
     };
     const hoverOutHandler = debounce(function () {
       if (mouseEnter.value === false) {
-        dropDownIsVisible.value = true;
+        dropDownIsVisible.value = false;
       }
     }, 1);
     return {

@@ -8,8 +8,13 @@
           <div v-for="(item, i) in newList" :key="item.id">
             <nuxt-link :to="`/c/${item.slug}`">
               <h4
-                :class="{ borderBottomAdded: addBorder }"
-                class="text-secondary text-base border-b border-[#ffffff] hover:border-[#aaaaaa] mb-1 w-[12rem] truncate text-left mr-10 hover:text-bold"
+                :class="{
+                  borderBottomAdded:
+                    addBorder && hoveredItem.name === item.name,
+                  borderBottomRemoved:
+                    !addBorder && hoveredItem.name !== item.name,
+                }"
+                class="text-secondary text-base mb-1 w-[12rem] truncate text-left mr-10 hover:text-bold"
                 @mouseover="hoverInHandler(item, i)"
                 @mouseleave="hoverOutHandler"
               >
@@ -29,7 +34,7 @@
           }"
           class="min-h-[90%] w-[28rem] bg-[#f5f5f5] absolute top-12 broder border-2 border-[#aaaaaa] z-50"
           @mouseover="(subHovered = true), (addBorder = true)"
-          @mouseleave="(subHovered = false), (addBorder = true)"
+          @mouseleave="(subHovered = false), (addBorder = false)"
         >
           <div class="p-3 nameLists">
             <div v-for="child in hoveredChildren" :key="child.id">
@@ -90,6 +95,7 @@ export default {
   },
   methods: {
     hoverInHandler(item, i) {
+      this.addBorder = true;
       this.hoveredItem = item;
       this.isNameHovered = true;
       this.hoveredItemImage = item.featuredAsset?.preview;
@@ -105,6 +111,7 @@ export default {
       }
     },
     hoverOutHandler() {
+      this.addBorder = false;
       if (this.subHovered == false) {
         this.isNameHovered = false;
       }
@@ -128,9 +135,12 @@ hr {
   box-shadow: 0 1px 2px 1px rgb(153, 153, 153);
 }
 .borderBottomAdded {
-  border-bottom: 2px solid rgb(255, 255, 255);
+  border-bottom: 2px solid rgb(164, 164, 164);
 }
 .borderBottomRemoved {
-  border-bottom: 2px solid rgb(0, 0, 0);
+  border-bottom: 2px solid rgb(255, 255, 255);
+}
+.borderBottomRemoved:hover {
+  border-bottom: 2px solid rgb(162, 162, 162);
 }
 </style>
