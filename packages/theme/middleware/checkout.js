@@ -5,7 +5,7 @@ export default async ({ app, $vsf }) => {
 
   if (!currentPath) return;
 
-  // const cart = await $vsf.$vendure.api.getCart();
+  const cart = await $vsf.$vendure.api.getCart();
   const activeCart = cart?.data?.activeOrder;
 
   if (currentPath === CheckoutSteps.Shipping && !canEnterShipping(activeCart)) {
