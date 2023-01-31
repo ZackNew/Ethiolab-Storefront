@@ -30,6 +30,14 @@
       class="flex items-center fixed invisible lg:visible min-w-full -mb-[6.5rem] bottom-1"
     >
       <!-- <p>dfhdiusfhsd</p> -->
+      <!-- <img
+        src="/spinner.svg"
+        alt="logo"
+        height="40px"
+        width="40px"
+        class="bg-white mx-4 my-2 rounded-full"
+        v-show="elementVisible"
+      /> -->
       <input
         type="text"
         v-model="messageToSend"
@@ -53,10 +61,21 @@ export default {
   data() {
     return {
       messageToSend: '',
+      loading: false,
+      elementVisible:false
     };
+  },
+  created(){
+    // setTimeout(() => {
+    //     // this.loading = true
+    //     setTimeout(() => this.elementVisible = false, 5000)
+    //   }, 5000);
   },
   methods: {
     sendMessageToAdmin() {
+      setTimeout(() => this.elementVisible = true, 100)
+
+      setTimeout(() => this.elementVisible = false, 5000)
       console.log('emitted', this.messageToSend);
       this.$emit('sendMessageToAdmin', this.messageToSend);
       this.messageToSend = '';
