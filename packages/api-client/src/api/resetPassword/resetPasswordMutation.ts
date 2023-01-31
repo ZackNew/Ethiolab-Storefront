@@ -25,6 +25,6 @@ export default gql`
         errorCode
         message
       }
-    }
+    } 
   }
 `;
