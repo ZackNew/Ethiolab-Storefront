@@ -69,9 +69,9 @@
               />
             </template>
           </LazyHydrate> -->
-          <div class="md:col-span-8" v-if="heroSection.link">
+          <div class="md:col-span-8 flex justify-end" v-if="heroSection.link">
             <iframe
-              class="w-[90%] md:h-[25rem] ytplayer mx-auto"
+              class="w-[90%] md:h-[25rem] ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
