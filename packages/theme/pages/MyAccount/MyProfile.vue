@@ -219,9 +219,7 @@ export default {
             },
           }
         );
-      } catch (e) {
-        console.log(JSON.stringify(e));
-      }
+      } catch (e) {}
     };
 
     return {

@@ -82,7 +82,6 @@ export default {
   },
   middleware: ['is-authenticated'],
   setup(props, context) {
-    console.log('maji my accounts');
     const { $router, $route } = context.root;
     const { cart, load: loadCart, setCart, applyCoupon } = useCart();
     const { logout } = useUser();

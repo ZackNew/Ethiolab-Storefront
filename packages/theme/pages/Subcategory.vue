@@ -38,7 +38,7 @@
         :style="
           !isDarkMode ? 'background-color: white' : 'background-color: #182533'
         "
-        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] hidden md:block border-white sticky max-h-[40rem] overflow-auto top-[5%] no-scrollbar"
+        class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl w-[28%] hidden md:block border-white sticky h-[40rem] overflow-auto top-[5%] no-scrollbar"
       >
         <div v-if="products.length > 0">
           <SubcategoryBrandAccordion
@@ -401,12 +401,9 @@ export default {
       this.search = event;
     },
     maxInput(event) {
-      console.log('maxinput value ', typeof event);
       this.high = event;
     },
     minInput(event) {
-      console.log('mininput value ', typeof event);
-
       this.low = event;
     },
     filterProducts(event) {
@@ -504,7 +501,6 @@ export default {
               },
             };
             var prod = await axios.post(baseUrl, pbody, poptions);
-            // console.log("the subcategory prod values are ", prod)
             this.products = prod.data?.data?.products?.items;
           }
           this.loading = false;

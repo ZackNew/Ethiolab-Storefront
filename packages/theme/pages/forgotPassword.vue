@@ -22,7 +22,7 @@
                   class="form__element width-[80%]"
                 />
               </ValidationProvider>
-       
+
               <SfButton type="submit" class="width-[80%] bg-secondary">
                 <SfLoader
                   :class="{ loader: forgotPasswordLoading }"
@@ -64,7 +64,7 @@
                   class="form__element width-[80%]"
                 />
               </ValidationProvider>
-       
+
               <SfButton type="submit" class="width-[80%] bg-secondary">
                 <SfLoader
                   :class="{ loader: forgotPasswordLoading }"
@@ -73,28 +73,24 @@
                   <div>{{ $t('Reset Password') }}</div>
                 </SfLoader>
               </SfButton>
-              
             </form>
           </ValidationObserver>
-              <button
-                class=" text-secondary  font-bold "
-                @click="handleNotReceived"
-              >
-                Didn`t get the code?
-              </button>
+          <button class="text-secondary font-bold" @click="handleNotReceived">
+            Didn`t get the code?
+          </button>
         </div>
       </div>
       <div class="col-span-6 mt-10">
         <div class="right">
           <h4 class="px-10 py-6 uppercase font-bold">Why Register?</h4>
           <h4 class="px-10">Register today and enjoy these benefits</h4>
-        <RegisterMessage />
-          
+          <RegisterMessage />
+
           <div class="mx-8 float-left w-1/3">
-            <h4 class=" pt-3">Don't have an account?</h4>
+            <h4 class="pt-3">Don't have an account?</h4>
             <nuxt-link to="/signup">
               <button
-                class="bg-secondary text-white  w-full h-14 font-bold rounded"
+                class="bg-secondary text-white w-full h-14 font-bold rounded"
               >
                 REGISTER
               </button>
@@ -102,18 +98,17 @@
             <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
           </div>
 
-          <div class="mx-4 float-left ">
-            <h4 class=" pt-3">Already have an account?</h4>
+          <div class="mx-4 float-left">
+            <h4 class="pt-3">Already have an account?</h4>
             <nuxt-link to="/signin">
               <button
-                class="bg-secondary text-white  w-full h-14 font-bold rounded"
+                class="bg-secondary text-white w-full h-14 font-bold rounded"
               >
                 SIGN IN
               </button>
             </nuxt-link>
             <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
           </div>
-   
         </div>
       </div>
     </div>
@@ -134,7 +129,7 @@ import {
 import { SfInput, SfButton, SfLoader } from '@storefront-ui/vue';
 import { useUser, useForgotPassword } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
-import RegisterMessage from "../components/RegisterMessage.vue"
+import RegisterMessage from '../components/RegisterMessage.vue';
 // import { log } from 'console';
 extend('required', {
   ...required,
@@ -161,7 +156,7 @@ export default defineComponent({
     ErrorMessage,
     SfButton,
     SfLoader,
-    RegisterMessage
+    RegisterMessage,
   },
   setup() {
     const showToast = inject('showToast');
@@ -169,7 +164,7 @@ export default defineComponent({
       request,
       error: forgotPasswordError,
       loading: forgotPasswordLoading,
-      setNew
+      setNew,
     } = useForgotPassword();
 
     const userEmail = ref('');
@@ -180,24 +175,23 @@ export default defineComponent({
 
     const handleForgotten = async () => {
       emailReset.value = false;
-      await request({ email: userEmail.value }).then(res => {
-        console.log("email response is ", res)
-      })
+      await request({ email: userEmail.value }).then((res) => {});
       showToast('A password reset token has been sent to your email');
       // if (!forgotPasswordError.value.request) {
       //   setCurrentScreen(SCREEN_THANK_YOU);
       // }
     };
 
-    const handleNotReceived = async() => {
-      console.log("handle code clicked")
+    const handleNotReceived = async () => {
       emailReset.value = true;
-    }
+    };
 
-    const handleReset = async() => {
-      console.log("reset clicked password" , password.value, tokenValue.value);
-      await setNew({tokenValue:tokenValue.value, newPassword: password.value});
-    }
+    const handleReset = async () => {
+      await setNew({
+        tokenValue: tokenValue.value,
+        newPassword: password.value,
+      });
+    };
 
     return {
       forgotPasswordLoading,
@@ -207,7 +201,7 @@ export default defineComponent({
       handleNotReceived,
       handleReset,
       tokenValue,
-      password
+      password,
     };
   },
 });

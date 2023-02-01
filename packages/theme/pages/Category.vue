@@ -653,7 +653,6 @@ export default {
     const rawBreadcrumbs = computed(() =>
       facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug)
     );
-    console.log('rrrrrrrrrrrrrrr', searchResult.value);
     const breadcrumbs = computed(() =>
       th.getFormattedBreadcrumbs(rawBreadcrumbs.value)
     );
@@ -948,7 +947,6 @@ export default {
             };
             return prod;
           });
-          console.log('myname2', produ);
           this.bestSellings = produ;
         });
       });
@@ -988,25 +986,16 @@ export default {
       };
     },
     addToCompareList(vid, pid, img) {
-      console.log('Maji Maji', vid, pid, img);
       if (
         this.$store.state.compareList?.productsToCompare?.length < 5 &&
         pid !== '' &&
         vid !== ''
       ) {
-        console.log('passed the first one');
-        console.log(
-          'djsfada',
-          this.$store.state.compareList?.productsToCompare?.filter(
-            (e) => e?.productID === pid && e?.variantID === vid
-          ).length
-        );
         if (
           this.$store.state.compareList?.productsToCompare?.filter(
             (e) => e?.productID === pid && e?.variantID === vid
           ).length === 0
         ) {
-          console.log('passed the second one');
           this.toastShower('Added to Compare List');
           this.$store.dispatch('compareList/addToCompareList', {
             product: {
@@ -1020,7 +1009,6 @@ export default {
         }
       } else {
         this.toastShower('Limit to Compare Products reached');
-        console.log('limit reached');
       }
     },
   },

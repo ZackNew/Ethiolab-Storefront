@@ -101,7 +101,7 @@
         >
           <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Why Register?</h4>
           <h4 class="px-2 md:px-10">Register today and enjoy these benefits</h4>
-        <RegisterMessage />
+          <RegisterMessage />
 
           <h4 class="px-2 md:px-16 pt-10">Don't hava an account?</h4>
           <div class="mx-2 md:mx-16">
@@ -134,7 +134,7 @@ import axios from 'axios';
 import { SfInput } from '@storefront-ui/vue';
 import { useUser, useForgotPassword } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
-import RegisterMessage from "../components/RegisterMessage.vue"
+import RegisterMessage from '../components/RegisterMessage.vue';
 extend('required', {
   ...required,
   message: 'This field is required',
@@ -158,9 +158,9 @@ export default defineComponent({
     ValidationObserver,
     SfInput,
     ErrorMessage,
-    RegisterMessage
+    RegisterMessage,
   },
-  setup() {
+  setup(props, { root }) {
     const { isDarkMode } = useUiState();
     const form = ref({});
     const { register, login, loading, error: userError } = useUser();
@@ -177,7 +177,6 @@ export default defineComponent({
     };
 
     const handleForm = (fn) => async () => {
-      console.log('login is clicked form is ', form);
       resetErrorValues();
       await fn({ user: form.value });
 
@@ -193,13 +192,8 @@ export default defineComponent({
         }
         return;
       }
-      // if (isSubscribe.value === true) {
-      // }
-      // isSubscribe.value ? onSubscribe() : '';
-      // toggleLoginModal();
       showToast('login successfull');
-
-      window.location.href = '/';
+      root.$router.push('/');
     };
 
     const handleLogin = async () => handleForm(login)();

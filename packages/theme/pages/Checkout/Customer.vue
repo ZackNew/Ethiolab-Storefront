@@ -143,7 +143,6 @@ export default {
     onMounted(async () => {
       await load();
       const customer = cart?.value.customer;
-      console.log('Maji customer', cart?.value);
       if (customer) {
         form.value = {
           firstName: customer?.firstName,

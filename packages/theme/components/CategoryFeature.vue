@@ -49,7 +49,6 @@ export default defineComponent({
   components: { CategorySingle },
   created() {
     this.getTree();
-    // console.log(this.headerNavigation);
   },
   mounted() {
     AOS.init({
@@ -81,7 +80,6 @@ export default defineComponent({
       categories.value.items.forEach((a) => {
         if (a?.parent?.name === '__root_collection__') {
           headerNavigation.push(facetGetters.getTree(a));
-          // console.log("category featured asset  val is ", a.featuredAsset.preview)
         }
       });
     };
@@ -92,10 +90,8 @@ export default defineComponent({
       { title: 'Filtration Products', image: '/categories/cat4.jpg' },
       { title: 'Flowmeters', image: '/categories/cat5.jpg' },
     ];
-    // console.log("the header navigation value is ", headerNavigation)
 
     // onMounted(()=> {
-    //   console.log("the header navigation value is ", headerNavigation)
     // })
 
     return {

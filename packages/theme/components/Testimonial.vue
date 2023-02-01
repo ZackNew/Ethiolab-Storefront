@@ -10,21 +10,23 @@
         breakpoints: { 1023: { peek: 0, perView: 1 } },
       }"
     >
-    <!-- <div v-for="testimony in tes" :key="testimony.id">  -->
+      <!-- <div v-for="testimony in tes" :key="testimony.id">  -->
       <!-- <p>{{testimony.id}}</p> -->
-  <SfCarouselItem
-        class="carousel__item" 
-      >
+      <SfCarouselItem class="carousel__item">
         <div
-          class="max-w-3xl p-4 ml-2 text-gray-800 rounded-lg shadow testimonial_card" v-for="testimony in testimonials" :key="testimony.id"
+          class="max-w-3xl p-4 ml-2 text-gray-800 rounded-lg shadow testimonial_card"
+          v-for="testimony in testimonials"
+          :key="testimony.id"
         >
- 
           <div class="flex flex-col items-center text-center">
             <div
               class="w-12 h-12 overflow-hidden bg-gray-100 border-2 border-indigo-100 rounded-full"
             >
               <img
-                :src= "`${path}${testimony.src}` || ` https://cdn.pixabay.com/photo/2017/05/19/12/38/entrepreneur-2326419__340.jpg`"
+                :src="
+                  `${path}${testimony.src}` ||
+                  ` https://cdn.pixabay.com/photo/2017/05/19/12/38/entrepreneur-2326419__340.jpg`
+                "
                 alt="img"
                 class="object-cover object-center w-full h-full"
               />
@@ -40,8 +42,7 @@
           <div class="h-3 text-3xl text-right quote">”</div>
         </div>
       </SfCarouselItem>
-    <!-- </div> -->
-    
+      <!-- </div> -->
     </SfCarousel>
     <!-- {{ testimonials }} +++++++++++++++++++++++++
     {{ testimonies }} -->
@@ -52,8 +53,8 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import { SfCarousel, SfDivider, SfHeading } from '@storefront-ui/vue';
-import { computed, ref, provide , onMounted} from '@vue/composition-api';
-import axios from "axios";
+import { computed, ref, provide, onMounted } from '@vue/composition-api';
+import axios from 'axios';
 
 export default {
   components: {
@@ -73,12 +74,10 @@ export default {
   setup() {
     const tes = ref([]);
     const baseUrl = process.env.GRAPHQL_API;
-    const path =baseUrl.split("/shop-api")[0]+"/assets/"
-    console.log("path value is ", path)
-    console.log("the base url i s", baseUrl.split("/shop-api")[0])
-    onMounted(() =>{
+    const path = baseUrl.split('/shop-api')[0] + '/assets/';
+    onMounted(() => {
       // async getTestimonials() {
-      
+
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -96,9 +95,8 @@ export default {
           }
         }`,
       };
-       axios.post(baseUrl, body, options).then((res) => {
+      axios.post(baseUrl, body, options).then((res) => {
         const test = res.data.data.getTestimonials.map((testimony) => {
-          console.log("testimony")
           return {
             id: testimony.id,
             name: testimony.name,
@@ -108,15 +106,14 @@ export default {
           };
         });
         tes.value = test;
-        console.log('testimonials MOUNTED', this.testimonials);  
       });
-    })
+    });
     // }
 
     return {
       tes,
-      path
-    }
+      path,
+    };
   },
   data() {
     return {

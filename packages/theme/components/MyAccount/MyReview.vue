@@ -102,11 +102,9 @@ export default {
     async setValues() {
       if (this.isAuthenticated) {
         // await this.load();
-        // console.log(this.user.identifier);
         this.authorName = userGetters.getFullName(this.user);
         // this.email = userGetters.getEmailAddress(this.user.value);
         this.email = userGetters.getEmailAddress(this.user);
-        // console.log(this.$props.myReview);
         // if(this.$props.myReview["authorLocation"] === this.email){
         //   this.form["summary"]= this.$props.myReview.summary;
         //   this.form["rating"]= this.$props.myReview.rating;
@@ -133,7 +131,6 @@ export default {
     //       }
     //     }
     //   `});
-    //   console.log(reviewQuery);
     //   const response = await fetch('http://localhost:3000/shop-api', {
     //       method: 'post',
     //       body: reviewQuery,
@@ -146,7 +143,6 @@ export default {
     //   for(var review of reviews){
     //     if(review["authorLocation"] === this.email /*&&
     //         review["authorLocation"] === this.lineItem.productVariant.id*/){
-    //       console.log(review);
     //       this.prompt= "Edit";
     //       this.title= "Edit your Review";
     //       this.form["summary"]= review["summary"];
@@ -252,7 +248,6 @@ export default {
     //           }
     //         }
     //       `});
-    //   console.log(updateReviewMutation);
     //   this.isSubmiting= true;
     //   const response = await fetch('http://10.10.20.55:3000/shop-api', {
     //       method: 'post',
@@ -263,7 +258,6 @@ export default {
     //       }
     //     }).then(r => r.json())
     //       .then((data) > {
-    //         //console.log(data);
     //         data.data.updateProductReview["authorName"]= "You";
     //         this.$emit('updateMyReview', data.data.updateProductReview);
     //         // this.currentReview["summary"]= data["summary"];

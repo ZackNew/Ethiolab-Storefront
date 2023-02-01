@@ -57,7 +57,7 @@
                 <div class="results-listing grid grid-cols-1 md:grid-cols-3">
                   <div v-for="product in result" :key="product._id">
                     <ProductCard
-                    :id="product._id"
+                      :id="product._id"
                       v-e2e="'category-product-card'"
                       :title="product.name"
                       :image="product.images"
@@ -73,13 +73,13 @@
                       @click:add-to-cart="addToCart"
                       :variantId="product._variantId"
                       @click:wishlist="
-                      !isInWishlist({ product })
-                        ? addItemToWishlist({ product })
-                        : removeItemFromWishlist({ product })
-                    "
+                        !isInWishlist({ product })
+                          ? addItemToWishlist({ product })
+                          : removeItemFromWishlist({ product })
+                      "
                     />
                   </div>
-                  
+
                   <!-- class="products__product-card mr-2 mb-4" -->
                 </div>
               </SfScrollable>
@@ -87,7 +87,7 @@
             <div class="results--mobile smartphone-only">
               <div v-for="product in result" :key="product._id">
                 <ProductCard
-                :id="product._id"
+                  :id="product._id"
                   v-e2e="'category-product-card'"
                   class="result-card"
                   :regular-price="product.price.current + ' ETB'"
@@ -100,15 +100,14 @@
                   :imageWidth="128"
                   :link="localePath(`/v/${product.slug}`)"
                   @click:add-to-cart="addToCart"
-                      :variantId="product._variantId"
-                      @click:wishlist="
-                      !isInWishlist({ product })
-                        ? addItemToWishlist({ product })
-                        : removeItemFromWishlist({ product })
-                    "
+                  :variantId="product._variantId"
+                  @click:wishlist="
+                    !isInWishlist({ product })
+                      ? addItemToWishlist({ product })
+                      : removeItemFromWishlist({ product })
+                  "
                 />
               </div>
-             
             </div>
           </SfMegaMenuColumn>
           <div class="action-buttons smartphone-only">
@@ -172,7 +171,7 @@ import {
   SfButton,
   SfImage,
 } from '@storefront-ui/vue';
-import { ref, watch, computed,inject } from '@nuxtjs/composition-api';
+import { ref, watch, computed, inject } from '@nuxtjs/composition-api';
 import Loading from '~/components/Loading.vue';
 import { productGetters, useCart, useWishlist } from '@vue-storefront/vendure';
 import ProductCard from './ProductCard.vue';
@@ -226,23 +225,18 @@ export default {
     });
 
     const addToCart = (e) => {
-      
       addItemToCart({
         product: {
           _variantId: e._variantId,
         },
         quantity: e.quantity,
-      }).then(res =>{
-        console.log("best seller updated cart value is ", cart.value)
-        if(cart.value.errorCode && cart.value.errorCode != ''){
-          showToast(cart.value.message)
+      }).then((res) => {
+        if (cart.value.errorCode && cart.value.errorCode != '') {
+          showToast(cart.value.message);
+        } else {
+          showToast('Product added to cart!');
         }
-        else{
-          showToast("Product added to cart!")
-        }
-      } 
-      )
-      
+      });
     };
 
     watch(

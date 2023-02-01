@@ -373,7 +373,6 @@ export default {
     });
 
     const sendMessage = async () => {
-      //     console.log("......x")
       sendContactUs({
         phone_number: form.value.phoneNumber,
         first_name: form.value.firstName,
@@ -401,7 +400,6 @@ export default {
       //             email: form.value.emailAddress,
       //             message: form.value.message
       //  }});
-      //  console.log({data})
       //  form.value = {}
       //  location.href = 'http://localhost:3001'
     };
@@ -439,7 +437,6 @@ export default {
     phoneInputHandler(payload) {
       this.formPhoneNumber = payload?.formattedNumber;
       this.form.phoneNumber = this.formPhoneNumber;
-      console.log('Maji phone', this.form.phoneNumber);
     },
   },
 };
