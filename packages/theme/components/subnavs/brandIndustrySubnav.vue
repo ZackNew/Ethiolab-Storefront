@@ -13,7 +13,7 @@
       >
         Brands
       </h3>
-      <hr class="mb-5" />
+      <!-- <hr class="mb-5" /> -->
       <div class="nameLists">
         <div v-for="item in brandsIndustries.items" :key="item.id">
           <nuxt-link

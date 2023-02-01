@@ -3,7 +3,7 @@
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-9 m-5 relative">
         <h3 class="text-[#717171] font-bold">Categories</h3>
-        <hr class="mb-5" />
+        <!-- <hr class="mb-5" /> -->
         <div class="nameLists">
           <div v-for="(item, i) in newList" :key="item.id">
             <nuxt-link :to="`/c/${item.slug}`">
