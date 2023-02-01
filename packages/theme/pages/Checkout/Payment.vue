@@ -220,7 +220,7 @@
 
               <div v-if="paymentMethod && paymentMethod.name == 'Cash'">
                 <SfModal title="My title" visible :persistent="false">
-                  <div class="relative h-full max-w-md md:h-auto -mr-4">
+                  <div class="relative h-full max-w-md md:h-auto -m-4">
                     <div
                       class="relative bg-white rounded-lg shadow dark:bg-gray-700"
                     >
@@ -540,19 +540,20 @@ export default {
 
     const handleModalCashOpen = () => {
       paymentMethod.value = null;
-      //   'MODAL cash OPEN CLICKED',
-      //   modalCashOpen.value,
-      //   typeof modalCashOpen.value
-      // );
-      // let temp = modalCashOpen.value;
-      // modalCashOpen.value = !temp;
-      // paymentMethod.value = null;
-      // if(modalOpen){
-      //   modalOpen.value = false
-      // }
-      // else {
-      //   modalOpen.value = true
-      // }
+      console.log(
+        'MODAL cash OPEN CLICKED',
+        modalCashOpen.value,
+        typeof modalCashOpen.value
+      );
+      let temp = modalCashOpen.value;
+      modalCashOpen.value = !temp;
+      paymentMethod.value = null;
+      if(modalOpen){
+        modalOpen.value = false
+      }
+      else {
+        modalOpen.value = true
+      }
     };
 
     const handleCancelOrder = async () => {
@@ -739,7 +740,7 @@ export default {
         appId: '4ae7217b4e7149fdac877852e7fd87db',
         nonce: paymentDetail.transaction_uuid,
         notifyUrl: 'https://admin.ethiolab.et/telebirr',
-        outTradeNo: cart.value.code,
+        outTradeNo: `${cart.value.code}_${paymentDetail.transaction_uuid}`,
         receiveName: 'Ethiolab',
         returnUrl: 'http://localhost:3001/checkout/thank-you/',
         shortCode: '220322',
@@ -784,7 +785,7 @@ export default {
         appId: '4ae7217b4e7149fdac877852e7fd87db',
         nonce: paymentDetail.transaction_uuid,
         notifyUrl: 'https://admin.ethiolab.et/telebirr',
-        outTradeNo: cart.value.code,
+        outTradeNo: `${cart.value.code}_${paymentDetail.transaction_uuid}`,
         receiveName: 'Ethiolab',
         returnUrl: 'http://localhost:3001/checkout/thank-you/',
         shortCode: '220322',
@@ -869,7 +870,7 @@ export default {
       handleModalOpen,
       modalOpen,
       handleCancelOrder,
-      handleModalCashOpen,
+      handleModalCashOpen
     };
   },
 };
