@@ -223,7 +223,9 @@ export default {
         ids.push(p?._id);
         vIds.push(p?._variantId);
       });
-      getWishList(ids, vIds);
+      if (ids.length > 0 && vIds.length > 0) {
+        getWishList(ids, vIds);
+      }
     });
     ctx.root.$on('emitWishList', () => {
       loadWishlist();

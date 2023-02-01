@@ -1,227 +1,53 @@
 <template>
   <div
-    class="flex body"
-    :style="
-      !isDarkMode
-        ? 'background: white !important'
-        : 'background: #182533 !important'
-    "
+    class="bg-white max-w-[1250px] w-[100%] min-h-[26rem] dropDown broder border-2 border-[#aaaaaa]"
   >
-    <div class="grid grid-rows-6 grid-cols-4 gap-4 grid-flow-col">
-      <HeaderSubNavigation
-        :handler="hoverHandler"
-        :hoverOutHandler="hoverOutHandler"
-        :title="navs.label"
-        :link="navs.link"
-        :id="navs.id"
-        :disc="navs.description"
-        :prev="navs.preview"
-        :subnavList="navs.items"
-        :preview="navs.featuredAsset"
-        v-for="navs in $props.subnavList"
-        :key="navs.id"
-      />
-    </div>
-
-    <div
-      :style="
-        !isDarkMode
-          ? 'background: white !important'
-          : 'background: #182533 !important'
-      "
-      class="detail bg-light_accent pb-3"
-      v-show="showDetail"
-    >
-      <!-- style="object-fit: cover" -->
-      <img :alt="cPrev" :src="cPrev" class="w-auto max-h-[80%]" />
-      <h4 class="text-primary font-bold">{{ cTitle }}</h4>
-      <!-- <p v-html="cDisc" class="mx-3"></p> -->
-    </div>
-    <!-- <div
-      v-show="!showDetail"
-      class="ad text-dark_accent pl-8 pt-16"
-      :style="{
-        backgroundImage: `url(${adImage || '/homepage/bannerA.webp'})`,
-        background: !isDarkMode ? 'white !important' : '#182533 !important',
-      }"
-    >
-      <p class="text-dark_gray uppercase pr-1">
-        {{ adSection.overview || 'Ad Overview' }}
-      </p>
-      <h2 class="mt-5 uppercase pr-1">{{ adSection.title || 'Ad Titile' }}</h2>
-      <p class="mt-5">{{ adSection.description || 'Ad Description' }}</p>
-      <button
-        class="mt-5 mb-2 bg-secondary w-24 p-2 text-white rounded hover:bg-dark_secondary hover:text-faded_black"
-      >
-        {{ adSection.buttonText || 'Ad Button' }}
-      </button>
-    </div> -->
+    <CategoriesSubNav :categories="categories" v-if="categories" />
+    <brandsIndustrySubnav
+      :brandsIndustries="industries || brands"
+      v-if="industries || brands"
+    />
   </div>
 </template>
+
 <script>
-import { useUiState } from '~/composables';
-import HeaderSubNavigation from './HeaderSubNavigation.vue';
-import { useCms } from '@vue-storefront/vendure';
-import { computed, ref } from '@vue/composition-api';
-import { SfBanner } from '@storefront-ui/vue';
+import brandsIndustrySubnav from './subnavs/brandIndustrySubnav.vue';
+import CategoriesSubNav from './subnavs/CategoriesSubNav.vue';
 
 export default {
-  name: 'DropDownMenu',
-  components: {
-    HeaderSubNavigation,
-    SfBanner,
-  },
-  created() {
-    // this.getTree();
-    // console.log(this.headerNavigation);
-  },
   props: {
-    subnavList: Array,
-    main: String,
+    contents: {
+      type: Object,
+      default: {},
+    },
   },
-  setup(props) {
-    // const headerNavigation = [];
-    // const {categories} = useCategory();
-    const { getCms } = useCms();
-    let adSection = computed(() => JSON.parse(getCms?.value[3]?.content));
-    const adImage = computed(() => getCms.value[3]?.featuredAsset?.preview);
-    const { isDarkMode } = useUiState();
-    // const getTree = ()=>{
-    // // categories.value.items.forEach((a)=>{
-    // //     if (a.parent.name === "__root_collection__") {
-    // //         headerNavigation.push(facetGetters.getTree(a));
-    // //    }
-    // // });
-    // };
-    let showDetail = ref(false);
-    let addVisible = ref(true);
-    let cTitle = ref('');
-    let cDisc = ref('');
-    let cPrev = ref('');
-    let hoverHandler = (item, title, disc, prev, preview) => {
-      // console.log('**hovered over the items',props.main,item,title,disc,prev)
-      if (props.main === 'INDUSTRIES' || props.main == 'BRANDS') {
-        addVisible.value = false;
-        showDetail.value = true;
-        cTitle.value = title;
-        let a = '';
-        a.len;
-        disc = disc.replace(/<[^>]+>/g, '');
-        if (disc.length > 120) {
-          disc = disc.slice(0, 120);
-          disc += ' ...';
-          // disc = disc.replace(/<[^>]+>/g, '');
-        }
-        cDisc.value = disc;
-        cPrev.value = prev;
-      } else if (props.main === 'PRODUCTS') {
-        addVisible.value = false;
-        showDetail.value = true;
-        cTitle.value = title;
-        let a = '';
-        a.len;
-        disc = disc.replace(/<[^>]+>/g, '');
-        if (disc.length > 120) {
-          disc = disc.slice(0, 120);
-          disc += ' ...';
-          // disc = disc.replace(/<[^>]+>/g, '');
-        }
-        cDisc.value = disc;
-        cPrev.value = preview?.preview;
-      }
-    };
-    let hoverOutHandler = () => {
-      addVisible.value = true;
-      showDetail.value = false;
-    };
-
-    return {
-      // getTree,
-      // headerNavigation,
-      adSection,
-      adImage,
-      cDisc,
-      cTitle,
-      cPrev,
-      hoverHandler,
-      hoverOutHandler,
-      addVisible,
-      showDetail,
-      isDarkMode,
-    };
+  computed: {
+    categories() {
+      let categs = null;
+      if (this.contents.hovered === 'categories') categs = this.contents;
+      return categs;
+    },
+    brands() {
+      let categs = null;
+      if (this.contents.hovered === 'brands') categs = this.contents;
+      return categs;
+    },
+    industries() {
+      let categs = null;
+      if (this.contents.hovered === 'Industries') categs = this.contents;
+      return categs;
+    },
+  },
+  components: {
+    brandsIndustrySubnav,
+    CategoriesSubNav,
   },
 };
 </script>
-<style scoped>
-.detail {
-  position: absolute;
-  right: 0;
-  top: 0;
-  display: flex;
-  border-radius: 1px;
-  box-shadow: 2px 2px 5px rgb(68, 68, 68);
-  flex-direction: column;
-  align-items: center;
-  margin: 0.5em;
-  box-sizing: border-box;
-  height: 95%;
-  width: 20%;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.detail p {
-  text-align: justify;
-}
-.ad {
-  position: absolute;
-  right: 0;
-  top: 0;
-  color: white;
-  display: flex;
-  border-radius: 1px;
-  box-shadow: 2px 2px 5px rgb(68, 68, 68);
-  flex-direction: column;
-  margin: 0.5em;
-  box-sizing: border-box;
-  height: 95%;
-  width: 20%;
-  background-position: center bottom;
-  background-repeat: no-repeat;
-  background-size: cover;
-  overflow: auto;
-}
-.ad::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
-}
-.center-my-text {
-  text-align: left !important;
-}
-.body {
-  position: absolute !important;
-  /* display: flex!important; */
-  /* flex-direction: row!important; */
-  /* flex-wrap: nowrap!important; */
 
-  height: 100% !important;
-}
-
-.grid {
-  margin-top: 5% !important;
-  margin-left: 2.5% !important;
-  width: 80% !important;
-  height: 75% !important;
-  /* background-color: yellow !important; */
-}
-
-.sf-banner {
-  width: 20% !important;
-  height: 60% !important;
-  position: relative !important;
-  left: 80% !important;
-  /* top: -87% !important; */
-  /* right: 0% !important; */
-  bottom: 90% !important;
-  display: inline-block !important;
-  /* border: 1px solid black; */
+<style>
+.dropDown {
+  margin: 0 auto;
+  z-index: 9999;
 }
 </style>

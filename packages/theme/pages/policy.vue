@@ -78,7 +78,6 @@ export default {
     const { $router, $route } = context.root;
     const { search: searchCms, getCms } = useCms();
     const policyPages = computed(() => JSON.parse(getCms.value[4].content));
-    // console.log("the fetched vaue is ", policyPages)
     // onSSR(async () => {
     //   await searchCms('POLICIES')
     // });

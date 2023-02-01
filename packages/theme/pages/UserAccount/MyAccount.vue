@@ -1,9 +1,19 @@
 <template>
   <div id="my-account">
-    <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    />
+    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
+      <ol class="sf-breadcrumbs__list">
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <span class="text-black">
+            <nuxt-link class="sf-breadcrumbs__breadcrumb font-exrathin" to="/">
+              Home
+            </nuxt-link>
+          </span>
+        </li>
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <p class="text-secondary">My Account</p>
+        </li>
+      </ol>
+    </nav>
     <SfContentPages
       v-e2e="'my-account-content-pages'"
       title="My Account"
@@ -72,7 +82,6 @@ export default {
   },
   middleware: ['is-authenticated'],
   setup(props, context) {
-    console.log('maji my accounts');
     const { $router, $route } = context.root;
     const { cart, load: loadCart, setCart, applyCoupon } = useCart();
     const { logout } = useUser();

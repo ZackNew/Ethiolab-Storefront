@@ -202,7 +202,7 @@
                     id="submit"
                     name="submit"
                     value="PAY WITH CYBERSOURCE"
-                    class="box-border relative flex h-12 pl-4 pr-4 align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold -mt-12"
+                    class="box-border relative flex h-12 pl-4 pr-4 align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold rounded-lg"
                   />
                 </form>
               </div>
@@ -259,21 +259,21 @@
                         >
                           Cash Payment
                         </h3>
-                        <div>
+                        <div v-if="CBE.length > 0">
                           <p>
                             Dear customer, you can complete your order by
                             directly depositing to one of the accounts below:
                           </p>
-                          <ul>
-                            <li>CBE- {{ CBE }}</li>
-                            <li>ABAY- 2165412564</li>
-                            <li>BERHAN- 49874598415</li>
+                          <ul v-for="bank in CBE" :key="bank">
                             <li>
-                              Please write the order ID #{{ cart.code }} in
-                              'Reason for payment' and contact the admin
-                              {{ phoneNumber }} for further instructions.
+                              {{ bank.split(',')[0] }} {{ bank.split(',')[1] }}
                             </li>
                           </ul>
+                          <p>
+                            Please write the order ID #{{ cart.code }} in
+                            'Reason for payment' and contact the admin
+                            {{ phoneNumber }} for further instructions.
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -503,11 +503,12 @@ export default {
       )[0];
     },
     CBE() {
-      return this.$store.state.companyDetails.companyInformation
-        ?.commercial_bank;
+      return this.$store.state.companyDetails.companyInformation?.commercial_bank.split(
+        ';'
+      );
     },
   },
-  setup(props, context) {
+  setup(props, { root }) {
     const { cart, load, setCart, applyCoupon } = useCart();
     const { loading } = useMakeOrder();
     const { set } = usePayment();
@@ -526,11 +527,6 @@ export default {
     const promoCode = ref('');
 
     const handleModalOpen = () => {
-      console.log(
-        'MODAL OPEN CLICKED',
-        modalOpen.value,
-        typeof modalOpen.value
-      );
       let temp = modalOpen.value;
       modalOpen.value = !temp;
 
@@ -561,8 +557,6 @@ export default {
     };
 
     const handleCancelOrder = async () => {
-      console.log('order is about to be cancelled');
-
       const body = {
         query: `mutation cancelOrder($orderCode: String!) {
           cancelMyOrder (orderCode: $orderCode){
@@ -573,16 +567,6 @@ export default {
           orderCode: cart.value.code,
         },
       };
-      //   query: `mutation transitionOrderToState($state: String!) {
-      //           transitionOrderToState(input : {state: $state}) {
-
-      //           }
-      //         }`,
-      //   variables: {
-      //     state: state,
-      //   },
-      // };
-
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -594,13 +578,11 @@ export default {
       const acat = await axios
         .post(baseUrl, body, options)
         .then(async (res) => {
-          console.log('the  cancel response value is ', res);
           modalOpen.value = false;
-          window.location.href = '/';
+          setCart();
+          root.$router.push('/');
         })
-        .catch((err) => {
-          console.log('the catch err is ', err);
-        });
+        .catch((err) => {});
     };
 
     onSSR(async () => {
@@ -634,7 +616,6 @@ export default {
 
       let signedFieldNames =
         'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency';
-      // console.log("the signed field names are ", signedFieldNames)
       let params = signedFieldNames.split(',');
       let dataToSign = [];
 
@@ -647,17 +628,14 @@ export default {
       var hash = CryptoJS.HmacSHA256(data, SECRET_KEY);
       var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
       paymentDetail.signature = hashInBase64;
-      // console.log("before comma", dataToSign)
       // return commaSeparate(dataToSign);
     });
 
     const updatePaymentMethod = (method) => {
       paymentMethod.value = method;
-      // console.log("paymentmethod id ", method);
     };
 
     const applyPromoCode = async () => {
-      console.log('processing promo code ', promoCode);
       const result = await applyCoupon({
         couponCode: promoCode.value,
         currentCart: cart.value,
@@ -691,7 +669,6 @@ export default {
           // Here you would pass data from an external Payment Provided after successful payment process like payment id.
         },
       });
-      console.log('the final payment response value is ', response);
 
       const state = 'Completed';
 
@@ -720,9 +697,7 @@ export default {
       // const acat = await axios
       //   .post(baseUrl, body, options)
       //   .then(async (res) => {
-      //     console.log("the response value sura is ", res);
       //   }).catch(err => {
-      //     console.log("error occured while updating the state and err is ", err);
       //   })
 
       //   const body = {
@@ -746,9 +721,7 @@ export default {
       //      const acat = await axios
       //   .post(baseUrl, body, options)
       //   .then(async (res) => {
-      //     console.log("the  gql response value is ", res);
       //   }).catch(err => {
-      //     console.log("the catch err is ", err)
       //   })
 
       // const thankYouPath = { name: 'thank-you', query: { order: response?.code }};
@@ -760,8 +733,6 @@ export default {
     };
 
     const processTelebirr = async () => {
-      console.log('telebirr next');
-
       ////////////////////////////////STEP 1//////////////////////////////////////
 
       const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
@@ -795,8 +766,6 @@ export default {
         return str.substr(0, str.length - 1);
       }
 
-      console.log('string A vlaue is ', StringA);
-
       ////////////////////////////////STEP 2//////////////////////////////////////
 
       let StringB = sha256(StringA);
@@ -807,11 +776,8 @@ export default {
         return hash.digest('hex');
       }
       ////////////////////////////////STEP 3//////////////////////////////////////
-      console.log('string B vlaue is ', StringB);
 
       let sign = StringB.toUpperCase();
-
-      console.log('sign vlaue is ', sign);
 
       ////////////////////////////////STEP 4//////////////////////////////////////
 
@@ -828,8 +794,6 @@ export default {
         timestamp: cart?.value?.code?.toString(),
         totalAmount: paymentDetail.amount,
       };
-
-      // console.log("jsonobj is ", jsonObj)
 
       let ussdjson = JSON.stringify(jsonObj);
 
@@ -874,7 +838,6 @@ export default {
       axios
         .post('/api/telebirr', requestMessage)
         .then((res) => {
-          console.log('local response is ', res);
           if (res.status == 200 && res.data.data.code == 200) {
             // rsp.redirect(res.data.data.toPayUrl);
             window.location.href = res.data.data.data.toPayUrl;

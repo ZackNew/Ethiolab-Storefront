@@ -1,12 +1,12 @@
 import {
   Context,
   useCartFactory,
-  UseCartFactoryParams
+  UseCartFactoryParams,
 } from '@vue-storefront/core';
 import type {
   CouponCodeInvalidError,
   Order,
-  OrderLine
+  OrderLine,
 } from '@vue-storefront/vendure-api';
 import { AgnosticProductVariant } from '../../types';
 
@@ -25,27 +25,44 @@ const params: UseCartFactoryParams<Order, OrderLine, AgnosticProductVariant> = {
 
   // TODO: update to use currentCart
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addItem: async (context: Context, { currentCart, product, quantity, customQuery }): Promise<Order> => {
-    const productVariantId = product?._variantId || product?._id || product?.productId;
-    const response = await context.$vendure.api.addToCart({ productVariantId, quantity }, customQuery);
-    console.log("add item to cartttt", response.data);
-    
+  addItem: async (
+    context: Context,
+    { currentCart, product, quantity, customQuery }
+  ): Promise<Order> => {
+    const productVariantId =
+      product?._variantId || product?._id || product?.productId;
+    const response = await context.$vendure.api.addToCart(
+      { productVariantId, quantity },
+      customQuery
+    );
 
     return response?.data?.addItemToOrder as Order;
   },
 
   // TODO: update to use currentCart
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeItem: async (context: Context, { currentCart, product, customQuery }): Promise<Order> => {
-    const response = await context.$vendure.api.removeFromCart({ orderLineId: product.id}, customQuery);
+  removeItem: async (
+    context: Context,
+    { currentCart, product, customQuery }
+  ): Promise<Order> => {
+    const response = await context.$vendure.api.removeFromCart(
+      { orderLineId: product.id },
+      customQuery
+    );
 
     return response?.data?.removeOrderLine as Order;
   },
 
   // TODO: update to use currentCart
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updateItemQty: async (context: Context, { currentCart, product, quantity, customQuery }): Promise<Order> => {
-    const response = await context.$vendure.api.updateCartQuantity({ orderLineId: product.id, quantity }, customQuery);
+  updateItemQty: async (
+    context: Context,
+    { currentCart, product, quantity, customQuery }
+  ): Promise<Order> => {
+    const response = await context.$vendure.api.updateCartQuantity(
+      { orderLineId: product.id, quantity },
+      customQuery
+    );
 
     return response?.data?.adjustOrderLine as Order;
   },
@@ -53,40 +70,58 @@ const params: UseCartFactoryParams<Order, OrderLine, AgnosticProductVariant> = {
   // Not used in VSF for now
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clear: async (context: Context, { currentCart }): Promise<Order> => {
-    console.log('Mocked: useCart.clear');
     return Promise.resolve({}) as Promise<Order>;
   },
 
   // TODO: update to use currentCart
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  applyCoupon: async (context: Context, { currentCart, couponCode, customQuery }) => {
-    const response = await context.$vendure.api.applyCartCoupon({ couponCode }, customQuery);
+  applyCoupon: async (
+    context: Context,
+    { currentCart, couponCode, customQuery }
+  ) => {
+    const response = await context.$vendure.api.applyCartCoupon(
+      { couponCode },
+      customQuery
+    );
 
-    if ((response?.data?.applyCouponCode as CouponCodeInvalidError)?.errorCode) {
+    if (
+      (response?.data?.applyCouponCode as CouponCodeInvalidError)?.errorCode
+    ) {
       return {
-        updatedCart: currentCart
+        updatedCart: currentCart,
       };
     }
 
     return {
       updatedCart: response?.data?.applyCouponCode as Order,
-      updatedCoupon: couponCode
+      updatedCoupon: couponCode,
     };
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeCoupon: async (context: Context, { couponCode, customQuery }) => {
-    const response = await context.$vendure.api.removeCartCoupon({ couponCode }, customQuery);
+    const response = await context.$vendure.api.removeCartCoupon(
+      { couponCode },
+      customQuery
+    );
 
     return {
-      updatedCart: response?.data?.removeCouponCode
+      updatedCart: response?.data?.removeCouponCode,
     };
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isInCart: (context: Context, { currentCart, product }) => {
-    return Boolean(currentCart?.lines?.find(orderLine => orderLine?.productVariant?.id === product._id || orderLine?.productVariant?.id === product._variantId));
-  }
+    return Boolean(
+      currentCart?.lines?.find(
+        (orderLine) =>
+          orderLine?.productVariant?.id === product._id ||
+          orderLine?.productVariant?.id === product._variantId
+      )
+    );
+  },
 };
 
-export const useCart = useCartFactory<Order, OrderLine, AgnosticProductVariant>(params);
+export const useCart = useCartFactory<Order, OrderLine, AgnosticProductVariant>(
+  params
+);

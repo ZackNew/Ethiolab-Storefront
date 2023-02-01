@@ -172,9 +172,7 @@ export default {
     },
   },
   methods: {
-    async getRelated() {
-      console.log('zzzzzzz', this.products);
-    },
+    async getRelated() {},
   },
   created() {
     this.getRelated();

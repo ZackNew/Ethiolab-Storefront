@@ -1,5 +1,8 @@
 <template>
-  <div class="chat rounded-xl shadow-lg bg-white max-h-96 overflow-auto no-scrollbar" v-if="isMessageSideBarOpen">
+  <div
+    class="chat rounded-xl shadow-lg bg-white max-h-96 overflow-auto no-scrollbar"
+    v-if="isMessageSideBarOpen"
+  >
     <div
       class="invisible lg:visible h-14 max-w-[25%] w-full bg-[#000000] text-white rounded-lg flex items-center fixed"
     >
@@ -10,20 +13,20 @@
         width="40px"
         class="bg-white mx-4 my-2 rounded-full"
       />
-      <h3 class="font-bold text-base whitespace-nowrap ">Ethiolab Support</h3>
+      <h3 class="font-bold text-base whitespace-nowrap">Ethiolab Support</h3>
     </div>
     <div class="mb-14">
       <div class="mx-3" v-for="(message, i) of messages" :key="i">
-      <div
-        v-if="!message.isFromAdmin"
-        class="bg-light_gray min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"
-      >
-        <p class="text-right mr-4">{{ message.msg }}</p>
+        <div
+          v-if="!message.isFromAdmin"
+          class="bg-light_gray min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"
+        >
+          <p class="text-right mr-4">{{ message.msg }}</p>
+        </div>
+        <div v-else class="bg-secondary min-h-[50px] my-2 w-[75%] rounded-lg">
+          <p class="text-left ml-4 text-white">{{ message.msg }}</p>
+        </div>
       </div>
-      <div v-else class="bg-secondary min-h-[50px] my-2 w-[75%] rounded-lg">
-        <p class="text-left ml-4 text-white">{{ message.msg }}</p>
-      </div>
-    </div>
     </div>
 
     <!-- <div
@@ -107,5 +110,4 @@ export default {
   background-color: #acacac;
   border-radius: 100px;
 }
-
 </style>

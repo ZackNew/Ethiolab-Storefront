@@ -412,17 +412,13 @@ export default {
         return this.setThisUsersReview(reviewsList);
       }
 
-      console.log('reviews value is ', reviewsList);
-
       return reviewsList;
     },
 
     setThisUsersReview(reviewsList) {
       var email = this.user.emailAddress;
       for (var review of reviewsList) {
-        console.log(`review['authorLocation'] ${review['authorLocation']}`);
         if (review['authorLocation'] === email) {
-          console.log("review['authorLocation'] === this.email");
           review['authorName'] = 'You';
           this.currentUserHasReview = true;
           var currentItemIndex = reviewsList.indexOf(review);
@@ -546,7 +542,6 @@ export default {
           1
         );
       }
-      console.log('maji checked', accessoriesToCart.value);
     };
 
     const addToCart = (e) => {
@@ -567,7 +562,6 @@ export default {
       });
 
       for (let vId of accessoriesToCart.value) {
-        console.log('majica', vId);
         addItemToCart({
           product: {
             _variantId: vId,

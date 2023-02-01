@@ -35,7 +35,6 @@ const useUiState = () => {
   const isMobileMenuOpen = computed(() => state.isMobileMenuOpen);
   const toggleMobileMenu = () => {
     state.isMobileMenuOpen = !state.isMobileMenuOpen;
-    console.log('mobile toogled', state.isMobileMenuOpen);
   };
 
   const isCartSidebarOpen = computed(() => state.isCartSidebarOpen);

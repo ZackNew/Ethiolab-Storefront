@@ -1,4 +1,12 @@
-import { CustomQuery, Context, FactoryParams, sharedRef, Logger, configureFactoryParams, ComputedProperty } from '@vue-storefront/core';
+import {
+  CustomQuery,
+  Context,
+  FactoryParams,
+  sharedRef,
+  Logger,
+  configureFactoryParams,
+  ComputedProperty,
+} from '@vue-storefront/core';
 import { PaymentInput } from '@vue-storefront/vendure-api';
 import { Ref, computed } from '@vue/composition-api';
 import { Error, Order } from '../types';
@@ -9,8 +17,14 @@ export interface UsePaymentErrors {
 }
 
 export interface UsePaymentFactoryParams<PAYMENT> extends FactoryParams {
-  set: (context: Context, params: PaymentInput & { customQuery?: CustomQuery }) => Promise<Order>;
-  load: (context: Context, params?: { customQuery?: CustomQuery }) => Promise<PAYMENT>;
+  set: (
+    context: Context,
+    params: PaymentInput & { customQuery?: CustomQuery }
+  ) => Promise<Order>;
+  load: (
+    context: Context,
+    params?: { customQuery?: CustomQuery }
+  ) => Promise<PAYMENT>;
 }
 
 export interface UsePayment<PAYMENT> {
@@ -27,10 +41,13 @@ export function usePaymentFactory<PAYMENT = any>(
   return function usePayment(): UsePayment<PAYMENT> {
     const methods: Ref<PAYMENT> = sharedRef([], 'usePayment-methods');
     const loading = sharedRef(false, 'usePayment-loading');
-    const error: Ref<UsePaymentErrors> = sharedRef({
-      set: null,
-      load: null
-    }, 'usePayment-error');
+    const error: Ref<UsePaymentErrors> = sharedRef(
+      {
+        set: null,
+        load: null,
+      },
+      'usePayment-error'
+    );
 
     const _factoryParams = configureFactoryParams(factoryParams);
 
@@ -50,7 +67,6 @@ export function usePaymentFactory<PAYMENT = any>(
     };
 
     const set = async (searchParams) => {
-      console.log("setttttt method", searchParams);
       Logger.debug('usePayment/set', searchParams);
 
       try {
@@ -71,7 +87,7 @@ export function usePaymentFactory<PAYMENT = any>(
       load,
       loading: computed(() => loading.value),
       methods: computed(() => methods.value),
-      error: computed(() => error.value)
+      error: computed(() => error.value),
     };
   };
 }

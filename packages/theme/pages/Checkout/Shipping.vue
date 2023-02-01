@@ -182,14 +182,6 @@ export default {
       this.formPhoneNumber = payload?.formattedNumber;
       this.form.phone = this.formPhoneNumber;
     },
-    getUser() {
-      axios.get('https://randomuser.me/api').then((res) => {
-        console.log('maji random user', res);
-      });
-    },
-  },
-  created() {
-    this.getUser();
   },
   setup() {
     const isFormSubmitted = ref(false);
@@ -233,7 +225,6 @@ export default {
           'shipping'
         );
         const formAddress = mapAddressToAddressForm(defaultAddress);
-        console.log('majic defship', formAddress);
         form.value = {
           firstName: formAddress?.firstName,
           lastName: formAddress?.lastName,

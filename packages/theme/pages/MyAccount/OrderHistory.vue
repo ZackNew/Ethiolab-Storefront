@@ -142,71 +142,6 @@
           </div>
         </div>
       </SfTab>
-      <SfTab class="profileTabs" title="My Quotes">
-        <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
-            Message: {{quote.msg}}
-            <SfButton>Delete</SfButton>
-          </div> -->
-        <SfTable>
-          <SfTableHeading>
-            <SfTableHeader
-              v-for="(tableHeader, index) in quotesHeader"
-              :key="index"
-              >{{ tableHeader }}</SfTableHeader
-            >
-            <SfTableHeader class="orders__element--right" />
-          </SfTableHeading>
-
-          <SfTableRow v-for="(quote, index) in quotes" :key="index">
-            <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
-            <SfTableData>{{ quote.createdAt }}</SfTableData>
-            <SfTableData>{{ quote.subject }}</SfTableData>
-            <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
-            <SfTableData>
-              <SfButton class="sf-button--text">See Details</SfButton>
-              <SfButton
-                class="sf-button--text red-text"
-                @click="removeQuote(quotes.indexOf(quote))"
-                >Delete</SfButton
-              >
-              <SfButton
-                class="sf-button--text"
-                @click="downloadQuote(quotes.indexOf(quote))"
-                >Download As Pdf</SfButton
-              >
-            </SfTableData>
-          </SfTableRow>
-
-          <!-- <SfTableRow v-for="(quote,index) in quotes" :key="index">
-            <SfTableData>{{ quotes.indexOf(quote) + 1 }})</SfTableData>
-            <SfTableData>{{ quote.createdAt }}</SfTableData>
-            <SfTableData>{{ quote.subject }}</SfTableData>
-            <SfTableData>
-              <SfButton class="sf-button--text">See Details</SfButton>
-              <SfButton
-                class="sf-button--text red-text"
-                @click="removeQuote(quotes.indexOf(quote))"
-                >Delete</SfButton       <SfTableData class="orders__view orders__element--right">
-                <SfButton
-                  class="sf-button--text desktop-only"
-                  @click="currentOrder = order"
-                >
-                  {{ $t('View details') }}
-                </SfButton>
-                <button
-                  class="mt-2"
-                  @click="itemsToCart(orderGetters.getItems(order))"
-                >
-                  Reorder All Items
-                </button>
-              </SfTableData>
-                @click="downloadQuote(quotes.indexOf(quote))"
-                >Download As Pdf</SfButton
-              >
-            </SfTableData>
-          </SfTableRow> -->
-        </SfTable>
-      </SfTab>
 
       <SfTab class="profileTabs" title="My Invoices">
         <!-- <div v-for="quote of quotes">{{quotes.indexOf(quote) + 1}})  Date: {{quote.createdAt}} <br/> Subject: {{quote.subject}}  
@@ -311,7 +246,6 @@ export default {
       load({ email: currentEmail })
         .then((data) => {
           quotes.value = myQuotes.value;
-          //console.log("DATA: ", myQuotes.value)
         })
         .catch((err) => console.warn(err));
     });
@@ -356,17 +290,12 @@ export default {
       axios
         .post(baseUrl, pbody, poptions)
         .then((res) => {
-          console.log('result invoice is ', res);
           invoices.value = res.data.data.myInvoices.items;
-          console.log('invoices.value is ', invoices.value);
         })
-        .catch((err) => {
-          console.log('error invoice is ', err);
-        });
+        .catch((err) => {});
     });
 
     //    // quotes.value = myQuotes
-    // console.log('DATA::',  load)
 
     // const  mutation = gql`
     //     query getInvoices($invoiceEmail: String!){
@@ -379,10 +308,8 @@ export default {
     //     }`
     // axios.post('http://localhost:3000/shop-api', {query: print(mutation), variables :{customerEmail:invoiceEmail}})
     // .then(data =>{
-    //   console.log("invoice data is",data);
     //     // quotes.value = data.data.data.getQueryOf
     // }).catch(err => {
-    //   console.log("the error is ", err)
     // })
 
     const limit = 10;

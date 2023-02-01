@@ -69,9 +69,9 @@
               />
             </template>
           </LazyHydrate> -->
-          <div class="md:col-span-8" v-if="heroSection.link">
+          <div class="md:col-span-8 flex justify-end" v-if="heroSection.link">
             <iframe
-              class="w-[90%] md:h-[25rem] ytplayer mx-auto"
+              class="w-[90%] md:h-[25rem] ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
@@ -429,7 +429,13 @@ import {
 import CategoriesAccordion from '~/components/CategoriesAccordion';
 import Banner from '~/components/Banner';
 import { onSSR } from '@vue-storefront/core';
-import { computed, onMounted, inject, ref , onUnmounted} from '@vue/composition-api';
+import {
+  computed,
+  onMounted,
+  inject,
+  ref,
+  onUnmounted,
+} from '@vue/composition-api';
 import { getCalculatedPrice } from '~/helpers';
 import getCms from '@vue-storefront/vendure-api/src/api/cms';
 import CategoryFeature from '../components/CategoryFeature.vue';
@@ -603,7 +609,6 @@ export default {
           };
         });
         this.testimonials = testim.slice(0, 3);
-        console.log('Maji testimonials', this.testimonials);
       });
     },
   },
@@ -632,17 +637,17 @@ export default {
 
     const messages = ref([]);
     const refreshMessages = async () => {
-      // await loadUser();
       const data = await getUserInstantMessage({
         userEmail: userGetters.getEmailAddress(user.value),
       });
       messages.value = data.data.getUserInstantMessage;
     };
-    let intervalId
-    intervalId= setInterval(() => { 
-      console.log('chat is running');
-      refreshMessages();
-    }, 5000);
+    let intervalId;
+    if (isAuthenticated.value) {
+      intervalId = setInterval(() => {
+        refreshMessages();
+      }, 5000);
+    }
 
     const { writeQuote, load, myQuotes } = useQuote();
 
@@ -672,7 +677,6 @@ export default {
     const { sendMessage, getUserInstantMessage } = useInstantMessage();
 
     const sendMessageToAdmin = async (messageToSend) => {
-      console.log('emit accepted', messageToSend);
       // await loadUser();
       const userEmail = userGetters.getEmailAddress(user.value);
       const userFirstName = userGetters.getFirstName(user.value);
@@ -721,7 +725,6 @@ export default {
         },
         quantity: quantity,
       }).then((res) => {
-        console.log('best seller updated cart value is ', cart.value);
         if (cart?.value?.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
         } else {
@@ -744,7 +747,7 @@ export default {
       localStorage.setItem('sort', 'Select Sorting');
     });
 
-    onUnmounted(() => clearInterval(intervalId))
+    onUnmounted(() => clearInterval(intervalId));
     return {
       productGetters,
       tabs,
@@ -827,9 +830,6 @@ export default {
       --banner-container-flex: 0 0 70%;
     }
   }
-}
-
-.sf-banner {
 }
 
 .advert {
