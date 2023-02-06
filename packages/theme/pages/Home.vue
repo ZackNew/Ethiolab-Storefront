@@ -360,13 +360,13 @@
           v-if="isMessageSideBarOpen"
           @click="toggleMessageSidebar()"
         >
-          <div v-if="isAuthenticated && isMessageSideBarOpen">
+          <div v-if="isMessageSideBarOpen">
             <img src="~/assets/close-circle-svgrepo-com.svg" alt="image" />
           </div>
         </SfButton>
         <SfButton
           class="sf-button--pure sf-header__action chatIcon"
-          v-if="isAuthenticated && !isMessageSideBarOpen"
+          v-if="!isMessageSideBarOpen"
           @click="toggleMessageSidebar()"
         >
           <div>
@@ -643,11 +643,10 @@ export default {
       messages.value = data.data.getUserInstantMessage;
     };
     let intervalId;
-    if (isAuthenticated.value) {
-      intervalId = setInterval(() => {
-        refreshMessages();
-      }, 5000);
-    }
+    intervalId = setInterval(() => {
+      console.log('refreshing');
+      refreshMessages();
+    }, 5000);
 
     const { writeQuote, load, myQuotes } = useQuote();
 
