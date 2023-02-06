@@ -38,7 +38,7 @@
                 v-model="qty"
                 type="number"
               />
-              <SfButton @click="addToCart" class="rounded bg-secondary mr-[2%]"
+              <SfButton @click="addToCart($event,'main')" class="rounded bg-secondary mr-[2%]"
                 >Add to Cart</SfButton
               >
               <button @click="addToCompareList">
@@ -164,7 +164,7 @@
                     ? addItemToWishlist({ product })
                     : removeItemFromWishlist({ product })
                 "
-                @click:add-to-cart="addToCart"
+                @click:add-to-cart="addToCart($event,'accessory')"
                 class="carousel__item__product mr-2"
                 style="border-radius: 15px"
               />
@@ -261,6 +261,8 @@ export default {
     const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
     const qty = ref(1);
+    const accQty = ref(1);
+
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
     const { products, search } = useProduct('products');
@@ -366,10 +368,12 @@ export default {
       window.history.pushState({}, '', url);
     };
 
-    const addToCart = () => {
+    const addToCart = (event,type) => {
       const isConfigurationSelected = Object.values(
         configuration.value
       )?.length;
+      // console.log("isconf val is", isConfigurationSelected)
+      // console.log("type is ", type)
       if (isConfigurationSelected) {
         const productVariant = getProductVariantByConfiguration(
           products.value,
@@ -389,7 +393,9 @@ export default {
           }
         });
       } else {
-        addItem({ product: product.value, quantity: parseInt(qty.value) }).then(
+        if(type == 'main'){
+          // console.log("main type")
+            addItem({ product: product.value, quantity: parseInt(qty.value) }).then(
           (res) => {
             if (cart.value.errorCode && cart.value.errorCode != '') {
               showToast(cart.value.message);
@@ -398,6 +404,22 @@ export default {
             }
           }
         );
+        }else if(type == 'accessory'){
+          // console.log(" accessory type")
+
+          addItem({ product: {
+          _variantId: event._variantId,
+        }, quantity: parseInt(event.quantity) }).then(
+          (res) => {
+            if (cart.value.errorCode && cart.value.errorCode != '') {
+              showToast(cart.value.message);
+            } else {
+              showToast('Product added to cart!');
+            }
+          }
+        );
+        }
+      
       }
     };
 
