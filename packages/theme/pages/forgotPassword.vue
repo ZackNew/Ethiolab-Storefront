@@ -22,8 +22,8 @@
                   class="form__element width-[80%]"
                 />
               </ValidationProvider>
-
-              <SfButton type="submit" class="width-[80%] bg-secondary">
+       
+              <SfButton type="submit" class=" bg-secondary  m-auto">
                 <SfLoader
                   :class="{ loader: forgotPasswordLoading }"
                   :loading="forgotPasswordLoading"
@@ -33,6 +33,12 @@
               </SfButton>
             </form>
           </ValidationObserver>
+          <button
+                class=" text-secondary  font-bold "
+                @click="handleHaveCode"
+              >
+                Already have a code?
+              </button>
         </div>
 
         <div class="field" v-else>
@@ -53,7 +59,17 @@
                 />
               </ValidationProvider>
 
-              <ValidationProvider rules="required" v-slot="{ errors }">
+              <ValidationProvider 
+               :rules="{
+                    required: true,
+                    min: 6,
+                    regex:
+                      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).*$/,
+                  }" 
+                  name="password"
+                  v-slot="{ errors }"
+                  slim
+                  >
                 <SfInput
                   v-e2e="'forgot-modal-email'"
                   v-model="password"
@@ -62,10 +78,11 @@
                   name="password"
                   :label="$t('New Password')"
                   class="form__element width-[80%]"
+                  type="password"
                 />
               </ValidationProvider>
-
-              <SfButton type="submit" class="width-[80%] bg-secondary">
+       
+              <SfButton type="submit" class=" bg-secondary  m-auto">
                 <SfLoader
                   :class="{ loader: forgotPasswordLoading }"
                   :loading="forgotPasswordLoading"
@@ -158,13 +175,14 @@ export default defineComponent({
     SfLoader,
     RegisterMessage,
   },
-  setup() {
+  setup(props, { root }) {
     const showToast = inject('showToast');
     const {
       request,
       error: forgotPasswordError,
       loading: forgotPasswordLoading,
       setNew,
+      result: forgotPasswordResult
     } = useForgotPassword();
 
     const userEmail = ref('');
@@ -175,23 +193,48 @@ export default defineComponent({
 
     const handleForgotten = async () => {
       emailReset.value = false;
-      await request({ email: userEmail.value }).then((res) => {});
+      await request({ email: userEmail.value }).then(res => {
+        console.log("email response is ", res)
+      })
+      if(forgotPasswordError.value.request !== null){
+      showToast("Code Is Not Sent!")
+
+    }else{
       showToast('A password reset token has been sent to your email');
+
+    }
       // if (!forgotPasswordError.value.request) {
       //   setCurrentScreen(SCREEN_THANK_YOU);
       // }
     };
 
-    const handleNotReceived = async () => {
+    const handleNotReceived = async() => {
       emailReset.value = true;
-    };
+    }
+    const handleHaveCode = async() => {
+      emailReset.value = false;
+    }
 
-    const handleReset = async () => {
-      await setNew({
-        tokenValue: tokenValue.value,
-        newPassword: password.value,
-      });
-    };
+    const handleReset = async() => {
+      // console.log("reset clicked password" , password.value, tokenValue.value);
+    const resu =  await setNew({tokenValue:tokenValue.value, newPassword: password.value})
+    let check = forgotPasswordResult.value.setNewPasswordResult.data.resetPassword.__typename;
+    // console.log("result  value is ", check);
+    // console.log("result error  value is ", forgotPasswordError);
+    if(check == "CurrentUser"){
+      showToast("Password Resetted Successfully!")
+      return root.$router.push('/');
+    }else{
+      showToast("Password Reset Failed!")
+      // return root.$router.push('/signin');
+    }
+
+    if(forgotPasswordError.value.setNew !== null){
+      showToast("Password Reset Failed!")
+
+    }
+
+    }
 
     return {
       forgotPasswordLoading,
@@ -202,6 +245,7 @@ export default defineComponent({
       handleReset,
       tokenValue,
       password,
+      handleHaveCode
     };
   },
 });

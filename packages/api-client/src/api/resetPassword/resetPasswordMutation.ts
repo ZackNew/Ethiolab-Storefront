@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  mutation resetPasswordMutation($token: String!, $password: String!) {
-    resetPassword(token: $token, password: $password) {
+  mutation resetPasswordMutation($tokenValue: String!, $newPassword: String!) {
+    resetPassword(token: $tokenValue, newPassword: $newPassword) {
       ... on CurrentUser {
         id
         identifier
@@ -25,6 +25,6 @@ export default gql`
         errorCode
         message
       }
-    }
+    } 
   }
 `;
