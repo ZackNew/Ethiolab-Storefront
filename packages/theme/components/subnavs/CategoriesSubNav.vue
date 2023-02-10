@@ -3,7 +3,7 @@
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-9 m-5 relative">
         <h3 class="text-[#717171] font-bold">Categories</h3>
-        <!-- <hr class="mb-5" /> -->
+        <hr class="mb-5" />
         <div class="nameLists">
           <div v-for="(item, i) in newList" :key="item.id">
             <nuxt-link :to="`/c/${item.slug}`">
@@ -131,7 +131,7 @@ export default {
   justify-content: start;
 }
 hr {
-  color: rgb(145, 154, 163);
+  color: rgb(147, 154, 159);
 }
 .sideImage {
   box-shadow: 0 1px 2px 1px rgb(153, 153, 153);

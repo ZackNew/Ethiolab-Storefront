@@ -82,7 +82,6 @@ export default {
       setTimeout(() => this.elementVisible = true, 100)
 
       setTimeout(() => this.elementVisible = false, 5000)
-      console.log('emitted', this.messageToSend);
       this.$emit('sendMessageToAdmin', this.messageToSend);
       this.messageToSend = '';
     },

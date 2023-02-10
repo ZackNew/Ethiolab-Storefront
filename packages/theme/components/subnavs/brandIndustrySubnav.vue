@@ -13,7 +13,7 @@
       >
         Brands
       </h3>
-      <!-- <hr class="mb-5" /> -->
+      <hr class="mb-5" />
       <div class="nameLists">
         <div v-for="item in brandsIndustries.items" :key="item.id">
           <nuxt-link
@@ -74,7 +74,7 @@ export default {
   justify-content: start;
 }
 hr {
-  color: rgb(145, 154, 163);
+  color: rgb(147, 154, 159);
 }
 .sideImage {
   box-shadow: 0 1px 2px 1px rgb(153, 153, 153);
