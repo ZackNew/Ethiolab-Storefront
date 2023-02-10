@@ -13,7 +13,7 @@ import {
 import { NO_CACHE_FETCH_POLICY } from '../../helpers/constants';
 
 const mutation = gql`
-  query ($userEmail: String!) {
+  query GetUserInstantMessage($userEmail: String!) {
     getUserInstantMessage(userEmail: $userEmail) {
       id
       msg

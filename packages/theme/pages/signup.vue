@@ -1054,7 +1054,6 @@ export default defineComponent({
               showToast('Registration Failed');
             }
             //   invoices.value = res.data.data.myInvoices.items;
-            //   console.lg("invoices.value is ", invoices.value)
           })
           .catch((err) => {
             showToast('Registration Failed');

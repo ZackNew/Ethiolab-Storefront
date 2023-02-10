@@ -2,7 +2,7 @@
   <client-only>
     <div id="home">
       <div>
-        <!--        categories-->
+        <!--categories-->
         <!-- <div
           class="md:col-span-3 px-4 pt-4 mt-16 md:block hidden rounded-xl drop-shadow-2xl shadow-lg category-container max-h-screen overflow-auto"
         >
@@ -644,7 +644,6 @@ export default {
     };
     let intervalId;
     intervalId = setInterval(() => {
-      console.log('refreshing');
       refreshMessages();
     }, 5000);
 
