@@ -42,7 +42,8 @@
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
-        <ValidationProvider
+        <div v-if="isAuthenticated"> 
+                  <ValidationProvider
           name="emailAddress"
           rules="required|email"
           v-slot="{ errors }"
@@ -59,6 +60,8 @@
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
+        </div>
+
       </div>
       <div class="form">
         <div class="form__action">
@@ -66,7 +69,7 @@
             v-e2e="'continue-to-shipping'"
             v-if="!isFormSubmitted"
             class="bg-secondary text-white form__action-button"
-            :disabled="!(form.firstName && form.lastName && form.emailAddress)"
+            :disabled="!(form.firstName && form.lastName)"
             type="submit"
           >
             {{ $t('Continue to shipping') }}
@@ -84,7 +87,7 @@ import { ref, onMounted } from '@vue/composition-api';
 import { required, min, digits, email } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { useVSFContext } from '@vue-storefront/core';
-import { useCart } from '@vue-storefront/vendure';
+import { useCart,useUser } from '@vue-storefront/vendure';
 import { EMAIL_ADDRESS_CONFLICT_ERROR } from '~/helpers';
 
 extend('required', {
@@ -120,6 +123,7 @@ export default {
     const { $vendure } = useVSFContext();
     const { cart, load } = useCart();
     const errorMessage = ref('');
+    const { isAuthenticated, load: loadUser, user } = useUser();
 
     const form = ref({
       firstName: '',
@@ -128,6 +132,11 @@ export default {
     });
 
     const handleFormSubmit = async () => {
+      console.log("form value is ", form)
+      console.log(isAuthenticated.value)
+      if(!isAuthenticated.value){
+        form.value.emailAddress="guest@gmail.com";
+      }
       const response = await $vendure.api.setCustomerForOrder(form.value);
       if (
         response?.data?.setCustomerForOrder?.errorCode ===
@@ -157,6 +166,7 @@ export default {
       form,
       handleFormSubmit,
       errorMessage,
+      isAuthenticated
     };
   },
 };
