@@ -174,7 +174,7 @@ export default {
         fromEmail: qEmail.value,
         fromPhone: qPhone.value,
         location: quoteCity.value,
-        productDescr: descr,
+        productDescr: descr || '',
         productIds: pIds,
       });
       showToast('Sent!');
