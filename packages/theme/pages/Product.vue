@@ -266,7 +266,8 @@ export default {
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
     const { products, search } = useProduct('products');
-    const { addItem, addItemToCart, isInCart, loading, cart } = useCart();
+    const { addItem, addItemToCart, isInCart, loading, cart, setCart } =
+      useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
     const {
       relatedProducts,
@@ -399,6 +400,7 @@ export default {
           (res) => {
             if (cart.value.errorCode && cart.value.errorCode != '') {
               showToast(cart.value.message);
+              setCart();
             } else {
               showToast('Product added to cart!');
             }

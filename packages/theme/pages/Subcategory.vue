@@ -88,6 +88,31 @@
             <p class="py-4 ml-4 mr-4 text-thin" v-html="description"></p>
           </div>
         </div>
+        <button
+          class="flex my-5 visible md:invisible text-sm px-2"
+          @click="showFilter = !showFilter"
+        >
+          <SfIcon
+            icon="menu"
+            size="xxs"
+            color="primary"
+            viewBox="0 0 24 24"
+            :coverage="1"
+          />
+          <p>Filters</p>
+        </button>
+        <div
+          class="shadow-xl rounded-lg w-80 h-10rem overflow-auto no-scrollbar"
+          v-if="products.length > 0 && showFilter"
+        >
+          <SubcategoryBrandAccordion
+            @maxAdded="maxInput"
+            @minAdded="minInput"
+            @searchChange="searchBox"
+            @filterClicked="filterProducts"
+            :filters="filters"
+          />
+        </div>
         <div
           v-if="filteredSearchedProducts.length === 0 && !loading"
           class="border border-light_accent shadow-md bg-white rounded-lg w-full"
@@ -172,45 +197,7 @@
           <div v-if="loading" class="mt-[7%]">
             <Loading />
           </div>
-          <button
-            class="flex my-5 visible md:invisible text-sm px-2"
-            @click="showFilter = !showFilter"
-          >
-            <SfIcon
-              icon="menu"
-              size="xxs"
-              color="primary"
-              viewBox="0 0 24 24"
-              :coverage="1"
-            />
-            <p>Filters</p>
-          </button>
-          <div
-            class="shadow-xl rounded-lg w-80 h-3/4"
-            v-if="products.length > 0 && showFilter"
-          >
-            <SubcategoryBrandAccordion
-              @maxAdded="maxInput"
-              @minAdded="minInput"
-              @searchChange="searchBox"
-              @filterClicked="filterProducts"
-              :filters="filters"
-            />
-            <!-- <div class="p-3">
-              <LazyHydrate>
-                <SfBanner
-                  :title="adSection.title || 'AD Title'"
-                  :subtitle="adSection.overview || 'AD Overview'"
-                  :description="adSection.description || 'AD Description'"
-                  :buttonText="adSection.buttonText || 'AD Button'"
-                  background=""
-                  :image="adImage || '/homepage/bannerA.webp'"
-                  link="/c/clinical-laboratory"
-                >
-                </SfBanner>
-              </LazyHydrate>
-            </div> -->
-          </div>
+
           <!-- Products -->
 
           <div class="mt-5">

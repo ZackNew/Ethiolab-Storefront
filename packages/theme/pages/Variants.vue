@@ -346,7 +346,7 @@ import {
   SfTabs,
   SfReview,
 } from '@storefront-ui/vue';
-import { ref } from '@vue/composition-api';
+import { ref, inject } from '@vue/composition-api';
 import { useWishlist, useCart, useUser } from '@vue-storefront/vendure';
 import Gallery from '~/components/Gallery.vue';
 
@@ -523,11 +523,13 @@ export default {
     custom() {
       const link = this.product?.customFields?.youtube_link.split('?v=')[1];
       const document =
-        process.env.GRAPHQL + this.product?.customFields?.documentation;
+        process.env.GRAPHQL_API?.split('/shop-api')[0] +
+        this.product?.customFields?.documentation;
       return { link: link, document: document };
     },
   },
   setup() {
+    const showToast = inject('showToast');
     const { user, isAuthenticated, load, getU } = useUser();
     const { isDarkMode } = useUiState();
     const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
@@ -559,6 +561,13 @@ export default {
           _variantId: variantId,
         },
         quantity: quantity,
+      }).then((res) => {
+        if (cart.value.errorCode && cart.value.errorCode != '') {
+          showToast(cart.value.message);
+          setCart();
+        } else {
+          showToast('Product added to cart!');
+        }
       });
 
       for (let vId of accessoriesToCart.value) {
@@ -567,10 +576,10 @@ export default {
             _variantId: vId,
           },
           quantity: 1,
+        }).then((res) => {
+          setTimeout(() => setCart(), 5000);
         });
       }
-
-      setTimeout(() => setCart(), 5000);
     };
     return {
       isInCart,

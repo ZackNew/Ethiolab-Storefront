@@ -33,7 +33,10 @@
               />
             </div>
           </VueSlickCarousel>
-          <button @click="showNext" class="text-secondary text-center ml-[45%]">
+          <button
+            @click="showNext"
+            class="text-secondary text-center ml-[45%] font-bold"
+          >
             +
           </button>
         </div>

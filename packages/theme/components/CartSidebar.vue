@@ -34,7 +34,7 @@
                     ' ETB'
                   "
                   :stock="99999"
-                  @click:remove="removeItem({ product })"
+                  @click:remove="removeFromCart({ product })"
                   class="collected-product"
                 >
                   <template #configuration>
@@ -53,7 +53,7 @@
                         :disabled="loading"
                         :qty="cartGetters.getItemQty(product)"
                         class="sf-collected-product__quantity-selector"
-                        @input="updateItemQty({ product, quantity: $event })"
+                        @input="updateCartQuty({ product, quantity: $event })"
                       />
                     </div>
                   </template>
@@ -131,7 +131,7 @@ import {
   SfQuantitySelector,
   SfInput,
 } from '@storefront-ui/vue';
-import { computed, watchEffect } from '@vue/composition-api';
+import { computed, watchEffect, inject } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { ref } from '@vue/composition-api';
@@ -154,11 +154,31 @@ export default {
   setup() {
     const { isCartSidebarOpen, toggleQuoteModal, toggleCartSidebar } =
       useUiState();
-    const { cart, removeItem, updateItemQty, loading } = useCart();
+    const { cart, removeItem, updateItemQty, loading, setCart } = useCart();
+    const showToast = inject('showToast');
     const { isAuthenticated } = useUser();
     const products = computed(() => cartGetters.getItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
+
+    const removeFromCart = (product) => {
+      removeItem(product).then((res) => {
+        if (cart?.value?.errorCode && cart.value.errorCode != '') {
+          showToast(cart.value.message);
+          setCart();
+        }
+      });
+    };
+
+    const updateCartQuty = (params) => {
+      updateItemQty(params).then((res) => {
+        if (cart?.value?.errorCode && cart.value.errorCode != '') {
+          showToast(cart.value.message);
+          setCart();
+        }
+      });
+    };
+
     const toggleQuoteDialog = () => {
       toggleCartSidebar();
       toggleQuoteModal();
@@ -175,6 +195,8 @@ export default {
       totals,
       totalItems,
       cartGetters,
+      removeFromCart,
+      updateCartQuty,
     };
   },
 };

@@ -174,7 +174,7 @@ export default defineComponent({
   },
   setup() {
     const showToast = inject('showToast');
-    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
     const {
       addItem: addItemToWishlist,
       isInWishlist,
@@ -192,6 +192,7 @@ export default defineComponent({
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
+          setCart();
         } else {
           showToast('Product added to cart!');
         }

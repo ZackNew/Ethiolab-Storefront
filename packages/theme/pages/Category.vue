@@ -607,7 +607,7 @@ export default {
     const itemQuantity = ref(1);
     const th = useUiHelpers();
     const uiState = useUiState();
-    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
     const {
       addItem: addItemToWishlist,
       isInWishlist,
@@ -629,6 +629,7 @@ export default {
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
+          setCart();
         } else {
           showToast('Product added to cart!');
         }
