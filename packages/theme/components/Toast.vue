@@ -2,7 +2,9 @@
   <Transition>
     <div v-if="show" id="container">
       <div id="toast-body">
-        <div>{{ message }}</div>
+        <div>
+          <h4>{{ message }}</h4>
+        </div>
       </div>
     </div>
   </Transition>
@@ -22,16 +24,19 @@ export default {
 <style lang="scss" scoped>
 #container {
   position: sticky;
-  max-width: 50%;
+  width: 50%;
   margin: auto;
   bottom: 15%;
-  background: rgba(0, 80, 149, 0.8);
-  color: white;
-  padding-right: 0%;
+  background: rgba(255, 255, 255, 0.8);
+  color: rgb(0, 0, 0);
+  padding: 1%;
   font-weight: bold;
+  text-align: center;
   transition: opacity 10s ease-in-out;
   border-radius: 5px;
   font-size: 1.3rem;
+  box-shadow: 1px 2px 2px 1px rgb(198, 198, 198);
+  z-index: 9999;
   //  box-shadow: black
   //  border-radius: 10%;
   #toast-body {

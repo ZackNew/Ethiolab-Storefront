@@ -20,7 +20,7 @@
             <SfButton class="sf-button--text">
               <a
                 class="text-secondary px-1"
-                :href="quote.assetUrl"
+                :href="`${urlLink}${quote.assetUrl}`"
                 target="_blank"
               >
                 view pdf
@@ -57,6 +57,9 @@ export default {
     const { isAuthenticated, load: loadUser, user } = useUser();
     const quotesHeader = ['Id', 'Sent At', 'Subject', 'Response'];
     const quotes = ref([]);
+    const urlLink = computed(() => {
+      return process.env.GRAPHQL_API.split('/shop-api')[0];
+    });
     const getMyuotes = async () => {
       loadUser();
       const baseUrl = process.env.GRAPHQL_API;
@@ -86,6 +89,7 @@ export default {
     return {
       quotes,
       quotesHeader,
+      urlLink,
     };
   },
 };

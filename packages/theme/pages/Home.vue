@@ -625,7 +625,7 @@ export default {
     } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
-    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
     const {
       addItem: addItemToWishlist,
       isInWishlist,
@@ -679,12 +679,14 @@ export default {
       const userEmail = userGetters.getEmailAddress(user.value);
       const userFirstName = userGetters.getFirstName(user.value);
       const userLastName = userGetters.getLastName(user.value);
-      await sendMessage({
-        msg: messageToSend,
-        lastName: userLastName,
-        firstName: userFirstName,
-        userEmail: userEmail,
-      });
+      if (messageToSend.length > 0) {
+        await sendMessage({
+          msg: messageToSend,
+          lastName: userLastName,
+          firstName: userFirstName,
+          userEmail: userEmail,
+        });
+      }
     };
 
     const onSubscribe = ({ emailAddress, event }) => {
@@ -725,6 +727,7 @@ export default {
       }).then((res) => {
         if (cart?.value?.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
+          setCart();
         } else {
           showToast('Product added to cart!');
         }
