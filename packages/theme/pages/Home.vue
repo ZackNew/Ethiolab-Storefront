@@ -370,7 +370,8 @@
           @click="toggleMessageSidebar()"
         >
           <div>
-            <img src="~/assets/chat1-svgrepo-com.svg" alt="image" />
+           <span v-if="unseen !== 0" class=" bg-red text-white rounded-full float-right  ">&nbsp;{{ unseen }}&nbsp;</span> 
+           <img class="-mt-2 float-right " src="~/assets/chat1-svgrepo-com.svg" alt="image" />
           </div>
         </SfButton>
       </div>
@@ -674,6 +675,9 @@ export default {
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
     const { sendMessage, getUserInstantMessage } = useInstantMessage();
 
+    const unseen = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false).length)
+    console.log("unseen value is ", unseen.value)
+
     const sendMessageToAdmin = async (messageToSend) => {
       // await loadUser();
       const userEmail = userGetters.getEmailAddress(user.value);
@@ -778,6 +782,7 @@ export default {
       isAuthenticated,
       sendMessageToAdmin,
       messages,
+      unseen
     };
   },
 };
