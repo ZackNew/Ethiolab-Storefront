@@ -1,6 +1,10 @@
 <template>
   <div class="wrap">
-    <SfMegaMenu :visible="isSearchOpen" title="Search results" class="search">
+    <SfMegaMenu
+      :visible="isSearchOpen"
+      title="Search results"
+      class="search w-[96%] md:w-[1140px]"
+    >
       <transition name="sf-fade" mode="out-in">
         <div
           v-if="result !== null && result.length > 0 && loading === false"
@@ -272,7 +276,7 @@ export default {
   box-sizing: border-box;
   padding: 0 var(--spacer-sm);
   @include for-desktop {
-    // max-width: 12400px;
+    max-width: 1250px !important;
     width: 91%;
     padding: 0;
     margin: 0 auto;
@@ -283,8 +287,7 @@ export default {
   z-index: 3;
   height: 100%;
   min-height: 50%;
-  width: 1140px;
-  --mega-menu-column-header-margin: var(--spacer-sm) 0 var(--spacer-xl);
+  // --mega-menu-column-header-margin: var(--spacer-sm) 0 var(--spacer-xl);
   --mega-menu-content-padding: 0;
   --mega-menu-height: auto;
   background-color: var(--c-accent);

@@ -164,13 +164,12 @@
                       : productGetters.getCoverImage(product)
                   "
                   :regular-price="
-                    String(
-                      product.priceWithTax.min || product.priceWithTax.value
-                    ).slice(0, -2) +
+                    String(product.price.min || product.price.value).slice(
+                      0,
+                      -2
+                    ) +
                     '.' +
-                    String(
-                      product.priceWithTax.min || product.priceWithTax.value
-                    ).slice(-2) +
+                    String(product.price.min || product.price.value).slice(-2) +
                     ' ETB'
                   "
                   :imageHeight="290"
@@ -634,6 +633,7 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+    const { sendMessage, getUserInstantMessage } = useInstantMessage();
     loadUser();
 
     const messages = ref([]);
@@ -673,7 +673,6 @@ export default {
       return JSON.parse(pro ?? '{}');
     });
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
-    const { sendMessage, getUserInstantMessage } = useInstantMessage();
 
     const unseen = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false).length)
     console.log("unseen value is ", unseen.value)

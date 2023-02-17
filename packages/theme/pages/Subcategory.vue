@@ -291,7 +291,7 @@ export default {
       searchProduct = searchProduct.filter((product) => {
         let total_price = 0;
         for (const variant of product.variants) {
-          total_price += Number(String(variant.priceWithTax).slice(0, -2));
+          total_price += Number(String(variant.price).slice(0, -2));
         }
         total_price = total_price / product.variants.length;
 
@@ -458,7 +458,7 @@ export default {
                             description
                             variants {
                               id
-                              priceWithTax
+                              price
                             }
                             featuredAsset{
                               preview
