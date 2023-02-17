@@ -76,7 +76,7 @@
           </SfButton>
           <div v-if="product.facetValues !== []" class="flex">
             <div v-for="(facet, i) in product.facetValues" :key="i">
-              <p class="bg-[#a7c6ed] mr-4 px-3 py-[0.5] rounded">
+              <p class="bg-[#d3e6fe] mr-4 px-3 py-[0.5] rounded">
                 {{ facet.name }}
               </p>
             </div>
@@ -197,9 +197,9 @@
                   <h4 class="text-secondary">
                     <span class="font-bold">
                       {{
-                        String(variant.priceWithTax).slice(0, -2) +
+                        String(variant.price).slice(0, -2) +
                         '.' +
-                        String(variant.priceWithTax).slice(-2)
+                        String(variant.price).slice(-2)
                       }}
                     </span>
                     ETB
@@ -288,9 +288,9 @@
                 <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
                 <h6 class="ml-4 text-secondary">
                   {{
-                    String(variant.priceWithTax).slice(0, -2) +
+                    String(variant.price).slice(0, -2) +
                     '.' +
-                    String(variant.priceWithTax).slice(-2)
+                    String(variant.price).slice(-2)
                   }}
                   ETB
                 </h6>
@@ -460,7 +460,7 @@ export default {
               items{
                 id
                 sku
-                priceWithTax
+                price
                 featuredAsset{
                   preview
                 }
@@ -501,13 +501,13 @@ export default {
   computed: {
     priceRange() {
       if (this.product?.variantList?.totalItems === 1) {
-        const price = String(this.product?.variantList?.items[0]?.priceWithTax);
+        const price = String(this.product?.variantList?.items[0]?.price);
         const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
         return fPrice + ' ETB';
       } else if (this.product?.variantList?.totalItems > 1) {
         let prices = [];
         this.product.variantList?.items.forEach((item) => {
-          prices.push(item.priceWithTax);
+          prices.push(item.price);
         });
         const max =
           String(Math.max(...prices)).slice(0, -2) +
@@ -660,5 +660,9 @@ hr {
 .red table tbody tr.active-row {
   font-weight: bold;
   color: #0e1621;
+}
+
+.redd {
+  color: #ffffff;
 }
 </style>

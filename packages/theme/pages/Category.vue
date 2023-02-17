@@ -846,7 +846,7 @@ export default {
               }
               variants{
                 id
-                priceWithTax
+                price
               }
               collections{
                 id
@@ -874,9 +874,9 @@ export default {
           });
           const image = [String(product?.featuredAsset?.preview)];
           const price =
-            String(product?.variants[0]?.priceWithTax).slice(0, -2) +
+            String(product?.variants[0]?.price).slice(0, -2) +
             '.' +
-            String(product?.variants[0]?.priceWithTax).slice(-2);
+            String(product?.variants[0]?.price).slice(-2);
           const prod = {
             _id: product?.id,
             _variantId: product?.variants[0]?.id,

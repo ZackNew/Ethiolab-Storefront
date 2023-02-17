@@ -113,7 +113,7 @@ export default {
   computed: {
     prices() {
       if (this.product?.variants.length === 1) {
-        const price = String(this.product?.variants[0]?.priceWithTax);
+        const price = String(this.product?.variants[0]?.price);
         const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
         return fPrice;
       }
@@ -121,7 +121,7 @@ export default {
         let items = this.product?.variants;
         let prices = [];
         items.forEach((item) => {
-          prices.push(item.priceWithTax);
+          prices.push(item.price);
         });
         const max =
           String(Math.max(...prices)).slice(0, -2) +
