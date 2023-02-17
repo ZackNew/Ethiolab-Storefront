@@ -1,188 +1,209 @@
 <template>
   <div>
-    <div class="my-[3%]" v-if="loading">
+    <div class="my-[3%]" v-if="loadings">
       <Loading />
     </div>
-    <div id="product" v-if="Svariant !== null">
-      <SfBreadcrumbs
-        class="breadcrumbs desktop-only text-secondary"
-        :breadcrumbs="breadcrumbs"
-      />
-      <!-- <p>{{breadcrumbs}}</p> -->
-      <div>
-        <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
-          <div class="md:col-span-6 max-w[99%]">
-            <Gallery
-              :images="
-                Svariant.assets.length > 0 ? Svariant.assets : prImages || []
-              "
-              :display="
-                Svariant.featuredAsset ? Svariant.featuredAsset : prImage
-              "
-              class="mb-5 md:mb-0"
-            />
-          </div>
-          <div class="md:col-span-6">
-            <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
-            <h4 class="text-secondary mb-3">
-              {{
-                String(Svariant.priceWithTax).slice(0, -2) +
-                '.' +
-                String(Svariant.priceWithTax).slice(-2)
-              }}
-              ETB
-            </h4>
-            <div class="flex mb-5 items-center">
-              <input
-                class="max-w-[55px] text-center mr-4"
-                v-model="qty"
-                type="number"
+    <div v-else>
+      <div id="product" v-if="Svariant !== null">
+        <SfBreadcrumbs
+          class="breadcrumbs desktop-only text-secondary"
+          :breadcrumbs="breadcrumbs"
+        />
+        <!-- <p>{{breadcrumbs}}</p> -->
+        <div>
+          <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
+            <div class="md:col-span-6 max-w[99%]">
+              <Gallery
+                :images="
+                  Svariant.assets.length > 0 ? Svariant.assets : prImages || []
+                "
+                :display="
+                  Svariant.featuredAsset ? Svariant.featuredAsset : prImage
+                "
+                class="mb-5 md:mb-0"
               />
-              <SfButton @click="addToCart($event,'main')" class="rounded bg-secondary mr-[2%]"
-                >Add to Cart</SfButton
+            </div>
+            <div class="md:col-span-6">
+              <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
+              <div class="flex items-end">
+                <h4 class="font-bold text-secondary mb-3 mr-8">
+                  {{
+                    String(Svariant.price).slice(0, -2) +
+                    '.' +
+                    String(Svariant.price).slice(-2)
+                  }}
+                  ETB
+                </h4>
+                <h5 class="text-secondary mb-3">
+                  {{
+                    String(Svariant.priceWithTax).slice(0, -2) +
+                    '.' +
+                    String(Svariant.priceWithTax).slice(-2)
+                  }}
+                  ETB including tax
+                </h5>
+              </div>
+              <div class="flex mb-5 items-center">
+                <input
+                  class="max-w-[60px] h-12 text-center mr-4"
+                  v-model="qty"
+                  type="number"
+                />
+                <SfButton
+                  @click="addToCart($event, 'main')"
+                  class="rounded bg-secondary mr-[2%]"
+                  >Add to Cart</SfButton
+                >
+                <button @click="addToCompareList">
+                  <p class="text-secondary align-center mt-3">
+                    + Add to Compare List
+                  </p>
+                </button>
+              </div>
+              <div
+                v-if="Svariant.customFields"
+                class="max-h-[20rem] overflow-hidden"
+                :class="isDarkMode ? 'text-white' : ''"
               >
-              <button @click="addToCompareList">
-                <p class="text-secondary align-center mt-3">
-                  + Add to Compare List
-                </p>
-              </button>
-            </div>
-            <div
-              v-if="Svariant.customFields"
-              class="max-h-[20rem] overflow-hidden"
-              :class="isDarkMode ? 'text-white' : ''"
-            >
-              <p
-                v-html="Svariant.customFields.description"
-                class="text-justify"
-                :class="classes.red"
-              ></p>
-            </div>
+                <p
+                  v-html="Svariant.customFields.description"
+                  class="text-justify"
+                  :class="classes.red"
+                ></p>
+              </div>
 
-            <a
-              v-if="Svariant.customFields.description"
-              href="#full"
-              class="text-secondary text-xl"
-              >More +</a
-            >
+              <a
+                v-if="Svariant.customFields.description"
+                href="#full"
+                class="text-secondary text-xl"
+                >More +</a
+              >
+              <div v-if="Svariant.facetValues !== []" class="flex">
+                <div v-for="(facet, i) in Svariant.facetValues" :key="i">
+                  <p class="bg-[#d3e6fe] mr-4 px-3 py-[0.5] rounded">
+                    {{ facet.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        id="full"
-        class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
-        :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
-        v-if="
-          Svariant.customFields &&
-          (Svariant.customFields.table || Svariant.customFields.description)
-        "
-      >
         <div
-          class="md:col-span-6"
-          v-if="Svariant.customFields && Svariant.customFields.table"
+          id="full"
+          class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
+          :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
+          v-if="
+            Svariant.customFields &&
+            (Svariant.customFields.table || Svariant.customFields.description)
+          "
         >
-          <h3>Speciﬁcation And Description</h3>
-          <p
-            v-html="Svariant.customFields ? Svariant.customFields.table : ''"
-            :class="classes.red"
-          ></p>
-        </div>
-        <div
-          class="md:col-span-6"
-          v-if="Svariant.customFields && Svariant.customFields.description"
-        >
-          <h3>More About This Item</h3>
-          <div v-if="Svariant.customFields">
+          <div
+            class="md:col-span-6"
+            v-if="Svariant.customFields && Svariant.customFields.table"
+          >
+            <h3>Speciﬁcation And Description</h3>
             <p
-              v-html="Svariant.customFields.description"
-              class="text-justify w-[100%]"
+              v-html="Svariant.customFields ? Svariant.customFields.table : ''"
               :class="classes.red"
             ></p>
           </div>
-        </div>
-      </div>
-
-      <div v-if="VariantAccessories.length > 0">
-        <h2 class="text-secondary text-center my-10">Accessories</h2>
-        <LazyHydrate when-visible>
-          <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
-            <template #prevArrow>
-              <div class="arrows">
-                <svg
-                  class="w-12 h-12 text-secondary"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 19l-7-7 7-7"
-                  ></path>
-                </svg>
-              </div>
-            </template>
-            /*...*/
-            <template #nextArrow>
-              <div class="arrows">
-                <svg
-                  class="w-12 h-12 text-secondary -ml-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5l7 7-7 7"
-                  ></path>
-                </svg>
-              </div>
-            </template>
-            <div v-for="product in VariantAccessories" :key="product._id">
-              <ProductCard
-                :id="product._id"
-                :title="product.name"
-                :image="product.images"
-                :regular-price="product.price.current + ' ETB'"
-                :imageHeight="440"
-                :imageWidth="500"
-                :alt="product.name"
-                :max-rating="5"
-                :score-rating="3"
-                :variantId="product._variantId"
-                :show-add-to-cart-button="true"
-                :isInWishlist="isInWishlist({ product })"
-                :isAddedToCart="isInCart({ product })"
-                :link="localePath(`/v/${product.slug}`)"
-                @click:wishlist="
-                  !isInWishlist({ product })
-                    ? addItemToWishlist({ product })
-                    : removeItemFromWishlist({ product })
-                "
-                @click:add-to-cart="addToCart($event,'accessory')"
-                class="carousel__item__product mr-2"
-                style="border-radius: 15px"
-              />
+          <div
+            class="md:col-span-6"
+            v-if="Svariant.customFields && Svariant.customFields.description"
+          >
+            <h3>More About This Item</h3>
+            <div v-if="Svariant.customFields">
+              <p
+                v-html="Svariant.customFields.description"
+                class="text-justify w-[100%]"
+                :class="classes.red"
+              ></p>
             </div>
-          </VueSlickCarousel>
+          </div>
+        </div>
+
+        <div v-if="VariantAccessories.length > 0">
+          <h2 class="text-secondary text-center my-10">Accessories</h2>
+          <LazyHydrate when-visible>
+            <VueSlickCarousel class="carousel-wrapper" v-bind="settings">
+              <template #prevArrow>
+                <div class="arrows">
+                  <svg
+                    class="w-12 h-12 text-secondary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    ></path>
+                  </svg>
+                </div>
+              </template>
+              /*...*/
+              <template #nextArrow>
+                <div class="arrows">
+                  <svg
+                    class="w-12 h-12 text-secondary -ml-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    ></path>
+                  </svg>
+                </div>
+              </template>
+              <div v-for="product in VariantAccessories" :key="product._id">
+                <ProductCard
+                  :id="product._id"
+                  :title="product.name"
+                  :image="product.images"
+                  :regular-price="product.price.current + ' ETB'"
+                  :imageHeight="440"
+                  :imageWidth="500"
+                  :alt="product.name"
+                  :max-rating="5"
+                  :score-rating="3"
+                  :variantId="product._variantId"
+                  :show-add-to-cart-button="true"
+                  :isInWishlist="isInWishlist({ product })"
+                  :isAddedToCart="isInCart({ product })"
+                  :link="localePath(`/v/${product.slug}`)"
+                  @click:wishlist="
+                    !isInWishlist({ product })
+                      ? addItemToWishlist({ product })
+                      : removeItemFromWishlist({ product })
+                  "
+                  @click:add-to-cart="addToCart($event, 'accessory')"
+                  class="carousel__item__product mr-2"
+                  style="border-radius: 15px"
+                />
+              </div>
+            </VueSlickCarousel>
+          </LazyHydrate>
+        </div>
+
+        <LazyHydrate when-visible>
+          <RelatedProducts
+            :products="relatedProducts"
+            :loading="relatedLoading"
+            class="related"
+          />
         </LazyHydrate>
+
+        <!-- <LazyHydrate when-visible> -->
+        <!-- </LazyHydrate> -->
       </div>
-
-      <LazyHydrate when-visible>
-        <RelatedProducts
-          :products="relatedProducts"
-          :loading="relatedLoading"
-          class="related"
-        />
-      </LazyHydrate>
-
-      <!-- <LazyHydrate when-visible> -->
-      <!-- </LazyHydrate> -->
     </div>
   </div>
 </template>
@@ -247,7 +268,7 @@ export default {
   name: 'Product',
   transition: 'fade',
   async created() {
-    this.loading = true;
+    this.loadings = true;
     this.getVariants();
     this.reviews = await this.getProductsReviews();
   },
@@ -369,7 +390,7 @@ export default {
       window.history.pushState({}, '', url);
     };
 
-    const addToCart = (event,type) => {
+    const addToCart = (event, type) => {
       const isConfigurationSelected = Object.values(
         configuration.value
       )?.length;
@@ -394,34 +415,35 @@ export default {
           }
         });
       } else {
-        if(type == 'main'){
+        if (type == 'main') {
           // console.log("main type")
-            addItem({ product: product.value, quantity: parseInt(qty.value) }).then(
-          (res) => {
+          addItem({
+            product: product.value,
+            quantity: parseInt(qty.value),
+          }).then((res) => {
             if (cart.value.errorCode && cart.value.errorCode != '') {
               showToast(cart.value.message);
               setCart();
             } else {
               showToast('Product added to cart!');
             }
-          }
-        );
-        }else if(type == 'accessory'){
+          });
+        } else if (type == 'accessory') {
           // console.log(" accessory type")
 
-          addItem({ product: {
-          _variantId: event._variantId,
-        }, quantity: parseInt(event.quantity) }).then(
-          (res) => {
+          addItem({
+            product: {
+              _variantId: event._variantId,
+            },
+            quantity: parseInt(event.quantity),
+          }).then((res) => {
             if (cart.value.errorCode && cart.value.errorCode != '') {
               showToast(cart.value.message);
             } else {
               showToast('Product added to cart!');
             }
-          }
-        );
+          });
         }
-      
       }
     };
 
@@ -478,6 +500,9 @@ export default {
                     }
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {
+                        facetValues{
+                          name
+                        }
                         accessories{
                           id
                           name
@@ -485,13 +510,14 @@ export default {
                           variants{
                             id
                             sku
-                            priceWithTax
+                            price
                           }
                           featuredAsset{
                             preview
                           }
                         }
                         name
+                        price
                         priceWithTax
                         customFields {
                           description
@@ -526,9 +552,9 @@ export default {
       this.VariantAccessories = this.Svariant.accessories.map((p) => {
         const image = p.featuredAsset ? p.featuredAsset.preview : '';
         const price =
-          String(p?.variants[0]?.priceWithTax).slice(0, -2) +
+          String(p?.variants[0]?.price).slice(0, -2) +
           '.' +
-          String(p?.variants[0]?.priceWithTax).slice(-2);
+          String(p?.variants[0]?.price).slice(-2);
         return {
           _id: p.id,
           _variantId: p?.variants[0]?.id,
@@ -541,7 +567,7 @@ export default {
           slug: p?.slug,
         };
       });
-      this.loading = false;
+      this.loadings = false;
     },
     async getProductsReviews() {
       const data = JSON.stringify({
@@ -681,7 +707,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loadings: false,
       prImage: '',
       quantity: 1,
       variant_description: null,
