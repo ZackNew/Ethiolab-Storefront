@@ -633,6 +633,7 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+    console.log("products value is ", products)
     const { sendMessage, getUserInstantMessage } = useInstantMessage();
     loadUser();
 

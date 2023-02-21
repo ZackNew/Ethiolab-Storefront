@@ -2,11 +2,21 @@
   <div id="checkout">
     <div class="checkout">
       <div class="checkout__main">
+        <div v-if="!canPay"> 
+          <img src="/info.png" alt="info icon" height="50" width="50"/>
+            <div class="bg-white text-lg m-4 p-4 font-bold rounded-lg"> 
+                      <p>This order contains order based product. You are allowed to pay once the admin update the order status. </p>
+
+             </div>
+        </div>
+
+        
         <SfHeading
           :level="3"
           :title="$t('Payment')"
           class="sf-heading--left sf-heading--no-underline title"
         />
+   
 
         <SfTable class="sf-table--bordered table desktop-only">
           <SfTableHeading class="table__row">
@@ -84,23 +94,27 @@
               class="sf-property--full-width sf-property--large summary__property-total"
             />
 
-            <VsfPaymentProvider @paymentMethodSelected="updatePaymentMethod" />
+            <div v-if="canPay"> 
+              <VsfPaymentProvider @paymentMethodSelected="updatePaymentMethod" />
 
-            <SfCheckbox
-              v-e2e="'terms'"
-              v-model="terms"
-              name="terms"
-              class="summary__terms"
-            >
-              <template #label>
-                <div class="sf-checkbox__label">
-                  {{ $t('I agree to') }}
-                  <SfLink href="/policy/terms-and-conditions">
-                    {{ $t('Terms and conditions') }}</SfLink
-                  >
-                </div>
-              </template>
-            </SfCheckbox>
+
+                <SfCheckbox
+                  v-e2e="'terms'"
+                  v-model="terms"
+                  name="terms"
+                  class="summary__terms"
+                >
+                  <template #label>
+                    <div class="sf-checkbox__label">
+                      {{ $t('I agree to') }}
+                      <SfLink href="/policy/terms-and-conditions">
+                        {{ $t('Terms and conditions') }}</SfLink
+                      >
+                    </div>
+                  </template>
+                  </SfCheckbox>
+            </div>
+
 
             <div class="summary__action">
               <SfButton
@@ -513,6 +527,11 @@ export default {
     const { loading } = useMakeOrder();
     const { set } = usePayment();
 
+    const canPay = computed(() => cart?.value?.customFields?.allow_customer_payment)
+    // console.log("canPay value is ", canPay)
+    // console.log("cart value is ", cart)
+
+
     const terms = ref(false);
     const paymentMethod = ref(null);
     const modalOpen = ref(false);
@@ -540,11 +559,11 @@ export default {
 
     const handleModalCashOpen = () => {
       paymentMethod.value = null;
-      console.log(
-        'MODAL cash OPEN CLICKED',
-        modalCashOpen.value,
-        typeof modalCashOpen.value
-      );
+      // console.log(
+      //   'MODAL cash OPEN CLICKED',
+      //   modalCashOpen.value,
+      //   typeof modalCashOpen.value
+      // );
       let temp = modalCashOpen.value;
       modalCashOpen.value = !temp;
       paymentMethod.value = null;
@@ -606,7 +625,7 @@ export default {
         .format('YYYY-MM-DDTHH:mm:ss[Z]');
       paymentDetail.locale = 'en';
       paymentDetail.transaction_type = 'authorization';
-      paymentDetail.reference_number = cart.value.code;
+      paymentDetail.reference_number = cart?.value?.code;
       paymentDetail.amount = (cart?.value?.totalWithTax / 100)
         .toFixed(2)
         .toString();
@@ -870,7 +889,8 @@ export default {
       handleModalOpen,
       modalOpen,
       handleCancelOrder,
-      handleModalCashOpen
+      handleModalCashOpen,
+      canPay
     };
   },
 };

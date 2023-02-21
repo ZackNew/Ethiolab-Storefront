@@ -720,6 +720,7 @@ export default {
       setSelectedFilters();
 
       // sort =  localStorage.getItem("sort");
+      console.log("all products value is ", allProducts)
     });
 
     const isFilterSelected = (facet, option) =>
@@ -853,6 +854,7 @@ export default {
               }
               customFields{
                 reviewRating
+                is_order_based
               }
             }
           }
