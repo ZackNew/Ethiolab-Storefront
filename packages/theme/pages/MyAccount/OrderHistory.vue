@@ -172,9 +172,10 @@
                 >Delete</SfButton
               > -->
               <SfButton class="sf-button--text">
-                <a :href="inv_download + invoice.downloadUrl" target="_blank">
+                <!-- <a :href="inv_download + invoice.downloadUrl" target="_blank">
                   Show As Pdf</a
-                >
+                > -->
+                <a @click="openPDF(invoice.downloadUrl)"> Show As Pdf</a>
               </SfButton>
             </SfTableData>
           </SfTableRow>
@@ -194,6 +195,7 @@ import {
   SfArrow,
 } from '@storefront-ui/vue';
 import { computed, ref, provide, onMounted } from '@vue/composition-api';
+// import { useCookie } from "@vue-composable/cookie";
 import {
   useUserOrder,
   orderGetters,
@@ -231,7 +233,36 @@ export default {
     },
   },
 
-  setup() {
+  methods: {
+    async openPDF(link) {
+      const url = process.env.GRAPHQL_API?.split('/shop-api')[0] + link;
+      const token = this.$cookies.get('etech-auth-token');
+      const options = {
+        responseType: 'blob',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${token}`,
+        },
+      };
+      await axios.get(url, options).then((res) => {
+        let binarydata = [];
+        binarydata.push(res.data);
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(
+          new Blob(binarydata, {
+            type: 'application/pdf',
+          })
+        );
+        downloadLink.setAttribute('target', '_blank');
+        console.log('the anchor tag', downloadLink);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      });
+    },
+  },
+
+  setup(props, { root }) {
     const quotes = ref([]);
     const invoices = ref([]);
 
