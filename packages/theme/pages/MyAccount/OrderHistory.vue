@@ -194,7 +194,13 @@ import {
   SfLink,
   SfArrow,
 } from '@storefront-ui/vue';
-import { computed, ref, provide, onMounted } from '@vue/composition-api';
+import {
+  computed,
+  ref,
+  provide,
+  onMounted,
+  inject,
+} from '@vue/composition-api';
 // import { useCookie } from "@vue-composable/cookie";
 import {
   useUserOrder,
@@ -346,6 +352,7 @@ export default {
     const limit = 10;
     const { orders, search } = useUserOrder();
     const currentOrder = ref(null);
+    const showToast = inject('showToast');
 
     onSSR(async () => {
       await search({ limit, offset: 0, sort: 'createdAt desc' });
@@ -383,6 +390,13 @@ export default {
               _variantId: item?.productVariant?.id,
             },
             quantity: 1,
+          }).then((res) => {
+            if (cart?.value?.errorCode && cart.value.errorCode != '') {
+              showToast(cart.value.message);
+              setCart();
+            } else {
+              showToast('Product added to cart!');
+            }
           });
         }
       } else {
@@ -391,6 +405,13 @@ export default {
             _variantId: items?.productVariant?.id,
           },
           quantity: 1,
+        }).then((res) => {
+          if (cart?.value?.errorCode && cart.value.errorCode != '') {
+            showToast(cart.value.message);
+            setCart();
+          } else {
+            showToast('Product added to cart!');
+          }
         });
       }
       setTimeout(() => setCart(), 5000);
