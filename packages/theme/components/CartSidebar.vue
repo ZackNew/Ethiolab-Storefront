@@ -1,7 +1,7 @@
 <template>
   <div>
     <RequestAQuote />
-    <div id="cart">
+    <div id="cart" class="z-[500]">
       <SfSidebar
         v-e2e="'sidebar-cart'"
         :visible="isCartSidebarOpen"
@@ -210,8 +210,8 @@ export default {
   min-width: 100%;
 }
 #cart {
-  --sidebar-z-index: 3;
-  --overlay-z-index: 3;
+  --sidebar-z-index: 500;
+  --overlay-z-index: 500;
   @include for-desktop {
     & > * {
       --sidebar-bottom-padding: var(--spacer-base);

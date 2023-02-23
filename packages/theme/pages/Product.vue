@@ -20,6 +20,7 @@
                 :display="
                   Svariant.featuredAsset ? Svariant.featuredAsset : prImage
                 "
+                 :isOrderBased="Svariant.isOrderBased"
                 class="mb-5 md:mb-0"
               />
             </div>
@@ -519,6 +520,7 @@ export default {
                         name
                         price
                         priceWithTax
+                        isOrderBased
                         customFields {
                           description
                           table

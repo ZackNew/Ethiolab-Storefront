@@ -610,7 +610,7 @@ export default {
 
     onMounted(() => {});
 
-    onBeforeMount(() => {
+    onBeforeMount( async() => {
       url = 'https://testsecureacceptance.cybersource.com/pay';
       SECRET_KEY =
         'c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7';

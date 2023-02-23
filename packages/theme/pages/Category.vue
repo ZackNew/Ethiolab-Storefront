@@ -1,6 +1,6 @@
 <template>
   <div id="category">
-    <div class="sticky" :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'">
+    <div class="sticky z-[300]" :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'">
       <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
@@ -306,6 +306,7 @@
                     :score-rating="product.rating ? product.rating : ''"
                     :variantId="product._variantId"
                     :show-add-to-cart-button="true"
+                    :isOrderBased ="product.isOrderBased"
                     :isInWishlist="isInWishlist({ product })"
                     :isAddedToCart="isInCart({ product })"
                     :link="localePath(`/v/${product.slug}`)"
@@ -720,8 +721,9 @@ export default {
       setSelectedFilters();
 
       // sort =  localStorage.getItem("sort");
-      console.log("all products value is ", allProducts)
+      
     });
+
 
     const isFilterSelected = (facet, option) =>
       (selectedFilters.value.attributes || []).includes(option?.id);
@@ -889,11 +891,13 @@ export default {
             price: price,
             slug: product.slug,
             rating: product?.customFields?.reviewRating,
+            isOrderBased: product?.customFields?.is_order_based,
             options: product?.optionGroups,
           };
           return prod;
         });
         this.allProducts = products;
+        console.log("all products value is ", this.allProducts)
         const pbaseUrl = process.env.GRAPHQL_API;
         const poptions = {
           headers: {

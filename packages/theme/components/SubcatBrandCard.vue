@@ -1,10 +1,11 @@
 <template>
   <div
-    class="shadow-lg rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent mr-3 mb-6"
+    class="shadow-lg rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent mr-3 mb-6 relative"
     :style="
       !isDarkMode ? 'background-color: white' : 'background-color: #182533'
     "
   >
+  <img v-if="product.customFields.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[100]"/>
     <nuxt-link :to="{ path: '/v/' + product.slug }">
       <LazyHydrate>
         <img

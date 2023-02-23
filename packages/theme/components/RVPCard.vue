@@ -3,7 +3,7 @@
     :class="`pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300 relative`"
     data-testid="product-card"
   >
-  <img  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[500]"/>
+  <!-- <img  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[500]"/> -->
     <div class="ssf-product-card__image-wrapper mx-3">
       <slot
         name="image"

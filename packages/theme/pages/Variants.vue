@@ -23,6 +23,7 @@
           <Gallery
             :images="product.assets"
             :display="product.featuredAsset"
+            :isOrderBased="product.customFields.is_order_based"
             class="mb-5 md:mb-0"
           />
         </div>
@@ -448,6 +449,7 @@ export default {
             customFields{
               youtube_link
               documentation
+              is_order_based
             }
             featuredAsset{
               preview
