@@ -366,10 +366,11 @@
         <SfButton
           class="sf-button--pure sf-header__action chatIcon"
           v-if="!isMessageSideBarOpen"
-          @click="toggleMessageSidebar()"
+          @click="handleMessageOpen"
         >
           <div>
-            <img src="~/assets/chat1-svgrepo-com.svg" alt="image" />
+           <span v-if="unseen !== 0" class=" bg-red text-white rounded-full float-right  ">&nbsp;{{ unseen }}&nbsp;</span> 
+           <img class="-mt-2 float-right " src="~/assets/chat1-svgrepo-com.svg" alt="image" />
           </div>
         </SfButton>
       </div>
@@ -673,6 +674,86 @@ export default {
     });
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
 
+    const unseen = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false).length)
+    console.log("unseen value is ", unseen.value)
+    const unseenMessages = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false))
+
+
+    // const handleCancelOrder = async () => {
+    //   const body = {
+    //     query: `mutation cancelOrder($orderCode: String!) {
+    //       cancelMyOrder (orderCode: $orderCode){
+    //               success
+    //             }
+    //           }`,
+    //     variables: {
+    //       orderCode: cart.value.code,
+    //     },
+    //   };
+    //   const options = {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Access-Control-Allow-Origin': '*',
+    //     },
+    //   };
+    //   let baseUrl = process.env.GRAPHQL_API;
+
+    //   const acat = await axios
+    //     .post(baseUrl, body, options)
+    //     .then(async (res) => {
+    //       modalOpen.value = false;
+    //       setCart();
+    //       root.$router.push('/');
+    //     })
+    //     .catch((err) => {});
+    // };
+
+    const handleMessageOpen = async () => {
+      // console.log("handlemessageopen is clicked" );
+      toggleMessageSidebar();
+      console.log("unseen messages are", unseenMessages);
+      let ids = [];
+     let mes = unseenMessages.value;
+      for(let i=0; i<mes.length; i++){
+        ids.push(mes[i].id);
+      }
+
+      console.log("ids value is ", ids)
+
+            const body = {
+        query: `mutation makeSeenByUser($ids: [ID]! ) {
+          makeSeenByUser (ids: $ids){
+                  success
+                }
+              }`,
+        variables: {
+          ids: ids,
+        },
+      };
+
+     const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      let baseUrl = process.env.GRAPHQL_API;
+
+       await axios
+        .post(baseUrl, body, options)
+        .then((res) => {
+          // modalOpen.value = false;
+          // setCart();
+          // root.$router.push('/');
+          console.log("successful", res)
+        })
+        .catch((err) => {
+          console.log("error occured");
+        });
+
+
+    }
+
     const sendMessageToAdmin = async (messageToSend) => {
       // await loadUser();
       const userEmail = userGetters.getEmailAddress(user.value);
@@ -777,6 +858,8 @@ export default {
       isAuthenticated,
       sendMessageToAdmin,
       messages,
+      unseen,
+      handleMessageOpen
     };
   },
 };
