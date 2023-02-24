@@ -29,7 +29,7 @@
               <div class="flex items-end">
                 <h4 class="font-bold text-secondary mb-3 mr-8">
                   {{
-                    String(Svariant.price).slice(0, -2) +
+                    parseFloat(String(Svariant.price).slice(0, -2)).toLocaleString()  +
                     '.' +
                     String(Svariant.price).slice(-2)
                   }}

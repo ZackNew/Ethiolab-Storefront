@@ -1,5 +1,5 @@
 <template>
-  <div id="variant">
+  <div id="variant" class="p-4">
     <div class="my-[3%]" v-if="product === null && loading">
       <Loading />
     </div>
@@ -30,7 +30,7 @@
         <div class="md:col-span-6">
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
           <h3 class="text-secondary text-xl">
-            <span class="font-bold mr-2">Price </span>{{ priceRange }}
+            <span class="font-bold mr-2">Price </span>{{ parseFloat(priceRange).toLocaleString() }} ETB
           </h3>
           <img v-if="product.customFields.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class=" z-[100]"/>
           <div class="mt-4 bg-[#EAEAEA] rounded py-2 flex justify-around">
@@ -199,7 +199,7 @@
                   <h4 class="text-secondary">
                     <span class="font-bold">
                       {{
-                        String(variant.price).slice(0, -2) +
+                       parseFloat(String(variant.price).slice(0, -2)).toLocaleString()  +
                         '.' +
                         String(variant.price).slice(-2)
                       }}

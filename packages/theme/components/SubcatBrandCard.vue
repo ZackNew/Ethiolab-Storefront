@@ -50,12 +50,12 @@
       class="text-center m-3 text-xs md:text-base"
       v-if="product.variants.length === 1"
     >
-      <span> </span>{{ prices }} ETB
+      <span> </span>{{ parseFloat(prices).toLocaleString() }} ETB
     </div>
     <div class="text-center m-3 text-xs md:text-base" v-else>
       <div class="inline-flex" v-for="(p, index) of prices" :key="index">
         <div class="mx-2" v-if="index === 1">-</div>
-        <template>{{ p }}ETB </template>
+        <template>{{ parseFloat(p).toLocaleString()}}ETB </template>
       </div>
     </div>
   </div>

@@ -549,6 +549,7 @@ export default {
         }`,
       };
       await axios.post(baseUrl, pbody, options).then((res) => {
+        console.log("bs res", res)
         const produ = res.data.data?.bestSellingProducts.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {

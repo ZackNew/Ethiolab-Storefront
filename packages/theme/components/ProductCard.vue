@@ -262,7 +262,7 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <p class="text-lg text-secondary">{{ regularPrice }}</p>
+        <p class="text-lg text-secondary">     {{parseFloat(regularPrice).toLocaleString() + "  ETB"  }}</p>
         <div class="sf-price"></div>
       </slot>
     </div>
