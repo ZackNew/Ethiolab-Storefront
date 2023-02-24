@@ -39,6 +39,7 @@
       </nuxt-link>
     </div>
     <DropDownMenu
+      @oneClicked="oneClicked"
       class="absolute"
       @mouseover.native="mouseEnter = true"
       @mouseleave.native="
@@ -168,6 +169,10 @@ export default {
         dropDownIsVisible.value = false;
       }
     }, 1);
+    const oneClicked = () => {
+      dropDownIsVisible.value = false;
+      contents.value = [];
+    };
     return {
       dropDownIsVisible,
       mouseEnter,
@@ -179,6 +184,7 @@ export default {
       isMobileMenuOpen,
       toggleMobileMenu,
       contents,
+      oneClicked,
     };
   },
 };
