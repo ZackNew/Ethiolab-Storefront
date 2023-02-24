@@ -114,7 +114,7 @@
     <div class="ml-2">
       <Accordion v-if="categories" class="mb-[6%]">
       <template v-slot:title>
-        <span>Category</span>
+        <span class="text-[18px]">Category</span>
       </template>
       <template v-slot:content>
         <ul
@@ -140,7 +140,7 @@
                 :checked="false"
                 :id="category"
               />
-              <h4 class="text-secondary">{{ category }}</h4>
+              <h4 class="text-secondary text-[18px]">{{ category }}</h4>
             </li>
           </ul>
       </template>
@@ -149,7 +149,7 @@
     <div v-for="filter in filters" :key="filter.filter_title">
       <Accordion class="mb-[6%]" v-if="filter.filter_options.length > 0">
         <template v-slot:title>
-          <span>{{ filter.filter_title }}</span>
+          <span class="text-[18px]">{{ filter.filter_title }}</span>
         </template>
         <template v-slot:content>
           <p>
@@ -158,7 +158,7 @@
             v-for="(list, i) in filter.filter_options"
             :key="i"
           >
-            <li class="mx-3 flex">
+            <li class="mx-3 flex text-[18px]">
               <input
                 v-on:click="filterClicked"
                 type="checkbox"
@@ -166,7 +166,7 @@
                 :checked="false"
                 :id="list"
               />
-              <h4 class="text-secondary">{{ list }}</h4>
+              <h4 class="text-secondary text-[18px]">{{ list }}</h4>
             </li>
           </ul>
           </p>
@@ -175,13 +175,13 @@
     </div>
     </div>
 
-    <h4 class="text-xl mx-2 mt-2 mb-6 text-secondary font-bold">Price Range</h4>
+    <h4 class="text-[18px] mx-2 mt-2 mb-6 text-secondary font-bold">Price Range</h4>
     <ul class="ul_list">
       <div v-for="(list, i) in range" :key="i">
-        <li class="ml-3 text-secondary text-lg">
+        <li class="ml-3 text-secondary text-[18px]">
           <input
             type="radio"
-            class="mr-4 text-secondary"
+            class="mr-4 text-secondary "
             :checked="false"
             :id="list"
             @input="() => bothInput(list)"

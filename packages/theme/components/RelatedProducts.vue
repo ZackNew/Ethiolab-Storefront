@@ -62,7 +62,7 @@
                 class="text-secondary font-bold mx-3 text-center"
               >
                 {{
-                  String(product.price.min).slice(0, -2) +
+                 parseFloat(String(product.price.min).slice(0, -2)).toLocaleString()   +
                   '.' +
                   String(product.price.min).slice(-2)
                 }}
