@@ -5,13 +5,19 @@
       class="grid grid-cols-4 gap-3 pt-4 w-[80%] desktop-only mx-auto text-center relative"
     >
       <h4
-        class="text-secondary font-bold uppercase"
+        :class="
+          contents.hovered === 'categories' ? 'text-primary' : 'text-secondary'
+        "
+        class="font-bold uppercase"
         @mouseover="hoverHandler('Products')"
         @mouseleave="hoverOutHandler"
       >
         Products
       </h4>
       <h4
+        :class="
+          contents.hovered === 'Industries' ? 'text-primary' : 'text-secondary'
+        "
         class="text-secondary font-bold uppercase"
         @mouseover="hoverHandler('Industries')"
         @mouseleave="hoverOutHandler"
@@ -19,6 +25,9 @@
         Industries
       </h4>
       <h4
+        :class="
+          contents.hovered === 'brands' ? 'text-primary' : 'text-secondary'
+        "
         class="text-secondary font-bold uppercase"
         @mouseover="hoverHandler('brands')"
         @mouseleave="hoverOutHandler"
@@ -32,7 +41,9 @@
     <DropDownMenu
       class="absolute"
       @mouseover.native="mouseEnter = true"
-      @mouseleave.native="(dropDownIsVisible = false), (mouseEnter = false)"
+      @mouseleave.native="
+        (dropDownIsVisible = false), (mouseEnter = false), (contents = [])
+      "
       :contents="contents"
       v-if="dropDownIsVisible"
     />
@@ -153,6 +164,7 @@ export default {
     };
     const hoverOutHandler = debounce(function () {
       if (mouseEnter.value === false) {
+        contents.value = [];
         dropDownIsVisible.value = false;
       }
     }, 1);

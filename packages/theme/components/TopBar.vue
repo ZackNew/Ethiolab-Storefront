@@ -34,7 +34,7 @@
           <h1
             class="bg-white text-secondary px-2 py-0.5 rounded text-sm hover:scale-110"
           >
-            Find Us
+            Website
           </h1>
         </a>
         <SfButton
