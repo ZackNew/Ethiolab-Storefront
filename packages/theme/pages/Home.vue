@@ -549,7 +549,7 @@ export default {
         }`,
       };
       await axios.post(baseUrl, pbody, options).then((res) => {
-        console.log("bs res", res)
+        // console.log("bs res", res)
         const produ = res.data.data?.bestSellingProducts.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
@@ -636,7 +636,7 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
-    console.log("products value is ", products)
+    // console.log("products value is ", products)
     const { sendMessage, getUserInstantMessage } = useInstantMessage();
     loadUser();
 
@@ -679,7 +679,7 @@ export default {
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
 
     const unseen = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false).length)
-    console.log("unseen value is ", unseen.value)
+    // console.log("unseen value is ", unseen.value)
     const unseenMessages = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false))
 
 
@@ -715,14 +715,14 @@ export default {
     const handleMessageOpen = async () => {
       // console.log("handlemessageopen is clicked" );
       toggleMessageSidebar();
-      console.log("unseen messages are", unseenMessages);
+      // console.log("unseen messages are", unseenMessages);
       let ids = [];
      let mes = unseenMessages.value;
       for(let i=0; i<mes.length; i++){
         ids.push(mes[i].id);
       }
 
-      console.log("ids value is ", ids)
+      // console.log("ids value is ", ids)
 
             const body = {
         query: `mutation makeSeenByUser($ids: [ID]! ) {
@@ -749,10 +749,10 @@ export default {
           // modalOpen.value = false;
           // setCart();
           // root.$router.push('/');
-          console.log("successful", res)
+          // console.log("successful", res)
         })
         .catch((err) => {
-          console.log("error occured");
+          // console.log("error occured");
         });
 
 

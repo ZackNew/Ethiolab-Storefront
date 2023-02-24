@@ -522,6 +522,40 @@ export default {
       );
     },
   },
+  methods:{
+    async handleCancelOrder  () {
+      const body = {
+        query: `mutation cancelOrder {
+          cancelMyOrder{
+                  success
+                }
+              }`,
+        variables: {
+          orderCode: cart?.value?.code,
+        },
+      };
+      const token = this.$cookies.get('etech-auth-token');
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', 
+          authorization: `Bearer ${token}`,
+        },
+      };
+      let baseUrl = process.env.GRAPHQL_API;
+
+      const acat = await axios
+        .post(baseUrl, body, options)
+        .then(async (res) => {
+          setCart();
+          modalOpen.value = false;
+         
+          // this.$router.push('/');
+          window.location.href = "/"
+        })
+        .catch((err) => {});
+    }
+  },
   setup(props, { root }) {
     const { cart, load, setCart, applyCoupon } = useCart();
     const { loading } = useMakeOrder();
@@ -575,34 +609,7 @@ export default {
       }
     };
 
-    const handleCancelOrder = async () => {
-      const body = {
-        query: `mutation cancelOrder($orderCode: String!) {
-          cancelMyOrder (orderCode: $orderCode){
-                  success
-                }
-              }`,
-        variables: {
-          orderCode: cart.value.code,
-        },
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      let baseUrl = process.env.GRAPHQL_API;
 
-      const acat = await axios
-        .post(baseUrl, body, options)
-        .then(async (res) => {
-          modalOpen.value = false;
-          setCart();
-          root.$router.push('/');
-        })
-        .catch((err) => {});
-    };
 
     onSSR(async () => {
       await load();
@@ -888,7 +895,7 @@ export default {
       promoCode,
       handleModalOpen,
       modalOpen,
-      handleCancelOrder,
+      // handleCancelOrder,
       handleModalCashOpen,
       canPay
     };
