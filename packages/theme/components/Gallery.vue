@@ -13,6 +13,8 @@
           ref="img"
         />
         <canvas ref="canvas" width="150" height="150"></canvas> -->
+ 
+
         <vue-magnifier :src="bigImage" :src-large="bigImage" />
       </div>
 
@@ -50,6 +52,7 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import VueMagnifier from './Magnify.vue';
+import { computed, onMounted, inject } from '@vue/composition-api';
 
 export default {
   name: 'Gallery',
@@ -61,6 +64,10 @@ export default {
     images: {
       type: Array,
       default: [],
+    },
+    isOrderBased: {
+      type: Boolean,
+      default: false,
     },
     display: {
       // type: Object,
@@ -138,6 +145,8 @@ export default {
   mounted() {
     // this.zoom();
     this.bigImage = this.display?.preview;
+
+    // console.log("isOrderBased value is ", this.isOrderBased)
   },
 };
 </script>

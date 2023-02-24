@@ -23,6 +23,7 @@
           <Gallery
             :images="product.assets"
             :display="product.featuredAsset"
+            :isOrderBased="product.customFields.is_order_based"
             class="mb-5 md:mb-0"
           />
         </div>
@@ -31,6 +32,7 @@
           <h3 class="text-secondary text-xl">
             <span class="font-bold mr-2">Price </span>{{ priceRange }}
           </h3>
+          <img v-if="product.customFields.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class=" z-[100]"/>
           <div class="mt-4 bg-[#EAEAEA] rounded py-2 flex justify-around">
             <div v-if="product.variantList.totalItems === 1">
               <h5>1 Variant of this product are available.</h5>
@@ -451,7 +453,8 @@ export default {
             }
             customFields{
               youtube_link
-              documentation
+              documentations
+              is_order_based
             }
             featuredAsset{
               preview

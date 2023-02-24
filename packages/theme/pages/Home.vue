@@ -544,6 +544,7 @@ export default {
             slug
             sku
             rating
+            is_order_based
           }
         }`,
       };
@@ -573,6 +574,7 @@ export default {
             },
             slug: product?.slug,
             rating: product?.rating,
+            is_order_based: product?.is_order_based
           };
           return prod;
         });
@@ -633,6 +635,7 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+    console.log("products value is ", products)
     const { sendMessage, getUserInstantMessage } = useInstantMessage();
     loadUser();
 

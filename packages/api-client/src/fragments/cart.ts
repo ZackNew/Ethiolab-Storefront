@@ -35,6 +35,9 @@ export const CartFragment = `
         code
         state
         active
+        customFields{
+            allow_customer_payment
+          }
         customer {
             firstName
             lastName
