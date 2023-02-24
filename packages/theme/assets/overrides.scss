@@ -61,3 +61,18 @@
   padding-bottom: 15px !important;
   height: auto;
 }
+.country-selector{
+  &__label{
+    margin-top: -10px !important;
+  }
+  
+}
+.input-tel{
+  margin-top: -3px !important;
+}
+
+.sf-content-pages{
+  &__sidebar{
+    max-width: 25% !important;
+  }
+}
