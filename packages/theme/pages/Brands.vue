@@ -420,6 +420,7 @@ export default {
           name
           }
           customFields{
+            is_order_based
           industries{
           name
           }

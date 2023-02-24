@@ -4,7 +4,7 @@
     class="pt-3 shadow-lg hover:shadow-2xl duration-300"
     data-testid="product-card"
   >
-    <div class="ssf-product-card__image-wrapper mx-3">
+    <div class="ssf-product-card__image-wrapper mx-3 relative">
       <slot
         name="image"
         v-bind="{
@@ -15,8 +15,10 @@
           imageWidth,
           imageTag,
           nuxtImgConfig,
+          isOrderBased
         }"
       >
+      <img v-if="isOrderBased"  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[200]"/>
         <SfButton
           :link="link"
           class="sf-button--pure ssf-product-card__link"
@@ -398,6 +400,10 @@ export default {
       type: String,
       default: '',
     },
+    isOrderBased:{
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
