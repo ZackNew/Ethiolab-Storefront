@@ -43,7 +43,10 @@
                   }}
                   ETB including tax
                 </h5>
+
               </div>
+              <img v-if="Svariant.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class=" z-[100] mb-4"/>
+
               <div class="flex mb-5 items-center">
                 <input
                   class="max-w-[60px] h-12 text-center mr-4"

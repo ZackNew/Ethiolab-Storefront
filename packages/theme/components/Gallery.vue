@@ -13,7 +13,7 @@
           ref="img"
         />
         <canvas ref="canvas" width="150" height="150"></canvas> -->
-    <img v-if="isOrderBased"  src="/OB.png" height="100" width="100" alt="order based"  class=" z-[100]"/>
+ 
 
         <vue-magnifier :src="bigImage" :src-large="bigImage" />
       </div>
