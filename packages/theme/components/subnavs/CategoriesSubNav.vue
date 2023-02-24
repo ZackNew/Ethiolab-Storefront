@@ -17,6 +17,7 @@
                 class="text-secondary text-base mb-1 w-[12rem] truncate text-left mr-10 hover:text-bold"
                 @mouseover="hoverInHandler(item, i)"
                 @mouseleave="hoverOutHandler"
+                @click="$emit('oneClicked')"
               >
                 {{ item.name }}
               </h4>
@@ -41,6 +42,7 @@
               <nuxt-link :to="`/s/${child.slug}`">
                 <h4
                   class="text-sm text-[#616161] mb-1 mr-4 hover:text-primary w-[12rem] truncate"
+                  @click="$emit('oneClicked')"
                 >
                   {{ child.name }}
                 </h4>

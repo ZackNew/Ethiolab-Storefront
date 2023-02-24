@@ -1,5 +1,5 @@
 <template>
-  <div class="signup text-secondary">
+  <div v-if="show" class="signup text-secondary">
     <h1 class="ml-[10%]">Create an Account</h1>
 
     <div class="md:grid grid-cols-12 gap-4">
@@ -19,7 +19,7 @@
             <form @submit.prevent="handleSubmit(handleFormSubmit)">
               <div class="m-8">
                 <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
+                  class="block text-secondary text-sm font-bold mb-2"
                   for="email"
                 >
                   *EMAIL ADDRESS/USER ID
@@ -46,7 +46,7 @@
 
               <div class="m-8">
                 <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
+                  class="block text-secondary text-sm font-bold mb-2"
                   for="confirmEmail"
                 >
                   *CONFIRM EMAIL ADDRESS
@@ -80,7 +80,7 @@
 
               <div class="m-8">
                 <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
+                  class="block text-secondary text-sm font-bold mb-2"
                   for="password"
                 >
                   *PASSWORD
@@ -112,7 +112,7 @@
 
               <div class="m-8">
                 <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
+                  class="block text-secondary text-sm font-bold mb-2"
                   for="confirmPassword"
                 >
                   *CONFIRM PASSWORD
@@ -138,7 +138,7 @@
 
               <div class="m-8">
                 <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
+                  class="block text-secondary text-sm font-bold mb-2"
                   for="firstName"
                 >
                   *FIRST NAME
@@ -163,7 +163,7 @@
 
               <div class="m-8">
                 <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
+                  class="block text-secondary text-sm font-bold mb-2"
                   for="lastName"
                 >
                   *LAST NAME
@@ -188,7 +188,7 @@
 
               <div class="m-8">
                 <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
+                  class="block text-secondary text-sm font-bold mb-2"
                   for="phoneNumber"
                 >
                   *PHONE NUMBER
@@ -230,7 +230,7 @@
                   <div class="m-8">
                     <div class="flex justify-between">
                       <div>
-                        <div class="text-dark_gray text-sm font-bold mb-2">
+                        <div class="text-secondary text-sm font-bold mb-2">
                           ORGANIZATION
                         </div>
 
@@ -244,7 +244,7 @@
                       </div>
                       <div class="block md:hidden">
                         <div class="">
-                          <div class="text-dark_gray text-sm font-bold mb-2">
+                          <div class="text-secondary text-sm font-bold mb-2">
                             INDIVIDUAL
                           </div>
                           <input
@@ -261,7 +261,7 @@
                   </div>
 
                   <div class="m-8">
-                    <div class="text-dark_gray text-sm font-bold mb-2">
+                    <div class="text-secondary text-sm font-bold mb-2">
                       *COUNTRY
                     </div>
 
@@ -604,7 +604,7 @@
                   </div>
                   <div class="mx-8 mt-12">
                     <div
-                      class="text-dark_gray text-sm font-bold mb-2"
+                      class="text-secondary text-sm font-bold mb-2"
                       for="state"
                     >
                       STATE
@@ -622,7 +622,7 @@
 
                   <div class="m-8">
                     <label
-                      class="block text-dark_gray text-sm font-bold mb-2"
+                      class="block text-secondary text-sm font-bold mb-2"
                       for="tin"
                     >
                       TIN
@@ -647,7 +647,7 @@
                 </div>
                 <div class="col-span-1">
                   <div class="m-8 hidden md:block">
-                    <div class="text-dark_gray text-sm font-bold mb-2">
+                    <div class="text-secondary text-sm font-bold mb-2">
                       INDIVIDUAL
                     </div>
 
@@ -664,7 +664,7 @@
                   <!-- <div class="m-8"> -->
 
                   <!-- <div class="m-8">
-                          <div class=" text-dark_gray text-sm font-bold mb-2 "> INDIVIDUAL</div>
+                          <div class=" text-secondary text-sm font-bold mb-2 "> INDIVIDUAL</div>
 
                           <ValidationProvider
                       name="company"
@@ -685,7 +685,7 @@
 
                   <div class="m-8">
                     <div
-                      class="text-dark_gray text-sm font-bold mb-2"
+                      class="text-secondary text-sm font-bold mb-2"
                       for="city"
                     >
                       CITY
@@ -710,7 +710,7 @@
 
                   <div class="m-8">
                     <div
-                      class="text-dark_gray text-sm font-bold mb-2"
+                      class="text-secondary text-sm font-bold mb-2"
                       for="street"
                     >
                       STREET ADDRESS
@@ -734,7 +734,7 @@
                   </div>
                   <div class="m-8">
                     <label
-                      class="block text-dark_gray text-sm font-bold mb-2"
+                      class="block text-secondary text-sm font-bold mb-2"
                       for="fax"
                     >
                       FAX
@@ -755,13 +755,13 @@
               <div v-if="isOrganization">
                 <div class="mx-8">
                   <label
-                    class="block text-dark_gray text-sm font-bold mb-2"
+                    class="block text-secondary text-sm font-bold mb-2"
                     for="tin"
                   >
                     ORGANIZATION NAME
                   </label>
                   <!-- <div
-                        class="text-dark_gray text-sm font-bold mb-2"
+                        class="text-secondary text-sm font-bold mb-2"
                         for="company"
                       >
                         ORGANIZATION NAME
@@ -786,7 +786,7 @@
               </div>
 
               <div class="m-8">
-                <span class="text-dark_gray text-sm font-bold mb-2">
+                <span class="text-secondary text-sm font-bold mb-2">
                   *JOB FUNCTION</span
                 >
                 <ValidationProvider
@@ -857,8 +857,14 @@
               <p v-if="errorMessage">{{ errorMessage }}aaa</p>
               <div class="justify-center flex mt-8">
                 <button
-                  class="bg-secondary text-white w-1/4 h-12 font-bold mb-8"
+                  :style="
+                    isLoading
+                      ? 'background-color: grey; pointer-events: none'
+                      : 'background-color: #3860a7'
+                  "
+                  class="text-white w-1/4 h-12 font-bold mb-8"
                   type="submit"
+                  :disabled="isLoading"
                 >
                   REGISTER
                 </button>
@@ -899,8 +905,13 @@
 </template>
 <script>
 import { useUiState } from '~/composables';
-import { defineComponent } from '@vue/composition-api';
-import { ref, onMounted, inject } from '@vue/composition-api';
+import {
+  ref,
+  onMounted,
+  inject,
+  onBeforeMount,
+  defineComponent,
+} from '@vue/composition-api';
 import {
   required,
   min,
@@ -917,6 +928,7 @@ import {
 } from 'vee-validate';
 import { useVSFContext } from '@vue-storefront/core';
 import VuePhoneNumberInput from 'vue-phone-number-input';
+import { useUser, useForgotPassword } from '@vue-storefront/vendure';
 import axios from 'axios';
 import {
   SfHeading,
@@ -975,10 +987,20 @@ export default defineComponent({
       this.form.phoneNumber = this.formPhoneNumber;
     },
   },
-  setup() {
+  setup(props, { root }) {
+    let isLoading = ref(false);
+    const show = ref(false);
     const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
     const isFormSubmitted = ref(false);
+    const {
+      load: loadUser,
+      register,
+      login,
+      loading,
+      error: userError,
+      user,
+    } = useUser();
 
     const errorMessage = ref('');
     let isOrganization = ref(false);
@@ -1002,7 +1024,9 @@ export default defineComponent({
       job: '',
     });
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = async () => {
+      isLoading.value = true;
+      console.log('this is that', isLoading.value);
       if (isIndividual.value) {
         form.value.company = 'Individual';
       }
@@ -1044,19 +1068,22 @@ export default defineComponent({
             'Access-Control-Allow-Origin': '*',
           },
         };
-        axios
+        await axios
           .post(baseUrl, pbody, poptions)
           .then((res) => {
             if (res.data.data.registerEtechCustomer.success) {
               showToast('Registration Successfull');
-              window.location.href = '/signin';
+              root.$route.push('/signin');
+              isLoading.value = false;
             } else {
               showToast('Registration Failed');
+              isLoading.value = false;
             }
             //   invoices.value = res.data.data.myInvoices.items;
           })
           .catch((err) => {
             showToast('Registration Failed');
+            isLoading.value = false;
           });
       }
 
@@ -1065,10 +1092,13 @@ export default defineComponent({
         form.value.password !== form.value.confirmPassword
       ) {
         showToast("Email and Password  didn't match");
+        isLoading.value = false;
       } else if (form.value.email !== form.value.confirmEmail) {
         showToast("Email didn't match");
+        isLoading.value = false;
       } else if (form.value.password !== form.value.confirmPassword) {
         showToast("Password didn't match");
+        isLoading.value = false;
       }
     };
 
@@ -1092,7 +1122,17 @@ export default defineComponent({
       }
     };
 
+    onBeforeMount(async () => {
+      await loadUser();
+      if (user.value) {
+        root.$router.push('/');
+      } else {
+        show.value = true;
+      }
+    });
+
     return {
+      isLoading,
       isFormSubmitted,
       form,
       handleFormSubmit,
@@ -1102,6 +1142,7 @@ export default defineComponent({
       isIndividual,
       checkIndividual,
       isDarkMode,
+      show,
     };
   },
 });

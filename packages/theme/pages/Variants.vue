@@ -287,7 +287,11 @@
                 />
               </div>
               <div>
-                <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
+                <nuxt-link
+                  :to="`/p/${product.id}/${variant.id}/${product.slug}`"
+                >
+                  <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
+                </nuxt-link>
                 <h6 class="ml-4 text-secondary">
                   {{
                     String(variant.price).slice(0, -2) +
