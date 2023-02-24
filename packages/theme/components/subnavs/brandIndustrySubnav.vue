@@ -27,6 +27,7 @@
               class="text-secondary text-base hover:font-bold mb-2 mr-10"
               @mouseover="(hoveredItemImage = item.icon), (hoveredItem = item)"
               @mouseleave="hoveredItemImage = null"
+              @click="$emit('oneClicked')"
             >
               {{ item.name }}
             </h4>

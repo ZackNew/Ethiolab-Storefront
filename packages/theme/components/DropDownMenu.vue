@@ -2,8 +2,13 @@
   <div
     class="bg-white max-w-[1250px] w-[100%] min-h-[26rem] dropDown broder border-2 border-[#aaaaaa]"
   >
-    <CategoriesSubNav :categories="categories" v-if="categories" />
+    <CategoriesSubNav
+      @oneClicked="$emit('oneClicked')"
+      :categories="categories"
+      v-if="categories"
+    />
     <brandsIndustrySubnav
+      @oneClicked="$emit('oneClicked')"
       :brandsIndustries="industries || brands"
       v-if="industries || brands"
     />

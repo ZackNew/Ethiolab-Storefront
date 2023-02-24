@@ -18,13 +18,7 @@
           <SfTableData class="pr-2">{{ quote.subject }}</SfTableData>
           <SfTableData>
             <SfButton class="sf-button--text">
-              <a
-                class="text-secondary px-1"
-                :href="`${urlLink}${quote.assetUrl}`"
-                target="_blank"
-              >
-                view pdf
-              </a>
+              <a @click="openPDF(quote.assetUrl)"> view pdf </a>
             </SfButton>
           </SfTableData>
         </SfTableRow>
@@ -52,6 +46,34 @@ export default {
     SfButton,
     SfLink,
     SfTable,
+  },
+  methods: {
+    async openPDF(link) {
+      const url = process.env.GRAPHQL_API?.split('/shop-api')[0] + link;
+      const token = this.$cookies.get('etech-auth-token');
+      const options = {
+        responseType: 'blob',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${token}`,
+        },
+      };
+      await axios.get(url, options).then((res) => {
+        let binarydata = [];
+        binarydata.push(res.data);
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(
+          new Blob(binarydata, {
+            type: 'application/pdf',
+          })
+        );
+        downloadLink.setAttribute('target', '_blank');
+        console.log('the anchor tag', downloadLink);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      });
+    },
   },
   setup() {
     const { isAuthenticated, load: loadUser, user } = useUser();

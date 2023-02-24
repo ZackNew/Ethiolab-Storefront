@@ -1,118 +1,130 @@
 <template>
-  <div class="signup text-secondary">
-    <h1 class="ml-[10%]">Sign In</h1>
+  <div>
+    <div v-if="show === true" class="signup text-secondary">
+      <h1 class="ml-[10%]">Sign In</h1>
 
-    <div class="md:grid grid-cols-12 gap-4">
-      <div class="left col-span-6 md:mt-10">
-        <!-- <p>*Required</p> -->
-        <div
-          class="field pb-10"
-          :style="
-            !isDarkMode
-              ? 'background-color: white'
-              : 'background-color: #182533'
-          "
-        >
-          <h4 class="px-10 py-6 uppercase font-bold">Please Sign IN</h4>
+      <div class="md:grid grid-cols-12 gap-4">
+        <div class="left col-span-6 md:mt-10">
+          <!-- <p>*Required</p> -->
+          <div
+            class="field pb-10"
+            :style="
+              !isDarkMode
+                ? 'background-color: white'
+                : 'background-color: #182533'
+            "
+          >
+            <h4 class="px-10 py-6 uppercase font-bold">Please Sign IN</h4>
 
-          <ValidationObserver v-slot="{ handleSubmit }">
-            <form @submit.prevent="handleSubmit(handleLogin)">
-              <div class="m-8">
-                <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
-                  for="username"
-                >
-                  *EMAIL ADDRESS/USER ID
-                </label>
+            <ValidationObserver v-slot="{ handleSubmit }">
+              <form @submit.prevent="handleSubmit(handleLogin)">
+                <div class="m-8">
+                  <label
+                    class="block text-secondary text-sm font-bold mb-2"
+                    for="username"
+                  >
+                    *EMAIL ADDRESS/USER ID
+                  </label>
 
-                <ValidationProvider
-                  name="username"
-                  rules="required"
-                  v-slot="{ errors }"
-                  slim
-                >
-                  <SfInput
-                    v-model="form.username"
-                    :placeholder="$t('email')"
+                  <ValidationProvider
                     name="username"
-                    class="sf-input--filled"
-                    :valid="!errors[0]"
-                    :errorMessage="errors[0]"
-                    type="email"
-                  />
-                </ValidationProvider>
-                <!-- <ErrorMessage name="email" /> -->
-              </div>
+                    rules="required"
+                    v-slot="{ errors }"
+                    slim
+                  >
+                    <SfInput
+                      v-model="form.username"
+                      :placeholder="$t('email')"
+                      name="username"
+                      class="sf-input--filled"
+                      :valid="!errors[0]"
+                      :errorMessage="errors[0]"
+                      type="email"
+                    />
+                  </ValidationProvider>
+                  <!-- <ErrorMessage name="email" /> -->
+                </div>
 
-              <div class="m-8">
-                <label
-                  class="block text-dark_gray text-sm font-bold mb-2"
-                  for="password"
-                >
-                  *PASSWORD
-                </label>
+                <div class="m-8">
+                  <label
+                    class="block text-secondary text-sm font-bold mb-2"
+                    for="password"
+                  >
+                    *PASSWORD
+                  </label>
 
-                <ValidationProvider
-                  name="password"
-                  rules="required|min:4"
-                  v-slot="{ errors }"
-                  slim
-                >
-                  <SfInput
-                    v-model="form.password"
-                    :placeholder="$t('password')"
+                  <ValidationProvider
                     name="password"
-                    class="sf-input--filled"
-                    :valid="!errors[0]"
-                    :errorMessage="errors[0]"
-                    type="password"
-                  />
-                </ValidationProvider>
-              </div>
+                    rules="required|min:4"
+                    v-slot="{ errors }"
+                    slim
+                  >
+                    <SfInput
+                      v-model="form.password"
+                      :placeholder="$t('password')"
+                      name="password"
+                      class="sf-input--filled"
+                      :valid="!errors[0]"
+                      :errorMessage="errors[0]"
+                      type="password"
+                    />
+                  </ValidationProvider>
+                </div>
 
-              <div class="justify-center flex">
-                <button
-                  class="bg-secondary text-white w-1/4 h-12 font-bold mb-8 but"
-                  type="submit"
-                >
-                  SIGN IN
-                </button>
-                <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
-              </div>
-            </form>
-          </ValidationObserver>
+                <div class="justify-center flex">
+                  <button
+                    :style="
+                      isLoading
+                        ? 'background-color: grey; pointer-events: none'
+                        : 'background-color: #3860a7'
+                    "
+                    class="text-white w-1/4 h-12 font-bold mb-8 but"
+                    type="submit"
+                    :disabled="isLoading"
+                  >
+                    SIGN IN
+                  </button>
+                  <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
+                </div>
+              </form>
+            </ValidationObserver>
 
-          <div class="justify-center flex">
-            <nuxt-link to="forgotPassword">
-              <span class="text-secondary"> Forgot Password?</span>
-            </nuxt-link>
-            <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
+            <div class="justify-center flex">
+              <nuxt-link to="forgotPassword">
+                <span class="text-secondary"> Forgot Password?</span>
+              </nuxt-link>
+              <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col-span-6 mt-3 md:mt-10">
-        <div
-          class="right"
-          :style="
-            !isDarkMode
-              ? 'background-color: white'
-              : 'background-color: #182533'
-          "
-        >
-          <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Why Register?</h4>
-          <h4 class="px-2 md:px-10">Register today and enjoy these benefits</h4>
-          <RegisterMessage />
+        <div class="col-span-6 mt-3 md:mt-10">
+          <div
+            class="right"
+            :style="
+              !isDarkMode
+                ? 'background-color: white'
+                : 'background-color: #182533'
+            "
+          >
+            <h4 class="px-2 md:px-10 py-6 uppercase font-bold">
+              Why Register?
+            </h4>
+            <h4 class="px-2 md:px-10">
+              Register today and enjoy these benefits
+            </h4>
+            <RegisterMessage />
 
-          <h4 class="px-2 md:px-16 pt-10">Don't hava an account?</h4>
-          <div class="mx-2 md:mx-16">
-            <nuxt-link to="/signup">
-              <button
-                class="bg-secondary text-white w-1/3 h-12 font-bold mb-8 but text-xs md:text-base"
-              >
-                REGISTER
-              </button>
-            </nuxt-link>
-            <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
+            <h4 class="px-2 md:px-16 pt-10">Don't hava an account?</h4>
+            <div class="mx-2 md:mx-16">
+              <nuxt-link to="/signup">
+                <button
+                  class="bg-secondary text-white w-1/3 h-12 font-bold mb-8 but text-xs md:text-base"
+                >
+                  REGISTER
+                </button>
+              </nuxt-link>
+              <!-- <span class="ml-4 text-large"> Forgot Password?</span> -->
+            </div>
           </div>
         </div>
       </div>
@@ -122,7 +134,7 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api';
-import { ref, onMounted, inject, reactive } from '@vue/composition-api';
+import { ref, onBeforeMount, inject, reactive } from '@vue/composition-api';
 import { required, min, digits, email } from 'vee-validate/dist/rules';
 import {
   ValidationProvider,
@@ -163,8 +175,17 @@ export default defineComponent({
   setup(props, { root }) {
     const { isDarkMode } = useUiState();
     const form = ref({});
-    const { register, login, loading, error: userError } = useUser();
+    const show = ref(false);
+    const {
+      load: loadUser,
+      register,
+      login,
+      loading,
+      error: userError,
+      user,
+    } = useUser();
     const showToast = inject('showToast');
+    let isLoading = ref(false);
 
     const error = reactive({
       login: null,
@@ -177,6 +198,7 @@ export default defineComponent({
     };
 
     const handleForm = (fn) => async () => {
+      isLoading.value = true;
       resetErrorValues();
       await fn({ user: form.value });
 
@@ -186,22 +208,36 @@ export default defineComponent({
         error.login = userError.value.login?.message;
         error.register = userError.value.register?.message;
         if ((userError.value.errorCode = 'INVALID_CREDENTIALS_ERROR')) {
+          isLoading.value = false;
           showToast(error.login);
         } else {
+          isLoading.value = false;
           showToast('Error occured while trying to login.');
         }
         return;
       }
+
       showToast('login successfull');
       root.$router.push('/');
     };
 
     const handleLogin = async () => handleForm(login)();
 
+    onBeforeMount(async () => {
+      await loadUser();
+      if (user.value) {
+        root.$router.push('/');
+      } else {
+        show.value = true;
+      }
+    });
+
     return {
+      isLoading,
       handleLogin,
       form,
       isDarkMode,
+      show,
     };
   },
 });

@@ -237,15 +237,15 @@
                         :src="subCat.image"
                         class="w-full h-32 sm:h-48 object-cover shadow-xl hover:shadow-2xl transition duration-300"
                       />
+                      <div class="mt-1">
+                        <h4
+                          :style="!isDarkMode ? '' : 'color: white'"
+                          class="text-secondary font-thin text-lg"
+                        >
+                          {{ subCat.name }}
+                        </h4>
+                      </div>
                     </nuxt-link>
-                    <div class="mt-1">
-                      <h4
-                        :style="!isDarkMode ? '' : 'color: white'"
-                        class="text-secondary font-thin text-lg"
-                      >
-                        {{ subCat.name }}
-                      </h4>
-                    </div>
                   </div>
                 </div>
                 <button
