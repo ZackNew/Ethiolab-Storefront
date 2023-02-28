@@ -69,9 +69,9 @@
               />
             </template>
           </LazyHydrate> -->
-          <div class="md:col-span-8 flex justify-end" v-if="heroSection.link">
+          <div class="md:col-span-8 flex justify-center" v-if="heroSection.link">
             <iframe
-              class="w-[90%] md:h-[25rem] ytplayer"
+              class="w-[90%] md:h-[25rem] h-[25rem] ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
@@ -82,7 +82,7 @@
           </div>
           <div class="md:col-span-3">
             <div
-              class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col gap-1"
+              class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col md:gap-1"
             >
               <div v-for="sale in bigSale" :key="sale.sku">
                 <div>
@@ -93,7 +93,7 @@
                     <img
                       :src="imageUrl + sale.banner"
                       alt="image"
-                      class="min-w-[100%] max-h-[8rem] min-h-[8rem]"
+                      class="min-w-[80%] md:min-w-[100%] max-h-[8rem] min-h-[8rem]"
                     />
                   </nuxt-link>
                 </div>
@@ -375,7 +375,7 @@
         </SfButton>
       </div>
       <MessageSideBar
-        class="lg:w-[25%] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500]"
+        class="lg:w-[20%] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500]"
         :messages="messages"
         @sendMessageToAdmin="sendMessageToAdmin"
       />

@@ -201,7 +201,7 @@
           <!-- Products -->
 
           <div class="mt-5">
-            <div class="grid grid-cols-1 md:grid-cols-4">
+            <div class="grid grid-cols-1 md:grid-cols-3">
               <!-- <p>{{product.name}}</p> -->
               <div
                 v-for="(product, i) in filteredSearchedProducts"

@@ -897,7 +897,6 @@ export default {
           return prod;
         });
         this.allProducts = products;
-        console.log("all products value is ", this.allProducts)
         const pbaseUrl = process.env.GRAPHQL_API;
         const poptions = {
           headers: {

@@ -166,7 +166,7 @@
             <Loading />
           </div>
           <!-- Products -->
-          <div class="mt-5 grid grid-cols-1 md:grid-cols-4">
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-3">
             <div
               v-for="(product, i) in filteredSearchedProducts"
               :key="product.id"

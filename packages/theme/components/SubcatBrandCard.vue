@@ -18,7 +18,7 @@
     <nuxt-link :to="{ path: '/v/' + product.slug }">
       <div class="m-1">
         <h4
-          class="mx-3 mt-1 text-center text-secondary md:min-h-[4rem] text-xs md:text-base text-extrathin"
+          class="truncate-overflow mx-3 my-2 mx-auto font-extrabold text-secondary md:text-lg text-center md:min-h-[7rem]"
         >
           {{ product.name }}
         </h4>

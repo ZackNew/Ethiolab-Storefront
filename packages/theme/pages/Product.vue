@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="my-[3%]" v-if="loadings">
+  <div class="p-4">
+    <div class="my-[3%] " v-if="loadings">
       <Loading />
     </div>
     <div v-else>
@@ -36,8 +36,9 @@
                   ETB
                 </h4>
                 <h5 class="text-secondary mb-3">
-                  {{
-                    String(Svariant.priceWithTax).slice(0, -2) +
+                
+                       {{
+                    parseFloat(String(Svariant.priceWithTax).slice(0, -2)).toLocaleString()  +
                     '.' +
                     String(Svariant.priceWithTax).slice(-2)
                   }}
@@ -58,7 +59,7 @@
                   class="rounded bg-secondary mr-[2%]"
                   >Add to Cart</SfButton
                 >
-                <button @click="addToCompareList">
+                <button @click="addToCompareList" class="hidden md:block">
                   <p class="text-secondary align-center mt-3">
                     + Add to Compare List
                   </p>
