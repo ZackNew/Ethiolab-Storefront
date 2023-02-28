@@ -1,8 +1,9 @@
 <template>
   <div
-    :class="`pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300`"
+    :class="`pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300 relative`"
     data-testid="product-card"
   >
+  <!-- <img  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[500]"/> -->
     <div class="ssf-product-card__image-wrapper mx-3">
       <slot
         name="image"
@@ -14,6 +15,7 @@
           imageWidth,
           imageTag,
           nuxtImgConfig,
+          isOrderBased
         }"
       >
         <SfButton
@@ -29,7 +31,7 @@
               :key="key"
               class="ssf-product-card__picture"
               :src="picture"
-              :alt="title"
+              :alt="isOrderBased"
               :width="imageWidth"
               :height="imageHeight"
               :image-tag="imageTag"
@@ -187,17 +189,13 @@
         data-testid="product-link"
         v-on="$listeners"
       >
-<<<<<<< HEAD
-        <span class="ssf-product-card__title min-h-[5rem] font-[0.5rem]">
-=======
         <span class="ssf-product-card__title min-h-[5rem] text-[0.5rem] overflow-hidden">
->>>>>>> 4f52a85f1dfccfed322fbd189b215b2e550a188e
           {{ title }}
         </span>
       </SfButton> -->
       <nuxt-link :to="link">
         <p
-          :class="`truncate-overflow mx-3 my-2 mx-auto font-extrabold text-primary md:text-lg text-center md:min-h-[7rem] md:min-w-${imageWidth}`"
+          :class="`truncate-overflow mx-3 my-2 mx-auto font-extrabold text-secondary md:text-lg text-center md:min-h-[7rem] md:min-w-${imageWidth}`"
         >
           {{ title }}
         </p>
@@ -211,8 +209,8 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <p v-if="regularPrice" class="text-lg mx-auto text-secondary text-xs font-bold">
-          {{ regularPrice }}
+        <p v-if="regularPrice" class="text-md mx-auto text-secondary font-bold">
+          {{parseFloat(regularPrice).toLocaleString() + "  ETB" }}
         </p>
       </slot>
       <slot name="review" v-bind="{ maxRating, scoreRating }">
@@ -374,6 +372,10 @@ export default {
     imageTag: {
       type: String,
       default: '',
+    },
+    isOrderBased: {
+      type: Boolean,
+      default: false,
     },
     nuxtImgConfig: {
       type: Object,

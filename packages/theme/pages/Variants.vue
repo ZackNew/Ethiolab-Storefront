@@ -1,5 +1,5 @@
 <template>
-  <div id="variant">
+  <div id="variant" class="p-4">
     <div class="my-[3%]" v-if="product === null && loading">
       <Loading />
     </div>
@@ -23,6 +23,7 @@
           <Gallery
             :images="product.assets"
             :display="product.featuredAsset"
+            :isOrderBased="product.customFields.is_order_based"
             class="mb-5 md:mb-0"
           />
         </div>
@@ -209,8 +210,22 @@
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData class="pr-4 flex justify-around">
-              <div class="my-4">
+            <SfTableData>
+              <div class="flex">
+                <div class="mr-4">
+                  <h4 class="text-secondary">
+                    <span class="font-bold">
+                      {{
+                        parseFloat(
+                          String(variant.price).slice(0, -2)
+                        ).toLocaleString() +
+                        '.' +
+                        String(variant.price).slice(-2)
+                      }}
+                    </span>
+                    ETB
+                  </h4>
+                </div>
                 <div class="flex">
                   <div class="mr-4">
                     <h4 class="text-secondary">
@@ -477,7 +492,8 @@ export default {
             }
             customFields{
               youtube_link
-              documentation
+              documentations
+              is_order_based
             }
             featuredAsset{
               preview

@@ -62,6 +62,7 @@
             :isInWishlist="isInWishlist({ product })"
             :isAddedToCart="isInCart({ product })"
             :link="localePath(`/v/${product.slug}`)"
+            :isOrderBased="product.is_order_based"
             @click:wishlist="
               !isInWishlist({ product })
                 ? addItemToWishlist({ product })

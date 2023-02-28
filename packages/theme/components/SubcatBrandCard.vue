@@ -1,10 +1,11 @@
 <template>
   <div
-    class="shadow-lg rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent mr-3 mb-6"
+    class="shadow-lg rounded-lg transform transition duration-200 hover:shadow-2xl border border-light_accent mr-3 mb-6 relative"
     :style="
       !isDarkMode ? 'background-color: white' : 'background-color: #182533'
     "
   >
+  <img v-if="product.customFields.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[100]"/>
     <nuxt-link :to="{ path: '/v/' + product.slug }">
       <LazyHydrate>
         <img
@@ -49,12 +50,12 @@
       class="text-center m-3 text-xs md:text-base"
       v-if="product.variants.length === 1"
     >
-      <span> </span>{{ prices }} ETB
+      <span> </span>{{ parseFloat(prices).toLocaleString() }} ETB
     </div>
     <div class="text-center m-3 text-xs md:text-base" v-else>
       <div class="inline-flex" v-for="(p, index) of prices" :key="index">
         <div class="mx-2" v-if="index === 1">-</div>
-        <template>{{ p }}ETB </template>
+        <template>{{ parseFloat(p).toLocaleString()}}ETB </template>
       </div>
     </div>
   </div>

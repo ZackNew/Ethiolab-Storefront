@@ -553,15 +553,20 @@ export default {
             slug
             sku
             rating
+            is_order_based
           }
         }`,
       };
       await axios.post(baseUrl, pbody, options).then((res) => {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
         console.log('bs res', res);
         // console.log("bs res", res)
 >>>>>>> Stashed changes
+=======
+        // console.log("bs res", res)
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
         const produ = res.data.data?.bestSellingProducts.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
@@ -587,10 +592,14 @@ export default {
             },
             slug: product?.slug,
             rating: product?.rating,
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
             is_order_based: product?.is_order_based,
 >>>>>>> Stashed changes
+=======
+            is_order_based: product?.is_order_based
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
           };
           return prod;
         });
@@ -651,6 +660,7 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 <<<<<<< HEAD
@@ -659,6 +669,9 @@ export default {
     // console.log("products value is ", products)
 >>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
 >>>>>>> Stashed changes
+=======
+    // console.log("products value is ", products)
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
     const { sendMessage, getUserInstantMessage } = useInstantMessage();
     loadUser();
 
@@ -715,7 +728,7 @@ export default {
     );
 =======
     const unseen = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false).length)
-    console.log("unseen value is ", unseen.value)
+    // console.log("unseen value is ", unseen.value)
     const unseenMessages = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false))
 
 >>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
@@ -752,6 +765,7 @@ export default {
     const handleMessageOpen = async () => {
       // console.log("handlemessageopen is clicked" );
       toggleMessageSidebar();
+<<<<<<< HEAD
 <<<<<<< Updated upstream
       console.log("unseen messages are", unseenMessages);
 =======
@@ -761,12 +775,16 @@ export default {
       // console.log("unseen messages are", unseenMessages);
 >>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
 >>>>>>> Stashed changes
+=======
+      // console.log("unseen messages are", unseenMessages);
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
       let ids = [];
       let mes = unseenMessages.value;
       for (let i = 0; i < mes.length; i++) {
         ids.push(mes[i].id);
       }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
       console.log("ids value is ", ids)
 =======
@@ -776,6 +794,9 @@ export default {
       // console.log("ids value is ", ids)
 >>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
 >>>>>>> Stashed changes
+=======
+      // console.log("ids value is ", ids)
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
 
       const body = {
         query: `mutation makeSeenByUser($ids: [ID]! ) {
@@ -802,6 +823,7 @@ export default {
           // modalOpen.value = false;
           // setCart();
           // root.$router.push('/');
+<<<<<<< HEAD
 <<<<<<< Updated upstream
           console.log("successful", res)
         })
@@ -820,6 +842,12 @@ export default {
           // console.log("error occured");
 >>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
 >>>>>>> Stashed changes
+=======
+          // console.log("successful", res)
+        })
+        .catch((err) => {
+          // console.log("error occured");
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
         });
     };
 

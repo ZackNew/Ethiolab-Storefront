@@ -20,6 +20,7 @@
                 :display="
                   Svariant.featuredAsset ? Svariant.featuredAsset : prImage
                 "
+                 :isOrderBased="Svariant.is_order_based"
                 class="mb-5 md:mb-0"
               />
             </div>
@@ -28,7 +29,7 @@
               <div class="flex items-end">
                 <h4 class="font-bold text-secondary mb-3 mr-8">
                   {{
-                    String(Svariant.price).slice(0, -2) +
+                    parseFloat(String(Svariant.price).slice(0, -2)).toLocaleString()  +
                     '.' +
                     String(Svariant.price).slice(-2)
                   }}
@@ -42,7 +43,10 @@
                   }}
                   ETB including tax
                 </h5>
+
               </div>
+              <img v-if="Svariant.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class=" z-[100] mb-4"/>
+
               <div class="flex mb-5 items-center">
                 <input
                   class="max-w-[60px] h-12 text-center mr-4"
@@ -519,6 +523,7 @@ export default {
                         name
                         price
                         priceWithTax
+                        is_order_based
                         customFields {
                           description
                           table

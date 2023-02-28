@@ -66,7 +66,7 @@
         </div> -->
       </div>
       <!-- Subcategory name and description -->
-      <div class="ml-6 w-[72%]">
+      <div class="ml-6 md:w-[72%] xs:w-[100%]">
         <h1
           class="sf-heading__title font-medium text-4xl font-sans text-secondary"
         >
@@ -468,6 +468,7 @@ export default {
                               name
                             }
                             customFields{
+                              is_order_based
                               industries{
                                 name
                               }
