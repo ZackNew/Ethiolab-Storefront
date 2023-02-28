@@ -210,22 +210,8 @@
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData>
-              <div class="flex">
-                <div class="mr-4">
-                  <h4 class="text-secondary">
-                    <span class="font-bold">
-                      {{
-                        parseFloat(
-                          String(variant.price).slice(0, -2)
-                        ).toLocaleString() +
-                        '.' +
-                        String(variant.price).slice(-2)
-                      }}
-                    </span>
-                    ETB
-                  </h4>
-                </div>
+            <SfTableData class="flex justify-around">
+              <div>
                 <div class="flex">
                   <div class="mr-4">
                     <h4 class="text-secondary">
