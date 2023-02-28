@@ -3,9 +3,9 @@
     <SfHeading
       v-e2e="'billing-heading'"
       :level="3"
-      :title="$t('Billing')"
       class="sf-heading--left sf-heading--no-underline title"
     />
+    <h3 class="my-4">Billing</h3>
     <form @submit.prevent="handleSubmit(handleFormSubmit)">
       <SfCheckbox
         v-e2e="'copy-address'"
@@ -94,7 +94,7 @@
             v-model="formPhoneNumber"
             valid-color="#3860a7"
             default-country-code="ET"
-            class="form__element form__element--half form__element--half-even"
+            class="form__element form__element--half"
           />
         </ValidationProvider>
         <ValidationProvider name="street-line-1" slim>

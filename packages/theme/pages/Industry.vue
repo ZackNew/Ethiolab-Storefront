@@ -46,6 +46,7 @@
               @filterClicked="filterProducts"
               @maxAdded="maxInput"
               @minAdded="minInput"
+              @clearClicked="clearFilters"
               :filters="filters"
               :categories="categoriesList"
             />
@@ -524,6 +525,11 @@ export default {
           this.description = res.data?.data?.industry?.description;
           this.loading = false;
         });
+    },
+    clearFilters() {
+      this.filtersClicked = [];
+      this.low = 0;
+      this.high = 1000000000;
     },
   },
   setup(props, { root }) {
