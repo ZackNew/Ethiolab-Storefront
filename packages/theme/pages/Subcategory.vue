@@ -46,6 +46,7 @@
             @minAdded="minInput"
             @searchChange="searchBox"
             @filterClicked="filterProducts"
+            @clearClicked="clearFilters"
             :filters="filters"
           />
         </div>
@@ -497,6 +498,11 @@ export default {
           this.categoryImg = res.data?.data?.collection?.featuredAsset?.preview;
           this.description = res.data?.data?.collection?.description;
         });
+    },
+    clearFilters() {
+      this.filtersClicked = [];
+      this.low = 0;
+      this.high = 1000000000;
     },
   },
   setup(props, { root }) {

@@ -46,6 +46,7 @@
               @searchChange="searchBox"
               @categoryClicked="filterCategory"
               @filterClicked="filterProducts"
+              @clearClicked="clearFilters"
               :filters="filters"
               :categories="collectionList"
             />
@@ -442,6 +443,11 @@ export default {
       this.brand = brandResult.data.data.brand;
       this.brandImage = brandResult.data.data.brand.icon?.preview;
       this.products = brandResult.data.data.brand.products;
+    },
+    clearFilters() {
+      this.filtersClicked = [];
+      this.low = 0;
+      this.high = 1000000000;
     },
   },
   setup() {

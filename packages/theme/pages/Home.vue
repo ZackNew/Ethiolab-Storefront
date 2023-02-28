@@ -369,8 +369,16 @@
           @click="handleMessageOpen"
         >
           <div>
-           <span v-if="unseen !== 0" class=" bg-red text-white rounded-full float-right  ">&nbsp;{{ unseen }}&nbsp;</span> 
-           <img class="-mt-2 float-right " src="~/assets/chat1-svgrepo-com.svg" alt="image" />
+            <span
+              v-if="unseen !== 0"
+              class="bg-red text-white rounded-full float-right"
+              >&nbsp;{{ unseen }}&nbsp;</span
+            >
+            <img
+              class="-mt-2 float-right"
+              src="~/assets/chat1-svgrepo-com.svg"
+              alt="image"
+            />
           </div>
         </SfButton>
       </div>
@@ -541,6 +549,7 @@ export default {
             name
             image
             priceWithTax
+            price
             slug
             sku
             rating
@@ -548,6 +557,11 @@ export default {
         }`,
       };
       await axios.post(baseUrl, pbody, options).then((res) => {
+<<<<<<< Updated upstream
+=======
+        console.log('bs res', res);
+        // console.log("bs res", res)
+>>>>>>> Stashed changes
         const produ = res.data.data?.bestSellingProducts.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
@@ -557,9 +571,9 @@ export default {
 
           const image = url.split('shop')[0] + `assets/${product?.image}`;
           const price =
-            String(product?.priceWithTax).slice(0, -2) +
+            String(product?.price).slice(0, -2) +
             '.' +
-            String(product?.priceWithTax).slice(-2);
+            String(product?.price).slice(-2);
           const prod = {
             _id: product?.id,
             _variantId: product?.variantId,
@@ -573,6 +587,10 @@ export default {
             },
             slug: product?.slug,
             rating: product?.rating,
+<<<<<<< Updated upstream
+=======
+            is_order_based: product?.is_order_based,
+>>>>>>> Stashed changes
           };
           return prod;
         });
@@ -633,6 +651,14 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    console.log('products value is ', products);
+=======
+    // console.log("products value is ", products)
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
+>>>>>>> Stashed changes
     const { sendMessage, getUserInstantMessage } = useInstantMessage();
     loadUser();
 
@@ -674,10 +700,25 @@ export default {
     });
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
 
+<<<<<<< HEAD
+    const unseen = computed(
+      () =>
+        messages.value.filter(
+          (mes) => mes.isFromAdmin == true && mes.isSeen == false
+        ).length
+    );
+    console.log('unseen value is ', unseen.value);
+    const unseenMessages = computed(() =>
+      messages.value.filter(
+        (mes) => mes.isFromAdmin == true && mes.isSeen == false
+      )
+    );
+=======
     const unseen = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false).length)
     console.log("unseen value is ", unseen.value)
     const unseenMessages = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false))
 
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
 
     // const handleCancelOrder = async () => {
     //   const body = {
@@ -711,16 +752,32 @@ export default {
     const handleMessageOpen = async () => {
       // console.log("handlemessageopen is clicked" );
       toggleMessageSidebar();
+<<<<<<< Updated upstream
       console.log("unseen messages are", unseenMessages);
+=======
+<<<<<<< HEAD
+      console.log('unseen messages are', unseenMessages);
+=======
+      // console.log("unseen messages are", unseenMessages);
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
+>>>>>>> Stashed changes
       let ids = [];
-     let mes = unseenMessages.value;
-      for(let i=0; i<mes.length; i++){
+      let mes = unseenMessages.value;
+      for (let i = 0; i < mes.length; i++) {
         ids.push(mes[i].id);
       }
 
+<<<<<<< Updated upstream
       console.log("ids value is ", ids)
+=======
+<<<<<<< HEAD
+      console.log('ids value is ', ids);
+=======
+      // console.log("ids value is ", ids)
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
+>>>>>>> Stashed changes
 
-            const body = {
+      const body = {
         query: `mutation makeSeenByUser($ids: [ID]! ) {
           makeSeenByUser (ids: $ids){
                   success
@@ -731,7 +788,7 @@ export default {
         },
       };
 
-     const options = {
+      const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -739,20 +796,32 @@ export default {
       };
       let baseUrl = process.env.GRAPHQL_API;
 
-       await axios
+      await axios
         .post(baseUrl, body, options)
         .then((res) => {
           // modalOpen.value = false;
           // setCart();
           // root.$router.push('/');
+<<<<<<< Updated upstream
           console.log("successful", res)
         })
         .catch((err) => {
           console.log("error occured");
+=======
+<<<<<<< HEAD
+          console.log('successful', res);
+        })
+        .catch((err) => {
+          console.log('error occured');
+=======
+          // console.log("successful", res)
+        })
+        .catch((err) => {
+          // console.log("error occured");
+>>>>>>> f6fffb71fac84af7be10f6b55958539e5fe24de1
+>>>>>>> Stashed changes
         });
-
-
-    }
+    };
 
     const sendMessageToAdmin = async (messageToSend) => {
       // await loadUser();
@@ -859,7 +928,7 @@ export default {
       sendMessageToAdmin,
       messages,
       unseen,
-      handleMessageOpen
+      handleMessageOpen,
     };
   },
 };
