@@ -35,6 +35,7 @@ export const CartFragment = `
         code
         state
         active
+        witholdingTax
         customFields{
             allow_customer_payment
           }
