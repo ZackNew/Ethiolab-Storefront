@@ -7,7 +7,10 @@
             FAQ&apos;s
           </h2>
         </div>
-        <div class="max-w-4xl mx-auto">
+        <div v-if="loading">
+          <Loading />
+        </div>
+        <div v-else class="max-w-4xl mx-auto">
           <SfAccordion
             transition=""
             open="all"
@@ -17,9 +20,7 @@
             class="mb-4 px-4 lg:px-12 py-8 accordion-bg rounded-2xl"
           >
             <SfAccordionItem header="Clothing" class="rounded-2xl">
-              <template
-                #header="{ header, isOpen, accordionClick, showChevron }"
-              >
+              <template #header="{ isOpen, accordionClick }">
                 <div
                   @click="accordionClick"
                   :style="{ cursor: 'pointer' }"
@@ -65,11 +66,13 @@
 <script>
 import { SfAccordion } from '@storefront-ui/vue';
 import axios from 'axios';
+import Loading from '~/components/Loading';
 
 export default {
   //   name: "Help&FAQ",
   components: {
     SfAccordion,
+    Loading,
   },
   created() {
     this.getFAQs();
@@ -77,10 +80,12 @@ export default {
   data() {
     return {
       FAQs: [],
+      loading: false,
     };
   },
   methods: {
     async getFAQs() {
+      this.loading = true;
       const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `query getFAQ {
@@ -100,6 +105,7 @@ export default {
       };
       await axios.post(baseUrl, body, options).then((res) => {
         this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
+        this.loading = false;
       });
     },
   },

@@ -31,7 +31,8 @@
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
           <h3 class="text-secondary text-xl">
             <span class="font-bold mr-2">Price </span
-            >{{ parseFloat(priceRange).toLocaleString() }} ETB
+            >{{ parseFloat(priceRange).toLocaleString() }} ETB /
+            {{ product.customFields.granularity }}
           </h3>
           <img
             v-if="product.customFields.is_order_based"
@@ -224,7 +225,7 @@
                           String(variant.price).slice(-2)
                         }}
                       </span>
-                      ETB
+                      ETB / {{ product.customFields.granularity }}
                     </h4>
                   </div>
                   <div class="flex">
@@ -323,7 +324,7 @@
                     '.' +
                     String(variant.price).slice(-2)
                   }}
-                  ETB
+                  ETB / {{ product.customFields.granularity }}
                 </h6>
               </div>
             </div>
@@ -480,6 +481,7 @@ export default {
               youtube_link
               documentations
               is_order_based
+              granularity
             }
             featuredAsset{
               preview
