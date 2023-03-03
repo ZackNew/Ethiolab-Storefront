@@ -369,8 +369,16 @@
           @click="handleMessageOpen"
         >
           <div>
-           <span v-if="unseen !== 0" class=" bg-red text-white rounded-full float-right  ">&nbsp;{{ unseen }}&nbsp;</span> 
-           <img class="-mt-2 float-right " src="~/assets/chat1-svgrepo-com.svg" alt="image" />
+            <span
+              v-if="unseen !== 0"
+              class="bg-red text-white rounded-full float-right"
+              >&nbsp;{{ unseen }}&nbsp;</span
+            >
+            <img
+              class="-mt-2 float-right"
+              src="~/assets/chat1-svgrepo-com.svg"
+              alt="image"
+            />
           </div>
         </SfButton>
       </div>
@@ -541,6 +549,7 @@ export default {
             name
             image
             priceWithTax
+            price
             slug
             sku
             rating
@@ -549,6 +558,7 @@ export default {
         }`,
       };
       await axios.post(baseUrl, pbody, options).then((res) => {
+        console.log('bs res', res);
         // console.log("bs res", res)
         const produ = res.data.data?.bestSellingProducts.map((product) => {
           let cref = [];
@@ -559,9 +569,9 @@ export default {
 
           const image = url.split('shop')[0] + `assets/${product?.image}`;
           const price =
-            String(product?.priceWithTax).slice(0, -2) +
+            String(product?.price).slice(0, -2) +
             '.' +
-            String(product?.priceWithTax).slice(-2);
+            String(product?.price).slice(-2);
           const prod = {
             _id: product?.id,
             _variantId: product?.variantId,
@@ -575,7 +585,7 @@ export default {
             },
             slug: product?.slug,
             rating: product?.rating,
-            is_order_based: product?.is_order_based
+            is_order_based: product?.is_order_based,
           };
           return prod;
         });
@@ -678,10 +688,18 @@ export default {
     });
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
 
-    const unseen = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false).length)
+    const unseen = computed(
+      () =>
+        messages.value.filter(
+          (mes) => mes.isFromAdmin == true && mes.isSeen == false
+        ).length
+    );
     // console.log("unseen value is ", unseen.value)
-    const unseenMessages = computed(() => messages.value.filter(mes => mes.isFromAdmin == true && mes.isSeen == false))
-
+    const unseenMessages = computed(() =>
+      messages.value.filter(
+        (mes) => mes.isFromAdmin == true && mes.isSeen == false
+      )
+    );
 
     // const handleCancelOrder = async () => {
     //   const body = {
@@ -717,14 +735,14 @@ export default {
       toggleMessageSidebar();
       // console.log("unseen messages are", unseenMessages);
       let ids = [];
-     let mes = unseenMessages.value;
-      for(let i=0; i<mes.length; i++){
+      let mes = unseenMessages.value;
+      for (let i = 0; i < mes.length; i++) {
         ids.push(mes[i].id);
       }
 
       // console.log("ids value is ", ids)
 
-            const body = {
+      const body = {
         query: `mutation makeSeenByUser($ids: [ID]! ) {
           makeSeenByUser (ids: $ids){
                   success
@@ -735,7 +753,7 @@ export default {
         },
       };
 
-     const options = {
+      const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -743,7 +761,7 @@ export default {
       };
       let baseUrl = process.env.GRAPHQL_API;
 
-       await axios
+      await axios
         .post(baseUrl, body, options)
         .then((res) => {
           // modalOpen.value = false;
@@ -754,9 +772,7 @@ export default {
         .catch((err) => {
           // console.log("error occured");
         });
-
-
-    }
+    };
 
     const sendMessageToAdmin = async (messageToSend) => {
       // await loadUser();
@@ -863,7 +879,7 @@ export default {
       sendMessageToAdmin,
       messages,
       unseen,
-      handleMessageOpen
+      handleMessageOpen,
     };
   },
 };

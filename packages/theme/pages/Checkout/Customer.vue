@@ -3,9 +3,9 @@
     <SfHeading
       v-e2e="'shipping-heading'"
       :level="3"
-      :title="$t('Customer')"
       class="sf-heading--left sf-heading--no-underline title"
     />
+    <h3 class="my-4">Customer</h3>
     <form @submit.prevent="handleSubmit(handleFormSubmit)">
       <div class="form">
         <ValidationProvider
@@ -42,26 +42,25 @@
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
-        <div v-if="isAuthenticated"> 
-                  <ValidationProvider
-          name="emailAddress"
-          rules="required|email"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
-            v-e2e="'customer-emailAddress'"
-            v-model="form.emailAddress"
-            :label="$t('Email Address')"
+        <div v-if="isAuthenticated">
+          <ValidationProvider
             name="emailAddress"
-            class="form__element form__element--half"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
+            rules="required|email"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              v-e2e="'customer-emailAddress'"
+              v-model="form.emailAddress"
+              :label="$t('Email Address')"
+              name="emailAddress"
+              class="form__element form__element--half"
+              required
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
         </div>
-
       </div>
       <div class="form">
         <div class="form__action">
@@ -87,7 +86,7 @@ import { ref, onMounted } from '@vue/composition-api';
 import { required, min, digits, email } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { useVSFContext } from '@vue-storefront/core';
-import { useCart,useUser } from '@vue-storefront/vendure';
+import { useCart, useUser } from '@vue-storefront/vendure';
 import { EMAIL_ADDRESS_CONFLICT_ERROR } from '~/helpers';
 
 extend('required', {
@@ -132,10 +131,10 @@ export default {
     });
 
     const handleFormSubmit = async () => {
-      console.log("form value is ", form)
-      console.log(isAuthenticated.value)
-      if(!isAuthenticated.value){
-        form.value.emailAddress="guest@gmail.com";
+      console.log('form value is ', form);
+      console.log(isAuthenticated.value);
+      if (!isAuthenticated.value) {
+        form.value.emailAddress = 'guest@gmail.com';
       }
       const response = await $vendure.api.setCustomerForOrder(form.value);
       if (
@@ -166,7 +165,7 @@ export default {
       form,
       handleFormSubmit,
       errorMessage,
-      isAuthenticated
+      isAuthenticated,
     };
   },
 };

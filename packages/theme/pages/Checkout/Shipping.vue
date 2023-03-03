@@ -3,9 +3,9 @@
     <SfHeading
       v-e2e="'shipping-heading'"
       :level="3"
-      :title="$t('Shipping')"
       class="sf-heading--left sf-heading--no-underline title"
     />
+    <h3 class="my-4">Shipping</h3>
     <form @submit.prevent="handleSubmit(handleFormSubmit)">
       <div class="form">
         <ValidationProvider

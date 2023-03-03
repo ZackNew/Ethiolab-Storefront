@@ -4,13 +4,16 @@ import {
   AgnosticTotals,
   AgnosticCoupon,
   AgnosticDiscount,
-  AgnosticAttribute
+  AgnosticAttribute,
 } from '@vue-storefront/core';
 import type { Order, OrderLine } from '@vue-storefront/vendure-api';
 import { createPrice } from '../helpers/_utils';
 
 interface ExtendedCartGetters extends CartGetters<Order, OrderLine> {
-  getItemOptions: (item: OrderLine, filterByAttributeName?: string[]) => AgnosticAttribute[]
+  getItemOptions: (
+    item: OrderLine,
+    filterByAttributeName?: string[]
+  ) => AgnosticAttribute[];
 }
 
 const getItems = (cart: Order): OrderLine[] => {
@@ -29,8 +32,8 @@ const getItemImage = (item: OrderLine): string => {
 
 const getItemPrice = (item: OrderLine): AgnosticPrice => {
   return {
-    regular: createPrice(item?.linePriceWithTax),
-    special: createPrice(item?.discountedLinePrice)
+    regular: createPrice(item?.unitPrice),
+    special: createPrice(item?.discountedLinePrice),
   };
 };
 
@@ -45,7 +48,7 @@ const getItemSku = (item: OrderLine): string => {
 const getTotals = (cart: Order): AgnosticTotals => {
   return {
     total: createPrice(cart?.totalWithTax),
-    subtotal: createPrice(cart?.subTotalWithTax)
+    subtotal: createPrice(cart?.subTotalWithTax),
   };
 };
 
@@ -54,20 +57,23 @@ const getTotalItems = (cart: Order): number => {
 };
 
 const getDiscounts = (cart: Order): AgnosticDiscount[] => {
-  return cart?.discounts?.map(discount => ({
+  return cart?.discounts?.map((discount) => ({
     id: discount.type,
     name: discount.adjustmentSource,
     value: createPrice(discount.amountWithTax),
-    description: discount.description
+    description: discount.description,
   }));
 };
 
 // TODO: Develop later filterByAttributeName
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getItemOptions = (item: OrderLine, filterByAttributeName?: string[]): AgnosticAttribute[] => {
-  const attributes = item?.productVariant?.options?.map(attribute => ({
+const getItemOptions = (
+  item: OrderLine,
+  filterByAttributeName?: string[]
+): AgnosticAttribute[] => {
+  const attributes = item?.productVariant?.options?.map((attribute) => ({
     label: attribute.group.name,
-    value: attribute.name
+    value: attribute.name,
   }));
 
   return attributes;
@@ -90,9 +96,12 @@ const getShippingPrice = (cart: Order): number => {
 
 // Not used in favor of GetItemOptions
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getItemAttributes = (item: OrderLine, filterByAttributeName?: Array<string>): Record<string, string | AgnosticAttribute> => {
+const getItemAttributes = (
+  item: OrderLine,
+  filterByAttributeName?: Array<string>
+): Record<string, string | AgnosticAttribute> => {
   return {
-    color: 'red'
+    color: 'red',
   };
 };
 
@@ -110,5 +119,5 @@ export const cartGetters: ExtendedCartGetters = {
   getTotalItems,
   getCoupons,
   getDiscounts,
-  getItemOptions
+  getItemOptions,
 };

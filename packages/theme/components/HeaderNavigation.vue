@@ -2,12 +2,10 @@
   <div>
     <div
       v-if="!isMobile"
-      class="grid grid-cols-4 gap-3 pt-4 w-[80%] desktop-only mx-auto text-center relative"
+      class="grid grid-cols-4 gap-4 pt-4 w-[80%] desktop-only mx-auto text-center relative"
     >
       <h4
-        :class="
-          contents.hovered === 'categories' ? 'text-primary' : 'text-secondary'
-        "
+        :class="contents.id === '1' ? 'text-primary' : 'text-secondary'"
         class="font-bold uppercase"
         @mouseover="hoverHandler('Products')"
         @mouseleave="hoverOutHandler"
@@ -15,20 +13,16 @@
         Products
       </h4>
       <h4
-        :class="
-          contents.hovered === 'Industries' ? 'text-primary' : 'text-secondary'
-        "
-        class="text-secondary font-bold uppercase"
+        :class="contents.id === '2' ? 'text-primary' : 'text-secondary'"
+        class="font-bold uppercase"
         @mouseover="hoverHandler('Industries')"
         @mouseleave="hoverOutHandler"
       >
         Industries
       </h4>
       <h4
-        :class="
-          contents.hovered === 'brands' ? 'text-primary' : 'text-secondary'
-        "
-        class="text-secondary font-bold uppercase"
+        :class="contents.id === '3' ? 'text-primary' : 'text-secondary'"
+        class="font-bold uppercase"
         @mouseover="hoverHandler('brands')"
         @mouseleave="hoverOutHandler"
       >

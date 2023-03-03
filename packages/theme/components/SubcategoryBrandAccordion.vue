@@ -162,6 +162,7 @@
               <input
                 v-on:click="filterClicked"
                 type="checkbox"
+                name="otherFiilters"
                 class="mr-4"
                 :checked="false"
                 :id="list"
@@ -208,6 +209,7 @@
         placeholder="Max..."
       />
     </div>
+    <button @click="clearAllFilters" class="bg-secondary text-white rounded w-full py-1 text-center">Clear All Filters</button>
   </div>
 </template>
 
@@ -289,6 +291,17 @@ export default {
     filterClicked(event) {
       this.$emit('filterClicked', event.target);
     },
+    clearAllFilters(){
+      this.min = ''
+      this.max = ''
+      var categoryCheckbox = document.getElementsByName('categories');
+      var otherCheckbox = document.getElementsByName('otherFiilters');
+      var priceRadio = document.getElementsByName('group1');
+      categoryCheckbox.forEach((item) => {item.checked = false})
+      otherCheckbox.forEach((item) => {item.checked = false})
+      priceRadio.forEach((item) => {item.checked = false})
+      this.$emit('clearClicked')
+    }
   },
   setup() {
     const { isDarkMode } = useUiState();

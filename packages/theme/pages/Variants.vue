@@ -29,10 +29,19 @@
         </div>
         <div class="md:col-span-6">
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
-          <h3 class="text-secondary md:text-xl ">
-            <span class="font-bold mr-2">Price </span> {{ priceRange }}
+          <h3 class="text-secondary text-xl">
+            <span class="font-bold mr-2">Price </span
+            >{{ parseFloat(priceRange).toLocaleString() }} ETB /
+            {{ product.customFields.granularity }}
           </h3>
-          <img v-if="product.customFields.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class=" z-[100]"/>
+          <img
+            v-if="product.customFields.is_order_based"
+            src="/OB.png"
+            height="100"
+            width="100"
+            alt="order based"
+            class="z-[100]"
+          />
           <div class="mt-4 bg-[#EAEAEA] rounded py-2 flex justify-around">
             <div v-if="product.variantList.totalItems === 1">
               <h5>1 Variant of this product are available.</h5>
@@ -67,15 +76,19 @@
               v-html="product.description"
             ></p>
           </div>
-          <SfButton
-            v-if="product.customFields.documentation"
-            class="bg-secondary my-2 pb-2 pt-3 rounded"
-          >
-            <a class="text-white px-1" :href="custom.document" target="_blank">
-              DESCRIPTION PDF
-            </a>
-            <!-- Get documentation -->
-          </SfButton>
+
+          <div v-if="custom.documents.length > 0">
+            <div v-for="(document, i) in custom.documents" :key="i">
+              <a
+                class="text-secondary underline"
+                :href="document"
+                target="_blank"
+              >
+                View Pdf
+              </a>
+              <!-- Get documentation -->
+            </div>
+          </div>
           <div v-if="product.facetValues !== []" class="flex">
             <div v-for="(facet, i) in product.facetValues" :key="i">
               <p class="bg-[#d3e6fe] mr-4 px-3 py-[0.5] rounded">
@@ -158,119 +171,132 @@
             :key="variant.id"
             class="mb-4"
           >
-            <SfTableData class="flex">
-              <div v-if="variant.featuredAsset">
-                <img
-                  :src="variant.featuredAsset.preview"
-                  alt=""
-                  class="float-left h-28 w-28 mr-2 object-cover"
-                />
-              </div>
-              <div v-else-if="product.featuredAsset">
-                <img
-                  :src="product.featuredAsset.preview"
-                  alt=""
-                  class="float-left h-28 w-28 mr-2 object-cover"
-                />
-              </div>
-              <p class="text-secondary">
-                <nuxt-link
-                  class="text-secondary"
-                  :to="`/p/${product.id}/${variant.id}/${product.slug}`"
+            <SfTableData>
+              <div class="my-4 px-auto">
+                <p class="text-secondary">
+                  <nuxt-link
+                    class="text-secondary"
+                    :to="`/p/${product.id}/${variant.id}/${product.slug}`"
+                  >
+                    {{ variant.sku }}
+                  </nuxt-link>
+                </p>
+                <div class="flex justify-around" v-if="variant.featuredAsset">
+                  <img
+                    :src="variant.featuredAsset.preview"
+                    alt=""
+                    class="h-16 w-16 mr-2 object-contain"
+                  />
+                </div>
+                <div
+                  class="flex justify-around"
+                  v-else-if="product.featuredAsset"
                 >
-                  {{ variant.sku }}
-                </nuxt-link>
-              </p>
+                  <img
+                    :src="product.featuredAsset.preview"
+                    alt=""
+                    class="h-16 w-16 mr-2 object-contain"
+                  />
+                </div>
+              </div>
             </SfTableData>
             <SfTableData
               v-for="(option, index) in variant.options"
               :key="index"
             >
-              <p class="text-secondary">{{ option.name }}</p>
+              <p class="my-4 text-secondary">{{ option.name }}</p>
             </SfTableData>
             <SfTableData
-              ><p class="text-secondary">
+              ><p class="my-4 text-secondary">
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData>
-              <div class="flex">
-                <div class="mr-4">
-                  <h4 class="text-secondary">
-                    <span class="font-bold">
-                      {{
-                       parseFloat(String(variant.price).slice(0, -2)).toLocaleString()  +
-                        '.' +
-                        String(variant.price).slice(-2)
-                      }}
-                    </span>
-                    ETB
-                  </h4>
-                </div>
+            <SfTableData class="flex justify-around">
+              <div>
                 <div class="flex">
-                  <input
-                    :value="toCart"
-                    class="bg-light_accent w-14 text-center mr-1"
-                    type="number"
-                    :id="variant.id"
-                  />
-                  <SfIcon
-                    :icon="
-                      isInCart({ product: { _variantId: variant.id } })
-                        ? 'added_to_cart'
-                        : 'add_to_cart'
-                    "
-                    size="lg"
-                    color="green-primary"
-                    viewBox="0 0 24 24"
-                    :coverage="1"
-                    @click="addToCart($event)"
-                  />
+                  <div class="mr-4">
+                    <h4 class="text-secondary">
+                      <span class="font-bold">
+                        {{
+                          parseFloat(
+                            String(variant.price).slice(0, -2)
+                          ).toLocaleString() +
+                          '.' +
+                          String(variant.price).slice(-2)
+                        }}
+                      </span>
+                      ETB / {{ product.customFields.granularity }}
+                    </h4>
+                  </div>
+                  <div class="flex">
+                    <input
+                      :value="toCart"
+                      class="bg-light_accent w-14 text-center mr-1"
+                      type="number"
+                      :id="variant.id"
+                    />
+                    <SfIcon
+                      :icon="
+                        isInCart({ product: { _variantId: variant.id } })
+                          ? 'added_to_cart'
+                          : 'add_to_cart'
+                      "
+                      size="lg"
+                      color="green-primary"
+                      viewBox="0 0 24 24"
+                      :coverage="1"
+                      @click="addToCart($event)"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div v-if="variant.accessories.length > 0">
-                <div class="flex mt-[5%]">
-                  <input
-                    type="checkbox"
-                    v-model="isAccessories"
-                    class="mr-[3%]"
-                  />
-                  <h3 class="text-secondary font-bold text-lg">accessories</h3>
-                </div>
-                <hr class="mt-4" />
-                <template v-if="isAccessories">
-                  <div
-                    v-for="(acc, i) in variant.accessories"
-                    :key="`'r' + ${i}`"
-                    class="mt-3"
-                  >
-                    <div class="flex accessories">
-                      <input
-                        @change="accessoryClicked(acc.variants[0].id)"
-                        type="checkbox"
-                        class="mr-[3%]"
-                      />
-                      <nuxt-link :to="`/v/${acc.slug}`">
-                        <img
-                          :src="acc.featuredAsset && acc.featuredAsset.preview"
-                          alt=""
-                          class="w-8 h-8 mr-2"
+                <div v-if="variant.accessories.length > 0">
+                  <div class="flex mt-[5%]">
+                    <input
+                      type="checkbox"
+                      v-model="isAccessories"
+                      class="mr-[3%]"
+                    />
+                    <h3 class="text-secondary font-bold text-lg">
+                      accessories
+                    </h3>
+                  </div>
+                  <hr class="mt-4" />
+                  <template v-if="isAccessories">
+                    <div
+                      v-for="(acc, i) in variant.accessories"
+                      :key="`'r' + ${i}`"
+                      class="mt-3"
+                    >
+                      <div class="flex accessories">
+                        <input
+                          @change="accessoryClicked(acc.variants[0].id)"
+                          type="checkbox"
+                          class="mr-[3%]"
                         />
-                      </nuxt-link>
-                      <nuxt-link :to="`/v/${acc.slug}`">
-                        <h4 class="text-secondary font-bold text-base">
-                          {{ acc.name }}
-                        </h4>
-                        <h5>For an additional    {{
+                        <nuxt-link :to="`/v/${acc.slug}`">
+                          <img
+                            :src="
+                              acc.featuredAsset && acc.featuredAsset.preview
+                            "
+                            alt=""
+                            class="w-8 h-8 mr-2"
+                          />
+                        </nuxt-link>
+                        <nuxt-link :to="`/v/${acc.slug}`">
+                          <h4 class="text-secondary font-bold text-base">
+                            {{ acc.name }}
+                          </h4>
+                          <h5>For an additional    {{
                        parseFloat(String(acc.variants[0].price).slice(0, -2)).toLocaleString()  +
                         '.' +
                         String(acc.variants[0].price).slice(-2)
                       }}  ETB</h5> 
-                      </nuxt-link>
+                        </nuxt-link>
+                      </div>
+                      <hr class="mt-2" />
                     </div>
-                    <hr class="mt-2" />
-                  </div>
-                </template>
+                  </template>
+                </div>
               </div>
             </SfTableData>
           </SfTableRow>
@@ -292,7 +318,7 @@
                     '.' +
                     String(variant.price).slice(-2)
                   }}
-                  ETB
+                  ETB / {{ product.customFields.granularity }}
                 </h6>
               <div v-if="variant.featuredAsset">
                 <img :src="variant.featuredAsset.preview" alt="image" class="w-40 h-40 object-cover m-2"/>
@@ -512,6 +538,7 @@ export default {
               youtube_link
               documentations
               is_order_based
+              granularity
             }
             featuredAsset{
               preview
@@ -588,10 +615,15 @@ export default {
     },
     custom() {
       const link = this.product?.customFields?.youtube_link.split('?v=')[1];
-      const document =
-        process.env.GRAPHQL_API?.split('/shop-api')[0] +
-        this.product?.customFields?.documentation;
-      return { link: link, document: document };
+      const documents = [];
+      this.product?.customFields?.documentations?.forEach((document) => {
+        documents.push(
+          process.env.GRAPHQL_API?.split('/shop-api')[0] + document
+        );
+      });
+      // process.env.GRAPHQL_API?.split('/shop-api')[0] +
+      // this.product?.customFields?.documentation;
+      return { link: link, documents: documents };
     },
   },
   setup() {
