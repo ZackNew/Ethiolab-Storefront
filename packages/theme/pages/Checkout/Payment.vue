@@ -74,6 +74,7 @@
         <div class="summary">
           <div class="summary__group">
             <div class="summary__total">
+              {{ totals }}
               <SfProperty
                 :name="$t('Subtotal')"
                 :value="parseFloat(totals.subtotal).toLocaleString() + ' ETB'"
@@ -629,19 +630,20 @@ export default {
     const totals = computed(() => {
       return {
         subtotal:
-          String(cart.value.subTotal).slice(0, -2) +
+          String(cart.value?.subTotal).slice(0, -2) +
           '.' +
-          String(cart.value.subTotal).slice(-2),
+          String(cart.value?.subTotal).slice(-2),
         withholding:
-          String(cart.value.witholdingTax).slice(0, -2) +
+          String(cart.value?.witholdingTax).slice(0, -2) +
           '.' +
-          String(cart.value.witholdingTax).slice(-2),
+          String(cart.value?.witholdingTax).slice(-2),
         total:
-          String(cart.value.subTotalWithTax).slice(0, -2) +
+          String(cart.value?.subTotalWithTax).slice(0, -2) +
           '.' +
-          String(cart.value.subTotalWithTax).slice(-2),
+          String(cart.value?.subTotalWithTax).slice(-2),
       };
     });
+    console.log("witholding value is ", cart.value);
 
     onSSR(async () => {
       await load({ customQuery: { activeOrder: 'get-cart-custom-query' } });
