@@ -98,7 +98,7 @@
           </div>
 
           <LazyHydrate when-idle>
-            <div>
+            <div class="hidden md:block">
               <h4 class="my-8 text-secondary">Product Reviews</h4>
               <SfReview
                 v-for="review in reviews"
@@ -286,6 +286,11 @@
                           <h4 class="text-secondary font-bold text-base">
                             {{ acc.name }}
                           </h4>
+                          <h5>For an additional    {{
+                       parseFloat(String(acc.variants[0].price).slice(0, -2)).toLocaleString()  +
+                        '.' +
+                        String(acc.variants[0].price).slice(-2)
+                      }}  ETB</h5> 
                         </nuxt-link>
                       </div>
                       <hr class="mt-2" />
@@ -298,12 +303,25 @@
         </SfTable>
       </div>
 
-      <div class="md:hidden">
-        <div v-for="variant in product.variantList.items" :key="variant.id">
+      <div class="md:hidden" id="var-table"> 
+        <div  v-for="variant in product.variantList.items" :key="variant.id">
           <div class="bg-white rounded-lg m-2 pb-3">
             <div class="flex">
+
+               <nuxt-link
+                  :to="`/p/${product.id}/${variant.id}/${product.slug}`"
+                >  
+                <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
+                <h6 class="ml-4 text-secondary">
+                  {{
+                    String(variant.price).slice(0, -2) +
+                    '.' +
+                    String(variant.price).slice(-2)
+                  }}
+                  ETB / {{ product.customFields.granularity }}
+                </h6>
               <div v-if="variant.featuredAsset">
-                <img :src="variant.featuredAsset.preview" alt="image" />
+                <img :src="variant.featuredAsset.preview" alt="image" class="w-40 h-40 object-cover m-2"/>
               </div>
               <div v-else-if="product.featuredAsset">
                 <img
@@ -313,21 +331,14 @@
                 />
               </div>
               <div>
-                <nuxt-link
-                  :to="`/p/${product.id}/${variant.id}/${product.slug}`"
-                >
-                  <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
-                </nuxt-link>
-                <h6 class="ml-4 text-secondary">
-                  {{
-                    String(variant.price).slice(0, -2) +
-                    '.' +
-                    String(variant.price).slice(-2)
-                  }}
-                  ETB / {{ product.customFields.granularity }}
-                </h6>
-              </div>
+             
+                 
+                
+           
+              </div> 
+             </nuxt-link>
             </div>
+        
             <div class="ml-4">
               <div v-for="(option, i) in variant.options" :key="i">
                 <h6 class="text-secondary">
@@ -361,6 +372,52 @@
           </div>
         </div>
       </div>
+
+
+      <LazyHydrate when-idle>
+            <div class=" md:hidden">
+              <h4 class="my-8 text-secondary">Product Reviews</h4>
+              <SfReview
+                v-for="review in reviews"
+                :key="review.id"
+                :author="review.authorName"
+                :date="new Date(review.createdAt).toLocaleString()"
+                :message="review.summary"
+                :max-rating="5"
+                :rating="review.rating"
+                :char-limit="250"
+                :read-more-text="$t('Read more')"
+                :hide-full-text="$t('Read less')"
+                class="product__review"
+              />
+              <MyReview
+                :productId="product.id"
+                :currentUserHasNoReview="!currentUserHasReview"
+              />
+            </div>
+
+            <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
+              <SfTab :title="$t('Read reviews')" :key="reviewKey">
+                <SfReview
+                  v-for="review in reviews"
+                  :key="review.id"
+                  :author="review.authorName"
+                  :date="new Date(review.createdAt).toLocaleString()"
+                  :message="review.summary"
+                  :max-rating="5"
+                  :rating="review.rating"
+                  :char-limit="250"
+                  :read-more-text="$t('Read more')"
+                  :hide-full-text="$t('Read less')"
+                  class="product__review"
+                />
+                <MyReview
+                  :productId="product.id"
+                  :currentUserHasNoReview="!currentUserHasReview"
+                />
+              </SfTab>
+            </SfTabs> -->
+          </LazyHydrate>
     </div>
   </div>
 </template>
@@ -512,6 +569,8 @@ export default {
                   slug
                   variants{
                     id
+                    priceWithTax
+                    price
                   }
                 }
                 stockLevel
@@ -551,7 +610,7 @@ export default {
           String(Math.min(...prices)).slice(0, -2) +
           '.' +
           String(Math.min(...prices)).slice(-2);
-        return min + ' ETB' + ' - ' + max + ' ETB';
+        return  parseFloat(min).toLocaleString()  + ' ETB' + ' - ' +  parseFloat(max).toLocaleString()  + ' ETB';
       }
     },
     custom() {

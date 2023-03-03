@@ -108,7 +108,7 @@
             v-model="formPhoneNumber"
             valid-color="#3860a7"
             default-country-code="ET"
-            class="form__element form__element--half form__element--half-even my-3 w-[80%]"
+            class="specialPhone form__element form__element--half form__element--half-even my-3 w-[80%]"
           />
           <!-- <SfInput
           label="Phone Number"

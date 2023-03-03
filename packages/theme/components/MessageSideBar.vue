@@ -4,7 +4,7 @@
     v-if="isMessageSideBarOpen"
   >
     <div
-      class="invisible lg:visible h-14 max-w-[25%] w-full bg-[#000000] text-white rounded-lg flex items-center fixed"
+      class="invisible lg:visible h-20 max-w-[20%] w-full bg-[#000000] text-white rounded-lg flex items-center fixed"
     >
       <img
         src="Favicon.png"
@@ -13,18 +13,28 @@
         width="40px"
         class="bg-white mx-4 my-2 rounded-full"
       />
-      <h3 class="font-bold text-base whitespace-nowrap">Ethiolab Support</h3>
+      <h3 class="font-bold text-[20px]  whitespace-nowrap">Ethiolab Support</h3> 
+    
     </div>
-    <div class="my-16">
+    <div class="my-24">
       <div class="mx-3" v-for="(message, i) in messages" :key="i">
         <div
           v-if="!message.isFromAdmin"
-          class="bg-light_gray min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"
+          class="bg-[#000000] min-h-[50px] w-[75%] ml-[24%] my-2 rounded-2xl"
         >
-          <p class="text-right mr-4">{{ message.msg }}</p>
+          <p class="text-right mr-4 text-white">{{ message.msg }}</p>
         </div>
-        <div v-else class="bg-secondary min-h-[50px] my-2 w-[75%] rounded-lg">
-          <p class="text-left ml-4 text-white">{{ message.msg }}</p>
+        <div v-else class="bg-[#f4f6f8] min-h-[50px] my-2 w-[75%] rounded-2xl">
+          
+          <SfIcon
+        icon="profile"
+        size="md"
+        color="green-primary"
+        viewBox="0 0 24 24"
+        :coverage="1"
+        class="float-left"
+      />
+          <span class="text-left  text-[#000000] justify-center">{{ message.msg }}</span>
         </div>
       </div>
     </div>
@@ -46,7 +56,7 @@
         type="text"
         v-model="messageToSend"
         placeholder="write a message"
-        class="min-w-[22%] h-12 px-4 rounded-xl shadow-md mr-2"
+        class="min-w-[18%] h-12 px-4 rounded-xl shadow-md mr-2"
       />
       <button class="sendButton" type="submit">
         <!-- <img class="w-[14%] overflow-hidden" src="sendr.png" alt="send icon" /> -->
@@ -72,10 +82,27 @@
 <script>
 import { useUiState } from '~/composables';
 import { ref } from '@vue/composition-api';
-
+import {
+  SfInput,
+  SfBadge,
+  SfButton,
+  SfHeader,
+  SfIcon,
+  SfImage,
+  SfLink,
+  SfMenuItem,
+  SfOverlay,
+  SfSearchBar,
+  SfTextarea,
+  SfModal,
+  SfSidebar,
+} from '@storefront-ui/vue';
 export default {
   name: 'messageSideBar',
   props: ['messages'],
+  components: {
+    SfIcon
+  },
   data() {
     return {
       messageToSend: '',

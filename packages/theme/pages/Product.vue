@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="my-[3%]" v-if="loadings">
+  <div class="p-4">
+    <div class="my-[3%] " v-if="loadings">
       <Loading />
     </div>
     <div v-else>
@@ -26,7 +26,16 @@
             </div>
             <div class="md:col-span-6">
               <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
+              <h4 v-if="Svariant.priceWithoutDiscount != Svariant.price" class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through">
+                  {{
+                    parseFloat(String(Svariant.priceWithoutDiscount).slice(0, -2)).toLocaleString()  +
+                    '.' +
+                    String(Svariant.priceWithoutDiscount).slice(-2)
+                  }}
+                  ETB
+                </h4> 
               <div class="flex items-end">
+               
                 <h4 class="font-bold text-secondary mb-3 mr-8">
                   {{
                     parseFloat(String(Svariant.price).slice(0, -2)).toLocaleString()  +
@@ -35,9 +44,10 @@
                   }}
                   ETB
                 </h4>
-                <h5 class="text-secondary mb-3">
-                  {{
-                    String(Svariant.priceWithTax).slice(0, -2) +
+                <h5 class="text-[#828181] mb-3">
+                
+                       {{
+                    parseFloat(String(Svariant.priceWithTax).slice(0, -2)).toLocaleString()  +
                     '.' +
                     String(Svariant.priceWithTax).slice(-2)
                   }}
@@ -58,7 +68,7 @@
                   class="rounded bg-secondary mr-[2%]"
                   >Add to Cart</SfButton
                 >
-                <button @click="addToCompareList">
+                <button @click="addToCompareList" class="hidden md:block">
                   <p class="text-secondary align-center mt-3">
                     + Add to Compare List
                   </p>
@@ -523,6 +533,7 @@ export default {
                         name
                         price
                         priceWithTax
+                        priceWithoutDiscount
                         is_order_based
                         customFields {
                           description
@@ -551,6 +562,7 @@ export default {
         },
       };
       const variant = await axios.post(baseUrl, body, options);
+      // console.log("variant value is ", variant);
       this.prImage = variant.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.product?.assets;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
