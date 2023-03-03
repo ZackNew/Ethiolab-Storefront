@@ -80,6 +80,11 @@
                 class="sf-property--full-width property"
               />
               <SfProperty
+                :name="$t('Standard Tax')"
+                :value="standardTax.toLocaleString() + ' ETB'"
+                class="sf-property--full-width property"
+              />
+              <SfProperty
                 :name="$t('Withholding Tax')"
                 :value="
                   parseFloat(totals.withholding).toLocaleString() + ' ETB'
@@ -91,7 +96,7 @@
             <SfDivider />
 
             <SfProperty
-              :name="$t('Total Price With Tax')"
+              :name="$t('Price With Tax')"
               :value="parseFloat(totals.total).toLocaleString() + ' ETB'"
               class="sf-property--full-width sf-property--large summary__property-total"
             />
@@ -611,6 +616,33 @@ export default {
       }
     };
 
+    const standardTax = computed(() => {
+      let tax = 0;
+      let totalWithTax = 0;
+      cart.value?.lines.forEach((line) => {
+        totalWithTax = totalWithTax + line.quantity * line.unitPriceWithTax;
+      });
+      tax = totalWithTax - cart.value?.subTotal;
+      return tax / 100;
+    });
+
+    const totals = computed(() => {
+      return {
+        subtotal:
+          String(cart.value.subTotal).slice(0, -2) +
+          '.' +
+          String(cart.value.subTotal).slice(-2),
+        withholding:
+          String(cart.value.witholdingTax).slice(0, -2) +
+          '.' +
+          String(cart.value.witholdingTax).slice(-2),
+        total:
+          String(cart.value.subTotalWithTax).slice(0, -2) +
+          '.' +
+          String(cart.value.subTotalWithTax).slice(-2),
+      };
+    });
+
     onSSR(async () => {
       await load({ customQuery: { activeOrder: 'get-cart-custom-query' } });
       console.log('this that', cart);
@@ -759,23 +791,6 @@ export default {
       // setCart(null);
     };
 
-    const totals = computed(() => {
-      return {
-        subtotal:
-          String(cart.value.subTotal).slice(0, -2) +
-          '.' +
-          String(cart.value.subTotal).slice(-2),
-        withholding:
-          String(cart.value.witholdingTax).slice(0, -2) +
-          '.' +
-          String(cart.value.witholdingTax).slice(-2),
-        total:
-          String(cart.value.subTotalWithTax).slice(0, -2) +
-          '.' +
-          String(cart.value.subTotalWithTax).slice(-2),
-      };
-    });
-
     const processTelebirr = async () => {
       ////////////////////////////////STEP 1//////////////////////////////////////
 
@@ -916,6 +931,7 @@ export default {
       // handleCancelOrder,
       handleModalCashOpen,
       canPay,
+      standardTax,
     };
   },
 };
