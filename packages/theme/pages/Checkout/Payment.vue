@@ -369,7 +369,7 @@
                     Are you sure you want to cancel this order?
                   </h3>
                   <button
-                    @click="handleCancelOrder"
+                    @click="handleCancelOrder(cookieToken)"
                     data-modal-toggle="popup-modal"
                     type="button"
                     class="text-white bg-red hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
@@ -510,6 +510,14 @@ export default {
       import('~/components/Checkout/VsfPaymentProvider'),
     CartPreview,
   },
+  data() {
+    return {
+      cookieToken: "",
+    };
+  },
+  created(){
+    this.cookieToken = this.$cookies.get('etech-auth-token');
+  },
   computed: {
     phoneNumber() {
       return this.$store.state.companyDetails.companyInformation?.phone_number?.split(
@@ -522,39 +530,40 @@ export default {
       );
     },
   },
-  methods:{
-    async handleCancelOrder  () {
-      const body = {
-        query: `mutation cancelOrder {
-          cancelMyOrder{
-                  success
-                }
-              }`,
-        variables: {
-          orderCode: cart?.value?.code,
-        },
-      };
-      const token = this.$cookies.get('etech-auth-token');
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', 
-          authorization: `Bearer ${token}`,
-        },
-      };
-      let baseUrl = process.env.GRAPHQL_API;
 
-      const acat = await axios
-        .post(baseUrl, body, options)
-        .then(async (res) => {
-          setCart();
-          modalOpen.value = false;
+  methods:{
+    // async handleCancelOrder  () {
+    //   const body = {
+    //     query: `mutation cancelOrder {
+    //       cancelMyOrder{
+    //               success
+    //             }
+    //           }`,
+    //     variables: {
+    //       orderCode: cart?.value?.code,
+    //     },
+    //   };
+    //   const token = this.$cookies.get('etech-auth-token');
+    //   const options = {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Access-Control-Allow-Origin': '*', 
+    //       authorization: `Bearer ${token}`,
+    //     },
+    //   };
+    //   let baseUrl = process.env.GRAPHQL_API;
+
+    //   const acat = await axios
+    //     .post(baseUrl, body, options)
+    //     .then(async (res) => {
+    //       setCart();
+    //       modalOpen.value = false;
          
-          // this.$router.push('/');
-          window.location.href = "/"
-        })
-        .catch((err) => {});
-    }
+    //       // this.$router.push('/');
+    //       window.location.href = "/"
+    //     })
+    //     .catch((err) => {});
+    // }
   },
   setup(props, { root }) {
     const { cart, load, setCart, applyCoupon } = useCart();
@@ -760,13 +769,14 @@ export default {
 
     const processTelebirr = async () => {
       ////////////////////////////////STEP 1//////////////////////////////////////
+      const uniqueId  =  uuid.v4();
 
       const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
       let signObj = {
         appId: '4ae7217b4e7149fdac877852e7fd87db',
-        nonce: paymentDetail.transaction_uuid,
+        nonce: uniqueId,
         notifyUrl: 'https://admin.ethiolab.et/telebirr',
-        outTradeNo: `${cart.value.code}_${paymentDetail.transaction_uuid}`,
+        outTradeNo: `${cart.value.code}_${uniqueId}`,
         receiveName: 'Ethiolab',
         returnUrl: 'http://localhost:3001/checkout/thank-you/',
         shortCode: '220322',
@@ -809,9 +819,9 @@ export default {
 
       let jsonObj = {
         appId: '4ae7217b4e7149fdac877852e7fd87db',
-        nonce: paymentDetail.transaction_uuid,
+        nonce: uniqueId,
         notifyUrl: 'https://admin.ethiolab.et/telebirr',
-        outTradeNo: `${cart.value.code}_${paymentDetail.transaction_uuid}`,
+        outTradeNo: `${cart.value.code}_${uniqueId}`,
         receiveName: 'Ethiolab',
         returnUrl: 'http://localhost:3001/checkout/thank-you/',
         shortCode: '220322',
@@ -876,6 +886,42 @@ export default {
         });
     };
 
+    const handleCancelOrder  = async (token) => {
+      const body = {
+        query: `mutation cancelOrder {
+          cancelMyOrder{
+                  success
+                }
+              }`,
+        variables: {
+          orderCode: cart?.value?.code,
+        },
+      };
+      // const token = this.$cookies.get('etech-auth-token');
+
+      // const token = this.cookieToken;
+
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', 
+          authorization: `Bearer ${token}`,
+        },
+      };
+      let baseUrl = process.env.GRAPHQL_API;
+
+      const acat = await axios
+        .post(baseUrl, body, options)
+        .then(async (res) => {
+          setCart();
+          modalOpen.value = false;
+         
+          root.$router.push('/');
+          // window.location.href = "/"
+        })
+        .catch((err) => {});
+    }
+
     return {
       terms,
       loading,
@@ -897,7 +943,8 @@ export default {
       modalOpen,
       // handleCancelOrder,
       handleModalCashOpen,
-      canPay
+      canPay,
+      handleCancelOrder
     };
   },
 };

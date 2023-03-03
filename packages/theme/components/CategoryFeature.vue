@@ -17,7 +17,7 @@
                   ? category.featuredAsset.preview
                   : '/categories/empty_image.png'
               "
-              class="w-full h-28 md:h-60 object-cover shadow-xl hover:shadow-2xl transition duration-300"
+              class="w-full h-44 md:h-60 object-cover shadow-xl hover:shadow-2xl transition duration-300"
             />
             <div class="mt-1">
               <h4 class="md:text-xl text-secondary">{{ category.label }}</h4>

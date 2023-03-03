@@ -1,6 +1,6 @@
 <template>
   <div id="category">
-    <div class="sticky z-[300]" :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'">
+    <div class="sticky md:z-[300]" :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'">
       <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
@@ -23,7 +23,7 @@
       <div class="navbar section">
         <div class="navbar__aside desktop-only">
           <LazyHydrate never>
-            <!-- <SfHeading
+            <!-- <SfHeading 
             :level="3"
             :title="$t('Categories')"
             class="navbar__title text-secondary"
