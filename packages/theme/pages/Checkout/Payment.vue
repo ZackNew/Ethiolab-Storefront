@@ -2,21 +2,21 @@
   <div id="checkout">
     <div class="checkout">
       <div class="checkout__main">
-        <div v-if="!canPay"> 
-          <img src="/info.png" alt="info icon" height="50" width="50"/>
-            <div class="bg-white text-lg m-4 p-4 font-bold rounded-lg"> 
-                      <p>This order contains order based product. You are allowed to pay once the admin update the order status. </p>
-
-             </div>
+        <div v-if="!canPay">
+          <img src="/info.png" alt="info icon" height="50" width="50" />
+          <div class="bg-white text-lg m-4 p-4 font-bold rounded-lg">
+            <p>
+              This order contains order based product. You are allowed to pay
+              once the admin update the order status.
+            </p>
+          </div>
         </div>
 
-        
         <SfHeading
           :level="3"
           :title="$t('Payment')"
           class="sf-heading--left sf-heading--no-underline title"
         />
-   
 
         <SfTable class="sf-table--bordered table desktop-only">
           <SfTableHeading class="table__row">
@@ -74,13 +74,21 @@
         <div class="summary">
           <div class="summary__group">
             <div class="summary__total">
+              {{ totals }}
               <SfProperty
                 :name="$t('Subtotal')"
+                :value="parseFloat(totals.subtotal).toLocaleString() + ' ETB'"
+                class="sf-property--full-width property"
+              />
+              <SfProperty
+                :name="$t('Standard Tax')"
+                :value="standardTax.toLocaleString() + ' ETB'"
+                class="sf-property--full-width property"
+              />
+              <SfProperty
+                :name="$t('Withholding Tax')"
                 :value="
-                  (totals.special > 0
-                    ? totals.special
-                    : totals.subtotal
-                  ).toLocaleString() + ' ETB'
+                  parseFloat(totals.withholding).toLocaleString() + ' ETB'
                 "
                 class="sf-property--full-width property"
               />
@@ -89,32 +97,32 @@
             <SfDivider />
 
             <SfProperty
-              :name="$t('Total price')"
-              :value="totals.subtotal.toLocaleString() + ' ETB'"
+              :name="$t('Price With Tax')"
+              :value="parseFloat(totals.total).toLocaleString() + ' ETB'"
               class="sf-property--full-width sf-property--large summary__property-total"
             />
 
-            <div v-if="canPay"> 
-              <VsfPaymentProvider @paymentMethodSelected="updatePaymentMethod" />
+            <div v-if="canPay">
+              <VsfPaymentProvider
+                @paymentMethodSelected="updatePaymentMethod"
+              />
 
-
-                <SfCheckbox
-                  v-e2e="'terms'"
-                  v-model="terms"
-                  name="terms"
-                  class="summary__terms"
-                >
-                  <template #label>
-                    <div class="sf-checkbox__label">
-                      {{ $t('I agree to') }}
-                      <SfLink href="/policy/terms-and-conditions">
-                        {{ $t('Terms and conditions') }}</SfLink
-                      >
-                    </div>
-                  </template>
-                  </SfCheckbox>
+              <SfCheckbox
+                v-e2e="'terms'"
+                v-model="terms"
+                name="terms"
+                class="summary__terms"
+              >
+                <template #label>
+                  <div class="sf-checkbox__label">
+                    {{ $t('I agree to') }}
+                    <SfLink href="/policy/terms-and-conditions">
+                      {{ $t('Terms and conditions') }}</SfLink
+                    >
+                  </div>
+                </template>
+              </SfCheckbox>
             </div>
-
 
             <div class="summary__action">
               <SfButton
@@ -522,8 +530,8 @@ export default {
       );
     },
   },
-  methods:{
-    async handleCancelOrder  () {
+  methods: {
+    async handleCancelOrder() {
       const body = {
         query: `mutation cancelOrder {
           cancelMyOrder{
@@ -538,7 +546,7 @@ export default {
       const options = {
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', 
+          'Access-Control-Allow-Origin': '*',
           authorization: `Bearer ${token}`,
         },
       };
@@ -549,22 +557,23 @@ export default {
         .then(async (res) => {
           setCart();
           modalOpen.value = false;
-         
+
           // this.$router.push('/');
-          window.location.href = "/"
+          window.location.href = '/';
         })
         .catch((err) => {});
-    }
+    },
   },
   setup(props, { root }) {
     const { cart, load, setCart, applyCoupon } = useCart();
     const { loading } = useMakeOrder();
     const { set } = usePayment();
 
-    const canPay = computed(() => cart?.value?.customFields?.allow_customer_payment)
+    const canPay = computed(
+      () => cart?.value?.customFields?.allow_customer_payment
+    );
     // console.log("canPay value is ", canPay)
     // console.log("cart value is ", cart)
-
 
     const terms = ref(false);
     const paymentMethod = ref(null);
@@ -601,23 +610,49 @@ export default {
       let temp = modalCashOpen.value;
       modalCashOpen.value = !temp;
       paymentMethod.value = null;
-      if(modalOpen){
-        modalOpen.value = false
-      }
-      else {
-        modalOpen.value = true
+      if (modalOpen) {
+        modalOpen.value = false;
+      } else {
+        modalOpen.value = true;
       }
     };
 
+    const standardTax = computed(() => {
+      let tax = 0;
+      let totalWithTax = 0;
+      cart.value?.lines.forEach((line) => {
+        totalWithTax = totalWithTax + line.quantity * line.unitPriceWithTax;
+      });
+      tax = totalWithTax - cart.value?.subTotal;
+      return tax / 100;
+    });
 
+    const totals = computed(() => {
+      return {
+        subtotal:
+          String(cart.value?.subTotal).slice(0, -2) +
+          '.' +
+          String(cart.value?.subTotal).slice(-2),
+        withholding:
+          String(cart.value?.witholdingTax).slice(0, -2) +
+          '.' +
+          String(cart.value?.witholdingTax).slice(-2),
+        total:
+          String(cart.value?.subTotalWithTax).slice(0, -2) +
+          '.' +
+          String(cart.value?.subTotalWithTax).slice(-2),
+      };
+    });
+    console.log("witholding value is ", cart.value);
 
     onSSR(async () => {
-      await load();
+      await load({ customQuery: { activeOrder: 'get-cart-custom-query' } });
+      console.log('this that', cart);
     });
 
     onMounted(() => {});
 
-    onBeforeMount( async() => {
+    onBeforeMount(async () => {
       url = 'https://testsecureacceptance.cybersource.com/pay';
       SECRET_KEY =
         'c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7';
@@ -880,7 +915,7 @@ export default {
       terms,
       loading,
       products: computed(() => cartGetters.getItems(cart.value)),
-      totals: computed(() => cartGetters.getTotals(cart.value)),
+      totals,
       cart: computed(() => cart.value),
       tableHeaders: ['Description', 'Quantity', 'Amount'],
       cartGetters,
@@ -897,7 +932,8 @@ export default {
       modalOpen,
       // handleCancelOrder,
       handleModalCashOpen,
-      canPay
+      canPay,
+      standardTax,
     };
   },
 };
@@ -932,7 +968,6 @@ export default {
     &__image {
       --image-width: 5.125rem;
       text-align: left;
-      margin: 0 var(--spacer-xl) 0 0;
     }
   }
 }

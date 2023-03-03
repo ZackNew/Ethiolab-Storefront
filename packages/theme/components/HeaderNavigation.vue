@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="!isMobile"
-      class="grid grid-cols-4 gap-3 pt-4 w-[80%] desktop-only mx-auto text-center relative"
+      class="grid grid-cols-4 gap-4 pt-4 w-[80%] desktop-only mx-auto text-center relative"
     >
       <h4
         :class="contents.id === '1' ? 'text-primary' : 'text-secondary'"
