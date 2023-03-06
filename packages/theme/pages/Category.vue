@@ -1,6 +1,9 @@
 <template>
   <div id="category">
-    <div class="sticky md:z-[300]" :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'">
+    <div
+      class="sticky md:z-[300]"
+      :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'"
+    >
       <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
@@ -306,7 +309,7 @@
                     :score-rating="product.rating ? product.rating : ''"
                     :variantId="product._variantId"
                     :show-add-to-cart-button="true"
-                    :isOrderBased ="product.isOrderBased"
+                    :isOrderBased="product.isOrderBased"
                     :isInWishlist="isInWishlist({ product })"
                     :isAddedToCart="isInCart({ product })"
                     :link="localePath(`/v/${product.slug}`)"
@@ -721,9 +724,7 @@ export default {
       setSelectedFilters();
 
       // sort =  localStorage.getItem("sort");
-      
     });
-
 
     const isFilterSelected = (facet, option) =>
       (selectedFilters.value.attributes || []).includes(option?.id);
@@ -823,6 +824,7 @@ export default {
     async getActiveCategory() {
       const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
+      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `
         query getCategoriesProducts($slug: String!){
@@ -867,6 +869,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${token}`,
         },
       };
       await axios.post(baseUrl, body, options).then((res) => {
@@ -902,6 +905,7 @@ export default {
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
+            authorization: `Bearer ${token}`,
           },
         };
         const pbody = {
