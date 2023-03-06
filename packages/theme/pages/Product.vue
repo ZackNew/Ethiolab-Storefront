@@ -555,14 +555,17 @@ export default {
           eq: variantId,
         },
       };
+      const cookieToken = this.$cookies.get("etech-auth-token");
+      console.log("cookieToken value is ", cookieToken);
       const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${cookieToken}`
         },
       };
       const variant = await axios.post(baseUrl, body, options);
-      // console.log("variant value is ", variant);
+      console.log("variant value is ", variant);
       this.prImage = variant.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.product?.assets;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
