@@ -21,9 +21,21 @@
         </div>
         <ValidationObserver
           v-slot="{ handleSubmit }"
-          class="card shadow-lg p-10 mx-10 rounded bg-light_accent"
+          :class="{
+            'bg-light_accent': !isDarkMode,
+            'bg-dark_accent': isDarkMode,
+          }"
+          class="card shadow-lg p-10 mx-10 rounded"
         >
-          <h2 class="mb-2">Contact Us</h2>
+          <h2
+            :class="{
+              'text-[#000000]': !isDarkMode,
+              'text-[#ffffff]': isDarkMode,
+            }"
+            class="mb-2"
+          >
+            Contact Us
+          </h2>
           <form @submit.prevent="handleSubmit(handleFormSubmit)">
             <div class="form">
               <ValidationProvider
@@ -169,7 +181,7 @@
             <div class="form">
               <div class="form__action">
                 <button
-                  class="color-primary bg-primary px-4 py-1 rounded text-white text-xl"
+                  class="color-primary bg-secondary px-4 py-1 rounded text-white text-xl"
                   :aria-disabled="false"
                   :link="null"
                   type="submit"
@@ -267,6 +279,7 @@ import {
 } from '@storefront-ui/vue';
 import StoreLocator from '~/components/StoreLocator.vue';
 import LazyHydrate from 'vue-lazy-hydration';
+import { useUiHelpers, useUiState } from '~/composables';
 import { ref, onMounted, inject } from '@vue/composition-api';
 import { required, min, digits, email } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
@@ -354,6 +367,7 @@ export default {
     },
   },
   setup(_, { root }) {
+    const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
     const isFormSubmitted = ref(false);
     const { $vendure } = useVSFContext();
@@ -422,6 +436,7 @@ export default {
     });
 
     return {
+      isDarkMode,
       isFormSubmitted,
       form,
       handleFormSubmit,

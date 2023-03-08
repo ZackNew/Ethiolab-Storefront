@@ -81,10 +81,10 @@
             <div v-for="(document, i) in custom.documents" :key="i">
               <a
                 class="text-secondary underline"
-                :href="document"
+                :href="document.link"
                 target="_blank"
               >
-                View Pdf
+                {{ document.name }}
               </a>
               <!-- Get documentation -->
             </div>
@@ -222,7 +222,8 @@
                             String(variant.price).slice(0, -2)
                           ).toLocaleString() +
                           '.' +
-                          String(variant.price).slice(-2)
+                          String(variant.price).slice(-2) +
+                          ' '
                         }}
                       </span>
                       ETB / {{ product.customFields.granularity }}
@@ -286,11 +287,18 @@
                           <h4 class="text-secondary font-bold text-base">
                             {{ acc.name }}
                           </h4>
-                          <h5>For an additional    {{
-                       parseFloat(String(acc.variants[0].price).slice(0, -2)).toLocaleString()  +
-                        '.' +
-                        String(acc.variants[0].price).slice(-2)
-                      }}  ETB</h5> 
+                          <h5>
+                            For an additional
+                            {{
+                              parseFloat(
+                                String(acc.variants[0].price).slice(0, -2)
+                              ).toLocaleString() +
+                              '.' +
+                              String(acc.variants[0].price).slice(-2) +
+                              ' '
+                            }}
+                            ETB
+                          </h5>
                         </nuxt-link>
                       </div>
                       <hr class="mt-2" />
@@ -303,14 +311,11 @@
         </SfTable>
       </div>
 
-      <div class="md:hidden" id="var-table"> 
-        <div  v-for="variant in product.variantList.items" :key="variant.id">
+      <div class="md:hidden" id="var-table">
+        <div v-for="variant in product.variantList.items" :key="variant.id">
           <div class="bg-white rounded-lg m-2 pb-3">
             <div class="flex">
-
-               <nuxt-link
-                  :to="`/p/${product.id}/${variant.id}/${product.slug}`"
-                >  
+              <nuxt-link :to="`/p/${product.id}/${variant.id}/${product.slug}`">
                 <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
                 <h6 class="ml-4 text-secondary">
                   {{
@@ -320,25 +325,24 @@
                   }}
                   ETB / {{ product.customFields.granularity }}
                 </h6>
-              <div v-if="variant.featuredAsset">
-                <img :src="variant.featuredAsset.preview" alt="image" class="w-40 h-40 object-cover m-2"/>
-              </div>
-              <div v-else-if="product.featuredAsset">
-                <img
-                  :src="product.featuredAsset.preview"
-                  alt="image"
-                  class="w-20 h-20 object-cover m-2"
-                />
-              </div>
-              <div>
-             
-                 
-                
-           
-              </div> 
-             </nuxt-link>
+                <div v-if="variant.featuredAsset">
+                  <img
+                    :src="variant.featuredAsset.preview"
+                    alt="image"
+                    class="w-40 h-40 object-cover m-2"
+                  />
+                </div>
+                <div v-else-if="product.featuredAsset">
+                  <img
+                    :src="product.featuredAsset.preview"
+                    alt="image"
+                    class="w-20 h-20 object-cover m-2"
+                  />
+                </div>
+                <div></div>
+              </nuxt-link>
             </div>
-        
+
             <div class="ml-4">
               <div v-for="(option, i) in variant.options" :key="i">
                 <h6 class="text-secondary">
@@ -373,30 +377,29 @@
         </div>
       </div>
 
-
       <LazyHydrate when-idle>
-            <div class=" md:hidden">
-              <h4 class="my-8 text-secondary">Product Reviews</h4>
-              <SfReview
-                v-for="review in reviews"
-                :key="review.id"
-                :author="review.authorName"
-                :date="new Date(review.createdAt).toLocaleString()"
-                :message="review.summary"
-                :max-rating="5"
-                :rating="review.rating"
-                :char-limit="250"
-                :read-more-text="$t('Read more')"
-                :hide-full-text="$t('Read less')"
-                class="product__review"
-              />
-              <MyReview
-                :productId="product.id"
-                :currentUserHasNoReview="!currentUserHasReview"
-              />
-            </div>
+        <div class="md:hidden">
+          <h4 class="my-8 text-secondary">Product Reviews</h4>
+          <SfReview
+            v-for="review in reviews"
+            :key="review.id"
+            :author="review.authorName"
+            :date="new Date(review.createdAt).toLocaleString()"
+            :message="review.summary"
+            :max-rating="5"
+            :rating="review.rating"
+            :char-limit="250"
+            :read-more-text="$t('Read more')"
+            :hide-full-text="$t('Read less')"
+            class="product__review"
+          />
+          <MyReview
+            :productId="product.id"
+            :currentUserHasNoReview="!currentUserHasReview"
+          />
+        </div>
 
-            <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
+        <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
               <SfTab :title="$t('Read reviews')" :key="reviewKey">
                 <SfReview
                   v-for="review in reviews"
@@ -417,7 +420,7 @@
                 />
               </SfTab>
             </SfTabs> -->
-          </LazyHydrate>
+      </LazyHydrate>
     </div>
   </div>
 </template>
@@ -524,6 +527,7 @@ export default {
     async getProductVariant() {
       const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
+      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `query getProductVariant($slug: String!){
           product(slug: $slug){
@@ -584,6 +588,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${token}`,
         },
       };
       const productVariant = await axios.post(baseUrl, body, options);
@@ -610,16 +615,25 @@ export default {
           String(Math.min(...prices)).slice(0, -2) +
           '.' +
           String(Math.min(...prices)).slice(-2);
-        return  parseFloat(min).toLocaleString()  + ' ETB' + ' - ' +  parseFloat(max).toLocaleString()  + ' ETB';
+        return (
+          parseFloat(min).toLocaleString() +
+          ' ETB' +
+          ' - ' +
+          parseFloat(max).toLocaleString() +
+          ' ETB'
+        );
       }
     },
     custom() {
       const link = this.product?.customFields?.youtube_link.split('?v=')[1];
       const documents = [];
       this.product?.customFields?.documentations?.forEach((document) => {
-        documents.push(
-          process.env.GRAPHQL_API?.split('/shop-api')[0] + document
-        );
+        if (document.length > 0) {
+          documents.push({
+            name: document.split('_')[1],
+            link: process.env.GRAPHQL_API?.split('/shop-api')[0] + document,
+          });
+        }
       });
       // process.env.GRAPHQL_API?.split('/shop-api')[0] +
       // this.product?.customFields?.documentation;

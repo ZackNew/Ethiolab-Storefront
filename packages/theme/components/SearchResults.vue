@@ -284,7 +284,7 @@ export default {
 }
 .search {
   position: absolute;
-  z-index: 3;
+  z-index: 99;
   height: 100%;
   min-height: 50%;
   // --mega-menu-column-header-margin: var(--spacer-sm) 0 var(--spacer-xl);

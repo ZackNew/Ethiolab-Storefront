@@ -15,10 +15,17 @@
           imageWidth,
           imageTag,
           nuxtImgConfig,
-          isOrderBased
+          isOrderBased,
         }"
       >
-      <img v-if="isOrderBased"  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[200]"/>
+        <img
+          v-if="isOrderBased"
+          src="/OB.png"
+          height="100"
+          width="100"
+          alt="order based"
+          class="absolute orderBased"
+        />
         <SfButton
           :link="link"
           class="sf-button--pure ssf-product-card__link"
@@ -195,9 +202,9 @@
           class="w-[20%] bg-light_accent mr-3 h-10 text-center"
           v-model="numberCart"
         />
-         <SfButton @click="onAddToCart" class="rounded bg-secondary mr-[2%]"
-                >Add To Cart</SfButton
-              >
+        <SfButton @click="onAddToCart" class="rounded bg-secondary mr-[2%]"
+          >Add To Cart</SfButton
+        >
       </div>
     </slot>
     <h1
@@ -262,7 +269,9 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <p class="text-lg text-secondary">     {{parseFloat(regularPrice).toLocaleString() + "  ETB"  }}</p>
+        <p class="text-lg text-secondary">
+          {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }}
+        </p>
         <div class="sf-price"></div>
       </slot>
     </div>
@@ -400,10 +409,10 @@ export default {
       type: String,
       default: '',
     },
-    isOrderBased:{
+    isOrderBased: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -702,5 +711,8 @@ export default {
 }
 .sf-image {
   object-fit: contain !important;
+}
+.orderBased {
+  z-index: 3;
 }
 </style>

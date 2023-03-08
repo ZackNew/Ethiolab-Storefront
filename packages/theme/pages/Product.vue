@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <div class="my-[3%] " v-if="loadings">
+    <div class="my-[3%]" v-if="loadings">
       <Loading />
     </div>
     <div v-else>
@@ -20,42 +20,56 @@
                 :display="
                   Svariant.featuredAsset ? Svariant.featuredAsset : prImage
                 "
-                 :isOrderBased="Svariant.is_order_based"
+                :isOrderBased="Svariant.is_order_based"
                 class="mb-5 md:mb-0"
               />
             </div>
             <div class="md:col-span-6">
               <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
-              <h4 v-if="Svariant.priceWithoutDiscount != Svariant.price" class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through">
-                  {{
-                    parseFloat(String(Svariant.priceWithoutDiscount).slice(0, -2)).toLocaleString()  +
-                    '.' +
-                    String(Svariant.priceWithoutDiscount).slice(-2)
-                  }}
-                  ETB
-                </h4> 
+              <h4
+                v-if="Svariant.priceWithoutDiscount != Svariant.price"
+                class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through"
+              >
+                {{
+                  parseFloat(
+                    String(Svariant.priceWithoutDiscount).slice(0, -2)
+                  ).toLocaleString() +
+                  '.' +
+                  String(Svariant.priceWithoutDiscount).slice(-2)
+                }}
+                ETB
+              </h4>
               <div class="flex items-end">
-               
                 <h4 class="font-bold text-secondary mb-3 mr-8">
                   {{
-                    parseFloat(String(Svariant.price).slice(0, -2)).toLocaleString()  +
+                    parseFloat(
+                      String(Svariant.price).slice(0, -2)
+                    ).toLocaleString() +
                     '.' +
-                    String(Svariant.price).slice(-2)
+                    String(Svariant.price).slice(-2) +
+                    ' '
                   }}
                   ETB
                 </h4>
                 <h5 class="text-[#828181] mb-3">
-                
-                       {{
-                    parseFloat(String(Svariant.priceWithTax).slice(0, -2)).toLocaleString()  +
+                  {{
+                    parseFloat(
+                      String(Svariant.priceWithTax).slice(0, -2)
+                    ).toLocaleString() +
                     '.' +
                     String(Svariant.priceWithTax).slice(-2)
                   }}
-                  ETB including tax
+                  ETB including VAT
                 </h5>
-
               </div>
-              <img v-if="Svariant.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class=" z-[100] mb-4"/>
+              <img
+                v-if="Svariant.is_order_based"
+                src="/OB.png"
+                height="100"
+                width="100"
+                alt="order based"
+                class="z-[100] mb-4"
+              />
 
               <div class="flex mb-5 items-center">
                 <input
@@ -503,6 +517,7 @@ export default {
       const productId = parseInt(this.$route.params.id);
       const variantId = this.$route.params.vid;
       const baseUrl = process.env.GRAPHQL_API;
+      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {
@@ -559,6 +574,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${token}`,
         },
       };
       const variant = await axios.post(baseUrl, body, options);

@@ -53,6 +53,6 @@ export default {
 <style>
 .dropDown {
   margin: 0 auto;
-  z-index: 9999;
+  z-index: 9;
 }
 </style>

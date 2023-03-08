@@ -1,7 +1,7 @@
 <template>
   <div id="category">
     <div
-      class="sticky md:z-[300]"
+      class="sticky topPosition"
       :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'"
     >
       <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
@@ -1392,5 +1392,8 @@ export default {
   position: sticky;
   top: 0px;
   z-index: 1;
+}
+.topPosition {
+  z-index: 2;
 }
 </style>
