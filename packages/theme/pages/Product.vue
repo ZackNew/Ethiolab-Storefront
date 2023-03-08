@@ -570,6 +570,7 @@ export default {
           eq: variantId,
         },
       };
+      console.log('cookieToken value is ', cookieToken);
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -578,11 +579,11 @@ export default {
         },
       };
       const variant = await axios.post(baseUrl, body, options);
-      // console.log("variant value is ", variant);
+      console.log('variant value is ', variant);
       this.prImage = variant.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.product?.assets;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
-      this.VariantAccessories = this.Svariant.accessories.map((p) => {
+      this.VariantAccessories = this.Svariant?.accessories.map((p) => {
         const image = p.featuredAsset ? p.featuredAsset.preview : '';
         const price =
           String(p?.variants[0]?.price).slice(0, -2) +
