@@ -11,6 +11,8 @@
                 :class="{
                   borderBottomAdded:
                     addBorder && hoveredItem.name === item.name,
+                  borderBottomRemoved:
+                    !addBorder && hoveredItem.name !== item.name,
                 }"
                 class="text-secondary text-base mb-1 w-[12rem] truncate text-left mr-10 hover:text-bold"
                 @mouseover="hoverInHandler(item, i)"
@@ -156,9 +158,9 @@ hr {
   border-bottom: 2px solid rgb(164, 164, 164);
 }
 .borderBottomRemoved {
-  border-bottom: 2px solid rgb(255, 255, 255);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.001);
 }
 .borderBottomRemoved:hover {
-  border-bottom: 2px solid rgb(162, 162, 162);
+  border-bottom: 2px solid rgb(162, 162, 162, 0.001);
 }
 </style>
