@@ -69,9 +69,12 @@
               />
             </template>
           </LazyHydrate> -->
-          <div class="md:col-span-8 flex justify-center" v-if="heroSection.link">
+          <div
+            class="md:col-span-8 flex justify-center"
+            v-if="heroSection.link"
+          >
             <iframe
-              class="w-[90%]  h-[20rem] md:h-[25rem] ytplayer"
+              class="w-[90%] h-[20rem] md:h-[25rem] ytplayer"
               id="ytplayer"
               type="text/html"
               :src="`https://www.youtube-nocookie.com/embed/${heroSection.link}?autoplay=1&mute=1&controls=0&loop=1&playlist=${heroSection.link}&rel=0`"
@@ -93,7 +96,7 @@
                     <img
                       :src="imageUrl + sale.banner"
                       alt="image"
-                       class="min-w-[100%] md:min-w-[100%] max-h-[12rem]  md:max-h-[8rem] min-h-[8rem] mt-4 md:mt-0"
+                      class="min-w-[100%] md:min-w-[100%] max-h-[12rem] md:max-h-[8rem] min-h-[8rem] mt-4 md:mt-0"
                     />
                   </nuxt-link>
                 </div>
@@ -531,11 +534,12 @@ export default {
   methods: {
     async getBestSellers() {
       const baseUrl = process.env.GRAPHQL_API;
-
+      const token = this.$cookies.get('etech-auth-token');
       const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${token}`,
         },
       };
       const pbody = {

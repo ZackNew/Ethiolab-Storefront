@@ -165,4 +165,56 @@ export default {
 .breadcrumbs {
   margin: var(--spacer-base) 0 var(--spacer-lg);
 }
+.accountPage .sf-content-pages {
+  &__section {
+    border-radius: 2% !important;
+    background: white !important;
+  }
+  &__sidebar {
+    min-height: 100% !important;
+    border-radius: 2% 0 0 2% !important;
+    background: #e7efff !important;
+  }
+  &__title {
+    color: #3860a7 !important;
+    font-weight: 700 !important;
+  }
+  &__category-title {
+    color: #3860a7 !important;
+  }
+}
+.sf-content-pages__content::-webkit-scrollbar {
+  width: 30px !important;
+  background-color: none !important;
+  width: 7px !important;
+}
+.sf-content-pages__content::-webkit-scrollbar-thumb {
+  background-color: #acacac !important;
+  border-radius: 100px !important;
+}
+.accountPage .sf-tabs__title.is-active + .sf-tabs__content {
+  border: none !important;
+}
+.accountPage .sf-menu-item.is-active {
+  padding: 5px !important;
+  background-color: #f8fbff !important;
+  color: #b6932f !important;
+}
+
+.myTabs .sf-tabs {
+  padding-top: 3% !important;
+  border-top: 1px solid rgb(205, 205, 205) !important;
+  &__title {
+    font-weight: 800 !important;
+  }
+}
+
+.profileTabs .is-active {
+  // background-color: pink !important;
+  border-radius: 0% !important;
+  box-shadow: 0px 1px 0px 0px #3860a7 !important;
+  color: #3860a7 !important;
+}
+
+// sf-content-pages__content
 </style>

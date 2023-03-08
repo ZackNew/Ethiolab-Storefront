@@ -42,13 +42,8 @@
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
-        <ValidationProvider
-          name="city"
-          rules="required|min:2"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
+        <ValidationProvider name="city" rules="required|min:2" slim>
+          <!-- <SfInput
             v-e2e="'shipping-city'"
             v-model="form.city"
             :label="$t('City')"
@@ -57,9 +52,20 @@
             required
             :valid="!errors[0]"
             :errorMessage="errors[0]"
-          />
+          /> -->
+          <select
+            class="bg-white rounded md:rounded-lg px-1 py-2 form__element--half selectTab mb-10"
+            @change="setCity($event)"
+          >
+            <option value="" disabled selected hidden>Choose a City</option>
+            <template v-for="(city, i) in cities">
+              <option :key="i" :value="city" class="capitalize">
+                {{ city }}
+              </option>
+            </template>
+          </select>
         </ValidationProvider>
-        <ValidationProvider name="state" slim>
+        <!-- <ValidationProvider name="state" slim>
           <SfInput
             v-e2e="'shipping-state'"
             v-model="form.state"
@@ -67,7 +73,7 @@
             name="state"
             class="form__element form__element--half form__element--half-even"
           />
-        </ValidationProvider>
+        </ValidationProvider> -->
         <ValidationProvider name="phone">
           <!-- <SfInput
             v-e2e="'shipping-phone'"
@@ -86,7 +92,7 @@
             v-model="formPhoneNumber"
             valid-color="#3860a7"
             default-country-code="ET"
-            class="form__element"
+            class="form__element form__element--half form__element--half-even"
           />
         </ValidationProvider>
       </div>
@@ -175,12 +181,35 @@ export default {
   data() {
     return {
       formPhoneNumber: '',
+      cities: [],
     };
+  },
+  created() {
+    this.getEligibleLocation();
   },
   methods: {
     phoneInputHandler(payload) {
       this.formPhoneNumber = payload?.formattedNumber;
       this.form.phone = this.formPhoneNumber;
+    },
+    async getEligibleLocation() {
+      let baseUrl = process.env.GRAPHQL_API;
+      let body = {
+        query: `
+          query{
+            shippingAvailableTo
+          }
+          `,
+      };
+      let options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(baseUrl, body, options).then((res) => {
+        this.cities = res.data.data.shippingAvailableTo;
+      });
     },
   },
   setup() {
@@ -211,6 +240,10 @@ export default {
 
     const displayBillingButton = async () => {
       shouldDisplayButton.value = true;
+    };
+
+    const setCity = (e) => {
+      form.value.city = e.target.value;
     };
 
     onSSR(async () => {
@@ -248,6 +281,7 @@ export default {
       loadingShippingProvider,
       displayBillingButton,
       shouldDisplayButton,
+      setCity,
     };
   },
 };
@@ -333,11 +367,18 @@ export default {
     --radio-description-font-size: var(--font-xs);
   }
 }
-
 .title {
   margin: var(--spacer-xl) 0 var(--spacer-base) 0;
 }
 .form__action-button {
   color: black;
+}
+.selectTab {
+  max-width: 100% !important;
+}
+@media only screen and (min-width: 1024px) {
+  .selectTab {
+    max-width: 50% !important;
+  }
 }
 </style>

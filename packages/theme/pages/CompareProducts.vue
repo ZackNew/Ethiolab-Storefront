@@ -254,6 +254,7 @@ export default {
         return p.variantID;
       });
       const baseUrl = process.env.GRAPHQL_API;
+      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `
         query getProductById($in: [String!], $eq: [String!]) {
@@ -310,6 +311,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${token}`,
         },
       };
       await axios.post(baseUrl, body, options).then((res) => {

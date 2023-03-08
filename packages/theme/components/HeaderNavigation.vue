@@ -29,7 +29,9 @@
         brands
       </h4>
       <nuxt-link to="/WriteAQuote">
-        <h4 class="text-secondary font-bold uppercase">request quote</h4>
+        <h4 class="text-secondary font-bold uppercase hover:text-primary">
+          request quote
+        </h4>
       </nuxt-link>
     </div>
     <DropDownMenu

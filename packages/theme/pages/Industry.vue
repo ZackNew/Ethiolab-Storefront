@@ -470,6 +470,7 @@ export default {
             const productId = productIdString.map((num) => {
               return String(num);
             });
+            const token = this.$cookies.get('etech-auth-token');
             let pbody = {
               query: `query getProductById($in: [String!]) {
                 products(options: {filter: {id: {in: $in}}}) {
@@ -512,6 +513,7 @@ export default {
               headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
+                authorization: `Bearer ${token}`,
               },
             };
             var prod = await axios.post(baseUrl, pbody, poptions);

@@ -394,6 +394,7 @@ export default {
     },
     async getProducts() {
       const id = this.$route.params.id;
+      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `query getProductByBrand($id: ID!){
           brand(id: $id){
@@ -436,6 +437,7 @@ export default {
       const options = {
         headers: {
           'Content-Type': 'application/json',
+          authorization: `Bearer ${token}`,
         },
       };
       let baseUrl = process.env.GRAPHQL_API;
