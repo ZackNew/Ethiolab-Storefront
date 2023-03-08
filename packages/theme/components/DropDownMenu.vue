@@ -1,6 +1,7 @@
 <template>
   <div
-    class="bg-white max-w-[1250px] w-[100%] min-h-[26rem] dropDown broder border-2 border-[#aaaaaa]"
+    :class="{ 'bg-white': !isDarkMode, 'bg-dark_accent': isDarkMode }"
+    class="max-w-[1250px] w-[100%] min-h-[26rem] dropDown broder border-2 border-[#aaaaaa]"
   >
     <CategoriesSubNav
       @oneClicked="$emit('oneClicked')"
@@ -18,6 +19,7 @@
 <script>
 import brandsIndustrySubnav from './subnavs/brandIndustrySubnav.vue';
 import CategoriesSubNav from './subnavs/CategoriesSubNav.vue';
+import { useUiState } from '~/composables';
 
 export default {
   props: {
@@ -46,6 +48,12 @@ export default {
   components: {
     brandsIndustrySubnav,
     CategoriesSubNav,
+  },
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
+    };
   },
 };
 </script>
