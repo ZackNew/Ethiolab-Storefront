@@ -274,6 +274,10 @@ export default {
         postalCode: defaultAddress?.postalCode,
         phone: defaultAddress?.phoneNumber,
       };
+      formPhoneNumber.value = defaultAddress?.phoneNumber;
+      loadCart();
+      billingDetails.value.streetLine1 =
+        cart.value?.customer?.customFields?.tin_number;
     });
 
     return {

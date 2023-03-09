@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mt-20 wrap">
+    <div class="mt-8 md:mt-20 wrap">
       <!-- <section class="sf-call-to-action rounded" :style="style">
         <div class="sf-call-to-action__text-container">
           <slot name="title">
@@ -8,9 +8,18 @@
           </slot>
         </div>
       </section> -->
-      <div class="flex">
+      <!-- <h2
+        :class="{
+          'text-[#000000]': !isDarkMode,
+          'text-[#ffffff]': isDarkMode,
+        }"
+        class="mb-2 ml-5 visible md:hidden"
+      >
+        Contact Us
+      </h2> -->
+      <div class="md:flex">
         <div
-          class="card shadow-lg w-2/3 font-bold p-3 rounded text-white bg-secondary"
+          class="mx-auto card shadow-lg w-[92%] md:w-2/3 font-bold p-3 rounded text-white bg-secondary"
         >
           <h4 class="text-7xl mb-5 mt-10">HOW CAN WE HELP?</h4>
           <p>
@@ -32,12 +41,12 @@
               'text-[#000000]': !isDarkMode,
               'text-[#ffffff]': isDarkMode,
             }"
-            class="mb-2"
+            class="mb-2 hidden md:visible"
           >
             Contact Us
           </h2>
           <form @submit.prevent="handleSubmit(handleFormSubmit)">
-            <div class="form">
+            <div class="form px-5 md:px-0">
               <ValidationProvider
                 name="firstName"
                 rules="required|min:2"
@@ -123,7 +132,7 @@
                   v-model="form.customerName"
                   :label="$t('Company Name')"
                   name="company_name"
-                  class="form__element form__element--half"
+                  class="form__element form__element--full"
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"
                 />
@@ -152,14 +161,13 @@
                 v-slot="{ errors }"
                 slim
               >
-                <div class="sf-textarea">
+                <div class="w-[100%]">
                   <textarea
                     id="message"
                     name="message"
-                    class="form__element form__element--full"
+                    class="w-[100%] border p-3"
                     placeholder="Your Message"
                     v-model="form.message"
-                    :cols="80"
                     :rows="10"
                     wrap="soft"
                     :disabled="false"

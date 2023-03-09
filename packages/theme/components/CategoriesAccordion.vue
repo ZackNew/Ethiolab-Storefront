@@ -129,11 +129,12 @@ export default {
     const { categories } = useCategory();
     const getTree = () => {
       categories.value.items.forEach((a) => {
-        if (a.parent.name === '__root_collection__') {
+        if (a.parent?.name === '__root_collection__') {
           headerNavigation.push(facetGetters.getTree(a));
         }
       });
     };
+    console.log('this is that', headerNavigation);
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
     const getSubCategory = (category) => {
       return isMobileMenuOpen.value ? category.items : category.items;
