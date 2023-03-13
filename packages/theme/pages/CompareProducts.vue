@@ -269,9 +269,6 @@ export default {
                   rating
                 }
               }
-              customFields{
-                documentation
-              }
               variantList(options: { filter: { id: { in: $eq } } }) {
                 items {
                   sku

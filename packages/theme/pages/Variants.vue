@@ -30,8 +30,7 @@
         <div class="md:col-span-6">
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
           <h3 class="text-secondary text-xl">
-            <span class="font-bold mr-2">Price </span
-            >{{ parseFloat(priceRange).toLocaleString() }} ETB /
+            <span class="font-bold mr-2">Price </span>{{ priceRange }} /
             {{ product.customFields.granularity }}
           </h3>
           <img
