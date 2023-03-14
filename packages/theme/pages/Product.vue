@@ -37,7 +37,7 @@
                   '.' +
                   String(Svariant.priceWithoutDiscount).slice(-2)
                 }}
-                ETB
+                ETB / {{ granularity }}
               </h4>
               <div class="flex items-end">
                 <h4 class="font-bold text-secondary mb-3 mr-8">
@@ -49,7 +49,7 @@
                     String(Svariant.price).slice(-2) +
                     ' '
                   }}
-                  ETB
+                  ETB / {{ granularity }}
                 </h4>
                 <h5 class="text-[#828181] mb-3">
                   {{
@@ -59,7 +59,7 @@
                     '.' +
                     String(Svariant.priceWithTax).slice(-2)
                   }}
-                  ETB including VAT
+                  ETB / {{ granularity }} including VAT
                 </h5>
               </div>
               <img
@@ -451,7 +451,7 @@ export default {
           }).then((res) => {
             if (cart.value.errorCode && cart.value.errorCode != '') {
               showToast(cart.value.message);
-              setCart();
+              setCart(cart.value?.order);
             } else {
               showToast('Product added to cart!');
             }
@@ -527,6 +527,9 @@ export default {
                     featuredAsset{
                       preview
                     }
+                    customFields{
+                      granularity
+                    }
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {
                         facetValues{
@@ -579,6 +582,7 @@ export default {
       };
       const variant = await axios.post(baseUrl, body, options);
       console.log('variant value is ', variant);
+      this.granularity = variant.data.data.product?.customFields?.granularity;
       this.prImage = variant.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.product?.assets;
       this.Svariant = variant.data.data.product?.variantList?.items[0];
@@ -749,6 +753,7 @@ export default {
       VariantAccessories: [],
       Svariant: null,
       stock: 5,
+      granularity: '',
       brand:
         'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
       careInstructions: 'Do not wash!',

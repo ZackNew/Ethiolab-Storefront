@@ -24,7 +24,6 @@
             </nuxt-link>
           </div>
         </div>
-        <!-- v-if="(hoveredChildren && hoveredChildren.length > 0)" -->
         <div
           :style="{
             left: left + 'rem',
@@ -33,7 +32,11 @@
                 ? 'visible'
                 : 'hidden',
           }"
-          class="min-h-[90%] w-[28rem] bg-[#f5f5f5] absolute top-12 broder border-2 border-[#aaaaaa] z-50"
+          :class="{
+            'bg-[#f5f5f5]': !isDarkMode,
+            'bg-dark_accent': isDarkMode,
+          }"
+          class="min-h-[90%] w-[28rem] absolute top-12 broder border-2 border-[#aaaaaa] z-50"
           @mouseover="(subHovered = true), (addBorder = true)"
           @mouseleave="(subHovered = false), (addBorder = false)"
         >
@@ -41,7 +44,11 @@
             <div v-for="child in hoveredChildren" :key="child.id">
               <nuxt-link :to="`/s/${child.slug}`">
                 <h4
-                  class="text-sm text-[#616161] mb-1 mr-4 hover:text-primary w-[12rem] truncate"
+                  :class="{
+                    'text-[#616161]': !isDarkMode,
+                    'text-[#ffffff]': isDarkMode,
+                  }"
+                  class="text-sm mb-1 mr-4 hover:text-primary w-[12rem] truncate"
                   @click="$emit('oneClicked')"
                 >
                   {{ child.name }}
@@ -56,7 +63,8 @@
           :style="{
             visibility: subHovered || isNameHovered ? 'visible' : 'hidden',
           }"
-          class="h-[26rem] bg-white sideImage"
+          :class="{ 'bg-white': !isDarkMode, 'bg-dark_accent': isDarkMode }"
+          class="h-[26rem] sideImage"
         >
           <img
             class="object-contain w-[100%] max-h-[24rem]"
@@ -73,6 +81,8 @@
 </template>
 
 <script>
+import { useUiState } from '~/composables';
+
 export default {
   props: ['categories'],
   data() {
@@ -121,6 +131,12 @@ export default {
       }
     },
   },
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
+    };
+  },
 };
 </script>
 
@@ -142,9 +158,9 @@ hr {
   border-bottom: 2px solid rgb(164, 164, 164);
 }
 .borderBottomRemoved {
-  border-bottom: 2px solid rgb(255, 255, 255);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.001);
 }
 .borderBottomRemoved:hover {
-  border-bottom: 2px solid rgb(162, 162, 162);
+  border-bottom: 2px solid rgb(162, 162, 162, 0.001);
 }
 </style>

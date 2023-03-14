@@ -1,37 +1,34 @@
 <template>
   <div class="mt-12" id="industry">
+    <nav
+      class="sf-breadcrumbs sticky mb-2"
+      aria-label="breadcrumbs"
+      :style="
+        !isDarkMode
+          ? 'background-color: #f0f7fc !important'
+          : 'background-color: #0e1621 !important'
+      "
+    >
+      <ol class="sf-breadcrumbs__list">
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <nuxt-link class="sf-breadcrumbs__breadcrumb font-exrathin" to="/">
+            Home
+          </nuxt-link>
+        </li>
+        <!-- <li class="sf-breadcrumbs__list-item" :aria-current="false">
+                {{ 'Industries' }}
+                </li> -->
+        <li class="sf-breadcrumbs__list-item" :aria-current="false">
+          <p class="text-secondary">
+            {{ industryName }}
+          </p>
+        </li>
+      </ol>
+    </nav>
     <div class="grid grid-cols-11 mt-6">
       <!-- Side filter search or an Ad -->
 
       <div class="col-span-3">
-        <nav
-          class="sf-breadcrumbs sticky mb-2"
-          aria-label="breadcrumbs"
-          :style="
-            !isDarkMode
-              ? 'background-color: #f0f7fc !important'
-              : 'background-color: #0e1621 !important'
-          "
-        >
-          <ol class="sf-breadcrumbs__list">
-            <li class="sf-breadcrumbs__list-item" :aria-current="false">
-              <nuxt-link
-                class="sf-breadcrumbs__breadcrumb font-exrathin"
-                to="/"
-              >
-                Home
-              </nuxt-link>
-            </li>
-            <!-- <li class="sf-breadcrumbs__list-item" :aria-current="false">
-                {{ 'Industries' }}
-                </li> -->
-            <li class="sf-breadcrumbs__list-item" :aria-current="false">
-              <p class="text-secondary">
-                {{ industryName }}
-              </p>
-            </li>
-          </ol>
-        </nav>
         <div
           class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white sticky h-[40rem] overflow-auto top-[5%] no-scrollbar"
           :style="

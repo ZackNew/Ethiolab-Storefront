@@ -38,7 +38,8 @@
     <div class="col-span-3 float-right">
       <div
         v-if="hoveredItemImage != null"
-        class="h-[26.5rem] bg-white sideImage w-full"
+        class="h-[26.5rem] sideImage w-full"
+        :class="{ 'bg-white': !isDarkMode, 'bg-dark_accent': isDarkMode }"
       >
         <img
           v-if="hoveredItemImage != null"
@@ -55,12 +56,20 @@
 </template>
 
 <script>
+import { useUiState } from '~/composables';
+
 export default {
   props: ['brandsIndustries'],
   data() {
     return {
       hoveredItemImage: null,
       hoveredItem: '',
+    };
+  },
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
     };
   },
 };

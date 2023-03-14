@@ -79,6 +79,26 @@
                 />
               </ValidationProvider>
 
+              <ValidationProvider
+                :rules="{
+                  required: true,
+                }"
+                name="Confirm password"
+                v-slot="{ errors }"
+                slim
+              >
+                <SfInput
+                  v-e2e="'forgot-modal-email'"
+                  v-model="confirm_password"
+                  :valid="!errors[0]"
+                  :errorMessage="errors[0]"
+                  name="Confirm password"
+                  :label="$t('Confirm Password')"
+                  class="form__element width-[80%]"
+                  type="password"
+                />
+              </ValidationProvider>
+
               <SfButton type="submit" class="bg-secondary m-auto">
                 <SfLoader
                   :class="{ loader: forgotPasswordLoading }"
@@ -184,6 +204,7 @@ export default defineComponent({
     const userEmail = ref('');
     const tokenValue = ref('');
     const password = ref('');
+    const confirm_password = ref('');
 
     let emailReset = ref(true);
 
@@ -208,26 +229,32 @@ export default defineComponent({
     };
 
     const handleReset = async () => {
-      // console.log("reset clicked password" , password.value, tokenValue.value);
-      const resu = await setNew({
-        tokenValue: tokenValue.value,
-        newPassword: password.value,
-      });
-      let check =
-        forgotPasswordResult.value.setNewPasswordResult.data.resetPassword
-          .__typename;
-      // console.log("result  value is ", check);
-      // console.log("result error  value is ", forgotPasswordError);
-      if (check == 'CurrentUser') {
-        showToast('Password Resetted Successfully!');
-        return root.$router.push('/');
-      } else {
-        showToast('Password Reset Failed!');
-        // return root.$router.push('/signin');
-      }
+      console.log('this is pass', password.value);
+      console.log('this is conf', confirm_password.value);
+      if (password.value === confirm_password.value) {
+        // console.log("reset clicked password" , password.value, tokenValue.value);
+        const resu = await setNew({
+          tokenValue: tokenValue.value,
+          newPassword: password.value,
+        });
+        let check =
+          forgotPasswordResult.value.setNewPasswordResult.data.resetPassword
+            .__typename;
+        // console.log("result  value is ", check);
+        // console.log("result error  value is ", forgotPasswordError);
+        if (check == 'CurrentUser') {
+          showToast('Password Resetted Successfully!');
+          return root.$router.push('/');
+        } else {
+          showToast('Password Reset Failed!');
+          // return root.$router.push('/signin');
+        }
 
-      if (forgotPasswordError.value.setNew !== null) {
-        showToast('Password Reset Failed!');
+        if (forgotPasswordError.value.setNew !== null) {
+          showToast('Password Reset Failed!');
+        }
+      } else {
+        showToast('Password should be the same as confirm password');
       }
     };
 
@@ -241,6 +268,7 @@ export default defineComponent({
       tokenValue,
       password,
       handleHaveCode,
+      confirm_password,
     };
   },
 });

@@ -180,7 +180,6 @@ export default {
   },
   data() {
     return {
-      formPhoneNumber: '',
       cities: [],
     };
   },
@@ -188,10 +187,6 @@ export default {
     this.getEligibleLocation();
   },
   methods: {
-    phoneInputHandler(payload) {
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.form.phone = this.formPhoneNumber;
-    },
     async getEligibleLocation() {
       let baseUrl = process.env.GRAPHQL_API;
       let body = {
@@ -219,6 +214,7 @@ export default {
     const { shipping: userShipping, load: loadUserShipping } =
       useUserShipping();
     const shouldDisplayButton = ref(false);
+    const formPhoneNumber = ref('');
 
     const form = ref({
       firstName: '',
@@ -236,6 +232,11 @@ export default {
       const orderAddress = mapAddressFormToOrderAddress(form.value);
       await save({ shippingDetails: orderAddress });
       isFormSubmitted.value = true;
+    };
+
+    const phoneInputHandler = (payload) => {
+      formPhoneNumber.value = payload?.formattedNumber;
+      form.value.phone = formPhoneNumber.value;
     };
 
     const displayBillingButton = async () => {
@@ -258,6 +259,7 @@ export default {
           'shipping'
         );
         const formAddress = mapAddressToAddressForm(defaultAddress);
+        console.log('this is that', formAddress);
         form.value = {
           firstName: formAddress?.firstName,
           lastName: formAddress?.lastName,
@@ -269,6 +271,7 @@ export default {
           postalCode: formAddress?.postalCode,
           phone: formAddress?.phone,
         };
+        formPhoneNumber.value = formAddress?.phone;
       }
     });
 
@@ -277,9 +280,11 @@ export default {
       isFormSubmitted,
       form,
       countries: COUNTRIES,
+      formPhoneNumber,
       handleFormSubmit,
       loadingShippingProvider,
       displayBillingButton,
+      phoneInputHandler,
       shouldDisplayButton,
       setCity,
     };

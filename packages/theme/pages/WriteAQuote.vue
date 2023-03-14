@@ -1,7 +1,7 @@
 <template>
-  <div id="main" class="flex mt-8">
+  <div id="main" class="md:flex mt-8">
     <div
-      class="card shadow-lg w-2/5 font-bold p-3 rounded text-white bg-secondary mr-5 ml-10"
+      class="card shadow-lg w-full md:w-2/5 font-bold p-3 rounded text-white bg-secondary md:mr-5 md:ml-10 mx-auto mx-3"
     >
       <h4 class="text-6xl mb-5 mt-10 font-bold">Request a Quote</h4>
       <p class="mt-5">
@@ -46,7 +46,7 @@
     </div> -->
     <div
       id="left"
-      class="form rounded-md p-5 pl-10 w-7/12 text-3xl"
+      class="form rounded-md p-5 pl-10 w-full md:w-7/12 text-3xl mx-auto"
       :class="isDarkMode ? 'bg-dark_accent' : 'bg-light_accent'"
     >
       <h2 class="text-secondary">Write A Special Quote</h2>
@@ -331,5 +331,4 @@ img{
    padding-top: 8%;
   
 } */
-
 </style>

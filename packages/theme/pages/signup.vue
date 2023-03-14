@@ -769,7 +769,7 @@
 
                   <ValidationProvider
                     name="company"
-                    rules="required|min:2"
+                    rules="min:2"
                     v-slot="{ errors }"
                     slim
                   >

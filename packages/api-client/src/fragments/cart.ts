@@ -43,6 +43,9 @@ export const CartFragment = `
             firstName
             lastName
             emailAddress
+            customFields{
+                tin_number
+            }
         }
         lines {
             id
