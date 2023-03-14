@@ -193,7 +193,7 @@ export default defineComponent({
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart();
+          setCart(cart.value?.order);
         } else {
           showToast('Product added to cart!');
         }

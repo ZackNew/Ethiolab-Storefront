@@ -323,9 +323,11 @@
         </div>
 
         <div>
-          <SfButton class="w-full mt-10" @click="handleModalOpen">{{
-            $t('Cancel Order')
-          }}</SfButton>
+          <SfButton
+            class="w-full mt-10 bg-secondary"
+            @click="handleModalOpen"
+            >{{ $t('Cancel Order') }}</SfButton
+          >
         </div>
       </div>
       <div>
@@ -519,10 +521,10 @@ export default {
   },
   data() {
     return {
-      cookieToken: "",
+      cookieToken: '',
     };
   },
-  created(){
+  created() {
     this.cookieToken = this.$cookies.get('etech-auth-token');
   },
   computed: {
@@ -538,7 +540,7 @@ export default {
     },
   },
 
-  methods:{
+  methods: {
     // async handleCancelOrder  () {
     //   const body = {
     //     query: `mutation cancelOrder {
@@ -554,18 +556,16 @@ export default {
     //   const options = {
     //     headers: {
     //       'Content-Type': 'application/json',
-    //       'Access-Control-Allow-Origin': '*', 
+    //       'Access-Control-Allow-Origin': '*',
     //       authorization: `Bearer ${token}`,
     //     },
     //   };
     //   let baseUrl = process.env.GRAPHQL_API;
-
     //   const acat = await axios
     //     .post(baseUrl, body, options)
     //     .then(async (res) => {
     //       setCart();
     //       modalOpen.value = false;
-         
     //       // this.$router.push('/');
     //       window.location.href = "/"
     //     })
@@ -651,7 +651,6 @@ export default {
           String(cart.value?.subTotalWithTax).slice(-2),
       };
     });
-    console.log("witholding value is ", cart.value);
 
     onSSR(async () => {
       await load({ customQuery: { activeOrder: 'get-cart-custom-query' } });
@@ -803,7 +802,7 @@ export default {
 
     const processTelebirr = async () => {
       ////////////////////////////////STEP 1//////////////////////////////////////
-      const uniqueId  =  uuid.v4();
+      const uniqueId = uuid.v4();
 
       const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
       let signObj = {
@@ -920,7 +919,7 @@ export default {
         });
     };
 
-    const handleCancelOrder  = async (token) => {
+    const handleCancelOrder = async (token) => {
       const body = {
         query: `mutation cancelOrder {
           cancelMyOrder{
@@ -938,7 +937,7 @@ export default {
       const options = {
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', 
+          'Access-Control-Allow-Origin': '*',
           authorization: `Bearer ${token}`,
         },
       };
@@ -949,12 +948,12 @@ export default {
         .then(async (res) => {
           setCart();
           modalOpen.value = false;
-         
+
           root.$router.push('/');
           // window.location.href = "/"
         })
         .catch((err) => {});
-    }
+    };
 
     return {
       terms,

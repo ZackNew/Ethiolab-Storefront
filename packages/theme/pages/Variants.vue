@@ -534,6 +534,9 @@ export default {
             name
             slug
             description
+            collections{
+              name
+            }
             facetValues{
               name
             }
@@ -643,7 +646,13 @@ export default {
     const showToast = inject('showToast');
     const { user, isAuthenticated, load, getU } = useUser();
     const { isDarkMode } = useUiState();
-    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
+    const {
+      load: loadCart,
+      addItem: addItemToCart,
+      isInCart,
+      cart,
+      setCart,
+    } = useCart();
     const accessoriesToCart = ref([]);
 
     const accessoryClicked = (accId) => {
@@ -675,7 +684,7 @@ export default {
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart();
+          setCart(cart.value?.order);
         } else {
           showToast('Product added to cart!');
         }
