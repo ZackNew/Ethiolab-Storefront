@@ -26,8 +26,8 @@
   &__data {
     justify-content: center !important;
     text-align: center !important;
-    border-right: 2px solid #d5d5d5;
-    border-left: 2px solid #d5d5d5;
+    border-right: 0.5px solid #ebebeb;
+    border-left: 0.5px solid #ebebeb;
   }
 }
 .slick-next:before {
@@ -72,24 +72,29 @@
   padding-bottom: 15px !important;
   height: auto;
 }
-.specialPhone .country-selector{
-  &__label{
+.specialPhone .country-selector {
+  &__label {
     margin-top: -10px !important;
   }
 }
-.specialPhone .input-tel{
+.specialPhone .input-tel {
   margin-top: -3px !important;
 }
 
 .sf-content-pages {
   @media only screen and (min-width: 1024px) {
-     &__sidebar {
-    max-width: 25% !important;
+    &__sidebar {
+      max-width: 25% !important;
+    }
   }
-  }
- 
 }
 .sf-footer {
   padding: 0 10% !important;
   border-top: none !important;
+}
+.sf-breadcrumbs__breadcrumb {
+  color: #000000;
+}
+.sf-breadcrumbs__breadcrumb.current {
+  color: #3860a7 !important;
 }
