@@ -297,6 +297,14 @@
                           </p>
                         </div>
                       </div>
+                      <div class="flex justify-around">
+                        <button
+                          @click="cashComplete"
+                          class="my-4 rounded bg-secondary text-bold text-white px-3 py-2"
+                        >
+                          Complete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </SfModal>
@@ -955,6 +963,10 @@ export default {
         .catch((err) => {});
     };
 
+    const cashComplete = () => {
+      root.$router.push('/');
+    };
+
     return {
       terms,
       loading,
@@ -979,6 +991,7 @@ export default {
       canPay,
       handleCancelOrder,
       standardTax,
+      cashComplete,
     };
   },
 };

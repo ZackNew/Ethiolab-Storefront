@@ -188,7 +188,7 @@
             @input="() => bothInput(list)"
             name="group1"
           />
-          {{ list.minrange }} - {{ list.maxrange }}
+          {{ list.minrange }} ETB - {{ list.maxrange }} ETB
         </li>
       </div>
     </ul>
@@ -245,7 +245,8 @@ export default {
       range: [
         { minrange: 50, maxrange: 1999 },
         { minrange: 2000, maxrange: 9999 },
-        { minrange: 10000, maxrange: 50000 },
+        { minrange: 10000, maxrange: 49999 },
+        { minrange: 50000, maxrange: 100000 },
       ],
     };
   },

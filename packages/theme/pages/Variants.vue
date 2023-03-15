@@ -4,7 +4,7 @@
       <Loading />
     </div>
     <div v-if="product !== null">
-      <nav class="sf-breadcrumbs my-4" aria-label="breadcrumbs">
+      <!-- <nav class="sf-breadcrumbs my-4" aria-label="breadcrumbs">
         <ol class="sf-breadcrumbs__list">
           <li class="sf-breadcrumbs__list-item" :aria-current="false">
             <nuxt-link class="sf-breadcrumbs__breadcrumb font-exrathin" to="/">
@@ -17,7 +17,11 @@
             </h5>
           </li>
         </ol>
-      </nav>
+      </nav> -->
+      <SfBreadcrumbs
+        class="breadcrumbs desktop-only mb-5"
+        :breadcrumbs="breadcrumbs"
+      />
       <div class="mx-2 md:mx-0 md:grid md:grid-cols-12">
         <div class="md:mr-8 md:col-span-6 max-w[99%]">
           <Gallery
@@ -174,7 +178,7 @@
               <div class="my-4 px-auto">
                 <p class="text-secondary">
                   <nuxt-link
-                    class="text-secondary"
+                    class="text-secondary hover:underline"
                     :to="`/p/${product.id}/${variant.id}/${product.slug}`"
                   >
                     {{ variant.sku }}
@@ -210,100 +214,92 @@
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData class="flex justify-around">
-              <div>
+            <SfTableData>
+              <div class="mx-2">
+                <div class="flex my-2">
+                  <h4 class="text-secondary">
+                    {{
+                      parseFloat(
+                        String(variant.price).slice(0, -2)
+                      ).toLocaleString() +
+                      '.' +
+                      String(variant.price).slice(-2) +
+                      ' '
+                    }}
+                    ETB / {{ product.customFields.granularity }}
+                  </h4>
+                </div>
                 <div class="flex">
-                  <div class="mr-4">
-                    <h4 class="text-secondary">
-                      <span class="font-bold">
-                        {{
-                          parseFloat(
-                            String(variant.price).slice(0, -2)
-                          ).toLocaleString() +
-                          '.' +
-                          String(variant.price).slice(-2) +
-                          ' '
-                        }}
-                      </span>
-                      ETB / {{ product.customFields.granularity }}
-                    </h4>
-                  </div>
-                  <div class="flex">
-                    <input
-                      :value="toCart"
-                      class="bg-light_accent w-14 text-center mr-1"
-                      type="number"
-                      :id="variant.id"
-                    />
-                    <SfIcon
-                      :icon="
-                        isInCart({ product: { _variantId: variant.id } })
-                          ? 'added_to_cart'
-                          : 'add_to_cart'
-                      "
-                      size="lg"
-                      color="green-primary"
-                      viewBox="0 0 24 24"
-                      :coverage="1"
-                      @click="addToCart($event)"
-                    />
-                  </div>
+                  <input
+                    :value="toCart"
+                    class="bg-light_accent w-14 text-center mr-1"
+                    type="number"
+                    :id="variant.id"
+                  />
+                  <SfIcon
+                    :icon="
+                      isInCart({ product: { _variantId: variant.id } })
+                        ? 'added_to_cart'
+                        : 'add_to_cart'
+                    "
+                    size="lg"
+                    color="green-primary"
+                    viewBox="0 0 24 24"
+                    :coverage="1"
+                    @click="addToCart($event)"
+                  />
                 </div>
-                <div v-if="variant.accessories.length > 0">
-                  <div class="flex mt-[5%]">
-                    <input
-                      type="checkbox"
-                      v-model="isAccessories"
-                      class="mr-[3%]"
-                    />
-                    <h3 class="text-secondary font-bold text-lg">
-                      accessories
-                    </h3>
-                  </div>
-                  <hr class="mt-4" />
-                  <template v-if="isAccessories">
-                    <div
-                      v-for="(acc, i) in variant.accessories"
-                      :key="`'r' + ${i}`"
-                      class="mt-3"
-                    >
-                      <div class="flex accessories">
-                        <input
-                          @change="accessoryClicked(acc.variants[0].id)"
-                          type="checkbox"
-                          class="mr-[3%]"
+              </div>
+              <div v-if="variant.accessories.length > 0">
+                <div class="flex mt-[5%] ml-2">
+                  <input
+                    type="checkbox"
+                    v-model="isAccessories"
+                    class="mr-[3%]"
+                  />
+                  <h3 class="text-secondary font-bold text-lg">accessories</h3>
+                </div>
+                <hr class="mt-4" />
+                <template v-if="isAccessories">
+                  <div
+                    v-for="(acc, i) in variant.accessories"
+                    :key="`'r' + ${i}`"
+                    class="mt-3 ml-2"
+                  >
+                    <div class="flex accessories">
+                      <input
+                        @change="accessoryClicked(acc.variants[0].id)"
+                        type="checkbox"
+                        class="mr-[3%]"
+                      />
+                      <nuxt-link :to="`/v/${acc.slug}`">
+                        <img
+                          :src="acc.featuredAsset && acc.featuredAsset.preview"
+                          alt=""
+                          class="w-8 h-8 mr-2"
                         />
-                        <nuxt-link :to="`/v/${acc.slug}`">
-                          <img
-                            :src="
-                              acc.featuredAsset && acc.featuredAsset.preview
-                            "
-                            alt=""
-                            class="w-8 h-8 mr-2"
-                          />
-                        </nuxt-link>
-                        <nuxt-link :to="`/v/${acc.slug}`">
-                          <h4 class="text-secondary font-bold text-base">
-                            {{ acc.name }}
-                          </h4>
-                          <h5>
-                            For an additional
-                            {{
-                              parseFloat(
-                                String(acc.variants[0].price).slice(0, -2)
-                              ).toLocaleString() +
-                              '.' +
-                              String(acc.variants[0].price).slice(-2) +
-                              ' '
-                            }}
-                            ETB
-                          </h5>
-                        </nuxt-link>
-                      </div>
-                      <hr class="mt-2" />
+                      </nuxt-link>
+                      <nuxt-link :to="`/v/${acc.slug}`">
+                        <h4 class="text-secondary font-bold text-base">
+                          {{ acc.name }}
+                        </h4>
+                        <h5>
+                          For an additional
+                          {{
+                            parseFloat(
+                              String(acc.variants[0].price).slice(0, -2)
+                            ).toLocaleString() +
+                            '.' +
+                            String(acc.variants[0].price).slice(-2) +
+                            ' '
+                          }}
+                          ETB
+                        </h5>
+                      </nuxt-link>
                     </div>
-                  </template>
-                </div>
+                    <hr class="mt-2" />
+                  </div>
+                </template>
               </div>
             </SfTableData>
           </SfTableRow>
@@ -436,6 +432,7 @@ import {
   SfIcon,
   SfTabs,
   SfReview,
+  SfBreadcrumbs,
 } from '@storefront-ui/vue';
 import { ref, inject } from '@vue/composition-api';
 import { useWishlist, useCart, useUser } from '@vue-storefront/vendure';
@@ -445,6 +442,7 @@ export default {
   components: {
     SfButton,
     SfTable,
+    SfBreadcrumbs,
     SfTabs,
     SfIcon,
     Gallery,
@@ -536,6 +534,10 @@ export default {
             description
             collections{
               name
+              slug
+              parent {
+                name
+              }
             }
             facetValues{
               name
@@ -596,14 +598,41 @@ export default {
       const productVariant = await axios.post(baseUrl, body, options);
       this.product = productVariant?.data?.data?.product;
       this.loading = false;
+      console.log('this is product', this.product);
     },
   },
   computed: {
+    breadcrumbs() {
+      let bcrumb = [{ text: 'home', link: '/' }];
+      this.product.collections.forEach((collection) => {
+        if (
+          collection?.name !== null &&
+          collection?.parent?.name &&
+          collection?.parent?.name === '__root_collection__'
+        ) {
+          bcrumb.push({
+            text: collection?.name,
+            link: `/c/${collection?.slug}`,
+          });
+        } else if (
+          collection?.name !== null &&
+          collection?.parent?.name &&
+          collection?.parent?.name !== '__root_collection__'
+        ) {
+          bcrumb.push({
+            text: collection?.name,
+            link: `/s/${collection?.slug}`,
+          });
+        }
+      });
+      bcrumb.push({ text: this.product?.name, link: '#' });
+      return bcrumb;
+    },
     priceRange() {
       if (this.product?.variantList?.totalItems === 1) {
         const price = String(this.product?.variantList?.items[0]?.price);
         const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
-        return fPrice + ' ETB';
+        return parseFloat(fPrice).toLocaleString() + ' ETB';
       } else if (this.product?.variantList?.totalItems > 1) {
         let prices = [];
         this.product.variantList?.items.forEach((item) => {
@@ -644,7 +673,7 @@ export default {
   },
   setup() {
     const showToast = inject('showToast');
-    const { user, isAuthenticated, load, getU } = useUser();
+    const { user, isAuthenticated, load } = useUser();
     const { isDarkMode } = useUiState();
     const {
       load: loadCart,
@@ -667,6 +696,7 @@ export default {
     };
 
     const addToCart = (e) => {
+      console.log('this is cart value', cart.value);
       const quantity =
         Number(e.target.parentElement.parentElement.firstChild.value) ||
         Number(
@@ -684,7 +714,9 @@ export default {
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
+          console.log('this is before', cart.value);
           setCart(cart.value?.order);
+          console.log('this is after', cart.value);
         } else {
           showToast('Product added to cart!');
         }
