@@ -175,7 +175,13 @@ export default defineComponent({
   },
   setup() {
     const showToast = inject('showToast');
-    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
+    const {
+      addItem: addItemToCart,
+      isInCart,
+      cart,
+      setCart,
+      load: loadCart,
+    } = useCart();
     const {
       addItem: addItemToWishlist,
       isInWishlist,
@@ -185,6 +191,8 @@ export default defineComponent({
       products.value[index].isInWishlist = !products.value[index].isInWishlist;
     };
     const addToCart = (e) => {
+      loadCart();
+      const cartBefore = cart.value;
       addItemToCart({
         product: {
           _variantId: e._variantId,
@@ -193,7 +201,7 @@ export default defineComponent({
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart(cart.value?.order);
+          setCart(cartBefore);
         } else {
           showToast('Product added to cart!');
         }

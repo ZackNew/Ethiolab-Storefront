@@ -69,7 +69,6 @@ export default {
           })
         );
         downloadLink.setAttribute('target', '_blank');
-        console.log('the anchor tag', downloadLink);
         document.body.appendChild(downloadLink);
         downloadLink.click();
       });

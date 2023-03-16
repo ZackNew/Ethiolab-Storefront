@@ -44,7 +44,6 @@
           class="sf-banner__description"
           v-html="description"
         >
-          <!-- {{ description }} -->
         </span>
       </slot>
       <slot name="call-to-action" v-bind="{ buttonText }">

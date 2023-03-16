@@ -588,8 +588,6 @@ export default {
     const canPay = computed(
       () => cart?.value?.customFields?.allow_customer_payment
     );
-    // console.log("canPay value is ", canPay)
-    // console.log("cart value is ", cart)
 
     const terms = ref(false);
     const paymentMethod = ref(null);
@@ -618,11 +616,6 @@ export default {
 
     const handleModalCashOpen = () => {
       paymentMethod.value = null;
-      // console.log(
-      //   'MODAL cash OPEN CLICKED',
-      //   modalCashOpen.value,
-      //   typeof modalCashOpen.value
-      // );
       let temp = modalCashOpen.value;
       modalCashOpen.value = !temp;
       paymentMethod.value = null;
@@ -662,7 +655,6 @@ export default {
 
     onSSR(async () => {
       await load({ customQuery: { activeOrder: 'get-cart-custom-query' } });
-      console.log('this that', cart);
     });
 
     onMounted(() => {});

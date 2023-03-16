@@ -1,7 +1,7 @@
 <template>
   <div id="category">
     <div
-      class="sticky topPosition"
+      class="topPosition"
       :class="!isDarkMode ? 'bg-whole_bg' : 'bg-dark_accent'"
     >
       <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs">
@@ -135,7 +135,7 @@
               "
               open="all"
               :show-chevron="true"
-              class="shadow-md w-80 sticky top-32"
+              class="shadow-md w-80 top-32"
             >
               <SfAccordionItem
                 :header="
@@ -178,6 +178,20 @@
                   </SfList>
                 </template>
               </SfAccordionItem>
+              <div class="p-3 hidden md:block">
+                <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
+                <LazyHydrate>
+                  <Banner
+                    :title="adSection.title || 'AD Title'"
+                    :subtitle="adSection.overview || 'AD Overview'"
+                    :description="adSection.description || 'AD Description'"
+                    background=""
+                    :image="adImage || '/homepage/bannerA.webp'"
+                    link="/c/clinical-laboratory"
+                  >
+                  </Banner>
+                </LazyHydrate>
+              </div>
             </SfAccordion>
           </SfLoader>
         </LazyHydrate>
@@ -252,7 +266,7 @@
                   </div>
                 </div>
                 <button
-                  v-if="subcategories.length > limitSub"
+                  v-if="subcategories && subcategories.length > limitSub"
                   class="text-secondary text-left"
                   @click="increaseSubLimit"
                 >
@@ -362,7 +376,10 @@
                     "
                     :link="localePath(`/v/${productGetters.getSlug(product)}`)"
                   >
-                    <template v-if="product.options.length > 0" #configuration>
+                    <template
+                      v-if="product.options && product.options.length > 0"
+                      #configuration
+                    >
                       <div v-for="(option, i) in product.options" :key="i">
                         <p class="text-secondary">{{ option.code }}</p>
                       </div>
@@ -448,7 +465,7 @@
           </div> -->
 
           <h3
-            v-if="bestSellings.length !== 0"
+            v-if="bestSellings && bestSellings.length !== 0"
             class="font-bold text-secondary mt-12 pb-2 mb-10"
           >
             Shop Our Best Sellers
@@ -583,6 +600,7 @@ import {
   SfProperty,
 } from '@storefront-ui/vue';
 import { ref, computed, onMounted, inject } from '@vue/composition-api';
+import Banner from '~/components/Banner.vue';
 import ProductCard from '~/components/ProductCard.vue';
 import {
   useCategory,
@@ -597,6 +615,7 @@ import { useUiHelpers, useUiState } from '~/composables';
 import { getTreeWithoutEmptyCategories } from '~/helpers';
 import { onSSR } from '@vue-storefront/core';
 import LazyHydrate from 'vue-lazy-hydration';
+import { useCms } from '@vue-storefront/vendure';
 import Vue from 'vue';
 import CategoryFeature from '~/components/CategoryFeature.vue';
 
@@ -611,7 +630,18 @@ export default {
     const itemQuantity = ref(1);
     const th = useUiHelpers();
     const uiState = useUiState();
-    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
+    const {
+      addItem: addItemToCart,
+      isInCart,
+      cart,
+      setCart,
+      load: loadCart,
+    } = useCart();
+    const { getCms } = useCms();
+    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
+    const adSection = computed(() =>
+      JSON.parse(getCms.value[3]?.content ?? '{}')
+    );
     const {
       addItem: addItemToWishlist,
       isInWishlist,
@@ -625,6 +655,8 @@ export default {
     const lastSlug = th.getLastSlugFromParams();
 
     const addToCart = (e) => {
+      loadCart();
+      const cartBefore = cart.value;
       addItemToCart({
         product: {
           _variantId: e._variantId,
@@ -633,7 +665,7 @@ export default {
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart(cart.value?.order);
+          setCart(cartBefore);
         } else {
           showToast('Product added to cart!');
         }
@@ -759,6 +791,8 @@ export default {
     };
 
     return {
+      adSection,
+      adImage,
       isDarkMode,
       ...uiState,
       productQuantity,
@@ -813,6 +847,7 @@ export default {
     LazyHydrate,
     CategoryFeature,
     ProductCard,
+    Banner,
   },
   methods: {
     increaseLimit() {
@@ -925,7 +960,7 @@ export default {
               }
             }`,
           variables: {
-            id: res.data.data.collection.id,
+            id: res.data.data?.collection?.id,
           },
         };
         axios.post(pbaseUrl, pbody, poptions).then((res) => {
@@ -1004,7 +1039,7 @@ export default {
         if (
           this.$store.state.compareList?.productsToCompare?.filter(
             (e) => e?.productID === pid && e?.variantID === vid
-          ).length === 0
+          )?.length === 0
         ) {
           this.toastShower('Added to Compare List');
           this.$store.dispatch('compareList/addToCompareList', {
@@ -1062,6 +1097,7 @@ export default {
   }
 }
 .main {
+  display: flex;
   &.section {
     padding: var(--spacer-xs);
     @include for-desktop {
@@ -1207,18 +1243,12 @@ export default {
   flex: unset;
   width: 11.875rem;
 }
-.main {
-  display: flex;
-}
+
 .sidebar {
-  flex: 0 0 15%;
   padding: var(--spacer-sm);
   border: 1px solid var(--c-light);
   border-width: 0 1px 0 0;
   display: block;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
 }
 .sidebar-filters {
   --overlay-z-index: 3;

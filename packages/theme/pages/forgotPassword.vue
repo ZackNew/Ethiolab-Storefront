@@ -229,10 +229,7 @@ export default defineComponent({
     };
 
     const handleReset = async () => {
-      console.log('this is pass', password.value);
-      console.log('this is conf', confirm_password.value);
       if (password.value === confirm_password.value) {
-        // console.log("reset clicked password" , password.value, tokenValue.value);
         const resu = await setNew({
           tokenValue: tokenValue.value,
           newPassword: password.value,
@@ -240,8 +237,6 @@ export default defineComponent({
         let check =
           forgotPasswordResult.value.setNewPasswordResult.data.resetPassword
             .__typename;
-        // console.log("result  value is ", check);
-        // console.log("result error  value is ", forgotPasswordError);
         if (check == 'CurrentUser') {
           showToast('Password Resetted Successfully!');
           return root.$router.push('/');

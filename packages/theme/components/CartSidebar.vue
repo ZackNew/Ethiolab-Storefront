@@ -158,7 +158,6 @@ export default {
     const showToast = inject('showToast');
     const { isAuthenticated } = useUser();
     const products = computed(() => cartGetters.getItems(cart.value));
-    console.log('here there', products);
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
 

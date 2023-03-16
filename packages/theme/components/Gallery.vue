@@ -13,7 +13,6 @@
           ref="img"
         />
         <canvas ref="canvas" width="150" height="150"></canvas> -->
- 
 
         <vue-magnifier :src="bigImage" :src-large="bigImage" />
       </div>
@@ -145,8 +144,6 @@ export default {
   mounted() {
     // this.zoom();
     this.bigImage = this.display?.preview;
-
-    // console.log("isOrderBased value is ", this.isOrderBased)
   },
 };
 </script>

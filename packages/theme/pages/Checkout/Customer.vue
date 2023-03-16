@@ -131,8 +131,6 @@ export default {
     });
 
     const handleFormSubmit = async () => {
-      console.log('form value is ', form);
-      console.log(isAuthenticated.value);
       if (!isAuthenticated.value) {
         form.value.emailAddress = 'guest@gmail.com';
       }

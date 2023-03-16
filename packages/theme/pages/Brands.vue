@@ -1,7 +1,7 @@
 <template>
   <div class="mt-12" id="brand">
     <nav
-      class="sf-breadcrumbs m-4 sticky"
+      class="sf-breadcrumbs m-4"
       aria-label="breadcrumbs"
       :style="
         !isDarkMode
@@ -28,25 +28,41 @@
       <div class="col-span-3">
         <!-- {{overflow-auto no-scrollbar}} -->
         <!-- sidebar -->
-        <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white h-[40rem] overflow-auto top-[5%] no-scrollbar sticky"
-          :style="
-            !isDarkMode
-              ? 'background-color: white'
-              : 'background-color: #182533'
-          "
-        >
-          <div v-if="products.length > 0" class="py-[2%]">
-            <SubcategoryBrandAccordion
-              @maxAdded="maxInput"
-              @minAdded="minInput"
-              @searchChange="searchBox"
-              @categoryClicked="filterCategory"
-              @filterClicked="filterProducts"
-              @clearClicked="clearFilters"
-              :filters="filters"
-              :categories="collectionList"
-            />
+        <div>
+          <div
+            class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white h-[40rem] overflow-auto top-[5%] no-scrollbar"
+            :style="
+              !isDarkMode
+                ? 'background-color: white'
+                : 'background-color: #182533'
+            "
+          >
+            <div v-if="products.length > 0" class="py-[2%]">
+              <SubcategoryBrandAccordion
+                @maxAdded="maxInput"
+                @minAdded="minInput"
+                @searchChange="searchBox"
+                @categoryClicked="filterCategory"
+                @filterClicked="filterProducts"
+                @clearClicked="clearFilters"
+                :filters="filters"
+                :categories="collectionList"
+              />
+            </div>
+          </div>
+          <div class="p-3 hidden md:block">
+            <LazyHydrate>
+              <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
+              <Banner
+                :title="adSection.title || 'AD Title'"
+                :subtitle="adSection.overview || 'AD Overview'"
+                :description="adSection.description || 'AD Description'"
+                background=""
+                :image="adImage || '/homepage/bannerA.webp'"
+                link="/c/clinical-laboratory"
+              >
+              </Banner>
+            </LazyHydrate>
           </div>
         </div>
       </div>
