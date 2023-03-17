@@ -315,8 +315,15 @@ export default {
     const { id } = context.root.$route.params;
     const { vid } = context.root.$route.params;
     const { products, search } = useProduct('products');
-    const { addItem, addItemToCart, isInCart, loading, cart, setCart } =
-      useCart();
+    const {
+      addItem,
+      addItemToCart,
+      isInCart,
+      loading,
+      cart,
+      setCart,
+      load: loadCart,
+    } = useCart();
     // const { reviews: productReviews, search: searchReviews } = useReview(id);
     const {
       relatedProducts,
@@ -419,11 +426,11 @@ export default {
     };
 
     const addToCart = (event, type) => {
+      loadCart();
+      const cartBefore = cart.value;
       const isConfigurationSelected = Object.values(
         configuration.value
       )?.length;
-      // console.log("isconf val is", isConfigurationSelected)
-      // console.log("type is ", type)
       if (isConfigurationSelected) {
         const productVariant = getProductVariantByConfiguration(
           products.value,
@@ -438,27 +445,25 @@ export default {
         }).then((res) => {
           if (cart.value.errorCode && cart.value.errorCode != '') {
             showToast(cart.value.message);
+            setCart(cartBefore);
           } else {
             showToast('Product added to cart!');
           }
         });
       } else {
         if (type == 'main') {
-          // console.log("main type")
           addItem({
             product: product.value,
             quantity: parseInt(qty.value),
           }).then((res) => {
             if (cart.value.errorCode && cart.value.errorCode != '') {
               showToast(cart.value.message);
-              setCart(cart.value?.order);
+              setCart(cartBefore);
             } else {
               showToast('Product added to cart!');
             }
           });
         } else if (type == 'accessory') {
-          // console.log(" accessory type")
-
           addItem({
             product: {
               _variantId: event._variantId,
@@ -467,6 +472,7 @@ export default {
           }).then((res) => {
             if (cart.value.errorCode && cart.value.errorCode != '') {
               showToast(cart.value.message);
+              setCart(cartBefore);
             } else {
               showToast('Product added to cart!');
             }
@@ -581,7 +587,6 @@ export default {
         },
       };
       const variant = await axios.post(baseUrl, body, options);
-      console.log('variant value is ', variant);
       this.granularity = variant.data.data.product?.customFields?.granularity;
       this.prImage = variant.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.product?.assets;

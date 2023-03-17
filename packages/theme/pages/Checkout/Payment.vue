@@ -2,7 +2,7 @@
   <div id="checkout">
     <div class="checkout">
       <div class="checkout__main">
-        <div v-if="!canPay">
+        <div v-if="!canPay" class="flex">
           <img src="/info.png" alt="info icon" height="50" width="50" />
           <div class="bg-white text-lg m-4 p-4 font-bold rounded-lg">
             <p>
@@ -126,7 +126,7 @@
             <div class="summary__action">
               <SfButton
                 type="button"
-                class="sf-button color-secondary summary__back-button"
+                class="sf-button bg-secondary summary__back-button"
                 @click="$router.push('/checkout/billing')"
               >
                 {{ $t('Go back') }}
@@ -219,6 +219,7 @@
                   />
 
                   <input
+                    @click="cashComplete"
                     type="submit"
                     id="submit"
                     name="submit"
@@ -488,7 +489,11 @@ import {
   cartGetters,
   usePayment,
 } from '@vue-storefront/vendure';
-// import { useBilling, useShipping, useUserBilling } from '@vue-storefront/vendure';
+import {
+  useBilling,
+  useShipping,
+  useUserBilling,
+} from '@vue-storefront/vendure';
 import { uuid } from 'vue-uuid';
 import * as crypto from 'crypto';
 import CryptoJS from 'crypto-js';
@@ -581,15 +586,15 @@ export default {
     // }
   },
   setup(props, { root }) {
+    const { load: loadBilling, save, billing } = useBilling();
     const { cart, load, setCart, applyCoupon } = useCart();
+    const billingDetails = ref(billing.value || {});
     const { loading } = useMakeOrder();
     const { set } = usePayment();
 
     const canPay = computed(
       () => cart?.value?.customFields?.allow_customer_payment
     );
-    // console.log("canPay value is ", canPay)
-    // console.log("cart value is ", cart)
 
     const terms = ref(false);
     const paymentMethod = ref(null);
@@ -618,11 +623,6 @@ export default {
 
     const handleModalCashOpen = () => {
       paymentMethod.value = null;
-      // console.log(
-      //   'MODAL cash OPEN CLICKED',
-      //   modalCashOpen.value,
-      //   typeof modalCashOpen.value
-      // );
       let temp = modalCashOpen.value;
       modalCashOpen.value = !temp;
       paymentMethod.value = null;
@@ -662,7 +662,6 @@ export default {
 
     onSSR(async () => {
       await load({ customQuery: { activeOrder: 'get-cart-custom-query' } });
-      console.log('this that', cart);
     });
 
     onMounted(() => {});
@@ -709,6 +708,13 @@ export default {
 
     const updatePaymentMethod = (method) => {
       paymentMethod.value = method;
+    };
+
+    const changeState = async () => {
+      const orderAddress = mapAddressFormToOrderAddress(billingDetails.value);
+      await save({ billingDetails: orderAddress });
+      await load();
+      setCart();
     };
 
     const applyPromoCode = async () => {
@@ -910,6 +916,10 @@ export default {
 
       ////////////////////////////////STEP 7//////////////////////////////////////
 
+      changeState();
+      await load();
+      setCart();
+
       const api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
 
       axios
@@ -963,7 +973,10 @@ export default {
         .catch((err) => {});
     };
 
-    const cashComplete = () => {
+    const cashComplete = async () => {
+      changeState();
+      await load();
+      setCart();
       root.$router.push('/');
     };
 
@@ -992,6 +1005,7 @@ export default {
       handleCancelOrder,
       standardTax,
       cashComplete,
+      changeState,
     };
   },
 };

@@ -1,7 +1,7 @@
 <template>
   <div class="mt-12" id="industry">
     <nav
-      class="sf-breadcrumbs sticky mb-2"
+      class="sf-breadcrumbs mb-2"
       aria-label="breadcrumbs"
       :style="
         !isDarkMode
@@ -30,7 +30,7 @@
 
       <div class="col-span-3">
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white sticky h-[40rem] overflow-auto top-[5%] no-scrollbar"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white h-[40rem] overflow-auto top-[5%] no-scrollbar"
           :style="
             !isDarkMode
               ? 'background-color: white !important'
@@ -64,20 +64,20 @@
               />
               </div> -->
           </div>
-          <!-- <div class="p-3">
-              <LazyHydrate>
-              <Banner
+        </div>
+        <div class="p-3 hidden md:block">
+          <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
+          <LazyHydrate>
+            <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
               :description="adSection.description || 'AD Description'"
-              :buttonText="adSection.buttonText || 'AD Button'"
               background=""
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory"
-              >
-              </Banner>
-              </LazyHydrate>
-              </div> -->
+            >
+            </Banner>
+          </LazyHydrate>
         </div>
       </div>
       <!-- Subcategory name and description -->

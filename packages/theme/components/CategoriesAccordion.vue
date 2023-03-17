@@ -134,7 +134,6 @@ export default {
         }
       });
     };
-    console.log('this is that', headerNavigation);
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
     const getSubCategory = (category) => {
       return isMobileMenuOpen.value ? category.items : category.items;

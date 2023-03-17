@@ -598,7 +598,6 @@ export default {
       const productVariant = await axios.post(baseUrl, body, options);
       this.product = productVariant?.data?.data?.product;
       this.loading = false;
-      console.log('this is product', this.product);
     },
   },
   computed: {
@@ -696,7 +695,8 @@ export default {
     };
 
     const addToCart = (e) => {
-      console.log('this is cart value', cart.value);
+      loadCart();
+      const cartBefore = cart.value;
       const quantity =
         Number(e.target.parentElement.parentElement.firstChild.value) ||
         Number(
@@ -714,9 +714,7 @@ export default {
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          console.log('this is before', cart.value);
-          setCart(cart.value?.order);
-          console.log('this is after', cart.value);
+          setCart(cartBefore);
         } else {
           showToast('Product added to cart!');
         }

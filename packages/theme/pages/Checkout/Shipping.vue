@@ -259,7 +259,6 @@ export default {
           'shipping'
         );
         const formAddress = mapAddressToAddressForm(defaultAddress);
-        console.log('this is that', formAddress);
         form.value = {
           firstName: formAddress?.firstName,
           lastName: formAddress?.lastName,

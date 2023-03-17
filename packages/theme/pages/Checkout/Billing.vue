@@ -110,7 +110,7 @@
       <div class="form">
         <div class="form__action">
           <SfButton
-            class="sf-button color-secondary form__back-button"
+            class="sf-button bg-secondary form__back-button"
             type="button"
             @click="$router.push('/checkout/shipping')"
           >
@@ -248,8 +248,8 @@ export default {
     });
 
     const handleFormSubmit = async () => {
-      const orderAddress = mapAddressFormToOrderAddress(billingDetails.value);
-      await save({ billingDetails: orderAddress });
+      // const orderAddress = mapAddressFormToOrderAddress(billingDetails.value);
+      // await save({ billingDetails: orderAddress });
       context.root.$router.push('/checkout/payment');
       sameAsShipping.value = false;
       await setCart();

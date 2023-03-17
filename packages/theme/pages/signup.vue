@@ -1026,7 +1026,6 @@ export default defineComponent({
 
     const handleFormSubmit = async () => {
       isLoading.value = true;
-      console.log('this is that', isLoading.value);
       if (isIndividual.value) {
         form.value.company = 'Individual';
       }

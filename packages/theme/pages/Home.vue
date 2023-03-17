@@ -562,8 +562,6 @@ export default {
         }`,
       };
       await axios.post(baseUrl, pbody, options).then((res) => {
-        console.log('bs res', res);
-        // console.log("bs res", res)
         const produ = res.data.data?.bestSellingProducts.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
@@ -642,7 +640,13 @@ export default {
     } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
-    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
+    const {
+      load: loadCart,
+      addItem: addItemToCart,
+      isInCart,
+      cart,
+      setCart,
+    } = useCart();
     const {
       addItem: addItemToWishlist,
       isInWishlist,
@@ -650,7 +654,6 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
-    // console.log("products value is ", products)
     const { sendMessage, getUserInstantMessage } = useInstantMessage();
     loadUser();
 
@@ -698,7 +701,6 @@ export default {
           (mes) => mes.isFromAdmin == true && mes.isSeen == false
         ).length
     );
-    // console.log("unseen value is ", unseen.value)
     const unseenMessages = computed(() =>
       messages.value.filter(
         (mes) => mes.isFromAdmin == true && mes.isSeen == false
@@ -735,16 +737,12 @@ export default {
     // };
 
     const handleMessageOpen = async () => {
-      // console.log("handlemessageopen is clicked" );
       toggleMessageSidebar();
-      // console.log("unseen messages are", unseenMessages);
       let ids = [];
       let mes = unseenMessages.value;
       for (let i = 0; i < mes.length; i++) {
         ids.push(mes[i].id);
       }
-
-      // console.log("ids value is ", ids)
 
       const body = {
         query: `mutation makeSeenByUser($ids: [ID]! ) {
@@ -771,11 +769,8 @@ export default {
           // modalOpen.value = false;
           // setCart();
           // root.$router.push('/');
-          // console.log("successful", res)
         })
-        .catch((err) => {
-          // console.log("error occured");
-        });
+        .catch((err) => {});
     };
 
     const sendMessageToAdmin = async (messageToSend) => {
@@ -823,6 +818,8 @@ export default {
     };
 
     const itemsToCart = (product, quantity) => {
+      loadCart();
+      const cartBefore = cart.value;
       addItemToCart({
         product: {
           _variantId: product?.productVariantId,
@@ -831,7 +828,7 @@ export default {
       }).then((res) => {
         if (cart?.value?.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart();
+          setCart(cartBefore);
         } else {
           showToast('Product added to cart!');
         }
