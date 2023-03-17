@@ -36,7 +36,7 @@
         </div>
 
         <div class="navbar__main">
-          <LazyHydrate on-interaction>
+          <!-- <LazyHydrate on-interaction>
             <SfButton
               class="sf-button--text navbar__filters-button text-secondary"
               :aria-label="$t('Filters')"
@@ -50,7 +50,7 @@
               />
               {{ $t('Filters') }}
             </SfButton>
-          </LazyHydrate>
+          </LazyHydrate> -->
 
           <div class="navbar__sort desktop-only">
             <span class="navbar__label text-secondary"

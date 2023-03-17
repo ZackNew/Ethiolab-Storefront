@@ -1,47 +1,42 @@
 <template>
   <div class="payment-provider">
+    <h3 class="text-bold">Payment methods</h3>
     <SfHeading
       :level="3"
-      :title="$t('Payment methods')"
       class="sf-heading--left sf-heading--no-underline title"
     />
     <div class="form">
       <div class="form__radio-group payment__methods">
-          <SfRadio
-            v-e2e="'payment-method'"
-            v-for="method in paymentMethods"
-            :key="method.id"
-            :label="method.name"
-            :value="method.id"
-            :selected="selectedPaymentMethod.id"
-            @input="selectPaymentMethod(method)"
-            name="paymentMethod"
-            :description="method.description"
-            class="form__radio payment__method"
-          >
-            <template #label="{ label }">
-              <div class="sf-radio__label payment__label">
-                <div>{{ label }}</div>
-              </div>
-            </template>
-            <template #description="{ description }">
-              <div class="sf-radio__description payment__description">
-                <div class="payment__info" v-html='description'>
-                </div>
-              </div>
-            </template>
-          </SfRadio>
-        </div>
+        <SfRadio
+          v-e2e="'payment-method'"
+          v-for="method in paymentMethods"
+          :key="method.id"
+          :label="method.name"
+          :value="method.id"
+          :selected="selectedPaymentMethod.id"
+          @input="selectPaymentMethod(method)"
+          name="paymentMethod"
+          :description="method.description"
+          class="form__radio payment__method"
+        >
+          <template #label="{ label }">
+            <div class="sf-radio__label payment__label">
+              <div>{{ label }}</div>
+            </div>
+          </template>
+          <template #description="{ description }">
+            <div class="sf-radio__description payment__description">
+              <div class="payment__info" v-html="description"></div>
+            </div>
+          </template>
+        </SfRadio>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  SfHeading,
-  SfButton,
-  SfRadio
-} from '@storefront-ui/vue';
+import { SfHeading, SfButton, SfRadio } from '@storefront-ui/vue';
 import { ref, onMounted } from '@vue/composition-api';
 import { usePaymentProviderMock } from '@/composables/usePaymentProviderMock';
 import { usePayment } from '@vue-storefront/vendure';
@@ -51,9 +46,9 @@ export default {
   components: {
     SfHeading,
     SfButton,
-    SfRadio
+    SfRadio,
   },
-  setup (_, { emit }) {
+  setup(_, { emit }) {
     const { status } = usePaymentProviderMock();
     const selectedPaymentMethod = ref({});
     const paymentMethods = ref([]);
@@ -74,9 +69,9 @@ export default {
     return {
       paymentMethods,
       selectedPaymentMethod,
-      selectPaymentMethod
+      selectPaymentMethod,
     };
-  }
+  },
 };
 </script>
 
@@ -105,7 +100,6 @@ export default {
     @include for-desktop {
       margin: 0 0 var(--spacer-xl) 0;
     }
-
   }
 }
 .payment {
