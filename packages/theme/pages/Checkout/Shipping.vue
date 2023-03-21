@@ -54,8 +54,9 @@
             :errorMessage="errors[0]"
           /> -->
           <select
+            required
             class="bg-white rounded md:rounded-lg px-1 py-2 form__element--half selectTab mb-10"
-            @change="setCity($event)"
+            @change="setCity($event, cookieToken)"
           >
             <option value="" disabled selected hidden>Choose a City</option>
             <template v-for="(city, i) in cities">
@@ -105,7 +106,9 @@
             class="bg-secondary text-white form__action-button"
             type="submit"
           >
-            {{ $t('Select shipping method') }}
+            {{
+              isSelfPickup ? 'Continue to Billing' : 'Select Shipping Method'
+            }}
           </SfButton>
         </div>
       </div>
@@ -118,12 +121,12 @@
         <SfButton
           v-if="shouldDisplayButton"
           v-e2e="'continue-to-billing'"
-          class="form__action-button"
+          class="bg-secondary text-white form__action-button"
           type="button"
           @click="$router.push(localePath({ name: 'billing' }))"
           :disabled="!shouldDisplayButton || loadingShippingProvider"
         >
-          {{ $t('Continue to billing') }}
+          Continue to billing
         </SfButton>
       </div>
     </form>
@@ -134,7 +137,7 @@
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { SfHeading, SfInput, SfButton, SfSelect } from '@storefront-ui/vue';
-import { ref, onMounted } from '@vue/composition-api';
+import { ref, onMounted, inject } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import {
   useShipping,
@@ -181,10 +184,12 @@ export default {
   data() {
     return {
       cities: [],
+      cookieToken: '',
     };
   },
   created() {
     this.getEligibleLocation();
+    this.cookieToken = this.$cookies.get('etech-auth-token');
   },
   methods: {
     async getEligibleLocation() {
@@ -207,7 +212,8 @@ export default {
       });
     },
   },
-  setup() {
+  setup(props, { root }) {
+    const showToast = inject('showToast');
     const isFormSubmitted = ref(false);
     const { load, save, loading } = useShipping();
     const { loading: loadingShippingProvider } = useShippingProvider();
@@ -215,6 +221,8 @@ export default {
       useUserShipping();
     const shouldDisplayButton = ref(false);
     const formPhoneNumber = ref('');
+    const isSelfPickup = ref(false);
+    const cookieSetup = ref(null);
 
     const form = ref({
       firstName: '',
@@ -231,7 +239,42 @@ export default {
     const handleFormSubmit = async () => {
       const orderAddress = mapAddressFormToOrderAddress(form.value);
       await save({ shippingDetails: orderAddress });
-      isFormSubmitted.value = true;
+      if (isSelfPickup.value) {
+        await setSelfPickupTrue();
+      } else {
+        isFormSubmitted.value = true;
+      }
+    };
+
+    const setSelfPickupTrue = async () => {
+      console.log(cookieSetup.value);
+      const body = {
+        query: `mutation setSelfPickupAsShippingMethod {
+                  setSelfPickupAsShippingMethod
+                  {
+                    success
+                  } 
+                }`,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          authorization: `Bearer ${cookieSetup.value}`,
+        },
+      };
+      let baseUrl = process.env.GRAPHQL_API;
+
+      await axios
+        .post(baseUrl, body, options)
+        .then((res) => {
+          if (res.data.data?.setSelfPickupAsShippingMethod?.success) {
+            root.$router.push(root.localePath({ name: 'billing' }));
+          } else {
+            showToast('Something went wrong. Try again!');
+          }
+        })
+        .catch((err) => {});
     };
 
     const phoneInputHandler = (payload) => {
@@ -243,7 +286,13 @@ export default {
       shouldDisplayButton.value = true;
     };
 
-    const setCity = (e) => {
+    const setCity = (e, token) => {
+      cookieSetup.value = token;
+      if (e.target.value === 'Self Pickup') {
+        isSelfPickup.value = true;
+      } else {
+        isSelfPickup.value = false;
+      }
       form.value.city = e.target.value;
     };
 
@@ -286,6 +335,7 @@ export default {
       phoneInputHandler,
       shouldDisplayButton,
       setCity,
+      isSelfPickup,
     };
   },
 };
