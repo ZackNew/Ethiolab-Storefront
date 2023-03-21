@@ -144,7 +144,7 @@ import {
 } from 'vee-validate';
 import axios from 'axios';
 import { SfInput } from '@storefront-ui/vue';
-import { useUser, useForgotPassword } from '@vue-storefront/vendure';
+import { useUser, useForgotPassword, useCart } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import RegisterMessage from '../components/RegisterMessage.vue';
 extend('required', {
@@ -174,6 +174,7 @@ export default defineComponent({
   },
   setup(props, { root }) {
     const { isDarkMode } = useUiState();
+    const { cart, load: loadCart, setCart, applyCoupon } = useCart();
     const form = ref({});
     const show = ref(false);
     const {
@@ -218,6 +219,10 @@ export default defineComponent({
       }
 
       showToast('login successfull');
+      loadCart();
+      console.log('loaded the cart');
+      setCart();
+      console.log('setted the cart');
       root.$router.push('/');
     };
 

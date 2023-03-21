@@ -12,7 +12,7 @@ export const canEnterBilling = (cart: Order): boolean =>
   Boolean(cart?.shippingAddress?.city);
 
 export const canEnterPayment = (cart: Order): boolean =>
-  Boolean(canEnterShipping(cart) && canEnterBilling(cart) && cart?.shipping); // && cart?.state === ARRANGING_PAYMENT;
+  Boolean(canEnterShipping(cart) && canEnterBilling(cart));
 
 export enum CheckoutSteps {
   Shipping = 'shipping',
