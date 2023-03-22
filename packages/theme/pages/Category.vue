@@ -178,7 +178,7 @@
                   </SfList>
                 </template>
               </SfAccordionItem>
-              <div class="p-3 hidden md:block">
+              <div class="p-3 hidden md:block border-t-2 border-[#efefef]">
                 <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
                 <LazyHydrate>
                   <Banner
@@ -210,7 +210,7 @@
                       ? cat.featuredAsset.preview
                       : '/categories/cat2.jpeg'
                   "
-                  class="rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[22%] min-w-[22%]"
+                  class="object-contain rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[22%] min-w-[22%]"
                 />
                 <div class="w-full overflow-auto no-scrollbar">
                   <p
@@ -233,9 +233,9 @@
 
           <LazyHydrate>
             <!-- <CategoryFeature /> -->
-            <div>
+            <div v-if="subcategories">
               <h3
-                class="font-bold mt-12 pb-2 text-secondary"
+                class="text-center mt-12 pb-2 text-secondary"
                 :style="!isDarkMode ? '' : 'color: white'"
               >
                 Featured
@@ -252,7 +252,7 @@
                     <nuxt-link :to="`/s/${subCat.slug}`">
                       <img
                         :src="subCat.image"
-                        class="w-full md:h-32 xs:h-60 object-cover shadow-xl hover:shadow-2xl transition duration-300"
+                        class="w-full md:h-44 xs:h-60 object-cover shadow-xl hover:shadow-2xl transition duration-300 rounded"
                       />
                       <div class="mt-1">
                         <h4
@@ -1082,7 +1082,7 @@ export default {
           image: sub.featuredAsset?.preview || '/categories/empty_image.png',
         };
       });
-      return subs || [];
+      return subs;
     },
   },
 };

@@ -1,9 +1,9 @@
 <template>
   <div
-    :class="`pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300 relative`"
+    :class="`pt-3 border border-light_accent bg-white shadow-lg hover:shadow-2xl duration-300 relative  my-3 rounded`"
     data-testid="product-card"
   >
-  <!-- <img  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[500]"/> -->
+    <!-- <img  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[500]"/> -->
     <div class="ssf-product-card__image-wrapper mx-3">
       <slot
         name="image"
@@ -15,7 +15,7 @@
           imageWidth,
           imageTag,
           nuxtImgConfig,
-          isOrderBased
+          isOrderBased,
         }"
       >
         <SfButton
@@ -210,7 +210,7 @@
           :special="specialPrice"
         />-->
         <p v-if="regularPrice" class="text-md mx-auto text-secondary font-bold">
-          {{parseFloat(regularPrice).toLocaleString() + "  ETB" }}
+          {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }}
         </p>
       </slot>
       <slot name="review" v-bind="{ maxRating, scoreRating }">
