@@ -1,10 +1,6 @@
 <template>
   <div class="payment-provider">
     <h3 class="text-bold">Payment methods</h3>
-    <SfHeading
-      :level="3"
-      class="sf-heading--left sf-heading--no-underline title"
-    />
     <div class="form">
       <div class="form__radio-group payment__methods">
         <SfRadio

@@ -3,7 +3,7 @@
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Featured Categories</h3> -->
     <div class="md:p-3">
       <div class="w-full py-5 md:pt-14 md:text-center">
-        <h1 class="md:text-4xl text-secondary">Featured</h1>
+        <h1 class="md:text-3xl text-secondary">Featured</h1>
       </div>
     </div>
     <div class="grid grid-cols-1 gap-4 md:mt-3 md:mb-7 md:grid-cols-3">
@@ -17,7 +17,7 @@
                   ? category.featuredAsset.preview
                   : '/categories/empty_image.png'
               "
-              class="w-full h-44 md:h-60 object-cover shadow-xl hover:shadow-2xl transition duration-300"
+              class="rounded w-full h-44 md:h-64 object-cover shadow-xl hover:shadow-2xl transition duration-500"
             />
             <div class="mt-1">
               <h4 class="md:text-xl text-secondary">{{ category.label }}</h4>

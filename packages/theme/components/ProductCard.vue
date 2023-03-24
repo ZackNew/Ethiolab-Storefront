@@ -1,7 +1,7 @@
 <template>
   <div
     :class="!isDarkMode ? `bg-white` : `bg-dark_accent`"
-    class="pt-3 shadow-lg hover:shadow-2xl duration-300"
+    class="pt-3 shadow-lg hover:shadow-2xl duration-300 rounded"
     data-testid="product-card"
   >
     <div class="ssf-product-card__image-wrapper mx-3 relative">
@@ -196,7 +196,7 @@
         title,
       }"
     >
-      <div class="flex mt-2 justify-center">
+      <div class="add-to-cart-button flex mt-2 justify-center">
         <input
           type="number"
           class="w-[20%] bg-light_accent mr-3 h-10 text-center"

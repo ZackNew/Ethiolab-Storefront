@@ -111,7 +111,7 @@
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
             <!-- <SfHeading title="Recently Viewed Products" :level="2" /> -->
-            <h1 class="md:text-4xl text-secondary">Recently Viewed Products</h1>
+            <h1 class="md:text-3xl text-secondary">Recently Viewed Products</h1>
           </div>
         </LazyHydrate>
         <LazyHydrate when-visible>
