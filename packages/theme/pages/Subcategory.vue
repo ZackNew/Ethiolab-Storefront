@@ -348,16 +348,44 @@ export default {
       return industries;
     },
     facetList() {
-      let facet = [];
+      let allFacets = [];
       this.products.forEach((element) => {
         if (element.facetValues.length !== 0) {
-          element.facetValues.forEach((f) => {
-            facet.push(f?.name);
+          element.facetValues.forEach((facet) => {
+            allFacets.push(facet);
           });
         }
       });
-      const facets = [...new Set(facet)];
-      return facets;
+      let semiFinalFacets = [];
+      allFacets.forEach((f) => {
+        let a = {};
+        a[f.facet.name] = f.name;
+        semiFinalFacets.push(a);
+      });
+      const finalFacets = semiFinalFacets.reduce((acc, curr) => {
+        const key = Object.keys(curr)[0];
+        const value = curr[key];
+        const existingObj = acc.find((obj) => obj[key]);
+
+        if (existingObj) {
+          existingObj[key].push(value);
+        } else {
+          acc.push({
+            [key]: [value],
+          });
+        }
+
+        return acc;
+      }, []);
+      const facet = finalFacets.map((facet) => {
+        const key = Object.keys(facet)[0];
+        const value = facet[key];
+        return {
+          filter_title: key,
+          filter_options: value,
+        };
+      });
+      return facet;
     },
     filters() {
       return [
@@ -369,11 +397,7 @@ export default {
           filter_title: 'Industry',
           filter_options: this.industryList,
         },
-        {
-          filter_title: 'Facet',
-          filter_options: this.facetList,
-        },
-      ];
+      ].concat(this.facetList);
     },
   },
   methods: {
@@ -471,6 +495,9 @@ export default {
                             }
                             facetValues{
                               name
+                              facet{
+                                name
+                              }
                             }
                             customFields{
                               is_order_based

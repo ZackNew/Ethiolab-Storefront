@@ -219,6 +219,7 @@
                   />
 
                   <input
+                    :disabled="!terms"
                     @click="cashComplete"
                     type="submit"
                     id="submit"
@@ -232,7 +233,7 @@
               <div v-if="paymentMethod && paymentMethod.name == 'Telebirr'">
                 <SfButton
                   v-e2e="'make-an-order'"
-                  :disabled="!paymentMethod"
+                  :disabled="!terms"
                   class="summary__action-button"
                   @click="processTelebirr"
                 >
@@ -929,12 +930,9 @@ export default {
             // rsp.redirect(res.data.data.toPayUrl);
             window.location.href = res.data.data.data.toPayUrl;
           } else {
-            console.error(res.data.message);
           }
         })
-        .catch((error) => {
-          console.error(error);
-        });
+        .catch((error) => {});
     };
 
     const handleCancelOrder = async (token) => {
