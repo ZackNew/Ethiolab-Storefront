@@ -118,8 +118,8 @@
         </div>
         <div
           id="full"
-          class="card rounded-2xl grid grid-cols-1 md:grid-cols-12 p-8"
-          :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-light_gray'"
+          class="card rounded-xl grid grid-cols-1 md:grid-cols-12 p-8"
+          :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-[#efefef]'"
           v-if="
             Svariant.customFields &&
             (Svariant.customFields.table || Svariant.customFields.description)

@@ -220,9 +220,7 @@ export default defineComponent({
 
       showToast('login successfull');
       loadCart();
-      console.log('loaded the cart');
       setCart();
-      console.log('setted the cart');
       root.$router.push('/');
     };
 

@@ -247,7 +247,6 @@ export default {
     };
 
     const setSelfPickupTrue = async () => {
-      console.log(cookieSetup.value);
       const body = {
         query: `mutation setSelfPickupAsShippingMethod {
                   setSelfPickupAsShippingMethod

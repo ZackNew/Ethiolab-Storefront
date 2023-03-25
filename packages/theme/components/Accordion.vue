@@ -2,7 +2,7 @@
   <div>
     <button
       @click="toggleAccordion()"
-      class="w-[80%] flex items-center justify-between hover:text-primary font-bold text-[130%] text-secondary"
+      class="w-[100%] flex items-center justify-between hover:text-primary font-bold text-[130%] text-secondary border-t border-[#dfdfdf]"
       :aria-expanded="isOpen"
       :aria-controls="`collapse${_uid}`"
     >
