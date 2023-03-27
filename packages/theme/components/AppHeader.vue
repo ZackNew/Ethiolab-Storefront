@@ -413,12 +413,12 @@ export default {
     const quoteCity = ref(cities[0]);
 
     const cartTotalItems = computed(() => {
+      loadCart();
       const count = cartGetters.getTotalItems(cart.value);
       return count ? count.toString() : null;
     });
 
     const wishlistTotalItems = computed(() => {
-      loadCart();
       const count = wishlistGetters.getTotalItems(wishlist.value);
       return count ? count.toString() : null;
     });
