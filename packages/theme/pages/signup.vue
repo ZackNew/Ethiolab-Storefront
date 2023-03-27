@@ -630,7 +630,7 @@
 
                     <ValidationProvider
                       name="tin"
-                      :rules="isOrganization && 'required'"
+                      :rules="isOrganization ? 'required' : ''"
                       v-slot="{ errors }"
                       slim
                     >
@@ -1067,23 +1067,18 @@ export default defineComponent({
             'Access-Control-Allow-Origin': '*',
           },
         };
-        await axios
-          .post(baseUrl, pbody, poptions)
-          .then((res) => {
-            if (res.data.data.registerEtechCustomer.success) {
-              showToast('Registration Successfull');
-              root.$route.push('/signin');
-              isLoading.value = false;
-            } else {
-              showToast('Registration Failed');
-              isLoading.value = false;
-            }
-            //   invoices.value = res.data.data.myInvoices.items;
-          })
-          .catch((err) => {
+        await axios.post(baseUrl, pbody, poptions).then((res) => {
+          console.log('majinat', res.data.data);
+          if (res.data.data.registerEtechCustomer.success === true) {
+            showToast('Registration Successfull');
+            root.$router.push('/signin');
+            isLoading.value = false;
+          } else {
             showToast('Registration Failed');
             isLoading.value = false;
-          });
+          }
+          //   invoices.value = res.data.data.myInvoices.items;
+        });
       }
 
       if (
