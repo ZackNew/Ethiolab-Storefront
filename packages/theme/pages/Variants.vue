@@ -714,7 +714,7 @@ export default {
       }).then((res) => {
         if (cart.value.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart(cartBefore);
+          setCart();
         } else {
           showToast('Product added to cart!');
         }

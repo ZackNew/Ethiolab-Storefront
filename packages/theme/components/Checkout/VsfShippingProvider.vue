@@ -126,7 +126,7 @@ export default {
       const newOrder = await $vendure.api.setShippingMethod({
         shippingMethodId: shippingMethod.id,
       });
-      setCart(newOrder.data.setOrderShippingMethod);
+      setCart();
       selectedShippingMethod.value = shippingMethod;
       emit('shippingMethodSelected', shippingMethod);
     };
