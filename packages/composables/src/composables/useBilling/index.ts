@@ -34,9 +34,9 @@ const params: UseBillingParams<OrderAddress, AddParams> = {
       { input: billingDetails as CreateAddressInput, type: BILLING_TYPE },
       customQuery
     );
-    await context.$vendure.api.transitionOrderToState({
-      state: 'ArrangingPayment',
-    });
+    // await context.$vendure.api.transitionOrderToState({
+    //   state: 'ArrangingPayment',
+    // });
     await context.$vendure.api.getCart();
     return (response?.data?.setOrderBillingAddress as Order)?.billingAddress;
   },
