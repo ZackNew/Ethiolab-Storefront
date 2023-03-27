@@ -586,7 +586,7 @@ export default {
     //     .catch((err) => {});
     // }
   },
-  setup(props, { root }) {
+  setup(props, context) {
     const { load: loadBilling, save, billing } = useBilling();
     const { cart, load, setCart, applyCoupon } = useCart();
     const billingDetails = ref(billing.value || {});
@@ -712,8 +712,9 @@ export default {
     };
 
     const changeState = async () => {
-      const orderAddress = mapAddressFormToOrderAddress(billingDetails.value);
-      await save({ billingDetails: orderAddress });
+      await context.parent.$store.$vsf.$vendure.api.transitionOrderToState({
+        state: 'ArrangingPayment',
+      });
       await load();
       setCart();
     };
@@ -824,7 +825,7 @@ export default {
         appId: '4ae7217b4e7149fdac877852e7fd87db',
         nonce: uniqueId,
         notifyUrl: 'https://admin.ethiolab.et/telebirr',
-        outTradeNo: `${cart.value.code}_${uniqueId}`,
+        outTradeNo: `${cart.value?.code}_${uniqueId}`,
         receiveName: 'Ethiolab',
         returnUrl: 'http://localhost:3001/checkout/thank-you/',
         shortCode: '220322',
@@ -869,7 +870,7 @@ export default {
         appId: '4ae7217b4e7149fdac877852e7fd87db',
         nonce: uniqueId,
         notifyUrl: 'https://admin.ethiolab.et/telebirr',
-        outTradeNo: `${cart.value.code}_${uniqueId}`,
+        outTradeNo: `${cart.value?.code}_${uniqueId}`,
         receiveName: 'Ethiolab',
         returnUrl: 'http://localhost:3001/checkout/thank-you/',
         shortCode: '220322',
@@ -926,7 +927,7 @@ export default {
       axios
         .post('/api/telebirr', requestMessage)
         .then((res) => {
-          if (res.status == 200 && res.data.data.code == 200) {
+          if (res.status == 200 && res.data.data?.code == 200) {
             // rsp.redirect(res.data.data.toPayUrl);
             window.location.href = res.data.data.data.toPayUrl;
           } else {
@@ -965,7 +966,7 @@ export default {
           setCart();
           modalOpen.value = false;
 
-          root.$router.push('/');
+          context.root.$router.push('/');
           // window.location.href = "/"
         })
         .catch((err) => {});
@@ -975,7 +976,7 @@ export default {
       changeState();
       await load();
       setCart();
-      root.$router.push('/');
+      context.root.$router.push('/');
     };
 
     return {

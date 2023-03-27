@@ -248,11 +248,11 @@ export default {
     });
 
     const handleFormSubmit = async () => {
-      // const orderAddress = mapAddressFormToOrderAddress(billingDetails.value);
-      // await save({ billingDetails: orderAddress });
+      const orderAddress = mapAddressFormToOrderAddress(billingDetails.value);
+      await save({ billingDetails: orderAddress });
       context.root.$router.push('/checkout/payment');
       sameAsShipping.value = false;
-      await setCart();
+      setCart();
     };
 
     onSSR(async () => {
