@@ -173,7 +173,7 @@
 
                 <ValidationProvider
                   name="confirmPassword"
-                  rules="required"
+                  rules="required|min:6"
                   v-slot="{ errors }"
                   slim
                 >
@@ -945,11 +945,11 @@
                 </ValidationProvider>
               </div>
               <!-- <ValidationProvider
-                                                name="email"
-                                                rules="required|min:2"
-                                               v-slot="{ errors }"
-                                                slim
-                                            >  -->
+                    name="email"
+                    rules="required|min:2"
+                    v-slot="{ errors }"
+                    slim
+                >  -->
               <input
                 type="checkbox"
                 name="categories"
@@ -1176,7 +1176,6 @@ export default defineComponent({
           },
         };
         await axios.post(baseUrl, pbody, poptions).then((res) => {
-          console.log('majinat', res.data.data);
           if (res.data.data.registerEtechCustomer.success === true) {
             showToast('Registration Successfull');
             root.$router.push('/signin');
