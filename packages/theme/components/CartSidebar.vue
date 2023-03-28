@@ -165,7 +165,7 @@ export default {
       removeItem(product).then((res) => {
         if (cart?.value?.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart();
+          setCart(cart.value.order);
         }
       });
     };
@@ -174,7 +174,7 @@ export default {
       updateItemQty(params).then((res) => {
         if (cart?.value?.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart();
+          setCart(cart.value.order);
         }
       });
     };

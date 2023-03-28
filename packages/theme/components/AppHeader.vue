@@ -412,8 +412,8 @@ export default {
 
     const quoteCity = ref(cities[0]);
 
+    loadCart();
     const cartTotalItems = computed(() => {
-      loadCart();
       const count = cartGetters.getTotalItems(cart.value);
       return count ? count.toString() : null;
     });
