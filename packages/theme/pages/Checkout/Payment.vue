@@ -2,14 +2,18 @@
   <div id="checkout">
     <div class="checkout">
       <div class="checkout__main">
-        <div v-if="!canPay" class="flex">
-          <img src="/info.png" alt="info icon" height="50" width="50" />
-          <div class="bg-white text-lg m-4 p-4 font-bold rounded-lg">
+        <div v-if="!canPay" class="flex items-center">
+          <!-- <img src="/info.png" alt="info icon" class="w-14 h-14 mr-2" />
+          <div class="bg-white text-lg px-2 py-1 font-bold rounded-lg">
             <p>
               This order contains order based product. You are allowed to pay
               once the admin update the order status.
             </p>
-          </div>
+          </div> -->
+          <SfAlert
+            message="This order contains order based product. You are allowed to pay. You will be contacted by our team shortly."
+            type="warning"
+          />
         </div>
 
         <SfHeading
@@ -242,11 +246,14 @@
               </div>
 
               <div v-if="paymentMethod && paymentMethod.name == 'Cash'">
-                <SfModal title="My title" visible :persistent="false">
+                <SfModal
+                  title="My title"
+                  visible
+                  :persistent="false"
+                  :cross="false"
+                >
                   <div class="relative h-full max-w-md md:h-auto -m-4">
-                    <div
-                      class="relative bg-white rounded-lg shadow dark:bg-gray-700"
-                    >
+                    <div class="relative rounded-lg dark:bg-gray-700">
                       <button
                         type="button"
                         class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
@@ -342,12 +349,12 @@
       </div>
       <div>
         <div v-if="modalOpen">
-          <SfModal title="My title" visible :persistent="false">
+          <SfModal title="My title" visible :persistent="false" :cross="false">
             <div class="relative w-full h-full max-w-md md:h-auto">
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <div class="relative rounded-lg dark:bg-gray-700">
                 <button
                   type="button"
-                  class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                  class="absolute right-[1px] top-3 bg-transparent rounded-lg text-sm"
                   data-modal-toggle="popup-modal"
                   @click="handleModalOpen"
                 >
@@ -481,6 +488,7 @@ import {
   SfLink,
   SfInput,
   SfModal,
+  SfAlert,
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
 import { ref, computed, onMounted, onBeforeMount } from '@vue/composition-api';
@@ -529,6 +537,7 @@ export default {
     SfLink,
     SfInput,
     SfModal,
+    SfAlert,
     VsfPaymentProvider: () =>
       import('~/components/Checkout/VsfPaymentProvider'),
     CartPreview,
