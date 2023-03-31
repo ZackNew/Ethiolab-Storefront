@@ -118,7 +118,7 @@
         </div>
         <div
           id="full"
-          class="card rounded-xl grid grid-cols-1 md:grid-cols-12 p-8"
+          class="card rounded grid grid-cols-1 md:grid-cols-12 p-8"
           :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-[#efefef]'"
           v-if="
             Svariant.customFields &&
@@ -1015,7 +1015,7 @@ tr:nth-child(even) {
 }
 .red table {
   table-layout: fixed;
-  border-radius: 10px;
+  border-radius: 2px;
   margin: 15px 5px;
   font-size: 0.9em;
   font-family: sans-serif;

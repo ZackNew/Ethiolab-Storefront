@@ -151,7 +151,7 @@ export default {
 
 <style lang="scss">
 // Magnifying glass options
-$border-size: 2px; // Modify the border width of the magnifying glass component
+$border-size: 0px; // Modify the border width of the magnifying glass component
 $border-color: #000000; // Modify the border color of the magnifying glass component
 $magnifier-width: 400px; // Modify the width of the magnifying glass component
 $magnifier-height: 400px; // Modify the height of the magnifying glass component

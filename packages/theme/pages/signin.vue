@@ -273,7 +273,6 @@ export default defineComponent({
 
       showToast('login successfull');
       loadCart();
-      setCart();
       root.$router.push('/');
     };
 
