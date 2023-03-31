@@ -171,10 +171,11 @@ export default {
     };
 
     const updateCartQuty = (params) => {
+      const currentCart = cart.value;
       updateItemQty(params).then((res) => {
         if (cart?.value?.errorCode && cart.value.errorCode != '') {
           showToast(cart.value.message);
-          setCart(cart.value.order);
+          setCart(currentCart);
         }
       });
     };

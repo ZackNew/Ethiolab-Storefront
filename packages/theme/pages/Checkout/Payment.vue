@@ -224,8 +224,8 @@
 
                   <input
                     :disabled="!terms"
-                    @click="cashComplete"
                     type="submit"
+                    @click="cashComplete"
                     id="submit"
                     name="submit"
                     value="PAY WITH CYBERSOURCE"
@@ -237,7 +237,6 @@
               <div v-if="paymentMethod && paymentMethod.name == 'Telebirr'">
                 <SfButton
                   v-e2e="'make-an-order'"
-                  :disabled="!terms"
                   class="summary__action-button"
                   @click="processTelebirr"
                 >
@@ -704,7 +703,7 @@ export default {
       let params = signedFieldNames.split(',');
       let dataToSign = [];
 
-      params.forEach((param) => {
+      params?.forEach((param) => {
         dataToSign.push(param + '=' + paymentDetail[param]);
       });
 
@@ -745,7 +744,7 @@ export default {
       let params = signedFieldNames.split(',');
       let dataToSign = [];
 
-      params.forEach((param) => {
+      params?.forEach((param) => {
         dataToSign.push(param + '=' + paymentDetail[param]);
       });
 
