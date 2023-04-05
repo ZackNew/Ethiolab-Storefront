@@ -13,7 +13,7 @@
         {{ this.title }}
       </h4>
       <textarea
-        class="form-control block w-full/p/55/eba-200-small-centrifuge text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+        class="form-control block w-full/p/55/eba-200-small-centrifuge text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none p-3"
         cols="30"
         rows="5"
         v-model="summary"
@@ -28,6 +28,7 @@
         <div class="col-span-1 justify-self-end">
           <SfButton
             class="color-info mt-2"
+            :disabled="summary === '' ? true : false"
             @click="this.submitReview"
             v-if="!this.isSubmiting"
             >{{ prompt }}</SfButton

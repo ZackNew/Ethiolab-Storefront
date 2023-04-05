@@ -35,24 +35,26 @@
           />
         </ValidationProvider>
       </div>
-      <ValidationProvider v-slot="{ errors }" class="form__element">
-        <SfInput
-          v-model="form.streetName"
-          name="streetName"
-          :label="$t('Street Name')"
-          :valid="!errors[0]"
-          :errorMessage="errors[0]"
-        />
-      </ValidationProvider>
-      <ValidationProvider v-slot="{ errors }" class="form__element">
-        <SfInput
-          v-model="form.streetNumber"
-          name="apartment"
-          :label="$t('House/Apartment number')"
-          :valid="!errors[0]"
-          :errorMessage="errors[0]"
-        />
-      </ValidationProvider>
+      <div class="form__horizontal">
+        <ValidationProvider v-slot="{ errors }" class="form__element">
+          <SfInput
+            v-model="form.streetName"
+            name="streetName"
+            :label="$t('Street Name')"
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
+          />
+        </ValidationProvider>
+        <ValidationProvider v-slot="{ errors }" class="form__element">
+          <SfInput
+            v-model="form.streetNumber"
+            name="apartment"
+            :label="$t('House/Apartment number')"
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
+          />
+        </ValidationProvider>
+      </div>
       <div class="form__horizontal">
         <ValidationProvider
           rules="required"
@@ -99,17 +101,15 @@
             v-model="form.state"
             :label="$t('State_OR_Province')"
             name="state"
-            class="form__element form__element--half form__element--half-even"
+            class="form__element form__element--half"
           />
         </ValidationProvider>
-        <ValidationProvider v-slot="{ errors }" class="form__element">
+        <ValidationProvider class="form__element">
           <SfInput
+            v-e2e="'zip-code'"
             v-model="form.postalCode"
-            name="zipCode"
             :label="$t('Zip-code')"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            name="zipCode"
           />
         </ValidationProvider>
       </div>
@@ -130,6 +130,7 @@
           default-country-code="ET"
           @update="phoneInputHandler"
           v-model="formPhoneNumber"
+          class="w-[50%]"
         />
       </ValidationProvider>
       <SfCheckbox

@@ -16,9 +16,9 @@
     padding: 0px 0px !important;
   }
   &__heading {
-    background-color: #cee0ff !important;
-    border-radius: 10px 10px 0 0;
-    padding: 16px 0;
+    background-color: #efefef !important;
+    padding: 8px 0;
+    border: none !important;
   }
   &__header {
     text-align: center !important;
@@ -52,13 +52,13 @@
 .sf-header__wrapper {
   padding-top: 0.5em;
 }
-.sf-accordion-item__header {
+.categoryAcordion .sf-accordion-item__header {
   background-color: #a5c4ea !important;
   box-shadow: 0 4px 8px 0 rgba(128, 122, 122, 0.2),
     0 6px 20px 0 rgba(139, 134, 134, 0.19) !important;
   font-size: x-large !important;
   color: white !important;
-  border-radius: 1rem !important;
+  border-radius: 3px !important;
   min-width: 100% !important;
   height: 4.7rem !important;
   padding: 0 15px !important;
