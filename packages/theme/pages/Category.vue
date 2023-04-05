@@ -139,8 +139,9 @@
             >
               <SfAccordionItem
                 :header="
-                  currentCategory !== null ? currentCategory.name : 'Loading'
+                  currentCategory !== null ? currentCategory.name : 'Loading...'
                 "
+                class="categoryAcordion"
               >
                 <template>
                   <SfList class="list p-2">
@@ -235,7 +236,7 @@
             <!-- <CategoryFeature /> -->
             <div v-if="subcategories">
               <h3
-                class="text-center mt-12 pb-2 text-secondary"
+                class="pb-2 text-secondary"
                 :style="!isDarkMode ? '' : 'color: white'"
               >
                 Featured
@@ -246,7 +247,7 @@
                 v-for="(cat, i) in rawCategoryTree && rawCategoryTree"
                 :key="i"
               > -->
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 mb-5">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3 mb-5">
                 <div v-for="(subCat, i) in subcategories" :key="subCat.slug">
                   <div v-if="i < limitSub">
                     <nuxt-link :to="`/s/${subCat.slug}`">

@@ -125,7 +125,7 @@ export default {
     [
       'nuxt-i18n',
       {
-        baseUrl: process.env.BASE_URL || 'http://10.10.20.55:3000',
+        baseUrl: process.env.BASE_URL,
       },
     ],
     'cookie-universal-nuxt',
@@ -133,6 +133,7 @@ export default {
     '@vue-storefront/middleware/nuxt',
     'nuxt-user-agent',
     '@nuxtjs/axios',
+    'nuxt-helmet',
   ],
   axios: {
     // Axios options here
@@ -257,6 +258,26 @@ export default {
     },
     fileLoader: {
       // file-loader options
+    },
+  },
+  helmet: {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'", 'https://www.youtube-nocookie.com/'],
+        connectSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          'data:',
+          'https://admin.ethiolab.et/shop-api',
+          'https://www.youtube-nocookie.com/',
+        ],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        fontSrc: ["'self'", 'https:'],
+        upgradeInsecureRequests: [],
+        baseUri: ['https://fonts.googleapis.com'],
+      },
     },
   },
 };

@@ -67,15 +67,6 @@
             :errorMessage="errors[0]"
           />
         </ValidationProvider>
-        <ValidationProvider name="state" slim>
-          <SfInput
-            v-e2e="'billing-state'"
-            v-model="billingDetails.state"
-            :label="'Region'"
-            name="state"
-            class="form__element form__element--half form__element--half-even"
-          />
-        </ValidationProvider>
         <ValidationProvider name="phone" slim>
           <!-- <SfInput
             v-e2e="'billing-phone'"
@@ -94,7 +85,7 @@
             v-model="formPhoneNumber"
             valid-color="#3860a7"
             default-country-code="ET"
-            class="form__element form__element--half"
+            class="form__element form__element--half form__element--half-even"
           />
         </ValidationProvider>
         <ValidationProvider name="street-line-1" slim>
@@ -103,7 +94,7 @@
             v-model="billingDetails.streetLine1"
             :label="$t('Tin')"
             name="tin"
-            class="form__element form__element--half form__element--half-even"
+            class="form__element form__element--half max-w-[50%]"
           />
         </ValidationProvider>
       </div>
@@ -220,6 +211,7 @@ export default {
         billingDetails.value = {
           ...mapOrderAddressToAddressForm(shippingDetails.value),
         };
+        formPhoneNumber.value = shippingDetails.value?.phoneNumber;
         return;
       }
 

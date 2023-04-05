@@ -33,19 +33,22 @@
         </div>
         <div class="md:col-span-6">
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
-          <h3 class="text-secondary text-xl">
-            <span class="font-bold mr-2">Price </span>{{ priceRange }} /
-            {{ product.customFields.granularity }}
-          </h3>
-          <img
-            v-if="product.customFields.is_order_based"
-            src="/OB.png"
-            height="100"
-            width="100"
-            alt="order based"
-            class="z-[100]"
-          />
-          <div class="mt-4 bg-[#EAEAEA] rounded py-2 flex justify-around">
+          <div class="bg-[#EBEBEB] p-2">
+            <h3 class="text-secondary text-xl">
+              <span class="font-semibold mr-2 p-2">Price </span
+              >{{ priceRange }} /
+              {{ product.customFields.granularity }}
+            </h3>
+            <img
+              v-if="product.customFields.is_order_based"
+              src="/OB.png"
+              height="100"
+              width="100"
+              alt="order based"
+              class="z-[100]"
+            />
+          </div>
+          <div class="mt-4 bg-[#EBEBEB] rounded py-2 flex justify-around">
             <div v-if="product.variantList.totalItems === 1">
               <h5>1 Variant of this product are available.</h5>
             </div>
@@ -150,33 +153,41 @@
       <div class="hidden md:block mt-8">
         <SfTable id="var-table">
           <SfTableHeading class="bg-none">
-            <SfTableHeader class="text-secondary font-bold text-xl">
-              Item
-            </SfTableHeader>
+            <SfTableHeader class="text-lg"> Item </SfTableHeader>
             <template v-if="product.variantList.items[0].options.length > 0">
               <SfTableHeader
-                class="text-secondary font-bold text-xl"
+                class="text-lg"
                 v-for="(o, index) in product.variantList.items[0].options"
                 :key="index"
               >
                 {{ o.group.name }}
               </SfTableHeader>
             </template>
-            <SfTableHeader class="text-secondary font-bold text-xl">
-              Availability
-            </SfTableHeader>
-            <SfTableHeader class="text-secondary font-bold text-xl">
-              Price
-            </SfTableHeader>
+            <SfTableHeader class="text-lg"> Availability </SfTableHeader>
+            <SfTableHeader class="text-lg"> Price </SfTableHeader>
           </SfTableHeading>
           <SfTableRow
             v-for="variant in product.variantList.items"
             :key="variant.id"
             class="mb-4"
           >
-            <SfTableData>
-              <div class="my-4 px-auto">
-                <p class="text-secondary">
+            <SfTableData class="flex items-center">
+              <div class="my-4 flex pl-2">
+                <div v-if="variant.featuredAsset" class="ml-2">
+                  <img
+                    :src="variant.featuredAsset.preview"
+                    alt=""
+                    class="h-16 w-16 mr-2 object-contain"
+                  />
+                </div>
+                <div v-else-if="product.featuredAsset" class="ml-2">
+                  <img
+                    :src="product.featuredAsset.preview"
+                    alt=""
+                    class="h-16 w-16 mr-2 object-contain"
+                  />
+                </div>
+                <p>
                   <nuxt-link
                     class="text-secondary hover:underline"
                     :to="`/p/${product.id}/${variant.id}/${product.slug}`"
@@ -184,40 +195,24 @@
                     {{ variant.sku }}
                   </nuxt-link>
                 </p>
-                <div class="flex justify-around" v-if="variant.featuredAsset">
-                  <img
-                    :src="variant.featuredAsset.preview"
-                    alt=""
-                    class="h-16 w-16 mr-2 object-contain"
-                  />
-                </div>
-                <div
-                  class="flex justify-around"
-                  v-else-if="product.featuredAsset"
-                >
-                  <img
-                    :src="product.featuredAsset.preview"
-                    alt=""
-                    class="h-16 w-16 mr-2 object-contain"
-                  />
-                </div>
               </div>
             </SfTableData>
             <SfTableData
               v-for="(option, index) in variant.options"
               :key="index"
+              class="flex items-center"
             >
-              <p class="my-4 text-secondary">{{ option.name }}</p>
+              <p class="my-4">{{ option.name }}</p>
             </SfTableData>
-            <SfTableData
-              ><p class="my-4 text-secondary">
+            <SfTableData class="flex justify-center"
+              ><p class="my-4">
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData>
-              <div class="mx-2">
-                <div class="flex my-2">
-                  <h4 class="text-secondary">
+            <SfTableData class="flex-col items-center">
+              <div class="mx-2 flex items-center">
+                <div class="flex my-2 whitespace-nowrap mr-4">
+                  <h4 class="text-lg">
                     {{
                       parseFloat(
                         String(variant.price).slice(0, -2)
@@ -229,10 +224,10 @@
                     ETB / {{ product.customFields.granularity }}
                   </h4>
                 </div>
-                <div class="flex">
+                <div class="flex my-auto">
                   <input
                     :value="toCart"
-                    class="bg-light_accent w-14 text-center mr-1"
+                    class="bg-light_accent w-14 text-center mr-1 h-9"
                     type="number"
                     :id="variant.id"
                   />

@@ -37,6 +37,7 @@
           <button
             @click="showNext"
             class="text-secondary text-center ml-[45%] font-bold"
+            v-if="images.length > 3"
           >
             +
           </button>
