@@ -26,50 +26,52 @@
             </div>
             <div class="md:col-span-6">
               <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
-              <h4
-                v-if="Svariant.priceWithoutDiscount != Svariant.price"
-                class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through"
-              >
-                {{
-                  parseFloat(
-                    String(Svariant.priceWithoutDiscount).slice(0, -2)
-                  ).toLocaleString() +
-                  '.' +
-                  String(Svariant.priceWithoutDiscount).slice(-2)
-                }}
-                ETB / {{ granularity }}
-              </h4>
-              <div class="flex items-end">
-                <h4 class="font-bold text-secondary mb-3 mr-8">
+              <div class="bg-[#EBEBEB] p-2 flex justify-between mb-2">
+                <h4
+                  v-if="Svariant.priceWithoutDiscount != Svariant.price"
+                  class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through"
+                >
                   {{
                     parseFloat(
-                      String(Svariant.price).slice(0, -2)
+                      String(Svariant.priceWithoutDiscount).slice(0, -2)
                     ).toLocaleString() +
                     '.' +
-                    String(Svariant.price).slice(-2) +
-                    ' '
+                    String(Svariant.priceWithoutDiscount).slice(-2)
                   }}
                   ETB / {{ granularity }}
                 </h4>
-                <h5 class="text-[#828181] mb-3">
-                  {{
-                    parseFloat(
-                      String(Svariant.priceWithTax).slice(0, -2)
-                    ).toLocaleString() +
-                    '.' +
-                    String(Svariant.priceWithTax).slice(-2)
-                  }}
-                  ETB / {{ granularity }} including VAT
-                </h5>
+                <div class="flex items-end">
+                  <h4 class="font-bold text-secondary mb-3 mr-8">
+                    {{
+                      parseFloat(
+                        String(Svariant.price).slice(0, -2)
+                      ).toLocaleString() +
+                      '.' +
+                      String(Svariant.price).slice(-2) +
+                      ' '
+                    }}
+                    ETB / {{ granularity }}
+                  </h4>
+                  <h5 class="text-[#828181] mb-3">
+                    {{
+                      parseFloat(
+                        String(Svariant.priceWithTax).slice(0, -2)
+                      ).toLocaleString() +
+                      '.' +
+                      String(Svariant.priceWithTax).slice(-2)
+                    }}
+                    ETB / {{ granularity }} including VAT
+                  </h5>
+                </div>
+                <img
+                  v-if="Svariant.is_order_based"
+                  src="/OB.png"
+                  height="100"
+                  width="100"
+                  alt="order based"
+                  class="z-[100] mb-4"
+                />
               </div>
-              <img
-                v-if="Svariant.is_order_based"
-                src="/OB.png"
-                height="100"
-                width="100"
-                alt="order based"
-                class="z-[100] mb-4"
-              />
 
               <div class="flex mb-5 items-center">
                 <input

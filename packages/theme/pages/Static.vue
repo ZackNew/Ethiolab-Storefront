@@ -51,7 +51,7 @@ import {
   SfBreadcrumbs,
   SfHeading,
 } from '@storefront-ui/vue';
-import { computed } from '@vue/composition-api';
+import { computed, onMounted } from '@vue/composition-api';
 import { useCms } from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core';
 export default {
@@ -90,6 +90,9 @@ export default {
     const changeActivePage = async (title) => {
       $router.push(`/page/${(title || '').toLowerCase().replaceAll(' ', '-')}`);
     };
+    onMounted(async () => {
+      await searchCms();
+    });
     return { changeActivePage, activePage, staticPages };
   },
   data() {
@@ -159,6 +162,4 @@ export default {
     }
   }
 }
-
-
 </style>

@@ -10,7 +10,7 @@
         @mouseover="hoverHandler('Products')"
         @mouseleave="hoverOutHandler"
       >
-        Products
+        Categories
       </h4>
       <h4
         :class="contents.id === '2' ? 'text-primary' : 'text-secondary'"

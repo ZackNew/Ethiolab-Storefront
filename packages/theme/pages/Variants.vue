@@ -33,7 +33,7 @@
         </div>
         <div class="md:col-span-6">
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
-          <div class="bg-[#EBEBEB] p-2">
+          <div class="bg-[#EBEBEB] p-2 flex justify-between">
             <h3 class="text-secondary text-xl">
               <span class="font-semibold mr-2 p-2">Price </span
               >{{ priceRange }} /

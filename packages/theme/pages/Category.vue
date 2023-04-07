@@ -236,7 +236,7 @@
             <!-- <CategoryFeature /> -->
             <div v-if="subcategories">
               <h3
-                class="pb-2 text-secondary"
+                class="text-secondary"
                 :style="!isDarkMode ? '' : 'color: white'"
               >
                 Featured
@@ -247,9 +247,12 @@
                 v-for="(cat, i) in rawCategoryTree && rawCategoryTree"
                 :key="i"
               > -->
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3 mb-5">
-                <div v-for="(subCat, i) in subcategories" :key="subCat.slug">
-                  <div v-if="i < limitSub">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-1 mb-2">
+                <div
+                  v-for="subCat in subcategories.slice(0, limitSub)"
+                  :key="subCat.slug"
+                >
+                  <div>
                     <nuxt-link :to="`/s/${subCat.slug}`">
                       <img
                         :src="subCat.image"
@@ -293,7 +296,7 @@
           </LazyHydrate>
 
           <h3
-            class="mt-8 pb-2 mb-3 text-center text-secondary"
+            class="mt-8 pb-1 mb-1 text-secondary"
             :style="!isDarkMode ? '' : 'color: white'"
           >
             Products Under This Category
@@ -306,8 +309,11 @@
               tag="div"
               class="grid grid-cols-1 md:grid-cols-3 gap-2"
             >
-              <div v-for="(product, i) in allProducts" :key="product._id">
-                <template v-if="i < limit">
+              <div
+                v-for="product in allProducts.slice(0, limit)"
+                :key="product._id"
+              >
+                <template>
                   <ProductCard
                     :id="product._id"
                     v-e2e="'category-product-card'"
