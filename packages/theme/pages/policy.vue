@@ -51,7 +51,7 @@ import {
   SfBreadcrumbs,
   SfHeading,
 } from '@storefront-ui/vue';
-import { computed } from '@vue/composition-api';
+import { computed, onMounted } from '@vue/composition-api';
 import { useCms } from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core';
 export default {
@@ -95,6 +95,9 @@ export default {
         `/policy/${(title || '').toLowerCase().replaceAll(' ', '-')}`
       );
     };
+    onMounted(async () => {
+      await searchCms();
+    });
     return { changeActivePage, activePage, policyPages };
   },
   data() {

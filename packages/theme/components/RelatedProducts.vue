@@ -44,13 +44,15 @@
           <div v-for="product in products" :key="product.productId">
             <div class="bg-white max-w-48 min-w-48 mr-3 pb-4 items-center">
               <div class="p-3">
-                <img
-                  :src="
-                    product.productAsset ? product.productAsset.preview : ''
-                  "
-                  class="w-full max-h-[20rem] min-h-[20rem] object-cover"
-                  alt="image"
-                />
+                <nuxt-link :to="`/v/${product.slug}`">
+                  <img
+                    :src="
+                      product.productAsset ? product.productAsset.preview : ''
+                    "
+                    class="w-full max-h-[20rem] min-h-[20rem] object-cover"
+                    alt="image"
+                  />
+                </nuxt-link>
               </div>
               <h1
                 class="mx-3 text-primary text-sm md:text-2xl font-bold md:min-h-[5rem] text-center"
@@ -62,7 +64,9 @@
                 class="text-secondary font-bold mx-3 text-center"
               >
                 {{
-                 parseFloat(String(product.price.min).slice(0, -2)).toLocaleString()   +
+                  parseFloat(
+                    String(product.price.min).slice(0, -2)
+                  ).toLocaleString() +
                   '.' +
                   String(product.price.min).slice(-2)
                 }}

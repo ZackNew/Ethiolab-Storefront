@@ -1,9 +1,9 @@
 <template>
   <div class="wrap">
     <!-- <h3 class="font-bold mt-12 pb-2 border-b border-gray-200">Best Seller</h3> -->
-    <div class="p-2 md:p-3">
+    <div class="md:p-3">
       <div v-if="bestSellers.length !== 0" class="w-full text-center">
-        <h1 class="md:text-4xl text-secondary">Best Seller</h1>
+        <h1 class="md:text-3xl text-secondary md:mb-3">Best Seller</h1>
       </div>
     </div>
 
@@ -235,7 +235,7 @@ export default defineComponent({
 
 <style scoped>
 .carousel-wrapper {
-  padding: 40px;
+  padding: 0px 40px;
 }
 .arrows {
   background-color: none;

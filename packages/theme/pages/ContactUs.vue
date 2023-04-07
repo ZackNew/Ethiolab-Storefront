@@ -46,6 +46,7 @@
             Contact Us
           </h2>
           <form @submit.prevent="handleSubmit(handleFormSubmit)">
+            <input type="hidden" name="csrf_token" v-model="form.csrfToken" />
             <div class="form px-5 md:px-0">
               <ValidationProvider
                 name="firstName"
@@ -392,7 +393,20 @@ export default {
       message: '',
       customerEmail: '',
       customerName: '',
+      csrfToken: '',
     });
+
+    const generateCSRFToken = () => {
+      let token = '';
+      const characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      for (let i = 0; i < 32; i++) {
+        token += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
+      }
+      return token;
+    };
 
     const sendMessage = async () => {
       sendContactUs({
@@ -403,6 +417,7 @@ export default {
         message: form.value.message,
         customerName: form.value.customerName,
         customerEmail: form.value.customerEmail,
+        csrfToken: form.value.csrfToken,
       });
       showToast('Sent!');
 
@@ -441,6 +456,8 @@ export default {
 
     onMounted(async () => {
       await load();
+      const csrfToken = generateCSRFToken();
+      form.value.csrfToken = csrfToken;
     });
 
     return {

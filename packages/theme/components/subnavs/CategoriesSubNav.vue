@@ -36,7 +36,7 @@
             'bg-[#f5f5f5]': !isDarkMode,
             'bg-dark_accent': isDarkMode,
           }"
-          class="min-h-[90%] w-[28rem] absolute top-12 broder border-2 border-[#aaaaaa] z-50"
+          class="min-h-[90%] min-w-[28rem] w-auto absolute top-12 broder border-2 border-[#aaaaaa] z-50"
           @mouseover="(subHovered = true), (addBorder = true)"
           @mouseleave="(subHovered = false), (addBorder = false)"
         >

@@ -70,7 +70,7 @@
             </template>
           </LazyHydrate> -->
           <div
-            class="md:col-span-8 flex justify-center"
+            class="md:col-span-8 flex justify-center md:justify-end"
             v-if="heroSection.link"
           >
             <iframe
@@ -85,7 +85,7 @@
           </div>
           <div class="md:col-span-3">
             <div
-              class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col md:gap-1 gap3"
+              class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col md:gap-1"
             >
               <div v-for="sale in bigSale" :key="sale.sku">
                 <div>
