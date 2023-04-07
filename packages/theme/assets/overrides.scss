@@ -78,6 +78,9 @@
   }
 }
 .specialPhone .input-tel {
+  &__label {
+    display: none;
+  }
   margin-top: -3px !important;
 }
 
