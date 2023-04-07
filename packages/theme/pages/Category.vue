@@ -211,7 +211,7 @@
                       ? cat.featuredAsset.preview
                       : '/categories/cat2.jpeg'
                   "
-                  class="object-contain rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[22%] min-w-[22%]"
+                  class="object-cover rounded-r rounded-xl my-auto max-h-40 min-h-40 bg-light max-w-[22%] min-w-[22%]"
                 />
                 <div class="w-full overflow-auto no-scrollbar">
                   <p

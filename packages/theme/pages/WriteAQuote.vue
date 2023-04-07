@@ -4,13 +4,19 @@
       class="card shadow-lg w-full md:w-2/5 font-bold p-5 rounded border border-[#a1a1a1] md:mr-5 md:ml-10 mx-auto mx-3"
     >
       <h3 class="mb-5 text-secondary">Request a Quote</h3>
-      <div class="bg-[#f1f1f1] mt-5 p-3">
-        <p>
+      <div
+        class="mt-5 p-3"
+        :class="isDarkMode ? 'bg-dark_accent' : 'bg-[#f1f1f1]'"
+      >
+        <p :class="isDarkMode ? 'text-[#ffffff]' : 'text-dark_accent'">
           Follow these steps to request a quote and out team will get back to
           you.
         </p>
         <div class="mt-16 px-5">
-          <div class="mb-3 flex bg-[#E1E1E1] p-3">
+          <div
+            class="mb-3 flex p-3"
+            :class="isDarkMode ? 'bg-[#1d2f33]' : 'bg-[#E1E1E1]'"
+          >
             <div class="circleBg bg-secondary relative">
               <div class="icon-container">
                 <SfIcon
@@ -22,9 +28,17 @@
                 />
               </div>
             </div>
-            <p class="my-auto">Add Items To Your Cart</p>
+            <p
+              class="my-auto"
+              :class="isDarkMode ? 'text-[#ffffff]' : 'text-dark_accent'"
+            >
+              Add Items To Your Cart
+            </p>
           </div>
-          <div class="mb-3 flex bg-[#E1E1E1] p-3">
+          <div
+            class="mb-3 flex p-3"
+            :class="isDarkMode ? 'bg-[#1d2f33]' : 'bg-[#E1E1E1]'"
+          >
             <div class="circleBg bg-secondary relative">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -42,9 +56,17 @@
               </svg>
             </div>
 
-            <p class="my-auto">Click Request a quote from the Bottom.</p>
+            <p
+              class="my-auto"
+              :class="isDarkMode ? 'text-[#ffffff]' : 'text-dark_accent'"
+            >
+              Click Request a quote from the Bottom.
+            </p>
           </div>
-          <div class="mb-10 flex bg-[#E1E1E1] p-3">
+          <div
+            class="mb-10 flex p-3"
+            :class="isDarkMode ? 'bg-[#1d2f33]' : 'bg-[#E1E1E1]'"
+          >
             <div class="circleBg bg-secondary relative">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -62,10 +84,20 @@
               </svg>
             </div>
 
-            <p class="my-auto">Click send!</p>
+            <p
+              class="my-auto"
+              :class="isDarkMode ? 'text-[#ffffff]' : 'text-dark_accent'"
+            >
+              Click send!
+            </p>
           </div>
         </div>
-        <p class="mt-8">or fill the form if you have a special quote</p>
+        <p
+          class="mt-8"
+          :class="isDarkMode ? 'text-[#ffffff]' : 'text-dark_accent'"
+        >
+          or fill the form if you have a special quote
+        </p>
       </div>
     </div>
     <!-- <div class="p-3">
@@ -124,11 +156,11 @@
               id="email"
               type="text"
               v-model="data.fromEmail"
-              class="text-white w-[80%] mt-1 border"
+              class="w-[80%] mt-1 border text-sm px-1 py-2"
               :class="
                 isDarkMode
-                  ? 'bg-dark_accent border-light_accent'
-                  : 'bg-light_accent border-dark_accent'
+                  ? 'bg-dark_accent border-light_accent text-white'
+                  : 'bg-light_accent border-dark_accent text-dark_accent'
               "
             />
             <h3 v-if="errors" class="text-[#dd0000] text-xs mt-1">
@@ -159,11 +191,11 @@
               id="company-name"
               type="text"
               v-model="data.fromName"
-              class="text-white w-[80%] mt-1 border border-dark_accent"
+              class="w-[80%] mt-1 border border-dark_accent text-sm px-1 py-2"
               :class="
                 isDarkMode
-                  ? 'bg-dark_accent border-[#ffffff]'
-                  : 'bg-light_accent border-dark_accent'
+                  ? 'bg-dark_accent border-[#ffffff] text-white'
+                  : 'bg-light_accent border-dark_accent text-dark_accent'
               "
             />
             <h3 v-if="errors" class="text-[#dd0000] text-xs mt-1">
@@ -195,11 +227,11 @@
               id="subject"
               type="text"
               v-model="data.subject"
-              class="text-white w-[80%] mt-1 border border-dark_accent"
+              class="w-[80%] mt-1 border border-dark_accent text-sm px-1 py-2"
               :class="
                 isDarkMode
-                  ? 'bg-dark_accent border-[#ffffff]'
-                  : 'bg-light_accent border-dark_accent'
+                  ? 'bg-dark_accent border-[#ffffff] text-white'
+                  : 'bg-light_accent border-dark_accent text-dark_accent'
               "
             />
             <h3 v-if="errors" class="text-[#dd0000] text-xs mt-1">
@@ -221,10 +253,6 @@
             valid-color="#3860a7"
             default-country-code="ET"
             class="specialPhone form__element form__element--half form__element--half-even my-3 w-[80%]"
-            :style="{
-              backgroundColor: isDarkMode ? '#182533 !important' : '#fff',
-              color: isDarkMode ? '#fff !important' : '#182533',
-            }"
           />
           <!-- <SfInput
           label="Phone Number"
@@ -256,11 +284,11 @@
               id="fname"
               type="text"
               v-model="data.firstName"
-              class="text-white w-[80%] mt-1 border border-dark_accent"
+              class="w-[80%] mt-1 border border-dark_accent text-sm px-1 py-2"
               :class="
                 isDarkMode
-                  ? 'bg-dark_accent border-[#ffffff]'
-                  : 'bg-light_accent border-dark_accent'
+                  ? 'bg-dark_accent border-[#ffffff] text-white'
+                  : 'bg-light_accent border-dark_accent text-dark_accent'
               "
             />
             <h3 v-if="errors" class="text-[#dd0000] text-xs mt-1">
@@ -292,11 +320,11 @@
               id="lname"
               type="text"
               v-model="data.lastName"
-              class="text-white w-[80%] mt-1 border border-dark_accent"
+              class="w-[80%] mt-1 border border-dark_accent text-sm px-1 py-2"
               :class="
                 isDarkMode
-                  ? 'bg-dark_accent border-[#ffffff]'
-                  : 'bg-light_accent border-dark_accent'
+                  ? 'bg-dark_accent border-[#ffffff] text-white'
+                  : 'bg-light_accent border-dark_accent text-dark_accent'
               "
             />
             <h3 v-if="errors" class="text-[#dd0000] text-xs mt-1">
@@ -315,10 +343,10 @@
             id="quote"
             placeholder="Your special quote."
             cols="20"
-            class="tarea text-sm rounded mt-4 text-dark_accent w-[80%]"
+            class="tarea text-sm rounded mt-4 w-[80%]"
             :class="
               isDarkMode
-                ? 'bg-dark_accent border-light_accent'
+                ? 'bg-dark_accent border-light_accent text-[#ffffff]'
                 : 'bg-light_accent border-dark_accent'
             "
             v-model="data.msg"

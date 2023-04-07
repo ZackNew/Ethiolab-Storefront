@@ -85,7 +85,7 @@
           class="rounded-md card shadow-lg my-4 flex mr-5 max-h-40"
         >
           <img
-            class="rounded-xl my-auto max-h-40 min-h-40 max-w-[25%] min-w-[25%]"
+            class="rounded-r rounded-xl my-auto max-h-40 min-h-40 max-w-[25%] min-w-[25%]"
             :src="categoryImg || '/categories/empty_image.png'"
             alt=""
           />
