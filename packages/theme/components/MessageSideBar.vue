@@ -4,7 +4,7 @@
     v-if="isMessageSideBarOpen"
   >
     <div
-      class="invisible lg:visible h-20 max-w-[20%] w-full bg-[#000000] text-white rounded-lg flex items-center fixed"
+      class="invisible lg:visible h-20 w-[20rem] bg-secondary text-white rounded-t flex items-center fixed"
     >
       <img
         src="Favicon.png"
@@ -13,28 +13,28 @@
         width="40px"
         class="bg-white mx-4 my-2 rounded-full"
       />
-      <h3 class="font-bold text-[20px]  whitespace-nowrap">Ethiolab Support</h3> 
-    
+      <h3 class="font-bold text-[20px] whitespace-nowrap">Ethiolab Support</h3>
     </div>
     <div class="my-24">
       <div class="mx-3" v-for="(message, i) in messages" :key="i">
         <div
           v-if="!message.isFromAdmin"
-          class="bg-[#000000] min-h-[50px] w-[75%] ml-[24%] my-2 rounded-2xl"
+          class="bg-[#ecfeff] min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"
         >
-          <p class="text-right mr-4 text-white">{{ message.msg }}</p>
+          <p class="text-right mr-4 mt-1">{{ message.msg }}</p>
         </div>
-        <div v-else class="bg-[#f4f6f8] min-h-[50px] my-2 w-[75%] rounded-2xl">
-          
+        <div v-else class="bg-[#f4f6ff] min-h-[50px] my-2 w-[75%] rounded-lg">
           <SfIcon
-        icon="profile"
-        size="md"
-        color="green-primary"
-        viewBox="0 0 24 24"
-        :coverage="1"
-        class="float-left"
-      />
-          <span class="text-left  text-[#000000] justify-center">{{ message.msg }}</span>
+            icon="profile"
+            size="md"
+            color="green-primary"
+            viewBox="0 0 24 24"
+            :coverage="1"
+            class="float-left"
+          />
+          <span class="text-left text-[#000000] justify-center mt-1">{{
+            message.msg
+          }}</span>
         </div>
       </div>
     </div>
@@ -50,13 +50,13 @@
     /> -->
     <form
       @submit.prevent="sendMessageToAdmin"
-      class="flex items-center fixed invisible lg:visible min-w-full bottom-14"
+      class="flex items-center fixed invisible lg:visible min-w-full bottom-[60px]"
     >
       <input
         type="text"
         v-model="messageToSend"
         placeholder="write a message"
-        class="min-w-[18%] h-12 px-4 rounded-xl shadow-md mr-2"
+        class="min-w-[17.5rem] h-10 px-4 rounded shadow-md mr-2"
       />
       <button class="sendButton" type="submit">
         <!-- <img class="w-[14%] overflow-hidden" src="sendr.png" alt="send icon" /> -->
@@ -66,7 +66,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-9 h-9"
+          class="w-6 h-6 text-secondary"
         >
           <path
             stroke-linecap="round"
@@ -101,7 +101,7 @@ export default {
   name: 'messageSideBar',
   props: ['messages'],
   components: {
-    SfIcon
+    SfIcon,
   },
   data() {
     return {

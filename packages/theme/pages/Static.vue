@@ -91,7 +91,14 @@ export default {
       $router.push(`/page/${(title || '').toLowerCase().replaceAll(' ', '-')}`);
     };
     onMounted(async () => {
-      await searchCms();
+      await searchCms([
+        'HERO_SECTION',
+        'POPUP',
+        'STATIC',
+        'ADVERTISEMENT',
+        'POLICIES',
+        'BIG_SALE',
+      ]);
     });
     return { changeActivePage, activePage, staticPages };
   },

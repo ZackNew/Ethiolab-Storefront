@@ -983,6 +983,7 @@ export default {
     };
 
     const cashComplete = async () => {
+      console.log('yes yes yes', paymentDetail);
       changeState();
       await load();
       setCart();
