@@ -15,12 +15,16 @@
           -->
           <template #logo>
             <nuxt-link :to="localePath('/')">
-              <SfImage
+              <!-- <SfImage
                 :src="logo || ''"
                 alt="EthioLab"
                 width="400"
                 class="sf-header__logo-image"
-              />
+              /> -->
+              <!-- <img :src="logo || ''" alt="" width="400px" /> -->
+              <div class="image-container min-w-[290px]">
+                <div class="background-image" ref="backgroundImage"></div>
+              </div>
             </nuxt-link>
           </template>
           <template #aside>
@@ -213,6 +217,18 @@ export default {
     logo() {
       return this.$store.state.companyDetails.companyInformation?.icon?.preview;
     },
+  },
+  mounted() {
+    // Create a new Image element
+    const img = new Image();
+
+    // Set the source of the image to your dynamic URL
+    img.src = this.logo;
+
+    // When the image is loaded, set it as the background-image of the container
+    img.onload = () => {
+      this.$refs.backgroundImage.style.backgroundImage = `url(${img.src})`;
+    };
   },
   methods: {
     searchInputHandle() {
@@ -610,6 +626,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.image-container {
+  padding-top: 5px;
+  width: 290px;
+  height: 90px;
+}
+
+.background-image {
+  width: 100%;
+  height: 80%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 .sf-header {
   --header-width: 90%;
   --header-padding: var(--spacer-sm);
