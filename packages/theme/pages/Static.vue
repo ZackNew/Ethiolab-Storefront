@@ -6,7 +6,7 @@
     />
     <SfContentPages
       :active="$t(activePage)"
-      :title="$t(activePage)"
+      :title="activePage"
       @click:change="changeActivePage"
     >
       <SfContentPage
@@ -14,32 +14,9 @@
         :key="key"
         :title="$t(page.name)"
       >
-        <template
-          v-if="page.description[0] && typeof page.description[0] === 'string'"
-        >
-          <SfHeading :title="$t(page.name)" :level="3" />
-          <p
-            class="paragraph paragraph--without-tab"
-            v-html="page.description"
-          ></p>
-        </template>
-        <template v-else>
-          <SfTabs :open-tab="1">
-            <SfTab
-              v-for="(tab, index) in page.description"
-              :key="index"
-              :title="tab.tabName"
-            >
-              <p
-                v-for="(paragraph, i) in tab.tabContent"
-                :key="i"
-                class="paragraph"
-              >
-                {{ paragraph }}
-              </p>
-            </SfTab>
-          </SfTabs>
-        </template>
+        <div v-if="page.description">
+          <p v-html="page.description"></p>
+        </div>
       </SfContentPage>
     </SfContentPages>
   </div>
@@ -51,7 +28,7 @@ import {
   SfBreadcrumbs,
   SfHeading,
 } from '@storefront-ui/vue';
-import { computed, onMounted } from '@vue/composition-api';
+import { computed, onMounted, ref } from '@vue/composition-api';
 import { useCms } from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core';
 export default {
@@ -62,52 +39,23 @@ export default {
     SfBreadcrumbs,
     SfHeading,
   },
-  head() {
-    return {
-      title: this.activePage,
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Home page description',
-        },
-      ],
-    };
-  },
   setup(props, context) {
-    const { $router, $route } = context.root;
     const { search: searchCms, getCms } = useCms();
     const staticPages = computed(() => JSON.parse(getCms.value[2].content));
-    const activePage = computed(() => {
-      const { pageName } = $route.params;
-      if (pageName) {
-        return (
-          pageName.charAt(0).toUpperCase() + pageName.slice(1)
-        ).replaceAll('-', ' ');
-      }
-      return 'About';
-    });
-    const changeActivePage = async (title) => {
-      $router.push(`/page/${(title || '').toLowerCase().replaceAll(' ', '-')}`);
+    const activePage = ref('ABOUT');
+    const breadcrumbs = computed(() => [
+      { text: 'Home', route: { link: '/' } },
+      { text: activePage.value, route: { link: '#' } },
+    ]);
+    let contents = ref('');
+    const changeActivePage = (title) => {
+      activePage.value = title;
+      contents = staticPages.value.filter((page) => page.name == title);
     };
-    onMounted(async () => {
-      await searchCms([
-        'HERO_SECTION',
-        'POPUP',
-        'STATIC',
-        'ADVERTISEMENT',
-        'POLICIES',
-        'BIG_SALE',
-      ]);
-    });
-    return { changeActivePage, activePage, staticPages };
+    return { staticPages, changeActivePage, contents, activePage, breadcrumbs };
   },
   data() {
     return {
-      breadcrumbs: [
-        { text: 'Home', route: { link: '#' } },
-        { text: this.activePage, route: { link: '#' } },
-      ],
       pages: [
         {
           name: 'About',

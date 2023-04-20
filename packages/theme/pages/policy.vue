@@ -1,45 +1,22 @@
 <template>
-  <div id="policy">
+  <div id="static">
     <SfBreadcrumbs
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
     <SfContentPages
       :active="$t(activePage)"
-      :title="$t(activePage)"
+      :title="activePage"
       @click:change="changeActivePage"
     >
       <SfContentPage
-        v-for="(page, key) in policyPages || pages"
+        v-for="(page, key) in staticPages || pages"
         :key="key"
         :title="$t(page.name)"
       >
-        <template
-          v-if="page.description[0] && typeof page.description[0] === 'string'"
-        >
-          <SfHeading :title="$t(page.name)" :level="3" />
-          <p
-            class="paragraph paragraph--without-tab"
-            v-html="page.description"
-          ></p>
-        </template>
-        <template v-else>
-          <SfTabs :open-tab="1">
-            <SfTab
-              v-for="(tab, index) in page.description"
-              :key="index"
-              :title="tab.tabName"
-            >
-              <p
-                v-for="(paragraph, i) in tab.tabContent"
-                :key="i"
-                class="paragraph"
-              >
-                {{ paragraph }}
-              </p>
-            </SfTab>
-          </SfTabs>
-        </template>
+        <div v-if="page.description">
+          <p v-html="page.description"></p>
+        </div>
       </SfContentPage>
     </SfContentPages>
   </div>
@@ -51,71 +28,45 @@ import {
   SfBreadcrumbs,
   SfHeading,
 } from '@storefront-ui/vue';
-import { computed, onMounted } from '@vue/composition-api';
+import { computed, onMounted, ref } from '@vue/composition-api';
 import { useCms } from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core';
 export default {
-  name: 'policy',
+  name: 'Static',
   components: {
     SfContentPages,
     SfTabs,
     SfBreadcrumbs,
     SfHeading,
   },
-  head() {
-    return {
-      title: this.activePage,
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Policy page description',
-        },
-      ],
-    };
-  },
   setup(props, context) {
-    const { $router, $route } = context.root;
     const { search: searchCms, getCms } = useCms();
-    const policyPages = computed(() => JSON.parse(getCms.value[4].content));
-    // onSSR(async () => {
-    //   await searchCms('POLICIES')
-    // });
-    const activePage = computed(() => {
-      const { pageName } = $route.params;
-      if (pageName) {
-        return (
-          pageName.charAt(0).toUpperCase() + pageName.slice(1)
-        ).replaceAll('-', ' ');
-      }
-      return 'Return';
-    });
-    const changeActivePage = async (title) => {
-      $router.push(
-        `/policy/${(title || '').toLowerCase().replaceAll(' ', '-')}`
-      );
+    const staticPages = computed(() => JSON.parse(getCms.value[4].content));
+    console.log('there are', getCms.value);
+    const activePage = ref('RETURN');
+    const breadcrumbs = computed(() => [
+      { text: 'Home', route: { link: '/' } },
+      { text: activePage.value, route: { link: '#' } },
+    ]);
+    let contents = ref('');
+    const changeActivePage = (title) => {
+      activePage.value = title;
+      contents = staticPages.value.filter((page) => page.name == title);
     };
-    onMounted(async () => {
-      await searchCms();
-    });
-    return { changeActivePage, activePage, policyPages };
+    return { staticPages, changeActivePage, contents, activePage, breadcrumbs };
   },
   data() {
     return {
-      breadcrumbs: [
-        { text: 'Home', route: { link: '#' } },
-        { text: this.activePage, route: { link: '#' } },
-      ],
       pages: [
         {
-          name: 'Return',
+          name: 'About',
           description: [
             'Ethiolab is a firm established in 2012 with the objective of supplying quality equipment from branded partners for research and development, testing, measuring and laboratory analysis applications.',
             ' We have solutions for R&D institutions, universities, production industries, and controlling & regulating authorities. On our eCommerce platform, we carry several portable measuring and testing devices, laboratory and research consumables, instruments and many more ranges for our partners and customers. In addition to our high equipment quality our after sales service is a source of trust by our clients.',
           ],
         },
         {
-          name: 'Shipping',
+          name: 'Mission',
           description: [
             'Providing high quality and latest technology laboratory instruments from world leading companies to researchers and other interested parties with efficient pre and post sales service.',
             'Creating an alternative marketplace online where safe and reliable market transactions are carried out.',
@@ -123,13 +74,13 @@ export default {
           ],
         },
         {
-          name: 'Privacy',
+          name: 'Vision',
           description: [
             'To be the leading laboratory products supplier in Africa.',
           ],
         },
         {
-          name: 'Terms and Conditions',
+          name: 'Value',
           description: [
             'Our first principal is honesty in our engagements with clients to serve them in a manner that upholds our cultural values as Ethiopians, where a promise is highly consecrated above all. ',
             'We believe trust is everything in the business world; therefore, we encourage open communication with our employees as well as with our clients.',
@@ -144,7 +95,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~@storefront-ui/vue/styles';
-#policy {
+#static {
   box-sizing: border-box;
   @include for-desktop {
     max-width: 1272px;
