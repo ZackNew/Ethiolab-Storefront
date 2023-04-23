@@ -482,16 +482,10 @@ export default {
           slug: slug,
         },
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      let baseUrl = process.env.GRAPHQL_API;
-      const reviewsListResponse = await axios.post(baseUrl, body, options);
+      const reviewsListResponse = await axios.post('/api/shop', body);
 
-      var reviewsList = reviewsListResponse.data?.data?.product.reviews.items;
+      var reviewsList =
+        reviewsListResponse.data?.data?.data?.product.reviews.items;
       if (this.isAuthenticated) {
         return this.setThisUsersReview(reviewsList);
       }
@@ -590,8 +584,8 @@ export default {
           authorization: `Bearer ${token}`,
         },
       };
-      const productVariant = await axios.post(baseUrl, body, options);
-      this.product = productVariant?.data?.data?.product;
+      const productVariant = await axios.post('/api/shop', body);
+      this.product = productVariant?.data?.data?.data?.product;
       this.loading = false;
     },
   },

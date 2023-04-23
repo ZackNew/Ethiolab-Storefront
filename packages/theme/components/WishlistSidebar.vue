@@ -178,8 +178,8 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      await axios.post(baseUrl, body, options).then((res) => {
-        const productsList = res.data.data.products.items;
+      await axios.post('/api/shop', body).then((res) => {
+        const productsList = res.data.data.data?.products?.items;
         const empArray = [];
         productsList.forEach((p) => {
           empArray.push({
