@@ -452,7 +452,9 @@ export default {
           'X-CSRF-TOKEN': generateCSRFToken(),
         },
       };
+      console.log('gb');
       await axios.post('/api/shop', body, options);
+      console.log('lb');
       showToast('Sent!');
 
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
