@@ -61,7 +61,6 @@
       <button class="sendButton" type="submit">
         <!-- <img class="w-[14%] overflow-hidden" src="sendr.png" alt="send icon" /> -->
         <svg
-          xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           stroke-width="1.5"

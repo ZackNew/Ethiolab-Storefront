@@ -2,7 +2,6 @@
   <ul class="mx-3 md:mx-8 my-4">
     <li class="flex">
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
@@ -19,7 +18,6 @@
     </li>
     <li class="flex">
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
@@ -36,7 +34,6 @@
     </li>
     <li class="flex">
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
@@ -53,7 +50,6 @@
     </li>
     <li class="flex">
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
@@ -70,7 +66,6 @@
     </li>
     <li class="flex">
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"

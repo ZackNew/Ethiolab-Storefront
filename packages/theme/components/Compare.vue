@@ -30,7 +30,6 @@
             class="bg-white w-10 h-10 md:w-16 md:h-14 border border-secondary"
           />
           <svg
-            xmlns="http://www.w3.org/2000/svg"
             fill="#c2c2c2"
             viewBox="0 0 24 24"
             stroke-width="1.5"

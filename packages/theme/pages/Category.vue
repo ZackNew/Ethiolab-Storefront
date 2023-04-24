@@ -963,36 +963,34 @@ export default {
           },
         };
         axios.post(pbaseUrl, pbody, poptions).then((res) => {
-          const produ = res.data.data.data?.bestSellersInCategory.map(
-            (product) => {
-              let cref = [];
-              product?.collections?.forEach((x) => {
-                cref.push(String(x?.id));
-              });
-              const image =
-                process.env.GRAPHQL_API.split('/shop-api')[0] +
-                `/assets/${product?.image}`;
-              const price =
-                String(product?.priceWithTax).slice(0, -2) +
-                '.' +
-                String(product?.priceWithTax).slice(-2);
-              const prod = {
-                _id: product?.id,
-                _variantId: product?.variantId,
-                _description: product?.description,
-                _categoriesRef: product?.collections,
-                name: product?.name,
-                images: image,
-                price: {
-                  original: price,
-                  current: price,
-                },
-                slug: product?.slug,
-                rating: product?.rating,
-              };
-              return prod;
-            }
-          );
+          const produ = res.data.data?.bestSellersInCategory.map((product) => {
+            let cref = [];
+            product?.collections?.forEach((x) => {
+              cref.push(String(x?.id));
+            });
+            const image =
+              process.env.GRAPHQL_API.split('/shop-api')[0] +
+              `/assets/${product?.image}`;
+            const price =
+              String(product?.priceWithTax).slice(0, -2) +
+              '.' +
+              String(product?.priceWithTax).slice(-2);
+            const prod = {
+              _id: product?.id,
+              _variantId: product?.variantId,
+              _description: product?.description,
+              _categoriesRef: product?.collections,
+              name: product?.name,
+              images: image,
+              price: {
+                original: price,
+                current: price,
+              },
+              slug: product?.slug,
+              rating: product?.rating,
+            };
+            return prod;
+          });
           this.bestSellings = produ;
         });
       });
