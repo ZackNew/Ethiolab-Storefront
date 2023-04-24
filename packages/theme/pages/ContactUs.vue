@@ -46,7 +46,6 @@
             Contact Us
           </h2>
           <form @submit.prevent="handleSubmit(handleFormSubmit)">
-            <input type="hidden" name="csrf_token" v-model="form.csrfToken" />
             <div class="form px-5 md:px-0">
               <ValidationProvider
                 name="firstName"
@@ -393,7 +392,6 @@ export default {
       message: '',
       customerEmail: '',
       customerName: '',
-      csrfToken: '',
     });
 
     const generateCSRFToken = () => {
@@ -454,9 +452,10 @@ export default {
           'X-CSRF-TOKEN': generateCSRFToken(),
         },
       };
-      await axios.post('/api/shop', body, options).then((res) => {
-        showToast('Sent!');
-      });
+      console.log('gb');
+      await axios.post('/api/shop', body, options);
+      console.log('lb');
+      showToast('Sent!');
 
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
