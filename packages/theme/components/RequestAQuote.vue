@@ -84,7 +84,6 @@ import {
   useQuote,
 } from '@vue-storefront/vendure';
 import test from '~/composables/test';
-import axios from 'axios';
 import gql from 'graphql-tag';
 import { print } from 'graphql';
 

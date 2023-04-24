@@ -1144,7 +1144,6 @@ export default defineComponent({
         // if(form.value.company === )
         // showToast("Perfect!")
 
-        let baseUrl = process.env.GRAPHQL_API;
         let pbody = {
           query: `mutation signUp($email: String!, $password: String!,$firstName: String!,$lastName: String!,$phoneNumber: String!,$fax: String!,$company: String!,
               $country: String!,$city: String!,$state: String!,$street: String!,$job: String!,$tin: String!) {
@@ -1169,14 +1168,8 @@ export default defineComponent({
             tin: form.value.tin,
           },
         };
-        let poptions = {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        };
-        await axios.post(baseUrl, pbody, poptions).then((res) => {
-          if (res.data.data.registerEtechCustomer.success === true) {
+        await axios.post('/api/shop', pbody).then((res) => {
+          if (res.data.data.data.registerEtechCustomer.success === true) {
             showToast('Registration Successfull');
             root.$router.push('/signin');
             isLoading.value = false;

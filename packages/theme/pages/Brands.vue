@@ -431,7 +431,6 @@ export default {
     },
     async getProducts() {
       const id = this.$route.params.id;
-      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `query getProductByBrand($id: ID!){
           brand(id: $id){
@@ -474,18 +473,11 @@ export default {
           id: id,
         },
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${token}`,
-        },
-      };
-      let baseUrl = process.env.GRAPHQL_API;
-      const brandResult = await axios.post(baseUrl, body, options);
+      const brandResult = await axios.post('/api/shop', body);
       this.loading = false;
-      this.brand = brandResult.data.data.brand;
-      this.brandImage = brandResult.data.data.brand.icon?.preview;
-      this.products = brandResult.data.data.brand.products;
+      this.brand = brandResult.data.data.data?.brand;
+      this.brandImage = brandResult.data.data.data?.brand.icon?.preview;
+      this.products = brandResult.data.data.data?.brand.products;
     },
     clearFilters() {
       this.filtersClicked = [];

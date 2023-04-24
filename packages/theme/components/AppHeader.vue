@@ -223,7 +223,6 @@ export default {
       if (this.searchText === '') {
         return;
       } else {
-        const baseUrl = process.env.GRAPHQL_API;
         const body = {
           query: `query getSearched($text: String!){
           simpleSearch(text: $text){
@@ -252,14 +251,8 @@ export default {
             text: this.searchText,
           },
         };
-        const options = {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        };
-        axios.post(baseUrl, body, options).then((res) => {
-          const results = res.data.data?.simpleSearch.map((result) => {
+        axios.post('/api/shop', body).then((res) => {
+          const results = res.data.data.data?.simpleSearch.map((result) => {
             let cref = [];
             result?.collections?.forEach((x) => {
               cref.push({ id: x.id, name: x.name, slug: x.slug });

@@ -88,7 +88,6 @@ import NewCarousel from './NewCarousel.vue';
 import BestSellerSingle from './BestSellerSingle.vue';
 import ProductCard from './ProductCard.vue';
 import AOS from 'aos';
-import axios from 'axios';
 import 'aos/dist/aos.css';
 import { useWishlist, useCart } from '@vue-storefront/vendure';
 export default defineComponent({

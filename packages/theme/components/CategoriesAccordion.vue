@@ -154,7 +154,6 @@ export default {
   },
   methods: {
     async getBrandAndIndustry() {
-      const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `query{
           brands{
@@ -167,15 +166,9 @@ export default {
           }
         }`,
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      await axios.post(baseUrl, body, options).then((res) => {
-        this.brands = res.data.data?.brands;
-        this.industries = res.data.data?.industries;
+      await axios.post('/api/shop', body).then((res) => {
+        this.brands = res.data.data.data?.brands;
+        this.industries = res.data.data.data?.industries;
       });
     },
   },

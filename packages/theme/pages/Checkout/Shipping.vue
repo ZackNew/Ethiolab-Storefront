@@ -207,8 +207,8 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      await axios.post(baseUrl, body, options).then((res) => {
-        this.cities = res.data.data.shippingAvailableTo;
+      await axios.post('/api/shop', body).then((res) => {
+        this.cities = res.data.data.data.shippingAvailableTo;
       });
     },
   },
@@ -255,19 +255,11 @@ export default {
                   } 
                 }`,
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          authorization: `Bearer ${cookieSetup.value}`,
-        },
-      };
-      let baseUrl = process.env.GRAPHQL_API;
 
       await axios
-        .post(baseUrl, body, options)
+        .post('/api/shop', body)
         .then((res) => {
-          if (res.data.data?.setSelfPickupAsShippingMethod?.success) {
+          if (res.data.data.data?.setSelfPickupAsShippingMethod?.success) {
             root.$router.push(root.localePath({ name: 'billing' }));
           } else {
             showToast('Something went wrong. Try again!');

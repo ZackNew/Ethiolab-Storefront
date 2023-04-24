@@ -95,8 +95,8 @@ export default {
           }
         }`,
       };
-      axios.post(baseUrl, body, options).then((res) => {
-        const test = res.data.data.getTestimonials.map((testimony) => {
+      axios.post('/api/shop', body).then((res) => {
+        const test = res.data.data.data.getTestimonials?.map((testimony) => {
           return {
             id: testimony.id,
             name: testimony.name,

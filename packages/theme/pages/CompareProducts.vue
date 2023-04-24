@@ -253,8 +253,6 @@ export default {
       const variantIds = products.map((p) => {
         return p.variantID;
       });
-      const baseUrl = process.env.GRAPHQL_API;
-      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `
         query getProductById($in: [String!], $eq: [String!]) {
@@ -304,15 +302,8 @@ export default {
         //   eq: ['11', '27', '25', '26', '28'],
         // },
       };
-      let options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          authorization: `Bearer ${token}`,
-        },
-      };
-      await axios.post(baseUrl, body, options).then((res) => {
-        const result = res.data.data?.products?.items;
+      await axios.post('/api/shop', body).then((res) => {
+        const result = res.data.data.data?.products?.items;
         const prod = [];
         result?.forEach((element) => {
           if (element?.variantList?.items?.length <= 1) {
