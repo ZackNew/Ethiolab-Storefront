@@ -409,17 +409,54 @@ export default {
     };
 
     const sendMessage = async () => {
-      sendContactUs({
-        phone_number: form.value.phoneNumber,
-        first_name: form.value.firstName,
-        last_name: form.value.lastName,
-        email: form.value.emailAddress,
-        message: form.value.message,
-        customerName: form.value.customerName,
-        customerEmail: form.value.customerEmail,
-        csrfToken: form.value.csrfToken,
+      // sendContactUs({
+      //   phone_number: form.value.phoneNumber,
+      //   first_name: form.value.firstName,
+      //   last_name: form.value.lastName,
+      //   email: form.value.emailAddress,
+      //   message: form.value.message,
+      //   customerName: form.value.customerName,
+      //   customerEmail: form.value.customerEmail,
+      //   csrfToken: form.value.csrfToken,
+      // });
+      const body = {
+        query: `mutation sendMessage(
+          $phone_number: String!
+          $first_name: String!
+          $last_name: String!
+          $message: String!
+          $email: String!
+        ) {
+          writeContactUsMessage(
+            message: {
+              email: $email
+              firstName: $first_name
+              lastName: $last_name
+              phoneNumber: $phone_number
+              message: $message
+            }
+          ) {
+            id
+          }
+        }`,
+        variables: {
+          phone_number: form.value.phoneNumber,
+          first_name: form.value.firstName,
+          last_name: form.value.lastName,
+          email: form.value.emailAddress,
+          message: form.value.message,
+        },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'X-CSRF-TOKEN': generateCSRFToken(),
+        },
+      };
+      await axios.post('/api/shop', body, options).then((res) => {
+        showToast('Sent!');
       });
-      showToast('Sent!');
 
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
@@ -453,12 +490,6 @@ export default {
       // root.$router.push(root.localePath({ name: "shipping" }));
       // isFormSubmitted.value = true;
     };
-
-    onMounted(async () => {
-      await load();
-      const csrfToken = generateCSRFToken();
-      form.value.csrfToken = csrfToken;
-    });
 
     return {
       isDarkMode,
