@@ -88,7 +88,6 @@ export default {
     const dropDownIsVisible = ref(false);
     const mouseEnter = ref(false);
     const getBrandIndustryCategory = async () => {
-      const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `
           query getBrandIndustryCategory{
@@ -126,16 +125,10 @@ export default {
             }
           }`,
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      await axios.post(baseUrl, body, options).then((res) => {
-        categories.value = res?.data?.data?.collection;
-        brands.value = res?.data?.data?.brands;
-        industries.value = res?.data?.data?.industries;
+      await axios.post('/api/shop', body).then((res) => {
+        categories.value = res?.data.data.data?.collection;
+        brands.value = res?.data.data?.data?.brands;
+        industries.value = res?.data?.data?.data?.industries;
       });
     };
     getBrandIndustryCategory();

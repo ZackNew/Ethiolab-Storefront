@@ -210,7 +210,6 @@ export default {
   },
   methods: {
     async getScocialMediaLinks() {
-      const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `query getSocials {
           getCompanyInfos {
@@ -223,14 +222,8 @@ export default {
           }
         }`,
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      const companyScocialMedia = await axios.post(baseUrl, body, options);
-      this.socialMedia = companyScocialMedia?.data.data?.getCompanyInfos;
+      const companyScocialMedia = await axios.post('/api/shop', body);
+      this.socialMedia = companyScocialMedia?.data.data.data?.getCompanyInfos;
     },
   },
   created() {

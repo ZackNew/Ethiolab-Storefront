@@ -490,12 +490,6 @@ export default {
       // isFormSubmitted.value = true;
     };
 
-    onMounted(async () => {
-      await load();
-      const csrfToken = generateCSRFToken();
-      form.value.csrfToken = csrfToken;
-    });
-
     return {
       isDarkMode,
       isFormSubmitted,

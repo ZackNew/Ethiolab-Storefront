@@ -929,7 +929,7 @@ export default {
 
       const api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
 
-      axios
+      await axios
         .post('/api/telebirr', requestMessage)
         .then((res) => {
           if (res.status == 200 && res.data.data?.code == 200) {
@@ -957,21 +957,9 @@ export default {
           orderCode: cart?.value?.code,
         },
       };
-      // const token = this.$cookies.get('etech-auth-token');
 
-      // const token = this.cookieToken;
-
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          authorization: `Bearer ${token}`,
-        },
-      };
-      let baseUrl = process.env.GRAPHQL_API;
-
-      const acat = await axios
-        .post(baseUrl, body, options)
+      await axios
+        .post('/api/shop', body)
         .then(async (res) => {
           setCart();
           modalOpen.value = false;
@@ -983,7 +971,6 @@ export default {
     };
 
     const cashComplete = async () => {
-      console.log('yes yes yes', paymentDetail);
       changeState();
       await load();
       setCart();
@@ -1009,7 +996,6 @@ export default {
       promoCode,
       handleModalOpen,
       modalOpen,
-      // handleCancelOrder,
       handleModalCashOpen,
       canPay,
       handleCancelOrder,

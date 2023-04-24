@@ -463,23 +463,21 @@ export default {
         },
       };
       let baseUrl = process.env.GRAPHQL_API;
-      const acat = await axios
-        .post(baseUrl, body, options)
-        .then(async (res) => {
-          if (
-            res.data?.data?.collection?.filters[0]?.args[0].name ===
-            'productIds'
-          ) {
-            const productIdString = JSON.parse(
-              res.data?.data?.collection?.filters[0]?.args[0].value
-            );
+      const acat = await axios.post('/api/shop', body).then(async (res) => {
+        if (
+          res.data?.data?.data.collection?.filters[0]?.args[0].name ===
+          'productIds'
+        ) {
+          const productIdString = JSON.parse(
+            res.data?.data?.data.collection?.filters[0]?.args[0].value
+          );
 
-            const productId = productIdString.map((num) => {
-              return String(num);
-            });
-            const token = this.$cookies.get('etech-auth-token');
-            let pbody = {
-              query: `query getProductById($in: [String!]) {
+          const productId = productIdString.map((num) => {
+            return String(num);
+          });
+          const token = this.$cookies.get('etech-auth-token');
+          let pbody = {
+            query: `query getProductById($in: [String!]) {
                         products(options: {filter: {id: {in: $in}}}) {
                           items {
                             name
@@ -511,27 +509,28 @@ export default {
                           }
                         }
                       }`,
-              variables: {
-                in: productId,
-              },
-            };
-            let poptions = {
-              headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                authorization: `Bearer ${token}`,
-              },
-            };
-            var prod = await axios.post(baseUrl, pbody, poptions);
-            this.products = prod.data?.data?.products?.items;
-          }
-          this.loading = false;
-          this.activeCategory = res.data?.data?.collection;
-          this.parent = res.data?.data?.collection?.parent?.slug;
-          this.categoryName = res.data?.data?.collection?.name;
-          this.categoryImg = res.data?.data?.collection?.featuredAsset?.preview;
-          this.description = res.data?.data?.collection?.description;
-        });
+            variables: {
+              in: productId,
+            },
+          };
+          let poptions = {
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              authorization: `Bearer ${token}`,
+            },
+          };
+          var prod = await axios.post('/api/shop', pbody);
+          this.products = prod.data?.data.data?.products?.items;
+        }
+        this.loading = false;
+        this.activeCategory = res.data?.data?.data.collection;
+        this.parent = res.data?.data?.data.collection?.parent?.slug;
+        this.categoryName = res.data?.data?.data.collection?.name;
+        this.categoryImg =
+          res.data?.data?.data.collection?.featuredAsset?.preview;
+        this.description = res.data?.data?.data.collection?.description;
+      });
     },
     clearFilters() {
       this.filtersClicked = [];

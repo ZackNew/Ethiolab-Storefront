@@ -588,11 +588,12 @@ export default {
           authorization: `Bearer ${token}`,
         },
       };
-      const variant = await axios.post(baseUrl, body, options);
-      this.granularity = variant.data.data.product?.customFields?.granularity;
-      this.prImage = variant.data.data.product?.featuredAsset;
-      this.prImages = variant.data.data.product?.assets;
-      this.Svariant = variant.data.data.product?.variantList?.items[0];
+      const variant = await axios.post('/api/shop', body);
+      this.granularity =
+        variant.data.data.data.product?.customFields?.granularity;
+      this.prImage = variant.data.data.data.product?.featuredAsset;
+      this.prImages = variant.data.data.data.product?.assets;
+      this.Svariant = variant.data.data.data.product?.variantList?.items[0];
       this.VariantAccessories = this.Svariant?.accessories.map((p) => {
         const image = p.featuredAsset ? p.featuredAsset.preview : '';
         const price =

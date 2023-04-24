@@ -96,7 +96,6 @@ export default {
   methods: {
     async getFAQs() {
       this.loading = true;
-      const baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `query getFAQ {
             getFaqs {
@@ -108,17 +107,11 @@ export default {
             }
           }`,
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      await axios.post(baseUrl, body, options).then((res) => {
-        this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
+      await axios.post('/api/shop', body).then((res) => {
+        this.FAQs = res.data.data.data?.getFaqs.filter((faq) => faq.isEnabled);
         this.loading = false;
-        res.data.data.getFaqs.forEach((faq) => {
-          faq.tags.forEach((tag) => {
+        res.data.data.data?.getFaqs?.forEach((faq) => {
+          faq.tags?.forEach((tag) => {
             !this.categories.includes(tag) && this.categories.push(tag);
           });
         });

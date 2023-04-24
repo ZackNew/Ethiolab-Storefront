@@ -864,7 +864,6 @@ export default {
       this.limitSub += 6;
     },
     async getActiveCategory() {
-      const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
       const token = this.$cookies.get('etech-auth-token');
       const body = {
@@ -907,15 +906,8 @@ export default {
         }`,
         variables: { slug: slug },
       };
-      let options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          authorization: `Bearer ${token}`,
-        },
-      };
-      await axios.post(baseUrl, body, options).then((res) => {
-        this.currentCategory = res.data.data.collection;
+      await axios.post('/api/shop', body).then((res) => {
+        this.currentCategory = res.data.data.data?.collection;
         const products = this.currentCategory?.products?.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
@@ -967,38 +959,40 @@ export default {
               }
             }`,
           variables: {
-            id: res.data.data?.collection?.id,
+            id: res.data.data.data?.collection?.id,
           },
         };
         axios.post(pbaseUrl, pbody, poptions).then((res) => {
-          const produ = res.data.data?.bestSellersInCategory.map((product) => {
-            let cref = [];
-            product?.collections?.forEach((x) => {
-              cref.push(String(x?.id));
-            });
-            const image =
-              process.env.GRAPHQL_API.split('/shop-api')[0] +
-              `/assets/${product?.image}`;
-            const price =
-              String(product?.priceWithTax).slice(0, -2) +
-              '.' +
-              String(product?.priceWithTax).slice(-2);
-            const prod = {
-              _id: product?.id,
-              _variantId: product?.variantId,
-              _description: product?.description,
-              _categoriesRef: product?.collections,
-              name: product?.name,
-              images: image,
-              price: {
-                original: price,
-                current: price,
-              },
-              slug: product?.slug,
-              rating: product?.rating,
-            };
-            return prod;
-          });
+          const produ = res.data.data.data?.bestSellersInCategory.map(
+            (product) => {
+              let cref = [];
+              product?.collections?.forEach((x) => {
+                cref.push(String(x?.id));
+              });
+              const image =
+                process.env.GRAPHQL_API.split('/shop-api')[0] +
+                `/assets/${product?.image}`;
+              const price =
+                String(product?.priceWithTax).slice(0, -2) +
+                '.' +
+                String(product?.priceWithTax).slice(-2);
+              const prod = {
+                _id: product?.id,
+                _variantId: product?.variantId,
+                _description: product?.description,
+                _categoriesRef: product?.collections,
+                name: product?.name,
+                images: image,
+                price: {
+                  original: price,
+                  current: price,
+                },
+                slug: product?.slug,
+                rating: product?.rating,
+              };
+              return prod;
+            }
+          );
           this.bestSellings = produ;
         });
       });

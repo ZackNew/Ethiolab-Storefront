@@ -472,28 +472,19 @@ export default {
           // slug: slug,
         },
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
       let baseUrl = process.env.GRAPHQL_API;
-      const acat = await axios
-        .post(baseUrl, body2, options)
-        .then(async (res) => {
-          if (res.data?.data?.industry.products.length > 0) {
-            const productIdString = res.data.data.industry.products.map(
-              (product_object) => {
-                return product_object.id;
-              }
-            );
-            const productId = productIdString.map((num) => {
-              return String(num);
-            });
-            const token = this.$cookies.get('etech-auth-token');
-            let pbody = {
-              query: `query getProductById($in: [String!]) {
+      const acat = await axios.post('/api/shop', body2).then(async (res) => {
+        if (res.data?.data?.data?.industry.products.length > 0) {
+          const productIdString = res.data.data.data.industry.products.map(
+            (product_object) => {
+              return product_object.id;
+            }
+          );
+          const productId = productIdString.map((num) => {
+            return String(num);
+          });
+          let pbody = {
+            query: `query getProductById($in: [String!]) {
                 products(options: {filter: {id: {in: $in}}}) {
                 items {
                 name
@@ -529,28 +520,21 @@ export default {
                 }
                 }
                 }`,
-              variables: {
-                in: productId,
-              },
-            };
-            let poptions = {
-              headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                authorization: `Bearer ${token}`,
-              },
-            };
-            var prod = await axios.post(baseUrl, pbody, poptions);
-            this.products = prod.data?.data?.products?.items;
-          }
+            variables: {
+              in: productId,
+            },
+          };
+          var prod = await axios.post('/api/shop', pbody);
+          this.products = prod.data?.data.data?.products?.items;
+        }
 
-          this.aCat = res.data?.data?.collection;
-          this.parent = res.data?.data?.collection?.parent?.name;
-          this.industryName = res.data?.data?.industry?.name;
-          this.industryImg = res.data?.data?.industry?.icon?.preview;
-          this.description = res.data?.data?.industry?.description;
-          this.loading = false;
-        });
+        this.aCat = res.data?.data?.data.collection;
+        this.parent = res.data?.data?.data.collection?.parent?.name;
+        this.industryName = res.data?.data?.data.industry?.name;
+        this.industryImg = res.data?.data?.data.industry?.icon?.preview;
+        this.description = res.data?.data?.data.industry?.description;
+        this.loading = false;
+      });
     },
     clearFilters() {
       this.filtersClicked = [];

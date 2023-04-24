@@ -166,7 +166,8 @@ export default {
 
     onMounted(async () => {
       await load();
-      const query = gql`
+      const body = {
+        query: `
         {
           activeCustomer {
             customFields {
@@ -177,28 +178,17 @@ export default {
             }
           }
         }
-      `;
-      let baseUrl = process.env.GRAPHQL_API;
-      axios
-        .post(
-          baseUrl,
-          { query: print(query) },
-          {
-            headers: {
-              Authorization: 'Bearer ' + getCookie('etech-auth-token'),
-            },
-          }
-        )
-
-        .then((data) => {
-          tinNumber.value =
-            data.data.data.activeCustomer.customFields.tin_number;
-        });
+      `,
+      };
+      axios.post('/api/shop', body).then((data) => {
+        tinNumber.value = data.data.data.activeCustomer.customFields.tin_number;
+      });
     });
     const updateTinNumber = async () => {
       try {
         showToast('Updated!');
-        const query = gql`
+        const body = {
+          query: `
           mutation upd($tinNumber: String!) {
             updateCustomer(
               input: {
@@ -209,16 +199,9 @@ export default {
               id
             }
           }
-        `;
-        axios.post(
-          'http://localhost:3000/shop-api',
-          { query: print(query), variables: { tinNumber: tinNumber.value } },
-          {
-            headers: {
-              Authorization: 'Bearer ' + getCookie('etech-auth-token'),
-            },
-          }
-        );
+        `,
+        };
+        axios.post('/api/shop', body);
       } catch (e) {}
     };
 

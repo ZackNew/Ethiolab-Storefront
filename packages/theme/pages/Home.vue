@@ -555,15 +555,6 @@ export default {
   },
   methods: {
     async getBestSellers() {
-      const baseUrl = process.env.GRAPHQL_API;
-      const token = this.$cookies.get('etech-auth-token');
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          authorization: `Bearer ${token}`,
-        },
-      };
       const pbody = {
         query: `
         query{
@@ -583,8 +574,8 @@ export default {
           }
         }`,
       };
-      await axios.post(baseUrl, pbody, options).then((res) => {
-        const produ = res.data.data?.bestSellingProducts.map((product) => {
+      await axios.post('/api/shop', pbody).then((res) => {
+        const produ = res.data.data.data?.bestSellingProducts.map((product) => {
           let cref = [];
           product?.collections?.forEach((x) => {
             cref.push(String(x.id));
@@ -617,13 +608,6 @@ export default {
       });
     },
     async getTestimonials() {
-      const baseUrl = process.env.GRAPHQL_API;
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
       const body = {
         query: `query{
           getTestimonials{
@@ -635,8 +619,8 @@ export default {
           }
         }`,
       };
-      await axios.post(baseUrl, body, options).then((res) => {
-        const testim = res.data.data.getTestimonials.map((testimony) => {
+      await axios.post('/api/shop', body).then((res) => {
+        const testim = res.data.data.data.getTestimonials.map((testimony) => {
           return {
             id: testimony.id,
             name: testimony.name,
@@ -777,16 +761,8 @@ export default {
         },
       };
 
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      let baseUrl = process.env.GRAPHQL_API;
-
       await axios
-        .post(baseUrl, body, options)
+        .post('/api/shop', body)
         .then((res) => {
           // modalOpen.value = false;
           // setCart();
@@ -811,7 +787,6 @@ export default {
     };
 
     const onSubscribe = ({ emailAddress, event }) => {
-      let baseUrl = process.env.GRAPHQL_API;
       const body = {
         query: `mutation MyMutation($email: String!) {
                   addSubscriptionEmail(input: {email: $email}) {
@@ -822,14 +797,8 @@ export default {
           email: emailAddress,
         },
       };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
       axios
-        .post(baseUrl, body, options)
+        .post('/api/shop', body)
         .then((res) => {
           if (res.status === 200) showToast('Subscribed!');
         })
