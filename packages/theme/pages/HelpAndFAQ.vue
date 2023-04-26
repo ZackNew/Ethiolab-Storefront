@@ -72,8 +72,10 @@
 import { SfAccordion, SfContentPages, SfTabs } from '@storefront-ui/vue';
 import axios from 'axios';
 import Loading from '~/components/Loading';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   //   name: "Help&FAQ",
   components: {
     SfContentPages,
@@ -106,8 +108,20 @@ export default {
               tags
             }
           }`,
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      await axios.post('/api/shop', body).then((res) => {
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios.post('/api/shop', body, options).then((res) => {
         this.FAQs = res.data.data.data?.getFaqs.filter((faq) => faq.isEnabled);
         this.loading = false;
         res.data.data.data?.getFaqs?.forEach((faq) => {

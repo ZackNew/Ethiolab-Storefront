@@ -98,29 +98,29 @@ export default {
     '@nuxt/postcss8',
     '@nuxtjs/svg',
   ],
-  auth: {
-    redirect: false,
-    strategies: {
-      // google: {
-      //   //   scope: ['profile', 'email'],
-      //   //accessType: 'offline',
-      //   clientId:
-      //     '1026633699260-dsqo7t7ucf6km4ktb1340fs2l7ao97rb.apps.googleusercontent.com',
-      //   codeChallengeMethod: '',
-      //   responseType: 'code',
-      //   redirectUri: 'http://localhost:3001/login',
-      // },
-      // facebook: {
-      //   // endpoints: {
-      //   //   userInfo: 'https://graph.facebook.com/v6.0/me?fields=id,name,picture{url}'
-      //   // },
-      //   responseType: 'code',
-      //   clientId: '980997845873215',
-      //   scope: ['public_profile', 'email'],
-      //   redirectUri: 'http://localhost:3001/login_facebook',
-      // },
-    },
-  },
+  // auth: {
+  //   redirect: false,
+  //   strategies: {
+  //     google: {
+  //       //   scope: ['profile', 'email'],
+  //       //accessType: 'offline',
+  //       clientId:
+  //         '1026633699260-dsqo7t7ucf6km4ktb1340fs2l7ao97rb.apps.googleusercontent.com',
+  //       codeChallengeMethod: '',
+  //       responseType: 'code',
+  //       redirectUri: 'http://localhost:3001/login',
+  //     },
+  //     facebook: {
+  //       // endpoints: {
+  //       //   userInfo: 'https://graph.facebook.com/v6.0/me?fields=id,name,picture{url}'
+  //       // },
+  //       responseType: 'code',
+  //       clientId: '980997845873215',
+  //       scope: ['public_profile', 'email'],
+  //       redirectUri: 'http://localhost:3001/login_facebook',
+  //     },
+  //   },
+  // },
   modules: [
     [
       'nuxt-i18n',

@@ -49,18 +49,20 @@
 
 <script>
 import { SfMenuItem, SfModal } from '@storefront-ui/vue';
+import CryptoJS from 'crypto-js';
 import { useUiState } from '~/composables';
 import HeaderNavigationItem from './HeaderNavigationItem.vue';
 import DropDownMenu from './DropDownMenu.vue';
 import BrandsSubNav from './subnavs/BrandsSubNav.vue';
 import IndustriesSubNav from './subnavs/IndustriesSubNav.vue';
-import { ref } from '@vue/composition-api';
+import { onMounted, ref } from '@vue/composition-api';
 import CategoriesSubNav from './subnavs/CategoriesSubNav.vue';
 import RequestQuoteSubNav from './subnavs//RequestQuoteSubNav.vue';
 import debounce from 'lodash.debounce';
 import axios from 'axios';
 
 export default {
+  middleware: ['csrf'],
   name: 'HeaderNavigation',
   components: {
     SfMenuItem,
@@ -79,7 +81,7 @@ export default {
     },
   },
   methods: {},
-  setup() {
+  setup(_, { root }) {
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
     const categories = ref([]);
     const brands = ref([]);
@@ -124,14 +126,29 @@ export default {
               }
             }
           }`,
+        csrfToken: root.$store.state.csrfToken.csrfToken,
       };
-      await axios.post('/api/shop', body).then((res) => {
-        categories.value = res?.data.data.data?.collection;
-        brands.value = res?.data.data?.data?.brands;
-        industries.value = res?.data?.data?.data?.industries;
-      });
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios
+        .post('/api/shop', body, options)
+        .then((res) => {
+          categories.value = res?.data.data.data?.collection;
+          brands.value = res?.data.data?.data?.brands;
+          industries.value = res?.data?.data?.data?.industries;
+        })
+        .catch((err) => '');
     };
-    getBrandIndustryCategory();
+
     const hoverHandler = (hovered) => {
       if (hovered === 'Products') {
         contents.value = {
@@ -162,6 +179,9 @@ export default {
       dropDownIsVisible.value = false;
       contents.value = [];
     };
+    onMounted(() => {
+      getBrandIndustryCategory();
+    });
     return {
       dropDownIsVisible,
       mouseEnter,

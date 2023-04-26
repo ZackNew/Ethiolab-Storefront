@@ -154,6 +154,7 @@ import {
   mapAddressToAddressForm,
 } from '~/helpers';
 import '@/helpers';
+import CryptoJS from 'crypto-js';
 
 extend('required', {
   ...required,
@@ -169,6 +170,7 @@ extend('digits', {
 });
 
 export default {
+  middleware: ['csrf'],
   name: 'Shipping',
   components: {
     SfHeading,
@@ -193,21 +195,26 @@ export default {
   },
   methods: {
     async getEligibleLocation() {
-      let baseUrl = process.env.GRAPHQL_API;
       let body = {
         query: `
           query{
             shippingAvailableTo
           }
           `,
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      let options = {
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          berta: token,
         },
       };
-      await axios.post('/api/shop', body).then((res) => {
+      await axios.post('/api/shop', body, options).then((res) => {
         this.cities = res.data.data.data.shippingAvailableTo;
       });
     },
@@ -254,10 +261,21 @@ export default {
                     success
                   } 
                 }`,
+        csrfToken: root.$store.state.csrfToken.csrfToken,
       };
-
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
       await axios
-        .post('/api/shop', body)
+        .post('/api/shop', body, options)
         .then((res) => {
           if (res.data.data.data?.setSelfPickupAsShippingMethod?.success) {
             root.$router.push(root.localePath({ name: 'billing' }));

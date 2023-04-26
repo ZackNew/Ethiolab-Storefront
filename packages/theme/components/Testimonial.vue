@@ -55,8 +55,10 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import { SfCarousel, SfDivider, SfHeading } from '@storefront-ui/vue';
 import { computed, ref, provide, onMounted } from '@vue/composition-api';
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   components: {
     SfCarousel,
     SfHeading,
@@ -71,19 +73,12 @@ export default {
       },
     },
   },
-  setup() {
+  setup(_, { root }) {
     const tes = ref([]);
     const baseUrl = process.env.GRAPHQL_API;
     const path = baseUrl.split('/shop-api')[0] + '/assets/';
     onMounted(() => {
       // async getTestimonials() {
-
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
       const body = {
         query: `query{
           getTestimonials{
@@ -94,19 +89,34 @@ export default {
             person_position
           }
         }`,
+        csrfToken: root.$store.state.csrfToken.csrfToken,
       };
-      axios.post('/api/shop', body).then((res) => {
-        const test = res.data.data.data.getTestimonials?.map((testimony) => {
-          return {
-            id: testimony.id,
-            name: testimony.name,
-            src: testimony.pic_location,
-            content: testimony.msg,
-            title: testimony.person_position,
-          };
-        });
-        tes.value = test;
-      });
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      axios
+        .post('/api/shop', body, options)
+        .then((res) => {
+          const test = res.data.data.data.getTestimonials?.map((testimony) => {
+            return {
+              id: testimony.id,
+              name: testimony.name,
+              src: testimony.pic_location,
+              content: testimony.msg,
+              title: testimony.person_position,
+            };
+          });
+          tes.value = test;
+        })
+        .catch((err) => '');
     });
     // }
 

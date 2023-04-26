@@ -71,7 +71,6 @@
                       <svg
                         v-if="!isPassword"
                         @click="isPassword = !isPassword"
-                        xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
@@ -92,7 +91,6 @@
                       <svg
                         v-else
                         @click="isPassword = !isPassword"
-                        xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"

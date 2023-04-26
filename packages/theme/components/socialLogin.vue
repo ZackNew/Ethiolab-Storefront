@@ -71,42 +71,39 @@ export default {
   name: 'socialLogin',
   methods: {
     async SignIn() {
-      this.$auth.loginWith('google').then(async (id_token) => {
-        /**/
-
-        return;
-        const data = JSON.stringify(
-          {
-            query: `
-        {
-        mutation Authenticate($token: String!) {
-        authenticate(input: {
-          google: { token: $token }
-        }) {
-        ...on CurrentUser {
-            id
-            identifier
-        }
-      }
-    }
-      `,
-          },
-          { token: id_token }
-        );
-        const response = await fetch('http://localhost:3000/shop-api', {
-          method: 'post',
-          body: data,
-          headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': data.length,
-          },
-        });
-        const characterData = await response.json();
-      });
+      //   this.$auth.loginWith('google').then(async (id_token) => {
+      //     /**/
+      //     return;
+      //     const data = JSON.stringify(
+      //       {
+      //         query: `
+      //     {
+      //     mutation Authenticate($token: String!) {
+      //     authenticate(input: {
+      //       google: { token: $token }
+      //     }) {
+      //     ...on CurrentUser {
+      //         id
+      //         identifier
+      //     }
+      //   }
+      // }
+      //   `,
+      //       },
+      //       { token: id_token }
+      //     );
+      //     const response = await fetch('http://localhost:3000/shop-api', {
+      //       method: 'post',
+      //       body: data,
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //         'Content-Length': data.length,
+      //       },
+      //     });
+      //     const characterData = await response.json();
+      //   });
     },
-    SignInWithFacebook() {
-      this.$auth.loginWith('facebook');
-    },
+    SignInWithFacebook() {},
   },
 };
 </script>

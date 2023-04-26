@@ -111,7 +111,6 @@
                     <svg
                       v-if="!isPassword"
                       @click="isPassword = !isPassword"
-                      xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
@@ -132,7 +131,6 @@
                     <svg
                       v-else
                       @click="isPassword = !isPassword"
-                      xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
@@ -190,7 +188,6 @@
                     <svg
                       v-if="!confirmIsPassword"
                       @click="confirmIsPassword = !confirmIsPassword"
-                      xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
@@ -211,7 +208,6 @@
                     <svg
                       v-else
                       @click="confirmIsPassword = !confirmIsPassword"
-                      xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
@@ -1046,6 +1042,8 @@ import {
   SfIcon,
 } from '@storefront-ui/vue';
 import RegisterMessage from '../components/RegisterMessage.vue';
+import CryptoJS from 'crypto-js';
+
 extend('required', {
   ...required,
   message: 'This field is required',
@@ -1074,6 +1072,7 @@ extend('regex', {
   message: 'Password must contain uppercase, lowercase, number and character',
 });
 export default defineComponent({
+  middleware: ['csrf'],
   components: {
     ValidationProvider,
     ValidationObserver,
@@ -1167,8 +1166,20 @@ export default defineComponent({
             job: form.value.job,
             tin: form.value.tin,
           },
+          csrfToken: root.$store.state.csrfToken.csrfToken,
         };
-        await axios.post('/api/shop', pbody).then((res) => {
+        const token = CryptoJS.AES.encrypt(
+          root.$store.state.csrfToken.csrfToken,
+          'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+        ).toString();
+        const options = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            berta: token,
+          },
+        };
+        await axios.post('/api/shop', pbody, options).then((res) => {
           if (res.data.data.data.registerEtechCustomer.success === true) {
             showToast('Registration Successfull');
             root.$router.push('/signin');

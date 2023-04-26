@@ -216,8 +216,10 @@ import axios from 'axios';
 import truncate from 'vue-truncate-collapsed';
 import { SfRating } from '@storefront-ui/vue';
 import { useUiState } from '~/composables';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   name: 'compareProduct',
   data() {
     return {
@@ -297,12 +299,24 @@ export default {
         }
         `,
         variables: { in: productIds, eq: variantIds },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
         // variables: {
         //   in: ['11', '17'],
         //   eq: ['11', '27', '25', '26', '28'],
         // },
       };
-      await axios.post('/api/shop', body).then((res) => {
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios.post('/api/shop', body, options).then((res) => {
         const result = res.data.data.data?.products?.items;
         const prod = [];
         result?.forEach((element) => {

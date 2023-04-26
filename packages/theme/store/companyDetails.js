@@ -44,7 +44,7 @@ export const actions = {
         'Access-Control-Allow-Origin': '*',
       },
     };
-    const compy = await axios.post(baseUrl, body, options);
+    const compy = await axios.post(baseUrl, body, options).catch((err) => '');
     const infos = compy?.data?.data?.getCompanyInfos;
     commit('SET_COMPANY_INFORMATION', { company: infos });
   },

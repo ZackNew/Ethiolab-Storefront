@@ -163,7 +163,6 @@
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       stroke-linecap="round"
@@ -182,7 +181,6 @@
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       stroke-linecap="round"
@@ -293,8 +291,10 @@ import LazyHydrate from 'vue-lazy-hydration';
 import { getProductVariantByConfiguration } from '~/helpers';
 import { useUiState } from '~/composables';
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   name: 'Product',
   transition: 'fade',
   async created() {
@@ -524,8 +524,6 @@ export default {
     async getVariants() {
       const productId = parseInt(this.$route.params.id);
       const variantId = this.$route.params.vid;
-      const baseUrl = process.env.GRAPHQL_API;
-      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {
@@ -580,15 +578,20 @@ export default {
           id: productId,
           eq: variantId,
         },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
       const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          authorization: `Bearer ${token}`,
+          berta: token,
         },
       };
-      const variant = await axios.post('/api/shop', body);
+      const variant = await axios.post('/api/shop', body, options);
       this.granularity =
         variant.data.data.data.product?.customFields?.granularity;
       this.prImage = variant.data.data.data.product?.featuredAsset;

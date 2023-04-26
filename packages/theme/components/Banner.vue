@@ -1,5 +1,5 @@
 <template>
-  <section class="sf-banner" :style="style" v-on="$listeners">
+  <div class="min-h-[23rem] max-w-[100%]">
     <!-- <component :is="wrapper" class="sf-banner__wrapper" :link="link">
       <slot name="subtitle" v-bind="{ subtitle }">
         <span
@@ -24,8 +24,8 @@
       </slot>
       <slot name="call-to-action" v-bind="{ buttonText }" />
     </component> -->
-    <div class="sf-banner__wrapper-desktop" :link="link">
-      <!-- <slot name="subtitle" v-bind="{ subtitle }">
+    <!-- <div class="sf-banner__wrapper-desktop" :link="link"> -->
+    <!-- <slot name="subtitle" v-bind="{ subtitle }">
         <span
           :class="{ 'display-none': !subtitle }"
           class="sf-banner__subtitle"
@@ -33,12 +33,12 @@
           {{ subtitle }}
         </span>
       </slot> -->
-      <!-- <slot name="title" v-bind="{ title }">
+    <!-- <slot name="title" v-bind="{ title }">
         <span :class="{ 'display-none': !title }" class="sf-banner__title">
           {{ title }}
         </span>
       </slot> -->
-      <slot name="description" v-bind="{ description }">
+    <!-- <slot name="description" v-bind="{ description }">
         <span
           :class="{ 'display-none': !description }"
           class="sf-banner__description"
@@ -58,8 +58,16 @@
         </SfButton>
       </slot>
     </div>
-    <slot name="img-tag" />
-  </section>
+    <slot name="img-tag" /> -->
+    <div class="relative">
+      <p v-html="description" class="absolute z-[2]"></p>
+      <img
+        :src="image.replace('http://', 'https://')"
+        alt=""
+        class="absolute"
+      />
+    </div>
+  </div>
 </template>
 <script>
 import { SfButton, SfLink } from '@storefront-ui/vue';
@@ -107,52 +115,76 @@ export default {
       default: () => ({}),
     },
   },
+  mounted() {
+    this.image = this.image.replace('http://', 'https://');
+  },
   computed: {
-    style() {
-      const image = this.image;
-      const background = this.background;
-      const nuxtImgConvert = (imgUrl) => {
-        return `url(${this.$img(imgUrl, this.nuxtImgConfig)})`;
-      };
-      if (this.imageTag === 'nuxt-img' || this.imageTag === 'nuxt-picture') {
-        return {
-          '--_banner-background-image': image.mobile
-            ? nuxtImgConvert(image.mobile)
-            : nuxtImgConvert(image),
-          '--_banner-background-desktop-image':
-            image.desktop && nuxtImgConvert(image.desktop),
-          '--_banner-background-color': background,
-        };
-      }
-      return {
-        '--_banner-background-image': image.mobile
-          ? `url(${image.mobile})`
-          : `url(${image})`,
-        '--_banner-background-desktop-image':
-          image.desktop && `url(${image.desktop})`,
-        '--_banner-background-color': background,
-      };
-    },
-    wrapper() {
-      return this.link ? 'SfLink' : 'SfButton';
-    },
+    // style() {
+    //   const image = this.image;
+    //   const background = this.background;
+    //   const nuxtImgConvert = (imgUrl) => {
+    //     return `url(${this.$img(imgUrl, this.nuxtImgConfig)})`;
+    //   };
+    //   if (this.imageTag === 'nuxt-img' || this.imageTag === 'nuxt-picture') {
+    //     return {
+    //       '--_banner-background-image': image.mobile
+    //         ? nuxtImgConvert(image.mobile)
+    //         : nuxtImgConvert(image),
+    //       '--_banner-background-desktop-image':
+    //         image.desktop && nuxtImgConvert(image.desktop),
+    //       '--_banner-background-color': background,
+    //     };
+    //   }
+    //   return {
+    //     '--_banner-background-image': image.mobile
+    //       ? `url(${image.mobile})`
+    //       : `url(${image})`,
+    //     '--_banner-background-desktop-image':
+    //       image.desktop && `url(${image.desktop})`,
+    //     '--_banner-background-color': background,
+    //   };
+    // },
+    // wrapper() {
+    //   return this.link ? 'SfLink' : 'SfButton';
+    // },
   },
 };
 </script>
 <style lang="scss" scoped>
 // @import '../../helpers';
+.my-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.my-image {
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; /* adjust aspect ratio as needed */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.my-image-container p {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.01);
+}
 .sf-banner {
   box-sizing: border-box;
   display: var(--banner-display, flex);
   justify-content: var(--banner-justify-content, flex-start);
   width: var(--banner-width, 100%);
   min-height: var(--banner-height, 21.4375rem);
-  @include background(
-    --banner-background,
-    var(--_banner-background-color, transparent),
-    var(--_banner-background-image)
-  );
-  --banner-background-position: 60%;
+  // @include background(
+  //   --banner-background,
+  //   var(--_banner-background-color, transparent),
+  //   var(--_banner-background-image)
+  // );
+  // --banner-background-position: 60%;
   &__wrapper {
     display: flex;
     flex-direction: column;
@@ -206,16 +238,16 @@ export default {
     );
     text-transform: var(--banner-subtitle-text-transform, uppercase);
   }
-  img,
-  &__image {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    width: inherit;
-    min-height: inherit;
-    object-fit: cover;
-  }
+  // img,
+  // &__image {
+  //   position: absolute;
+  //   z-index: -1;
+  //   top: 0;
+  //   left: 0;
+  //   width: inherit;
+  //   min-height: inherit;
+  //   object-fit: cover;
+  // }
   &__title {
     margin: var(--banner-title-margin, var(--spacer-2xs) 0 0 0);
     color: var(--banner-color, var(--banner-title-color, var(--c-text)));
@@ -257,10 +289,10 @@ export default {
     );
   }
   @include for-desktop {
-    --banner-background-image: var(
-      --_banner-background-desktop-image,
-      var(--_banner-background-image)
-    );
+    // --banner-background-image: var(
+    //   --_banner-background-desktop-image,
+    //   var(--_banner-background-image)
+    // );
     --banner-wrapper-width: 50%;
     --banner-description-display: block;
     --banner-display-call-to-action: block;

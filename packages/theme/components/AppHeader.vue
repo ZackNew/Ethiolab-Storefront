@@ -192,7 +192,10 @@ import HeaderNavigation from './HeaderNavigation';
 import DropdownNavigationItem from '~/components/DropdownNavigationItem.vue';
 import { useProduct } from '@vue-storefront/vendure';
 import { load } from 'mime';
+import CryptoJS from 'crypto-js';
+
 export default {
+  middleware: ['csrf'],
   components: {
     SfSidebar,
     SfInput,
@@ -266,8 +269,20 @@ export default {
           variables: {
             text: this.searchText,
           },
+          csrfToken: this.$store.state.csrfToken.csrfToken,
         };
-        axios.post('/api/shop', body).then((res) => {
+        const token = CryptoJS.AES.encrypt(
+          this.$store.state.csrfToken.csrfToken,
+          'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+        ).toString();
+        const options = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            berta: token,
+          },
+        };
+        axios.post('/api/shop', body, options).then((res) => {
           const results = res.data.data.data?.simpleSearch.map((result) => {
             let cref = [];
             result?.collections?.forEach((x) => {

@@ -2,6 +2,7 @@
 
 const express = require('express');
 const axios = require('axios');
+import CryptoJS from 'crypto-js';
 
 const app = express();
 app.use(express.json());
@@ -22,44 +23,51 @@ app.post('/telebirr', async function (req, res) {
 });
 
 app.post('/shop', async function (req, res) {
+  const decrypted = CryptoJS.AES.decrypt(
+    req.headers.berta,
+    'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+  ).toString(CryptoJS.enc.Utf8);
   let csrfToken = '';
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for (let i = 0; i < 32; i++) {
-    csrfToken += characters.charAt(
-      Math.floor(Math.random() * characters.length)
-    );
-  }
-  let etech_auth_token = '';
-  let cookies = req.headers.cookie.split('; ');
-
-  for (let i = 0; i < cookies.length; i++) {
-    if (cookies[i].startsWith('etech-auth-token=')) {
-      etech_auth_token = cookies[i].split('=')[1];
-      break;
+  if (decrypted === req.body.csrfToken) {
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 32; i++) {
+      csrfToken += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
     }
-  }
-  const body = req.body;
-  const options = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      authorization: `Bearer ${etech_auth_token}`,
-      'X-CSRF-TOKEN': csrfToken,
-    },
-  };
+    let etech_auth_token = '';
+    let cookies = req.headers.cookie.split('; ');
 
-  try {
-    await axios
-      .post('https://admin.ethiolab.et/shop-api', body, options)
-      .then((resp) => {
-        res.status(200).json({ data: resp.data });
-      })
-      .catch((err) => {
-        res.send({ msg: err });
-      });
-  } catch (err) {
-    res.send('failed');
+    for (let i = 0; i < cookies.length; i++) {
+      if (cookies[i].startsWith('etech-auth-token=')) {
+        etech_auth_token = cookies[i].split('=')[1];
+        break;
+      }
+    }
+    const body = req.body;
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        authorization: `Bearer ${etech_auth_token}`,
+      },
+    };
+
+    try {
+      await axios
+        .post('https://admin.ethiolab.et/shop-api', body, options)
+        .then((resp) => {
+          res.status(200).json({ data: resp.data });
+        })
+        .catch((err) => {
+          res.send({ msg: '' });
+        });
+    } catch (err) {
+      res.send('');
+    }
+  } else {
+    res.send('Something Went Wrong!');
   }
 });
 

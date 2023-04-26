@@ -70,6 +70,7 @@ import { onMounted, watchEffect, ref, inject } from '@vue/composition-api';
 import gql from 'graphql-tag';
 import { print } from 'graphql';
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 extend('email', {
   ...email,
@@ -101,6 +102,7 @@ extend('confirmed', {
 });
 
 export default {
+  middleware: ['csrf'],
   name: 'PersonalDetails',
   onMounted() {},
   components: {
@@ -112,7 +114,7 @@ export default {
     EmailUpdateForm,
   },
 
-  setup() {
+  setup(_, { root }) {
     const showToast = inject('showToast');
     const { updateUser, changePassword, user, load, updateEmail } = useUser();
     const tinNumber = ref('');
@@ -179,8 +181,20 @@ export default {
           }
         }
       `,
+        csrfToken: root.$store.state.csrfToken.csrfToken,
       };
-      axios.post('/api/shop', body).then((data) => {
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      axios.post('/api/shop', body, options).then((data) => {
         tinNumber.value = data.data.data.activeCustomer.customFields.tin_number;
       });
     });
@@ -200,8 +214,20 @@ export default {
             }
           }
         `,
+          csrfToken: root.$store.state.csrfToken.csrfToken,
         };
-        axios.post('/api/shop', body);
+        const token = CryptoJS.AES.encrypt(
+          root.$store.state.csrfToken.csrfToken,
+          'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+        ).toString();
+        const options = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            berta: token,
+          },
+        };
+        axios.post('/api/shop', body, options);
       } catch (e) {}
     };
 

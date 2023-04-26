@@ -42,7 +42,6 @@ export default {
   setup(props, context) {
     const { search: searchCms, getCms } = useCms();
     const staticPages = computed(() => JSON.parse(getCms.value[4].content));
-    console.log('there are', getCms.value);
     const activePage = ref('RETURN');
     const breadcrumbs = computed(() => [
       { text: 'Home', route: { link: '/' } },
