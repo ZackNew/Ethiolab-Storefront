@@ -432,8 +432,10 @@ import {
 import { ref, inject } from '@vue/composition-api';
 import { useWishlist, useCart, useUser } from '@vue-storefront/vendure';
 import Gallery from '~/components/Gallery.vue';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   components: {
     SfButton,
     SfTable,
@@ -481,8 +483,20 @@ export default {
         variables: {
           slug: slug,
         },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      const reviewsListResponse = await axios.post('/api/shop', body);
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      const reviewsListResponse = await axios.post('/api/shop', body, options);
 
       var reviewsList =
         reviewsListResponse.data?.data?.data?.product.reviews.items;
@@ -511,9 +525,7 @@ export default {
     },
 
     async getProductVariant() {
-      const baseUrl = process.env.GRAPHQL_API;
       const slug = this.$route.params.slug_1;
-      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `query getProductVariant($slug: String!){
           product(slug: $slug){
@@ -576,15 +588,20 @@ export default {
           }
         }`,
         variables: { slug: slug },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
       const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          authorization: `Bearer ${token}`,
+          berta: token,
         },
       };
-      const productVariant = await axios.post('/api/shop', body);
+      const productVariant = await axios.post('/api/shop', body, options);
       this.product = productVariant?.data?.data?.data?.product;
       this.loading = false;
     },

@@ -231,12 +231,14 @@ import { useCms } from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import axios from 'axios';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
+import CryptoJS from 'crypto-js';
 
 export default {
   name: 'Subcategory',
   created() {
     this.getCategory();
   },
+  middleware: ['csrf'],
   data() {
     return {
       loading: true,
@@ -446,6 +448,7 @@ export default {
         variables: {
           id: this.$route.params.id,
         },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
 
       const body = {
@@ -470,20 +473,33 @@ export default {
         variables: {
           // slug: slug,
         },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      let baseUrl = process.env.GRAPHQL_API;
-      const acat = await axios.post('/api/shop', body2).then(async (res) => {
-        if (res.data?.data?.data?.industry.products.length > 0) {
-          const productIdString = res.data.data.data.industry.products.map(
-            (product_object) => {
-              return product_object.id;
-            }
-          );
-          const productId = productIdString.map((num) => {
-            return String(num);
-          });
-          let pbody = {
-            query: `query getProductById($in: [String!]) {
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      const acat = await axios
+        .post('/api/shop', body2, options)
+        .then(async (res) => {
+          if (res.data?.data?.data?.industry.products.length > 0) {
+            const productIdString = res.data.data.data.industry.products.map(
+              (product_object) => {
+                return product_object.id;
+              }
+            );
+            const productId = productIdString.map((num) => {
+              return String(num);
+            });
+            let pbody = {
+              query: `query getProductById($in: [String!]) {
                 products(options: {filter: {id: {in: $in}}}) {
                 items {
                 name
@@ -519,21 +535,33 @@ export default {
                 }
                 }
                 }`,
-            variables: {
-              in: productId,
-            },
-          };
-          var prod = await axios.post('/api/shop', pbody);
-          this.products = prod.data?.data.data?.products?.items;
-        }
+              variables: {
+                in: productId,
+              },
+              csrfToken: this.$store.state.csrfToken.csrfToken,
+            };
+            const token = CryptoJS.AES.encrypt(
+              this.$store.state.csrfToken.csrfToken,
+              'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+            ).toString();
+            const options = {
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                berta: token,
+              },
+            };
+            var prod = await axios.post('/api/shop', pbody, options);
+            this.products = prod.data?.data.data?.products?.items;
+          }
 
-        this.aCat = res.data?.data?.data.collection;
-        this.parent = res.data?.data?.data.collection?.parent?.name;
-        this.industryName = res.data?.data?.data.industry?.name;
-        this.industryImg = res.data?.data?.data.industry?.icon?.preview;
-        this.description = res.data?.data?.data.industry?.description;
-        this.loading = false;
-      });
+          this.aCat = res.data?.data?.data.collection;
+          this.parent = res.data?.data?.data.collection?.parent?.name;
+          this.industryName = res.data?.data?.data.industry?.name;
+          this.industryImg = res.data?.data?.data.industry?.icon?.preview;
+          this.description = res.data?.data?.data.industry?.description;
+          this.loading = false;
+        });
     },
     clearFilters() {
       this.filtersClicked = [];

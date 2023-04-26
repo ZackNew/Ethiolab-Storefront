@@ -625,10 +625,12 @@ import LazyHydrate from 'vue-lazy-hydration';
 import { useCms } from '@vue-storefront/vendure';
 import Vue from 'vue';
 import CategoryFeature from '~/components/CategoryFeature.vue';
+import CryptoJS from 'crypto-js';
 
 // TODO(addToCart qty, horizontal): https://github.com/vuestorefront/storefront-ui/issues/1606
 export default {
   name: 'Category',
+  middleware: ['csrf'],
   transition: 'fade',
   setup(props, context) {
     const showToast = inject('showToast');
@@ -865,7 +867,6 @@ export default {
     },
     async getActiveCategory() {
       const slug = this.$route.params.slug_1;
-      const token = this.$cookies.get('etech-auth-token');
       const body = {
         query: `
         query getCategoriesProducts($slug: String!){
@@ -905,8 +906,20 @@ export default {
           }
         }`,
         variables: { slug: slug },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      await axios.post('/api/shop', body).then((res) => {
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios.post('/api/shop', body, options).then((res) => {
         this.currentCategory = res.data.data.data?.collection;
         const products = this.currentCategory?.products?.map((product) => {
           let cref = [];

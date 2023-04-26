@@ -470,6 +470,7 @@ import BestSeller from '../components/BestSeller.vue';
 import FeaturedProducts from '../components/FeaturedProducts.vue';
 import axios from 'axios';
 import { subscribe } from 'graphql';
+import CryptoJS from 'crypto-js';
 
 export default {
   name: 'Home',
@@ -512,10 +513,7 @@ export default {
       },
     };
   },
-  middleware: cacheControl({
-    'max-age': 60,
-    'stale-when-revalidate': 5,
-  }),
+  middleware: ['csrf'],
   components: {
     CategoriesAccordion,
     SfHero,
@@ -567,39 +565,56 @@ export default {
             is_order_based
           }
         }`,
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      await axios.post('/api/shop', pbody).then((res) => {
-        const produ = res.data.data.data?.bestSellingProducts.map((product) => {
-          let cref = [];
-          product?.collections?.forEach((x) => {
-            cref.push(String(x.id));
-          });
-          const url = process.env.GRAPHQL_API;
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios
+        .post('/api/shop', pbody, options)
+        .then((res) => {
+          const produ = res.data.data.data?.bestSellingProducts.map(
+            (product) => {
+              let cref = [];
+              product?.collections?.forEach((x) => {
+                cref.push(String(x.id));
+              });
+              const url = process.env.GRAPHQL_API;
 
-          const image = url.split('shop')[0] + `assets/${product?.image}`;
-          const price =
-            String(product?.price).slice(0, -2) +
-            '.' +
-            String(product?.price).slice(-2);
-          const prod = {
-            _id: product?.id,
-            _variantId: product?.variantId,
-            _description: product?.description,
-            _categoriesRef: product?.collections,
-            name: product?.name,
-            images: image,
-            price: {
-              original: price,
-              current: price,
-            },
-            slug: product?.slug,
-            rating: product?.rating,
-            is_order_based: product?.is_order_based,
-          };
-          return prod;
-        });
-        this.bestSellings = produ;
-      });
+              const image = url.split('shop')[0] + `assets/${product?.image}`;
+              const price =
+                String(product?.price).slice(0, -2) +
+                '.' +
+                String(product?.price).slice(-2);
+              const prod = {
+                _id: product?.id,
+                _variantId: product?.variantId,
+                _description: product?.description,
+                _categoriesRef: product?.collections,
+                name: product?.name,
+                images: image,
+                price: {
+                  original: price,
+                  current: price,
+                },
+                slug: product?.slug,
+                rating: product?.rating,
+                is_order_based: product?.is_order_based,
+              };
+              return prod;
+            }
+          );
+          this.bestSellings = produ;
+        })
+        .catch((err) => '');
     },
     async getTestimonials() {
       const body = {
@@ -612,23 +627,38 @@ export default {
             person_position
           }
         }`,
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      await axios.post('/api/shop', body).then((res) => {
-        const testim = res.data.data.data.getTestimonials.map((testimony) => {
-          return {
-            id: testimony.id,
-            name: testimony.name,
-            src: testimony.pic_location,
-            content: testimony.msg,
-            title: testimony.person_position,
-          };
-        });
-        this.testimonials = testim.slice(0, 3);
-      });
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios
+        .post('/api/shop', body, options)
+        .then((res) => {
+          const testim = res.data.data.data.getTestimonials.map((testimony) => {
+            return {
+              id: testimony.id,
+              name: testimony.name,
+              src: testimony.pic_location,
+              content: testimony.msg,
+              title: testimony.person_position,
+            };
+          });
+          this.testimonials = testim.slice(0, 3);
+        })
+        .catch((err) => '');
     },
   },
 
-  setup() {
+  setup(_, { root }) {
     const { user, load: loadUser, isAuthenticated } = useUser();
     const baseUrl = process.env.GRAPHQL_API;
     const path = baseUrl.split('/shop-api')[0] + '/assets/';
@@ -753,10 +783,22 @@ export default {
         variables: {
           ids: ids,
         },
+        csrfToken: root.$store.state.csrfToken.csrfToken,
+      };
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
       };
 
       await axios
-        .post('/api/shop', body)
+        .post('/api/shop', body, options)
         .then((res) => {
           // modalOpen.value = false;
           // setCart();
@@ -790,9 +832,21 @@ export default {
         variables: {
           email: emailAddress,
         },
+        csrfToken: root.$store.state.csrfToken.csrfToken,
+      };
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
       };
       axios
-        .post('/api/shop', body)
+        .post('/api/shop', body, options)
         .then((res) => {
           if (res.status === 200) showToast('Subscribed!');
         })

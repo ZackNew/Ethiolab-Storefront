@@ -153,8 +153,10 @@ import {
 import { useUser } from '@vue-storefront/vendure';
 import { onSSR } from '@vue-storefront/core';
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   components: {
     SfFooter,
     SfList,
@@ -221,8 +223,22 @@ export default {
             youtube_address
           }
         }`,
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      const companyScocialMedia = await axios.post('/api/shop', body);
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      const companyScocialMedia = await axios
+        .post('/api/shop', body, options)
+        .catch((err) => '');
       this.socialMedia = companyScocialMedia?.data.data.data?.getCompanyInfos;
     },
   },

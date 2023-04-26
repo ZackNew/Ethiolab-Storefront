@@ -118,8 +118,10 @@ import { computed, onMounted, ref } from '@vue/composition-api';
 import { useWishlist, useUser, wishlistGetters } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { getCalculatedPrice } from '~/helpers';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   name: 'Wishlist',
   components: {
     SfSidebar,
@@ -171,14 +173,20 @@ export default {
         }
         `,
         variables: { in: ids, eq: vIds },
+        csrfToken: ctx.root.$store.state.csrfToken.csrfToken,
       };
-      let options = {
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          berta: token,
         },
       };
-      await axios.post('/api/shop', body).then((res) => {
+      await axios.post('/api/shop', body, options).then((res) => {
         const productsList = res.data.data.data?.products?.items;
         const empArray = [];
         productsList.forEach((p) => {

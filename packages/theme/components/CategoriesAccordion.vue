@@ -96,8 +96,10 @@ import axios from 'axios';
 import { SfAccordion, SfList, SfMenuItem } from '@storefront-ui/vue';
 import { facetGetters, useCategory } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   name: 'CategoriesAccordion',
   data() {
     return {
@@ -165,8 +167,20 @@ export default {
             name
           }
         }`,
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      await axios.post('/api/shop', body).then((res) => {
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios.post('/api/shop', body, options).then((res) => {
         this.brands = res.data.data.data?.brands;
         this.industries = res.data.data.data?.industries;
       });

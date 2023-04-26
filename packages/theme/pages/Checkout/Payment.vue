@@ -516,6 +516,7 @@ import CartPreview from '~/components/Checkout/CartPreview.vue';
 // Vue.use(VueAxios, axios);
 
 export default {
+  middleware: ['csrf'],
   name: 'ReviewOrder',
   components: {
     SfHeading,
@@ -941,7 +942,7 @@ export default {
       context.root.$router.push('/');
     };
 
-    const handleCancelOrder = async (token) => {
+    const handleCancelOrder = async () => {
       const body = {
         query: `mutation cancelOrder {
           cancelMyOrder{
@@ -951,10 +952,21 @@ export default {
         variables: {
           orderCode: cart?.value?.code,
         },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
       await axios
-        .post('/api/shop', body)
+        .post('/api/shop', body, options)
         .then(async (res) => {
           setCart();
           modalOpen.value = false;

@@ -223,8 +223,10 @@ import axios from 'axios';
 import { useCms } from '@vue-storefront/vendure';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
 import useUiState from '~/composables/useUiState';
+import CryptoJS from 'crypto-js';
 
 export default {
+  middleware: ['csrf'],
   name: 'brand',
   created() {
     this.getProducts();
@@ -471,8 +473,21 @@ export default {
         variables: {
           id: id,
         },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
       };
-      const brandResult = await axios.post('/api/shop', body);
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+
+      const brandResult = await axios.post('/api/shop', body, options);
       this.loading = false;
       this.brand = brandResult.data.data.data?.brand;
       this.brandImage = brandResult.data.data.data?.brand.icon?.preview;

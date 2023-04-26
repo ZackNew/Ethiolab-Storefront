@@ -45,7 +45,7 @@
           >
             Contact Us
           </h2>
-          <form @submit.prevent="handleSubmit(handleFormSubmit)">
+          <form @submit.prevent="handleSubmit(handleFormSubmit(csrfToken))">
             <div class="form px-5 md:px-0">
               <ValidationProvider
                 name="firstName"
@@ -296,6 +296,7 @@ import { useCart, useTinNumber, useContactUs } from '@vue-storefront/vendure';
 import { EMAIL_ADDRESS_CONFLICT_ERROR } from '~/helpers';
 import gql from 'graphql-tag';
 import { print } from 'graphql';
+import CryptoJS from 'crypto-js';
 import axios from 'axios';
 
 extend('required', {
@@ -317,6 +318,7 @@ extend('email', {
 });
 
 export default {
+  middleware: ['csrf'],
   components: {
     SfHeading,
     SfInput,
@@ -333,6 +335,10 @@ export default {
   },
 
   computed: {
+    csrfToken() {
+      const csrf = this.$store.state.csrfToken.csrfToken;
+      return csrf;
+    },
     style() {
       //   const image = this.image;
       //   const background = this.background;
@@ -406,7 +412,7 @@ export default {
       return token;
     };
 
-    const sendMessage = async () => {
+    const sendMessage = async (csrfToken) => {
       // sendContactUs({
       //   phone_number: form.value.phoneNumber,
       //   first_name: form.value.firstName,
@@ -444,17 +450,20 @@ export default {
           email: form.value.emailAddress,
           message: form.value.message,
         },
+        csrfToken: root.$store.state.csrfToken.csrfToken,
       };
+      const token = CryptoJS.AES.encrypt(
+        root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
       const options = {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          'X-CSRF-TOKEN': generateCSRFToken(),
+          berta: token,
         },
       };
-      console.log('gb');
       await axios.post('/api/shop', body, options);
-      console.log('lb');
       showToast('Sent!');
 
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
@@ -476,8 +485,8 @@ export default {
       //  form.value = {}
       //  location.href = 'http://localhost:3001'
     };
-    const handleFormSubmit = async () => {
-      sendMessage();
+    const handleFormSubmit = async (csrfToken) => {
+      sendMessage(csrfToken);
       // const response = await $vendure.api.setCustomerForOrder(form.value);
       // if (
       //   response?.data?.setCustomerForOrder?.errorCode ===
