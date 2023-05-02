@@ -94,7 +94,6 @@ export default {
       },
     ],
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next',
     '@nuxt/postcss8',
     '@nuxtjs/svg',
   ],

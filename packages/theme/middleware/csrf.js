@@ -9,7 +9,8 @@ const generateCSRFToken = () => {
 };
 
 export default function ({ req, res, store }) {
-  store.dispatch('csrfToken/addToken', { csrf: generateCSRFToken() });
+  if (store)
+    store.dispatch('csrfToken/addToken', { csrf: generateCSRFToken() });
   if (res) {
     res.setHeader('X-CSRF-TOKEN', generateCSRFToken());
   }
