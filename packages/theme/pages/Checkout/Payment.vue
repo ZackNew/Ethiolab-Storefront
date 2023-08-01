@@ -11,7 +11,7 @@
             </p>
           </div> -->
           <SfAlert
-            message="This order contains order based product. You are allowed to pay. You will be contacted by our team shortly."
+            message="This order contains order based product. You are not allowed to pay. You will be contacted by our team shortly."
             type="info"
           />
         </div>

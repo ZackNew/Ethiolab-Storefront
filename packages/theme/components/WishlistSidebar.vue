@@ -176,7 +176,7 @@ export default {
         csrfToken: ctx.root.$store.state.csrfToken.csrfToken,
       };
       const token = CryptoJS.AES.encrypt(
-        root.$store.state.csrfToken.csrfToken,
+        ctx.root.$store.state.csrfToken.csrfToken,
         'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
       ).toString();
       const options = {

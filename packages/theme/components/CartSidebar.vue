@@ -81,7 +81,7 @@
           <transition name="sf-fade">
             <div v-if="totalItems">
               <SfProperty
-                :name="$t('Subtotal price')"
+                :name="$t('Total with VAT')"
                 class="sf-property--full-width sf-property--large my-cart__total-price"
               >
                 <template #value>

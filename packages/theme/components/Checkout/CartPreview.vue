@@ -14,7 +14,7 @@
         class="sf-property--full-width sf-property--large property"
       />
       <SfProperty
-        :name="$t('Subtotal')"
+        :name="$t('Total')"
         :value="$n(totals.subtotal, 'currency')"
         :class="[
           'sf-property--full-width',
@@ -40,7 +40,7 @@
         class="sf-property--full-width sf-property--large property"
       />
       <SfProperty
-        :name="$t('Total')"
+        :name="$t('Total with shipping')"
         :value="$n(totals.total, 'currency')"
         class="sf-property--full-width sf-property--large property-total"
       />
@@ -73,7 +73,6 @@ import {
   SfCollectedProduct,
   SfProperty,
   SfCharacteristic,
-
   SfInput,
   SfCircleIcon,
 } from '@storefront-ui/vue';

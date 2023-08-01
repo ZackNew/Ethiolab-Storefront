@@ -259,24 +259,24 @@ export default {
       // file-loader options
     },
   },
-  helmet: {
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'", 'https://www.youtube-nocookie.com/'],
-        connectSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          'data:',
-          'https://admin.ethiolab.et/shop-api',
-          'https://www.youtube-nocookie.com/',
-        ],
-        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
-        fontSrc: ["'self'", 'https:'],
-        upgradeInsecureRequests: [],
-        baseUri: ['https://fonts.googleapis.com'],
-      },
-    },
-  },
+  // helmet: {
+  //   contentSecurityPolicy: {
+  //     directives: {
+  //       defaultSrc: ["'self'", 'https://www.youtube-nocookie.com/'],
+  //       connectSrc: [
+  //         "'self'",
+  //         "'unsafe-inline'",
+  //         'data:',
+  //         'https://admin.ethiolab.et/shop-api',
+  //         'https://www.youtube-nocookie.com/',
+  //       ],
+  //       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+  //       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+  //       imgSrc: ["'self'", 'data:', 'https:'],
+  //       fontSrc: ["'self'", 'https:'],
+  //       upgradeInsecureRequests: [],
+  //       baseUri: ['https://fonts.googleapis.com'],
+  //     },
+  //   },
+  // },
 };
