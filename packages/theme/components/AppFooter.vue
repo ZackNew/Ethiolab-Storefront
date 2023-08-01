@@ -129,7 +129,7 @@
           <a v-if="item.link.length > 3" :href="item.link" target="_blank">
             <SfImage
               class="footer__social-image"
-              :src="'/icons/' + item.name + '.svg'"
+              :src="'/icons/' + item.name + '.png'"
               :alt="item.name"
               width="32"
               height="32"

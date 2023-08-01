@@ -437,7 +437,8 @@ export default {
       lastName: '',
     });
     if (isAuthenticated) {
-      data.value.productDescr = user?.value?.emailAddress;
+      data.value.productDescr =
+        user?.value?.emailAddress || data?.value?.fromEmail;
     }
     const send = () => {
       writeQuote({
