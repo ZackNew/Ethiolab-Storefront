@@ -952,12 +952,13 @@ export default {
         variables: {
           orderCode: cart?.value?.code,
         },
-        csrfToken: this.$store.state.csrfToken.csrfToken,
+        csrfToken: context.root.$store.state.csrfToken.csrfToken,
       };
       const token = CryptoJS.AES.encrypt(
-        this.$store.state.csrfToken.csrfToken,
+        context.root.$store.state.csrfToken.csrfToken,
         'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
       ).toString();
+      console.log('pink3');
       const options = {
         headers: {
           'Content-Type': 'application/json',

@@ -91,14 +91,14 @@
           </div>
         </div>
       </transition>
-      <template #content-bottom>
+      <!-- <template #content-bottom>
         <SfButton
           @click="toggleWishlistSidebar"
           class="sf-button--full-width color-secondary"
         >
           {{ $t('Start shopping') }}
         </SfButton>
-      </template>
+      </template> -->
     </SfSidebar>
   </div>
 </template>
