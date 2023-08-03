@@ -29,7 +29,8 @@
                 showChevron
                 v-for="(faq, index) in contents"
                 :key="faq.id"
-                class="mb-4 px-4 lg:px-12 py-8 accordion-bg rounded-2xl"
+                class="mb-4 px-4 lg:px-12 py-8 rounded-2xl darkAccordion"
+                :class="isDarkMode ? 'bg-[#182533]' : 'bg-white'"
               >
                 <SfAccordionItem header="Clothing" class="rounded-2xl">
                   <template #header="{ isOpen, accordionClick }">
@@ -71,6 +72,7 @@
 <script>
 import { SfAccordion, SfContentPages, SfTabs } from '@storefront-ui/vue';
 import axios from 'axios';
+import { useUiState } from '~/composables';
 import Loading from '~/components/Loading';
 import CryptoJS from 'crypto-js';
 
@@ -141,6 +143,12 @@ export default {
       this.activePage = title;
       this.contents = this.FAQs.filter((faq) => faq.tags.includes(title));
     },
+  },
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
+    };
   },
 };
 </script>

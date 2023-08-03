@@ -26,7 +26,10 @@
             </div>
             <div class="md:col-span-6">
               <h2 class="text-secondary font-bold mb-3">{{ Svariant.name }}</h2>
-              <div class="bg-[#EBEBEB] p-2 flex justify-between mb-2">
+              <div
+                class="p-2 flex justify-between mb-2"
+                :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
+              >
                 <h4
                   v-if="Svariant.priceWithoutDiscount != Svariant.price"
                   class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through"
@@ -76,6 +79,9 @@
               <div class="flex mb-5 items-center">
                 <input
                   class="max-w-[60px] h-12 text-center mr-4"
+                  :class="
+                    isDarkMode ? 'bg-[#182533] text-white' : 'bg-[#EBEBEB]'
+                  "
                   v-model="qty"
                   type="number"
                 />
@@ -85,7 +91,7 @@
                   >Add to Cart</SfButton
                 >
                 <button @click="addToCompareList" class="hidden md:block">
-                  <p class="text-secondary align-center mt-3">
+                  <p class="text-secondary align-center mt-3 mr-2">
                     + Add to Compare List
                   </p>
                 </button>

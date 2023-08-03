@@ -40,7 +40,10 @@
             </div>
           </template>
           <div v-for="product in products" :key="product.productId">
-            <div class="bg-white max-w-48 min-w-48 mr-3 pb-4 items-center">
+            <div
+              class="max-w-48 min-w-48 mr-3 pb-4 items-center"
+              :class="isDarkMode ? 'bg-[#182533]' : 'bg-white'"
+            >
               <div class="p-3">
                 <nuxt-link :to="`/v/${product.slug}`">
                   <img
@@ -105,6 +108,8 @@
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import { useUiState } from '~/composables';
+
 export default {
   data() {
     return {
@@ -178,6 +183,12 @@ export default {
   },
   created() {
     this.getRelated();
+  },
+  setup() {
+    const { isDarkMode } = useUiState();
+    return {
+      isDarkMode,
+    };
   },
 };
 </script>

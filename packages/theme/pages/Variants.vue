@@ -33,7 +33,10 @@
         </div>
         <div class="md:col-span-6">
           <h2 class="text-secondary font-bold">{{ product.name }}</h2>
-          <div class="bg-[#EBEBEB] p-2 flex justify-between">
+          <div
+            class="p-2 flex justify-between"
+            :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
+          >
             <h3 class="text-secondary text-xl">
               <span class="font-semibold mr-2 p-2">Price </span
               >{{ priceRange }} /
@@ -48,12 +51,17 @@
               class="z-[100]"
             />
           </div>
-          <div class="mt-4 bg-[#EBEBEB] rounded py-2 flex justify-around">
+          <div
+            class="mt-4 rounded py-2 flex justify-around"
+            :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
+          >
             <div v-if="product.variantList.totalItems === 1">
-              <h5>1 Variant of this product are available.</h5>
+              <h5 :class="isDarkMode ? 'text-white' : 'text-black'">
+                1 Variant of this product are available.
+              </h5>
             </div>
             <div v-if="product.variantList.totalItems > 1">
-              <h5 class="text-lg">
+              <h5 :class="isDarkMode ? 'text-white' : 'text-black'">
                 <span>{{ product.variantList.totalItems }}</span>
                 Variants of this product are available.
               </h5>

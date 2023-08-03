@@ -19,6 +19,7 @@
       title="My Account"
       :active="activePage"
       class="my-account accountPage"
+      :class="isDarkMode ? 'accountPageDark' : 'accountPage'"
       @click:change="changeActivePage"
     >
       <SfContentCategory title="Personal Details">
@@ -63,6 +64,7 @@ import BillingDetails from '../MyAccount/BillingDetails';
 import MyNewsletter from '../MyAccount/MyNewsletter';
 import OrderHistory from '../MyAccount/OrderHistory';
 import MyQuotes from '../MyAccount/MyQuotes';
+import useUiState from '~/composables/useUiState';
 import {
   mapMobileObserver,
   unMapMobileObserver,
@@ -82,6 +84,7 @@ export default {
   },
   middleware: ['is-authenticated'],
   setup(props, context) {
+    const { isDarkMode } = useUiState();
     const { $router, $route } = context.root;
     const { cart, load: loadCart, setCart, applyCoupon } = useCart();
     const { logout } = useUser();
@@ -121,7 +124,7 @@ export default {
       unMapMobileObserver();
     });
 
-    return { changeActivePage, activePage };
+    return { changeActivePage, activePage, isDarkMode };
   },
 
   data() {

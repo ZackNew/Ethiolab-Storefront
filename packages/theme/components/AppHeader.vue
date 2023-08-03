@@ -89,7 +89,12 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search md:w-[29rem] md:h-[2.5rem] bg-light_accent rounded-xl border-none md:mr-3"
+              class="search md:w-[29rem] md:h-[2.5rem] rounded-xl border-none md:mr-3"
+              :class="
+                isDarkMode
+                  ? 'bg-[#182f3f] text-white'
+                  : 'bg-light_accent text-black'
+              "
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="searchInputHandle"

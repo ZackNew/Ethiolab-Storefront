@@ -15,7 +15,10 @@
         :title="$t(page.name)"
       >
         <div v-if="page.description">
-          <p v-html="page.description"></p>
+          <p
+            :class="isDarkMode ? 'darkVHtml' : ''"
+            v-html="page.description"
+          ></p>
         </div>
       </SfContentPage>
     </SfContentPages>
@@ -30,7 +33,7 @@ import {
 } from '@storefront-ui/vue';
 import { computed, onMounted, ref } from '@vue/composition-api';
 import { useCms } from '@vue-storefront/vendure';
-import { onSSR } from '@vue-storefront/core';
+import { useUiState } from '~/composables';
 export default {
   name: 'Static',
   components: {
@@ -40,6 +43,7 @@ export default {
     SfHeading,
   },
   setup(props, context) {
+    const { isDarkMode } = useUiState();
     const { search: searchCms, getCms } = useCms();
     const staticPages = computed(() => JSON.parse(getCms.value[2].content));
     const activePage = ref('ABOUT');
@@ -52,7 +56,14 @@ export default {
       activePage.value = title;
       contents = staticPages.value.filter((page) => page.name == title);
     };
-    return { staticPages, changeActivePage, contents, activePage, breadcrumbs };
+    return {
+      staticPages,
+      changeActivePage,
+      contents,
+      activePage,
+      breadcrumbs,
+      isDarkMode,
+    };
   },
   data() {
     return {
@@ -116,5 +127,8 @@ export default {
       padding: 0 var(--spacer-sm);
     }
   }
+}
+.darkVHtml {
+  color: white;
 }
 </style>

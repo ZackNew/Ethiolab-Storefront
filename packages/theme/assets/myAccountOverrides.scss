@@ -16,6 +16,24 @@
     color: #3860a7 !important;
   }
 }
+.accountPageDark .sf-content-pages {
+  &__section {
+    border-radius: 2% !important;
+    background: #0e1621 !important;
+  }
+  &__sidebar {
+    min-height: 100% !important;
+    border-radius: 2% 0 0 2% !important;
+    background: #182533 !important;
+  }
+  &__title {
+    color: #4e82db !important;
+    font-weight: 700 !important;
+  }
+  &__category-title {
+    color: #5d8ad8 !important;
+  }
+}
 .sf-content-pages__content::-webkit-scrollbar {
   width: 30px !important;
   background-color: none !important;

@@ -123,10 +123,6 @@ export default {
   created() {
     this.$store.dispatch('companyDetails/setInfo');
   },
-  mounted() {
-    const cookie = this.$cookies.get('auth.strategy');
-    if (cookie) this.$cookies.remove('auth.strategy');
-  },
 };
 </script>
 

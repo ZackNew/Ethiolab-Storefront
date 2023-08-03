@@ -9,11 +9,12 @@
       type="info"
     />
     <div class="grid" v-if="!this.showNotification">
-      <h4 class="font-weight-bold">
+      <h4 class="font-weight-bold text-primary">
         {{ this.title }}
       </h4>
       <textarea
-        class="form-control block w-full/p/55/eba-200-small-centrifuge text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none p-3"
+        class="form-control block w-full/p/55/eba-200-small-centrifuge text-base font-normal bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:border-blue-600 focus:outline-none p-3"
+        :class="isDarkMode ? 'bg-[#182533] text-light_accent' : 'bg-white'"
         cols="30"
         rows="5"
         v-model="summary"
@@ -46,6 +47,7 @@ import { SfButton, SfNotification } from '@storefront-ui/vue';
 import { integer } from 'vee-validate/dist/rules';
 import MyRating from './MyRating.vue';
 import { useUser, userGetters } from '@vue-storefront/vendure';
+import { useUiState } from '~/composables';
 
 export default {
   name: 'Review',
@@ -70,6 +72,7 @@ export default {
     // }
   },
   setup(props) {
+    const { isDarkMode } = useUiState();
     const { user, isAuthenticated, load } = useUser();
     var previousReviewId = -1;
     var title = 'Add a Review';
@@ -81,6 +84,7 @@ export default {
       previousReviewId,
       title,
       isAuthenticated,
+      isDarkMode,
     };
   },
   data() {
