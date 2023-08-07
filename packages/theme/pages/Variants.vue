@@ -309,66 +309,97 @@
         </SfTable>
       </div>
 
-      <div class="md:hidden" id="var-table">
+      <div class="md:hidden mt-2 mx-auto" id="var-table">
         <div v-for="variant in product.variantList.items" :key="variant.id">
-          <div class="bg-white rounded-lg m-2 pb-3">
-            <div class="flex">
-              <nuxt-link :to="`/p/${product.id}/${variant.id}/${product.slug}`">
-                <h6 class="m-4 text-secondary">{{ variant.sku }}</h6>
-                <h6 class="ml-4 text-secondary">
-                  {{
-                    String(variant.price).slice(0, -2) +
-                    '.' +
-                    String(variant.price).slice(-2)
-                  }}
-                  ETB / {{ product.customFields.granularity }}
-                </h6>
-                <div v-if="variant.featuredAsset">
-                  <img
-                    :src="variant.featuredAsset.preview"
-                    alt="image"
-                    class="w-40 h-40 object-cover m-2"
-                  />
+          <div
+            :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-white'"
+            class="rounded-lg m-2"
+          >
+            <div class="block w-full">
+              <div class="grid grid-cols-2">
+                <div class="image">
+                  <div v-if="variant.featuredAsset">
+                    <img
+                      :src="variant.featuredAsset.preview"
+                      alt="image"
+                      class="object-cover m-2"
+                    />
+                  </div>
+                  <div v-else-if="product.featuredAsset">
+                    <img
+                      :src="product.featuredAsset.preview"
+                      alt="image"
+                      class="object-cover m-2"
+                    />
+                  </div>
                 </div>
-                <div v-else-if="product.featuredAsset">
-                  <img
-                    :src="product.featuredAsset.preview"
-                    alt="image"
-                    class="w-20 h-20 object-cover m-2"
-                  />
+                <div class="text flex flex-col justify-between">
+                  <nuxt-link
+                    :to="`/p/${product.id}/${variant.id}/${product.slug}`"
+                  >
+                    <h6
+                      :class="isDarkMode ? 'text-white bg-dark_accent' : ''"
+                      class="m-4"
+                    >
+                      {{ variant.sku }}
+                      {{
+                        String(variant.price).slice(0, -2) +
+                        '.' +
+                        String(variant.price).slice(-2)
+                      }}
+                      ETB / {{ product.customFields.granularity }}
+                    </h6>
+                  </nuxt-link>
+                  <div class="m-4">
+                    <div v-for="(option, i) in variant.options" :key="i">
+                      <h6 class="text-secondary">
+                        {{ option.group.name }} : {{ option.name }}
+                      </h6>
+                    </div>
+                    <h6 :class="isDarkMode ? 'text-white bg-dark_accent' : ''">
+                      Availability: {{ variant.stockLevel }}
+                    </h6>
+                    <hr
+                      :class="isDarkMode ? 'bg-white ' : 'bg-bg_dark'"
+                      class="my-4"
+                    />
+                    <div class="flex">
+                      <input
+                        :value="toCart"
+                        :class="
+                          isDarkMode
+                            ? 'text-white bg-dark_accent'
+                            : 'text-secondary'
+                        "
+                        class="border border-secondary rounded-lg w-10 text-center mr-2"
+                        type="number"
+                        :id="variant.id"
+                      />
+                      <button
+                        @click="addToCart($event)"
+                        :class="
+                          isDarkMode
+                            ? 'bg-white text-secondary'
+                            : 'bg-secondary text-white'
+                        "
+                        class="flex border border-secondary rounded-lg px-2"
+                      >
+                        <span class="mt-1"> Buy </span>
+                        <SfIcon
+                          :icon="
+                            isInCart({ product: { _variantId: variant.id } })
+                              ? 'added_to_cart'
+                              : 'add_to_cart'
+                          "
+                          size="lg"
+                          color="green-primary"
+                          viewBox="0 0 24 24"
+                          :coverage="1"
+                        />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div></div>
-              </nuxt-link>
-            </div>
-
-            <div class="ml-4">
-              <div v-for="(option, i) in variant.options" :key="i">
-                <h6 class="text-secondary">
-                  {{ option.group.name }} : {{ option.name }}
-                </h6>
-              </div>
-              <h6 class="text-secondary">
-                Availability: {{ variant.stockLevel }}
-              </h6>
-              <div class="flex">
-                <input
-                  :value="toCart"
-                  class="bg-light_accent w-14 text-center mr-1"
-                  type="number"
-                  :id="variant.id"
-                />
-                <SfIcon
-                  :icon="
-                    isInCart({ product: { _variantId: variant.id } })
-                      ? 'added_to_cart'
-                      : 'add_to_cart'
-                  "
-                  size="lg"
-                  color="green-primary"
-                  viewBox="0 0 24 24"
-                  :coverage="1"
-                  @click="addToCart($event)"
-                />
               </div>
             </div>
           </div>
