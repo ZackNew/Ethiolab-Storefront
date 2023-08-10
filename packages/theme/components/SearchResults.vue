@@ -130,7 +130,7 @@
           </div>
           <template v-else-if="result !== null && result.length === 0">
             <SfImage
-              :src="'/error/error.svg'"
+              :src="'/error/error.png'"
               class="before-results__picture"
               alt="error"
               loading="lazy"
@@ -141,7 +141,7 @@
           </template>
           <template v-else>
             <SfImage
-              :src="'/error/error.svg'"
+              :src="'/error/error.png'"
               class="before-results__picture"
               alt="error"
               loading="lazy"

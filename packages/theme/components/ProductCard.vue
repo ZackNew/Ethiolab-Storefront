@@ -458,6 +458,7 @@ export default {
   },
   methods: {
     toggleIsInWishlist() {
+      this.toastShower('Item added to wishlist');
       this.$emit('click:wishlist', !this.isInWishlist);
       this.$root.$emit('emitWishList');
     },
