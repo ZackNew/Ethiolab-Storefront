@@ -12,22 +12,22 @@
 }
 .sf-table {
   &__row {
-    background-color: white !important;
+    margin-top: 4px;
     padding: 0px 0px !important;
   }
   &__heading {
-    background-color: #efefef !important;
     padding: 8px 0;
-    border: none !important;
   }
   &__header {
+    font-size: 1.125rem !important;
+    line-height: 1.75rem !important;
     text-align: center !important;
   }
   &__data {
     justify-content: center !important;
     text-align: center !important;
-    border-right: 0.5px solid #ebebeb;
-    border-left: 0.5px solid #ebebeb;
+    // border-right: 0.5px solid #ebebeb;
+    // border-left: 0.5px solid #ebebeb;
   }
 }
 .slick-next:before {

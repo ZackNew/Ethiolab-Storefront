@@ -85,7 +85,7 @@
           ></iframe>
           <div :class="isDarkMode ? 'text-white' : ''">
             <p
-              class="text-justify mt-2"
+              class="text-justify my-4 indent-8 space-y-4"
               :class="classes.red"
               v-html="product.description"
             ></p>
@@ -110,77 +110,36 @@
               </p>
             </div>
           </div>
-
-          <LazyHydrate when-idle>
-            <div class="hidden md:block">
-              <h4 class="my-8 text-secondary">Product Reviews</h4>
-              <SfReview
-                v-for="review in reviews"
-                :key="review.id"
-                :author="review.authorName"
-                :date="new Date(review.createdAt).toLocaleString()"
-                :message="review.summary"
-                :max-rating="5"
-                :rating="review.rating"
-                :char-limit="250"
-                :read-more-text="$t('Read more')"
-                :hide-full-text="$t('Read less')"
-                class="product__review"
-              />
-              <MyReview
-                :productId="product.id"
-                :currentUserHasNoReview="!currentUserHasReview"
-              />
-            </div>
-
-            <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
-              <SfTab :title="$t('Read reviews')" :key="reviewKey">
-                <SfReview
-                  v-for="review in reviews"
-                  :key="review.id"
-                  :author="review.authorName"
-                  :date="new Date(review.createdAt).toLocaleString()"
-                  :message="review.summary"
-                  :max-rating="5"
-                  :rating="review.rating"
-                  :char-limit="250"
-                  :read-more-text="$t('Read more')"
-                  :hide-full-text="$t('Read less')"
-                  class="product__review"
-                />
-                <MyReview
-                  :productId="product.id"
-                  :currentUserHasNoReview="!currentUserHasReview"
-                />
-              </SfTab>
-            </SfTabs> -->
-          </LazyHydrate>
         </div>
       </div>
 
       <div class="hidden md:block mt-8">
-        <SfTable id="var-table">
-          <SfTableHeading class="bg-none">
-            <SfTableHeader class="text-lg"> Item </SfTableHeader>
+        <SfTable
+          :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-faded_white'"
+          id="var-table"
+        >
+          <SfTableHeading>
+            <SfTableHeader> Item </SfTableHeader>
             <template v-if="product.variantList.items[0].options.length > 0">
               <SfTableHeader
-                class="text-lg"
                 v-for="(o, index) in product.variantList.items[0].options"
                 :key="index"
               >
                 {{ o.group.name }}
               </SfTableHeader>
             </template>
-            <SfTableHeader class="text-lg"> Availability </SfTableHeader>
-            <SfTableHeader class="text-lg"> Price </SfTableHeader>
+            <SfTableHeader class="border-l border-r">
+              Availability
+            </SfTableHeader>
+            <SfTableHeader> Price </SfTableHeader>
           </SfTableHeading>
           <SfTableRow
             v-for="variant in product.variantList.items"
             :key="variant.id"
             class="mb-4"
           >
-            <SfTableData class="flex items-center">
-              <div class="my-4 flex pl-2">
+            <SfTableData class="flex ijustify-center items-center">
+              <div class="flex justify-center items-center my-4">
                 <div v-if="variant.featuredAsset" class="ml-2">
                   <img
                     :src="variant.featuredAsset.preview"
@@ -208,18 +167,18 @@
             <SfTableData
               v-for="(option, index) in variant.options"
               :key="index"
-              class="flex items-center"
+              class="flex justify-center items-center"
             >
               <p class="my-4">{{ option.name }}</p>
             </SfTableData>
-            <SfTableData class="flex justify-center"
+            <SfTableData class="flex justify-center items-center"
               ><p class="my-4">
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData class="flex-col items-center">
+            <SfTableData class="flex justify-center items-center">
               <div class="mx-2 flex items-center">
-                <div class="flex my-2 whitespace-nowrap mr-4">
+                <div class="flex whitespace-nowrap mr-4">
                   <h4 class="text-lg">
                     {{
                       parseFloat(
@@ -232,10 +191,52 @@
                     ETB / {{ product.customFields.granularity }}
                   </h4>
                 </div>
-                <div class="flex my-auto">
+                <div class="flex">
                   <input
+                    type="number"
+                    min="1"
                     :value="toCart"
-                    class="bg-light_accent w-14 text-center mr-1 h-9"
+                    :class="
+                      isDarkMode
+                        ? 'text-white bg-dark_accent'
+                        : 'text-secondary'
+                    "
+                    class="border border-secondary rounded-lg w-10 text-center mr-2"
+                    :id="variant.id"
+                  />
+                  <button
+                    @click="addToCart($event)"
+                    :class="
+                      isDarkMode
+                        ? 'bg-[#d3e6fe] text-secondary'
+                        : 'bg-secondary text-white'
+                    "
+                    class="flex border border-secondary rounded-lg px-2 hover:scale-105"
+                  >
+                    <span class="mt-1"> Buy </span>
+                    <SfIcon
+                      :icon="
+                        isInCart({ product: { _variantId: variant.id } })
+                          ? 'added_to_cart'
+                          : 'add_to_cart'
+                      "
+                      size="lg"
+                      color="green-primary"
+                      viewBox="0 0 24 24"
+                      :coverage="1"
+                    />
+                  </button>
+                </div>
+                <!-- <div class="flex my-auto">
+                  <input
+                    :class="
+                      isDarkMode
+                        ? 'text-white bg-dark_accent'
+                        : 'bg-faded_white'
+                    "
+                    class="bg-none rounded-lg w-12 text-center mr-2 h-8"
+                    min="1"
+                    :value="toCart"
                     type="number"
                     :id="variant.id"
                   />
@@ -251,7 +252,7 @@
                     :coverage="1"
                     @click="addToCart($event)"
                   />
-                </div>
+                </div> -->
               </div>
               <div v-if="variant.accessories.length > 0">
                 <div class="flex mt-[5%] ml-2">
@@ -309,7 +310,7 @@
         </SfTable>
       </div>
 
-      <div class="md:hidden mt-2 mx-auto" id="var-table">
+      <div class="md:hidden mt-4 mx-auto" id="var-table">
         <div v-for="variant in product.variantList.items" :key="variant.id">
           <div
             :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-white'"
@@ -317,19 +318,19 @@
           >
             <div class="block w-full">
               <div class="grid grid-cols-2">
-                <div class="image">
+                <div class="image mr-1">
                   <div v-if="variant.featuredAsset">
                     <img
                       :src="variant.featuredAsset.preview"
                       alt="image"
-                      class="object-cover m-2"
+                      class="rounded-lg object-cover m-2"
                     />
                   </div>
                   <div v-else-if="product.featuredAsset">
                     <img
                       :src="product.featuredAsset.preview"
                       alt="image"
-                      class="object-cover m-2"
+                      class="rounded-lg object-cover m-2"
                     />
                   </div>
                 </div>
@@ -342,6 +343,7 @@
                       class="m-4"
                     >
                       {{ variant.sku }}
+                      <br />
                       {{
                         String(variant.price).slice(0, -2) +
                         '.' +
@@ -405,6 +407,51 @@
           </div>
         </div>
       </div>
+
+      <LazyHydrate when-idle>
+        <div class="hidden md:block">
+          <h4 class="my-4 text-secondary">Product Reviews</h4>
+          <SfReview
+            v-for="review in reviews"
+            :key="review.id"
+            :author="review.authorName"
+            :date="new Date(review.createdAt).toLocaleString()"
+            :message="review.summary"
+            :max-rating="5"
+            :rating="review.rating"
+            :char-limit="250"
+            :read-more-text="$t('Read more')"
+            :hide-full-text="$t('Read less')"
+            class="product__review"
+          />
+          <MyReview
+            :productId="product.id"
+            :currentUserHasNoReview="!currentUserHasReview"
+          />
+        </div>
+
+        <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
+              <SfTab :title="$t('Read reviews')" :key="reviewKey">
+                <SfReview
+                  v-for="review in reviews"
+                  :key="review.id"
+                  :author="review.authorName"
+                  :date="new Date(review.createdAt).toLocaleString()"
+                  :message="review.summary"
+                  :max-rating="5"
+                  :rating="review.rating"
+                  :char-limit="250"
+                  :read-more-text="$t('Read more')"
+                  :hide-full-text="$t('Read less')"
+                  class="product__review"
+                />
+                <MyReview
+                  :productId="product.id"
+                  :currentUserHasNoReview="!currentUserHasReview"
+                />
+              </SfTab>
+            </SfTabs> -->
+      </LazyHydrate>
 
       <LazyHydrate when-idle>
         <div class="md:hidden">
