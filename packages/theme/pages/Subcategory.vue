@@ -41,7 +41,7 @@
               ? 'background-color: white'
               : 'background-color: #182533'
           "
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white overflow-auto top-[5%] no-scrollbar"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded hidden md:block border-white overflow-auto top-[5%] no-scrollbar"
         >
           <div v-if="products.length > 0">
             <SubcategoryBrandAccordion
@@ -54,9 +54,9 @@
             />
           </div>
         </div>
-        <div class="p-3 hidden md:block">
+        <!-- <div class="p-3 hidden md:block">
           <LazyHydrate>
-            <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
+             :buttonText="adSection.buttonText || 'AD Button'" 
             <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
@@ -67,7 +67,7 @@
             >
             </Banner>
           </LazyHydrate>
-        </div>
+        </div> -->
       </div>
       <!-- Subcategory name and description -->
       <div class="ml-6 md:w-[72%] xs:w-[100%]">
@@ -205,7 +205,7 @@
           <!-- Products -->
 
           <div class="mt-5">
-            <div class="grid grid-cols-1 md:grid-cols-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               <!-- <p>{{product.name}}</p> -->
               <div
                 v-for="product in filteredSearchedProducts.slice(0, limit)"
@@ -369,7 +369,9 @@ export default {
         const existingObj = acc.find((obj) => obj[key]);
 
         if (existingObj) {
-          existingObj[key].push(value);
+          if (!existingObj[key].includes(value)) {
+            existingObj[key].push(value);
+          }
         } else {
           acc.push({
             [key]: [value],

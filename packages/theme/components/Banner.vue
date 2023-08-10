@@ -61,11 +61,7 @@
     <slot name="img-tag" /> -->
     <div class="relative">
       <p v-html="description" class="absolute z-[2]"></p>
-      <img
-        :src="image.replace('http://', 'https://')"
-        alt=""
-        class="absolute"
-      />
+      <img :src="lastImage" alt="" class="absolute" />
     </div>
   </div>
 </template>
@@ -115,38 +111,10 @@ export default {
       default: () => ({}),
     },
   },
-  mounted() {
-    this.image = this.image.replace('http://', 'https://');
-  },
   computed: {
-    // style() {
-    //   const image = this.image;
-    //   const background = this.background;
-    //   const nuxtImgConvert = (imgUrl) => {
-    //     return `url(${this.$img(imgUrl, this.nuxtImgConfig)})`;
-    //   };
-    //   if (this.imageTag === 'nuxt-img' || this.imageTag === 'nuxt-picture') {
-    //     return {
-    //       '--_banner-background-image': image.mobile
-    //         ? nuxtImgConvert(image.mobile)
-    //         : nuxtImgConvert(image),
-    //       '--_banner-background-desktop-image':
-    //         image.desktop && nuxtImgConvert(image.desktop),
-    //       '--_banner-background-color': background,
-    //     };
-    //   }
-    //   return {
-    //     '--_banner-background-image': image.mobile
-    //       ? `url(${image.mobile})`
-    //       : `url(${image})`,
-    //     '--_banner-background-desktop-image':
-    //       image.desktop && `url(${image.desktop})`,
-    //     '--_banner-background-color': background,
-    //   };
-    // },
-    // wrapper() {
-    //   return this.link ? 'SfLink' : 'SfButton';
-    // },
+    lastImage() {
+      return this.image.replace('http://', 'https://');
+    },
   },
 };
 </script>

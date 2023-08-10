@@ -29,7 +29,7 @@
       </div>
       <input
         type="text"
-        class="max-w-[100%] block p-2 pl-10 mt-12 h-14 rounded-2xl border border-white focus:border-light_accent"
+        class="max-w-[100%] block px-2 py-1 pl-10 mt-12 h-14 rounded-2xl border border-white focus:border-light_accent"
         :style="
         !isDarkMode
           ? 'background-color: #f0f7fc !important '
@@ -139,12 +139,27 @@
       />
     </div>
     <button @click="clearAllFilters" class="bg-secondary text-white rounded w-full py-1 text-center">Clear All Filters</button>
+    <div class="mt-5 hidden md:block">
+          <LazyHydrate>
+            <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
+            <Banner
+              :title="adSection.title || 'AD Title'"
+              :subtitle="adSection.overview || 'AD Overview'"
+              :description="adSection.description || 'AD Description'"
+              background=""
+              :image="adImage || '/homepage/bannerA.webp'"
+              link="/c/clinical-laboratory"
+            >
+            </Banner>
+          </LazyHydrate>
+        </div>
   </div>
 </template>
 
 <script>
 import { useUiHelpers, useUiState } from '~/composables';
 import { SfAccordion, SfSearchBar } from '@storefront-ui/vue';
+import { computed, ref } from '@vue/composition-api';
 import {
   VsaList,
   VsaItem,
@@ -154,6 +169,8 @@ import {
 } from 'vue-simple-accordion';
 import 'vue-simple-accordion/dist/vue-simple-accordion.css';
 import Accordion from './Accordion.vue';
+import Banner from '~/components/Banner.vue';
+import { useCms } from '@vue-storefront/vendure';
 
 export default {
   name: 'SubcategoryBrandAccordion',
@@ -165,6 +182,7 @@ export default {
     VsaHeading,
     VsaContent,
     VsaIcon,
+    Banner,
     Accordion,
   },
   data() {
@@ -235,8 +253,15 @@ export default {
   },
   setup() {
     const { isDarkMode } = useUiState();
+    const { getCms } = useCms();
+    const adSection = computed(() =>
+      JSON.parse(getCms.value[3]?.content ?? '{}')
+    );
+    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
     return {
       isDarkMode,
+      adSection,
+      adImage
     };
   },
 };

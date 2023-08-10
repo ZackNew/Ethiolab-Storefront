@@ -1,74 +1,75 @@
 <template>
-  <ValidationObserver v-slot="{ handleSubmit }">
-    <SfHeading
-      v-e2e="'billing-heading'"
-      :level="3"
-      class="sf-heading--left sf-heading--no-underline title"
-    />
-    <h3 class="my-4">Billing</h3>
-    <form @submit.prevent="handleSubmit(handleFormSubmit)">
-      <SfCheckbox
-        v-e2e="'copy-address'"
-        :selected="sameAsShipping"
-        @change="handleCheckSameAddress"
-        :label="$t('Copy address data from shipping')"
-        name="copyShippingAddress"
-        class="form__element"
+  <div class="border rounded md:pb-6 md:px-4 md:mt-6 border-[#a1a1a1]">
+    <ValidationObserver v-slot="{ handleSubmit }">
+      <SfHeading
+        v-e2e="'billing-heading'"
+        :level="3"
+        class="sf-heading--left sf-heading--no-underline title"
       />
-      <div class="form">
-        <ValidationProvider
-          name="firstName"
-          rules="required|min:2"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
-            v-e2e="'billing-firstName'"
-            v-model="billingDetails.firstName"
-            :label="$t('First name')"
+      <h3 class="my-4">Billing</h3>
+      <form @submit.prevent="handleSubmit(handleFormSubmit)">
+        <SfCheckbox
+          v-e2e="'copy-address'"
+          :selected="sameAsShipping"
+          @change="handleCheckSameAddress"
+          :label="$t('Copy address data from shipping')"
+          name="copyShippingAddress"
+          class="form__element"
+        />
+        <div class="form">
+          <ValidationProvider
             name="firstName"
-            class="form__element form__element--half"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <ValidationProvider
-          name="lastName"
-          rules="required|min:2"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
-            v-e2e="'billing-lastName'"
-            v-model="billingDetails.lastName"
-            :label="$t('Last name')"
+            rules="required|min:2"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              v-e2e="'billing-firstName'"
+              v-model="billingDetails.firstName"
+              :label="$t('First name')"
+              name="firstName"
+              class="form__element form__element--half"
+              required
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+          <ValidationProvider
             name="lastName"
-            class="form__element form__element--half form__element--half-even"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <ValidationProvider
-          name="city"
-          rules="required|min:2"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
-            v-e2e="'billing-city'"
-            v-model="billingDetails.city"
-            :label="$t('City')"
+            rules="required|min:2"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              v-e2e="'billing-lastName'"
+              v-model="billingDetails.lastName"
+              :label="$t('Last name')"
+              name="lastName"
+              class="form__element form__element--half form__element--half-even"
+              required
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+          <ValidationProvider
             name="city"
-            class="form__element form__element--half"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <ValidationProvider name="phone" slim>
-          <!-- <SfInput
+            rules="required|min:2"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              v-e2e="'billing-city'"
+              v-model="billingDetails.city"
+              :label="$t('City')"
+              name="city"
+              class="form__element form__element--half"
+              required
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+          <ValidationProvider name="phone" slim>
+            <!-- <SfInput
             v-e2e="'billing-phone'"
             v-model="billingDetails.phone"
             :label="$t('Phone number')"
@@ -78,46 +79,47 @@
             :valid="!errors[0]"
             :errorMessage="errors[0]"
           /> -->
-          <VuePhoneNumberInput
-            @update="phoneInputHandler"
-            required
-            color="#000000"
-            v-model="formPhoneNumber"
-            valid-color="#3860a7"
-            default-country-code="ET"
-            class="form__element form__element--half form__element--half-even"
-          />
-        </ValidationProvider>
-        <ValidationProvider name="street-line-1" slim>
-          <SfInput
-            v-e2e="'billing-streetLine1'"
-            v-model="billingDetails.streetLine1"
-            :label="$t('Tin')"
-            name="tin"
-            class="form__element form__element--half max-w-[50%]"
-          />
-        </ValidationProvider>
-      </div>
-      <div class="form">
-        <div class="form__action">
-          <SfButton
-            class="sf-button bg-secondary form__back-button"
-            type="button"
-            @click="$router.push('/checkout/shipping')"
-          >
-            {{ $t('Go back') }}
-          </SfButton>
-          <SfButton
-            v-e2e="'continue-to-payment'"
-            class="bg-secondary text-white form__action-button"
-            type="submit"
-          >
-            {{ $t('Continue to payment') }}
-          </SfButton>
+            <VuePhoneNumberInput
+              @update="phoneInputHandler"
+              required
+              color="#000000"
+              v-model="formPhoneNumber"
+              valid-color="#3860a7"
+              default-country-code="ET"
+              class="form__element form__element--half form__element--half-even"
+            />
+          </ValidationProvider>
+          <ValidationProvider name="street-line-1" slim>
+            <SfInput
+              v-e2e="'billing-streetLine1'"
+              v-model="billingDetails.streetLine1"
+              :label="$t('Tin')"
+              name="tin"
+              class="form__element form__element--half max-w-[50%]"
+            />
+          </ValidationProvider>
         </div>
-      </div>
-    </form>
-  </ValidationObserver>
+        <div class="form">
+          <div class="form__action">
+            <SfButton
+              class="sf-button bg-secondary form__back-button"
+              type="button"
+              @click="$router.push('/checkout/shipping')"
+            >
+              {{ $t('Go back') }}
+            </SfButton>
+            <SfButton
+              v-e2e="'continue-to-payment'"
+              class="bg-secondary text-white form__action-button"
+              type="submit"
+            >
+              {{ $t('Continue to payment') }}
+            </SfButton>
+          </div>
+        </div>
+      </form>
+    </ValidationObserver>
+  </div>
 </template>
 
 <script>

@@ -421,4 +421,15 @@ export default {
     --store-locator-map-height: 46.25rem;
   }
 }
+.sf-store {
+  &__info {
+    display: none;
+  }
+  &__media {
+    background-image: url('~/static/icon.png');
+    background-repeat: no-repeat; /* This prevents the image from repeating */
+    background-size: contain;
+    background-position: center;
+  }
+}
 </style>

@@ -1,49 +1,50 @@
 <template>
-  <ValidationObserver v-slot="{ handleSubmit }">
-    <SfHeading
-      v-e2e="'shipping-heading'"
-      :level="3"
-      class="sf-heading--left sf-heading--no-underline title"
-    />
-    <h3 class="my-4">Shipping</h3>
-    <form @submit.prevent="handleSubmit(handleFormSubmit)">
-      <div class="form">
-        <ValidationProvider
-          name="firstName"
-          rules="required|min:2"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
-            v-e2e="'shipping-firstName'"
-            v-model="form.firstName"
-            :label="$t('First name')"
+  <div class="border rounded md:pb-6 md:px-4 md:mt-6 border-[#a1a1a1]">
+    <ValidationObserver v-slot="{ handleSubmit }">
+      <SfHeading
+        v-e2e="'shipping-heading'"
+        :level="3"
+        class="sf-heading--left sf-heading--no-underline title"
+      />
+      <h3 class="my-4">Shipping</h3>
+      <form @submit.prevent="handleSubmit(handleFormSubmit)">
+        <div class="form">
+          <ValidationProvider
             name="firstName"
-            class="form__element form__element--half"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <ValidationProvider
-          name="lastName"
-          rules="required|min:2"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
-            v-e2e="'shipping-lastName'"
-            v-model="form.lastName"
-            :label="$t('Last name')"
+            rules="required|min:2"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              v-e2e="'shipping-firstName'"
+              v-model="form.firstName"
+              :label="$t('First name')"
+              name="firstName"
+              class="form__element form__element--half"
+              required
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+          <ValidationProvider
             name="lastName"
-            class="form__element form__element--half form__element--half-even"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <ValidationProvider name="city" rules="required|min:2" slim>
-          <!-- <SfInput
+            rules="required|min:2"
+            v-slot="{ errors }"
+            slim
+          >
+            <SfInput
+              v-e2e="'shipping-lastName'"
+              v-model="form.lastName"
+              :label="$t('Last name')"
+              name="lastName"
+              class="form__element form__element--half form__element--half-even"
+              required
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+          <ValidationProvider name="city" rules="required|min:2" slim>
+            <!-- <SfInput
             v-e2e="'shipping-city'"
             v-model="form.city"
             :label="$t('City')"
@@ -53,20 +54,20 @@
             :valid="!errors[0]"
             :errorMessage="errors[0]"
           /> -->
-          <select
-            required
-            class="bg-white rounded md:rounded-lg px-1 py-2 form__element--half selectTab mb-10"
-            @change="setCity($event, cookieToken)"
-          >
-            <option value="" disabled selected hidden>Choose a City</option>
-            <template v-for="(city, i) in cities">
-              <option :key="i" :value="city" class="capitalize">
-                {{ city }}
-              </option>
-            </template>
-          </select>
-        </ValidationProvider>
-        <!-- <ValidationProvider name="state" slim>
+            <select
+              required
+              class="bg-white rounded md:rounded-lg px-1 py-2 form__element--half selectTab mb-10"
+              @change="setCity($event, cookieToken)"
+            >
+              <option value="" disabled selected hidden>Choose a City</option>
+              <template v-for="(city, i) in cities">
+                <option :key="i" :value="city" class="capitalize">
+                  {{ city }}
+                </option>
+              </template>
+            </select>
+          </ValidationProvider>
+          <!-- <ValidationProvider name="state" slim>
           <SfInput
             v-e2e="'shipping-state'"
             v-model="form.state"
@@ -75,8 +76,8 @@
             class="form__element form__element--half form__element--half-even"
           />
         </ValidationProvider> -->
-        <ValidationProvider name="phone">
-          <!-- <SfInput
+          <ValidationProvider name="phone">
+            <!-- <SfInput
             v-e2e="'shipping-phone'"
             v-model="form.phone"
             :label="$t('Phone number')"
@@ -86,51 +87,52 @@
             :valid="!errors[0]"
             :errorMessage="errors[0]"
           /> -->
-          <VuePhoneNumberInput
-            @update="phoneInputHandler"
-            required
-            color="#000000"
-            v-model="formPhoneNumber"
-            valid-color="#3860a7"
-            default-country-code="ET"
-            class="form__element form__element--half form__element--half-even"
-          />
-        </ValidationProvider>
-      </div>
-      <div class="form">
+            <VuePhoneNumberInput
+              @update="phoneInputHandler"
+              required
+              color="#000000"
+              v-model="formPhoneNumber"
+              valid-color="#3860a7"
+              default-country-code="ET"
+              class="form__element form__element--half form__element--half-even"
+            />
+          </ValidationProvider>
+        </div>
+        <div class="form">
+          <div class="form__action">
+            <SfButton
+              v-e2e="'select-shipping'"
+              v-if="!isFormSubmitted"
+              :disabled="loading"
+              class="bg-secondary text-white form__action-button"
+              type="submit"
+            >
+              {{
+                isSelfPickup ? 'Continue to Billing' : 'Select Shipping Method'
+              }}
+            </SfButton>
+          </div>
+        </div>
+        <VsfShippingProvider
+          v-if="isFormSubmitted"
+          @submit="$router.push('/checkout/billing')"
+          @shippingMethodSelected="displayBillingButton"
+        />
         <div class="form__action">
           <SfButton
-            v-e2e="'select-shipping'"
-            v-if="!isFormSubmitted"
-            :disabled="loading"
+            v-if="shouldDisplayButton"
+            v-e2e="'continue-to-billing'"
             class="bg-secondary text-white form__action-button"
-            type="submit"
+            type="button"
+            @click="$router.push(localePath({ name: 'billing' }))"
+            :disabled="!shouldDisplayButton || loadingShippingProvider"
           >
-            {{
-              isSelfPickup ? 'Continue to Billing' : 'Select Shipping Method'
-            }}
+            Continue to billing
           </SfButton>
         </div>
-      </div>
-      <VsfShippingProvider
-        v-if="isFormSubmitted"
-        @submit="$router.push('/checkout/billing')"
-        @shippingMethodSelected="displayBillingButton"
-      />
-      <div class="form__action">
-        <SfButton
-          v-if="shouldDisplayButton"
-          v-e2e="'continue-to-billing'"
-          class="bg-secondary text-white form__action-button"
-          type="button"
-          @click="$router.push(localePath({ name: 'billing' }))"
-          :disabled="!shouldDisplayButton || loadingShippingProvider"
-        >
-          Continue to billing
-        </SfButton>
-      </div>
-    </form>
-  </ValidationObserver>
+      </form>
+    </ValidationObserver>
+  </div>
 </template>
 
 <script>
