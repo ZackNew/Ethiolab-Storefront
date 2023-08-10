@@ -66,7 +66,7 @@
               <SfImage
                 :alt="$t('Empty bag')"
                 class="empty-cart__image"
-                src="/icons/empty-cart.svg"
+                src="/icons/empty-cart.png"
               />
               <SfHeading
                 :title="$t('Your cart is empty')"
