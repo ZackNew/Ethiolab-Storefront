@@ -23,7 +23,7 @@
               <Loading />
             </div>
             <div v-else class="max-w-4xl mx-auto">
-              <h1 class="mb-4">{{ category }}</h1>
+              <h2 class="mb-4">{{ category }}</h2>
               <SfAccordion
                 transition=""
                 showChevron

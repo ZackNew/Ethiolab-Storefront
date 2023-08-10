@@ -132,6 +132,7 @@
                   v-model="form.customerName"
                   :label="$t('Company Name')"
                   name="company_name"
+                  required
                   class="form__element form__element--full"
                   :valid="!errors[0]"
                   :errorMessage="errors[0]"

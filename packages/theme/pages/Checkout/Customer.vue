@@ -1,83 +1,85 @@
 <template>
-  <ValidationObserver v-slot="{ handleSubmit }">
-    <SfHeading
-      v-e2e="'shipping-heading'"
-      :level="3"
-      class="sf-heading--left sf-heading--no-underline title"
-    />
-    <h3 class="my-4">Customer</h3>
-    <form @submit.prevent="handleSubmit(handleFormSubmit)">
-      <div class="form">
-        <ValidationProvider
-          name="firstName"
-          rules="required|min:2"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
-            v-e2e="'customer-firstName'"
-            v-model="form.firstName"
-            :label="$t('First name')"
-            name="firstName"
-            class="form__element form__element--half"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <ValidationProvider
-          name="lastName"
-          rules="required|min:2"
-          v-slot="{ errors }"
-          slim
-        >
-          <SfInput
-            v-e2e="'customer-lastName'"
-            v-model="form.lastName"
-            :label="$t('Last name')"
-            name="lastName"
-            class="form__element form__element--half form__element--half-even"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <div v-if="isAuthenticated">
+  <div class="border rounded md:pb-6 md:px-4 md:mt-6 border-[#a1a1a1]">
+    <ValidationObserver v-slot="{ handleSubmit }">
+      <SfHeading
+        v-e2e="'shipping-heading'"
+        :level="3"
+        class="sf-heading--left sf-heading--no-underline title"
+      />
+      <h3 class="my-4">Customer</h3>
+      <form @submit.prevent="handleSubmit(handleFormSubmit)">
+        <div class="form">
           <ValidationProvider
-            name="emailAddress"
-            rules="required|email"
+            name="firstName"
+            rules="required|min:2"
             v-slot="{ errors }"
             slim
           >
             <SfInput
-              v-e2e="'customer-emailAddress'"
-              v-model="form.emailAddress"
-              :label="$t('Email Address')"
-              name="emailAddress"
+              v-e2e="'customer-firstName'"
+              v-model="form.firstName"
+              :label="$t('First name')"
+              name="firstName"
               class="form__element form__element--half"
               required
               :valid="!errors[0]"
               :errorMessage="errors[0]"
             />
           </ValidationProvider>
-        </div>
-      </div>
-      <div class="form">
-        <div class="form__action">
-          <SfButton
-            v-e2e="'continue-to-shipping'"
-            v-if="!isFormSubmitted"
-            class="bg-secondary text-white form__action-button"
-            :disabled="!(form.firstName && form.lastName)"
-            type="submit"
+          <ValidationProvider
+            name="lastName"
+            rules="required|min:2"
+            v-slot="{ errors }"
+            slim
           >
-            {{ $t('Continue to shipping') }}
-          </SfButton>
+            <SfInput
+              v-e2e="'customer-lastName'"
+              v-model="form.lastName"
+              :label="$t('Last name')"
+              name="lastName"
+              class="form__element form__element--half form__element--half-even"
+              required
+              :valid="!errors[0]"
+              :errorMessage="errors[0]"
+            />
+          </ValidationProvider>
+          <div v-if="isAuthenticated">
+            <ValidationProvider
+              name="emailAddress"
+              rules="required|email"
+              v-slot="{ errors }"
+              slim
+            >
+              <SfInput
+                v-e2e="'customer-emailAddress'"
+                v-model="form.emailAddress"
+                :label="$t('Email Address')"
+                name="emailAddress"
+                class="form__element form__element--half"
+                required
+                :valid="!errors[0]"
+                :errorMessage="errors[0]"
+              />
+            </ValidationProvider>
+          </div>
         </div>
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-      </div>
-    </form>
-  </ValidationObserver>
+        <div class="form">
+          <div class="form__action">
+            <SfButton
+              v-e2e="'continue-to-shipping'"
+              v-if="!isFormSubmitted"
+              class="bg-secondary text-white form__action-button"
+              :disabled="!(form.firstName && form.lastName)"
+              type="submit"
+            >
+              {{ $t('Continue to shipping') }}
+            </SfButton>
+          </div>
+          <p v-if="errorMessage">{{ errorMessage }}</p>
+        </div>
+      </form>
+    </ValidationObserver>
+  </div>
 </template>
 
 <script>
