@@ -85,7 +85,7 @@
           ></iframe>
           <div :class="isDarkMode ? 'text-white' : ''">
             <p
-              class="text-justify my-4 indent-8 space-y-4"
+              class="text-justify my-4 space-y-4"
               :class="classes.red"
               v-html="product.description"
             ></p>
@@ -138,7 +138,7 @@
             :key="variant.id"
             class="mb-4"
           >
-            <SfTableData class="flex ijustify-center items-center">
+            <SfTableData class="flex ijustify-center items-start">
               <div class="flex justify-center items-center my-4">
                 <div v-if="variant.featuredAsset" class="ml-2">
                   <img
@@ -171,63 +171,64 @@
             >
               <p class="my-4">{{ option.name }}</p>
             </SfTableData>
-            <SfTableData class="flex justify-center items-center"
-              ><p class="my-4">
+            <SfTableData class="flex justify-center items-start"
+              ><p class="mt-7">
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData class="flex justify-center items-center">
-              <div class="mx-2 flex items-center">
-                <div class="flex whitespace-nowrap mr-4">
-                  <h4 class="text-lg">
-                    {{
-                      parseFloat(
-                        String(variant.price).slice(0, -2)
-                      ).toLocaleString() +
-                      '.' +
-                      String(variant.price).slice(-2) +
-                      ' '
-                    }}
-                    ETB / {{ product.customFields.granularity }}
-                  </h4>
-                </div>
-                <div class="flex">
-                  <input
-                    type="number"
-                    min="1"
-                    :value="toCart"
-                    :class="
-                      isDarkMode
-                        ? 'text-white bg-dark_accent'
-                        : 'text-secondary'
-                    "
-                    class="border border-secondary rounded-lg w-10 text-center mr-2"
-                    :id="variant.id"
-                  />
-                  <button
-                    @click="addToCart($event)"
-                    :class="
-                      isDarkMode
-                        ? 'bg-[#d3e6fe] text-secondary'
-                        : 'bg-secondary text-white'
-                    "
-                    class="flex border border-secondary rounded-lg px-2 hover:scale-105"
-                  >
-                    <span class="mt-1"> Buy </span>
-                    <SfIcon
-                      :icon="
-                        isInCart({ product: { _variantId: variant.id } })
-                          ? 'added_to_cart'
-                          : 'add_to_cart'
+            <SfTableData class="flex justify-center items-start">
+              <div class="block mt-6">
+                <div class="mx-2 flex items-center">
+                  <div class="flex whitespace-nowrap mr-4">
+                    <h4 class="text-lg">
+                      {{
+                        parseFloat(
+                          String(variant.price).slice(0, -2)
+                        ).toLocaleString() +
+                        '.' +
+                        String(variant.price).slice(-2) +
+                        ' '
+                      }}
+                      ETB / {{ product.customFields.granularity }}
+                    </h4>
+                  </div>
+                  <div class="flex">
+                    <input
+                      type="number"
+                      min="1"
+                      :value="toCart"
+                      :class="
+                        isDarkMode
+                          ? 'text-white bg-dark_accent'
+                          : 'text-secondary'
                       "
-                      size="lg"
-                      color="green-primary"
-                      viewBox="0 0 24 24"
-                      :coverage="1"
+                      class="border border-secondary rounded-lg w-10 text-center mr-2"
+                      :id="variant.id"
                     />
-                  </button>
-                </div>
-                <!-- <div class="flex my-auto">
+                    <button
+                      @click="addToCart($event)"
+                      :class="
+                        isDarkMode
+                          ? 'bg-[#d3e6fe] text-secondary'
+                          : 'bg-secondary text-white'
+                      "
+                      class="flex border border-secondary rounded-lg px-2 hover:scale-105"
+                    >
+                      <span class="mt-1"> Buy </span>
+                      <SfIcon
+                        :icon="
+                          isInCart({ product: { _variantId: variant.id } })
+                            ? 'added_to_cart'
+                            : 'add_to_cart'
+                        "
+                        size="lg"
+                        color="green-primary"
+                        viewBox="0 0 24 24"
+                        :coverage="1"
+                      />
+                    </button>
+                  </div>
+                  <!-- <div class="flex my-auto">
                   <input
                     :class="
                       isDarkMode
@@ -253,57 +254,62 @@
                     @click="addToCart($event)"
                   />
                 </div> -->
-              </div>
-              <div v-if="variant.accessories.length > 0">
-                <div class="flex mt-[5%] ml-2">
-                  <input
-                    type="checkbox"
-                    v-model="isAccessories"
-                    class="mr-[3%]"
-                  />
-                  <h3 class="text-secondary font-bold text-lg">accessories</h3>
                 </div>
-                <hr class="mt-4" />
-                <template v-if="isAccessories">
-                  <div
-                    v-for="(acc, i) in variant.accessories"
-                    :key="`'r' + ${i}`"
-                    class="mt-3 ml-2"
-                  >
-                    <div class="flex accessories">
-                      <input
-                        @change="accessoryClicked(acc.variants[0].id)"
-                        type="checkbox"
-                        class="mr-[3%]"
-                      />
-                      <nuxt-link :to="`/v/${acc.slug}`">
-                        <img
-                          :src="acc.featuredAsset && acc.featuredAsset.preview"
-                          alt=""
-                          class="w-8 h-8 mr-2"
-                        />
-                      </nuxt-link>
-                      <nuxt-link :to="`/v/${acc.slug}`">
-                        <h4 class="text-secondary font-bold text-base">
-                          {{ acc.name }}
-                        </h4>
-                        <h5>
-                          For an additional
-                          {{
-                            parseFloat(
-                              String(acc.variants[0].price).slice(0, -2)
-                            ).toLocaleString() +
-                            '.' +
-                            String(acc.variants[0].price).slice(-2) +
-                            ' '
-                          }}
-                          ETB
-                        </h5>
-                      </nuxt-link>
-                    </div>
-                    <hr class="mt-2" />
+                <div v-if="variant.accessories.length > 0">
+                  <div class="flex mt-[5%] ml-2">
+                    <input
+                      type="checkbox"
+                      v-model="isAccessories"
+                      class="mr-[3%]"
+                    />
+                    <h3 class="text-secondary font-bold text-lg">
+                      accessories
+                    </h3>
                   </div>
-                </template>
+                  <hr class="mt-4" />
+                  <template v-if="isAccessories">
+                    <div
+                      v-for="(acc, i) in variant.accessories"
+                      :key="`'r' + ${i}`"
+                      class="mt-3 ml-2"
+                    >
+                      <div class="flex accessories">
+                        <input
+                          @change="accessoryClicked(acc.variants[0].id)"
+                          type="checkbox"
+                          class="mr-[3%]"
+                        />
+                        <nuxt-link :to="`/v/${acc.slug}`">
+                          <img
+                            :src="
+                              acc.featuredAsset && acc.featuredAsset.preview
+                            "
+                            alt=""
+                            class="w-8 h-8 mr-2"
+                          />
+                        </nuxt-link>
+                        <nuxt-link :to="`/v/${acc.slug}`">
+                          <h4 class="text-secondary font-bold text-base">
+                            {{ acc.name }}
+                          </h4>
+                          <h5>
+                            For an additional
+                            {{
+                              parseFloat(
+                                String(acc.variants[0].price).slice(0, -2)
+                              ).toLocaleString() +
+                              '.' +
+                              String(acc.variants[0].price).slice(-2) +
+                              ' '
+                            }}
+                            ETB
+                          </h5>
+                        </nuxt-link>
+                      </div>
+                      <hr class="mt-2" />
+                    </div>
+                  </template>
+                </div>
               </div>
             </SfTableData>
           </SfTableRow>
