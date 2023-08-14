@@ -48,7 +48,7 @@
               height="100"
               width="100"
               alt="order based"
-              class="z-[100]"
+              class=""
             />
           </div>
           <div

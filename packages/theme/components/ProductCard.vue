@@ -291,7 +291,7 @@ import {
   SfBadge,
   SfButton,
   SfColorPicker,
-  SfColor,
+  SfColor
 } from '@storefront-ui/vue';
 
 export default {
@@ -306,119 +306,120 @@ export default {
     SfButton,
     SfColorPicker,
     SfColor,
-    Toast,
+    Toast
   },
   props: {
     id: {
       type: [Number, String],
-      default: '',
+      default: ''
     },
     image: {
       type: [Array, Object, String],
-      default: '',
+      default: ''
     },
     imageWidth: {
       type: [Number, String],
-      default: null,
+      default: null
     },
     imageHeight: {
       type: [Number, String],
-      default: null,
+      default: null
     },
     badgeLabel: {
       type: String,
-      default: '',
+      default: ''
     },
     badgeColor: {
       type: String,
-      default: '',
+      default: ''
     },
     colors: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     title: {
       type: String,
-      default: '',
+      default: ''
     },
     link: {
       type: [String, Object],
-      default: null,
+      default: null
     },
+
     /**
      * Link element tag
      * @deprecated will be removed in 1.0.0 use slot to replace content
      */
     linkTag: {
       type: String,
-      default: undefined,
+      default: undefined
     },
     scoreRating: {
       type: [Number, Boolean, String],
-      default: false,
+      default: false
     },
     reviewsCount: {
       type: [Number, Boolean],
-      default: false,
+      default: false
     },
     maxRating: {
       type: [Number, String],
-      default: 5,
+      default: 5
     },
     regularPrice: {
       type: [Number, String],
-      default: null,
+      default: null
     },
     specialPrice: {
       type: [Number, String],
-      default: null,
+      default: null
     },
     wishlistIcon: {
       type: [String, Array, Boolean],
-      default: 'heart',
+      default: 'heart'
     },
     isInWishlistIcon: {
       type: [String, Array],
-      default: 'heart_fill',
+      default: 'heart_fill'
     },
     isInWishlist: {
       type: Boolean,
-      default: false,
+      default: false
     },
     showAddToCartButton: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isAddedToCart: {
       type: Boolean,
-      deafult: false,
+      deafult: false
     },
     addToCartDisabled: {
       type: Boolean,
-      default: false,
+      default: false
     },
     imageTag: {
       type: String,
-      default: '',
+      default: ''
     },
     nuxtImgConfig: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     variantId: {
       type: String,
-      default: '',
+      default: ''
     },
     isOrderBased: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
       isAddingToCart: false,
       openColorPicker: false,
-      numberCart: 1,
+      numberCart: 1
     };
   },
   computed: {
@@ -443,7 +444,7 @@ export default {
     },
     showBadge() {
       return this.colors.length > 5;
-    },
+    }
   },
   setup() {
     const showToast = inject('showToast');
@@ -453,7 +454,7 @@ export default {
     };
     return {
       isDarkMode,
-      toastShower,
+      toastShower
     };
   },
   methods: {
@@ -470,7 +471,7 @@ export default {
       }, 1000);
       this.$emit('click:add-to-cart', {
         _variantId: this.variantId,
-        quantity: Number(this.numberCart),
+        quantity: Number(this.numberCart)
       });
     },
     handleSelectedColor(colorIndex) {
@@ -502,8 +503,8 @@ export default {
             product: {
               productID: this.id,
               variantID: this.variantId,
-              image: this.image,
-            },
+              image: this.image
+            }
           });
         } else {
           this.toastShower('Item is already in the list');
@@ -511,8 +512,8 @@ export default {
       } else {
         this.toastShower('Limit to Compare Products reached');
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped lang="scss">
@@ -714,6 +715,6 @@ export default {
   object-fit: contain !important;
 }
 .orderBased {
-  z-index: 3;
+ z-index: 3;
 }
 </style>
