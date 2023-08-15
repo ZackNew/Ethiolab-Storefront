@@ -10,7 +10,7 @@
         @close="toggleCartSidebar"
       >
         <template #content-top>
-          <div style="display: flex; justify-content: space-between">
+          <div class="flex justify-between">
             <SfProperty
               v-if="totalItems"
               class="sf-property--large cart-summary desktop-only"
@@ -26,7 +26,7 @@
                 <SfCollectedProduct
                   v-for="product in products"
                   v-e2e="'collected-product'"
-                  :key="cartGetters.getItemName(product) + 'woman'"
+                  :key="cartGetters.getItemName(product)"
                   :image="cartGetters.getItemImage(product)"
                   :title="cartGetters.getItemName(product)"
                   :regular-price="
@@ -129,7 +129,7 @@ import {
   SfCollectedProduct,
   SfImage,
   SfQuantitySelector,
-  SfInput,
+  SfInput
 } from '@storefront-ui/vue';
 import { computed, watchEffect, inject } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
@@ -149,7 +149,7 @@ export default {
     SfPrice,
     SfCollectedProduct,
     SfImage,
-    SfQuantitySelector,
+    SfQuantitySelector
   },
   setup() {
     const { isCartSidebarOpen, toggleQuoteModal, toggleCartSidebar } =
@@ -163,7 +163,7 @@ export default {
 
     const removeFromCart = (product) => {
       removeItem(product).then((res) => {
-        if (cart?.value?.errorCode && cart.value.errorCode != '') {
+        if (cart?.value?.errorCode && cart.value.errorCode !== '') {
           showToast(cart.value.message);
           setCart(cart.value.order);
         }
@@ -173,7 +173,7 @@ export default {
     const updateCartQuty = (params) => {
       const currentCart = cart.value;
       updateItemQty(params).then((res) => {
-        if (cart?.value?.errorCode && cart.value.errorCode != '') {
+        if (cart?.value?.errorCode && cart.value.errorCode !== '') {
           showToast(cart.value.message);
           setCart(currentCart);
         }
@@ -197,9 +197,9 @@ export default {
       totalItems,
       cartGetters,
       removeFromCart,
-      updateCartQuty,
+      updateCartQuty
     };
-  },
+  }
 };
 </script>
 

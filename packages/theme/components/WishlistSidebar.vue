@@ -78,7 +78,7 @@
         <div v-else class="empty-wishlist" key="empty-wishlist">
           <div class="empty-wishlist__banner">
             <SfImage
-              src="/icons/empty-cart.svg"
+            src="/icons/empty-cart.png"
               alt="Empty bag"
               class="empty-wishlist__icon"
             />
