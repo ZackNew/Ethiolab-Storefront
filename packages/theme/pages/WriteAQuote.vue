@@ -1,7 +1,7 @@
 <template>
   <div id="main" class="md:flex mt-8">
     <div
-      class="card shadow-lg w-full md:w-2/5 font-bold p-5 rounded border border-[#a1a1a1] md:mr-5 md:ml-10 mx-auto mx-3"
+      class="card shadow-lg w-full md:w-2/5 font-bold p-5 rounded border border-[#a1a1a1] md:mr-5 md:ml-10 mx-auto"
     >
       <h3 class="mb-5 text-secondary">Request a Quote</h3>
       <div
@@ -9,7 +9,7 @@
         :class="isDarkMode ? 'bg-dark_accent' : 'bg-[#f1f1f1]'"
       >
         <p :class="isDarkMode ? 'text-[#ffffff]' : 'text-dark_accent'">
-          Follow these steps to request a quote and out team will get back to
+          Follow these steps to request a quote and our team will get back to
           you.
         </p>
         <div class="mt-16 px-5">

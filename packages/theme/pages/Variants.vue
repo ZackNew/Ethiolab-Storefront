@@ -38,7 +38,7 @@
             :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
           >
             <h3 class="text-secondary text-xl">
-              <span class="font-semibold mr-2 p-2">Price </span
+              <span class="font-semibold mr-1 p-2">Price : </span
               >{{ priceRange }} /
               {{ product.customFields.granularity }}
             </h3>
@@ -119,16 +119,17 @@
           id="var-table"
         >
           <SfTableHeading>
-            <SfTableHeader> Item </SfTableHeader>
+            <SfTableHeader class="border-r"> Item </SfTableHeader>
             <template v-if="product.variantList.items[0].options.length > 0">
               <SfTableHeader
+              class="border-r"
                 v-for="(o, index) in product.variantList.items[0].options"
                 :key="index"
               >
                 {{ o.group.name }}
               </SfTableHeader>
             </template>
-            <SfTableHeader class="border-l border-r">
+            <SfTableHeader class="border-r">
               Availability
             </SfTableHeader>
             <SfTableHeader> Price </SfTableHeader>
@@ -167,9 +168,9 @@
             <SfTableData
               v-for="(option, index) in variant.options"
               :key="index"
-              class="flex justify-center items-center"
+              class="flex justify-center mt-2 ml-4"
             >
-              <p class="my-4">{{ option.name }}</p>
+              <p class="my-4 capitalize">{{ option.name }}</p>
             </SfTableData>
             <SfTableData class="flex justify-center items-start"
               ><p class="mt-7">
