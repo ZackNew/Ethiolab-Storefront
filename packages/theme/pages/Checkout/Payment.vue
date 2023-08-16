@@ -11,7 +11,7 @@
             </p>
           </div> -->
           <SfAlert
-            message="This order contains order based product. You are not allowed to pay. You will be contacted by our team shortly."
+            message="Your order contains at least one item that is order-based. Please wait for our team members to contact you, so that you are able to access the payment methods and proceed with your purchase."
             type="info"
           />
         </div>
@@ -325,7 +325,7 @@
         <transition name="fade">
           <CartPreview key="order-summary" />
         </transition>
-        <div class="highlighted promo-code">
+        <div v-if="canPay" class="highlighted promo-code">
           <SfInput
             v-model="promoCode"
             name="promoCode"
@@ -485,7 +485,13 @@ import {
   SfAlert,
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
-import { ref, computed, onMounted, onBeforeMount } from '@vue/composition-api';
+import {
+  ref,
+  computed,
+  onMounted,
+  onBeforeMount,
+  inject,
+} from '@vue/composition-api';
 import {
   useMakeOrder,
   useCart,
@@ -591,6 +597,7 @@ export default {
     // }
   },
   setup(props, context) {
+    const showToast = inject('showToast');
     const { load: loadBilling, save, billing } = useBilling();
     const { cart, load, setCart, applyCoupon } = useCart();
     const billingDetails = ref(billing.value || {});
@@ -725,10 +732,17 @@ export default {
     };
 
     const applyPromoCode = async () => {
+      const prevDiscount = cart.value.discounts.length;
       const result = await applyCoupon({
         couponCode: promoCode.value,
         currentCart: cart.value,
       });
+
+      if (cart.value.discounts.length > prevDiscount) {
+        showToast('Coupon code applied!');
+      } else {
+        showToast("Couldn't apply coupon code!");
+      }
 
       paymentDetail.amount = (cart?.value?.totalWithTax / 100)
         .toFixed(2)
