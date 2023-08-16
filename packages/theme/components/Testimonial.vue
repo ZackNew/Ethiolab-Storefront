@@ -2,6 +2,7 @@
   <div>
     <SfHeading title="Testimonials" :level="2" />
 
+    {{ testimonials }}
     <SfCarousel
       class="carousel"
       :settings="{

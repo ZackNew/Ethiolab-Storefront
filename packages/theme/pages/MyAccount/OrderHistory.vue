@@ -273,7 +273,13 @@ export default {
 
     const { load, myQuotes, deleteQuote } = useQuote();
     const { user, load: loadUser } = useUser();
-    const { addItem: addItemToCart, isInCart, cart, setCart } = useCart();
+    const {
+      addItem: addItemToCart,
+      isInCart,
+      cart,
+      setCart,
+      load: loadCart,
+    } = useCart();
     const invoiceEmail = userGetters.getEmailAddress(user.value);
     const baseUrl = process.env.GRAPHQL_API;
 
@@ -383,6 +389,7 @@ export default {
 
     const itemsToCart = (items) => {
       if (items.length >= 1) {
+        console.log(items);
         for (let item of items) {
           addItemToCart({
             product: {
@@ -413,7 +420,10 @@ export default {
           }
         });
       }
-      setTimeout(() => setCart(), 5000);
+      setTimeout(async () => {
+        loadCart();
+        // setCart(cart.value.order);
+      }, 5000);
     };
 
     const getStatusTextClass = (order) => {

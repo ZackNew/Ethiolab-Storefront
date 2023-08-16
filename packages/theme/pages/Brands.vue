@@ -341,7 +341,9 @@ export default {
       this.products.forEach((product) => {
         if (product.collections !== null) {
           product.collections.forEach((c) => {
-            collection.push(c.name);
+            if (c?.parent?.name == '__root_collection__') {
+              collection.push(c.name);
+            }
           });
         }
       });
@@ -446,6 +448,9 @@ export default {
           slug
           collections {
           name
+          parent {
+            name
+          }
           }
           featuredAsset{
           preview
