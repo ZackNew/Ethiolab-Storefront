@@ -3,8 +3,7 @@
     <div v-if="loading" class="mt-28">
       <Loading />
     </div>
-    <div v-else class="p-[2%] border border-secondary" :style="!isDarkMode ? 'background-color: white' : 'background-color: #182533'
-      ">
+    <div v-else class="p-[2%] border border-secondary">
       <h3 class="font-bold text-secondary">Product Comparison</h3>
       <hr />
 
@@ -19,9 +18,9 @@
       </div> -->
       <div v-if="productsToCompare.length > 0">
         <table class="w-full table-fixed mt-5">
-          <tbody>
-            <tr class="align-top">
-              <th scope="row" class="px-4 bg-light_gray border-b-4 border-b-white">
+          <tbody :class="isDarkMode ? 'bg-dark_accent text-dark_gray' : 'bg-[#EBEBEB]'">
+            <tr class="border-b-2 align-top">
+              <th scope="row" class="px-4   ">
                 <h2 class="text-lg font-bold mt-3 text-left">Images</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -36,7 +35,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="bg-light_gray border-b-4 border-b-white px-4">
+              <th scope="row" class="   px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Name</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -48,7 +47,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="px-4 bg-light_gray border-b-4 border-b-white">
+              <th scope="row" class="px-4   ">
                 <h2 class="text-lg font-bold mt-3 text-left">SKU</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -60,7 +59,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="bg-light_gray border-b-4 border-b-white px-4">
+              <th scope="row" class="   px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Price</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -76,7 +75,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="bg-light_gray border-b-4 border-b-white px-4">
+              <th scope="row" class="   px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Description</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -91,7 +90,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="bg-light_gray border-b-4 border-b-white px-4">
+              <th scope="row" class="   px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Rating</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -104,7 +103,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="bg-light_gray border-b-4 border-b-white px-4">
+              <th scope="row" class="   px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Availability</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -113,7 +112,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="bg-light_gray border-b-4 border-b-white px-4">
+              <th scope="row" class="   px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Accessories</h2>
               </th>
 
@@ -127,20 +126,20 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="bg-light_gray border-b-4 border-b-white px-4">
+              <th scope="row" class="   px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Weight</h2>
               </th>
               <template v-for="product in productsToCompare">
-                <td class="py-4 px-4">
+                <td class="text-secondary py-4 px-4">
                   {{
                     product.variantList.customFields.weight || 'Not Available'
                   }}
                 </td>
               </template>
             </tr>
-            <tr class="align-top">
-              <th scope="row" class="bg-light_gray border-b-4 border-b-white px-4">
-                <h2 class="text-lg font-bold mt-3 text-left">Specificaton</h2>
+            <tr class="last-tr align-top">
+              <th scope="row" class="   px-4">
+                <h2 class="text-lg font-bold my-2 text-left">Specificaton</h2>
               </th>
               <template v-for="product in productsToCompare">
                 <td class="py-4 px-4">
@@ -297,6 +296,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+tr {
+  border-bottom-width: 2px !important;
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity)) !important;
+}
+
+.last-tr {
+  border-bottom-width: 0px !important;
+}
+
 th {
   width: 13%;
   height: auto;
