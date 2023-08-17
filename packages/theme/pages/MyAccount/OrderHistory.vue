@@ -388,8 +388,7 @@ export default {
     ];
 
     const itemsToCart = (items) => {
-      if (items.length >= 1) {
-        console.log(items);
+      if (items.length > 1) {
         for (let item of items) {
           addItemToCart({
             product: {
@@ -403,6 +402,10 @@ export default {
             } else {
               showToast('Product added to cart!');
             }
+            setTimeout(() => {
+              const newCart = loadCart();
+              setCart(newCart.order);
+            }, 5000);
           });
         }
       } else {
@@ -420,10 +423,6 @@ export default {
           }
         });
       }
-      setTimeout(async () => {
-        const newCart = loadCart();
-        setCart(newCart.order);
-      }, 5000);
     };
 
     const getStatusTextClass = (order) => {
