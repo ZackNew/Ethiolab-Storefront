@@ -16,7 +16,7 @@
       >
         <div v-if="page.description">
           <p
-            v-html="page.description"
+            v-html="page.description[0]"
             :class="isDarkMode ? 'darkVHtml' : ''"
           ></p>
         </div>
@@ -46,6 +46,9 @@ export default {
     const { isDarkMode } = useUiState();
     const { search: searchCms, getCms } = useCms();
     const staticPages = computed(() => JSON.parse(getCms.value[4].content));
+    staticPages.value.forEach((element) => {
+      element.description = [element?.description];
+    });
     const activePage = ref('RETURN');
     const breadcrumbs = computed(() => [
       { text: 'Home', route: { link: '/' } },

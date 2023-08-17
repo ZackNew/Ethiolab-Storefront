@@ -421,8 +421,8 @@ export default {
         });
       }
       setTimeout(async () => {
-        loadCart();
-        // setCart(cart.value.order);
+        const newCart = loadCart();
+        setCart(newCart.order);
       }, 5000);
     };
 

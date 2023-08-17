@@ -419,8 +419,6 @@
           <SfReview
             v-for="review in reviews"
             :key="review.id"
-            :author="review.authorName"
-            :date="new Date(review.createdAt).toLocaleString()"
             :message="review.summary"
             :max-rating="5"
             :rating="review.rating"
@@ -428,7 +426,18 @@
             :read-more-text="$t('Read more')"
             :hide-full-text="$t('Read less')"
             class="product__review"
-          />
+          >
+            <template #author class="flex">
+              <h4
+                class="capitalize text-[#4f4f4f] mr-3 font-bold text-base float-left"
+              >
+                {{ review.authorName }}
+              </h4>
+              <h4 class="text-base text-[#4f4f4f]">
+                {{ new Date(review.createdAt).toLocaleString() }}
+              </h4>
+            </template>
+          </SfReview>
           <MyReview
             :productId="product.id"
             :currentUserHasNoReview="!currentUserHasReview"
@@ -464,8 +473,6 @@
           <SfReview
             v-for="review in reviews"
             :key="review.id"
-            :author="review.authorName"
-            :date="new Date(review.createdAt).toLocaleString()"
             :message="review.summary"
             :max-rating="5"
             :rating="review.rating"
@@ -473,7 +480,18 @@
             :read-more-text="$t('Read more')"
             :hide-full-text="$t('Read less')"
             class="product__review"
-          />
+          >
+            <template #author class="flex">
+              <h4
+                class="capitalize text-[#4f4f4f] mr-3 font-bold text-base float-left"
+              >
+                {{ review.authorName }}
+              </h4>
+              <h4 class="text-base text-[#4f4f4f]">
+                {{ new Date(review.createdAt).toLocaleString() }}
+              </h4>
+            </template>
+          </SfReview>
           <MyReview
             :productId="product.id"
             :currentUserHasNoReview="!currentUserHasReview"
@@ -824,7 +842,10 @@ export default {
           },
           quantity: 1,
         }).then((res) => {
-          setTimeout(() => loadCart(), 5000);
+          setTimeout(() => {
+            const newCart = loadCart();
+            setCart(newCart.order);
+          }, 5000);
         });
       }
     };
