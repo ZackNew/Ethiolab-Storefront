@@ -159,6 +159,7 @@
 import { useUiHelpers, useUiState } from '~/composables';
 import { SfAccordion, SfSearchBar } from '@storefront-ui/vue';
 import { computed, ref } from '@vue/composition-api';
+import LazyHydrate from 'vue-lazy-hydration';
 import {
   VsaList,
   VsaItem,
@@ -183,6 +184,7 @@ export default {
     VsaIcon,
     Banner,
     Accordion,
+    LazyHydrate
   },
   data() {
     return {
@@ -200,6 +202,7 @@ export default {
     categories: {
       type: Array,
       required: false,
+      default: []
     },
     filters: {
       type: Array,

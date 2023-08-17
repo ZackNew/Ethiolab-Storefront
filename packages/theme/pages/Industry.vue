@@ -30,7 +30,7 @@
 
       <div class="col-span-3">
         <div
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded-xl hidden md:block border-white overflow-auto top-[5%] no-scrollbar"
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded hidden md:block border-white overflow-auto top-[5%] no-scrollbar"
           :style="
             !isDarkMode
               ? 'background-color: white !important'
@@ -65,8 +65,8 @@
               </div> -->
           </div>
         </div>
-        <div class="p-3 hidden md:block">
-          <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
+        <!-- <div class="p-3 hidden md:block">
+           :buttonText="adSection.buttonText || 'AD Button'"
           <LazyHydrate>
             <Banner
               :title="adSection.title || 'AD Title'"
@@ -78,7 +78,7 @@
             >
             </Banner>
           </LazyHydrate>
-        </div>
+        </div> -->
       </div>
       <!-- Subcategory name and description -->
       <div class="ml-6 col-span-8">
@@ -337,7 +337,11 @@ export default {
         if (element.collections.length > 0) {
           for (let cat in element.collections) {
             if (!categories.includes(element.collections[cat].name)) {
-              categories.push(element.collections[cat].name);
+              if (
+                element.collections[cat]?.parent?.name == '__root_collection__'
+              ) {
+                categories.push(element.collections[cat].name);
+              }
             }
           }
         }
@@ -508,6 +512,9 @@ export default {
                 description
                 collections{
                 name
+                parent {
+                  name
+                }
                 }
                 variants {
                 id
