@@ -122,16 +122,14 @@
             <SfTableHeader class="border-r"> Item </SfTableHeader>
             <template v-if="product.variantList.items[0].options.length > 0">
               <SfTableHeader
-              class="border-r"
+                class="border-r"
                 v-for="(o, index) in product.variantList.items[0].options"
                 :key="index"
               >
                 {{ o.group.name }}
               </SfTableHeader>
             </template>
-            <SfTableHeader class="border-r">
-              Availability
-            </SfTableHeader>
+            <SfTableHeader class="border-r"> Availability </SfTableHeader>
             <SfTableHeader> Price </SfTableHeader>
           </SfTableHeading>
           <SfTableRow
@@ -826,7 +824,7 @@ export default {
           },
           quantity: 1,
         }).then((res) => {
-          setTimeout(() => setCart(), 5000);
+          setTimeout(() => loadCart(), 5000);
         });
       }
     };

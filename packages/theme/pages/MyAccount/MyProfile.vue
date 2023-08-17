@@ -49,6 +49,7 @@
           class="max-w-[60%]"
           placeholder="Your tin number"
           v-model="tinNumber"
+          onKeyPress="if(this.value.length==10) return false;"
         />
         <SfButton class="bg-secondary" @click="updateTinNumber"
           >Update Tin Number</SfButton
@@ -143,9 +144,12 @@ export default {
       return '';
     }
 
-    const updatePersonalData = ({ form, onComplete, onError }) =>
+    const updatePersonalData = ({ form, onComplete, onError }) => {
       formHandler(() => updateUser({ user: form.value }), onComplete, onError);
-    const updateEmailData = ({ form, onComplete, onError }) =>
+      showToast('Updated Succcessfully!');
+    };
+
+    const updateEmailData = ({ form, onComplete, onError }) => {
       formHandler(
         () =>
           updateEmail({
@@ -155,7 +159,9 @@ export default {
         onComplete,
         onError
       );
-    const updatePassword = ({ form, onComplete, onError }) =>
+      showToast('Updated Succcessfully!');
+    };
+    const updatePassword = ({ form, onComplete, onError }) => {
       formHandler(
         () =>
           changePassword({
@@ -165,7 +171,8 @@ export default {
         onComplete,
         onError
       );
-
+      showToast('Updated Succcessfully!');
+    };
     onMounted(async () => {
       await load();
       const body = {

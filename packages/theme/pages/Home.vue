@@ -275,79 +275,80 @@
       <!-- <LazyHydrate when-visible>
         <Testimonial :testimonials="testimonials" />
       </LazyHydrate> -->
-      <h1 class="md:text-4xl text-secondary text-center">Testimonials</h1>
-      <VueSlickCarousel
-        v-if="testimonials.length > 0"
-        class="carousel-wrapper wraplg"
-        v-bind="settings"
-        :slidesToShow="3"
-      >
-        <template #prevArrow>
-          <div class="arrows">
-            <svg
-              class="w-12 h-12 text-secondary -ml-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              ></path>
-            </svg>
-          </div>
-        </template>
-        /*...*/
-        <template #nextArrow>
-          <div class="arrows">
-            <svg
-              class="w-12 h-12 text-secondary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              ></path>
-            </svg>
-          </div>
-        </template>
-        <div v-for="testimony in testimonials" :key="testimony.id" cl>
-          <div class="testimonial_card mr-2 noScrollbar">
-            <div class="flex flex-col">
-              <div
-                class="mx-auto w-12 h-12 overflow-hidden bg-gray-100 border-2 border-indigo-100 rounded-full"
+      <div v-if="testimonials.length > 0">
+        <h1 class="md:text-4xl text-secondary text-center">Testimonials</h1>
+        <VueSlickCarousel
+          class="carousel-wrapper wraplg"
+          v-bind="settings"
+          :slidesToShow="3"
+        >
+          <template #prevArrow>
+            <div class="arrows">
+              <svg
+                class="w-12 h-12 text-secondary -ml-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <img
-                  :src="
-                    `${path}${testimony.src}` ||
-                    ` https://cdn.pixabay.com/photo/2017/05/19/12/38/entrepreneur-2326419__340.jpg`
-                  "
-                  alt="img"
-                  class="object-cover object-center w-full h-full"
-                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                ></path>
+              </svg>
+            </div>
+          </template>
+          /*...*/
+          <template #nextArrow>
+            <div class="arrows">
+              <svg
+                class="w-12 h-12 text-secondary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+            </div>
+          </template>
+          <div v-for="testimony in testimonials" :key="testimony.id" cl>
+            <div class="testimonial_card mr-2 noScrollbar">
+              <div class="flex flex-col">
+                <div
+                  class="mx-auto w-24 h-24 overflow-hidden bg-gray-100 border-2 border-indigo-100 rounded-full"
+                >
+                  <img
+                    :src="
+                      `${path}${testimony.src}` ||
+                      ` https://cdn.pixabay.com/photo/2017/05/19/12/38/entrepreneur-2326419__340.jpg`
+                    "
+                    alt="img"
+                    class="object-cover object-center w-full h-full"
+                  />
+                </div>
+                <h5 class="font-bold quote text-center">
+                  {{ testimony.name }}
+                </h5>
+                <p class="text-sm testimonies text-center">
+                  {{ testimony.title }}
+                </p>
+                <div class="h-3 text-3xl text-left quote">“</div>
+                <p
+                  class="px-4 text-center testimonies"
+                  v-html="testimony.content"
+                ></p>
+                <div class="h-3 text-3xl text-right quote">”</div>
               </div>
-              <h5 class="font-bold quote text-center">
-                {{ testimony.name }}
-              </h5>
-              <p class="text-sm testimonies text-center">
-                {{ testimony.title }}
-              </p>
-              <div class="h-3 text-3xl text-left quote">“</div>
-              <p
-                class="px-4 text-center testimonies"
-                v-html="testimony.content"
-              ></p>
-              <div class="h-3 text-3xl text-right quote">”</div>
             </div>
           </div>
-        </div>
-      </VueSlickCarousel>
+        </VueSlickCarousel>
+      </div>
 
       <LazyHydrate when-visible>
         <NewsletterModal @email-submitted="onSubscribe" />
@@ -652,7 +653,7 @@ export default {
               title: testimony.person_position,
             };
           });
-          this.testimonials = testim.slice(0, 3);
+          this.testimonials = testim;
         })
         .catch((err) => '');
     },

@@ -39,9 +39,8 @@
         @input="sendChanges"
       />
     </div>
-
     <div class="ml-2">
-      <Accordion v-if="categories" class="mb-[6%]">
+      <Accordion v-if="categories.length > 0" class="mb-[6%]">
       <template v-slot:title>
         <span class="text-[18px]">Category</span>
       </template>

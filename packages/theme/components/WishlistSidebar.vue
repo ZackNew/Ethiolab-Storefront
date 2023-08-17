@@ -44,7 +44,7 @@
                 class="collected-product sf-collected-product"
               >
                 <template #configuration>
-                  <div class="collected-product__properties">
+                  <!-- <div class="collected-product__properties">
                     <SfProperty
                       v-for="(
                         attribute, key
@@ -56,9 +56,11 @@
                       :name="key"
                       :value="attribute"
                     />
-                  </div>
+                  </div> -->
+                  &nbsp;
                 </template>
                 <template #input="{}">&nbsp;</template>
+                <template #actions>&nbsp;</template>
               </SfCollectedProduct>
             </transition-group>
           </div>
@@ -78,7 +80,7 @@
         <div v-else class="empty-wishlist" key="empty-wishlist">
           <div class="empty-wishlist__banner">
             <SfImage
-            src="/icons/empty-cart.png"
+              src="/icons/empty-cart.png"
               alt="Empty bag"
               class="empty-wishlist__icon"
             />
