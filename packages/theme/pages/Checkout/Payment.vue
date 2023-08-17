@@ -84,7 +84,7 @@
                 class="sf-property--full-width property"
               />
               <SfProperty
-                :name="$t('Standard Tax')"
+                name="VAT"
                 :value="standardTax.toLocaleString() + ' ETB'"
                 class="sf-property--full-width property"
               />
@@ -229,7 +229,12 @@
                     id="submit"
                     name="submit"
                     value="PAY WITH CYBERSOURCE"
-                    class="box-border relative flex h-12 pl-4 pr-4 align-center justify-center text-white bg-primary delay-75 bg-center uppercase cursor-pointer font-bold rounded-lg"
+                    class="box-border relative flex h-12 pl-4 pr-4 align-center justify-center delay-75 bg-center uppercase cursor-pointer font-bold rounded-lg"
+                    :class="
+                      !terms
+                        ? 'bg-[#f1f2f3] text-[#dfdfdf]'
+                        : 'bg-primary text-white'
+                    "
                   />
                 </form>
               </div>
@@ -239,6 +244,7 @@
                   v-e2e="'make-an-order'"
                   class="summary__action-button"
                   @click="processTelebirr"
+                  :disabled="!terms"
                 >
                   {{ $t('Pay with Telebirr') }}
                 </SfButton>
