@@ -305,7 +305,7 @@ export default {
   async created() {
     this.loadings = true;
     this.getVariants();
-    this.reviews = await this.getProductsReviews();
+    // this.reviews = await this.getProductsReviews();
   },
 
   setup(props, context) {
@@ -539,7 +539,7 @@ export default {
                       preview
                     }
                     customFields{
-                      
+                      reviewRating
                     }
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {
@@ -627,8 +627,8 @@ export default {
         query: `
         query{
           product(id: ${this.id}){
-            reviews{
-              items{
+            reviews {
+              items {
                 summary
                 body
                 rating
@@ -640,7 +640,6 @@ export default {
             }
             customFields{
               youtube_link
-              maintenance_fee
             }
           }
         }
