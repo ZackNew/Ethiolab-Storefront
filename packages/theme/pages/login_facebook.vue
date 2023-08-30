@@ -52,10 +52,10 @@ export default {
       });
 
       // localStorage.setItem("etech_token", data.data.data.authenticate.channels[0].token)
-      // setCookie("etech-auth-token",  data.data.data.authenticate.channels[0].token)
+      // setCookie("vendure-auth-token",  data.data.data.authenticate.channels[0].token)
 
-      if (data.headers['etech-auth-token'])
-        setCookie('etech-auth-token', data.headers['etech-auth-token']);
+      if (data.headers['vendure-auth-token'])
+        setCookie('vendure-auth-token', data.headers['vendure-auth-token']);
       location.href = 'http://localhost:3001'; //redirect
     };
     login().catch((e) => console.log('NErf Error ', e));

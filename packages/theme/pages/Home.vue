@@ -721,9 +721,13 @@ export default {
     const BIG_SALE = computed(() =>
       JSON.parse(getCms.value[5]?.content ?? '{}')
     );
-    const bigSale = BIG_SALE?.value?.map((pro) => {
-      return JSON.parse(pro ?? '{}');
-    });
+    let bigSale;
+    if (BIG_SALE.length > 0) {
+      bigSale = BIG_SALE?.value?.map((pro) => {
+        return JSON.parse(pro ?? '{}');
+      });
+    }
+
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
 
     const unseen = computed(

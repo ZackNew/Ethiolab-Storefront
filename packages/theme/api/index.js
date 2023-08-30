@@ -40,7 +40,7 @@ app.post('/shop', async function (req, res) {
     let cookies = req.headers.cookie.split('; ');
 
     for (let i = 0; i < cookies.length; i++) {
-      if (cookies[i].startsWith('etech-auth-token=')) {
+      if (cookies[i].startsWith('vendure-auth-token=')) {
         etech_auth_token = cookies[i].split('=')[1];
         break;
       }
@@ -56,7 +56,7 @@ app.post('/shop', async function (req, res) {
 
     try {
       await axios
-        .post('https://admin.ethiolab.et/shop-api', body, options)
+        .post('http://localhost:3000/shop-api', body, options)
         .then((resp) => {
           res.status(200).json({ data: resp.data });
         })

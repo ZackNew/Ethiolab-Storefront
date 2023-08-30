@@ -443,6 +443,11 @@ export default {
                 slug
               }
               name
+              productVariants {
+                items{
+                  productId
+                }
+              }
               featuredAsset{
                 preview
               }
@@ -475,9 +480,17 @@ export default {
         .post('/api/shop', body, options)
         .then(async (res) => {
           if (
-            res.data?.data?.data.collection?.filters[0]?.args[0].name ===
-            'productIds'
+            res.data?.data?.data.collection?.productVariants?.items.length > 0
           ) {
+            const list_of_id = [];
+            res.data?.data?.data.collection?.productVariants.items.forEach(
+              (item) => {
+                if (!list_of_id.includes(item.productId)) {
+                  list_of_id.push(item.productId);
+                }
+              }
+            );
+
             const productIdString = JSON.parse(
               res.data?.data?.data.collection?.filters[0]?.args[0].value
             );
@@ -519,7 +532,7 @@ export default {
                         }
                       }`,
               variables: {
-                in: productId,
+                in: list_of_id,
               },
               csrfToken: this.$store.state.csrfToken.csrfToken,
             };

@@ -370,7 +370,9 @@ export default {
         const existingObj = acc.find((obj) => obj[key]);
 
         if (existingObj) {
-          existingObj[key].push(value);
+          if (!existingObj[key].includes(value)) {
+            existingObj[key].push(value);
+          }
         } else {
           acc.push({
             [key]: [value],

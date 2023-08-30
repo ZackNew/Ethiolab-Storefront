@@ -242,7 +242,7 @@ export default {
   methods: {
     async openPDF(link) {
       const url = process.env.GRAPHQL_API?.split('/shop-api')[0] + link;
-      const token = this.$cookies.get('etech-auth-token');
+      const token = this.$cookies.get('vendure-auth-token');
       const options = {
         responseType: 'blob',
         headers: {

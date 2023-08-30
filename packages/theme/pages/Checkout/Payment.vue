@@ -555,7 +555,7 @@ export default {
     };
   },
   created() {
-    this.cookieToken = this.$cookies.get('etech-auth-token');
+    this.cookieToken = this.$cookies.get('vendure-auth-token');
   },
   computed: {
     phoneNumber() {
@@ -582,7 +582,7 @@ export default {
     //       orderCode: cart?.value?.code,
     //     },
     //   };
-    //   const token = this.$cookies.get('etech-auth-token');
+    //   const token = this.$cookies.get('vendure-auth-token');
     //   const options = {
     //     headers: {
     //       'Content-Type': 'application/json',

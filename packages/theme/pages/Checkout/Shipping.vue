@@ -193,7 +193,7 @@ export default {
   },
   created() {
     this.getEligibleLocation();
-    this.cookieToken = this.$cookies.get('etech-auth-token');
+    this.cookieToken = this.$cookies.get('vendure-auth-token');
   },
   methods: {
     async getEligibleLocation() {
