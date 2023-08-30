@@ -900,7 +900,6 @@ export default {
               }
               customFields{
                 reviewRating
-                is_order_based
               }
             }
           }

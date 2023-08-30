@@ -654,9 +654,6 @@ export default {
             }
             customFields{
               youtube_link
-              documentations
-              is_order_based
-              granularity
             }
             featuredAsset{
               preview

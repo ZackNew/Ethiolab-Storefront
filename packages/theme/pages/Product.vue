@@ -76,7 +76,7 @@
 
               <div class="flex mb-5 items-center">
                 <input
-                min="1"
+                  min="1"
                   class="max-w-[60px] h-12 text-center mr-4"
                   :class="
                     isDarkMode ? 'bg-[#182533] text-white' : 'bg-[#EBEBEB]'
@@ -539,7 +539,7 @@ export default {
                       preview
                     }
                     customFields{
-                      granularity
+                      
                     }
                     variantList(options: {filter: {id: {eq: $eq}}}) {
                       items {

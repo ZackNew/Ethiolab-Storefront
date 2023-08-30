@@ -520,7 +520,6 @@ export default {
                               }
                             }
                             customFields{
-                              is_order_based
                               industries{
                                 name
                               }
