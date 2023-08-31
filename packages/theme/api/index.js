@@ -56,7 +56,7 @@ app.post('/shop', async function (req, res) {
 
     try {
       await axios
-        .post('http://10.10.20.45:3000/shop-api', body, options)
+        .post('https://196.188.235.251/shop-api', body, options)
         .then((resp) => {
           res.status(200).json({ data: resp.data });
         })
