@@ -1079,9 +1079,10 @@ export default {
   background-color: var(--c-accent);
   padding: 5%;
   box-shadow: 1px 1px 3px #bbbbbb;
-  min-height: 15rem;
-  max-height: 18rem;
+  height: 18rem;
+  width: 24rem;
   overflow: auto;
+  margin: 1em 2em;
 }
 
 .noScrollbar::-webkit-scrollbar {
