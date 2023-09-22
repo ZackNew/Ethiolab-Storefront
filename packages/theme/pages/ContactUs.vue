@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="isDarkMode ? 'text-white' : ''">
     <div class="mt-8 md:mt-20 wrap">
       <!-- <section class="sf-call-to-action rounded" :style="style">
         <div class="sf-call-to-action__text-container">
@@ -19,7 +19,7 @@
       </h2> -->
       <div class="md:flex">
         <div
-          class="mx-auto card shadow-lg w-[92%] md:w-2/3 font-bold p-3 rounded text-white bg-secondary"
+          class="mx-auto card shadow-lg md:w-2/3 font-bold p-3 rounded text-white bg-secondary"
         >
           <h4 class="text-7xl mb-5 mt-10">HOW CAN WE HELP?</h4>
           <p>
@@ -162,11 +162,27 @@
                 v-slot="{ errors }"
                 slim
               >
-                <div class="w-[100%]">
+                <div class="w-full mb-2">
+                  <textarea
+                    id="message"
+                    placeholder="Message *"
+                    cols="75"
+                    rows="10"
+                    class="border p-2 placeholder:text-faded_black rounded-sm focus:outline-primary focus:outline focus:border-none"
+                    :class="
+                      isDarkMode
+                        ? 'bg-dark_accent border-faded_white text-light_accent placeholder:text-faded_white'
+                        : 'bg-light_accent border-dark_accent'
+                    "
+                    v-model="form.message"
+                    required
+                  ></textarea>
+                </div>
+                <!-- <div class="w-full">
                   <textarea
                     id="message"
                     name="message"
-                    class="w-[100%] border p-3"
+                    class="w-full bg-none border p-3"
                     placeholder="Your Message"
                     v-model="form.message"
                     :rows="10"
@@ -183,7 +199,7 @@
                       <div class="display-none">Required</div>
                     </transition>
                   </div>
-                </div>
+                </div> -->
               </ValidationProvider>
             </div>
 

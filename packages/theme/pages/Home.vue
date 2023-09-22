@@ -275,10 +275,15 @@
       <!-- <LazyHydrate when-visible>
         <Testimonial :testimonials="testimonials" />
       </LazyHydrate> -->
-      <div v-if="testimonials.length > 0">
-        <h1 class="md:text-4xl text-secondary text-center">Testimonials</h1>
+      <div
+        v-if="testimonials.length > 0"
+        class="block w-full items-center justify-center mx-auto"
+      >
+        <h1 class="md:text-4xl text-secondary text-center mb-3">
+          Testimonials
+        </h1>
         <VueSlickCarousel
-          class="carousel-wrapper wraplg"
+          class="carousel-wrapper wraplg w-full mx-auto items-center justify-center"
           v-bind="settings"
           :slidesToShow="3"
         >
@@ -318,10 +323,10 @@
             </div>
           </template>
           <div v-for="testimony in testimonials" :key="testimony.id" cl>
-            <div class="testimonial_card mr-2 noScrollbar">
+            <div class="testimonial_card noScrollbar">
               <div class="flex flex-col">
                 <div
-                  class="mx-auto w-24 h-24 overflow-hidden bg-gray-100 border-2 border-indigo-100 rounded-full"
+                  class="mx-auto w-24 h-24 overflow-hidden bg-gray-100 border-2 border-secondary rounded-full"
                 >
                   <img
                     :src="
@@ -329,7 +334,7 @@
                       ` https://cdn.pixabay.com/photo/2017/05/19/12/38/entrepreneur-2326419__340.jpg`
                     "
                     alt="img"
-                    class="object-cover object-center w-full h-full"
+                    class="object-cover object-center w-full h-full mb-4"
                   />
                 </div>
                 <h5 class="font-bold quote text-center">
@@ -1044,7 +1049,6 @@ export default {
 }
 .wraplg {
   @include for-desktop {
-    max-width: 93% !important;
     margin: auto;
   }
 }
@@ -1079,9 +1083,10 @@ export default {
   background-color: var(--c-accent);
   padding: 5%;
   box-shadow: 1px 1px 3px #bbbbbb;
-  min-height: 15rem;
-  max-height: 18rem;
+  height: 18rem;
+  width: 21rem;
   overflow: auto;
+  margin: auto;
 }
 
 .noScrollbar::-webkit-scrollbar {
