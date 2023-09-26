@@ -50,7 +50,7 @@ type Query {
   # Search Products based on the criteria set by the `SearchInput`
   search(input: SearchInput!): SearchResponse!
   # Gets different content based on their `Type`
-  getCms(type:[Type!]!):[cms]
+  getCms(type: [Type!]!): [cms]
 }
 
 type Mutation {
@@ -3127,12 +3127,12 @@ input NativeAuthInput {
   password: String!
 }
 
-type cms{
+type cms {
   id: ID!
-  cmsType:Type!
+  cmsType: Type!
   assets: [Asset]
-  featuredAsset:Asset
-  content:[String]
-  translations:[CmsTranslation]
+  featuredAsset: Asset
+  content: [String]
+  translations: [CmsTranslation]
   languageCode: LanguageCode
 }

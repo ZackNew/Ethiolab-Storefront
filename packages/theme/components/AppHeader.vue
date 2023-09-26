@@ -15,6 +15,7 @@
           -->
           <template #logo>
             <nuxt-link :to="localePath('/')">
+              <SfImage src="/Logo.png" :alt="$t('Ethiolab')" class="sf-header__logo-image"/>
               <!-- <SfImage
                 :src="logo || ''"
                 alt="EthioLab"
@@ -22,9 +23,9 @@
                 class="sf-header__logo-image"
               /> -->
               <!-- <img :src="logo || ''" alt="" width="400px" /> -->
-              <div class="image-container min-w-[290px]">
+              <!-- <div class="image-container min-w-[290px]">
                 <div class="background-image" ref="backgroundImage"></div>
-              </div>
+              </div> -->
             </nuxt-link>
           </template>
           <template #aside>
@@ -90,11 +91,10 @@
               :placeholder="$t('Search for items')"
               :value="term"
               class="search md:w-[29rem] md:h-[2.5rem] rounded-xl border-none md:mr-3"
-              :class="
-                isDarkMode
-                  ? 'bg-[#182f3f] text-white'
-                  : 'bg-light_accent text-black'
-              "
+              :class="isDarkMode
+                ? 'bg-[#182f3f] text-white'
+                : 'bg-light_accent text-black'
+                "
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="searchInputHandle"
@@ -119,7 +119,7 @@
                     isSearchOpen
                       ? (isSearchOpen = false)
                       : (isSearchOpen = true)
-                  "
+                    "
                 >
                   <SfIcon icon="search" color="#ffffff" />
                 </SfButton>
@@ -392,7 +392,7 @@ export default {
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
     const messageToSend = ref('');
-    const selectedProd = () => {};
+    const selectedProd = () => { };
 
     const sendMessageToAdmin = async () => {
       await loadUser();
@@ -652,12 +652,15 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
 }
+
 .sf-header {
   --header-width: 90%;
   --header-padding: var(--spacer-sm);
+
   @include for-desktop {
     --header-padding: 0;
   }
+
   &__navigation.is-visible {
     --header-navigation-display: block;
   }
@@ -681,38 +684,47 @@ export default {
   color: var(--c-text);
   text-decoration: none;
 }
+
 @media (max-width: 800px) {
   .search {
     width: 80%;
     margin-left: 40px;
   }
 }
+
 #messages-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   overflow-y: scroll;
 }
+
 .msg-from-admin {
   background-color: lightblue;
 }
+
 .msg-from-me {
   background-color: lightyellow;
 }
+
 .header-on-top {
   z-index: 2;
 }
+
 #msg-to-send {
   width: 75%;
 }
+
 #send-btn {
   width: 25%;
 }
+
 .cart-badge {
   position: absolute;
   bottom: 40%;
   left: 40%;
 }
+
 .sf-search-bar__button {
   background-color: var(--c-secondary);
   height: 100%;
@@ -723,16 +735,19 @@ export default {
   padding-right: 10px;
   padding-left: 10px;
 }
+
 .header2 {
   width: fit-content;
   margin: auto;
 }
+
 .wrap {
   @include for-desktop {
     max-width: 1250px !important;
     margin: auto;
   }
 }
+
 #sendmessage {
   position: fixed;
   bottom: 1%;
@@ -770,6 +785,7 @@ export default {
   top: 0;
   z-index: 1;
 }
+
 .chat-bottom {
   bottom: 0;
   z-index: 1;
