@@ -168,7 +168,7 @@
                     placeholder="Message *"
                     cols="75"
                     rows="10"
-                    class="border p-2 placeholder:text-faded_black rounded-sm focus:outline-primary focus:outline focus:border-none"
+                    class="border p-2 placeholder:text-faded_black rounded-sm focus:outline focus:outline-primary focus:placeholder-primary focus:border-none"
                     :class="
                       isDarkMode
                         ? 'bg-dark_accent border-faded_white text-light_accent placeholder:text-faded_white'

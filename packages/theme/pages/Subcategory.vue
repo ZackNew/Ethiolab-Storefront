@@ -56,7 +56,7 @@
         </div>
         <!-- <div class="p-3 hidden md:block">
           <LazyHydrate>
-             :buttonText="adSection.buttonText || 'AD Button'" 
+             :buttonText="adSection.buttonText || 'AD Button'"
             <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
@@ -238,7 +238,7 @@
 <script>
 import Banner from '~/components/Banner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
-import { computed, ref } from '@vue/composition-api';
+import { computed } from '@vue/composition-api';
 import {
   SfRange,
   SfAccordion,
@@ -329,7 +329,7 @@ export default {
       return filterProducts;
     },
     brandsList() {
-      let brand = [];
+      const brand = [];
       this.products.forEach((element) => {
         if (element.customFields.brand?.name) {
           brand.push(element.customFields.brand?.name);
@@ -339,7 +339,7 @@ export default {
       return brands;
     },
     industryList() {
-      let industry = [];
+      const industry = [];
       this.products.forEach((element) => {
         element.customFields.industries.forEach((i) => {
           industry.push(i?.name);
@@ -349,7 +349,7 @@ export default {
       return industries;
     },
     facetList() {
-      let allFacets = [];
+      const allFacets = [];
       this.products.forEach((element) => {
         if (element.facetValues.length !== 0) {
           element.facetValues.forEach((facet) => {
@@ -357,9 +357,9 @@ export default {
           });
         }
       });
-      let semiFinalFacets = [];
+      const semiFinalFacets = [];
       allFacets.forEach((f) => {
-        let a = {};
+        const a = {};
         a[f.facet.name] = f.name;
         semiFinalFacets.push(a);
       });
@@ -498,7 +498,7 @@ export default {
             const productId = productIdString.map((num) => {
               return String(num);
             });
-            let pbody = {
+            const pbody = {
               query: `query getProductById($in: [String!]) {
                         products(options: {filter: {id: {in: $in}}}) {
                           items {
@@ -546,7 +546,7 @@ export default {
                 berta: token,
               },
             };
-            var prod = await axios.post('/api/shop', pbody, options);
+            let prod = await axios.post('/api/shop', pbody, options);
             this.products = prod.data?.data.data?.products?.items;
           }
           this.loading = false;

@@ -138,9 +138,9 @@
       />
     </div>
     <button @click="clearAllFilters" class="bg-secondary text-white rounded w-full py-1 text-center">Clear All Filters</button>
-    <div class="mt-5 hidden md:block">
+    <!-- <div class="mt-5 hidden md:block">
           <LazyHydrate>
-            <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
+            :buttonText="adSection.buttonText || 'AD Button'"
             <Banner
               :title="adSection.title || 'AD Title'"
               :subtitle="adSection.overview || 'AD Overview'"
@@ -151,21 +151,21 @@
             >
             </Banner>
           </LazyHydrate>
-        </div>
+      </div> -->
   </div>
 </template>
 
 <script>
-import { useUiHelpers, useUiState } from '~/composables';
+import { useUiState } from '~/composables';
 import { SfAccordion, SfSearchBar } from '@storefront-ui/vue';
-import { computed, ref } from '@vue/composition-api';
+import { computed } from '@vue/composition-api';
 import LazyHydrate from 'vue-lazy-hydration';
 import {
   VsaList,
   VsaItem,
   VsaHeading,
   VsaContent,
-  VsaIcon,
+  VsaIcon
 } from 'vue-simple-accordion';
 import 'vue-simple-accordion/dist/vue-simple-accordion.css';
 import Accordion from './Accordion.vue';
@@ -194,8 +194,8 @@ export default {
         { minrange: 50, maxrange: 1999 },
         { minrange: 2000, maxrange: 9999 },
         { minrange: 10000, maxrange: 49999 },
-        { minrange: 50000, maxrange: 100000 },
-      ],
+        { minrange: 50000, maxrange: 100000 }
+      ]
     };
   },
   props: {
@@ -206,8 +206,8 @@ export default {
     },
     filters: {
       type: Array,
-      required: true,
-    },
+      required: true
+    }
   },
   methods: {
     categoryClicked(event) {
@@ -228,7 +228,7 @@ export default {
     },
     checkOne(checkbox, filterClicked) {
       filterClicked(checkbox);
-      var checkboxes = document.getElementsByName('categories');
+      const checkboxes = document.getElementsByName('categories');
       checkboxes.forEach((item) => {
         if (item.getAttribute('id') !== checkbox.target.getAttribute('id')) {
           if (item.checked) {
@@ -241,16 +241,22 @@ export default {
     filterClicked(event) {
       this.$emit('filterClicked', event.target);
     },
-    clearAllFilters(){
-      this.min = ''
-      this.max = ''
-      var categoryCheckbox = document.getElementsByName('categories');
-      var otherCheckbox = document.getElementsByName('otherFiilters');
-      var priceRadio = document.getElementsByName('group1');
-      categoryCheckbox.forEach((item) => {item.checked = false})
-      otherCheckbox.forEach((item) => {item.checked = false})
-      priceRadio.forEach((item) => {item.checked = false})
-      this.$emit('clearClicked')
+    clearAllFilters() {
+      this.min = '';
+      this.max = '';
+      const categoryCheckbox = document.getElementsByName('categories');
+      const otherCheckbox = document.getElementsByName('otherFiilters');
+      const priceRadio = document.getElementsByName('group1');
+      categoryCheckbox.forEach((item) => {
+        item.checked = false;
+      });
+      otherCheckbox.forEach((item) => {
+        item.checked = false;
+      });
+      priceRadio.forEach((item) => {
+        item.checked = false;
+      });
+      this.$emit('clearClicked');
     }
   },
   setup() {
@@ -265,7 +271,7 @@ export default {
       adSection,
       adImage
     };
-  },
+  }
 };
 </script>
 

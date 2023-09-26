@@ -179,8 +179,8 @@
                   </SfList>
                 </template>
               </SfAccordionItem>
-              <div class="p-3 hidden md:block border-t-2 border-[#efefef]">
-                <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
+              <!-- <div class="p-3 hidden md:block border-t-2 border-[#efefef]">
+                :buttonText="adSection.buttonText || 'AD Button'"
                 <LazyHydrate>
                   <Banner
                     :title="adSection.title || 'AD Title'"
@@ -192,7 +192,7 @@
                   >
                   </Banner>
                 </LazyHydrate>
-              </div>
+              </div> -->
             </SfAccordion>
           </SfLoader>
         </LazyHydrate>

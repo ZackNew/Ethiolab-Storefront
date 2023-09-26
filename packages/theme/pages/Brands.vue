@@ -100,7 +100,7 @@
         >
           <div class="justify-end">
             <div class="flex flex-col items-center py-10">
-              <img src="~/static/noProduct.png" alt="" />
+              <img src="~/static/noProduct.png" alt="no product" />
               <h2>OOPS!</h2>
               <p>No Product Avaliable!</p>
             </div>
@@ -125,7 +125,7 @@
               <button
                 id="dropdownDefault"
                 data-dropdown-toggle="dropdown"
-                class="flex justify-between mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:shadow-2xl font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
+                class="flex justify-between mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:shadow-2xl font-medium rounded-lg text-sm px-4 py-1.5 text-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-44"
                 type="button"
                 @click="open = !open"
               >
@@ -216,7 +216,7 @@ import {
   SfBreadcrumbs,
   SfBanner,
 } from '@storefront-ui/vue';
-import { computed, onMounted, ref, onBeforeMount } from '@vue/composition-api';
+import { computed } from '@vue/composition-api';
 import Loading from '~/components/Loading.vue';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import axios from 'axios';
@@ -279,7 +279,7 @@ export default {
 
           let matchFound = false;
           if (product.collections.length > 0) {
-            for (let collection of product.collections) {
+            for (const collection of product.collections) {
               matchFound = filtersClicked.includes(collection.name);
               if (matchFound) {
                 break;
@@ -327,7 +327,7 @@ export default {
       return filterProducts;
     },
     industryList() {
-      let industry = [];
+      const industry = [];
       this.products.forEach((product) => {
         product.customFields.industries.forEach((i) => {
           industry.push(i?.name);
@@ -337,11 +337,11 @@ export default {
       return industries;
     },
     collectionList() {
-      let collection = [];
+      const collection = [];
       this.products.forEach((product) => {
         if (product.collections !== null) {
           product.collections.forEach((c) => {
-            if (c?.parent?.name == '__root_collection__') {
+            if (c?.parent?.name === '__root_collection__') {
               collection.push(c.name);
             }
           });
@@ -351,7 +351,7 @@ export default {
       return collections;
     },
     facetList() {
-      let allFacets = [];
+      const allFacets = [];
       this.products.forEach((element) => {
         if (element.facetValues.length !== 0) {
           element.facetValues.forEach((facet) => {
@@ -359,9 +359,9 @@ export default {
           });
         }
       });
-      let semiFinalFacets = [];
+      const semiFinalFacets = [];
       allFacets.forEach((f) => {
-        let a = {};
+        const a = {};
         a[f.facet.name] = f.name;
         semiFinalFacets.push(a);
       });

@@ -5,7 +5,14 @@
       !isDarkMode ? 'background-color: white' : 'background-color: #182533'
     "
   >
-  <img v-if="product.customFields.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[100]"/>
+    <img
+      v-if="product.customFields.is_order_based"
+      src="/OB.png"
+      height="100"
+      width="100"
+      alt="order based"
+      class="absolute z-[100]"
+    />
     <nuxt-link :to="{ path: '/v/' + product.slug }">
       <LazyHydrate>
         <img
@@ -18,7 +25,7 @@
     <nuxt-link :to="{ path: '/v/' + product.slug }">
       <div class="m-1">
         <h4
-          class="truncate-overflow mx-3 my-2 mx-auto font-extrabold text-secondary md:text-lg text-center md:min-h-[7rem]"
+          class="truncate-overflow my-2 mx-auto font-extrabold text-secondary md:text-lg text-center md:min-h-[7rem]"
         >
           {{ product.name }}
         </h4>
@@ -55,7 +62,7 @@
     <div class="text-center m-3 text-xs md:text-base" v-else>
       <div class="inline-flex" v-for="(p, index) of prices" :key="index">
         <div class="mx-2" v-if="index === 1">-</div>
-        <template>{{ parseFloat(p).toLocaleString()}}ETB </template>
+        <template>{{ parseFloat(p).toLocaleString() }}ETB </template>
       </div>
     </div>
   </div>
@@ -64,7 +71,7 @@
 <script>
 import Toast from '~/components/Toast.vue';
 import { useUiState } from '~/composables';
-import { computed, onMounted, inject } from '@vue/composition-api';
+import { inject } from '@vue/composition-api';
 import LazyHydrate from 'vue-lazy-hydration';
 
 export default {
@@ -119,8 +126,8 @@ export default {
         return fPrice;
       }
       if (this.product?.variants.length > 1) {
-        let items = this.product?.variants;
-        let prices = [];
+        const items = this.product?.variants;
+        const prices = [];
         items.forEach((item) => {
           prices.push(item.price);
         });
