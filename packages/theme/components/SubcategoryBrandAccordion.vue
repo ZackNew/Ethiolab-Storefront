@@ -138,8 +138,8 @@
       />
     </div>
     <button @click="clearAllFilters" class="bg-secondary text-white rounded w-full py-1 text-center">Clear All Filters</button>
-    <!-- <div class="mt-5 hidden md:block">
-          <LazyHydrate>
+    <div class="mt-5 hidden md:block">
+        <LazyHydrate>
             :buttonText="adSection.buttonText || 'AD Button'"
             <Banner
               :title="adSection.title || 'AD Title'"
@@ -149,10 +149,10 @@
               :image="adImage || '/homepage/bannerA.webp'"
               link="/c/clinical-laboratory"
             >
-            </Banner>
-          </LazyHydrate>
-      </div> -->
-  </div>
+          </Banner>
+        </LazyHydrate>
+    </div>
+</div>
 </template>
 
 <script>
@@ -265,7 +265,11 @@ export default {
     const adSection = computed(() =>
       JSON.parse(getCms.value[3]?.content ?? '{}')
     );
-    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
+    const adImage = computed(() => getCms.value[3]?.featuredAsset?.preview);
+    // const adImage = computed(() => {
+    //   const cmsValue = getCms.value[3];
+    //   return cmsValue && cmsValue.featuredAsset ? cmsValue.featuredAsset.preview : null;
+    // });
     return {
       isDarkMode,
       adSection,
