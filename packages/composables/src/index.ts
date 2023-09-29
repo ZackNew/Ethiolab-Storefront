@@ -17,13 +17,13 @@ export { useWishlist } from './composables/useWishlist';
 export { useForgotPassword } from './composables/useForgotPassword';
 export { usePayment } from './composables/usePayment';
 export { useRelatedProducts } from './composables/useRelatedProducts';
-export {useTest} from './composables/useTest'
-export {useAnotherTest} from './composables/useAnotherTest';
-export {useQuote} from './composables/useQuote';
-export {useInstantMessage} from './composables/useInstantMessage';
+export { useTest } from './composables/useTest';
+export { useAnotherTest } from './composables/useAnotherTest';
+export { useQuote } from './composables/useQuote';
+export { useInstantMessage } from './composables/useInstantMessage';
 
-export {useTinNumber} from './composables/useTinNumber';
-export {useContactUs} from './composables/useContactUs';
+export { useTinNumber } from './composables/useTinNumber';
+export { useContactUs } from './composables/useContactUs';
 
 // Getters
 export { cartGetters } from './getters/cartGetters';
@@ -38,7 +38,6 @@ export { userGetters } from './getters/userGetters';
 export { userShippingGetters } from './getters/userShippingGetters';
 export { wishlistGetters } from './getters/wishlistGetters';
 export { default as forgotPasswordGetters } from './getters/forgotPasswordGetters';
-
 
 // Types
 export * from './types/types';

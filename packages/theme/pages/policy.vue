@@ -31,7 +31,7 @@ import {
   SfBreadcrumbs,
   SfHeading,
 } from '@storefront-ui/vue';
-import { computed, onMounted, ref } from '@vue/composition-api';
+import { computed, ref } from '@vue/composition-api';
 import { useCms } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 export default {
@@ -45,11 +45,18 @@ export default {
   setup(props, context) {
     const { isDarkMode } = useUiState();
     const { search: searchCms, getCms } = useCms();
-    const staticPages = computed(() => JSON.parse(getCms.value[4].content));
+    // const staticPages = computed(() => JSON.parse(getCms.value[4].content));
+    const staticPages = computed(() => {
+      try {
+        return JSON.parse(getCms.value[3].content);
+      } catch (error) {
+        return [];
+      }
+    });
     staticPages.value.forEach((element) => {
       element.description = [element?.description];
     });
-    const activePage = ref('RETURN');
+    const activePage = ref('');
     const breadcrumbs = computed(() => [
       { text: 'Home', route: { link: '/' } },
       { text: activePage.value, route: { link: '#' } },
@@ -57,7 +64,7 @@ export default {
     let contents = ref('');
     const changeActivePage = (title) => {
       activePage.value = title;
-      contents = staticPages.value.filter((page) => page.name == title);
+      contents = staticPages.value.filter((page) => page.name === title);
     };
     return {
       staticPages,

@@ -31,7 +31,7 @@ import {
   SfBreadcrumbs,
   SfHeading,
 } from '@storefront-ui/vue';
-import { computed, onMounted, ref } from '@vue/composition-api';
+import { computed, ref } from '@vue/composition-api';
 import { useCms } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 export default {
@@ -42,14 +42,20 @@ export default {
     SfBreadcrumbs,
     SfHeading,
   },
-  setup(props, context) {
+  setup() {
     const { isDarkMode } = useUiState();
-    const { search: searchCms, getCms } = useCms();
-    const staticPages = computed(() => JSON.parse(getCms.value[2].content));
+    const { getCms } = useCms();
+    const staticPages = computed(() => {
+      try {
+        return JSON.parse(getCms.value[3].content);
+      } catch (error) {
+        return [];
+      }
+    });
     staticPages.value.forEach((element) => {
       element.description = [element?.description];
     });
-    const activePage = ref('ABOUT');
+    const activePage = ref('');
     const breadcrumbs = computed(() => [
       { text: 'Home', route: { link: '/' } },
       { text: activePage.value, route: { link: '#' } },
@@ -57,7 +63,7 @@ export default {
     let contents = ref('');
     const changeActivePage = (title) => {
       activePage.value = title;
-      contents = staticPages.value.filter((page) => page.name == title);
+      contents = staticPages.value.filter((page) => page.name === title);
     };
     return {
       staticPages,
@@ -68,42 +74,42 @@ export default {
       isDarkMode,
     };
   },
-  data() {
-    return {
-      pages: [
-        {
-          name: 'About',
-          description: [
-            'Ethiolab is a firm established in 2012 with the objective of supplying quality equipment from branded partners for research and development, testing, measuring and laboratory analysis applications.',
-            ' We have solutions for R&D institutions, universities, production industries, and controlling & regulating authorities. On our eCommerce platform, we carry several portable measuring and testing devices, laboratory and research consumables, instruments and many more ranges for our partners and customers. In addition to our high equipment quality our after sales service is a source of trust by our clients.',
-          ],
-        },
-        {
-          name: 'Mission',
-          description: [
-            'Providing high quality and latest technology laboratory instruments from world leading companies to researchers and other interested parties with efficient pre and post sales service.',
-            'Creating an alternative marketplace online where safe and reliable market transactions are carried out.',
-            'Growing and expanding our business to regional cities of the country.',
-          ],
-        },
-        {
-          name: 'Vision',
-          description: [
-            'To be the leading laboratory products supplier in Africa.',
-          ],
-        },
-        {
-          name: 'Value',
-          description: [
-            'Our first principal is honesty in our engagements with clients to serve them in a manner that upholds our cultural values as Ethiopians, where a promise is highly consecrated above all. ',
-            'We believe trust is everything in the business world; therefore, we encourage open communication with our employees as well as with our clients.',
-            'Passion – We are driven to perform better, progress constantly and exceed expectations.',
-            '',
-          ],
-        },
-      ],
-    };
-  },
+  // data() {
+  //   return {
+  //     pages: [
+  //       {
+  //         name: 'About',
+  //         description: [
+  //           'Ethiolab is a firm established in 2012 with the objective of supplying quality equipment from branded partners for research and development, testing, measuring and laboratory analysis applications.',
+  //           ' We have solutions for R&D institutions, universities, production industries, and controlling & regulating authorities. On our eCommerce platform, we carry several portable measuring and testing devices, laboratory and research consumables, instruments and many more ranges for our partners and customers. In addition to our high equipment quality our after sales service is a source of trust by our clients.',
+  //         ],
+  //       },
+  //       {
+  //         name: 'Mission',
+  //         description: [
+  //           'Providing high quality and latest technology laboratory instruments from world leading companies to researchers and other interested parties with efficient pre and post sales service.',
+  //           'Creating an alternative marketplace online where safe and reliable market transactions are carried out.',
+  //           'Growing and expanding our business to regional cities of the country.',
+  //         ],
+  //       },
+  //       {
+  //         name: 'Vision',
+  //         description: [
+  //           'To be the leading laboratory products supplier in Africa.',
+  //         ],
+  //       },
+  //       {
+  //         name: 'Value',
+  //         description: [
+  //           'Our first principal is honesty in our engagements with clients to serve them in a manner that upholds our cultural values as Ethiopians, where a promise is highly consecrated above all. ',
+  //           'We believe trust is everything in the business world; therefore, we encourage open communication with our employees as well as with our clients.',
+  //           'Passion – We are driven to perform better, progress constantly and exceed expectations.',
+  //           '',
+  //         ],
+  //       },
+  //     ],
+  //   };
+  // },
 };
 </script>
 <style lang="scss" scoped>

@@ -21,8 +21,7 @@
       <nuxt :key="$route.fullPath" />
       <client-only><Compare class="bottomright" /></client-only>
       <!-- <client-only><img src="chatr.png" alt="chat image" height="50px" width="50px" class="chatcss" /></client-only> -->
-
-      <!-- 
+      <!--
     <div id="layout" >
       <nuxt :key="$route.fullPath"/> -->
 
@@ -61,7 +60,7 @@ import { useCms, useFacet, useUser } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 import Toast from '~/components/Toast.vue';
-import { computed, ref, watchEffect, provide } from '@vue/composition-api';
+import { ref, provide } from '@vue/composition-api';
 export default {
   name: 'DefaultLayout',
   // middleware: 'themeChecker',
@@ -104,7 +103,7 @@ export default {
     provide('closeToast', closeToast);
     provide('showToast', showToast);
     loadUser().then(() => {
-      //this.$router.go(0)
+      // this.$router.go(0)
     });
 
     onSSR(async () => {

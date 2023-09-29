@@ -179,8 +179,8 @@
                   </SfList>
                 </template>
               </SfAccordionItem>
-              <!-- <div class="p-3 hidden md:block border-t-2 border-[#efefef]">
-                :buttonText="adSection.buttonText || 'AD Button'"
+              <div class="p-3 hidden md:block border-t-2 border-[#efefef]">
+                <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
                 <LazyHydrate>
                   <Banner
                     :title="adSection.title || 'AD Title'"
@@ -192,7 +192,7 @@
                   >
                   </Banner>
                 </LazyHydrate>
-              </div> -->
+              </div>
             </SfAccordion>
           </SfLoader>
         </LazyHydrate>
@@ -610,7 +610,6 @@ import { ref, computed, onMounted, inject } from '@vue/composition-api';
 import Banner from '~/components/Banner.vue';
 import ProductCard from '~/components/ProductCard.vue';
 import {
-  useCategory,
   useCart,
   useWishlist,
   productGetters,
@@ -647,10 +646,10 @@ export default {
       load: loadCart,
     } = useCart();
     const { getCms } = useCms();
-    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
     const adSection = computed(() =>
       JSON.parse(getCms.value[3]?.content ?? '{}')
     );
+    const adImage = computed(() => getCms.value[3]?.featuredAsset?.preview);
     const {
       addItem: addItemToWishlist,
       isInWishlist,

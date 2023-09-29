@@ -444,7 +444,6 @@ import Carousel from '~/components/carousel.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
 import RVPCard from '~/components/RVPCard.vue';
 import { useUiState } from '../composables';
-import cacheControl from './../helpers/cacheControl';
 import NewCarousel from '~/components/NewCarousel.vue';
 import {
   productGetters,
@@ -461,7 +460,6 @@ import {
 } from '@vue-storefront/vendure';
 import CategoriesAccordion from '~/components/CategoriesAccordion';
 import Banner from '~/components/Banner';
-import { onSSR } from '@vue-storefront/core';
 import {
   computed,
   onMounted,
@@ -470,12 +468,10 @@ import {
   onUnmounted,
 } from '@vue/composition-api';
 import { getCalculatedPrice } from '~/helpers';
-import getCms from '@vue-storefront/vendure-api/src/api/cms';
 import CategoryFeature from '../components/CategoryFeature.vue';
 import BestSeller from '../components/BestSeller.vue';
 import FeaturedProducts from '../components/FeaturedProducts.vue';
 import axios from 'axios';
-import { subscribe } from 'graphql';
 import CryptoJS from 'crypto-js';
 
 export default {

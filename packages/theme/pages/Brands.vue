@@ -50,9 +50,9 @@
               />
             </div>
           </div>
-          <!-- <div class="p-3 hidden md:block">
+          <div class="p-3 hidden md:block">
             <LazyHydrate>
-               :buttonText="adSection.buttonText || 'AD Button'" 
+              <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
               <Banner
                 :title="adSection.title || 'AD Title'"
                 :subtitle="adSection.overview || 'AD Overview'"
@@ -63,7 +63,7 @@
               >
               </Banner>
             </LazyHydrate>
-          </div> -->
+          </div>
         </div>
       </div>
       <!-- Subcategory name and description -->
@@ -512,7 +512,9 @@ export default {
     const adSection = computed(() =>
       JSON.parse(getCms.value[3]?.content ?? '{}')
     );
-    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
+
+    const adImage = computed(() => getCms.value[3]?.featuredAsset?.preview);
+
     return {
       adSection,
       adImage,
