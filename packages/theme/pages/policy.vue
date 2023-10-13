@@ -1,9 +1,9 @@
 <template>
   <div id="static">
-    <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    />
+    <div class="flex">
+      <p><nuxt-link to="/">HOME</nuxt-link>&nbsp; | &nbsp;</p>
+      <p>{{ activePage }}</p>
+    </div>
     <SfContentPages
       :active="$t(activePage)"
       :title="activePage"
@@ -52,9 +52,7 @@ export default {
     staticPages.value.forEach((element) => {
       element.description = [element?.description];
     });
-    // const activePage = ref('RETURN');
     const breadcrumbs = computed(() => [
-      { text: 'Home', route: { link: '/' } },
       { text: activePage.value, route: { link: '#' } },
     ]);
     let contents = ref('');
