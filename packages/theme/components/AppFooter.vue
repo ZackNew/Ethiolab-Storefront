@@ -11,7 +11,8 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy" exact>
+          <!-- <router-link to="/policy" exact> -->
+          <router-link :to="{ name: 'policy', query: { initialPage: 'RETURN' } }" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Return and Cancellation')"
@@ -19,7 +20,8 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy/shipping" exact>
+          <!-- <router-link to="/policy/shipping" exact> -->
+          <router-link :to="{ name: 'policy', query: { initialPage: 'SHIPPING' } }" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Shipping Policy')"
@@ -27,7 +29,8 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy/warranty-policy" exact>
+          <!-- <router-link to="/policy/warranty-policy" exact> -->
+          <router-link :to="{ name: 'policy', query: { initialPage: 'WARRANTY POLICY' } }" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Warranty Policy')"
@@ -70,12 +73,36 @@
     <SfFooterColumn :title="$t('Company')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-          <router-link to="/page/about" exact>
-            <SfMenuItem class="sf-footer__menu-item" :label="$t('About Us')" />
+          <router-link :to="{name: 'static' , query: { initialPage: 'ABOUT'}}" exact>
+            <SfMenuItem 
+            class="sf-footer__menu-item" 
+            :label="$t('About Us')" />
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy/privacy" exact>
+          <router-link :to="{name: 'static' , query: { initialPage: 'MISSION'}}" exact>
+            <SfMenuItem 
+            class="sf-footer__menu-item" 
+            :label="$t('Mission')" />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link :to="{name: 'static' , query: { initialPage: 'VISION'}}" exact>
+            <SfMenuItem 
+            class="sf-footer__menu-item" 
+            :label="$t('Vision')" />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link :to="{name: 'static' , query: { initialPage: 'VALUE'}}" exact>
+            <SfMenuItem 
+            class="sf-footer__menu-item" 
+            :label="$t('Value')" />
+          </router-link>
+        </SfListItem>
+        <SfListItem class="footer-list-item">
+          <!-- <router-link to="/policy/privacy" exact> -->
+          <router-link :to="{ name: 'policy', query: { initialPage: 'PRIVACY' } }" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Privacy Policy')"
@@ -83,7 +110,8 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy/cookie-policy" exact>
+          <!-- <router-link to="/policy/cookie-policy" exact> -->
+          <router-link :to="{ name: 'policy', query: { initialPage: 'COOKIE POLICY' } }" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Cookie Policy')"
@@ -91,7 +119,8 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link to="/policy/terms-and-conditions" exact>
+          <!-- <router-link to="/policy/terms-and-conditions" exact> -->
+          <router-link :to="{ name: 'policy', query: { initialpage: 'TERMS AND CONDITIONS' }}" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Terms & Conditions')"
