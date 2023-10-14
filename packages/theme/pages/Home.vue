@@ -103,14 +103,12 @@
               </div>
             </div>
           </div>
-          <!-- <div class="md:col-span-1"></div> -->
         </div>
       </div>
 
       <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrapsm">
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
-            <!-- <SfHeading title="Recently Viewed Products" :level="2" /> -->
             <h1 class="md:text-3xl text-secondary">Recently Viewed Products</h1>
           </div>
         </LazyHydrate>
@@ -724,10 +722,10 @@ export default {
       });
     };
     const BIG_SALE = computed(() =>
-      JSON.parse(getCms.value[5]?.content ?? '{}')
+      JSON.parse(getCms.value[4]?.content ?? '{}')
     );
     let bigSale;
-    if (BIG_SALE.length > 0) {
+    if (BIG_SALE.value.length > 0) {
       bigSale = BIG_SALE?.value?.map((pro) => {
         return JSON.parse(pro ?? '{}');
       });
