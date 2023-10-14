@@ -1,9 +1,9 @@
 <template>
   <div id="static">
-    <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    />
+    <div class="flex">
+      <p><nuxt-link to="/">HOME</nuxt-link>&nbsp; | &nbsp;</p>
+      <p>{{ activePage }}</p>
+    </div>
     <SfContentPages
       :active="$t(activePage)"
       :title="activePage"
@@ -45,15 +45,16 @@ export default {
   setup(props, context) {
     const { isDarkMode } = useUiState();
     const { search: searchCms, getCms } = useCms();
-    const staticPages = computed(() => JSON.parse(getCms.value[2].content));
+    console.log(getCms);
+    const staticPages = computed(() => JSON.parse(getCms.value[1].content));
+    //Test Return page Based on query
+    const activePage = ref(context.root.$route.query.initialPage || 'ABOUT');
     staticPages.value.forEach((element) => {
       element.description = [element?.description];
     });
-    const activePage = ref('ABOUT');
     const breadcrumbs = computed(() => [
-      { text: 'Home', route: { link: '/' } },
-      { text: activePage.value, route: { link: '#' } },
-    ]);
+        { text: activePage.value, route: { link: '#' } },
+     ]);
     let contents = ref('');
     const changeActivePage = (title) => {
       activePage.value = title;
