@@ -813,21 +813,21 @@
                   <div class="m-8">
                     <div
                       class="text-secondary text-sm font-bold mb-2"
-                      for="street"
+                      for="streetLine1"
                     >
                       STREET ADDRESS
                     </div>
 
                     <ValidationProvider
-                      name="street"
+                      name="streetLine1"
                       rules="min:2"
                       v-slot="{ errors }"
                       slim
                     >
                       <SfInput
-                        v-model="form.street"
+                        v-model="form.streetLine1"
                         :placeholder="$t('street')"
-                        name="street"
+                        name="streetLine1"
                         class="sf-input--filled"
                         :valid="!errors[0]"
                         :errorMessage="errors[0]"
@@ -1032,15 +1032,7 @@ import { useVSFContext } from '@vue-storefront/core';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import { useUser, useForgotPassword } from '@vue-storefront/vendure';
 import axios from 'axios';
-import {
-  SfHeading,
-  SfInput,
-  SfButton,
-  SfSelect,
-  SfStoreLocator,
-  SfBanner,
-  SfIcon,
-} from '@storefront-ui/vue';
+import { SfInput } from '@storefront-ui/vue';
 import RegisterMessage from '../components/RegisterMessage.vue';
 import CryptoJS from 'crypto-js';
 
@@ -1127,7 +1119,8 @@ export default defineComponent({
       country: '',
       city: '',
       state: '',
-      street: '',
+      streetLine1: '',
+      streetLine2: '',
       job: '',
     });
 
@@ -1144,13 +1137,43 @@ export default defineComponent({
         // showToast("Perfect!")
 
         let pbody = {
-          query: `mutation signUp($email: String!, $password: String!,$firstName: String!,$lastName: String!,$phoneNumber: String!,$fax: String!,$company: String!,
-              $country: String!,$city: String!,$state: String!,$street: String!,$job: String!,$tin: String!) {
-                registerEtechCustomer(input:{email: $email, password: $password,firstName: $firstName,lastName: $lastName,phoneNumber: $phoneNumber,fax: $fax,company: $company,
-                    country: $country,city: $city,state: $state,street: $street,job: $job,tin: $tin}){
-                            success
-                          }
-                      }`,
+          query: `mutation signUp(
+                  $email: String!
+                  $password: String!
+                  $firstName: String!
+                  $lastName: String!
+                  $phoneNumber: String!
+                  $fax: String!
+                  $company: String!
+                  $country: String!
+                  $city: String!
+                  $state: String!
+                  $streetLine1: String!
+                  $streetLine2: String!
+                  $job: String!
+                  $tin: String!
+                ) {
+                  registerEtechCustomer(
+                    input: {
+                      email: $email
+                      password: $password
+                      firstName: $firstName
+                      lastName: $lastName
+                      phoneNumber: $phoneNumber
+                      fax: $fax
+                      company: $company
+                      country: $country
+                      city: $city
+                      state: $state
+                      streetLine1: $streetLine1
+                      streetLine2: $streetLine2
+                      job: $job
+                      tin: $tin
+                    }
+                  ) {
+                    success
+                  }
+                }`,
           variables: {
             email: form.value.email,
             password: form.value.password,
@@ -1162,7 +1185,8 @@ export default defineComponent({
             country: form.value.country,
             city: form.value.city,
             state: form.value.state,
-            street: form.value.street,
+            streetLine1: form.value.streetLine1,
+            streetLine2: '',
             job: form.value.job,
             tin: form.value.tin,
           },
