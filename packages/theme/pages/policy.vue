@@ -45,7 +45,7 @@ export default {
   setup(props, context) {
     const { isDarkMode } = useUiState();
     const { search: searchCms, getCms } = useCms();
-    const staticPages = computed(() => JSON.parse(getCms.value[4].content));
+    const staticPages = computed(() => JSON.parse(getCms.value[3].content));
     staticPages.value.forEach((element) => {
       element.description = [element?.description];
     });
