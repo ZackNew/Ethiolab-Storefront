@@ -139,7 +139,7 @@
     </div>
     <button @click="clearAllFilters" class="bg-secondary text-white rounded w-full py-1 text-center">Clear All Filters</button>
     <div class="mt-5 hidden md:block">
-          <LazyHydrate>
+          <LazyHydrate v-if="adSection">
             <!-- :buttonText="adSection.buttonText || 'AD Button'" -->
             <Banner
               :title="adSection.title || 'AD Title'"
@@ -257,9 +257,9 @@ export default {
     const { isDarkMode } = useUiState();
     const { getCms } = useCms();
     const adSection = computed(() =>
-      JSON.parse(getCms.value[3]?.content ?? '{}')
+      JSON.parse(getCms.value[2]?.content ?? '{}')
     );
-    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
+    const adImage = computed(() => getCms.value[2]?.featuredAsset.preview);
     return {
       isDarkMode,
       adSection,

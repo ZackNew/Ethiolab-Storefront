@@ -45,10 +45,9 @@ export default {
   setup(props, context) {
     const { isDarkMode } = useUiState();
     const { search: searchCms, getCms } = useCms();
-    console.log(getCms);
     const staticPages = computed(() => JSON.parse(getCms.value[3].content));
-     //Test Return page Based on query
-     const activePage = ref(context.root.$route.query.initialPage || 'RETURN');
+    //Test Return page Based on query
+    const activePage = ref(context.root.$route.query.initialPage || 'RETURN');
     staticPages.value.forEach((element) => {
       element.description = [element?.description];
     });

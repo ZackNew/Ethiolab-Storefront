@@ -45,7 +45,6 @@ export default {
   setup(props, context) {
     const { isDarkMode } = useUiState();
     const { search: searchCms, getCms } = useCms();
-    console.log(getCms);
     const staticPages = computed(() => JSON.parse(getCms.value[1].content));
     //Test Return page Based on query
     const activePage = ref(context.root.$route.query.initialPage || 'ABOUT');
@@ -53,8 +52,8 @@ export default {
       element.description = [element?.description];
     });
     const breadcrumbs = computed(() => [
-        { text: activePage.value, route: { link: '#' } },
-     ]);
+      { text: activePage.value, route: { link: '#' } },
+    ]);
     let contents = ref('');
     const changeActivePage = (title) => {
       activePage.value = title;
