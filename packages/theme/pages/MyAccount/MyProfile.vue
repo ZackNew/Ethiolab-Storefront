@@ -55,6 +55,68 @@
           >Update Tin Number</SfButton
         >
       </SfTab>
+      <!----Address added---->
+
+      <SfTab class="profileTabs" title="Address">
+        <h4 class="text-secondary text-lg">Chnage Your Address:</h4>
+        <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your Phone number"
+          v-model="addressForm.phoneNumber"
+          onKeyPress="if(this.value.length==10) return false;"
+        />
+        <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your Country"
+          v-model="addressForm.country"
+          onKeyPress="if(this.value.length==10) return false;"
+        />
+        <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your State "
+          v-model="addressForm.state"
+          onKeyPress="if(this.value.length==10) return false;"
+        />
+        <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your City "
+          v-model="addressForm.city"
+          onKeyPress="if(this.value.length==10) return false;"
+        />
+        <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your Street number"
+          v-model="addressForm.streetLine1"
+          onKeyPress="if(this.value.length==10) return false;"
+        />
+        <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your fax number"
+          v-model="addressForm.fax"
+          onKeyPress="if(this.value.length==10) return false;"
+        />
+        <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your Job"
+          v-model="addressForm.job"
+          onKeyPress="if(this.value.length==15) return false;"
+        />
+        <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your Postal-Code"
+          v-model="addressForm.postalCode"
+          onKeyPress="if(this.value.length==10) return false;"
+        />
+          <SfInput
+          class="max-w-[60%] grid-cols-2"
+          placeholder="Your Campany"
+          v-model="addressForm.company"
+          onKeyPress="if(this.value.length==10) return false;"
+        />
+        <SfButton class="bg-secondary" @click="updateAddress"
+          >Update Address</SfButton
+        >
+      </SfTab>
     </SfTabs>
   </div>
 </template>
@@ -67,7 +129,13 @@ import PasswordResetForm from '~/components/MyAccount/PasswordResetForm';
 import EmailUpdateForm from '~/components/MyAccount/EmailUpdateForm';
 import { SfTabs, SfInput, SfButton } from '@storefront-ui/vue';
 import { useUser, userGetters } from '@vue-storefront/vendure';
-import { onMounted, watchEffect, ref, inject } from '@vue/composition-api';
+import {
+  onMounted,
+  watchEffect,
+  ref,
+  inject,
+  reactive,
+} from '@vue/composition-api';
 import gql from 'graphql-tag';
 import { print } from 'graphql';
 import axios from 'axios';
@@ -116,9 +184,25 @@ export default {
   },
 
   setup(_, { root }) {
+    //adding token
+    const token = CryptoJS.AES.encrypt(
+      root.$store.state.csrfToken.csrfToken,
+      'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+    ).toString();
     const showToast = inject('showToast');
     const { updateUser, changePassword, user, load, updateEmail } = useUser();
     const tinNumber = ref('');
+    const addressForm = reactive({
+      phoneNumber: '',
+      country: '',
+      state: '',
+      city: '',
+      streetLine1: '',
+      fax: '',
+      job: '',
+      postalCode: '',
+      company: '',
+    });
     const currentEmail = userGetters.getEmailAddress(user.value);
     const formHandler = async (fn, onComplete, onError) => {
       try {
@@ -143,10 +227,69 @@ export default {
       }
       return '';
     }
-
     const updatePersonalData = ({ form, onComplete, onError }) => {
       formHandler(() => updateUser({ user: form.value }), onComplete, onError);
       showToast('Updated Succcessfully!');
+    };
+    const updateAddress = async () => {
+      const body = {
+        query: `
+          mutation updateAddress(
+            $city: String
+            $country: String
+            $fax: String
+            $id: ID!
+            $job: String
+            $phoneNumber: String
+            $postalCode: String
+            $state: String
+            $streetLine1: String
+            $streetLine2: String
+            $company: String
+          ) {
+            updateEtechCustomer(
+              input: {
+                id: $id
+                city: $city
+                country: $country
+                fax: $fax
+                job: $job
+                phoneNumber: $phoneNumber
+                postalCode: $postalCode
+                state: $state
+                streetLine1: $streetLine1
+                streetLine2: $streetLine2
+                company: $company
+              }
+            ) {
+              success
+            }
+          }
+        `,
+        variables: {
+          phoneNumber: addressForm.phoneNumber,
+          country: addressForm.country,
+          state: addressForm.state,
+          city: addressForm.city,
+          streetLine1: addressForm.streetLine1,
+          fax: addressForm.fax,
+          job: addressForm.job,
+          postalCode: addressForm.postalCode,
+          company: addressForm.company,
+          id: user.value.id,
+        },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
+        console.log(res);
+        showToast('Updated Succcessfully!');
+      });
     };
 
     const updateEmailData = ({ form, onComplete, onError }) => {
@@ -175,6 +318,20 @@ export default {
     };
     onMounted(async () => {
       await load();
+      console.log('=================');
+      console.log(user);
+      console.log('=================');
+      console.log(user.value.addresses[0].city);
+      addressForm.phoneNumber = user.value.phoneNumber;
+      addressForm.country = user.value.addresses[0].country.name;
+      addressForm.state = user.value.addresses[0].province;
+      addressForm.city = user.value.addresses[0].city;
+      addressForm.streetLine1 = user.value.addresses[0].streetLine1;
+      addressForm.fax = user.value.addresses[0].customFields.fax;
+      addressForm.job = user.value.addresses[0].job;
+      addressForm.postalCode = user.value.addresses[0].postalCode;
+      addressForm.company = user.value.addresses[0].company;
+
       const body = {
         query: `
         {
@@ -208,7 +365,7 @@ export default {
     const updateTinNumber = async () => {
       try {
         showToast('Updated!');
-        const body = {
+        const body1 = {
           query: `
           mutation upd($tinNumber: String!) {
             updateCustomer(
@@ -234,7 +391,7 @@ export default {
             berta: token,
           },
         };
-        axios.post('/api/shop', body, options);
+        axios.post('/api/shop', body1, options);
       } catch (e) {}
     };
 
@@ -246,6 +403,8 @@ export default {
       updateEmailData,
       updateTinNumber,
       user,
+      addressForm,
+      updateAddress,
     };
   },
 };
