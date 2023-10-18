@@ -8,16 +8,17 @@
     :style="
       !isDarkMode ? `background-color: #f0f7fc;` : `background-color: #0e1621;`
     "
+    class="block"
   >
     <div :class="!isDarkMode ? `bg-white` : `bg-dark_accent`">
       <LazyHydrate when-visible>
-        <TopBar class="desktop-only" />
+        <Top class="desktop-only" />
       </LazyHydrate>
       <LazyHydrate when-idle>
         <AppHeader />
       </LazyHydrate>
     </div>
-    <div id="layout">
+    <div class="min-h-screen" id="layout">
       <nuxt :key="$route.fullPath" />
       <client-only><Compare class="bottomright" /></client-only>
       <!-- <client-only><img src="chatr.png" alt="chat image" height="50px" width="50px" class="chatcss" /></client-only> -->
@@ -50,7 +51,7 @@ import Compare from '~/components/Compare.vue';
 import AppHeader from '~/components/AppHeader.vue';
 import BottomNavigation from '~/components/BottomNavigation.vue';
 import AppFooter from '~/components/AppFooter.vue';
-import TopBar from '~/components/TopBar.vue';
+import Top from '~/components/Top.vue';
 import CartSidebar from '~/components/CartSidebar.vue';
 import WishlistSidebar from '~/components/WishlistSidebar.vue';
 import LoginModal from '~/components/LoginModal.vue';
@@ -61,7 +62,8 @@ import { useCms, useFacet, useUser } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 import Toast from '~/components/Toast.vue';
-import { computed, ref, watchEffect, provide } from '@vue/composition-api';
+import { ref, provide } from '@vue/composition-api';
+
 export default {
   name: 'DefaultLayout',
   // middleware: 'themeChecker',
@@ -71,7 +73,6 @@ export default {
     Compare,
     CategoriesSidebar,
     LazyHydrate,
-    TopBar,
     AppHeader,
     BottomNavigation,
     AppFooter,
@@ -80,6 +81,7 @@ export default {
     LoginModal,
     Notification,
     Toast,
+    Top,
   },
 
   setup() {
@@ -171,13 +173,13 @@ body {
   margin: 0;
   padding: 0;
 }
-a {
-  text-decoration: none;
-  color: var(--c-link);
-  &:hover {
-    color: var(--c-link-hover);
-  }
-}
+// a {
+//   text-decoration: none;
+//   color: var(--c-link);
+//   &:hover {
+//     color: var(--c-link-hover);
+//   }
+// }
 h1 {
   font-family: var(--font-family--secondary);
   font-size: var(--h1-font-size);

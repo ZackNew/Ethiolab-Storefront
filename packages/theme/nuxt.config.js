@@ -17,7 +17,7 @@ export default {
     TELEBIRR_APPID: process.env.TELEBIRR_APPID,
   },
   head: {
-    title: 'Ethio Labs',
+    title: 'Ethiolab',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

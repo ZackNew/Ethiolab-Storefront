@@ -15,13 +15,12 @@
           -->
           <template #logo>
             <nuxt-link :to="localePath('/')">
-              <SfImage src="/Logo.png" :alt="$t('Ethiolab')" class="sf-header__logo-image"/>
-              <!-- <SfImage
+              <!-- <SfImage src="/Logo.png" :alt="$t('Ethiolab')" class="sf-header__logo-image"/> -->
+              <SfImage
                 :src="logo || ''"
                 alt="EthioLab"
-                width="400"
-                class="sf-header__logo-image"
-              /> -->
+                class="sf-header__logo-image object-fill w-56"
+              />
               <!-- <img :src="logo || ''" alt="" width="400px" /> -->
               <!-- <div class="image-container min-w-[290px]">
                 <div class="background-image" ref="backgroundImage"></div>
@@ -90,11 +89,12 @@
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
               :value="term"
-              class="search md:w-[29rem] md:h-[2.5rem] rounded-xl border-none md:mr-3"
-              :class="isDarkMode
-                ? 'bg-[#182f3f] text-white'
-                : 'bg-light_accent text-black'
-                "
+              class="search md:w-[29rem] md:h-[2.5rem] rounded-lg border-none md:mr-3"
+              :class="
+                isDarkMode
+                  ? 'bg-[#182f3f] text-white'
+                  : 'bg-light_accent text-black'
+              "
               @focus="isSearchOpen = true"
               @blur="isSearchOpen = false"
               @input="searchInputHandle"
@@ -119,7 +119,7 @@
                     isSearchOpen
                       ? (isSearchOpen = false)
                       : (isSearchOpen = true)
-                    "
+                  "
                 >
                   <SfIcon icon="search" color="#ffffff" />
                 </SfButton>
@@ -392,7 +392,7 @@ export default {
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
     const messageToSend = ref('');
-    const selectedProd = () => { };
+    const selectedProd = () => {};
 
     const sendMessageToAdmin = async () => {
       await loadUser();

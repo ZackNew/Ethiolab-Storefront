@@ -103,12 +103,67 @@
               <!-- Get documentation -->
             </div>
           </div>
-          <div v-if="product.facetValues !== []" class="flex">
+          <div v-if="product.facetValues.length > 0" class="flex">
             <div v-for="(facet, i) in product.facetValues" :key="i">
               <p class="bg-[#d3e6fe] mr-4 px-3 py-[0.5] rounded">
                 {{ facet.name }}
               </p>
             </div>
+          </div>
+          <div>
+            <LazyHydrate when-idle>
+              <div class="hidden md:block">
+                <h4 class="my-4 text-secondary">Product Reviews</h4>
+                <SfReview
+                  v-for="review in reviews"
+                  :key="review.id"
+                  :message="review.summary"
+                  :max-rating="5"
+                  :rating="review.rating"
+                  :char-limit="250"
+                  :read-more-text="$t('Read more')"
+                  :hide-full-text="$t('Read less')"
+                  class="product__review"
+                >
+                  <template #author class="flex">
+                    <h4
+                      class="capitalize text-[#4f4f4f] mr-3 font-bold text-base float-left"
+                    >
+                      {{ review.authorName }}
+                    </h4>
+                    <h4 class="text-base text-[#4f4f4f]">
+                      {{ new Date(review.createdAt).toLocaleString() }}
+                    </h4>
+                  </template>
+                </SfReview>
+                <MyReview
+                  :productId="product.id"
+                  :currentUserHasNoReview="!currentUserHasReview"
+                />
+              </div>
+
+              <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
+              <SfTab :title="$t('Read reviews')" :key="reviewKey">
+                <SfReview
+                  v-for="review in reviews"
+                  :key="review.id"
+                  :author="review.authorName"
+                  :date="new Date(review.createdAt).toLocaleString()"
+                  :message="review.summary"
+                  :max-rating="5"
+                  :rating="review.rating"
+                  :char-limit="250"
+                  :read-more-text="$t('Read more')"
+                  :hide-full-text="$t('Read less')"
+                  class="product__review"
+                />
+                <MyReview
+                  :productId="product.id"
+                  :currentUserHasNoReview="!currentUserHasReview"
+                />
+              </SfTab>
+            </SfTabs> -->
+            </LazyHydrate>
           </div>
         </div>
       </div>
@@ -412,60 +467,6 @@
           </div>
         </div>
       </div>
-
-      <LazyHydrate when-idle>
-        <div class="hidden md:block">
-          <h4 class="my-4 text-secondary">Product Reviews</h4>
-          <SfReview
-            v-for="review in reviews"
-            :key="review.id"
-            :message="review.summary"
-            :max-rating="5"
-            :rating="review.rating"
-            :char-limit="250"
-            :read-more-text="$t('Read more')"
-            :hide-full-text="$t('Read less')"
-            class="product__review"
-          >
-            <template #author class="flex">
-              <h4
-                class="capitalize text-[#4f4f4f] mr-3 font-bold text-base float-left"
-              >
-                {{ review.authorName }}
-              </h4>
-              <h4 class="text-base text-[#4f4f4f]">
-                {{ new Date(review.createdAt).toLocaleString() }}
-              </h4>
-            </template>
-          </SfReview>
-          <MyReview
-            :productId="product.id"
-            :currentUserHasNoReview="!currentUserHasReview"
-          />
-        </div>
-
-        <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
-              <SfTab :title="$t('Read reviews')" :key="reviewKey">
-                <SfReview
-                  v-for="review in reviews"
-                  :key="review.id"
-                  :author="review.authorName"
-                  :date="new Date(review.createdAt).toLocaleString()"
-                  :message="review.summary"
-                  :max-rating="5"
-                  :rating="review.rating"
-                  :char-limit="250"
-                  :read-more-text="$t('Read more')"
-                  :hide-full-text="$t('Read less')"
-                  class="product__review"
-                />
-                <MyReview
-                  :productId="product.id"
-                  :currentUserHasNoReview="!currentUserHasReview"
-                />
-              </SfTab>
-            </SfTabs> -->
-      </LazyHydrate>
 
       <LazyHydrate when-idle>
         <div class="md:hidden">
