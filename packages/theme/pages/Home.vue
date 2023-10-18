@@ -87,7 +87,7 @@
             <div
               class="flex-row justify-between md:grid md:grid-rows-3 md:grid-flow-col md:gap-1"
             >
-              <div v-for="sale in bigSale" :key="sale.sku">
+              <div v-for="sale in bigSale" :key="sale.id">
                 <div>
                   <nuxt-link
                     :to="`/v/${sale.productSlug}`"

@@ -17,5 +17,8 @@ export const AddressFragment = `
     phoneNumber
     defaultShippingAddress
     defaultBillingAddress
+    customFields {
+      fax
+    }
   }
 `;
