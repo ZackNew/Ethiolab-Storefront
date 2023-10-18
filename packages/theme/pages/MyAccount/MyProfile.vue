@@ -95,24 +95,39 @@
           v-model="addressForm.fax"
           onKeyPress="if(this.value.length==10) return false;"
         />
-        <SfInput
-          class="max-w-[60%] grid-cols-2"
-          placeholder="Your Job"
+      
+        <span class="max-w-[50%] grid-cols-2 text-secondary text-sm font-bold mb-2">
+                  JOB FUNCTION</span>
+        <select
           v-model="addressForm.job"
-          onKeyPress="if(this.value.length==15) return false;"
-        />
-        <SfInput
-          class="max-w-[60%] grid-cols-2"
-          placeholder="Your Postal-Code"
-          v-model="addressForm.postalCode"
-          onKeyPress="if(this.value.length==10) return false;"
-        />
-          <SfInput
-          class="max-w-[60%] grid-cols-2"
-          placeholder="Your Campany"
-          v-model="addressForm.company"
-          onKeyPress="if(this.value.length==10) return false;"
-        />
+          class="text-sm font-bold mb-2 ml-4 w-1/3 h-10 border border-primary"
+        >
+          <option value="Adminstrative">Adminstrative</option>
+          <option value="Calibration">Calibration</option>
+          <option value="Purchasing">Purchasing</option>
+          <option value="Technical Support">Technical Support</option>
+          <option value="Engineer">Engineer</option>
+          <option value="Equipment Technician">Equipment Technician</option>
+          <option value="Executive/Director">Executive/Director</option>
+          <option value="Healthcare Professional">
+            Healthcare Professional
+          </option>
+          <option value="Human Resources">Human Resources</option>
+          <option value="Laboratory/R&D">Laboratory/R&D</option>
+          <option value="Maintenance">Maintenance</option>
+          <option value="Operations/Plant Management">
+            Operations/Plant Management
+          </option>
+          <option value="Owner">Owner</option>
+          <option value="Production Maintenance">Production Maintenance</option>
+          <option value="Production Management">Production Management</option>
+          <option value="Quality Assurance/Control">
+            Quality Assurance/Control
+          </option>
+          <option value="Safety">Safety</option>
+          <option value="Student">Student</option>
+          <option value="Researcher">Researcher</option>
+        </select>
         <SfButton class="bg-secondary" @click="updateAddress"
           >Update Address</SfButton
         >
@@ -200,8 +215,6 @@ export default {
       streetLine1: '',
       fax: '',
       job: '',
-      postalCode: '',
-      company: '',
     });
     const currentEmail = userGetters.getEmailAddress(user.value);
     const formHandler = async (fn, onComplete, onError) => {
@@ -274,8 +287,6 @@ export default {
           streetLine1: addressForm.streetLine1,
           fax: addressForm.fax,
           job: addressForm.job,
-          postalCode: addressForm.postalCode,
-          company: addressForm.company,
           id: user.value.id,
         },
       };
@@ -320,6 +331,7 @@ export default {
       await load();
       console.log('=================');
       console.log(user);
+      console.log(user.value.customFields.job);
       console.log('=================');
       console.log(user.value.addresses[0].city);
       addressForm.phoneNumber = user.value.phoneNumber;
@@ -328,10 +340,7 @@ export default {
       addressForm.city = user.value.addresses[0].city;
       addressForm.streetLine1 = user.value.addresses[0].streetLine1;
       addressForm.fax = user.value.addresses[0].customFields.fax;
-      addressForm.job = user.value.addresses[0].job;
-      addressForm.postalCode = user.value.addresses[0].postalCode;
-      addressForm.company = user.value.addresses[0].company;
-
+      addressForm.job = user.value.customFields.job;
       const body = {
         query: `
         {

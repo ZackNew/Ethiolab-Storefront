@@ -13,6 +13,7 @@ export default gql`
       phoneNumber
       customFields{
         tin_number
+        job
       }
       orders {
         items {
