@@ -8,15 +8,12 @@
         <p class="message text-secondary">
           {{ $t('Feel free to edit') }}
         </p>
-
         <ProfileUpdateForm @submit="updatePersonalData" />
-
         <p class="notice text-secondary">
           {{ $t('Use your personal data') }}
           <a href="">{{ $t('Privacy Policy') }}</a>
         </p>
       </SfTab>
-
       <!-- Email update -->
       <SfTab class="profileTabs" title="Email data">
         <p class="message text-secondary">
@@ -30,7 +27,6 @@
           <a href="">{{ $t('Privacy Policy') }}</a>
         </p>
       </SfTab>
-
       <!-- Password reset -->
       <SfTab class="profileTabs" title="Password change">
         <p class="message text-secondary">
@@ -40,30 +36,15 @@
             {{ currentEmail }}
           </span>
         </p>
-
         <PasswordResetForm @submit="updatePassword" />
       </SfTab>
-      <SfTab class="profileTabs" title="TIN">
-        <h4 class="text-secondary text-lg">Tin Number:</h4>
-        <SfInput
-          class="max-w-[60%]"
-          placeholder="Your tin number"
-          v-model="tinNumber"
-          onKeyPress="if(this.value.length==10) return false;"
-        />
-        <SfButton class="bg-secondary" @click="updateTinNumber"
-          >Update Tin Number</SfButton
-        >
-      </SfTab>
-      <!----Address added---->
-
       <SfTab class="profileTabs" title="Address">
-        <h4 class="text-secondary text-lg">Chnage Your Address:</h4>
+        <h4 class="text-secondary text-lg">Change Your Address:</h4>
         <SfInput
           class="max-w-[60%] grid-cols-2"
           placeholder="Your Phone number"
           v-model="addressForm.phoneNumber"
-          onKeyPress="if(this.value.length==10) return false;"
+          @keypress="handleKeyPress"
         />
         <SfInput
           class="max-w-[60%] grid-cols-2"
@@ -75,29 +56,32 @@
           class="max-w-[60%] grid-cols-2"
           placeholder="Your State "
           v-model="addressForm.state"
-          onKeyPress="if(this.value.length==10) return false;"
         />
         <SfInput
           class="max-w-[60%] grid-cols-2"
           placeholder="Your City "
           v-model="addressForm.city"
-          onKeyPress="if(this.value.length==10) return false;"
         />
         <SfInput
           class="max-w-[60%] grid-cols-2"
           placeholder="Your Street number"
           v-model="addressForm.streetLine1"
-          onKeyPress="if(this.value.length==10) return false;"
+        />
+        <SfInput
+          class="max-w-[60%]"
+          placeholder="Your tin number"
+          v-model="addressForm.tin"
         />
         <SfInput
           class="max-w-[60%] grid-cols-2"
           placeholder="Your fax number"
           v-model="addressForm.fax"
-          onKeyPress="if(this.value.length==10) return false;"
         />
-      
-        <span class="max-w-[50%] grid-cols-2 text-secondary text-sm font-bold mb-2">
-                  JOB FUNCTION</span>
+        <span
+          class="max-w-[50%] grid-cols-2 text-secondary text-sm font-bold mb-2"
+        >
+          JOB FUNCTION</span
+        >
         <select
           v-model="addressForm.job"
           class="text-sm font-bold mb-2 ml-4 w-1/3 h-10 border border-primary"
@@ -135,7 +119,6 @@
     </SfTabs>
   </div>
 </template>
-
 <script>
 import { extend } from 'vee-validate';
 import { email, required, min, confirmed } from 'vee-validate/dist/rules';
@@ -186,6 +169,20 @@ extend('confirmed', {
 });
 
 export default {
+  methods: {
+    handleKeyPress(event) {
+      const inputChar = String.fromCharCode(event.charCode);
+      if (!/^\d+$/.test(inputChar) && inputChar !== '+') {
+        event.preventDefault(); 
+      }
+      if (this.addressForm.phoneNumber.length === 0 && inputChar === ' ') {
+        event.preventDefault(); 
+      }
+      if (this.addressForm.phoneNumber.length >= 13 && event.key !== 'Backspace') {
+        event.preventDefault(); 
+      }
+    },
+  },
   middleware: ['csrf'],
   name: 'PersonalDetails',
   onMounted() {},
@@ -197,9 +194,7 @@ export default {
     PasswordResetForm,
     EmailUpdateForm,
   },
-
   setup(_, { root }) {
-    //adding token
     const token = CryptoJS.AES.encrypt(
       root.$store.state.csrfToken.csrfToken,
       'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
@@ -215,6 +210,7 @@ export default {
       streetLine1: '',
       fax: '',
       job: '',
+      tin: '',
     });
     const currentEmail = userGetters.getEmailAddress(user.value);
     const formHandler = async (fn, onComplete, onError) => {
@@ -229,7 +225,7 @@ export default {
       let name = cname + '=';
       let decodedCookie = decodeURIComponent(document.cookie);
       let ca = decodedCookie.split(';');
-      for (let i = 0; i < ca.length; i++) {
+      for (let i = 0; i < ca.length; i++) {x  
         let c = ca[i];
         while (c.charAt(0) == ' ') {
           c = c.substring(1);
@@ -259,6 +255,7 @@ export default {
             $streetLine1: String
             $streetLine2: String
             $company: String
+            $tin: String
           ) {
             updateEtechCustomer(
               input: {
@@ -273,6 +270,7 @@ export default {
                 streetLine1: $streetLine1
                 streetLine2: $streetLine2
                 company: $company
+                tin:  $tin
               }
             ) {
               success
@@ -287,6 +285,7 @@ export default {
           streetLine1: addressForm.streetLine1,
           fax: addressForm.fax,
           job: addressForm.job,
+          tin: addressForm.tin,
           id: user.value.id,
         },
       };
@@ -329,11 +328,6 @@ export default {
     };
     onMounted(async () => {
       await load();
-      console.log('=================');
-      console.log(user);
-      console.log(user.value.customFields.job);
-      console.log('=================');
-      console.log(user.value.addresses[0].city);
       addressForm.phoneNumber = user.value.phoneNumber;
       addressForm.country = user.value.addresses[0].country.name;
       addressForm.state = user.value.addresses[0].province;
@@ -341,76 +335,13 @@ export default {
       addressForm.streetLine1 = user.value.addresses[0].streetLine1;
       addressForm.fax = user.value.addresses[0].customFields.fax;
       addressForm.job = user.value.customFields.job;
-      const body = {
-        query: `
-        {
-          activeCustomer {
-            customFields {
-              tin_number
-            }
-            user {
-              id
-            }
-          }
-        }
-      `,
-        csrfToken: root.$store.state.csrfToken.csrfToken,
-      };
-      const token = CryptoJS.AES.encrypt(
-        root.$store.state.csrfToken.csrfToken,
-        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
-      ).toString();
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          berta: token,
-        },
-      };
-      axios.post('/api/shop', body, options).then((data) => {
-        tinNumber.value = data.data.data.activeCustomer.customFields.tin_number;
-      });
+      addressForm.tin = user.value.customFields.tin_number;
     });
-    const updateTinNumber = async () => {
-      try {
-        showToast('Updated!');
-        const body1 = {
-          query: `
-          mutation upd($tinNumber: String!) {
-            updateCustomer(
-              input: {
-                # id: $id,
-                customFields: { tin_number: $tinNumber }
-              }
-            ) {
-              id
-            }
-          }
-        `,
-          csrfToken: root.$store.state.csrfToken.csrfToken,
-        };
-        const token = CryptoJS.AES.encrypt(
-          root.$store.state.csrfToken.csrfToken,
-          'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
-        ).toString();
-        const options = {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            berta: token,
-          },
-        };
-        axios.post('/api/shop', body1, options);
-      } catch (e) {}
-    };
-
     return {
-      tinNumber,
       currentEmail,
       updatePersonalData,
       updatePassword,
       updateEmailData,
-      updateTinNumber,
       user,
       addressForm,
       updateAddress,
