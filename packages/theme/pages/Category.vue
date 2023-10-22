@@ -647,7 +647,7 @@ export default {
       load: loadCart,
     } = useCart();
     const { getCms } = useCms();
-    const adImage = computed(() => getCms.value[2]?.featuredAsset.preview);
+    const adImage = computed(() => getCms.value[2]?.featuredAsset?.preview);
     const adSection = computed(() =>
       JSON.parse(getCms.value[2]?.content ?? '{}')
     );

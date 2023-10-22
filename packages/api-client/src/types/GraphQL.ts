@@ -1868,8 +1868,7 @@ export type Order = Node & {
   taxSummary: Array<OrderTaxSummary>;
   history: HistoryEntryList;
   customFields?: Maybe<Scalars['JSON']>;
-  witholdingTax: Scalars['Int'];
-  
+  witholding_tax: Scalars['Int'];
 };
 
 export type OrderHistoryArgs = {

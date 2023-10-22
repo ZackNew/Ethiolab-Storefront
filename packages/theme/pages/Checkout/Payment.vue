@@ -105,6 +105,17 @@
               class="sf-property--full-width sf-property--large summary__property-total"
             />
 
+            <div class="my-5">
+              <input
+                type="checkbox"
+                name="apply-withholding"
+                id="apply-withholding"
+                v-model="withholdingApplied"
+                @change="addOrRemoveWithholdingTax"
+              />
+              <label for="apply-withholding">I will pay withholding tax.</label>
+            </div>
+
             <div v-if="canPay">
               <VsfPaymentProvider
                 @paymentMethodSelected="updatePaymentMethod"
@@ -607,6 +618,7 @@ export default {
     const { load: loadBilling, save, billing } = useBilling();
     const { cart, load, setCart, applyCoupon } = useCart();
     const billingDetails = ref(billing.value || {});
+    const withholdingApplied = ref(false);
     const { loading } = useMakeOrder();
     const { set } = usePayment();
 
@@ -651,6 +663,51 @@ export default {
       }
     };
 
+    const addOrRemoveWithholdingTax = async () => {
+      let addRemove = '';
+      if (withholdingApplied.value == true) {
+        addRemove = 'add';
+      } else {
+        addRemove = 'remove';
+      }
+      const body = {
+        query: `
+          mutation AddOrRemoveWithholding($id: ID!, $value: String!) {
+            addOrRemoveWitholding(input: {id: $id, value: $value}) {
+              success
+              }
+            }`,
+        variables: { id: cart.value.id, value: addRemove },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
+        if (res.data.data.addOrRemoveWitholding.success === true) {
+          if (addRemove === 'add') {
+            showToast('witholding applied successfully');
+            load();
+            setCart();
+          } else if (addRemove === 'remove') {
+            showToast('withholding removed successfully');
+            load();
+            setCart();
+          }
+        } else {
+          if (addRemove === 'add') {
+            showToast('Couldnt add withholding.');
+            withholdingApplied.value = false;
+          } else if (addRemove === 'remove') {
+            showToast('Couldnt remove withholding.');
+            withholdingApplied.value = true;
+          }
+        }
+      });
+    };
+
     const standardTax = computed(() => {
       let tax = 0;
       let totalWithTax = 0;
@@ -668,9 +725,9 @@ export default {
           '.' +
           String(cart.value?.subTotal).slice(-2),
         withholding:
-          String(cart.value?.witholdingTax).slice(0, -2) +
+          String(cart.value?.customFields?.withholding_tax).slice(0, -2) +
           '.' +
-          String(cart.value?.witholdingTax).slice(-2),
+          String(cart.value?.customFields?.withholding_tax).slice(-2),
         total:
           String(cart.value?.subTotalWithTax).slice(0, -2) +
           '.' +
@@ -1030,6 +1087,8 @@ export default {
       standardTax,
       cashComplete,
       changeState,
+      addOrRemoveWithholdingTax,
+      withholdingApplied,
     };
   },
 };
