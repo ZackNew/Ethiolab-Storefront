@@ -699,9 +699,9 @@ export default {
       messages.value = data.data.getUserInstantMessage;
     };
     let intervalId;
-    intervalId = setInterval(() => {
-      refreshMessages();
-    }, 2000);
+    // intervalId = setInterval(() => {
+    //   refreshMessages();
+    // }, 2000);
 
     const { writeQuote, load, myQuotes } = useQuote();
 
@@ -709,10 +709,10 @@ export default {
       JSON.parse(getCms.value[0]?.content ?? '{}')
     );
     const adSection = computed(() =>
-      JSON.parse(getCms.value[3]?.content ?? '{}')
+      JSON.parse(getCms.value[2]?.content ?? '{}')
     );
     const heroImage = computed(() => getCms.value[0]?.featuredAsset.preview);
-    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
+    const adImage = computed(() => getCms.value[2]?.featuredAsset.preview);
     const headerNavigation = [];
     const getTree = () => {
       categories.value.items.forEach((a) => {

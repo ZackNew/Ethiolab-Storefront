@@ -510,9 +510,9 @@ export default {
     const { isDarkMode } = useUiState();
     const { getCms } = useCms();
     const adSection = computed(() =>
-      JSON.parse(getCms.value[3]?.content ?? '{}')
+      JSON.parse(getCms.value[2]?.content ?? '{}')
     );
-    const adImage = computed(() => getCms.value[3]?.featuredAsset.preview);
+    const adImage = computed(() => getCms.value[2]?.featuredAsset.preview);
     return {
       adSection,
       adImage,
