@@ -15,17 +15,77 @@
         </p>
       </SfTab>
       <!-- Email update -->
+      <!-- 
       <SfTab class="profileTabs" title="Email data">
         <p class="message text-secondary">
           {{ $t('Feel free to edit') }}
         </p>
-
-        <EmailUpdateForm @submit="updateEmailData" />
-
         <p class="notice text-secondary">
           {{ $t('Use your personal data') }}
           <a href="">{{ $t('Privacy Policy') }}</a>
         </p>
+        <ValidationObserver v-slot="{ handleSubmit }">
+          <form class="form" @submit.prevent>
+            <ValidationProvider
+              rules="required|email"
+              v-slot="{ errors }"
+              class="form__element"
+            >
+              <SfInput
+                v-e2e="'myaccount-email'"
+                v-model="addressForm.email"
+                type="email"
+                name="email"
+                label="Your e-mail"
+                required
+                :valid="!errors[0]"
+                :errorMessage="errors[0]"
+                class="w-[60%]"
+              />
+            </ValidationProvider>
+            <SfButton
+              v-e2e="'myaccount-update-personal-data-btn'"
+              class="bg-secondary w-[33%] py-3"
+              @submit="updateAddress"
+            >
+              <h4 class="text-white font-bold text-base">UPDATE EMAIL</h4>
+            </SfButton>
+          </form>
+        </ValidationObserver>
+        console.log(================);
+        console.log(addressForm.email);
+        console.log(user.value.emailAddress);
+        console.log(submitForm(reset));
+      </SfTab> -->
+      <!-- Email update -->
+      <SfTab class="profileTabs" title="Email data">
+        <p class="message text-secondary">
+          {{ $t('Feel free to edit') }}
+        </p>
+        <ValidationObserver v-slot="{ handleSubmit }">
+          <form class="form" @submit.prevent="handleSubmit(submitForm(reset))">
+            <ValidationProvider
+              rules="required|customEmail"
+              v-slot="{ errors }"
+              class="form__element"
+            >
+              <SfInput
+                v-model="addressForm.email"
+                type="email"
+                name="email"
+                label="Your e-mail"
+                required
+                :valid="!errors[0]"
+                :errorMessage="errors[0]"
+                class="w-[60%]"
+              />
+            </ValidationProvider>
+
+            <SfButton class="bg-secondary w-[33%] py-3" @click="updateAddress">
+              <h4 class="text-white font-bold text-base">UPDATE EMAIL</h4>
+            </SfButton>
+          </form>
+        </ValidationObserver>
       </SfTab>
       <!-- Password reset -->
       <SfTab class="profileTabs" title="Password change">
@@ -121,6 +181,7 @@
 </template>
 <script>
 import { extend } from 'vee-validate';
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import { email, required, min, confirmed } from 'vee-validate/dist/rules';
 import ProfileUpdateForm from '~/components/MyAccount/ProfileUpdateForm';
 import PasswordResetForm from '~/components/MyAccount/PasswordResetForm';
@@ -138,7 +199,16 @@ import gql from 'graphql-tag';
 import { print } from 'graphql';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-
+// Define a custom email validation rule
+extend('customEmail', {
+  validate: (value) => {
+    // You can use a custom regular expression for email validation
+    // Example: This regular expression matches common email formats
+    const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+    return emailRegex.test(value);
+  },
+  message: 'Invalid email format',
+});
 extend('email', {
   ...email,
   message: 'Invalid email',
@@ -173,13 +243,16 @@ export default {
     handleKeyPress(event) {
       const inputChar = String.fromCharCode(event.charCode);
       if (!/^\d+$/.test(inputChar) && inputChar !== '+') {
-        event.preventDefault(); 
+        event.preventDefault();
       }
       if (this.addressForm.phoneNumber.length === 0 && inputChar === ' ') {
-        event.preventDefault(); 
+        event.preventDefault();
       }
-      if (this.addressForm.phoneNumber.length >= 13 && event.key !== 'Backspace') {
-        event.preventDefault(); 
+      if (
+        this.addressForm.phoneNumber.length >= 13 &&
+        event.key !== 'Backspace'
+      ) {
+        event.preventDefault();
       }
     },
   },
@@ -192,7 +265,9 @@ export default {
     SfButton,
     ProfileUpdateForm,
     PasswordResetForm,
-    EmailUpdateForm,
+    // EmailUpdateForm,
+    ValidationProvider,
+    ValidationObserver,
   },
   setup(_, { root }) {
     const token = CryptoJS.AES.encrypt(
@@ -200,7 +275,10 @@ export default {
       'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
     ).toString();
     const showToast = inject('showToast');
-    const { updateUser, changePassword, user, load, updateEmail } = useUser();
+    const { updateUser, changePassword, user, load /*updateEmail*/ } =
+      useUser();
+    //const updateEmail = addressForm.email;
+
     const tinNumber = ref('');
     const addressForm = reactive({
       phoneNumber: '',
@@ -211,6 +289,7 @@ export default {
       fax: '',
       job: '',
       tin: '',
+      email: '',
     });
     const currentEmail = userGetters.getEmailAddress(user.value);
     const formHandler = async (fn, onComplete, onError) => {
@@ -256,6 +335,7 @@ export default {
             $streetLine2: String
             $company: String
             $tin: String
+            $email: String
           ) {
             updateEtechCustomer(
               input: {
@@ -271,6 +351,7 @@ export default {
                 streetLine2: $streetLine2
                 company: $company
                 tin:  $tin
+                email: $email
               }
             ) {
               success
@@ -286,6 +367,7 @@ export default {
           fax: addressForm.fax,
           job: addressForm.job,
           tin: addressForm.tin,
+          email: addressForm.email,
           id: user.value.id,
         },
       };
@@ -302,17 +384,40 @@ export default {
       });
     };
 
-    const updateEmailData = ({ form, onComplete, onError }) => {
-      formHandler(
-        () =>
-          updateEmail({
-            password: form.value.password,
-            newEmail: form.value.email,
-          }),
-        onComplete,
-        onError
-      );
-      showToast('Updated Succcessfully!');
+    // const updateEmailData = ({ form, onComplete, onError }) => {
+    //   formHandler(
+    //     () =>
+    //       updateEmail({
+    //         password: form.value.password,
+    //         newEmail: form.value.email,
+    //       }),
+    //     onComplete,
+    //     onError
+    //   );
+    //   showToast('Updated Succcessfully!');
+    // };
+    const resetForm = () => ({
+      email: userGetters.getEmailAddress(user.value),
+      password: '',
+    });
+
+    const form = ref(resetForm());
+
+    const submitForm = (resetValidationFn) => {
+      return () => {
+        const onComplete = async () => {
+          await load();
+          form.value = resetForm();
+          resetValidationFn();
+
+        };
+
+        const onError = () => {
+          // TODO: Handle error
+        };
+
+        emit('submit', { form, onComplete, onError });
+      };
     };
     const updatePassword = ({ form, onComplete, onError }) => {
       formHandler(
@@ -328,6 +433,8 @@ export default {
     };
     onMounted(async () => {
       await load();
+      // console.log(user.value);
+      // console.log('=========');
       addressForm.phoneNumber = user.value.phoneNumber;
       addressForm.country = user.value.addresses[0].country.name;
       addressForm.state = user.value.addresses[0].province;
@@ -336,12 +443,13 @@ export default {
       addressForm.fax = user.value.addresses[0].customFields.fax;
       addressForm.job = user.value.customFields.job;
       addressForm.tin = user.value.customFields.tin_number;
+      addressForm.email = user.value.emailAddress;
     });
     return {
       currentEmail,
       updatePersonalData,
       updatePassword,
-      updateEmailData,
+      //updateEmailData,
       user,
       addressForm,
       updateAddress,
