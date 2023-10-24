@@ -105,7 +105,7 @@
               class="sf-property--full-width sf-property--large summary__property-total"
             />
 
-            <div class="my-5">
+            <div v-if="totals.total > 10000" class="my-5">
               <input
                 type="checkbox"
                 name="apply-withholding"
@@ -342,16 +342,19 @@
         <transition name="fade">
           <CartPreview key="order-summary" />
         </transition>
-        <div v-if="canPay" class="highlighted promo-code">
+        <div
+          v-if="canPay && cart.customFields.withholding_tax === 0"
+          class="highlighted promo-code"
+        >
           <SfInput
             v-model="promoCode"
             name="promoCode"
             :label="$t('Enter promo code')"
             class="sf-input--filled promo-code__input"
           />
-          <SfButton class="promo-code__button" @click="applyPromoCode">{{
-            $t('Apply')
-          }}</SfButton>
+          <SfButton class="promo-code__button" @click="applyPromoCode">
+            {{ $t('Apply') }}
+          </SfButton>
         </div>
 
         <div>
@@ -429,57 +432,6 @@
           </SfModal>
         </div>
       </div>
-
-      <!-- <div>
-        <div v-if="modalCashOpen">
-          <SfModal title="My title" visible :persistent="false">
-            <div class="relative h-full max-w-md md:h-auto -mr-4">
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <button
-                  type="button"
-                  class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                  data-modal-toggle="popup-modal"
-                  @click="handleModalCashOpen"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                </button>
-                <div class="p-6 text-center">
-                  <svg
-                    aria-hidden="true"
-                    class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  <h3
-                    class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"
-                  >
-                    Cash Payment
-                  </h3>
-                </div>
-              </div>
-            </div>
-          </SfModal>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -580,43 +532,10 @@ export default {
       );
     },
   },
-
-  methods: {
-    // async handleCancelOrder  () {
-    //   const body = {
-    //     query: `mutation cancelOrder {
-    //       cancelMyOrder{
-    //               success
-    //             }
-    //           }`,
-    //     variables: {
-    //       orderCode: cart?.value?.code,
-    //     },
-    //   };
-    //   const token = this.$cookies.get('vendure-auth-token');
-    //   const options = {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Access-Control-Allow-Origin': '*',
-    //       authorization: `Bearer ${token}`,
-    //     },
-    //   };
-    //   let baseUrl = process.env.GRAPHQL_API;
-    //   const acat = await axios
-    //     .post(baseUrl, body, options)
-    //     .then(async (res) => {
-    //       setCart();
-    //       modalOpen.value = false;
-    //       // this.$router.push('/');
-    //       window.location.href = "/"
-    //     })
-    //     .catch((err) => {});
-    // }
-  },
   setup(props, context) {
     const showToast = inject('showToast');
     const { load: loadBilling, save, billing } = useBilling();
-    const { cart, load, setCart, applyCoupon } = useCart();
+    const { cart, setCart, applyCoupon, load: loadCart } = useCart();
     const billingDetails = ref(billing.value || {});
     const withholdingApplied = ref(false);
     const { loading } = useMakeOrder();
@@ -685,27 +604,20 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
-        if (res.data.data.addOrRemoveWitholding.success === true) {
-          if (addRemove === 'add') {
-            showToast('witholding applied successfully');
-            load();
-            setCart();
-          } else if (addRemove === 'remove') {
-            showToast('withholding removed successfully');
-            load();
-            setCart();
+      await axios
+        .post(process.env.GRAPHQL_API, body, options)
+        .then(async (res) => {
+          if (res.data.data.addOrRemoveWitholding?.success === true) {
+            const result =
+              await context.parent.$store.$vsf.$vendure.api.getCart();
+            setCart(result.data.activeOrder);
+          } else {
+            if (addRemove === 'add') {
+              showToast('Couldnt add withholding.');
+              withholdingApplied.value = false;
+            }
           }
-        } else {
-          if (addRemove === 'add') {
-            showToast('Couldnt add withholding.');
-            withholdingApplied.value = false;
-          } else if (addRemove === 'remove') {
-            showToast('Couldnt remove withholding.');
-            withholdingApplied.value = true;
-          }
-        }
-      });
+        });
     };
 
     const standardTax = computed(() => {
@@ -736,13 +648,15 @@ export default {
     });
 
     onSSR(async () => {
-      await load({ customQuery: { activeOrder: 'get-cart-custom-query' } });
+      await loadCart({ customQuery: { activeOrder: 'get-cart-custom-query' } });
     });
 
     onMounted(() => {});
 
     onBeforeMount(async () => {
-      await load();
+      await loadCart();
+      await addOrRemoveWithholdingTax();
+      await loadCart();
       url = 'https://testsecureacceptance.cybersource.com/pay';
       SECRET_KEY =
         'c03b7b8aa22c4bc8b2760c31d915bafd5b1c0c08d87340bfbf2e73931d4b066afdeb12fa507c435cb7a5530147ca9430ee81ebf228144eeaae55bb76eb6aba0d3e7038cb4e3e473cae83a48a3e9ce99864d7a1a903de4ce1b923e4d711321fe40bd2fd198dee4621b650e52ccd3f04ee818443c9b1d3476a8af1460343fb7ac7';
@@ -790,7 +704,7 @@ export default {
       await context.parent.$store.$vsf.$vendure.api.transitionOrderToState({
         state: 'ArrangingPayment',
       });
-      await load();
+      await loadCart();
       setCart();
     };
 
@@ -1014,7 +928,7 @@ export default {
         .catch((error) => {});
 
       changeState();
-      await load();
+      await loadCart();
       setCart();
       context.root.$router.push('/');
     };
@@ -1035,7 +949,6 @@ export default {
         context.root.$store.state.csrfToken.csrfToken,
         'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
       ).toString();
-      console.log('pink3');
       const options = {
         headers: {
           'Content-Type': 'application/json',
@@ -1057,7 +970,7 @@ export default {
 
     const cashComplete = async () => {
       changeState();
-      await load();
+      await loadCart();
       setCart();
       context.root.$router.push('/');
     };
