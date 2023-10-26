@@ -41,6 +41,62 @@
     <LazyHydrate when-visible>
       <AppFooter />
     </LazyHydrate>
+    <div class="hidden lg:block">
+      <SfButton
+        class="sf-button--pure sf-header__action chatIcon"
+        v-if="isMessageSideBarOpen"
+        @click="toggleMessageSidebar()"
+      >
+        <div v-if="isMessageSideBarOpen">
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-8 h-8 text-secondary"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+      </SfButton>
+      <SfButton
+        class="sf-button--pure sf-header__action chatIcon"
+        v-if="!isMessageSideBarOpen"
+        @click="getChatMessage"
+      >
+        <div>
+          <span
+            v-if="unseen !== 0"
+            class="bg-red text-white rounded-full float-right"
+            >&nbsp;{{ unseen }}&nbsp;</span
+          >
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-8 h-8 text-secondary -mt-2 float-right"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
+            />
+          </svg>
+        </div>
+      </SfButton>
+    </div>
+    <MessageSideBar
+      v-if="isMessageSideBarOpen"
+      class="lg:w-[20rem] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500] hidden lg:block"
+      @sendMessageToAdmin="sendMessageToAdmin"
+      @submitt="gust"
+      :messages="messages"
+    />
   </div>
   <!-- </div> -->
 </template>
@@ -63,11 +119,15 @@ import { useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 import Toast from '~/components/Toast.vue';
 import { ref, provide } from '@vue/composition-api';
+import CryptoJS from 'crypto-js';
+import axios from 'axios';
+import MessageSideBar from '~/components/MessageSideBar.vue';
+import { userGetters } from '@vue-storefront/vendure';
+import { computed, watch } from '@vue/composition-api';
 
 export default {
   name: 'DefaultLayout',
   // middleware: 'themeChecker',
-
   components: {
     ToastVue,
     Compare,
@@ -82,11 +142,136 @@ export default {
     Notification,
     Toast,
     Top,
+    MessageSideBar,
   },
-
+  methods: {
+    
+  },
   setup() {
-    const { load: loadUser } = useUser();
+    const { isMessageSideBarOpen, toggleMessageSidebar } = useUiState();
+    const { load: loadUser, user, isAuthenticated } = useUser();
+    const messages = ref([]);
+    const gustEmail = ref(null);
+    console.log(gustEmail) ;
+    console.log()
 
+    const gust = (email) => {
+      gustEmail.value = email;
+      getChatMessage();
+    }
+
+    const getChatMessage = async () => {
+      if(isMessageSideBarOpen.value == false){
+        toggleMessageSidebar();
+      }
+      let id = [];
+      let mes = unseenMessages.value;
+      for (let i = 0; i < mes.length; i++) {
+        id.push(mes[i].id);
+      }
+      console.log(isAuthenticated.value);
+      console.log(gustEmail.value);
+
+      if(isAuthenticated.value || gustEmail.value != null){
+        console.log("pppppink");
+        const body = {
+        query: `query GetChatMessage($userEmail: String!) {
+                  getChatMessage(userEmail: $userEmail) {
+                    createdAt
+                    id
+                    messages {
+                      content
+                      createdAt
+                      id
+                      isFromAdmin
+                    }
+                  }
+                }
+                `,
+        variables: {
+          //userEmail: userGetters.getEmailAddress(user.value),
+          userEmail: isAuthenticated
+            ? userGetters.getEmailAddress(user.value)
+            : gustEmail.value,
+        },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
+        console.log(res);
+        messages.value = res.data.data.getChatMessage?.messages;
+        console.log('============');
+        console.log(messages.value);
+        //console.log(messages.value.messages[0].content);
+        console.log('After axios request:', messages.value);
+        // const messagesArray = messages.value.messages;
+      });
+      }
+    };
+    // watch(messages, (newMessages) => {
+    //   console.log('Messages have changed:', newMessages);
+    // });
+    console.log(messages.value);
+    console.log('');
+    loadUser();
+    console.log('Our:', messages.value);
+    const unseen = computed(
+      () =>
+        messages.value.filter(
+          (mes) => mes.isFromAdmin == true && mes.isSeen == false
+        ).length
+    );
+    const unseenMessages = computed(() =>
+      messages.value.filter(
+        (mes) => mes.isFromAdmin == true && mes.isSeen == false
+      )
+    );
+    const sendMessage = async (messageToSend) => {
+      const body = {
+        query: `mutation SendMessage( $message: String!,$userEmail: String!,$userName: String) {
+                  writeChatMessage(
+                    input:
+                     { userEmail: $userEmail, message: $message, userName: $userName })}
+                `,
+        variables: {
+          message: messageToSend.msg,
+          userEmail: messageToSend.userEmail,
+          userName: messageToSend.firstName + ' ' + messageToSend.lastName,
+        },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+      await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
+        console.log(res);
+      });
+    };
+    const sendMessageToAdmin = async (messageToSend) => {
+      await loadUser();
+      let userEmail;
+      if (isAuthenticated) {
+        userEmail = userGetters.getEmailAddress(user.value);
+      } else {
+        userEmail = gustEmail.value;
+      }
+      const userFirstName = userGetters.getFirstName(user.value);
+      const userLastName = userGetters.getLastName(user.value);
+      if (messageToSend.length > 0) {
+        await sendMessage({
+          msg: messageToSend,
+          lastName: userLastName,
+          firstName: userFirstName,
+          userEmail: userEmail,
+        });
+      }
+    };
     const { isDarkMode } = useUiState();
     const { search: searchCms } = useCms();
     const { search } = useFacet();
@@ -120,7 +305,22 @@ export default {
         'BIG_SALE',
       ]);
     });
-    return { isDarkMode, isToastVisible, showToast, toastMessage };
+    return {
+      isAuthenticated,
+      isDarkMode,
+      isToastVisible,
+      showToast,
+      toastMessage,
+      isMessageSideBarOpen,
+      toggleMessageSidebar,
+      sendMessageToAdmin,
+      unseen,
+      getChatMessage,
+      unseenMessages,
+      messages,
+      gust,
+      //messagesArray,
+    };
   },
   created() {
     this.$store.dispatch('companyDetails/setInfo');
@@ -215,5 +415,13 @@ h4 {
   z-index: 500;
   top: 90vh;
   left: 95%;
+}
+.chatIcon {
+  position: fixed;
+  z-index: 600;
+  bottom: 30px;
+  right: 20px;
+  width: 3%;
+  height: 3%;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div
     class="chat rounded-xl shadow-lg bg-white max-h-96 overflow-auto no-scrollbar"
-    v-if="isMessageSideBarOpen"
   >
     <div
       class="invisible lg:visible h-20 w-[20rem] bg-secondary text-white rounded-t flex items-center fixed"
@@ -15,13 +14,33 @@
       />
       <h3 class="font-bold text-[20px] whitespace-nowrap">Ethiolab Support</h3>
     </div>
-    <div class="my-24">
-      <div class="mx-3" v-for="(message, i) in messages" :key="i">
-        <div
+    <!-- NewCodeforAuthentictedUser -->
+    <div
+      v-if="!isAuthenticated && !isFormOpen"
+      class="flex flex-col items-center justify-center h-full"
+    >
+      <h3 class="text-lg font-bold mb-4">
+        {{ $t('Please provide your email to start chatting') }}
+      </h3>
+      <div class="flex items-center">
+        <label for="email" class="mr-2">{{ $t('Email') }}:</label>
+        <input type="email" id="email" v-model="email" required />
+        <button class="ml-2" @click="startChatting">
+          {{ $t('Start Chatting') }}
+        </button>
+      </div>
+    </div>
+    <div v-else-if="isAuthenticated || email" class="relative">
+    <!-- EndNewCodeforAuthentictedUser -->
+    <div class="my-24" v-if="messages">
+      <div class="mx-3" v-for="message in messages" :key="message.id">
+         <div
           v-if="!message.isFromAdmin"
           class="bg-[#ecfeff] min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg"
         >
-          <p class="text-right mr-4 mt-1">{{ message.msg }}</p>
+          <span class="text-right text-[#000000] justify-center mt-1">{{
+            message.content
+          }}</span>
         </div>
         <div v-else class="bg-[#f4f6ff] min-h-[50px] my-2 w-[75%] rounded-lg">
           <SfIcon
@@ -33,9 +52,10 @@
             class="float-left"
           />
           <span class="text-left text-[#000000] justify-center mt-1">{{
-            message.msg
+            message.content
           }}</span>
-        </div>
+        </div> 
+        <!-- <div :class="message.isFromAdmin?'text-left':'text-right'" class="bg-[#ecfeff] min-h-[50px] w-[75%] ml-[24%] my-2 rounded-lg">{{message.content}}</div> -->
       </div>
     </div>
 
@@ -49,6 +69,7 @@
       v-show="elementVisible"
     /> -->
     <form
+       v-if="isFormOpen || isAuthenticated"
       @submit.prevent="sendMessageToAdmin"
       class="flex items-center fixed invisible lg:visible min-w-full bottom-[60px]"
     >
@@ -76,11 +97,14 @@
       </button>
     </form>
   </div>
+  </div>
 </template>
 
 <script>
 import { useUiState } from '~/composables';
 import { ref } from '@vue/composition-api';
+import { onSSR } from '@vue-storefront/core';
+import { useUser } from '@vue-storefront/vendure';
 import {
   SfInput,
   SfBadge,
@@ -96,6 +120,8 @@ import {
   SfModal,
   SfSidebar,
 } from '@storefront-ui/vue';
+//import { start } from 'repl';
+import { onMounted } from 'vue';
 export default {
   name: 'messageSideBar',
   props: ['messages'],
@@ -107,6 +133,7 @@ export default {
       messageToSend: '',
       loading: false,
       elementVisible: false,
+      isFormOpen: false,
     };
   },
   created() {
@@ -123,13 +150,27 @@ export default {
       this.$emit('sendMessageToAdmin', this.messageToSend);
       this.messageToSend = '';
     },
+    startChatting() {
+      this.$emit("submitt", this.email);
+       this.isFormOpen = true;
+    },
+    
   },
   setup() {
     const { isMessageSideBarOpen } = useUiState();
-
+    const email = ref('');
+    const { isAuthenticated, load: loadUser, user } = useUser();
+    (async () => await loadUser())();
     return {
       isMessageSideBarOpen,
+      email,
+      isAuthenticated,
+      user,
+      email,
+
     };
+   
+    
   },
 };
 </script>
