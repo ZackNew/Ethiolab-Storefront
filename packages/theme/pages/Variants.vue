@@ -655,7 +655,7 @@ export default {
             }
             customFields{
               youtube_link
-              documentation
+              documentations
             }
             featuredAsset{
               preview
