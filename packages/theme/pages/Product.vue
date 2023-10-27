@@ -120,6 +120,39 @@
                   </p>
                 </div>
               </div>
+                  <div>
+            <LazyHydrate when-idle>
+              <div class="hidden md:block">
+                <h4 class="my-4 text-secondary">Product Reviews</h4>
+                <SfReview
+                  v-for="review in reviews"
+                  :key="review.id"
+                  :message="review.summary"
+                  :max-rating="5"
+                  :rating="review.rating"
+                  :char-limit="250"
+                  :read-more-text="$t('Read more')"
+                  :hide-full-text="$t('Read less')"
+                  class="product__review"
+                >
+                  <template #author class="flex">
+                    <h4
+                      class="capitalize text-[#4f4f4f] mr-3 font-bold text-base float-left"
+                    >
+                      {{ review.authorName }}
+                    </h4>
+                    <h4 class="text-base text-[#4f4f4f]">
+                      {{ new Date(review.createdAt).toLocaleString() }}
+                    </h4>
+                  </template>
+                </SfReview>
+                <MyReview
+                  :productId="$route.params.id"
+                  :currentUserHasNoReview="!currentUserHasReview"
+                />
+              </div>
+            </LazyHydrate>
+          </div>
             </div>
           </div>
         </div>
@@ -233,9 +266,6 @@
             class="related"
           />
         </LazyHydrate>
-
-        <!-- <LazyHydrate when-visible> -->
-        <!-- </LazyHydrate> -->
       </div>
     </div>
   </div>
@@ -305,7 +335,6 @@ export default {
   async created() {
     this.loadings = true;
     this.getVariants();
-    // this.reviews = await this.getProductsReviews();
   },
 
   setup(props, context) {
@@ -519,7 +548,6 @@ export default {
       addItemToCart,
       isDarkMode,
       toastShower,
-      //reviewKey,
       removeItemFromWishlist,
       isInWishlist,
       isInCart,
@@ -532,6 +560,7 @@ export default {
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {
+                    slug
                     assets{
                       preview
                     }
@@ -621,14 +650,18 @@ export default {
         };
       });
       this.loadings = false;
+      this.productSlug = variant.data.data.data.product?.slug
+      this.productid = variant.data.data.data.product?.id
+      this.getProductsReviews()
     },
     async getProductsReviews() {
-      const data = JSON.stringify({
+      const slug = this.$route.params.slug_1;
+      const body = {
         query: `
-        query{
-          product(id: ${this.id}){
-            reviews {
-              items {
+        query Reviews($slug:String!){
+          product(slug: $slug){
+            reviews{
+              items{
                 summary
                 body
                 rating
@@ -638,39 +671,30 @@ export default {
                 id
               }
             }
-            customFields{
-              youtube_link
-            }
           }
         }
       `,
-      });
-      let baseUrll = process.env.GRAPHQL_API;
-      const response = await fetch(baseUrll, {
-        method: 'post',
-        body: data,
+        variables: {
+          slug: this.productSlug,
+          
+        },
+        csrfToken: this.$store.state.csrfToken.csrfToken,
+      };
+      const token = CryptoJS.AES.encrypt(
+        this.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': data?.length,
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
         },
-      });
-      const reviewsListResponse = await response.json();
-      let splitted =
-        reviewsListResponse.data.product.customFields?.youtube_link.split(
-          '?v='
-        );
-      if (splitted?.length == 2) {
-        this.youtube_link = splitted[1];
-      }
-      if (
-        reviewsListResponse.data.product.customFields?.maintenance_fee !== ''
-      ) {
-        this.properties.push({
-          name: 'Maintenance Fee',
-          value: reviewsListResponse.data.product.customFields?.maintenance_fee,
-        });
-      }
-      var reviewsList = reviewsListResponse.data.product.reviews.items;
+      };
+      const reviewsListResponse = await axios.post('/api/shop', body, options);
+
+      var reviewsList =
+        reviewsListResponse.data?.data?.data?.product.reviews.items;
       if (this.isAuthenticated) {
         return this.setThisUsersReview(reviewsList);
       }
@@ -694,7 +718,6 @@ export default {
       }
       return reviewsList;
     },
-
     addToCompareList() {
       const productId = this.$route.params.id;
       const variantId = this.$route.params.vid;
@@ -759,6 +782,8 @@ export default {
   },
   data() {
     return {
+      productSlug:null,
+      productid:null,
       loadings: false,
       prImage: '',
       quantity: 1,
