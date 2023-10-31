@@ -173,7 +173,7 @@ import {
   useWishlist,
   wishlistGetters,
   userGetters,
-  useInstantMessage,
+  //useInstantMessage,
 } from '@vue-storefront/vendure';
 import {
   computed,
@@ -335,7 +335,7 @@ export default {
       //   {isFromAdmin: true, msg: 'hi', isSeen: false},
       // {isFromAdmin: false, msg: 'Hello sir', isSeen: true}
     ]);
-    const { sendMessage, getUserInstantMessage } = useInstantMessage();
+    //const { sendMessage, getUserInstantMessage } = useInstantMessage();
     const { isAuthenticated, load: loadUser, user } = useUser();
     //getUserInstantMessage()
     const refreshMessages = async () => {
@@ -394,19 +394,19 @@ export default {
     const messageToSend = ref('');
     const selectedProd = () => {};
 
-    const sendMessageToAdmin = async () => {
-      await loadUser();
-      const userEmail = userGetters.getEmailAddress(user.value);
-      const userFirstName = userGetters.getFirstName(user.value);
-      const userLastName = userGetters.getLastName(user.value);
-      await sendMessage({
-        msg: messageToSend.value,
-        lastName: userLastName,
-        firstName: userFirstName,
-        userEmail: userEmail,
-      });
-      messageToSend.value = '';
-    };
+    // const sendMessageToAdmin = async () => {
+    //   await loadUser();
+    //   const userEmail = userGetters.getEmailAddress(user.value);
+    //   const userFirstName = userGetters.getFirstName(user.value);
+    //   const userLastName = userGetters.getLastName(user.value);
+    //   await sendMessage({
+    //     msg: messageToSend.value,
+    //     lastName: userLastName,
+    //     firstName: userFirstName,
+    //     userEmail: userEmail,
+    //   });
+    //   messageToSend.value = '';
+    // };
     //a list of {isFromAdmin, and msg}
     const unSeenMessagesLen = computed(() => {
       let len = 0;
@@ -629,9 +629,9 @@ export default {
       prodList,
       isDarkMode,
       messageToSend,
-      sendMessageToAdmin,
+     // sendMessageToAdmin,
       isAuthenticated,
-      unSeenMessagesLen,
+      //unSeenMessagesLen,
       handleCartSidebar,
       handleWishlistSidebar,
     };

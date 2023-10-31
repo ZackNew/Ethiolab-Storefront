@@ -243,13 +243,6 @@
         <BestSeller :bestSellers="bestSellings" />
       </LazyHydrate>
 
-      <!-- <NewCarousel /> -->
-      <!-- 
-      <LazyHydrate>
-        <FeaturedProducts />
-      </LazyHydrate> -->
-      <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-
       <LazyHydrate when-visible>
         <SfCallToAction
           title="Subscribe to Newsletters"
@@ -269,10 +262,6 @@
           </template>
         </SfCallToAction>
       </LazyHydrate>
-
-      <!-- <LazyHydrate when-visible>
-        <Testimonial :testimonials="testimonials" />
-      </LazyHydrate> -->
       <div
         v-if="testimonials.length > 0"
         class="block w-full items-center justify-center mx-auto"
@@ -356,60 +345,6 @@
       <LazyHydrate when-visible>
         <NewsletterModal @email-submitted="onSubscribe" />
       </LazyHydrate>
-      <div class="hidden lg:block">
-        <SfButton
-          class="sf-button--pure sf-header__action chatIcon"
-          v-if="isMessageSideBarOpen"
-          @click="toggleMessageSidebar()"
-        >
-          <div v-if="isMessageSideBarOpen">
-            <svg
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-8 h-8 text-secondary"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-        </SfButton>
-        <SfButton
-          class="sf-button--pure sf-header__action chatIcon"
-          v-if="!isMessageSideBarOpen"
-          @click="handleMessageOpen"
-        >
-          <div>
-            <span
-              v-if="unseen !== 0"
-              class="bg-red text-white rounded-full float-right"
-              >&nbsp;{{ unseen }}&nbsp;</span
-            >
-            <svg
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-8 h-8 text-secondary -mt-2 float-right"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
-              />
-            </svg>
-          </div>
-        </SfButton>
-      </div>
-      <MessageSideBar
-        class="lg:w-[20rem] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500] hidden lg:block"
-        :messages="messages"
-        @sendMessageToAdmin="sendMessageToAdmin"
-      />
     </div>
   </client-only>
 </template>
@@ -436,7 +371,7 @@ import {
 } from '@storefront-ui/vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import Testimonial from '~/components/Testimonial.vue';
-import MessageSideBar from '~/components/MessageSideBar.vue';
+//import MessageSideBar from '~/components/MessageSideBar.vue';
 import NewsletterModal from '~/components/NewsletterModal.vue';
 import Carousel from '~/components/carousel.vue';
 import PopupNotification from '~/components/PopupNotification.vue';
@@ -547,7 +482,7 @@ export default {
     RVPCard,
     NewCarousel,
     VueSlickCarousel,
-    MessageSideBar,
+    // MessageSideBar,
   },
   methods: {
     async getBestSellers() {
@@ -667,11 +602,10 @@ export default {
     const baseUrl = process.env.GRAPHQL_API;
     const path = baseUrl.split('/shop-api')[0] + '/assets/';
     const showToast = inject('showToast');
-    const {
+     const {
       toggleNewsletterModal,
-      isMessageSideBarOpen,
-      toggleMessageSidebar,
-    } = useUiState();
+  
+     } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
     const {
@@ -688,21 +622,7 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
-    const { sendMessage, getUserInstantMessage } = useInstantMessage();
     loadUser();
-
-    const messages = ref([]);
-    const refreshMessages = async () => {
-      const data = await getUserInstantMessage({
-        userEmail: userGetters.getEmailAddress(user.value),
-      });
-      messages.value = data.data.getUserInstantMessage;
-    };
-    let intervalId;
-    // intervalId = setInterval(() => {
-    //   refreshMessages();
-    // }, 2000);
-
     const { writeQuote, load, myQuotes } = useQuote();
 
     const heroSection = computed(() =>
@@ -733,17 +653,17 @@ export default {
 
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
 
-    const unseen = computed(
-      () =>
-        messages.value.filter(
-          (mes) => mes.isFromAdmin == true && mes.isSeen == false
-        ).length
-    );
-    const unseenMessages = computed(() =>
-      messages.value.filter(
-        (mes) => mes.isFromAdmin == true && mes.isSeen == false
-      )
-    );
+    // const unseen = computed(
+    //   () =>
+    //     messages.value.filter(
+    //       (mes) => mes.isFromAdmin == true && mes.isSeen == false
+    //     ).length
+    // );
+    // const unseenMessages = computed(() =>
+    //   messages.value.filter(
+    //     (mes) => mes.isFromAdmin == true && mes.isSeen == false
+    //   )
+    // );
 
     // const handleCancelOrder = async () => {
     //   const body = {
@@ -773,62 +693,102 @@ export default {
     //     })
     //     .catch((err) => {});
     // };
+    // const getChatMessage = async () => 
+    // {
+    //    toggleMessageSidebar();
+    //   let id = 1;
+    //   let mes = unseenMessages.value;
+    //   for (let i = 0; i < mes.length; i++) {
+    //     id.push(mes[i].id);
+    //   }
+    //   const body = {
+    //   query:
+    //    `query getChatMessage($userEmail: String!) {
+    //     getChatMessage(userEmail: $userEmail) {
+    //       createdAt
+    //         id
+    //         messages {
+    //           content
+    //           createdAt
+    //           id
+    //           isFromAdmin
+    //         }
+    //   }`,
+    //   srfToken: this.$store.state.csrfToken.csrfToken,
+    //   };
+    //   const token = CryptoJS.AES.encrypt(
+    //     this.$store.state.csrfToken.csrfToken,
+    //     'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+    //   ).toString();
+    //   const options = {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Access-Control-Allow-Origin': '*',
+    //       berta: token,
+    //     },
+    //   };
+    //   console.log(body);
+    //   console.log(options);
+    //   await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
+    //     console.log(res);
+    //   });
+    // };
+    // const handleMessageOpen = async () => {
+    //   toggleMessageSidebar();
+    //   let ids = 1;
+    //   let mes = unseenMessages.value;
+    //   for (let i = 0; i < mes.length; i++) {
+    //     ids.push(mes[i].id);
+    //   }
+    
 
-    const handleMessageOpen = async () => {
-      toggleMessageSidebar();
-      let ids = [];
-      let mes = unseenMessages.value;
-      for (let i = 0; i < mes.length; i++) {
-        ids.push(mes[i].id);
-      }
+    //   const body = {
+    //     query: `mutation makeSeenByUser($ids: [ID]! ) {
+    //       makeSeenByUser (ids: $ids){
+    //               success
+    //             }
+    //           }`,
+    //     variables: {
+    //       ids: ids,
+    //     },
+    //     csrfToken: root.$store.state.csrfToken.csrfToken,
+    //   };
+    //   const token = CryptoJS.AES.encrypt(
+    //     root.$store.state.csrfToken.csrfToken,
+    //     'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+    //   ).toString();
+    //   const options = {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Access-Control-Allow-Origin': '*',
+    //       berta: token,
+    //     },
+    //   };
 
-      const body = {
-        query: `mutation makeSeenByUser($ids: [ID]! ) {
-          makeSeenByUser (ids: $ids){
-                  success
-                }
-              }`,
-        variables: {
-          ids: ids,
-        },
-        csrfToken: root.$store.state.csrfToken.csrfToken,
-      };
-      const token = CryptoJS.AES.encrypt(
-        root.$store.state.csrfToken.csrfToken,
-        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
-      ).toString();
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          berta: token,
-        },
-      };
+    //   await axios
+    //     .post('/api/shop', body, options)
+    //     .then((res) => {
+    //       // modalOpen.value = false;
+    //       // setCart();
+    //       // root.$router.push('/');
+    //     })
+    //     .catch((err) => {});
+    // };
 
-      await axios
-        .post('/api/shop', body, options)
-        .then((res) => {
-          // modalOpen.value = false;
-          // setCart();
-          // root.$router.push('/');
-        })
-        .catch((err) => {});
-    };
-
-    const sendMessageToAdmin = async (messageToSend) => {
-      // await loadUser();
-      const userEmail = userGetters.getEmailAddress(user.value);
-      const userFirstName = userGetters.getFirstName(user.value);
-      const userLastName = userGetters.getLastName(user.value);
-      if (messageToSend.length > 0) {
-        await sendMessage({
-          msg: messageToSend,
-          lastName: userLastName,
-          firstName: userFirstName,
-          userEmail: userEmail,
-        });
-      }
-    };
+    // const sendMessageToAdmin = async (messageToSend) => {
+    //   // await loadUser();
+    //   const userEmail = userGetters.getEmailAddress(user.value);
+    //   const userFirstName = userGetters.getFirstName(user.value);
+    //   const userLastName = userGetters.getLastName(user.value);
+    //   if (messageToSend.length > 0) {
+    //     await sendMessage({
+    //       msg: messageToSend,
+    //       lastName: userLastName,
+    //       firstName: userFirstName,
+    //       userEmail: userEmail,
+    //     });
+    //   }
+    // };
 
     const onSubscribe = ({ emailAddress, event }) => {
       const body = {
@@ -896,7 +856,7 @@ export default {
       localStorage.setItem('sort', 'Select Sorting');
     });
 
-    onUnmounted(() => clearInterval(intervalId));
+   // onUnmounted(() => clearInterval(intervalId));
     return {
       productGetters,
       tabs,
@@ -921,13 +881,15 @@ export default {
       imageUrl,
       itemsToCart,
       path,
-      isMessageSideBarOpen,
-      toggleMessageSidebar,
+      // isMessageSideBarOpen,
+      // toggleMessageSidebar,
       isAuthenticated,
-      sendMessageToAdmin,
-      messages,
-      unseen,
-      handleMessageOpen,
+      // sendMessageToAdmin,
+      // messages,
+      //unseen,
+      //handleMessageOpen,
+      //handleCancelOrder,  
+      // getChatMessage,
     };
   },
 };
