@@ -142,6 +142,15 @@ export default {
   //   this.scrollToBottom();
   // },
   created() {},
+  mounted() {
+    this.$nextTick(() => {
+      this.scrollToBottom();
+    });
+  },
+
+  updated() {
+    this.scrollToBottom();
+  },
   methods: {
     sendMessageToAdmin() {
       setTimeout(() => (this.elementVisible = true), 100);
@@ -150,6 +159,15 @@ export default {
       this.$emit('sendMessageToAdmin', this.messageToSend);
       this.messageToSend = '';
     },
+      scrollToBottom() {
+      this.$nextTick(() => {
+        const chatContainer = this.$refs.chatContainer;
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: 'smooth',
+        });
+      });
+      },
     validateEmail() {
       const emailPattern = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 
