@@ -66,7 +66,7 @@
       <SfButton
         class="sf-button--pure sf-header__action chatIcon"
         v-if="!isMessageSideBarOpen"
-        @click="getChatMessage"
+        @click="getChatMessage(true)"
       >
         <div>
           <span
@@ -118,7 +118,7 @@ import { useCms, useFacet, useUser } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 import Toast from '~/components/Toast.vue';
-import { ref, provide } from '@vue/composition-api';
+import { ref, provide,onUnmounted } from '@vue/composition-api';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import MessageSideBar from '~/components/MessageSideBar.vue';
@@ -144,38 +144,29 @@ export default {
     Top,
     MessageSideBar,
   },
-  methods: {
-    
-  },
+  methods: {},
   setup() {
     const { isMessageSideBarOpen, toggleMessageSidebar } = useUiState();
     const { load: loadUser, user, isAuthenticated } = useUser();
     const messages = ref([]);
     const gustEmail = ref(null);
-    console.log(gustEmail) ;
-    console.log()
-
     const gust = (email) => {
       gustEmail.value = email;
       getChatMessage();
-    }
-
-    const getChatMessage = async () => {
-      if(isMessageSideBarOpen.value == false){
+    };
+    const getChatMessage = async (toggle=false) => {
+      if (isMessageSideBarOpen.value == false && toggle) {
         toggleMessageSidebar();
+        ppp();
       }
       let id = [];
       let mes = unseenMessages.value;
-      for (let i = 0; i < mes.length; i++) {
+      for (let i = 0; i < mes?.length; i++) {
         id.push(mes[i].id);
       }
-      console.log(isAuthenticated.value);
-      console.log(gustEmail.value);
-
-      if(isAuthenticated.value || gustEmail.value != null){
-        console.log("pppppink");
+      if (isAuthenticated.value || gustEmail.value != null) {
         const body = {
-        query: `query GetChatMessage($userEmail: String!) {
+          query: `query GetChatMessage($userEmail: String!) {
                   getChatMessage(userEmail: $userEmail) {
                     createdAt
                     id
@@ -188,45 +179,32 @@ export default {
                   }
                 }
                 `,
-        variables: {
-          //userEmail: userGetters.getEmailAddress(user.value),
-          userEmail: isAuthenticated
-            ? userGetters.getEmailAddress(user.value)
-            : gustEmail.value,
-        },
-      };
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      };
-      await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
-        console.log(res);
-        messages.value = res.data.data.getChatMessage?.messages;
-        console.log('============');
-        console.log(messages.value);
-        //console.log(messages.value.messages[0].content);
-        console.log('After axios request:', messages.value);
-        // const messagesArray = messages.value.messages;
-      });
+          variables: {
+            userEmail: isAuthenticated.value
+              ? userGetters.getEmailAddress(user.value)
+              : gustEmail.value,
+          },
+        };
+        const options = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        };
+        await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
+          messages.value = res.data.data.getChatMessage?.messages;
+        });
       }
     };
-    // watch(messages, (newMessages) => {
-    //   console.log('Messages have changed:', newMessages);
-    // });
-    console.log(messages.value);
-    console.log('');
     loadUser();
-    console.log('Our:', messages.value);
     const unseen = computed(
       () =>
-        messages.value.filter(
+        messages.value?.filter(
           (mes) => mes.isFromAdmin == true && mes.isSeen == false
         ).length
     );
     const unseenMessages = computed(() =>
-      messages.value.filter(
+      messages.value?.filter(
         (mes) => mes.isFromAdmin == true && mes.isSeen == false
       )
     );
@@ -249,18 +227,16 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
-        console.log(res);
-      });
+      await axios
+        .post(process.env.GRAPHQL_API, body, options)
+        .then((res) => {});
     };
     const sendMessageToAdmin = async (messageToSend) => {
       await loadUser();
-      let userEmail;
-      if (isAuthenticated) {
-        userEmail = userGetters.getEmailAddress(user.value);
-      } else {
-        userEmail = gustEmail.value;
-      }
+
+      const userEmail = isAuthenticated.value
+        ? userGetters.getEmailAddress(user.value)
+        : gustEmail.value;
       const userFirstName = userGetters.getFirstName(user.value);
       const userLastName = userGetters.getLastName(user.value);
       if (messageToSend.length > 0) {
@@ -272,6 +248,21 @@ export default {
         });
       }
     };
+    const refreshMessages = async () => {
+    if(!isMessageSideBarOpen.value){
+      console.log("clearing interval");
+      clearInterval(intervalId);
+    }
+    const data = await getChatMessage();
+    };
+    let intervalId;
+    const ppp = () => {
+      intervalId = setInterval(() => {
+        refreshMessages();
+      }, 2000);
+    };
+
+
     const { isDarkMode } = useUiState();
     const { search: searchCms } = useCms();
     const { search } = useFacet();
@@ -280,7 +271,6 @@ export default {
     function showToast(msg) {
       toastMessage.value = msg;
       isToastVisible.value = true;
-
       setTimeout(() => {
         closeToast();
       }, 100);
@@ -305,6 +295,8 @@ export default {
         'BIG_SALE',
       ]);
     });
+    // onUnmounted(() => clearInterval(intervalId));
+
     return {
       isAuthenticated,
       isDarkMode,
@@ -322,6 +314,7 @@ export default {
       //messagesArray,
     };
   },
+  
   created() {
     this.$store.dispatch('companyDetails/setInfo');
   },

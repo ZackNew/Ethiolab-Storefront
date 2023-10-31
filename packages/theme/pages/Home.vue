@@ -243,13 +243,6 @@
         <BestSeller :bestSellers="bestSellings" />
       </LazyHydrate>
 
-      <!-- <NewCarousel /> -->
-      <!-- 
-      <LazyHydrate>
-        <FeaturedProducts />
-      </LazyHydrate> -->
-      <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-
       <LazyHydrate when-visible>
         <SfCallToAction
           title="Subscribe to Newsletters"
@@ -269,10 +262,6 @@
           </template>
         </SfCallToAction>
       </LazyHydrate>
-
-      <!-- <LazyHydrate when-visible>
-        <Testimonial :testimonials="testimonials" />
-      </LazyHydrate> -->
       <div
         v-if="testimonials.length > 0"
         class="block w-full items-center justify-center mx-auto"
@@ -356,62 +345,6 @@
       <LazyHydrate when-visible>
         <NewsletterModal @email-submitted="onSubscribe" />
       </LazyHydrate>
-       <!-- 
-      <div class="hidden lg:block">
-       <SfButton
-          class="sf-button--pure sf-header__action chatIcon"
-          v-if="isMessageSideBarOpen"
-          @click="toggleMessageSidebar()"
-          
-        >
-          <div v-if="isMessageSideBarOpen">
-            <svg
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-8 h-8 text-secondary"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-        </SfButton>
-        <SfButton
-          class="sf-button--pure sf-header__action chatIcon"
-          v-if="!isMessageSideBarOpen"
-          @click="getChatMessage"
-        >
-          <div>
-            <span
-              v-if="unseen !== 0"
-              class="bg-red text-white rounded-full float-right"
-              >&nbsp;{{ unseen }}&nbsp;</span
-            >
-            <svg
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-8 h-8 text-secondary -mt-2 float-right"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
-              />
-            </svg>
-          </div>
-        </SfButton>
-      </div>
-        <MessageSideBar
-        class="lg:w-[20rem] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500] hidden lg:block"
-        :messages="messages.content"
-        @sendMessageToAdmin="sendMessageToAdmin"
-      />-->
     </div>
   </client-only>
 </template>
@@ -671,8 +604,7 @@ export default {
     const showToast = inject('showToast');
      const {
       toggleNewsletterModal,
-    //   isMessageSideBarOpen,
-    //   toggleMessageSidebar,
+  
      } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
@@ -690,24 +622,7 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
-
-   
-    //const { sendMessage, getChatMessage } = useInstantMessage();
-    // const { sendMessage } = getChatMessage();
     loadUser();
-
-    // const messages = ref([]);
-    // const refreshMessages = async () => {
-    //   const data = await getChatMessage({
-    //     userEmail: userGetters.getEmailAddress(user.value),
-    //   });
-    //   messages.content.value = data.data.getChatMessage;
-    // };
-    // let intervalId;
-    // // intervalId = setInterval(() => {
-    // //   refreshMessages();
-    // // }, 2000);
-
     const { writeQuote, load, myQuotes } = useQuote();
 
     const heroSection = computed(() =>

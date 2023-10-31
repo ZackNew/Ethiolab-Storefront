@@ -199,11 +199,8 @@ import gql from 'graphql-tag';
 import { print } from 'graphql';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-// Define a custom email validation rule
 extend('customEmail', {
   validate: (value) => {
-    // You can use a custom regular expression for email validation
-    // Example: This regular expression matches common email formats
     const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
     return emailRegex.test(value);
   },
