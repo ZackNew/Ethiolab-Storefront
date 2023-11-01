@@ -43,39 +43,19 @@
                 @click:remove="removeFromList(product)"
                 class="collected-product sf-collected-product"
               >
-                <template #configuration>
-                  <!-- <div class="collected-product__properties">
-                    <SfProperty
-                      v-for="(
-                        attribute, key
-                      ) in wishlistGetters.getItemAttributes(product, [
-                        'color',
-                        'size',
-                      ])"
-                      :key="key"
-                      :name="key"
-                      :value="attribute"
-                    />
-                  </div> -->
-                  &nbsp;
-                </template>
+                <template #configuration> &nbsp; </template>
                 <template #input="{}">&nbsp;</template>
-                <template #actions>&nbsp;</template>
+                <template #actions>
+                  <SfButton
+                    @click="itemsToCart(product, 1)"
+                    class="rounded bg-secondary mr-[2%]"
+                    >Add To Cart</SfButton
+                  ></template
+                >
               </SfCollectedProduct>
             </transition-group>
           </div>
-          <div class="sidebar-bottom">
-            <!-- <SfProperty
-              class="sf-property--full-width my-wishlist__total-price"
-            >
-              <template #name>
-                <span class="my-wishlist__total-price-label">Total price:</span>
-              </template>
-              <template #value>
-                <SfPrice :regular="totals + ' ETB'" />
-              </template>
-            </SfProperty> -->
-          </div>
+          <div class="sidebar-bottom"></div>
         </div>
         <div v-else class="empty-wishlist" key="empty-wishlist">
           <div class="empty-wishlist__banner">
@@ -93,14 +73,6 @@
           </div>
         </div>
       </transition>
-      <!-- <template #content-bottom>
-        <SfButton
-          @click="toggleWishlistSidebar"
-          class="sf-button--full-width color-secondary"
-        >
-          {{ $t('Start shopping') }}
-        </SfButton>
-      </template> -->
     </SfSidebar>
   </div>
 </template>
@@ -117,10 +89,17 @@ import {
   SfImage,
 } from '@storefront-ui/vue';
 import { computed, onMounted, ref } from '@vue/composition-api';
-import { useWishlist, useUser, wishlistGetters } from '@vue-storefront/vendure';
+import {
+  useWishlist,
+  useUser,
+  wishlistGetters,
+  useCart,
+  productGetters,
+} from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { getCalculatedPrice } from '~/helpers';
 import CryptoJS from 'crypto-js';
+import { showToast } from '~/helpers';
 
 export default {
   middleware: ['csrf'],
@@ -136,6 +115,14 @@ export default {
     SfImage,
   },
   setup(props, ctx) {
+    const {
+      addItem: addItemToCart,
+      load: loadCart,
+      setCart,
+      cart,
+      isInCart,
+    } = useCart();
+
     const { isWishlistSidebarOpen, toggleWishlistSidebar } = useUiState();
     const { wishlist, removeItem, load: loadWishlist } = useWishlist();
     const { isAuthenticated } = useUser();
@@ -210,6 +197,25 @@ export default {
         products.value = empArray;
       });
     };
+    const itemsToCart = (product, quantity) => {
+      console.log("log",product);
+
+      const cartBefore = cart.value;
+
+      addItemToCart({
+        product: {
+          _variantId: product?._variantId,
+        },
+        quantity: quantity,
+      }).then((res) => {
+        if (cart?.value?.errorCode && cart.value.errorCode != '') {
+          showToast(cart.value.message);
+          setCart(cart.value.order);
+        } else {
+          showToast('Product added to cart!');
+        }
+      });
+    };
 
     const removeFromList = (product) => {
       removeItem({ product });
@@ -261,7 +267,12 @@ export default {
       totalItems,
       wishlistGetters,
       getCalculatedPrice,
-      removeFromList,
+      addItemToCart,
+      isInCart,
+      cart,
+      itemsToCart,
+     removeFromList,
+      variantid,
     };
   },
 };
