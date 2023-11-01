@@ -198,10 +198,7 @@ export default {
       });
     };
     const itemsToCart = (product, quantity) => {
-      console.log("log",product);
-
       const cartBefore = cart.value;
-
       addItemToCart({
         product: {
           _variantId: product?._variantId,
@@ -216,10 +213,9 @@ export default {
         }
       });
     };
-
     const removeFromList = (product) => {
       removeItem({ product });
-      // loadWishlist();
+      loadWishlist();
       const ids = [];
       const vIds = [];
       const wishList = wishlistGetters.getItems(wishlist.value);
@@ -272,7 +268,6 @@ export default {
       cart,
       itemsToCart,
      removeFromList,
-      variantid,
     };
   },
 };
