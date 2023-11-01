@@ -118,7 +118,7 @@ import { useCms, useFacet, useUser } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 import Toast from '~/components/Toast.vue';
-import { ref, provide,onUnmounted } from '@vue/composition-api';
+import { ref, provide, onUnmounted } from '@vue/composition-api';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import MessageSideBar from '~/components/MessageSideBar.vue';
@@ -154,7 +154,7 @@ export default {
       gustEmail.value = email;
       getChatMessage();
     };
-    const getChatMessage = async (toggle=false) => {
+    const getChatMessage = async (toggle = false) => {
       if (isMessageSideBarOpen.value == false && toggle) {
         toggleMessageSidebar();
         ppp();
@@ -249,11 +249,10 @@ export default {
       }
     };
     const refreshMessages = async () => {
-    if(!isMessageSideBarOpen.value){
-      console.log("clearing interval");
-      clearInterval(intervalId);
-    }
-    const data = await getChatMessage();
+      if (!isMessageSideBarOpen.value) {
+        clearInterval(intervalId);
+      }
+      const data = await getChatMessage();
     };
     let intervalId;
     const ppp = () => {
@@ -261,7 +260,6 @@ export default {
         refreshMessages();
       }, 2000);
     };
-
 
     const { isDarkMode } = useUiState();
     const { search: searchCms } = useCms();
@@ -314,12 +312,16 @@ export default {
       //messagesArray,
     };
   },
-  
+
   created() {
     this.$store.dispatch('companyDetails/setInfo');
   },
 };
 </script>
+
+<head>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+</head>
 
 <style lang="scss">
 @import '../assets/myAccountOverrides.scss';
