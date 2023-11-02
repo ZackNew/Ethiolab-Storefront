@@ -23,7 +23,6 @@
       </ol>
     </nav>
     <div class="grid grid-cols-11 mt-6">
-      <!-- Side filter search or an Ad -->
 
       <div class="col-span-3">
         <div
