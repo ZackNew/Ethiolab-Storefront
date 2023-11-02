@@ -15,9 +15,6 @@
             Home
           </nuxt-link>
         </li>
-        <!-- <li class="sf-breadcrumbs__list-item" :aria-current="false">
-                {{ 'Industries' }}
-                </li> -->
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
           <p class="text-secondary">
             {{ industryName }}
