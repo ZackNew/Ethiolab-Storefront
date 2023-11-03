@@ -387,12 +387,33 @@ export default {
       'Document',
     ];
 
-    const itemsToCart = (items) => {
-      if (items.length > 1) {
-        for (let item of items) {
+      const itemsToCart = (items) => {
+        if (items.length > 1) {
+          for (let item of items) {
+            addItemToCart({
+              product: {
+                _variantId: item?.productVariant?.id,
+              },
+              quantity: 1,
+             
+            }).then((res) => {
+              if (cart?.value?.errorCode && cart.value.errorCode != '') {
+                showToast(cart.value.message);
+                setCart(cart.value.order);
+              } else {
+                showToast('Product added to cart!');
+              }
+              setTimeout(() => {
+                const newCart = loadCart();
+                setCart(newCart.order);
+              }, 5000);
+            });
+            console.log('++++', item);
+          }
+        } else {
           addItemToCart({
             product: {
-              _variantId: item?.productVariant?.id,
+               _variantId: Array.isArray(items) ? items[0].productVariant.id : items?.productVariant?.id,
             },
             quantity: 1,
           }).then((res) => {
@@ -402,29 +423,9 @@ export default {
             } else {
               showToast('Product added to cart!');
             }
-            setTimeout(() => {
-              const newCart = loadCart();
-              setCart(newCart.order);
-            }, 5000);
           });
         }
-      } else {
-        addItemToCart({
-          product: {
-            _variantId: items?.productVariant?.id,
-          },
-          quantity: 1,
-        }).then((res) => {
-          if (cart?.value?.errorCode && cart.value.errorCode != '') {
-            showToast(cart.value.message);
-            setCart(cart.value.order);
-          } else {
-            showToast('Product added to cart!');
-          }
-        });
-      }
-    };
-
+      };
     const getStatusTextClass = (order) => {
       const status = orderGetters.getStatus(order);
       switch (status) {
