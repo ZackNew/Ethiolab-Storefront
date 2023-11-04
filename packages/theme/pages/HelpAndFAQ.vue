@@ -102,14 +102,17 @@ export default {
       this.loading = true;
       const body = {
         query: `query getFAQ {
-            getFaqs {
-              answer
-              id
-              question
-              isEnabled
-              tags
-            }
-          }`,
+                  getFaqs {
+                    answer
+                    id
+                    question
+                    isEnabled
+                    tags {
+                      id
+                      tag
+                    }
+                  }
+                }`,
         csrfToken: this.$store.state.csrfToken.csrfToken,
       };
       const token = CryptoJS.AES.encrypt(
@@ -128,7 +131,7 @@ export default {
         this.loading = false;
         res.data.data.data?.getFaqs?.forEach((faq) => {
           faq.tags?.forEach((tag) => {
-            !this.categories.includes(tag) && this.categories.push(tag);
+            !this.categories.includes(tag.tag) && this.categories.push(tag.tag);
           });
         });
         if (this.categories.length > 0) {
