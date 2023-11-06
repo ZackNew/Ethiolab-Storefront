@@ -335,9 +335,6 @@ export default defineComponent({
     const handleHaveCode = async () => {
       emailReset.value = false;
     };
-    console.log('passowrdvalue', password.value);
-    console.log();
-    console.log('token', tokenValue.value);
     const handleReset = async () => {
       const body = {
         query: `
