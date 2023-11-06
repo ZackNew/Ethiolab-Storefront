@@ -92,4 +92,9 @@ export default {
 .navigation-bottom {
   --bottom-navigation-z-index: 3;
 }
+.sf-bottom-navigation-item 
+{
+  --icon-color:blue !important;
+  color:blue !important;
+}
 </style>
