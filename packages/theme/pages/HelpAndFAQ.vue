@@ -9,7 +9,7 @@
         </div> -->
 
         <SfContentPages
-          title="FAQ's"
+          title="FAQ"
           @click:change="changeActive"
           :active="activePage"
           class="faqContentPages"
@@ -102,17 +102,18 @@ export default {
       this.loading = true;
       const body = {
         query: `query getFAQ {
-                  getFaqs {
-                    answer
-                    id
-                    question
-                    isEnabled
-                    tags {
-                      id
-                      tag
-                    }
-                  }
-                }`,
+            getFaqs {
+              answer
+              id
+              question
+              isEnabled
+              tags
+              {
+                id
+                tag
+              }
+            }
+          }`,
         csrfToken: this.$store.state.csrfToken.csrfToken,
       };
       const token = CryptoJS.AES.encrypt(
@@ -126,25 +127,25 @@ export default {
           berta: token,
         },
       };
-      await axios.post('/api/shop', body, options).then((res) => {
-        this.FAQs = res.data.data.data?.getFaqs.filter((faq) => faq.isEnabled);
+      await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
+        this.FAQs = res.data.data.getFaqs.filter((faq) => faq.isEnabled);
         this.loading = false;
-        res.data.data.data?.getFaqs?.forEach((faq) => {
+        res.data.data.getFaqs?.forEach((faq) => {
           faq.tags?.forEach((tag) => {
             !this.categories.includes(tag.tag) && this.categories.push(tag.tag);
           });
         });
         if (this.categories.length > 0) {
           this.activePage = this.categories[0];
-          this.contents = this.FAQs.filter((faq) =>
-            faq.tags.includes(this.categories[0])
+          this.contents = this.FAQs.filter(
+            (faq) => (faq.tag = this.categories[0])
           );
         }
       });
     },
     changeActive(title) {
       this.activePage = title;
-      this.contents = this.FAQs.filter((faq) => faq.tags.includes(title));
+      this.contents = this.FAQs.filter((faq) => (faq.tags.tag = title));
     },
   },
   setup() {
