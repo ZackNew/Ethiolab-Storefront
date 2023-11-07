@@ -175,7 +175,7 @@
                 <!-- <a :href="inv_download + invoice.downloadUrl" target="_blank">
                   Show As Pdf</a
                 > -->
-                <a @click="openPDF(invoice.downloadUrl)"> Show As Pdf</a>
+                <a @click="openPDF(invoice.storageReference)"> Show As Pdf</a>
               </SfButton>
             </SfTableData>
           </SfTableRow>
@@ -241,29 +241,32 @@ export default {
 
   methods: {
     async openPDF(link) {
-      const url = process.env.GRAPHQL_API?.split('/shop-api')[0] + link;
-      const token = this.$cookies.get('vendure-auth-token');
-      const options = {
-        responseType: 'blob',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          authorization: `Bearer ${token}`,
-        },
-      };
-      await axios.get(url, options).then((res) => {
-        let binarydata = [];
-        binarydata.push(res.data);
-        let downloadLink = document.createElement('a');
-        downloadLink.href = window.URL.createObjectURL(
-          new Blob(binarydata, {
-            type: 'application/pdf',
-          })
-        );
-        downloadLink.setAttribute('target', '_blank');
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-      });
+      const url =
+        process.env.GRAPHQL_API?.split('/shop-api')[0] +
+        link.split('static')[1];
+      window.open(url, '_blank');
+      // const token = this.$cookies.get('vendure-auth-token');
+      // const options = {
+      //   responseType: 'blob',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Access-Control-Allow-Origin': '*',
+      //     authorization: `Bearer ${token}`,
+      //   },
+      // };
+      // await axios.get(url, options).then((res) => {
+      //   let binarydata = [];
+      //   binarydata.push(res.data);
+      //   let downloadLink = document.createElement('a');
+      //   downloadLink.href = window.URL.createObjectURL(
+      //     new Blob(binarydata, {
+      //       type: 'application/pdf',
+      //     })
+      //   );
+      //   downloadLink.setAttribute('target', '_blank');
+      //   document.body.appendChild(downloadLink);
+      //   downloadLink.click();
+      // });
     },
   },
 
@@ -316,6 +319,7 @@ export default {
                             downloadUrl
                             createdAt
                             orderCode
+                            storageReference
                           }
                         }
                       }`,
@@ -387,33 +391,12 @@ export default {
       'Document',
     ];
 
-      const itemsToCart = (items) => {
-        if (items.length > 1) {
-          for (let item of items) {
-            addItemToCart({
-              product: {
-                _variantId: item?.productVariant?.id,
-              },
-              quantity: 1,
-             
-            }).then((res) => {
-              if (cart?.value?.errorCode && cart.value.errorCode != '') {
-                showToast(cart.value.message);
-                setCart(cart.value.order);
-              } else {
-                showToast('Product added to cart!');
-              }
-              setTimeout(() => {
-                const newCart = loadCart();
-                setCart(newCart.order);
-              }, 5000);
-            });
-            console.log('++++', item);
-          }
-        } else {
+    const itemsToCart = (items) => {
+      if (items.length > 1) {
+        for (let item of items) {
           addItemToCart({
             product: {
-               _variantId: Array.isArray(items) ? items[0].productVariant.id : items?.productVariant?.id,
+              _variantId: item?.productVariant?.id,
             },
             quantity: 1,
           }).then((res) => {
@@ -423,9 +406,31 @@ export default {
             } else {
               showToast('Product added to cart!');
             }
+            setTimeout(() => {
+              const newCart = loadCart();
+              setCart(newCart.order);
+            }, 5000);
           });
+          console.log('++++', item);
         }
-      };
+      } else {
+        addItemToCart({
+          product: {
+            _variantId: Array.isArray(items)
+              ? items[0].productVariant.id
+              : items?.productVariant?.id,
+          },
+          quantity: 1,
+        }).then((res) => {
+          if (cart?.value?.errorCode && cart.value.errorCode != '') {
+            showToast(cart.value.message);
+            setCart(cart.value.order);
+          } else {
+            showToast('Product added to cart!');
+          }
+        });
+      }
+    };
     const getStatusTextClass = (order) => {
       const status = orderGetters.getStatus(order);
       switch (status) {
