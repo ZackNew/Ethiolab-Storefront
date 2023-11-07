@@ -130,7 +130,7 @@ import {
   SfCollectedProduct,
   SfImage,
   SfQuantitySelector,
-  SfInput
+  SfInput,
 } from '@storefront-ui/vue';
 import { computed, watchEffect, inject } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
@@ -150,9 +150,9 @@ export default {
     SfPrice,
     SfCollectedProduct,
     SfImage,
-    SfQuantitySelector
+    SfQuantitySelector,
   },
-  setup() {
+  setup(props, { root }) {
     const { isCartSidebarOpen, toggleQuoteModal, toggleCartSidebar } =
       useUiState();
     const { cart, removeItem, updateItemQty, loading, setCart } = useCart();
@@ -161,6 +161,7 @@ export default {
     const products = computed(() => cartGetters.getItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
+    const currentLocation = ref('');
 
     const removeFromCart = (product) => {
       removeItem(product).then((res) => {
@@ -170,8 +171,14 @@ export default {
         }
       });
     };
-
     const updateCartQuty = (params) => {
+      const isWithholdingApplied =
+        cart.value.customFields.withholding_tax !== 0;
+      const currentLocation = root.$route.fullPath;
+      if (currentLocation === '/checkout/payment' && isWithholdingApplied) {
+        showToast('Can not update cart once withholding tax is applied!');
+        return;
+      }
       const currentCart = cart.value;
       updateItemQty(params).then((res) => {
         if (cart?.value?.errorCode && cart.value.errorCode !== '') {
@@ -198,9 +205,9 @@ export default {
       totalItems,
       cartGetters,
       removeFromCart,
-      updateCartQuty
+      updateCartQuty,
     };
-  }
+  },
 };
 </script>
 
