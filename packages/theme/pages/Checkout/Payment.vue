@@ -451,7 +451,7 @@ import {
   SfLink,
   SfInput,
   SfModal,
-  SfAlert,
+  SfAlert
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
 import {
@@ -459,36 +459,25 @@ import {
   computed,
   onMounted,
   onBeforeMount,
-  inject,
+  inject
 } from '@vue/composition-api';
 import {
   useMakeOrder,
   useCart,
   cartGetters,
-  usePayment,
+  usePayment
 } from '@vue-storefront/vendure';
 import {
-  useBilling,
-  useShipping,
-  useUserBilling,
+  useBilling
 } from '@vue-storefront/vendure';
 import { uuid } from 'vue-uuid';
 import * as crypto from 'crypto';
 import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import axios from 'axios';
-import Vue from 'vue';
 // import VueAxios from 'vue-axios';
-import {
-  mapAddressFormToOrderAddress,
-  COUNTRIES,
-  getDefaultAddress,
-  mapAddressToAddressForm,
-} from '~/helpers';
 import NodeRSA from 'node-rsa';
 import CartPreview from '~/components/Checkout/CartPreview.vue';
-
-// Vue.use(VueAxios, axios);
 
 export default {
   middleware: ['csrf'],
@@ -510,11 +499,11 @@ export default {
     SfAlert,
     VsfPaymentProvider: () =>
       import('~/components/Checkout/VsfPaymentProvider'),
-    CartPreview,
+    CartPreview
   },
   data() {
     return {
-      cookieToken: '',
+      cookieToken: ''
     };
   },
   created() {
@@ -530,11 +519,11 @@ export default {
       return this.$store.state.companyDetails.companyInformation?.commercial_bank.split(
         ';'
       );
-    },
+    }
   },
   setup(props, context) {
     const showToast = inject('showToast');
-    const { load: loadBilling, save, billing } = useBilling();
+    const { billing } = useBilling();
     const { cart, setCart, applyCoupon, load: loadCart } = useCart();
     const billingDetails = ref(billing.value || {});
     const withholdingApplied = ref(false);
@@ -550,16 +539,16 @@ export default {
     const modalOpen = ref(false);
     const modalCashOpen = ref(false);
 
-    let time = new Date().getTime();
+    const time = new Date().getTime();
 
-    let sign = ref('');
-    let paymentDetail = {};
+    const sign = ref('');
+    const paymentDetail = {};
     let SECRET_KEY = '';
     let url = '';
     const promoCode = ref('');
 
     const handleModalOpen = () => {
-      let temp = modalOpen.value;
+      const temp = modalOpen.value;
       modalOpen.value = !temp;
 
       // if(modalOpen){
@@ -572,19 +561,15 @@ export default {
 
     const handleModalCashOpen = () => {
       paymentMethod.value = null;
-      let temp = modalCashOpen.value;
+      const temp = modalCashOpen.value;
       modalCashOpen.value = !temp;
       paymentMethod.value = null;
-      if (modalOpen) {
-        modalOpen.value = false;
-      } else {
-        modalOpen.value = true;
-      }
+      modalOpen.value = !modalOpen;
     };
 
     const addOrRemoveWithholdingTax = async () => {
       let addRemove = '';
-      if (withholdingApplied.value == true) {
+      if (withholdingApplied.value === true) {
         addRemove = 'add';
       } else {
         addRemove = 'remove';
@@ -596,12 +581,12 @@ export default {
               success
               }
             }`,
-        variables: { id: cart.value.id, value: addRemove },
+        variables: { id: cart.value.id, value: addRemove }
       };
       const options = {
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': '*'
         },
       };
       await axios
@@ -613,7 +598,7 @@ export default {
             setCart(result.data.activeOrder);
           } else {
             if (addRemove === 'add') {
-              showToast('Couldnt add withholding.');
+              showToast('Couldn\'t add withholding.');
               withholdingApplied.value = false;
             }
           }

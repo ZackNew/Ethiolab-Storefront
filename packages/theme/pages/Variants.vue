@@ -775,7 +775,10 @@ export default {
         if (document.length > 0) {
           documents.push({
             name: document.split('_')[1],
-            link: process.env.GRAPHQL_API?.split('/shop-api')[0] + document,
+            link:
+              process.env.GRAPHQL_API?.split('/shop-api')[0] +
+              '/assets/' +
+              document,
           });
         }
       });
