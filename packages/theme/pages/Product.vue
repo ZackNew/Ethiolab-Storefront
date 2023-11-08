@@ -120,39 +120,39 @@
                   </p>
                 </div>
               </div>
-                  <div>
-            <LazyHydrate when-idle>
-              <div class="hidden md:block">
-                <h4 class="my-4 text-secondary">Product Reviews</h4>
-                <SfReview
-                  v-for="review in reviews"
-                  :key="review.id"
-                  :message="review.summary"
-                  :max-rating="5"
-                  :rating="review.rating"
-                  :char-limit="250"
-                  :read-more-text="$t('Read more')"
-                  :hide-full-text="$t('Read less')"
-                  class="product__review"
-                >
-                  <template #author class="flex">
-                    <h4
-                      class="capitalize text-[#4f4f4f] mr-3 font-bold text-base float-left"
+              <div>
+                <LazyHydrate when-idle>
+                  <div class="hidden md:block">
+                    <h4 class="my-4 text-secondary">Product Reviews</h4>
+                    <SfReview
+                      v-for="review in reviews"
+                      :key="review.id"
+                      :message="review.summary"
+                      :max-rating="5"
+                      :rating="review.rating"
+                      :char-limit="250"
+                      :read-more-text="$t('Read more')"
+                      :hide-full-text="$t('Read less')"
+                      class="product__review"
                     >
-                      {{ review.authorName }}
-                    </h4>
-                    <h4 class="text-base text-[#4f4f4f]">
-                      {{ new Date(review.createdAt).toLocaleString() }}
-                    </h4>
-                  </template>
-                </SfReview>
-                <MyReview
-                  :productId="$route.params.id"
-                  :currentUserHasNoReview="!currentUserHasReview"
-                />
+                      <template #author class="flex">
+                        <h4
+                          class="capitalize text-[#4f4f4f] mr-3 font-bold text-base float-left"
+                        >
+                          {{ review.authorName }}
+                        </h4>
+                        <h4 class="text-base text-[#4f4f4f]">
+                          {{ new Date(review.createdAt).toLocaleString() }}
+                        </h4>
+                      </template>
+                    </SfReview>
+                    <MyReview
+                      :productId="$route.params.id"
+                      :currentUserHasNoReview="!currentUserHasReview"
+                    />
+                  </div>
+                </LazyHydrate>
               </div>
-            </LazyHydrate>
-          </div>
             </div>
           </div>
         </div>
@@ -650,9 +650,9 @@ export default {
         };
       });
       this.loadings = false;
-      this.productSlug = variant.data.data.data.product?.slug
-      this.productid = variant.data.data.data.product?.id
-      this.getProductsReviews()
+      this.productSlug = variant.data.data.data.product?.slug;
+      this.productid = variant.data.data.data.product?.id;
+      this.getProductsReviews();
     },
     async getProductsReviews() {
       const slug = this.$route.params.slug_1;
@@ -676,7 +676,6 @@ export default {
       `,
         variables: {
           slug: this.productSlug,
-          
         },
         csrfToken: this.$store.state.csrfToken.csrfToken,
       };
@@ -782,8 +781,8 @@ export default {
   },
   data() {
     return {
-      productSlug:null,
-      productid:null,
+      productSlug: null,
+      productid: null,
       loadings: false,
       prImage: '',
       quantity: 1,
@@ -1066,6 +1065,9 @@ tr:nth-child(even) {
 .red table th,
 .red table td {
   padding: 12px 15px;
+}
+.red table th {
+  text-align: left;
 }
 .red table tbody tr {
   border-bottom: 1px solid #dddddd;
