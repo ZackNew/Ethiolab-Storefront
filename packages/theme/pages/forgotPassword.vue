@@ -264,6 +264,8 @@ import { SfInput, SfButton, SfLoader } from '@storefront-ui/vue';
 import { useUser, useForgotPassword } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import RegisterMessage from '../components/RegisterMessage.vue';
+import axios from 'axios';
+import CryptoJS from 'crypto-js';
 extend('required', {
   ...required,
   message: 'This field is required',
@@ -300,6 +302,10 @@ export default defineComponent({
       setNew,
       result: forgotPasswordResult,
     } = useForgotPassword();
+    const token = CryptoJS.AES.encrypt(
+      root.$store.state.csrfToken.csrfToken,
+      'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+    ).toString();
 
     const isPassword = ref(true);
     const confirmIsPassword = ref(true);
@@ -329,32 +335,69 @@ export default defineComponent({
     const handleHaveCode = async () => {
       emailReset.value = false;
     };
-
     const handleReset = async () => {
-      if (password.value === confirm_password.value) {
-        const resu = await setNew({
-          tokenValue: tokenValue.value,
-          newPassword: password.value,
+      const body = {
+        query: `
+            mutation resetPassword(
+              $token: String!
+             $password: String!) 
+            {
+              resetPassword(
+                token: $token
+                password: $password)
+              {
+                ... on NotVerifiedError {
+                  __typename
+                  errorCode
+                  message
+                }
+                ... on NativeAuthStrategyError {
+                  __typename
+                  errorCode
+                  message
+                }
+                ... on PasswordValidationError {
+                  __typename
+                  errorCode
+                  message
+                  validationErrorMessage
+                }
+                ... on PasswordResetTokenExpiredError {
+                  __typename
+                  errorCode
+                  message
+                }
+                ... on PasswordResetTokenInvalidError {
+                  __typename
+                  errorCode
+                  message
+                }
+                ... on CurrentUser {
+                  id
+                }
+              }
+            }`,
+        variables: {
+          token: tokenValue.value,
+          password: password.value,
+        },
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      if (password.value == confirm_password.value) {
+        await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
+            showToast('Password Resetted Successfully!');
+            return root.$router.push('/signin');
         });
-        let check =
-          forgotPasswordResult.value.setNewPasswordResult.data.resetPassword
-            .__typename;
-        if (check == 'CurrentUser') {
-          showToast('Password Resetted Successfully!');
-          return root.$router.push('/');
-        } else {
-          showToast('Password Reset Failed!');
-          // return root.$router.push('/signin');
-        }
-
-        if (forgotPasswordError.value.setNew !== null) {
-          showToast('Password Reset Failed!');
-        }
       } else {
         showToast('Password should be the same as confirm password');
       }
     };
-
     return {
       forgotPasswordLoading,
       handleForgotten,
