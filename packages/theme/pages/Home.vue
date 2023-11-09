@@ -343,7 +343,7 @@
       </div>
 
       <LazyHydrate when-visible>
-        <NewsletterModal @email-submitted="onSubscribe" />
+        <NewsletterModal @submitted="onSubscribe" />
       </LazyHydrate>
     </div>
   </client-only>
@@ -790,15 +790,21 @@ export default {
     //   }
     // };
 
-    const onSubscribe = ({ emailAddress, event }) => {
+    const onSubscribe = ({ emailAddress ,FullName ,CompanyName, event }) => {
       const body = {
-        query: `mutation MyMutation($email: String!) {
-                  addSubscriptionEmail(input: {email: $email}) {
+        query: `mutation MyMutation
+                  ($email: String!, $name: String!, $companyName: String!)
+                   {
+                  addSubscriptionEmail
+                  (input: 
+                    {email: $email, name: $name, companyName: $companyName}) {
                     id
                   }
                 }`,
         variables: {
           email: emailAddress,
+          name: FullName,
+          companyName: CompanyName,
         },
         csrfToken: root.$store.state.csrfToken.csrfToken,
       };
@@ -814,7 +820,7 @@ export default {
         },
       };
       axios
-        .post('/api/shop', body, options)
+        .post(process.env.GRAPHQL_API, body, options)
         .then((res) => {
           if (res.status === 200) showToast('Subscribed!');
         })
@@ -1051,14 +1057,5 @@ export default {
 
 .noScrollbar::-webkit-scrollbar {
   display: none;
-}
-
-.chatIcon {
-  position: fixed;
-  z-index: 600;
-  bottom: 30px;
-  right: 20px;
-  width: 3%;
-  height: 3%;
 }
 </style>

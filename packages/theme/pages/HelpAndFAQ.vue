@@ -137,15 +137,14 @@ export default {
         });
         if (this.categories.length > 0) {
           this.activePage = this.categories[0];
-          this.contents = this.FAQs.filter(
-            (faq) => (faq.tag = this.categories[0])
+          this.contents = this.FAQs.filter(faq => faq.tags.some(tag => tag.tag === this.categories[0])
           );
         }
       });
     },
     changeActive(title) {
       this.activePage = title;
-      this.contents = this.FAQs.filter((faq) => (faq.tags.tag = title));
+      this.contents = this.FAQs.filter(faq => faq.tags.some(tag => tag.tag === title));
     },
   },
   setup() {
