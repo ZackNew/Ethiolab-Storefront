@@ -36,6 +36,7 @@
           <template #header-icons>
             <div class="sf-header__icons">
               <SfButton
+                v-if="isAuthenticated"
                 v-e2e="'app-header-account'"
                 aria-label="Open account button"
                 class="sf-button--pure sf-header__action"
@@ -47,6 +48,24 @@
                   :color="!isDarkMode ? '#3860a7' : '#ffffff'"
                 />
               </SfButton>
+              <div class="inline-flex"
+                v-if="!isAuthenticated"
+              >
+                <button
+                  v-e2e="'app-header-account'"
+                  @click="handlelogin"
+                  class=" HeaderLogin pl-3 pr-1  hover:bg-gray-400 text-secondary  font-thin py-2  rounded-l"
+                >
+                  Login |
+                </button>
+                <button
+                  v-e2e="'app-header-account'"
+                  @click="handleregister"
+                  class="HeaderLogin pl-1 pr-1  hover:bg-gray-400 text-secondary font-thin py-2  rounded-r"
+                >
+                  Register
+                </button>
+              </div>
               <SfButton
                 aria-label="Toggle wishlist sidebar"
                 class="sf-button--pure sf-header__action"
@@ -474,6 +493,14 @@ export default {
       // toggleLoginModal();
       return root.$router.push('/signin');
     };
+    const handleregister = async () => {
+      await loadUser();
+      return root.$router.push('/signup');
+    };
+    const handlelogin = async () => {
+      await loadUser();
+      return root.$router.push('/signin');
+    };
     onSSR(async () => {
       await loadUser();
       await loadCart();
@@ -609,6 +636,8 @@ export default {
       accountIcon,
       cartTotalItems,
       handleAccountClick,
+      handleregister,
+      handlelogin,
       toggleCartSidebar,
       toggleWishlistSidebar,
       setTermForUrl,
@@ -629,7 +658,7 @@ export default {
       prodList,
       isDarkMode,
       messageToSend,
-     // sendMessageToAdmin,
+      // sendMessageToAdmin,
       isAuthenticated,
       //unSeenMessagesLen,
       handleCartSidebar,
@@ -785,7 +814,6 @@ export default {
   top: 0;
   z-index: 1;
 }
-
 .chat-bottom {
   bottom: 0;
   z-index: 1;
@@ -794,4 +822,7 @@ export default {
     // display: none;
   }
 }
+// .HeaderLogin{
+//   color: #3860A7;
+// }
 </style>

@@ -376,7 +376,6 @@ export default {
         },
       };
       await axios.post(process.env.GRAPHQL_API, body, options).then((res) => {
-        console.log(res);
         showToast('Updated Succcessfully!');
       });
     };

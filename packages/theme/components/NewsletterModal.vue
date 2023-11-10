@@ -15,17 +15,62 @@
           :title="$t('Subscribe to newsletter')"
           class="modal__title desktop-only"
         />
-        <form @submit.prevent="emailSubmitted">
-          <SfInput
-            type="email"
-            :label="$t('Email address')"
-            v-model="emailAddress"
-            class="modal__input"
-          />
-          <SfButton class="modal__button confirm_btn" type="submit">
-            I confirm subscription
-          </SfButton>
-        </form>
+        <ValidationObserver v-slot="{ handleSubmit }">
+          <form @submit.prevent="handleSubmit(emailSubmitted)">
+            <ValidationProvider
+              name="FullName"
+              rules="required"
+              v-slot="{ errors }"
+              slim
+            >
+              <SfInput
+                type="Name"
+                :label="$t('Full Name')"
+                v-model="FullName"
+                class="modal__input"
+                required
+              />
+              <p id="error">{{ errors[0] }}</p>
+            </ValidationProvider>
+            <ValidationProvider
+              name="email"
+              rules="required|email"
+              v-slot="{ errors }"
+              :valid="!errors[0]" 
+              slim
+            >
+              <SfInput
+                type="email"
+                :label="$t('Email address')"
+                v-model="emailAddress"
+                class="modal__input"
+                :valid="!errors[0]"
+                required
+              />
+              <p id="error">{{ errors[0] }}</p>
+            </ValidationProvider>
+            <ValidationProvider
+              name="CompanyName"
+              rules="required"
+              v-slot="{ errors }"
+              :valid="!errors[0]"
+              slim
+            >
+              <SfInput
+                type="Name"
+                :label="$t('Company Name')"
+                v-model="CompanyName"
+                class="modal__input"
+                :valid="!errors[0]"
+                required
+              />
+              <p id="error">{{ errors[0] }}</p>
+            </ValidationProvider>
+            <SfButton class="modal__button confirm_btn" type="submit">
+              I confirm subscription
+            </SfButton>
+          </form>
+        </ValidationObserver>
         <SfHeading description="You can unsubscribe at any time" :level="3" />
         <SfScrollable
           maxContentHeight="3.75rem"
@@ -63,7 +108,16 @@ import {
 } from '@storefront-ui/vue';
 import { ref } from '@nuxtjs/composition-api';
 import { useUiState } from '~/composables';
-
+import { ValidationObserver, ValidationProvider, extend } from 'vee-validate';
+import { required, email } from 'vee-validate/dist/rules';
+extend('required', {
+  ...required,
+  message: 'This field is required',
+});
+extend('email', {
+  ...email,
+  message: 'Invalid email',
+});
 export default {
   name: 'NewsletterModal',
   components: {
@@ -74,14 +128,23 @@ export default {
     SfScrollable,
     SfBar,
     SfLink,
+    ValidationObserver,
+    ValidationProvider,
+  },
+  data(){
+    return{errors:[]};
   },
   methods: {
     emailSubmitted(event) {
-      this.$emit('email-submitted', {
+      this.$emit('submitted', {
         emailAddress: this.emailAddress,
+        FullName: this.FullName,
+        CompanyName: this.CompanyName,
         event: event,
       });
       this.emailAddress = '';
+      this.FullName = '';
+      this.CompanyName = '';
     },
   },
   setup() {
@@ -89,6 +152,8 @@ export default {
 
     const isHidden = ref(true);
     const emailAddress = ref('');
+    const FullName = ref('');
+    const CompanyName = ref('');
 
     const closeModal = () => {
       toggleNewsletterModal();
@@ -99,6 +164,8 @@ export default {
       toggleNewsletterModal,
       isHidden,
       emailAddress,
+      FullName,
+      CompanyName,
       closeModal,
     };
   },
