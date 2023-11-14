@@ -54,12 +54,12 @@
               <div class="product-sku">
                 {{ cartGetters.getItemSku(product) }}
               </div>
-              <SfProperty
+              <!-- <SfProperty
                 v-for="(attribute, key) in cartGetters.getItemOptions(product)"
                 :key="key"
                 :name="attribute.label"
                 :value="attribute.value"
-              />
+              /> -->
             </SfTableData>
             <SfTableData class="table__data">{{
               cartGetters.getItemQty(product)
@@ -451,7 +451,7 @@ import {
   SfLink,
   SfInput,
   SfModal,
-  SfAlert
+  SfAlert,
 } from '@storefront-ui/vue';
 import { onSSR } from '@vue-storefront/core';
 import {
@@ -459,17 +459,15 @@ import {
   computed,
   onMounted,
   onBeforeMount,
-  inject
+  inject,
 } from '@vue/composition-api';
 import {
   useMakeOrder,
   useCart,
   cartGetters,
-  usePayment
+  usePayment,
 } from '@vue-storefront/vendure';
-import {
-  useBilling
-} from '@vue-storefront/vendure';
+import { useBilling } from '@vue-storefront/vendure';
 import { uuid } from 'vue-uuid';
 import * as crypto from 'crypto';
 import CryptoJS from 'crypto-js';
@@ -499,11 +497,11 @@ export default {
     SfAlert,
     VsfPaymentProvider: () =>
       import('~/components/Checkout/VsfPaymentProvider'),
-    CartPreview
+    CartPreview,
   },
   data() {
     return {
-      cookieToken: ''
+      cookieToken: '',
     };
   },
   created() {
@@ -519,7 +517,7 @@ export default {
       return this.$store.state.companyDetails.companyInformation?.commercial_bank.split(
         ';'
       );
-    }
+    },
   },
   setup(props, context) {
     const showToast = inject('showToast');
@@ -581,12 +579,12 @@ export default {
               success
               }
             }`,
-        variables: { id: cart.value.id, value: addRemove }
+        variables: { id: cart.value.id, value: addRemove },
       };
       const options = {
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': '*',
         },
       };
       await axios
@@ -598,7 +596,7 @@ export default {
             setCart(result.data.activeOrder);
           } else {
             if (addRemove === 'add') {
-              showToast('Couldn\'t add withholding.');
+              showToast("Couldn't add withholding.");
               withholdingApplied.value = false;
             }
           }

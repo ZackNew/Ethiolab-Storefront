@@ -11,7 +11,10 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link :to="{ name: 'policy', query: { initialPage: 'RETURN' } }" exact>
+          <router-link
+            :to="{ name: 'policy', query: { initialPage: 'RETURN' } }"
+            exact
+          >
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Return and Cancellation')"
@@ -19,14 +22,16 @@
           </router-link>
         </SfListItem>
         <SfListItem class="footer-list-item">
-          <router-link :to="{ name: 'policy', query: { initialPage: 'SHIPPING' } }" exact>
+          <router-link
+            :to="{ name: 'policy', query: { initialPage: 'SHIPPING' } }"
+            exact
+          >
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Shipping Policy')"
             />
           </router-link>
         </SfListItem>
-       
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Customer Support')" class="footer-column">
@@ -52,13 +57,14 @@
     <SfFooterColumn :title="$t('Company')" class="footer-column">
       <SfList class="footer-list">
         <SfListItem class="footer-list-item">
-          <router-link :to="{name: 'static' , query: { initialPage: 'ABOUT'} }" exact>
-            <SfMenuItem 
-            class="sf-footer__menu-item" 
-            :label="$t('About Us')" />
+          <router-link
+            :to="{ name: 'static', query: { initialPage: 'ABOUT' } }"
+            exact
+          >
+            <SfMenuItem class="sf-footer__menu-item" :label="$t('About Us')" />
           </router-link>
         </SfListItem>
-        <SfListItem class="footer-list-item">
+        <!-- <SfListItem class="footer-list-item">
           <router-link :to="{name: 'static' , query: { initialPage: 'MISSION'} }" exact>
             <SfMenuItem 
             class="sf-footer__menu-item" 
@@ -78,16 +84,19 @@
             class="sf-footer__menu-item" 
             :label="$t('Value')" />
           </router-link>
-        </SfListItem>
+        </SfListItem> -->
         <SfListItem class="footer-list-item">
-          <router-link :to="{ name: 'policy', query: { initialPage: 'PRIVACY' } }" exact>
+          <router-link
+            :to="{ name: 'policy', query: { initialPage: 'PRIVACY' } }"
+            exact
+          >
             <SfMenuItem
               class="sf-footer__menu-item"
               :label="$t('Privacy Policy')"
             />
           </router-link>
         </SfListItem>
-        <SfListItem class="footer-list-item">
+        <!-- <SfListItem class="footer-list-item">
           <router-link :to="{ name: 'policy', query: { initialPage: 'COOKIE POLICY' } }" exact>
             <SfMenuItem
               class="sf-footer__menu-item"
@@ -110,7 +119,7 @@
               :label="$t('Warranty Policy')"
             />
           </router-link>
-        </SfListItem>
+        </SfListItem> -->
       </SfList>
     </SfFooterColumn>
     <!-- <SfFooterColumn :title="$t('Payment & Delivery')" class="footer-column">
