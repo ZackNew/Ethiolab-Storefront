@@ -107,6 +107,13 @@ export const CartFragment = `
             adjustmentSource
             type
         }
+        surcharges
+        {
+            description
+            price
+            priceWithTax
+        }
+
     }
 `;
 
