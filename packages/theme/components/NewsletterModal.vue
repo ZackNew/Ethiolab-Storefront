@@ -36,7 +36,7 @@
               name="email"
               rules="required|email"
               v-slot="{ errors }"
-              :valid="!errors[0]" 
+              :valid="!errors[0]"
               slim
             >
               <SfInput
@@ -77,12 +77,18 @@
           :class="{ 'is-open text-center': !isHidden }"
         >
           <!--          <i18n tag="p"  class="modal__content" path="subscribeToNewsletterModalContent">-->
-          <SfLink
+          <!-- <SfLink
             v-if="!isHidden"
             link="https://www.etechsc.com/privacy-policy"
             >{{ $t('Privacy Policy') }}</SfLink
-          >
+          > -->
           <!--          </i18n>-->
+          <nuxt-link
+            v-if="!isHidden"
+            :to="{ name: 'policy', query: { initialPage: 'PRIVACY' } }"
+            class="text-sm text-primary"
+            >Privacy Policy</nuxt-link
+          >
           <template #view-all>
             <SfButton
               class="sf-button--text sf-scrollable__view-all desktop-only"
@@ -131,8 +137,8 @@ export default {
     ValidationObserver,
     ValidationProvider,
   },
-  data(){
-    return{errors:[]};
+  data() {
+    return { errors: [] };
   },
   methods: {
     emailSubmitted(event) {
