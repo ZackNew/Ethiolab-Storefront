@@ -45,7 +45,7 @@
           >
             Contact Us
           </h2>
-          <form @submit.prevent="handleSubmit(handleFormSubmit(csrfToken))">
+          <form @submit.prevent="handleSubmit(sendMessage)">
             <div class="form px-5 md:px-0">
               <ValidationProvider
                 name="firstName"
@@ -82,7 +82,7 @@
                 />
               </ValidationProvider>
               <ValidationProvider
-                name="phoneNumber"
+                name="emailAddress"
                 rules="required|email"
                 v-slot="{ errors }"
                 slim
@@ -99,32 +99,23 @@
                 />
               </ValidationProvider>
               <ValidationProvider
-                name="emailAddress"
-                rules="required"
+                name="phoneNumber"
+                rules="required|digits:9"
                 v-slot="{ errors }"
                 slim
               >
-                <!-- <SfInput
-                  type="number"
-                  v-e2e="'customer-emailAddress'"
-                  v-model="form.phoneNumber"
-                  :label="$t('Phone Number')"
-                  name="phoneNumber"
-                  class="form__element form__element--half form__element--half-even"
-                  required
-                  :valid="!errors[0]"
-                  :errorMessage="errors[0]"
-                /> -->
                 <VuePhoneNumberInput
                   @update="phoneInputHandler"
-                  required
-                  color="#000000"
-                  v-model="formPhoneNumber"
-                  valid-color="#3860a7"
-                  default-country-code="ET"
-                  :errorMessage="errors[0]"
-                  class="form__element form__element--half form__element--half-even"
+                    required
+                    color="#000000"
+                    valid-color="#3860a7"
+                    default-country-code="ET"
+                    :valid="!errors[0]"
+                    :errorMessage="errors[0]"
+                    v-model="formPhoneNumber"
+                    class="form__element form__element--half form__element--half-even"
                 />
+                <p class="text-red">{{ errors[0] }}</p>
               </ValidationProvider>
               <ValidationProvider name="companyName" v-slot="{ errors }" slim>
                 <SfInput
@@ -175,6 +166,8 @@
                         : 'bg-light_accent border-dark_accent'
                     "
                     v-model="form.message"
+                    :valid="!errors[0]"
+                    :errorMessage="errors[0]"
                     required
                   ></textarea>
                 </div>
@@ -326,13 +319,14 @@ extend('min', {
 });
 extend('digits', {
   ...digits,
-  message: 'Please provide a valid phone number',
+  message: 'valid phone number Example:- 910111213',
 });
 
 extend('email', {
   ...email,
   message: 'Invalid email',
 });
+
 
 export default {
   middleware: ['csrf'],
@@ -395,6 +389,17 @@ export default {
       const name =
         this.$store.state.companyDetails.companyInformation?.company_name;
       return name;
+    },
+  },
+   data() {
+    return {
+      formPhoneNumber: '',
+    };
+  },
+  methods: {
+    phoneInputHandler(payload) {
+      this.formPhoneNumber = payload?.formattedNumber;
+      this.form.phoneNumber = this.formPhoneNumber;
     },
   },
   setup(_, { root }) {
@@ -480,8 +485,10 @@ export default {
           berta: token,
         },
       };
+      showToast('Message Is SuccessFully Sent!');
       await axios.post('/api/shop', body, options);
-      showToast('Sent!');
+       return root.$router.push('/');
+      
 
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
@@ -502,39 +509,31 @@ export default {
       //  form.value = {}
       //  location.href = 'http://localhost:3001'
     };
-    const handleFormSubmit = async (csrfToken) => {
-      sendMessage(csrfToken);
-      // const response = await $vendure.api.setCustomerForOrder(form.value);
-      // if (
-      //   response?.data?.setCustomerForOrder?.errorCode ===
-      //   EMAIL_ADDRESS_CONFLICT_ERROR
-      // ) {
-      //   errorMessage.value = response?.data?.setCustomerForOrder?.message;
-      //   return;
-      // }
-      // root.$router.push(root.localePath({ name: "shipping" }));
-      // isFormSubmitted.value = true;
-    };
+
+    // const handleFormSubmit = async (csrfToken) => {
+    //   sendMessage(csrfToken);
+    //   // const response = await $vendure.api.setCustomerForOrder(form.value);
+    //   // if (
+    //   //   response?.data?.setCustomerForOrder?.errorCode ===
+    //   //   EMAIL_ADDRESS_CONFLICT_ERROR
+    //   // ) {
+    //   //   errorMessage.value = response?.data?.setCustomerForOrder?.message;
+    //   //   return;
+    //   // }
+    //   // root.$router.push(root.localePath({ name: "shipping" }));
+    //   // isFormSubmitted.value = true;
+    // };
 
     return {
       isDarkMode,
       isFormSubmitted,
       form,
-      handleFormSubmit,
+     // handleFormSubmit,
       errorMessage,
+      sendMessage,
     };
   },
-  data() {
-    return {
-      formPhoneNumber: '',
-    };
-  },
-  methods: {
-    phoneInputHandler(payload) {
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.form.phoneNumber = this.formPhoneNumber;
-    },
-  },
+ 
 };
 </script>
 
