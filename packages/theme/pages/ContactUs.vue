@@ -45,7 +45,7 @@
           >
             Contact Us
           </h2>
-          <form @submit.prevent="handleSubmit(sendMessage)">
+          <form @submit.prevent="handleSubmit(submitForm(sendMessage))">
             <div class="form px-5 md:px-0">
               <ValidationProvider
                 name="firstName"
@@ -100,20 +100,20 @@
               </ValidationProvider>
               <ValidationProvider
                 name="phoneNumber"
-                rules="required|digits:9"
+                rules="required | digits"
                 v-slot="{ errors }"
                 slim
               >
                 <VuePhoneNumberInput
                   @update="phoneInputHandler"
-                    required
-                    color="#000000"
-                    valid-color="#3860a7"
-                    default-country-code="ET"
-                    :valid="!errors[0]"
-                    :errorMessage="errors[0]"
-                    v-model="formPhoneNumber"
-                    class="form__element form__element--half form__element--half-even"
+                  required
+                  :valid="isPhoneNumberValid"
+                  color="red"
+                  valid-color="#3860a7"
+                  default-country-code="ET"
+                  :errorMessage="errors[0]"
+                  v-model="formPhoneNumber"
+                  class="form__element form__element--half form__element--half-even"
                 />
                 <p class="text-red">{{ errors[0] }}</p>
               </ValidationProvider>
@@ -327,7 +327,6 @@ extend('email', {
   message: 'Invalid email',
 });
 
-
 export default {
   middleware: ['csrf'],
   components: {
@@ -391,15 +390,24 @@ export default {
       return name;
     },
   },
-   data() {
+  data() {
     return {
       formPhoneNumber: '',
+      isPhoneNumberValid: false,
     };
   },
   methods: {
     phoneInputHandler(payload) {
+      this.isPhoneNumberValid = payload?.isValid;
       this.formPhoneNumber = payload?.formattedNumber;
       this.form.phoneNumber = this.formPhoneNumber;
+    },
+    submitForm() {
+      if (!this.isPhoneNumberValid) {
+        return;
+      } else {
+        this.sendMessage();
+      }
     },
   },
   setup(_, { root }) {
@@ -421,6 +429,15 @@ export default {
       customerEmail: '',
       customerName: '',
     });
+    const resetForm = () => {
+      form.value.firstName = '';
+      form.value.lastName = '';
+      form.value.emailAddress = '';
+      form.value.phoneNumber = '';
+      form.value.message = '';
+      form.value.customerEmail = '';
+      form.value.customerName = '';
+    };
 
     const generateCSRFToken = () => {
       let token = '';
@@ -485,10 +502,10 @@ export default {
           berta: token,
         },
       };
-      showToast('Message Is SuccessFully Sent!');
+
       await axios.post('/api/shop', body, options);
-       return root.$router.push('/');
-      
+      showToast('Your Message Is SuccessFully Sent!');
+      resetForm();
 
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
@@ -528,12 +545,11 @@ export default {
       isDarkMode,
       isFormSubmitted,
       form,
-     // handleFormSubmit,
+      // handleFormSubmit,
       errorMessage,
       sendMessage,
     };
   },
- 
 };
 </script>
 
