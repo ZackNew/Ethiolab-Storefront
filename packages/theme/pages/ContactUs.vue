@@ -463,7 +463,7 @@ export default {
       //   customerEmail: form.value.customerEmail,
       //   csrfToken: form.value.csrfToken,
       // });
-    //  const formattedMessage = form.value.message.replace(/\n/g, '<br>');
+      const formattedMessage = form.value.message.replace(/\n/g, '<br>');
       const body = {
         query: `mutation sendMessage(
           $phone_number: String!
@@ -489,7 +489,7 @@ export default {
           first_name: form.value.firstName,
           last_name: form.value.lastName,
           email: form.value.emailAddress,
-          message: form.value.message,
+          message: formattedMessage,
         },
         csrfToken: root.$store.state.csrfToken.csrfToken,
       };
@@ -507,8 +507,6 @@ export default {
 
       await axios.post('/api/shop', body, options);
       showToast('Your Message Is SuccessFully Sent!');
-      console.log("message",form.value.message.innerHTML);
-      console.log("formateedMessage",formattedMessage);
       resetForm();
       
 
