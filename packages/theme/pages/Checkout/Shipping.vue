@@ -7,7 +7,7 @@
         class="sf-heading--left sf-heading--no-underline title"
       />
       <h3 class="my-4">Shipping</h3>
-      <form @submit.prevent="handleSubmit(handleFormSubmit)">
+      <form @submit.prevent="handleSubmit(validphone(handleFormSubmit))">
         <div class="form">
           <ValidationProvider
             name="firstName"
@@ -90,7 +90,8 @@
             <VuePhoneNumberInput
               @update="phoneInputHandler"
               required
-              color="#000000"
+              color="red"
+              :valid = isPhoneValid
               v-model="formPhoneNumber"
               valid-color="#3860a7"
               default-country-code="ET"
@@ -232,6 +233,7 @@ export default {
     const formPhoneNumber = ref('');
     const isSelfPickup = ref(false);
     const cookieSetup = ref(null);
+    const isPhoneValid = ref(false);
 
     const form = ref({
       firstName: '',
@@ -291,6 +293,15 @@ export default {
     const phoneInputHandler = (payload) => {
       formPhoneNumber.value = payload?.formattedNumber;
       form.value.phone = formPhoneNumber.value;
+      isPhoneValid.value = payload?.isValid;
+    };
+    const validphone = (handleFormSubmit) => {
+      if (!isPhoneValid.value) {
+        showToast('Please provide a valid phone number');
+        return
+      } else {
+        handleFormSubmit();
+      }
     };
 
     const displayBillingButton = async () => {
@@ -347,6 +358,7 @@ export default {
       shouldDisplayButton,
       setCity,
       isSelfPickup,
+      validphone,
     };
   },
 };

@@ -436,6 +436,19 @@ export default {
       firstName: '',
       lastName: '',
     });
+    const resetForm = () => {
+      data.value = {
+        fromName: '',
+        fromEmail: '',
+        subject: '',
+        fromPhone: '',
+        msg: '',
+        location: '',
+        productDescr: '',
+        firstName: '',
+        lastName: '',
+      };
+    };
     if (isAuthenticated) {
       data.value.productDescr =
         user?.value?.emailAddress || data?.value?.fromEmail;
@@ -444,7 +457,7 @@ export default {
       writeQuote({
         isSpecial: true,
         fromEmail: data.value.fromEmail,
-        fromName: data.value.fromName,
+        companyName: data.value.fromName,
         subject: data.value.subject,
         fromPhone: data.value.fromPhone,
         msg: data.value.msg,
@@ -454,8 +467,9 @@ export default {
         lastName: data.value.firstName,
       });
       showToast('Quote Sent!');
+      resetForm();
     };
-    return { data, send, isDarkMode };
+    return { data, send, isDarkMode ,};
   },
 };
 </script>

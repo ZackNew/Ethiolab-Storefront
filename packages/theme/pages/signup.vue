@@ -16,7 +16,7 @@
           <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Please Sign UP</h4>
 
           <ValidationObserver v-slot="{ handleSubmit }">
-            <form @submit.prevent="handleSubmit(handleFormSubmit)">
+            <form @submit.prevent="handleSubmit(validPhone(handleFormSubmit))">
               <div class="m-8">
                 <label
                   class="block text-secondary text-sm font-bold mb-2"
@@ -298,7 +298,7 @@
 
                 <ValidationProvider
                   name="phoneNumber"
-                  rules="required"
+                  rules="required | digits"
                   v-slot="{ errors }"
                   slim
                 >
@@ -316,10 +316,10 @@
                   <VuePhoneNumberInput
                     @update="phoneInputHandler"
                     required
-                    color="#000000"
+                    color="red"
                     valid-color="#3860a7"
                     default-country-code="ET"
-                    :valid="!errors[0]"
+                    :valid= isPhoneNumberValid
                     :errorMessage="errors[0]"
                     v-model="formPhoneNumber"
                     class="form__element form__element--half form__element--half-even"
@@ -815,7 +815,7 @@
                       class="text-secondary text-sm font-bold mb-2"
                       for="streetLine1"
                     >
-                      STREET ADDRESS
+                      Zone
                     </div>
 
                     <ValidationProvider
@@ -826,7 +826,7 @@
                     >
                       <SfInput
                         v-model="form.streetLine1"
-                        :placeholder="$t('street')"
+                        :placeholder="$t('Zone')"
                         name="streetLine1"
                         class="sf-input--filled"
                         :valid="!errors[0]"
@@ -1076,13 +1076,26 @@ export default defineComponent({
   data() {
     return {
       formPhoneNumber: '',
+      isValidPhone: false,
     };
   },
   methods: {
     phoneInputHandler(payload) {
       this.formPhoneNumber = payload?.formattedNumber;
       this.form.phoneNumber = this.formPhoneNumber;
+      this.isValidPhone = payload?.isValid;
     },
+    validPhone()
+    {
+      if(!this.isValidPhone)
+      {
+        return;
+      }
+      else
+      {
+        this.handleFormSubmit();
+      }
+    }
   },
   setup(props, { root }) {
     let isLoading = ref(false);

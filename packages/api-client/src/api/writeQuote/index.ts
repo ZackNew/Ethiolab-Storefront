@@ -18,6 +18,7 @@ type writeQuoteParams = {
   location: string;
   productIds?: string;
   productDescr: string;
+  companyName: string;
   isSpecial?: boolean;
 };
 

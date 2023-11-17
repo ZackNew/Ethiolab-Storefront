@@ -10,7 +10,8 @@ mutation wQuote($msg: String!,
                 $location:String!, 
                 $productDescr: String!, 
                 $productIds: [String] = "[]",
-                $isSpecial: Boolean! = false
+                $isSpecial: Boolean! = false,
+                $companyName: String!
                 ){
   writeQuote(args:{
     msg:$msg,
@@ -21,6 +22,7 @@ mutation wQuote($msg: String!,
     productDescr: $productDescr,
     productIds: $productIds  ,
     isSpecial: $isSpecial
+    companyName: $companyName
   }){
     location,
     msg,
@@ -28,6 +30,7 @@ mutation wQuote($msg: String!,
     subject,
     productDescr,
     isSpecial,
+    companyName,
     
     forProducts{
       name

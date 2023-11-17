@@ -115,7 +115,6 @@
                   v-model="formPhoneNumber"
                   class="form__element form__element--half form__element--half-even"
                 />
-                <p class="text-red">{{ errors[0] }}</p>
               </ValidationProvider>
               <ValidationProvider name="companyName" v-slot="{ errors }" slim>
                 <SfInput
@@ -429,6 +428,8 @@ export default {
       customerEmail: '',
       customerName: '',
     });
+    let formattedMessage = '';
+    
     const resetForm = () => {
       form.value.firstName = '';
       form.value.lastName = '';
@@ -462,6 +463,7 @@ export default {
       //   customerEmail: form.value.customerEmail,
       //   csrfToken: form.value.csrfToken,
       // });
+    //  const formattedMessage = form.value.message.replace(/\n/g, '<br>');
       const body = {
         query: `mutation sendMessage(
           $phone_number: String!
@@ -505,7 +507,10 @@ export default {
 
       await axios.post('/api/shop', body, options);
       showToast('Your Message Is SuccessFully Sent!');
+      console.log("message",form.value.message.innerHTML);
+      console.log("formateedMessage",formattedMessage);
       resetForm();
+      
 
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
@@ -548,6 +553,7 @@ export default {
       // handleFormSubmit,
       errorMessage,
       sendMessage,
+      formattedMessage,
     };
   },
 };
