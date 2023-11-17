@@ -11,7 +11,12 @@
         <ProfileUpdateForm @submit="updatePersonalData" />
         <p class="notice text-secondary">
           {{ $t('Use your personal data') }}
-          <a href="">{{ $t('Privacy Policy') }}</a>
+           <router-link
+            :to="{ name: 'policy', query: { initialPage: 'PRIVACY' } }"
+            exact
+          >
+          {{ $t('Privacy Policy') }}
+          </router-link>
         </p>
       </SfTab>
       <!-- Email update -->

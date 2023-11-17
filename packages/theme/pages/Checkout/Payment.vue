@@ -89,12 +89,19 @@
                 class="sf-property--full-width property"
               />
               <SfProperty
+                v-if = " totals.withholding != 0 "
                 :name="$t('Withholding Tax')"
                 :value="
                   parseFloat(totals.withholding).toLocaleString() + ' ETB'
                 "
                 class="sf-property--full-width property"
               />
+              <SfProperty
+                v-if= " totals.ordermodification != 0 && !isNaN(totals.ordermodification)"
+                :name="$t('Order Modification')"
+                :value="parseFloat(totals.ordermodification).toLocaleString() + ' ETB'"
+                class="sf-property--full-width property"
+              />  
             </div>
 
             <SfDivider />
@@ -613,6 +620,7 @@ export default {
       return tax / 100;
     });
 
+    
     const totals = computed(() => {
       return {
         subtotal:
@@ -627,6 +635,8 @@ export default {
           String(cart.value?.subTotalWithTax).slice(0, -2) +
           '.' +
           String(cart.value?.subTotalWithTax).slice(-2),
+        ordermodification:
+          cart.value?.surcharges[0]?.price / 100,
       };
     });
 

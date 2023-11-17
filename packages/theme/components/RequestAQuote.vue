@@ -44,6 +44,12 @@
         :valid="Boolean(isEmailValid)"
         errorMessage="This is a required field"
       />
+       <SfInput
+        v-model="qfromName"
+        placeholder="Company Name"
+        :valid="Boolean(isCompanyValid)"
+        errorMessage="This is a required field"
+      />
       <SfTextarea
         cols="95"
         rows="7"
@@ -97,6 +103,7 @@ export default {
     SfButton,
   },
   setup(props, context) {
+    const qfromName = ref('');
     const validateEmail = (email) => {
       return String(email)
         .toLowerCase()
@@ -105,6 +112,7 @@ export default {
         );
     };
     const isSubjectValid = ref(true);
+    const isCompanyValid = ref(true);
     const isPhoneValid = ref(true);
     const isMessageValid = ref(true);
     const isLocationValid = ref(true);
@@ -139,12 +147,16 @@ export default {
       isPhoneValid.value = telephoneCheck(qPhone.value);
       isMessageValid.value = qBody.value.length > 0;
       isSubjectValid.value = qTitle.value.length > 0;
+      isCompanyValid.value = qfromName.value.length > 0;
+      
       return (
         isEmailValid.value &&
         isSubjectValid.value &&
         isPhoneValid.value &&
         isLocationValid.value &&
-        isEmailValid.value
+        isEmailValid.value &&
+        isCompanyValid.value
+
       );
     };
     //  watchEffect(checkInputs);
@@ -175,6 +187,7 @@ export default {
         location: quoteCity.value,
         productDescr: descr || '',
         productIds: pIds,
+        companyName: qfromName.value,
       });
       showToast('Sent!');
       toggleQuoteModal();
@@ -185,6 +198,7 @@ export default {
       isEmailValid,
       isMessageValid,
       isLocationValid,
+      isCompanyValid,
       toggleCartSidebar,
       toggleQuotationDialog,
       isQuoteModalOpen,
@@ -197,6 +211,7 @@ export default {
       qTitle,
       qPhone,
       cities,
+      qfromName,
     };
   },
 };

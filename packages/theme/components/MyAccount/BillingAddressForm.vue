@@ -3,7 +3,7 @@
     <form
       id="billing-details-form"
       class="form"
-      @submit.prevent="handleSubmit(submitForm)"
+      @submit.prevent="handleSubmit(validphone(submitForm))"
     >
       <div class="form__horizontal">
         <ValidationProvider
@@ -36,40 +36,6 @@
         </ValidationProvider>
       </div>
       <div class="form__horizontal">
-        <ValidationProvider v-slot="{ errors }" class="form__element">
-          <SfInput
-            v-model="form.streetName"
-            name="streetName"
-            :label="$t('Street Name')"
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-        <ValidationProvider v-slot="{ errors }" class="form__element">
-          <SfInput
-            v-model="form.streetNumber"
-            name="apartment"
-            :label="$t('House/Apartment number')"
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
-      </div>
-      <div class="form__horizontal">
-        <ValidationProvider
-          rules="required"
-          v-slot="{ errors }"
-          class="form__element"
-        >
-          <SfInput
-            v-model="form.city"
-            name="city"
-            :label="$t('City')"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          />
-        </ValidationProvider>
         <ValidationProvider
           :rules="validationRules.country"
           v-slot="{ errors }"
@@ -93,22 +59,54 @@
             </SfSelectOption>
           </SfSelect>
         </ValidationProvider>
-      </div>
-      <div class="form__horizontal">
-        <ValidationProvider name="state" slim>
+        <ValidationProvider v-slot="{ errors }" class="form__element">
           <SfInput
-            v-e2e="'shipping-state'"
             v-model="form.state"
             :label="$t('State_OR_Province')"
             name="state"
-            class="form__element form__element--half form__element--half-even"
+          />
+        </ValidationProvider>
+      </div>
+      <div class="form__horizontal">
+        <ValidationProvider v-slot="{ errors }" class="form__element">
+          <SfInput
+            v-model="form.streetName"
+            name="streetName"
+            :label="$t('Zone')"
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
+          />
+        </ValidationProvider>
+        <ValidationProvider v-slot="{ errors }" class="form__element">
+          <SfInput
+            v-model="form.streetNumber"
+            name="apartment"
+            :label="$t('Woreda')"
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
+          />
+        </ValidationProvider>
+      </div>
+      <div class="form__horizontal">
+        <ValidationProvider
+          rules="required"
+          v-slot="{ errors }"
+          class="form__element"
+        >
+          <SfInput
+            v-model="form.city"
+            name="city"
+            :label="$t('City')"
+            required
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
           />
         </ValidationProvider>
         <ValidationProvider class="form__element">
           <SfInput
             v-model="form.postalCode"
             name="zipCode"
-            :label="$t('Zip-code')"
+            :label="$t('PostalCode')"
           />
         </ValidationProvider>
       </div>
@@ -129,8 +127,9 @@
           /> -->
           <VuePhoneNumberInput
             required
-            color="#000000"
+            color="red"
             valid-color="#3860a7"
+            :valid = isPhoneValid
             default-country-code="ET"
             :errorMessage="errors[0]"
             v-model="formPhoneNumber"
@@ -225,12 +224,22 @@ export default {
   data() {
     return {
       formPhoneNumber: '',
+      isPhoneValid: false,
     };
   },
   methods: {
     phoneInputHandler(payload) {
       this.formPhoneNumber = payload?.formattedNumber;
       this.form.phone = this.formPhoneNumber;
+      this.isPhoneValid = payload?.isValid;
+    },
+    validphone(submitForm) {
+      if (!this.isPhoneValid) {
+        return;
+      }
+      else {
+        submitForm();
+      }
     },
   },
   setup(props, { emit }) {
