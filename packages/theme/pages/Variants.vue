@@ -281,7 +281,25 @@
                         :coverage="1"
                       />
                     </button>
+                    <button
+                      @click="addToWishlist($event)"
+                      :class="
+                        isDarkMode
+                          ? 'bg-white text-secondary'
+                          : 'bg-secondary text-white'
+                      "
+                      class="border border-secondary rounded-lg mx-2 px-4"
+                    >
+                      <span class="mt-1"> Add To WishList </span>
+                      <!-- <SfIcon
+                          size="lg"
+                          color="green-primary"
+                          viewBox="0 0 24 24"
+                          :coverage="1"
+                        /> -->
+                    </button>
                   </div>
+
                   <!-- <div class="flex my-auto">
                   <input
                     :class="
@@ -543,7 +561,6 @@ import { ref, inject } from '@vue/composition-api';
 import { useWishlist, useCart, useUser } from '@vue-storefront/vendure';
 import Gallery from '~/components/Gallery.vue';
 import CryptoJS from 'crypto-js';
-
 export default {
   middleware: ['csrf'],
   components: {
@@ -558,6 +575,7 @@ export default {
     LazyHydrate,
     Loading,
   },
+
   data() {
     return {
       isAccessories: false,
@@ -810,9 +828,31 @@ export default {
         );
       }
     };
+    const {
+      addItem: addItemToWishlist,
+      wishlist,
+      removeItem: removeItemFromWishlist,
+      isInWishlist,
+    } = useWishlist();
+    const addToWishlist = (e) => {
+      const variantId =
+        e.target.parentElement.parentElement.firstChild.id ||
+        e.target.parentElement.parentElement.parentElement.firstChild.id;
+      addItemToWishlist({
+        product: {
+          _variantId: variantId,
+        },
+      }).then((res) => {
+        if (wishlist.value.errorCode && wishlist.value.errorCode != '') {
+          showToast(wishlist.value.message);
+        } else {
+          showToast('Product added to wishlist!');
+        }
+      });
+    };
 
     const addToCart = (e) => {
-      loadCart();
+      //loadCart();
       const cartBefore = cart.value;
       const quantity =
         Number(e.target.parentElement.parentElement.firstChild.value) ||
@@ -836,24 +876,28 @@ export default {
           showToast('Product added to cart!');
         }
       });
-
+      let promises = [];
       for (let vId of accessoriesToCart.value) {
-        addItemToCart({
+        let promise = addItemToCart({
           product: {
             _variantId: vId,
           },
           quantity: 1,
-        }).then((res) => {
-          setTimeout(() => {
-            const newCart = loadCart();
-            setCart(newCart.order);
-          }, 5000);
         });
+        promises.push(promise);
       }
+      Promise.all(promises).then(async () => {
+        setTimeout(async () => {
+          const newCart = await loadCart();
+          setCart(newCart.order);
+        }, 5000);
+      });
     };
     return {
       isInCart,
       addToCart,
+      isInWishlist,
+      addToWishlist,
       isAuthenticated,
       isDarkMode,
       user,
