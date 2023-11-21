@@ -96,7 +96,7 @@
   border-top: none !important;
 }
 .sf-breadcrumbs__breadcrumb {
-  color: #000000;
+  color: #3860a7 !important;
 }
 .sf-breadcrumbs__breadcrumb.current {
   color: #3860a7 !important;
@@ -124,5 +124,16 @@
     color: #3860a7;
     font-weight: bolder;
     font-size: xx-large;
+  }
+}
+.sf-radio
+{
+  &.is-active {
+    background: transparent !important;
+  }
+  &--transparent {
+    &.is-active {
+      background: none !important;
+    }
   }
 }
