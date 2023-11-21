@@ -11,6 +11,9 @@
   object-fit: contain !important;
 }
 .sf-table {
+  --table-column-text-align: left !important;
+  table-layout: fixed !important;
+  // i need to add border for the column
   &__row {
     margin-top: 4px;
     padding: 0px 0px !important;
@@ -25,9 +28,13 @@
   }
   &__data {
     justify-content: center !important;
-    text-align: center !important;
+    border-collapse: collapse !important;
+    
     // border-right: 0.5px solid #ebebeb;
     // border-left: 0.5px solid #ebebeb;
+  }
+  &__data p{
+    display: flex !important;
   }
 }
 .slick-next:before {

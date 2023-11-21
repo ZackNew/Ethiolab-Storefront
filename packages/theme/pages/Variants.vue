@@ -168,7 +168,7 @@
         </div>
       </div>
 
-      <div class="hidden md:block mt-8">
+      <div class="hidden md:flex mt-8">
         <SfTable
           :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-faded_white'"
           id="var-table"
@@ -192,8 +192,8 @@
             :key="variant.id"
             class="mb-4"
           >
-            <SfTableData class="flex ijustify-center items-start">
-              <div class="flex justify-center items-center my-4">
+            <SfTableData class=" justify-center items-center">
+              <div class=" justify-center items-center my-4">
                 <div v-if="variant.featuredAsset" class="ml-2">
                   <img
                     :src="variant.featuredAsset.preview"
@@ -230,10 +230,10 @@
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData class="flex justify-center items-start">
-              <div class="block mt-6">
-                <div class="mx-2 flex items-center">
-                  <div class="flex whitespace-nowrap mr-4">
+            <SfTableData class="justify-center items-start">
+              <div class="mt-6">
+                <div class="mx-2  items-center">
+                  <div class=" whitespace-nowrap mr-4">
                     <h4 class="text-lg">
                       {{
                         parseFloat(
@@ -246,7 +246,8 @@
                       ETB / {{ product.customFields.granularity }}
                     </h4>
                   </div>
-                  <div class="flex">
+                  <div>
+                    <div class= "flex">
                     <input
                       type="number"
                       min="1"
@@ -256,7 +257,7 @@
                           ? 'text-white bg-dark_accent'
                           : 'text-secondary'
                       "
-                      class="border border-secondary rounded-lg w-10 text-center mr-2"
+                      class=" border border-secondary rounded-lg w-10 text-center mr-2"
                       :id="variant.id"
                     />
                     <button
@@ -281,6 +282,7 @@
                         :coverage="1"
                       />
                     </button>
+                    </div>
                     <button
                       @click="addToWishlist($event)"
                       :class="
@@ -288,9 +290,9 @@
                           ? 'bg-white text-secondary'
                           : 'bg-secondary text-white'
                       "
-                      class="border border-secondary rounded-lg mx-2 px-4"
+                      class="border border-secondary rounded-lg my-2 mx-2"
                     >
-                      <span class="mt-1"> Add To WishList </span>
+                      <span class="mt-1">Add To WishList</span>
                       <!-- <SfIcon
                           size="lg"
                           color="green-primary"
@@ -328,7 +330,7 @@
                 </div> -->
                 </div>
                 <div v-if="variant.accessories.length > 0">
-                  <div class="flex mt-[5%] ml-2">
+                  <div class=" mt-[5%] ml-2">
                     <input
                       type="checkbox"
                       v-model="isAccessories"
@@ -345,7 +347,7 @@
                       :key="`'r' + ${i}`"
                       class="mt-3 ml-2"
                     >
-                      <div class="flex accessories">
+                      <div class=" accessories">
                         <input
                           @change="accessoryClicked(acc.variants[0].id)"
                           type="checkbox"
