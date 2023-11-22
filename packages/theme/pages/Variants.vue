@@ -192,8 +192,8 @@
             :key="variant.id"
             class="mb-4"
           >
-            <SfTableData class=" justify-center items-center">
-              <div class=" justify-center items-center my-4">
+            <SfTableData class="justify-center items-center">
+              <div class="justify-center items-center my-4">
                 <div v-if="variant.featuredAsset" class="ml-2">
                   <img
                     :src="variant.featuredAsset.preview"
@@ -232,8 +232,8 @@
             </SfTableData>
             <SfTableData class="justify-center items-start">
               <div class="mt-6">
-                <div class="mx-2  items-center">
-                  <div class=" whitespace-nowrap mr-4">
+                <div class="mx-2 items-center">
+                  <div class="whitespace-nowrap mr-4">
                     <h4 class="text-lg">
                       {{
                         parseFloat(
@@ -247,43 +247,43 @@
                     </h4>
                   </div>
                   <div>
-                    <div class= "flex">
-                    <input
-                      type="number"
-                      min="1"
-                      :value="toCart"
-                      :class="
-                        isDarkMode
-                          ? 'text-white bg-dark_accent'
-                          : 'text-secondary'
-                      "
-                      class=" border border-secondary rounded-lg w-10 text-center mr-2"
-                      :id="variant.id"
-                    />
-                    <button
-                      @click="addToCart($event)"
-                      :class="
-                        isDarkMode
-                          ? 'bg-[#d3e6fe] text-secondary'
-                          : 'bg-secondary text-white'
-                      "
-                      class="flex border border-secondary rounded-lg px-2 hover:scale-105"
-                    >
-                      <span class="mt-1"> Buy </span>
-                      <SfIcon
-                        :icon="
-                          isInCart({ product: { _variantId: variant.id } })
-                            ? 'added_to_cart'
-                            : 'add_to_cart'
+                    <div class="flex">
+                      <input
+                        type="number"
+                        min="1"
+                        :value="toCart"
+                        :class="
+                          isDarkMode
+                            ? 'text-white bg-dark_accent'
+                            : 'text-secondary'
                         "
-                        size="lg"
-                        color="green-primary"
-                        viewBox="0 0 24 24"
-                        :coverage="1"
+                        class="border border-secondary rounded-lg w-10 text-center mr-2"
+                        :id="variant.id"
                       />
-                    </button>
+                      <button
+                        @click="addToCart($event)"
+                        :class="
+                          isDarkMode
+                            ? 'bg-[#d3e6fe] text-secondary'
+                            : 'bg-secondary text-white'
+                        "
+                        class="flex border border-secondary rounded-lg px-2 hover:scale-105"
+                      >
+                        <span class="mt-1"> Buy </span>
+                        <SfIcon
+                          :icon="
+                            isInCart({ product: { _variantId: variant.id } })
+                              ? 'added_to_cart'
+                              : 'add_to_cart'
+                          "
+                          size="lg"
+                          color="green-primary"
+                          viewBox="0 0 24 24"
+                          :coverage="1"
+                        />
+                      </button>
                     </div>
-                    <button
+                    <!-- <button
                       @click="addToWishlist(product, variant.id)"
                       :class="
                         isDarkMode
@@ -293,13 +293,7 @@
                       class="border border-secondary rounded-lg my-2 mx-2"
                     >
                       <span class="mt-1">Add To WishList</span>
-                      <!-- <SfIcon
-                          size="lg"
-                          color="green-primary"
-                          viewBox="0 0 24 24"
-                          :coverage="1"
-                        /> -->
-                    </button>
+                    </button> -->
                   </div>
 
                   <!-- <div class="flex my-auto">
@@ -330,7 +324,7 @@
                 </div> -->
                 </div>
                 <div v-if="variant.accessories.length > 0">
-                  <div class=" mt-[5%] ml-2">
+                  <div class="mt-[5%] ml-2">
                     <input
                       type="checkbox"
                       v-model="isAccessories"
@@ -347,7 +341,7 @@
                       :key="`'r' + ${i}`"
                       class="mt-3 ml-2"
                     >
-                      <div class=" accessories">
+                      <div class="accessories">
                         <input
                           @change="accessoryClicked(acc.variants[0].id)"
                           type="checkbox"
@@ -807,7 +801,6 @@ export default {
       // this.product?.customFields?.documentation;
       return { link: link, documents: documents };
     },
-    
   },
   setup() {
     const showToast = inject('showToast');
@@ -832,40 +825,49 @@ export default {
         );
       }
     };
-    const {
-      addItem: addItemToWishlist,
-      wishlist,
-      removeItem: removeItemFromWishlist,
-      isInWishlist,
-    } = useWishlist();
-    const addToWishlist = async (product, variantId) => {
-        const variantImage = product.variantList.items.find(items => items.id === variantId); 
-        console.log("testingproduct",product);
-        console.log("productcatagery",product.collections);
-        console.log("priceWithTax", variantImage.price);
-        console.log("variantImage",variantImage);
-      await addItemToWishlist({
-        product: {
-          _variantId: variantId,
-          images: [product.assets[0].priview],
-          name: product.name,
-          options: variantImage.options,
-          price: [variantImage.price],
-          rating: product.rating,
-          slug: product.slug,
-          _description: product.description,
-          _id: product.id,
-          _categoriesRef:  [product.collections[0].id]
-        },
-      }).then((res) => {
-        if (wishlist.value.errorCode && wishlist.value.errorCode != '') {
-          showToast(wishlist.value.message);
-        } else {
-          showToast('Product added to wishlist!');
-        }
-      });
-    };
+    // const {
+    //   addItem: addItemToWishlist,
+    //   WishlistItem,
+    //   removeItem: removeItemFromWishlist,
+    //   isInWishlist,
+    //   load: loadwishlist,
+    // } = useWishlist();
+    // const wishlist = ref([]);
+    // const addToWishlist = (product, variantId) => {
+    //   const variant = product.variantList.items.find(
+    //     (item) => item.id === variantId
+    //   );
 
+    //   if (!variant) {
+    //     showToast('Variant not found');
+    //     return;
+    //   }
+
+    //   const wishlistProduct = {
+    //     _id: product.id,
+    //     _variantId: variantId,
+    //     _description: product.description,
+    //     _categoriesRef: product.collections[0].id,
+    //     name: product.name,
+    //     slug: product.slug,
+    //     images: product.assets[0].preview ? [product.assets[0].preview] : [],
+    //     price: variant.price,
+    //     options: variant.options,
+    //     rating: product.rating,
+    //   };
+
+    //   addItemToWishlist({ product: wishlistProduct })
+    //     .then(async () => {
+    //       await loadwishlist();
+    //       wishlist.value = [...wishlist.value, wishlistProduct];
+    //       showToast('Product added to wishlist!');
+          
+    //       console.log('wishlistvalue', wishlist.value);
+    //     })
+    //     .catch((error) => {
+    //       showToast(error.message);
+    //     });
+    // };
 
     const addToCart = (e) => {
       //loadCart();
@@ -912,8 +914,10 @@ export default {
     return {
       isInCart,
       addToCart,
-      isInWishlist,
-      addToWishlist,
+    //  isInWishlist,
+     // addToWishlist,
+      loadCart,
+    //  loadwishlist,
       isAuthenticated,
       isDarkMode,
       user,
