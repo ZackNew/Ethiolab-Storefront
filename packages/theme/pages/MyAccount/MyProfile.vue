@@ -105,34 +105,53 @@
       </SfTab>
       <SfTab class="profileTabs" title="Address">
         <h4 class="text-secondary text-lg">Change Your Address:</h4>
-        <SfInput
+        <!-- <SfInput
           class="max-w-[60%] grid-cols-2"
           placeholder="Your Phone number"
           v-model="addressForm.phoneNumber"
           @keypress="handleKeyPress"
-        />
+        /> -->
+        <ValidationObserver v-slot = "{ handleSubmit }">
+          <ValidationProvider
+          rules="required"
+          v-slot="{ errors }"
+          class="form__element"
+        >
         <SfInput
           class="max-w-[60%] grid-cols-2"
+          :valid = "!errors[0]"
+          :errorMessage="errors[0]"
           placeholder="Your Country"
           v-model="addressForm.country"
+          required
           onKeyPress="if(this.value.length==10) return false;"
         />
+        </ValidationProvider>
         <SfInput
           class="max-w-[60%] grid-cols-2"
           placeholder="Your State "
           v-model="addressForm.state"
         />
+        <ValidationProvider
+          rules="required"
+          v-slot="{ errors }"
+          class="form__element"
+        >
         <SfInput
           class="max-w-[60%] grid-cols-2"
           placeholder="Your City "
+          :valid = "!errors[0]"
+          :errorMessage="errors[0]"
+          required
           v-model="addressForm.city"
         />
+        </ValidationProvider>
         <SfInput
           class="max-w-[60%] grid-cols-2"
           placeholder="Your Street number"
           v-model="addressForm.streetLine1"
         />
-        <SfInput
+        <!-- <SfInput
           class="max-w-[60%]"
           placeholder="Your tin number"
           v-model="addressForm.tin"
@@ -141,45 +160,12 @@
           class="max-w-[60%] grid-cols-2"
           placeholder="Your fax number"
           v-model="addressForm.fax"
-        />
-        <span
-          class="max-w-[50%] grid-cols-2 text-secondary text-sm font-bold mb-2"
-        >
-          JOB FUNCTION</span
-        >
-        <select
-          v-model="addressForm.job"
-          class="text-sm font-bold mb-2 ml-4 w-1/3 h-10 border border-primary"
-        >
-          <option value="Adminstrative">Adminstrative</option>
-          <option value="Calibration">Calibration</option>
-          <option value="Purchasing">Purchasing</option>
-          <option value="Technical Support">Technical Support</option>
-          <option value="Engineer">Engineer</option>
-          <option value="Equipment Technician">Equipment Technician</option>
-          <option value="Executive/Director">Executive/Director</option>
-          <option value="Healthcare Professional">
-            Healthcare Professional
-          </option>
-          <option value="Human Resources">Human Resources</option>
-          <option value="Laboratory/R&D">Laboratory/R&D</option>
-          <option value="Maintenance">Maintenance</option>
-          <option value="Operations/Plant Management">
-            Operations/Plant Management
-          </option>
-          <option value="Owner">Owner</option>
-          <option value="Production Maintenance">Production Maintenance</option>
-          <option value="Production Management">Production Management</option>
-          <option value="Quality Assurance/Control">
-            Quality Assurance/Control
-          </option>
-          <option value="Safety">Safety</option>
-          <option value="Student">Student</option>
-          <option value="Researcher">Researcher</option>
-        </select>
-        <SfButton class="bg-secondary" @click="updateAddress"
+        /> -->
+  
+        <SfButton class="bg-secondary" @click= handleSubmit(updateAddress)
           >Update Address</SfButton
         >
+        </ValidationObserver>
       </SfTab>
     </SfTabs>
   </div>
