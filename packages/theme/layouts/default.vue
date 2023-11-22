@@ -41,7 +41,7 @@
     <LazyHydrate when-visible>
       <AppFooter />
     </LazyHydrate>
-    <div class="hidden lg:block">
+    <div class="hidden sm:block md:block lg:block">
       <SfButton
         class="sf-button--pure sf-header__action chatIcon"
         v-if="isMessageSideBarOpen"
@@ -92,7 +92,8 @@
     </div>
     <MessageSideBar
       v-if="isMessageSideBarOpen"
-      class="lg:w-[20rem] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500] hidden lg:block"
+      class="sm:w-[20rem] sm:right-[2%] sm:bottom-[6%] sm:min-h-[70%] sm:fixed sm:z-[500] sm:block
+      lg:w-[20rem] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500] hidden lg:block"
       @sendMessageToAdmin="sendMessageToAdmin"
       @submitt="gust"
       :messages="messages"

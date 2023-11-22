@@ -284,7 +284,7 @@
                     </button>
                     </div>
                     <button
-                      @click="addToWishlist($event)"
+                      @click="addToWishlist(product, variant.id)"
                       :class="
                         isDarkMode
                           ? 'bg-white text-secondary'
@@ -664,6 +664,7 @@ export default {
             slug
             description
             collections{
+              id
               name
               slug
               parent {
@@ -806,6 +807,7 @@ export default {
       // this.product?.customFields?.documentation;
       return { link: link, documents: documents };
     },
+    
   },
   setup() {
     const showToast = inject('showToast');
@@ -836,13 +838,24 @@ export default {
       removeItem: removeItemFromWishlist,
       isInWishlist,
     } = useWishlist();
-    const addToWishlist = (e) => {
-      const variantId =
-        e.target.parentElement.parentElement.firstChild.id ||
-        e.target.parentElement.parentElement.parentElement.firstChild.id;
-      addItemToWishlist({
+    const addToWishlist = async (product, variantId) => {
+        const variantImage = product.variantList.items.find(items => items.id === variantId); 
+        console.log("testingproduct",product);
+        console.log("productcatagery",product.collections);
+        console.log("priceWithTax", variantImage.price);
+        console.log("variantImage",variantImage);
+      await addItemToWishlist({
         product: {
           _variantId: variantId,
+          images: [product.assets[0].priview],
+          name: product.name,
+          options: variantImage.options,
+          price: [variantImage.price],
+          rating: product.rating,
+          slug: product.slug,
+          _description: product.description,
+          _id: product.id,
+          _categoriesRef:  [product.collections[0].id]
         },
       }).then((res) => {
         if (wishlist.value.errorCode && wishlist.value.errorCode != '') {
@@ -852,6 +865,7 @@ export default {
         }
       });
     };
+
 
     const addToCart = (e) => {
       //loadCart();

@@ -4,7 +4,8 @@
     ref="chatContainer"
   >
     <div
-      class="invisible lg:visible h-20 w-[20rem] bg-secondary text-white rounded-t flex items-center fixed z-50"
+      class="sm:visible sm:h-20 sm:w-[20rem] sm:bg-secondary sm:text-white sm:rounded-t sm:flex sm:items-center sm:fixed sm:z-50
+      invisible lg:visible h-20 w-[20rem] bg-secondary text-white rounded-t flex items-center fixed z-50"
     >
       <img
         src="Favicon.png"
@@ -50,10 +51,12 @@
         <div class="mx-3" v-for="message in messages" :key="message.id">
           <div
             v-if="!message.isFromAdmin"
-            class="bg-[#ecfeff] w-[75%] ml-[24%] my-2 rounded-lg"
+            class="bg-[#ecfeff] sm:w-[75%] sm:ml-[24%] sm:my-2 sm:rounded-lg
+                    w-[75%] ml-[24%] my-2 rounded-lg"
           >
             <span
-              class="inline-block text-right text-[#000000] justify-center mt-1 max-w-full break-words"
+              class="sm:inline-block sm:text-right sm:justify-center sm:mt-1 sm:max-w-full sm:break-words
+                      inline-block text-right text-[#000000] justify-center mt-1 max-w-full break-words"
               >{{ message.content }}</span
             >
           </div>
@@ -76,14 +79,16 @@
       <form
         v-if="isFormOpen || isAuthenticated"
         @submit.prevent="sendMessageToAdmin"
-        class="flex items-center fixed invisible lg:visible min-w-full bottom-[70px]"
+        class="sm:flex sm:items-center sm:fixed  sm:visible sm:min-w-full sm:bottom-[70px]
+        flex items-center fixed invisible lg:visible min-w-full bottom-[70px]"
       >
         <textarea
           type="text"
           v-model="messageToSend"
           placeholder="write a message"
           rows="2"
-          class="min-w-[17.5rem] max-h-[90%] h-30 px-2 rounded shadow-md no-scrollbar resize-none"
+          class="sm:min-w-[17.5rem] sm:max-h-[90%] sm:px-2 sm:rounded sm:shadow-md sm:no-scrollbar sm:resize-none
+          min-w-[17.5rem] max-h-[90%] h-30 px-2 rounded shadow-md no-scrollbar resize-none"
         
           @keydown.enter.prevent="handleEnterKey"
         />
