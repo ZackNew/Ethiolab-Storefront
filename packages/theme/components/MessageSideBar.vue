@@ -1,11 +1,11 @@
 <template>
   <div
-    class="chat rounded-xl shadow-lg bg-white max-h-96 overflow-auto no-scrollbar"
+    class="visible chat rounded-xl shadow-lg bg-white max-h-96 overflow-auto no-scrollbar"
     ref="chatContainer"
   >
     <div
-      class="sm:visible sm:h-20 sm:w-[20rem] sm:bg-secondary sm:text-white sm:rounded-t sm:flex sm:items-center sm:fixed sm:z-50
-      invisible lg:visible h-20 w-[20rem] bg-secondary text-white rounded-t flex items-center fixed z-50"
+      class="visible sm:visible sm:h-20 sm:w-[20rem] sm:bg-secondary sm:text-white sm:rounded-t sm:flex sm:items-center sm:fixed sm:z-50
+       lg:visible h-20 w-[20rem] bg-secondary text-white rounded-t flex items-center fixed z-50"
     >
       <img
         src="Favicon.png"
@@ -14,7 +14,7 @@
         width="40px"
         class="bg-white mx-4 my-2 rounded-full"
       />
-      <h3 class="font-bold text-[20px] whitespace-nowrap">Ethiolab Support</h3>
+      <h3 class="visbile font-bold text-[20px] whitespace-nowrap">Ethiolab Support</h3>
     </div>
     <div v-if="!isAuthenticated && !isFormOpen" style="margin-top: 100px ; margin-left: 5px ; margin-right: 5px">
       <h3 class="text-lg font-bold mb-4">
@@ -79,16 +79,16 @@
       <form
         v-if="isFormOpen || isAuthenticated"
         @submit.prevent="sendMessageToAdmin"
-        class="sm:flex sm:items-center sm:fixed  sm:visible sm:min-w-full sm:bottom-[70px]
-        flex items-center fixed invisible lg:visible min-w-full bottom-[70px]"
+        class="visible sm:flex sm:items-center sm:fixed  sm:visible sm:min-w-full sm:bottom-[70px]
+        flex items-center fixed  lg:visible min-w-full bottom-[70px]"
       >
         <textarea
           type="text"
           v-model="messageToSend"
           placeholder="write a message"
           rows="2"
-          class="sm:min-w-[17.5rem] sm:max-h-[90%] sm:px-2 sm:rounded sm:shadow-md sm:no-scrollbar sm:resize-none
-          min-w-[17.5rem] max-h-[90%] h-30 px-2 rounded shadow-md no-scrollbar resize-none"
+          class="visbible min-w-[7rem] max-h-[90%] h-30 px-2 rounded shadow-md no-scrollbar resize-none
+            lg:min-w-[17.5rem] lg:max-h-[90%] lg:h-30 lg:px-2 lg:rounded lg:shadow-md lg:no-scrollbar lg:resize-none"
         
           @keydown.enter.prevent="handleEnterKey"
         />
@@ -99,7 +99,7 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6 text-secondary"
+            class="h-6 w-6 lg:w-6 lg:h-6 text-secondary"
           >
             <path
               stroke-linecap="round"
