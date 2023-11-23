@@ -41,7 +41,7 @@
     <LazyHydrate when-visible>
       <AppFooter />
     </LazyHydrate>
-    <div class="hidden sm:block md:block lg:block">
+    <div class="hidden lg:block">
       <SfButton
         class="sf-button--pure sf-header__action chatIcon"
         v-if="isMessageSideBarOpen"
@@ -92,8 +92,7 @@
     </div>
     <MessageSideBar
       v-if="isMessageSideBarOpen"
-      class="sm:w-[20rem] sm:right-[2%] sm:bottom-[6%] sm:min-h-[70%] sm:fixed sm:z-[500] sm:block
-      lg:w-[20rem] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed z-[500] hidden lg:block"
+      class="block w-[15rem] right-[2%] bottom-[6%] min-h-[70%] fixed z-[500] lg:w-[20rem] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed lg:z-[500]"
       @sendMessageToAdmin="sendMessageToAdmin"
       @submitt="gust"
       :messages="messages"
@@ -119,7 +118,13 @@ import { useCms, useFacet, useUser } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 import Toast from '~/components/Toast.vue';
-import { ref, provide, onUnmounted } from '@vue/composition-api';
+import {
+  ref,
+  provide,
+  onUnmounted,
+  onMounted,
+  getCurrentInstance,
+} from '@vue/composition-api';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import MessageSideBar from '~/components/MessageSideBar.vue';
@@ -158,7 +163,7 @@ export default {
     const getChatMessage = async (toggle = false) => {
       if (isMessageSideBarOpen.value == false && toggle) {
         toggleMessageSidebar();
-        ppp();
+        interval();
       }
       let id = [];
       let mes = unseenMessages.value;
@@ -256,7 +261,7 @@ export default {
       const data = await getChatMessage();
     };
     let intervalId;
-    const ppp = () => {
+    const interval = () => {
       intervalId = setInterval(() => {
         refreshMessages();
       }, 2000);
@@ -282,7 +287,17 @@ export default {
     loadUser().then(() => {
       //this.$router.go(0)
     });
-
+    onMounted(() => {
+      const instant = getCurrentInstance();
+      instant.$root.$on('emitMessage', () => {
+        toggleMessageSidebar();
+        getChatMessage();
+        intervalId = setInterval(refreshMessages, 2500);
+      });
+    });
+    onUnmounted(() => {
+      clearInterval(intervalId);
+    });
     onSSR(async () => {
       await search({ sort: { name: 'DESC' }, take: 8 });
       await searchCms([
@@ -294,7 +309,6 @@ export default {
         'BIG_SALE',
       ]);
     });
-    // onUnmounted(() => clearInterval(intervalId));
 
     return {
       isAuthenticated,

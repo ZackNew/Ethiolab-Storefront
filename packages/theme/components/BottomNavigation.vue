@@ -60,7 +60,7 @@
        <SfBottomNavigationItem
       :label="$t('Chat')"
       icon="message"
-      @click="toggleMessageSidebar()"
+      @click= "$root.$emit('emitMessage')"
     >
       <template #icon>
         <SfCircleIcon aria-label="Message">
