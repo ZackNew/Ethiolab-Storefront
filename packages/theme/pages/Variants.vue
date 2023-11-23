@@ -168,7 +168,7 @@
         </div>
       </div>
 
-      <div class="hidden md:block mt-8">
+      <div class="hidden md:flex mt-8">
         <SfTable
           :class="isDarkMode ? 'text-white bg-dark_accent' : 'bg-faded_white'"
           id="var-table"
@@ -192,8 +192,8 @@
             :key="variant.id"
             class="mb-4"
           >
-            <SfTableData class="flex ijustify-center items-start">
-              <div class="flex justify-center items-center my-4">
+            <SfTableData class="justify-center items-center">
+              <div class="justify-center items-center my-4">
                 <div v-if="variant.featuredAsset" class="ml-2">
                   <img
                     :src="variant.featuredAsset.preview"
@@ -230,10 +230,10 @@
                 {{ variant.stockLevel }}
               </p>
             </SfTableData>
-            <SfTableData class="flex justify-center items-start">
-              <div class="block mt-6">
-                <div class="mx-2 flex items-center">
-                  <div class="flex whitespace-nowrap mr-4">
+            <SfTableData class="justify-center items-start">
+              <div class="mt-6">
+                <div class="mx-2 items-center">
+                  <div class="whitespace-nowrap mr-4">
                     <h4 class="text-lg">
                       {{
                         parseFloat(
@@ -246,42 +246,56 @@
                       ETB / {{ product.customFields.granularity }}
                     </h4>
                   </div>
-                  <div class="flex">
-                    <input
-                      type="number"
-                      min="1"
-                      :value="toCart"
+                  <div>
+                    <div class="flex">
+                      <input
+                        type="number"
+                        min="1"
+                        :value="toCart"
+                        :class="
+                          isDarkMode
+                            ? 'text-white bg-dark_accent'
+                            : 'text-secondary'
+                        "
+                        class="border border-secondary rounded-lg w-10 text-center mr-2"
+                        :id="variant.id"
+                      />
+                      <button
+                        @click="addToCart($event)"
+                        :class="
+                          isDarkMode
+                            ? 'bg-[#d3e6fe] text-secondary'
+                            : 'bg-secondary text-white'
+                        "
+                        class="flex border border-secondary rounded-lg px-2 hover:scale-105"
+                      >
+                        <span class="mt-1"> Buy </span>
+                        <SfIcon
+                          :icon="
+                            isInCart({ product: { _variantId: variant.id } })
+                              ? 'added_to_cart'
+                              : 'add_to_cart'
+                          "
+                          size="lg"
+                          color="green-primary"
+                          viewBox="0 0 24 24"
+                          :coverage="1"
+                        />
+                      </button>
+                    </div>
+                    <!-- <button
+                      @click="addToWishlist(product, variant.id)"
                       :class="
                         isDarkMode
-                          ? 'text-white bg-dark_accent'
-                          : 'text-secondary'
-                      "
-                      class="border border-secondary rounded-lg w-10 text-center mr-2"
-                      :id="variant.id"
-                    />
-                    <button
-                      @click="addToCart($event)"
-                      :class="
-                        isDarkMode
-                          ? 'bg-[#d3e6fe] text-secondary'
+                          ? 'bg-white text-secondary'
                           : 'bg-secondary text-white'
                       "
-                      class="flex border border-secondary rounded-lg px-2 hover:scale-105"
+                      class="border border-secondary rounded-lg my-2 mx-2"
                     >
-                      <span class="mt-1"> Buy </span>
-                      <SfIcon
-                        :icon="
-                          isInCart({ product: { _variantId: variant.id } })
-                            ? 'added_to_cart'
-                            : 'add_to_cart'
-                        "
-                        size="lg"
-                        color="green-primary"
-                        viewBox="0 0 24 24"
-                        :coverage="1"
-                      />
-                    </button>
+                      <span class="mt-1">Add To WishList</span>
+                    </button> -->
                   </div>
+
                   <!-- <div class="flex my-auto">
                   <input
                     :class="
@@ -310,7 +324,7 @@
                 </div> -->
                 </div>
                 <div v-if="variant.accessories.length > 0">
-                  <div class="flex mt-[5%] ml-2">
+                  <div class="mt-[5%] ml-2">
                     <input
                       type="checkbox"
                       v-model="isAccessories"
@@ -327,7 +341,7 @@
                       :key="`'r' + ${i}`"
                       class="mt-3 ml-2"
                     >
-                      <div class="flex accessories">
+                      <div class="accessories">
                         <input
                           @change="accessoryClicked(acc.variants[0].id)"
                           type="checkbox"
@@ -543,7 +557,6 @@ import { ref, inject } from '@vue/composition-api';
 import { useWishlist, useCart, useUser } from '@vue-storefront/vendure';
 import Gallery from '~/components/Gallery.vue';
 import CryptoJS from 'crypto-js';
-
 export default {
   middleware: ['csrf'],
   components: {
@@ -558,6 +571,7 @@ export default {
     LazyHydrate,
     Loading,
   },
+
   data() {
     return {
       isAccessories: false,
@@ -644,6 +658,7 @@ export default {
             slug
             description
             collections{
+              id
               name
               slug
               parent {
@@ -810,9 +825,52 @@ export default {
         );
       }
     };
+    // const {
+    //   addItem: addItemToWishlist,
+    //   WishlistItem,
+    //   removeItem: removeItemFromWishlist,
+    //   isInWishlist,
+    //   load: loadwishlist,
+    // } = useWishlist();
+    // const wishlist = ref([]);
+    // const addToWishlist = (product, variantId) => {
+    //   const variant = product.variantList.items.find(
+    //     (item) => item.id === variantId
+    //   );
+
+    //   if (!variant) {
+    //     showToast('Variant not found');
+    //     return;
+    //   }
+
+    //   const wishlistProduct = {
+    //     _id: product.id,
+    //     _variantId: variantId,
+    //     _description: product.description,
+    //     _categoriesRef: product.collections[0].id,
+    //     name: product.name,
+    //     slug: product.slug,
+    //     images: product.assets[0].preview ? [product.assets[0].preview] : [],
+    //     price: variant.price,
+    //     options: variant.options,
+    //     rating: product.rating,
+    //   };
+
+    //   addItemToWishlist({ product: wishlistProduct })
+    //     .then(async () => {
+    //       await loadwishlist();
+    //       wishlist.value = [...wishlist.value, wishlistProduct];
+    //       showToast('Product added to wishlist!');
+          
+    //       console.log('wishlistvalue', wishlist.value);
+    //     })
+    //     .catch((error) => {
+    //       showToast(error.message);
+    //     });
+    // };
 
     const addToCart = (e) => {
-      loadCart();
+      //loadCart();
       const cartBefore = cart.value;
       const quantity =
         Number(e.target.parentElement.parentElement.firstChild.value) ||
@@ -836,24 +894,30 @@ export default {
           showToast('Product added to cart!');
         }
       });
-
+      let promises = [];
       for (let vId of accessoriesToCart.value) {
-        addItemToCart({
+        let promise = addItemToCart({
           product: {
             _variantId: vId,
           },
           quantity: 1,
-        }).then((res) => {
-          setTimeout(() => {
-            const newCart = loadCart();
-            setCart(newCart.order);
-          }, 5000);
         });
+        promises.push(promise);
       }
+      Promise.all(promises).then(async () => {
+        setTimeout(async () => {
+          const newCart = await loadCart();
+          setCart(newCart.order);
+        }, 5000);
+      });
     };
     return {
       isInCart,
       addToCart,
+    //  isInWishlist,
+     // addToWishlist,
+      loadCart,
+    //  loadwishlist,
       isAuthenticated,
       isDarkMode,
       user,
