@@ -96,7 +96,7 @@
                 <SfTableData v-e2e="'order-number'">{{
                   order.code
                 }}</SfTableData>
-                <SfTableData>{{ orderGetters.getDate(order) }}</SfTableData>
+                <SfTableData></SfTableData>
                 <SfTableData>{{
                   orderGetters.getPrice(order).toLocaleString() + ' ETB'
                 }}</SfTableData>
