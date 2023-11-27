@@ -946,6 +946,39 @@ export default {
           return prod;
         });
         this.allProducts = products;
+        let newArray = []
+        if(this.allProducts.length >= 10){
+         newArray = this.allProducts.slice(0,10)
+        }
+        else 
+        {
+          newArray = this.allProducts.concat(this.$store.state.recently.recently).slice(0,10);
+          // console.log("The Response",this.$store.state.recently.recently)
+          // newArray = this.allProducts
+          console.log("NewArray",newArray)
+
+        }
+        this.$store.dispatch('recently/setRecentlyViewd',newArray)
+
+      
+        // this.allProducts.forEach((product) => {
+        //   this.$store.dispatch('recentlyviewd/setRecentlyViewd', {
+        //     product: {
+        //       productId: product._id,
+        //       variantID: product._variantId,
+        //       image: product.images[0],
+        //       price: product.price,
+        //       name: product.name,
+        //       slug: product.slug,
+        //       _variantId: product._variantId,
+        //       _description: product._description,
+        //       _categoriesRef: product._categoriesRef,
+        //       rating: product.rating,
+        //       isOrderBased: product.isOrderBased,
+        //       options: product.options,
+        //     },
+        //   });
+        // });
         const pbaseUrl = process.env.GRAPHQL_API;
         const poptions = {
           headers: {

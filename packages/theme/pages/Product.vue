@@ -103,6 +103,7 @@
                 <p
                   v-html="Svariant.customFields.description"
                   class="text-justify"
+                  :id="$style.limitedLines"
                   :class="classes.red"
                 ></p>
               </div>
@@ -1090,5 +1091,13 @@ tr:nth-child(even) {
 .red::-webkit-scrollbar-thumb {
   background-color: #acacac;
   border-radius: 100px;
+}
+</style>
+<style module>
+#limitedLines{
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
