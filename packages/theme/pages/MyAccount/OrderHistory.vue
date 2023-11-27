@@ -96,7 +96,7 @@
                 <SfTableData v-e2e="'order-number'">{{
                   order.code
                 }}</SfTableData>
-                <SfTableData></SfTableData>
+                <SfTableData>{{ formatDate(orderGetters.getDate(order)) }}</SfTableData>
                 <SfTableData>{{
                   orderGetters.getPrice(order).toLocaleString() + ' ETB'
                 }}</SfTableData>
@@ -162,7 +162,7 @@
           </SfTableHeading>
           <SfTableRow v-for="(invoice, index) in invoices" :key="index">
             <SfTableData>{{ invoice.invoiceNumber }}</SfTableData>
-            <SfTableData>{{ invoice.createdAt }}</SfTableData>
+            <SfTableData>{{ formatDate(invoice.createdAt) }}</SfTableData>
             <SfTableData>{{ invoice.orderCode }}</SfTableData>
             <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
             <SfTableData>
@@ -240,6 +240,10 @@ export default {
   },
 
   methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return new Date(date).toLocaleDateString();
+    },
     async openPDF(link) {
       const url =
         process.env.GRAPHQL_API?.split('/shop-api')[0] +
