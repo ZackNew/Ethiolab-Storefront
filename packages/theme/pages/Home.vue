@@ -184,7 +184,7 @@
                       ? addItemToWishlist({ product })
                       : removeItemFromWishlist({ product })
                   "
-                  @click:add-to-cart="itemsToCart(prouct, 1)"
+                  @click:add-to-cart="itemsToCart(product, 1)"
                   class="carousel__item__product mr-2"
                 />
               </div>
