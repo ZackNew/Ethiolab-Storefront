@@ -35,7 +35,7 @@
           />
         </ValidationProvider>
       </div>
-       <div class="form__horizontal">
+      <div class="form__horizontal">
         <ValidationProvider
           :rules="validationRules.country"
           v-slot="{ errors }"
@@ -59,11 +59,12 @@
             </SfSelectOption>
           </SfSelect>
         </ValidationProvider>
-        <ValidationProvider >
+        <ValidationProvider>
           <SfInput
             v-model="form.state"
             :label="$t('State_OR_Province')"
             name="state"
+            class="form__element"
           />
         </ValidationProvider>
       </div>
@@ -110,27 +111,29 @@
           />
         </ValidationProvider>
       </div>
+      <!-- <div class="form__horizontal"> -->
       <ValidationProvider rules="required" class="form__element">
-        <!-- <SfInput
-          type="number"
-          v-model="form.phone"
-          name="phone"
-          :label="$t('Phone number')"
-          required
-          :valid="!errors[0]"
-          :errorMessage="errors[0]"
-        /> -->
         <VuePhoneNumberInput
           required
           color="red"
           valid-color="#3860a7"
-          :valid = isPhoneValid
+          :valid="isPhoneValid"
           default-country-code="ET"
           @update="phoneInputHandler"
           v-model="formPhoneNumber"
-          class="w-[50%]"
+          class="w-[100%]"
         />
       </ValidationProvider>
+      <!-- <ValidationProvider v-slot="{ errors }" class="form__element">
+          <SfInput
+            v-model="form.companyname"
+            name="Company"
+            :label="$t('Company')"
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
+          />
+        </ValidationProvider>
+      </div> -->
       <SfCheckbox
         v-model="form.isDefault"
         name="isDefault"
@@ -220,8 +223,7 @@ export default {
     validphone(submitForm) {
       if (!this.isPhoneValid) {
         return;
-      }
-      else {
+      } else {
         submitForm();
       }
     },
