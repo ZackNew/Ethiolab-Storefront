@@ -209,9 +209,49 @@
               <!-- <p>{{product.name}}</p> -->
               <div
                 v-for="product in filteredSearchedProducts.slice(0, limit)"
-                :key="product.id"
+                :key="product._id"
               >
-                <SubcatBrandCard :product="product" />
+                <SubcatBrandCard
+                  :product="product"
+                  @click:wishlist="
+                    !isInWishlist({
+                      product: {
+                        _variantId: product.variants[0].id,
+                        _id: product.id,
+                        name: product.name,
+                        price: product.variants[0].price,
+                        slug: product.slug,
+                        _categoriesRef: [],
+                        _description: '',
+                        images : product.featuredAsset ? [product.featuredAsset.preview] : undefined
+                      },
+                    })
+                      ? addItemToWishlist({
+                          product: {
+                            _variantId: product.variants[0].id,
+                            _id: product.id,
+                            name: product.name,
+                            price: product.variants[0].price,
+                            slug: product.slug,
+                            _categoriesRef: [],
+                            _description: '',
+                            images : product.featuredAsset ? [product.featuredAsset.preview] : undefined
+                          },
+                        })
+                      : removeItemFromWishlist({
+                          product: {
+                            _variantId: product.variants[0].id,
+                            _id: product.id,
+                            name: product.name,
+                            price: product.variants[0].price,
+                            slug: product.slug,
+                            _categoriesRef: [],
+                            _description: '',
+                            images : product.featuredAsset ? [product.featuredAsset.preview] : undefined
+                          },
+                        })
+                  "
+                />
               </div>
             </div>
             <button
@@ -249,7 +289,7 @@ import {
 } from '@storefront-ui/vue';
 import SubcategoryBrandAccordion from '~/components/SubcategoryBrandAccordion';
 import Loading from '~/components/Loading.vue';
-import { useCms } from '@vue-storefront/vendure';
+import { useCms, useWishlist } from '@vue-storefront/vendure';
 import { useUiHelpers, useUiState } from '~/composables';
 import axios from 'axios';
 import SubcatBrandCard from '../components/SubcatBrandCard.vue';
@@ -282,6 +322,7 @@ export default {
       description: null,
     };
   },
+
   computed: {
     filteredSearchedProducts() {
       const filtersClicked = this.filtersClicked;
@@ -303,7 +344,6 @@ export default {
 
         return total_price >= lower && total_price <= high;
       });
-
       const filterProducts = searchProduct.filter((product) => {
         if (filtersClicked.length > 0) {
           const facetIndex = product.facetValues.findIndex((facet) =>
@@ -321,7 +361,6 @@ export default {
         }
         return true;
       });
-
       if (this.A_Z) filterProducts.sort(this.generateSortFn('name', false));
 
       if (this.Z_A) filterProducts.sort(this.generateSortFn('name', true));
@@ -565,6 +604,11 @@ export default {
     },
   },
   setup(props, { root }) {
+    const {
+      addItem: addItemToWishlist,
+      isInWishlist,
+      removeItem: removeItemFromWishlist,
+    } = useWishlist();
     const { isDarkMode } = useUiState();
     const th = useUiHelpers();
     const { getCms } = useCms();
@@ -578,6 +622,9 @@ export default {
       adSection,
       adImage,
       isDarkMode,
+      addItemToWishlist,
+      removeItemFromWishlist,
+      isInWishlist,
     };
   },
   components: {

@@ -597,7 +597,6 @@ export default {
     const recentlyViewd = computed(
       () => root.$store.state.recently.recently
     );
-    console.log(recentlyViewd);
     loadUser();
     const { writeQuote, load, myQuotes } = useQuote();
 

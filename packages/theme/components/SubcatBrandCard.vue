@@ -5,7 +5,14 @@
       !isDarkMode ? 'background-color: white' : 'background-color: #182533'
     "
   >
-  <img v-if="product.customFields.is_order_based"  src="/OB.png" height="100" width="100" alt="order based"  class="absolute z-[100]"/>
+    <img
+      v-if="product.customFields.is_order_based"
+      src="/OB.png"
+      height="100"
+      width="100"
+      alt="order based"
+      class="absolute z-[100]"
+    />
     <nuxt-link :to="{ path: '/v/' + product.slug }">
       <LazyHydrate>
         <img
@@ -35,6 +42,12 @@
       </button>
     </div>
     <h1
+      @click="toggleIsInWishlist"
+      class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
+    >
+      <button>+ Add to Wishlist</button>
+    </h1>
+    <h1
       @click="addToCompareList"
       class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
     >
@@ -55,7 +68,7 @@
     <div class="text-center m-3 text-xs md:text-base" v-else>
       <div class="inline-flex" v-for="(p, index) of prices" :key="index">
         <div class="mx-2" v-if="index === 1">-</div>
-        <template>{{ parseFloat(p).toLocaleString()}}ETB </template>
+        <template>{{ parseFloat(p).toLocaleString() }}ETB </template>
       </div>
     </div>
   </div>
@@ -74,12 +87,29 @@ export default {
       type: Object,
       required: false,
     },
+    wishlistIcon: {
+      type: [String, Array, Boolean],
+      default: 'heart',
+    },
+    isInWishlistIcon: {
+      type: [String, Array],
+      default: 'heart_fill',
+    },
+    isInWishlist: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     LazyHydrate,
     Toast,
   },
   methods: {
+    toggleIsInWishlist() {
+      this.toastShower('Item added to wishlist');
+      this.$emit('click:wishlist', !this.isInWishlist);
+      this.$root.$emit('emitWishList');
+    },
     addToCompareList() {
       if (
         this.$store.state.compareList?.productsToCompare?.length < 5 &&
@@ -169,6 +199,7 @@ export default {
       toastShower,
       maxPrice,
       minPrice,
+      
     };
   },
 };
