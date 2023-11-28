@@ -9,9 +9,9 @@
       @close="toggleMobileMenu"
       overlay
     >
-      <template>
-        <CategoriesAccordion />
-      </template>
+        <template>
+          <CategoriesAccordion />
+        </template>
     </SfSidebar>
   </div>
 </template>

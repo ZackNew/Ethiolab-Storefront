@@ -1,57 +1,64 @@
 <template>
   <div>
-    <div v-for="category in headerNavigation" :key="category.id">
-      <SfAccordion
-        class="accordion"
-        :open="openState"
-        :multiple="false"
-        transition=""
-        showChevron
-      >
-        <SfAccordionItem :header="category.label">
-          <SfList class="ml-5">
-            <SfListItem>
-              <SfMenuItem :count="category.count || ''" :label="category.label">
-                <template #label>
-                  <nuxt-link
-                    :to="'/c/' + category.slug"
-                    :class="
-                      category.isCurrent
-                        ? 'sidebar--cat-selected cl '
-                        : 'mb-3 cl '
-                    "
-                    @click.native="closeSideNav()"
+    <SfAccordion>
+      <SfAccordionItem header="All Categories">
+        <div v-for="category in headerNavigation" :key="category.id">
+          <SfAccordion
+            class="accordion"
+            :open="openState"
+            :multiple="false"
+            transition=""
+            showChevron
+          >
+            <SfAccordionItem :header="category.label">
+              <SfList class="ml-5">
+                <SfListItem>
+                  <SfMenuItem
+                    :count="category.count || ''"
+                    :label="category.label"
                   >
-                    All
-                  </nuxt-link>
-                </template>
-              </SfMenuItem>
-            </SfListItem>
-            <SfListItem
-              v-for="subCat in getSubCategory(category)"
-              class="border-b-2 mb-3"
-              :key="subCat.id"
-            >
-              <SfMenuItem :label="subCat.label">
-                <template #label="{ label }">
-                  <nuxt-link
-                    :to="'/s/' + subCat.slug"
-                    :class="
-                      subCat.isCurrent
-                        ? 'sidebar--cat-selected cl '
-                        : 'mb-3 cl '
-                    "
-                    @click.native="closeSideNav()"
-                  >
-                    {{ label }}
-                  </nuxt-link>
-                </template>
-              </SfMenuItem>
-            </SfListItem>
-          </SfList>
-        </SfAccordionItem>
-      </SfAccordion>
-    </div>
+                    <template #label>
+                      <nuxt-link
+                        :to="'/c/' + category.slug"
+                        :class="
+                          category.isCurrent
+                            ? 'sidebar--cat-selected cl '
+                            : 'mb-3 cl '
+                        "
+                        @click.native="closeSideNav()"
+                      >
+                        All
+                      </nuxt-link>
+                    </template>
+                  </SfMenuItem>
+                </SfListItem>
+                <SfListItem
+                  v-for="subCat in getSubCategory(category)"
+                  class="border-b-2 mb-3"
+                  :key="subCat.id"
+                >
+                  <SfMenuItem :label="subCat.label">
+                    <template #label="{ label }">
+                      <nuxt-link
+                        :to="'/s/' + subCat.slug"
+                        :class="
+                          subCat.isCurrent
+                            ? 'sidebar--cat-selected cl '
+                            : 'mb-3 cl '
+                        "
+                        @click.native="closeSideNav()"
+                      >
+                        {{ label }}
+                      </nuxt-link>
+                    </template>
+                  </SfMenuItem>
+                </SfListItem>
+              </SfList>
+            </SfAccordionItem>
+          </SfAccordion>
+        </div>
+      </SfAccordionItem>
+    </SfAccordion>
     <SfAccordion>
       <SfAccordionItem header="Brands">
         <SfList>
