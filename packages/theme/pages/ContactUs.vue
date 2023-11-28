@@ -389,27 +389,27 @@ export default {
       return name;
     },
   },
-  data() {
-    return {
-      formPhoneNumber: '',
-      isPhoneNumberValid: false,
-    };
-  },
-  methods: {
-    phoneInputHandler(payload) {
-      this.isPhoneNumberValid = payload?.isValid;
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.form.phoneNumber = this.formPhoneNumber;
-    },
-    submitForm() {
-      if (!this.isPhoneNumberValid) {
-        this.showToast('Please Enter Valid Phone Number');
-        return;
-      } else {
-        this.sendMessage();
-      }
-    },
-  },
+  // data() {
+  //   return {
+  //     formPhoneNumber: '',
+  //     isPhoneNumberValid: false,
+  //   };
+  // },
+  // methods: {
+  //   phoneInputHandler(payload) {
+  //     this.isPhoneNumberValid = payload?.isValid;
+  //     this.formPhoneNumber = payload?.formattedNumber;
+  //     this.form.phoneNumber = this.formPhoneNumber;
+  //   },
+  //   submitForm() {
+  //     if (!this.isPhoneNumberValid) {
+  //       this.showToast('Please Enter Valid Phone Number');
+  //       return;
+  //     } else {
+  //       this.sendMessage();
+  //     }
+  //   },
+  // },
   setup(_, { root }) {
     const { isDarkMode } = useUiState();
     const  showToast  = inject('showToast');
@@ -419,6 +419,21 @@ export default {
     const errorMessage = ref('');
     const { sendContactUs } = useContactUs();
     const { setTinNumber } = useTinNumber();
+    const isPhoneNumberValid = ref(false);
+    const formPhoneNumber = ref('');
+    const phoneInputHandler = (payload) => {
+      isPhoneNumberValid.value = payload?.isValid;
+      formPhoneNumber.value = payload?.formattedNumber;
+      form.value.phoneNumber = formPhoneNumber.value
+    };
+    const submitForm = (sendMessage) => {
+      if (!isPhoneNumberValid.value) {
+        showToast('Please Enter Valid Phone Number');
+        return;
+      } else {
+        sendMessage();
+      }
+    };
 
     const form = ref({
       firstName: '',
@@ -439,6 +454,7 @@ export default {
       form.value.message = '';
       form.value.customerEmail = '';
       form.value.customerName = '';
+      formPhoneNumber.value = '';
     };
 
     const generateCSRFToken = () => {
@@ -554,6 +570,11 @@ export default {
       sendMessage,
       formattedMessage,
       showToast,
+      phoneInputHandler,
+      isPhoneNumberValid,
+      submitForm,
+      formPhoneNumber,
+
     };
   },
 };

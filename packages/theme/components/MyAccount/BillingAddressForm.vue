@@ -81,7 +81,7 @@
           <SfInput
             v-model="form.streetNumber"
             name="apartment"
-            :label="$t('Woreda')"
+            :label="$t('CompanyName')"
             :valid="!errors[0]"
             :errorMessage="errors[0]"
           />
