@@ -340,7 +340,7 @@ export default {
     SfIcon,
     LazyHydrate,
     StoreLocator,
-    VuePhoneNumberInput,
+    VuePhoneNumberInput, 
   },
 
   computed: {
@@ -403,6 +403,7 @@ export default {
     },
     submitForm() {
       if (!this.isPhoneNumberValid) {
+        this.showToast('Please Enter Valid Phone Number');
         return;
       } else {
         this.sendMessage();
@@ -411,7 +412,7 @@ export default {
   },
   setup(_, { root }) {
     const { isDarkMode } = useUiState();
-    const showToast = inject('showToast');
+    const  showToast  = inject('showToast');
     const isFormSubmitted = ref(false);
     const { $vendure } = useVSFContext();
     const { cart, load } = useCart();
@@ -552,6 +553,7 @@ export default {
       errorMessage,
       sendMessage,
       formattedMessage,
+      showToast,
     };
   },
 };
