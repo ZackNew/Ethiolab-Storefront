@@ -94,6 +94,12 @@
                     + Add to Compare List
                   </p>
                 </button>
+                <h1
+                  @click="togglewishlistt"
+                  class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
+                >
+                  <button>+ Add to Wishlist</button>
+                </h1>
               </div>
               <div
                 v-if="Svariant.customFields"
@@ -170,7 +176,7 @@
             class="md:col-span-6"
             v-if="Svariant.customFields && Svariant.customFields.table"
           >
-            <h3>Speciﬁcation And Description</h3>
+            <h3>Speciﬁcation and Description</h3>
             <p
               v-html="Svariant.customFields ? Svariant.customFields.table : ''"
               :class="classes.red"
@@ -180,7 +186,7 @@
             class="md:col-span-6"
             v-if="Svariant.customFields && Svariant.customFields.description"
           >
-            <h3>More About This Item</h3>
+            <h3>More About this Item</h3>
             <div v-if="Svariant.customFields">
               <p
                 v-html="Svariant.customFields.description"
@@ -344,6 +350,68 @@ export default {
       isInWishlist,
       removeItem: removeItemFromWishlist,
     } = useWishlist();
+    // const productId = ref(null);
+    // const variantId = ref(null);
+    const productId = context.root.$route.params.id;
+    const variantId = context.root.$route.params.vid;
+    console.log("variantId",variantId);
+    const Svariant = ref(null);
+    const togglewishlistt = () => {
+      if (
+        isInWishlist({
+          product: {
+            _variantId: variantId,
+            _id: productId,
+            name: Svariant.value.name,
+            slug: Svariant.value.name,
+            _categoriesRef: [],
+            _description: '',
+            rating: null,
+            images: Svariant.value.featuredAsset
+              ? [Svariant.value.featuredAsset.preview]
+              : undefined,
+          },
+        })
+      ) {
+        removeItemFromWishlist({
+          product: {
+            _variantId: variantId,
+            _id: productId,
+            name: Svariant.value.name,
+            price: Svariant.value.price,
+            slug: Svariant.value.name,
+            _categoriesRef: [],
+            _description: '',
+            rating: null,
+            images: Svariant.value.featuredAsset
+              ? [Svariant.value.featuredAsset.preview]
+              : undefined,
+          },
+        });
+      } else {
+        addItemToWishlist({
+          product :{
+            _variantId: variantId,
+            name: Svariant.value.name,
+            price: Svariant.value.price,
+            slug: Svariant.value.name,
+            _categoriesRef: [],
+            _description: '',
+            rating: null,
+            images: Svariant.value.featuredAsset
+              ? [Svariant.value.featuredAsset.preview]
+              : undefined,
+             _id: productId,
+          }
+        });
+        console.log("addItemToWishlist",product.value._variantId); 
+        console.log("VaruiantId",product.value); 
+        console.log("VaruihhhhhhhhhhhhhhhhhhhhantId",product.value._id);
+      }     
+      console.log("Logintnnnngngngng",id);
+      console.log("Logintnnnngngngng",vid);
+    };
+    //console.log("Productsssssss",product);
     const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
     const qty = ref(1);
@@ -520,6 +588,10 @@ export default {
 
     //var reviewKey= ref(0);
     return {
+      togglewishlistt,
+      Svariant,
+      productId,
+      variantId,
       products,
       updateFilter,
       configuration,
@@ -558,6 +630,8 @@ export default {
     async getVariants() {
       const productId = parseInt(this.$route.params.id);
       const variantId = this.$route.params.vid;
+      console.log('Product Id', productId);
+      console.log('Variant Id', variantId);
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {
@@ -1094,7 +1168,7 @@ tr:nth-child(even) {
 }
 </style>
 <style module>
-#limitedLines{
+#limitedLines {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;

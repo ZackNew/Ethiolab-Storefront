@@ -412,32 +412,47 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
-  data() {
-    return {
-      formPhoneNumber: '',
-      isPhoneValid : false,
-    };
-  },
-  methods: {
-    phoneInputHandler(payload) {
-      this.isPhoneValid = payload?.isValid;
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.data.fromPhone = this.formPhoneNumber;
-    },
-    validphone(){
-      if (!this.isPhoneValid) {
-        this.showToast('Please provide a valid phone number');
-        return;
-      } else {
-        this.send();
-      }
-    },
-  },
+  // data() {
+  //   return {
+  //     formPhoneNumber: '',
+  //     isPhoneValid : false,
+  //   };
+  // },
+  // methods: {
+  //   phoneInputHandler(payload) {
+  //     this.isPhoneValid = payload?.isValid;
+  //     this.formPhoneNumber = payload?.formattedNumber;
+  //     this.data.fromPhone = this.formPhoneNumber;
+  //   },
+  //   validphone(){
+  //     if (!this.isPhoneValid) {
+  //       this.showToast('Please provide a valid phone number');
+  //       return;
+  //     } else {
+  //       this.send();
+  //     }
+  //   },
+  // },
   setup() {
     const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
     const { writeQuote } = useQuote();
     const { isAuthenticated, load: loadUser, user } = useUser();
+    const isPhonevalid = ref(false);
+    const formPhoneNumber = ref('');
+    const phoneInputHandler =(paylod) =>{
+      isPhonevalid.value = paylod?.isValid;
+      formPhoneNumber.value = paylod?.formattedNumber;
+      data.value.fromPhone = formPhoneNumber.value;
+    }
+    const validphone = (send) => {
+      if (!isPhonevalid.value) {
+        showToast('Please provide a valid phone number');
+        return;
+      } else {
+        send();
+      }
+    }
     const data = ref({
       fromName: '',
       fromEmail: '',
@@ -461,7 +476,7 @@ export default {
         firstName: '',
         lastName: '',
       };
-      
+      formPhoneNumber.value = '';
     };
     if (isAuthenticated) {
       data.value.productDescr =
@@ -483,7 +498,7 @@ export default {
       showToast('Quote Sent!');
       resetForm();
     };
-    return { data, send, isDarkMode,showToast};
+    return { data, send, isDarkMode,showToast ,phoneInputHandler, validphone , formPhoneNumber};
   },
 };
 </script>
