@@ -130,7 +130,7 @@
         mention it here.
       </div>
       <ValidationObserver v-slot="{ handleSubmit }">
-        <form @submit.prevent="handleSubmit(send)">
+        <form @submit.prevent="handleSubmit(validphone(send))">
           <ValidationProvider
             name="fromEmail"
             rules="required|email"
@@ -236,6 +236,7 @@
               {{ errors[0] }}
             </h3>
           </ValidationProvider>
+          <ValidationProvider name="phone" slim>
           <label
             for="phoneNumber"
             class="text-sm uppercase"
@@ -246,12 +247,14 @@
             id="phoneNumber"
             @update="phoneInputHandler"
             required
-            color="#000000"
+            color="red"
+            :valid="isPhoneValid"
             v-model="formPhoneNumber"
             valid-color="#3860a7"
             default-country-code="ET"
             class="specialPhone form__element form__element--half form__element--half-even my-3 w-[80%]"
           />
+          </ValidationProvider>
           <!-- <SfInput
           label="Phone Number"
           class="form__element w-[80%]"
@@ -409,22 +412,47 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
-  data() {
-    return {
-      formPhoneNumber: '',
-    };
-  },
-  methods: {
-    phoneInputHandler(payload) {
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.data.fromPhone = this.formPhoneNumber;
-    },
-  },
+  // data() {
+  //   return {
+  //     formPhoneNumber: '',
+  //     isPhoneValid : false,
+  //   };
+  // },
+  // methods: {
+  //   phoneInputHandler(payload) {
+  //     this.isPhoneValid = payload?.isValid;
+  //     this.formPhoneNumber = payload?.formattedNumber;
+  //     this.data.fromPhone = this.formPhoneNumber;
+  //   },
+  //   validphone(){
+  //     if (!this.isPhoneValid) {
+  //       this.showToast('Please provide a valid phone number');
+  //       return;
+  //     } else {
+  //       this.send();
+  //     }
+  //   },
+  // },
   setup() {
     const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
     const { writeQuote } = useQuote();
     const { isAuthenticated, load: loadUser, user } = useUser();
+    const isPhonevalid = ref(false);
+    const formPhoneNumber = ref('');
+    const phoneInputHandler =(paylod) =>{
+      isPhonevalid.value = paylod?.isValid;
+      formPhoneNumber.value = paylod?.formattedNumber;
+      data.value.fromPhone = formPhoneNumber.value;
+    }
+    const validphone = (send) => {
+      if (!isPhonevalid.value) {
+        showToast('Please provide a valid phone number');
+        return;
+      } else {
+        send();
+      }
+    }
     const data = ref({
       fromName: '',
       fromEmail: '',
@@ -448,6 +476,7 @@ export default {
         firstName: '',
         lastName: '',
       };
+      formPhoneNumber.value = '';
     };
     if (isAuthenticated) {
       data.value.productDescr =
@@ -469,7 +498,7 @@ export default {
       showToast('Quote Sent!');
       resetForm();
     };
-    return { data, send, isDarkMode ,};
+    return { data, send, isDarkMode,showToast ,phoneInputHandler, validphone , formPhoneNumber};
   },
 };
 </script>

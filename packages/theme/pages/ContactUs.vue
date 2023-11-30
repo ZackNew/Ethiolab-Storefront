@@ -198,15 +198,38 @@
             <div class="form">
               <div class="form__action">
                 <button
-                  class="color-primary bg-secondary px-4 py-1 rounded text-white text-xl"
+                  :disabled="isloading"
+                  class="color-primary bg-secondary px-4 py-1 rounded text-white text-xl flex justify-center items-center"
                   :aria-disabled="false"
                   :link="null"
                   type="submit"
                 >
-                  Submit
+                  <svg
+                    v-if="isloading"
+                    class="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  <span v-else> Submit</span>
                 </button>
               </div>
               <p v-if="errorMessage">{{ errorMessage }}</p>
+             
             </div>
           </form>
         </ValidationObserver>
@@ -389,26 +412,27 @@ export default {
       return name;
     },
   },
-  data() {
-    return {
-      formPhoneNumber: '',
-      isPhoneNumberValid: false,
-    };
-  },
-  methods: {
-    phoneInputHandler(payload) {
-      this.isPhoneNumberValid = payload?.isValid;
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.form.phoneNumber = this.formPhoneNumber;
-    },
-    submitForm() {
-      if (!this.isPhoneNumberValid) {
-        return;
-      } else {
-        this.sendMessage();
-      }
-    },
-  },
+  // data() {
+  //   return {
+  //     formPhoneNumber: '',
+  //     isPhoneNumberValid: false,
+  //   };
+  // },
+  // methods: {
+  //   phoneInputHandler(payload) {
+  //     this.isPhoneNumberValid = payload?.isValid;
+  //     this.formPhoneNumber = payload?.formattedNumber;
+  //     this.form.phoneNumber = this.formPhoneNumber;
+  //   },
+  //   submitForm() {
+  //     if (!this.isPhoneNumberValid) {
+  //       this.showToast('Please Enter Valid Phone Number');
+  //       return;
+  //     } else {
+  //       this.sendMessage();
+  //     }
+  //   },
+  // },
   setup(_, { root }) {
     const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
@@ -418,7 +442,22 @@ export default {
     const errorMessage = ref('');
     const { sendContactUs } = useContactUs();
     const { setTinNumber } = useTinNumber();
-
+    const isPhoneNumberValid = ref(false);
+    const formPhoneNumber = ref('');
+    const phoneInputHandler = (payload) => {
+      isPhoneNumberValid.value = payload?.isValid;
+      formPhoneNumber.value = payload?.formattedNumber;
+      form.value.phoneNumber = formPhoneNumber.value;
+    };
+    const submitForm = (sendMessage) => {
+      if (!isPhoneNumberValid.value) {
+        showToast('Please Enter Valid Phone Number');
+        return;
+      } else {
+        sendMessage();
+      }
+    };
+    const isloading = ref(false);
     const form = ref({
       firstName: '',
       lastName: '',
@@ -429,7 +468,7 @@ export default {
       customerName: '',
     });
     let formattedMessage = '';
-    
+
     const resetForm = () => {
       form.value.firstName = '';
       form.value.lastName = '';
@@ -438,6 +477,7 @@ export default {
       form.value.message = '';
       form.value.customerEmail = '';
       form.value.customerName = '';
+      formPhoneNumber.value = '';
     };
 
     const generateCSRFToken = () => {
@@ -453,6 +493,7 @@ export default {
     };
 
     const sendMessage = async (csrfToken) => {
+      isloading.value = true;
       // sendContactUs({
       //   phone_number: form.value.phoneNumber,
       //   first_name: form.value.firstName,
@@ -507,8 +548,8 @@ export default {
 
       await axios.post('/api/shop', body, options);
       showToast('Your Message Is SuccessFully Sent!');
+      isloading.value = false;
       resetForm();
-      
 
       //setTinNumber({tinNumber: '09ddsifdilsjfdis'});
       // const mutation = gql`
@@ -552,6 +593,12 @@ export default {
       errorMessage,
       sendMessage,
       formattedMessage,
+      showToast,
+      phoneInputHandler,
+      isPhoneNumberValid,
+      submitForm,
+      formPhoneNumber,
+      isloading,
     };
   },
 };

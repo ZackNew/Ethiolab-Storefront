@@ -192,8 +192,8 @@
             :key="variant.id"
             class="mb-4"
           >
-            <SfTableData class="justify-center items-center">
-              <div class="justify-center items-center my-4">
+            <SfTableData class="flex justify-center items-center">
+              <div class="flex justify-center items-center my-4">
                 <div v-if="variant.featuredAsset" class="ml-2">
                   <img
                     :src="variant.featuredAsset.preview"

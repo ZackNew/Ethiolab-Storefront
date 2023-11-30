@@ -25,7 +25,7 @@
       <div class="form__radio-group">
         <SfRadio
           v-e2e="'shipping-method-label'"
-          v-for="method in state"
+          v-for="method in filteredMethods"
           :key="method.id"
           :label="method.name"
           :value="method.id"
@@ -117,7 +117,6 @@ export default {
     } = useShippingProvider();
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const selectedShippingMethod = ref(null);
-
     const error = reactive({
       loadMethods: null,
     });
@@ -150,6 +149,11 @@ export default {
       loadingShippingProvider,
       state,
     };
+  },
+  computed: {
+    filteredMethods() {
+      return this.state ? this.state.filter(method => method.name !== 'self pickup') : [];
+    },
   },
 };
 </script>

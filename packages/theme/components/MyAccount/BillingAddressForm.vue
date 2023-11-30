@@ -81,7 +81,7 @@
           <SfInput
             v-model="form.streetNumber"
             name="apartment"
-            :label="$t('Woreda')"
+            :label="$t('CompanyName')"
             :valid="!errors[0]"
             :errorMessage="errors[0]"
           />
@@ -110,30 +110,34 @@
           />
         </ValidationProvider>
       </div>
+      <!-- <div class="form__horizontal">
+         <ValidationProvider  v-slot="{ errors }" class="form__element">
+          <SfInput
+            v-model="form.postalCode"
+            name="Company"
+            :label="$t('Company')"
+            :valid="!errors[0]"
+            :errorMessage="errors[0]"
+          />
+        </ValidationProvider> -->
+
+      <!-- </div> -->
       <div class="form__horizontal">
         <ValidationProvider
           rules="required"
           v-slot="{ errors }"
           class="form__element"
         >
-          <!-- <SfInput
-            type="number"
-            v-model="form.phone"
-            name="phone"
-            :label="$t('Phone number')"
-            required
-            :valid="!errors[0]"
-            :errorMessage="errors[0]"
-          /> -->
           <VuePhoneNumberInput
             required
             color="red"
             valid-color="#3860a7"
-            :valid = isPhoneValid
+            :valid="isPhoneValid"
             default-country-code="ET"
             :errorMessage="errors[0]"
             v-model="formPhoneNumber"
             @update="phoneInputHandler"
+            class="w-[100%]"
           />
         </ValidationProvider>
         <ValidationProvider v-slot="{ errors }" class="form__element">
@@ -236,8 +240,7 @@ export default {
     validphone(submitForm) {
       if (!this.isPhoneValid) {
         return;
-      }
-      else {
+      } else {
         submitForm();
       }
     },

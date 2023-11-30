@@ -7,7 +7,7 @@
         class="sf-heading--left sf-heading--no-underline title"
       />
       <h3 class="my-4">Billing</h3>
-      <form @submit.prevent="handleSubmit(handleFormSubmit)">
+      <form @submit.prevent="handleSubmit(validphone(handleFormSubmit))">
         <SfCheckbox
           v-e2e="'copy-address'"
           :selected="sameAsShipping"
@@ -82,7 +82,8 @@
             <VuePhoneNumberInput
               @update="phoneInputHandler"
               required
-              color="#000000"
+              color="red"
+              :valid="isPhoneValid"
               v-model="formPhoneNumber"
               valid-color="#3860a7"
               default-country-code="ET"
@@ -133,7 +134,7 @@ import {
   SfRadio,
   SfCheckbox,
 } from '@storefront-ui/vue';
-import { ref, onMounted } from '@vue/composition-api';
+import { ref, onMounted ,inject} from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import {
   useBilling,
@@ -193,6 +194,7 @@ export default {
   //   this.formPhoneNumber = this.billingDetails.phone || '';
   // },
   setup(props, context) {
+    const isPhoneValid = ref(false);
     const { load, save, billing } = useBilling();
     const { cart, load: loadCart, setCart, applyCoupon } = useCart();
     const { shipping: shippingDetails, load: loadShipping } = useShipping();
@@ -200,6 +202,7 @@ export default {
     const billingDetails = ref(billing.value || {});
     const formPhoneNumber = ref('');
     let oldBilling = null;
+    const showToast = inject('showToast');
 
     const sameAsShipping = ref(false);
 
@@ -222,9 +225,11 @@ export default {
 
     const phoneInputHandler = (payload) => {
       formPhoneNumber.value = payload?.formattedNumber;
+      isPhoneValid.value = payload?.isValid;
       billingDetails.value = {
         ...billingDetails.value,
         phone: formPhoneNumber.value,
+      
       };
     };
 
@@ -273,6 +278,14 @@ export default {
       billingDetails.value.streetLine1 =
         cart.value?.customer?.customFields?.tin_number;
     });
+    const validphone = (handleFormSubmit) => {
+      if (!isPhoneValid.value) {
+        showToast('Please provide a valid phone number');
+        return;
+      } else {
+        handleFormSubmit();
+      }
+    };
 
     return {
       form,
@@ -283,6 +296,8 @@ export default {
       billingDetails,
       phoneInputHandler,
       formPhoneNumber,
+      validphone,
+      isPhoneValid,
     };
   },
 };

@@ -106,14 +106,14 @@
         </div>
       </div>
 
-      <div v-if="this.products.length !== 0" class="md:mt-14 mt-3 wrapsm">
+      <div v-if="this.recentlyViewd.length !==0" class="md:mt-14 mt-3 wrapsm">
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
             <h1 class="md:text-3xl text-secondary">Recently Viewed Products</h1>
           </div>
         </LazyHydrate>
         <LazyHydrate when-visible>
-          <div v-if="this.products.length !== 0">
+          <div v-if="this.recentlyViewd.length !==0">
             <VueSlickCarousel
               class="carousel-wrapper"
               v-bind="settings"
@@ -154,29 +154,29 @@
                   </svg>
                 </div>
               </template>
-              <div v-for="product in this.products" :key="product._id">
+              <div v-for="product in recentlyViewd" :key="product.id">
                 <RVPCard
-                  :title="productGetters.getName(product)"
+                  :title="product.name"
                   :image="
-                    productGetters.getCoverImage(product) === ''
+                      product.images[0] === 'undefined' || product.images[0] === ''
                       ? 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=740'
-                      : productGetters.getCoverImage(product)
+                      : product.images[0]
                   "
                   :regular-price="
-                    String(product.price.min || product.price.value).slice(
+                    String(product.price || product.price.value).slice(
                       0,
                       -2
                     ) +
                     '.' +
-                    String(product.price.min || product.price.value).slice(-2) +
+                    String(product.price || product.price.value).slice(-2) +
                     ' ETB'
                   "
                   :imageHeight="290"
                   :imageWidth="500"
                   :alt="productGetters.getName(product)"
-                  :score-rating="productGetters.getAverageRating(product)"
+                  :score-rating="product.rating"
                   :show-add-to-cart-button="true"
-                  :isInWishlist="isInWishlist({ product })"
+                  :isInWishlist="product.isInWishlist"
                   :isAddedToCart="isInCart({ product })"
                   :link="localePath(`/v/${productGetters.getSlug(product)}`)"
                   @click:wishlist="
@@ -190,46 +190,6 @@
               </div>
             </VueSlickCarousel>
           </div>
-          <!-- <Carousel
-            class="carousel mt-2"
-            :settings="{
-              type: 'slider',
-              rewind: true,
-              perView: 3,
-              slidePerPage: true,
-              breakpoints: { 1023: { peek: 0, perView: 1 } },
-            }"
-          >
-            <SfCarouselItem
-              class="carousel__item border-0 rounded-lg drop-shadow-md product-card ml-2 w-40 md:w-48"
-              v-for="(product, i) in this.products"
-              :key="i"
-            >
-              <RVPCard
-                :title="productGetters.getName(product)"
-                :image="productGetters.getCoverImage(product)"
-                :regular-price="
-                  productGetters.getPrice(product).regular.toLocaleString() +
-                  ' ETB'
-                "
-                imageHeight="10rem"
-                :alt="productGetters.getName(product)"
-                :score-rating="productGetters.getAverageRating(product)"
-                :show-add-to-cart-button="true"
-                :isInWishlist="isInWishlist({ product })"
-                :isAddedToCart="isInCart({ product })"
-                :link="localePath(`/v/${productGetters.getSlug(product)}`)"
-                @click:wishlist="
-                  !isInWishlist({ product })
-                    ? addItemToWishlist({ product })
-                    : removeItemFromWishlist({ product })
-                "
-                @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-                class="carousel__item__product w-72"
-                style="border-radius: 15px"
-              />
-            </SfCarouselItem>
-          </Carousel> -->
         </LazyHydrate>
       </div>
       <!-- <top-section></top-section> -->
@@ -596,16 +556,12 @@ export default {
         .catch((err) => '');
     },
   },
-
   setup(_, { root }) {
     const { user, load: loadUser, isAuthenticated } = useUser();
     const baseUrl = process.env.GRAPHQL_API;
     const path = baseUrl.split('/shop-api')[0] + '/assets/';
     const showToast = inject('showToast');
-     const {
-      toggleNewsletterModal,
-  
-     } = useUiState();
+    const { toggleNewsletterModal } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
     const {
@@ -622,6 +578,25 @@ export default {
     } = useWishlist();
     const { result } = useFacet();
     const products = computed(() => result.value.data?.items);
+    // const processedProducts = computed(() => {
+    //   let product = [];
+    //   for (let i = 0; i < recentlyViewd.value.length; i++) {
+    //     product.push(recentlyViewd.value[i].product);
+    //   }
+    //   return product.map((product) => ({
+    //     id: product.id,
+    //     name: productGetters.getName(product),
+    //     coverImage: product.image,
+    //     averageRating: productGetters.getAverageRating(product),
+    //     slug: productGetters.getSlug(product),
+    //     isInWishlist: isInWishlist({ product }),
+    //     isInCart: isInCart({ product }),
+    //     price: product.price,
+    //   }));
+    // });
+    const recentlyViewd = computed(
+      () => root.$store.state.recently.recently
+    );
     loadUser();
     const { writeQuote, load, myQuotes } = useQuote();
 
@@ -693,7 +668,7 @@ export default {
     //     })
     //     .catch((err) => {});
     // };
-    // const getChatMessage = async () => 
+    // const getChatMessage = async () =>
     // {
     //    toggleMessageSidebar();
     //   let id = 1;
@@ -740,7 +715,6 @@ export default {
     //   for (let i = 0; i < mes.length; i++) {
     //     ids.push(mes[i].id);
     //   }
-    
 
     //   const body = {
     //     query: `mutation makeSeenByUser($ids: [ID]! ) {
@@ -790,7 +764,7 @@ export default {
     //   }
     // };
 
-    const onSubscribe = ({ emailAddress ,FullName ,CompanyName, event }) => {
+    const onSubscribe = ({ emailAddress, FullName, CompanyName, event }) => {
       const body = {
         query: `mutation MyMutation
                   ($email: String!, $name: String!, $companyName: String!)
@@ -835,7 +809,7 @@ export default {
       const cartBefore = cart.value;
       addItemToCart({
         product: {
-          _variantId: product?.productVariantId,
+          _variantId: product?.productVariantId || product?._variantId,
         },
         quantity: quantity,
       }).then((res) => {
@@ -862,9 +836,11 @@ export default {
       localStorage.setItem('sort', 'Select Sorting');
     });
 
-   // onUnmounted(() => clearInterval(intervalId));
+    // onUnmounted(() => clearInterval(intervalId));
     return {
       productGetters,
+      recentlyViewd,
+      // processedProducts,
       tabs,
       toggleWishlist,
       toggleNewsletterModal,
@@ -894,7 +870,7 @@ export default {
       // messages,
       //unseen,
       //handleMessageOpen,
-      //handleCancelOrder,  
+      //handleCancelOrder,
       // getChatMessage,
     };
   },

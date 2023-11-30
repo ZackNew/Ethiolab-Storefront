@@ -946,6 +946,15 @@ export default {
           return prod;
         });
         this.allProducts = products;
+        let newArray = []
+        if(this.allProducts.length >= 10){
+         newArray = this.allProducts.slice(0,10)
+        }
+        else 
+        {
+          newArray = this.allProducts.concat(this.$store.state.recently.recently).slice(0,10);
+        }
+        this.$store.dispatch('recently/setRecentlyViewd',newArray);
         const pbaseUrl = process.env.GRAPHQL_API;
         const poptions = {
           headers: {

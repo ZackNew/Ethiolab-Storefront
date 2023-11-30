@@ -91,7 +91,7 @@
               @update="phoneInputHandler"
               required
               color="red"
-              :valid = isPhoneValid
+              :valid="isPhoneValid"
               v-model="formPhoneNumber"
               valid-color="#3860a7"
               default-country-code="ET"
@@ -298,7 +298,7 @@ export default {
     const validphone = (handleFormSubmit) => {
       if (!isPhoneValid.value) {
         showToast('Please provide a valid phone number');
-        return
+        return;
       } else {
         handleFormSubmit();
       }
@@ -359,6 +359,7 @@ export default {
       setCity,
       isSelfPickup,
       validphone,
+      isPhoneValid,
     };
   },
 };

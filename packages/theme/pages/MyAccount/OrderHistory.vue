@@ -96,13 +96,15 @@
                 <SfTableData v-e2e="'order-number'">{{
                   order.code
                 }}</SfTableData>
-                <SfTableData>{{ orderGetters.getDate(order) }}</SfTableData>
+                <SfTableData>{{
+                  formatDate(orderGetters.getDate(order))
+                }}</SfTableData>
                 <SfTableData>{{
                   orderGetters.getPrice(order).toLocaleString() + ' ETB'
                 }}</SfTableData>
                 <SfTableData>
                   <span :class="getStatusTextClass(order)">{{
-                    orderGetters.getStatus(order)
+                    convertCamelToNormal(orderGetters.getStatus(order))
                   }}</span>
                 </SfTableData>
                 <SfTableData class="orders__view orders__element--right">
@@ -162,7 +164,7 @@
           </SfTableHeading>
           <SfTableRow v-for="(invoice, index) in invoices" :key="index">
             <SfTableData>{{ invoice.invoiceNumber }}</SfTableData>
-            <SfTableData>{{ invoice.createdAt }}</SfTableData>
+            <SfTableData>{{ formatDate(invoice.createdAt) }}</SfTableData>
             <SfTableData>{{ invoice.orderCode }}</SfTableData>
             <!-- <SfTableData>Message: {{quote.msg}}</SfTableData> -->
             <SfTableData>
@@ -240,6 +242,10 @@ export default {
   },
 
   methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return new Date(date).toLocaleDateString();
+    },
     async openPDF(link) {
       const url =
         process.env.GRAPHQL_API?.split('/shop-api')[0] +
@@ -268,6 +274,15 @@ export default {
       //   downloadLink.click();
       // });
     },
+    convertCamelToNormal(camelCaseString) {
+  // Split the camelCaseString by uppercase letters
+    let words = camelCaseString.replace(/([a-z])([A-Z])/g, '$1 $2').split(/(?=[A-Z])/);
+  
+  // Convert each word to lowercase and join with spaces
+   let normalString = words.map(word => word.toLowerCase()).join(' ');
+  
+  return normalString;
+},
   },
 
   setup(props, { root }) {
