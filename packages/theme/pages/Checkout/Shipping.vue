@@ -359,6 +359,7 @@ export default {
       setCity,
       isSelfPickup,
       validphone,
+      isPhoneValid,
     };
   },
 };

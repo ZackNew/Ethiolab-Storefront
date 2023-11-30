@@ -134,7 +134,7 @@ import {
   SfRadio,
   SfCheckbox,
 } from '@storefront-ui/vue';
-import { ref, onMounted } from '@vue/composition-api';
+import { ref, onMounted ,inject} from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import {
   useBilling,
@@ -202,6 +202,7 @@ export default {
     const billingDetails = ref(billing.value || {});
     const formPhoneNumber = ref('');
     let oldBilling = null;
+    const showToast = inject('showToast');
 
     const sameAsShipping = ref(false);
 
@@ -224,9 +225,11 @@ export default {
 
     const phoneInputHandler = (payload) => {
       formPhoneNumber.value = payload?.formattedNumber;
+      isPhoneValid.value = payload?.isValid;
       billingDetails.value = {
         ...billingDetails.value,
         phone: formPhoneNumber.value,
+      
       };
     };
 
@@ -294,6 +297,7 @@ export default {
       phoneInputHandler,
       formPhoneNumber,
       validphone,
+      isPhoneValid,
     };
   },
 };
