@@ -48,7 +48,7 @@
                   :color="!isDarkMode ? '#3860a7' : '#ffffff'"
                 />
               </SfButton>
-              <div class="inline-flex"
+              <div class="inline-fle sm:flex-col"
                 v-if="!isAuthenticated"
               >
                 <button

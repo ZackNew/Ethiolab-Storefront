@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="py-5 2xl:py-10 faq">
-      <div class="container px-4 mx-auto">
+      <div class="container px-4 mx-auto overflow-y-auto">
         <!-- <div class="mb-5 text-center">
           <h3 class="mt-4 text-5xl font-bold font-heading text-secondary">
             FAQ&apos;s
@@ -12,12 +12,14 @@
           title="FAQ"
           @click:change="changeActive"
           :active="activePage"
-          class="faqContentPages"
+          class="faqContentPages overflow-y-auto"
+          
         >
           <SfContentPage
             v-for="(category, i) in categories"
             :key="i"
             :title="category"
+            
           >
             <div v-if="loading">
               <Loading />
@@ -32,19 +34,22 @@
                 class="mb-4 px-4 lg:px-12 py-8 rounded-2xl darkAccordion"
                 :class="isDarkMode ? 'bg-[#182533]' : 'bg-white'"
               >
-                <SfAccordionItem header="Clothing" class="rounded-2xl">
+                <SfAccordionItem header="Clothing" class="test rounded-2xl"
+                >
                   <template #header="{ isOpen, accordionClick }">
                     <div
                       @click="accordionClick"
                       :style="{ cursor: 'pointer' }"
-                      class="flex justify-between"
+                      class="flex justify-between text-base"
+                      :class ="isDarkMode ? 'bg-[#182533]' : 'bg-white'"
                     >
                       <div class="flex">
-                        <span class="text-xl font-bold w-auto mr-8">{{
+                        <span class="text-xl font-sans font-bold w-auto mr-8"
+                        :class ="isDarkMode ? 'bg-[#182533]' : 'bg-white'">{{
                           index + 1
                         }}</span>
                         <h3
-                          class="text-xl font-bold"
+                          class="text-xl"
                           v-html="faq.question"
                         ></h3>
                       </div>
@@ -57,8 +62,8 @@
                       </span>
                     </div>
                   </template>
-                  <div class="mt-3 pl-5 ml-5">
-                    <p class="mb-4 text-xl" v-html="faq.answer"></p>
+                  <div class="font-sans mt-3 pl-5 ml-5">
+                    <p class="mb-4 text-base" v-html="faq.answer"></p>
                   </div>
                 </SfAccordionItem>
               </SfAccordion>
@@ -159,9 +164,6 @@ export default {
 .faq,
 h2 {
   color: var(--c-text);
-}
-
-.faq {
 }
 .accordion-bg {
   background-color: white;
