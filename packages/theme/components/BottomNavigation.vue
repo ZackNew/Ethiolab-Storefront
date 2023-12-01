@@ -14,18 +14,16 @@
       :label="$t('Menu')"
       @click="toggleMobileMenu"
     />
-    <div style="position: relative;">
-      <SfBadge v-if="wishlistTotalItems" class="sf-badge--dot wishlist-badge">{{
-        wishlistTotalItems
-      }}
+    <div style="position: relative">
+      <SfBadge v-if="wishlistTotalItems" class="sf-badge--dot wishlist-badge"
+        >{{ wishlistTotalItems }}
       </SfBadge>
-    <SfBottomNavigationItem
-      icon="heart"
-      size="20px"
-      :label="$t('Wishlist')"
-      @click="toggleWishlistSidebar"
-    /> 
-     
+      <SfBottomNavigationItem
+        icon="heart"
+        size="20px"
+        :label="$t('Wishlist')"
+        @click="toggleWishlistSidebar"
+      />
     </div>
     <SfBottomNavigationItem
       icon="profile"
@@ -34,18 +32,16 @@
       @click="handleAccountClick"
     />
     <!-- TODO: add logic for label - if on Home then Basket, if on PDC then AddToCart etc. -->
-     <div style="position: relative;">
-    <SfBadge
-                  v-if="cartTotalItems"
-                  class="sf-badge--number cart-badge"
-                  >{{ cartTotalItems }}</SfBadge
-                >
-    <SfBottomNavigationItem
-      :label="$t('Basket')"
-      icon="add_to_cart"
-      @click="toggleCartSidebar"
-    >
-      <!-- <template #icon>
+    <div style="position: relative">
+      <SfBadge v-if="cartTotalItems" class="sf-badge--number cart-badge">{{
+        cartTotalItems
+      }}</SfBadge>
+      <SfBottomNavigationItem
+        :label="$t('Basket')"
+        icon="add_to_cart"
+        @click="toggleCartSidebar"
+      >
+        <!-- <template #icon>
         <SfCircleIcon aria-label="Add to cart">
           <SfIcon
             icon="add_to_cart"
@@ -55,12 +51,12 @@
           />
         </SfCircleIcon>
       </template> -->
-    </SfBottomNavigationItem>
+      </SfBottomNavigationItem>
     </div>
-       <SfBottomNavigationItem
+    <SfBottomNavigationItem
       :label="$t('Chat')"
       icon="message"
-      @click= "$root.$emit('emitMessage')"
+      @click="$root.$emit('emitMessage')"
     >
       <template #icon>
         <SfCircleIcon aria-label="Message">
@@ -132,7 +128,7 @@ export default {
       const count = wishlistGetters.getTotalItems(wishlist.value);
       return count ? count.toString() : null;
     });
-       loadCart();
+    loadCart();
     const cartTotalItems = computed(() => {
       const count = cartGetters.getTotalItems(cart.value);
       return count ? count.toString() : null;
@@ -160,26 +156,26 @@ export default {
 .navigation-bottom {
   --bottom-navigation-z-index: 3;
 }
-.sf-bottom-navigation-item  {
+.sf-bottom-navigation-item {
   --icon-color: blue !important;
   color: blue !important;
 }
-  .wishlist-badge {
-    position: absolute;
-    bottom: 50%;
-    left: 40%;
-    color: red !important;
-    border-radius: 50%;
-    background-color: transparent !important;
-  }
-   .cart-badge {
-    position: absolute;
-    bottom: 58%;
-    left: 60%;
-    color: red !important;
-    border-radius: 50%;
-    background-color: transparent !important;
-  }
+.wishlist-badge {
+  position: absolute;
+  bottom: 50%;
+  left: 40%;
+  color: blue !important;
+  border-radius: 50%;
+  background-color: transparent !important;
+}
+.cart-badge {
+  position: absolute;
+  bottom: 58%;
+  left: 60%;
+  color: blue !important;
+  border-radius: 50%;
+  background-color: transparent !important;
+}
 // .sf-badge {
 //   position: relative;
 //   top: -8px;
