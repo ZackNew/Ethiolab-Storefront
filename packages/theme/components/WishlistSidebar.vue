@@ -43,15 +43,15 @@
                 @click:remove="removeFromList(product)"
                 class="collected-product sf-collected-product"
               >
-                <template #configuration> &nbsp; </template>
-                <template #input="{}">&nbsp;</template>
-                <template #actions>
+                <template #configuration>&nbsp; </template>
+                <template #input>
                   <SfButton
-                    @click="itemsToCart(product, 1)"
                     class="rounded bg-secondary mr-[2%]"
+                    @click="itemsToCart(product, 1)"
                     >Add To Cart</SfButton
-                  ></template
-                >
+                  >
+                </template>
+                <template #actions> &nbsp; </template>
               </SfCollectedProduct>
             </transition-group>
           </div>
@@ -267,7 +267,7 @@ export default {
       isInCart,
       cart,
       itemsToCart,
-     removeFromList,
+      removeFromList,
     };
   },
 };
