@@ -130,7 +130,7 @@
         mention it here.
       </div>
       <ValidationObserver v-slot="{ handleSubmit }">
-        <form @submit.prevent="handleSubmit(validphone(send))">
+        <form @submit.prevent="handleSubmit(send)">
           <ValidationProvider
             name="fromEmail"
             rules="required|email"
@@ -148,18 +148,21 @@
               for="email"
               class="text-sm uppercase"
               :class="isDarkMode ? 'text-white' : 'text-dark_accent'"
-              >Your Contact Email</label
+              >Your Contact Email
+              </label
             >
             <input
               id="email"
               type="text"
               v-model="data.fromEmail"
+              :valid="!errors[0]"
               class="w-[80%] mt-1 border text-sm px-1 py-2"
               :class="
                 isDarkMode
                   ? 'bg-dark_accent border-light_accent text-white'
                   : 'bg-light_accent border-dark_accent text-dark_accent'
               "
+              required
             />
             <h3 v-if="errors" class="text-[#dd0000] text-xs mt-1">
               {{ errors[0] }}
@@ -195,6 +198,7 @@
                   ? 'bg-dark_accent border-[#ffffff] text-white'
                   : 'bg-light_accent border-dark_accent text-dark_accent'
               "
+              required
             />
             <h3 v-if="errors" class="text-[#dd0000] text-xs mt-1">
               {{ errors[0] }}
@@ -236,7 +240,7 @@
               {{ errors[0] }}
             </h3>
           </ValidationProvider>
-          <ValidationProvider name="phone" slim>
+          <ValidationProvider name="phone" slim rules ="required" v-slot="{ errors }">
           <label
             for="phoneNumber"
             class="text-sm uppercase"
@@ -248,9 +252,10 @@
             @update="phoneInputHandler"
             required
             color="red"
-            :valid="isPhoneValid"
+            :valid="isPhonevalid"
             v-model="formPhoneNumber"
             valid-color="#3860a7"
+            :errorMessage="errors[0]"
             default-country-code="ET"
             class="specialPhone form__element form__element--half form__element--half-even my-3 w-[80%]"
           />
@@ -481,15 +486,20 @@ export default {
     if (isAuthenticated) {
       data.value.productDescr =
         user?.value?.emailAddress || data?.value?.fromEmail;
-    }
+    };
     const send = () => {
+      if (!isPhonevalid.value) {
+        showToast('Please provide a valid phone number');
+        return;
+      }
+      else {
       writeQuote({
         isSpecial: true,
         fromEmail: data.value.fromEmail,
         companyName: data.value.fromName,
         subject: data.value.subject,
         fromPhone: data.value.fromPhone,
-        msg: data.value.msg,
+        msg: data.value.msg.replace(/\n/g, '<br>'),
         location: data.value.location,
         productDescr: data.value.productDescr,
         firstName: data.value.firstName,
@@ -497,8 +507,10 @@ export default {
       });
       showToast('Quote Sent!');
       resetForm();
+    }
     };
-    return { data, send, isDarkMode,showToast ,phoneInputHandler, validphone , formPhoneNumber};
+
+    return { data, send, isDarkMode,showToast ,phoneInputHandler, validphone , formPhoneNumber, isPhonevalid};
   },
 };
 </script>

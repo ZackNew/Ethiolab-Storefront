@@ -96,7 +96,7 @@
                     <img
                       :src="imageUrl + sale.banner"
                       alt="image"
-                      class="min-w-[100%] md:min-w-[100%] max-h-[12rem] md:max-h-[8rem] min-h-[8rem] mt-4 md:mt-0"
+                      class="object-contain min-w-[100%] md:min-w-[100%] max-h-[12rem] md:max-h-[8rem] min-h-[8rem] mt-4 md:mt-0"
                     />
                   </nuxt-link>
                 </div>

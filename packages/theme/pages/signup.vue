@@ -16,7 +16,7 @@
           <h4 class="px-2 md:px-10 py-6 uppercase font-bold">Please Sign UP</h4>
 
           <ValidationObserver v-slot="{ handleSubmit }">
-            <form @submit.prevent="handleSubmit(validPhone(handleFormSubmit))">
+            <form @submit.prevent="handleSubmit(handleFormSubmit)">
               <div class="m-8">
                 <label
                   class="block text-secondary text-sm font-bold mb-2"
@@ -319,7 +319,7 @@
                     color="red"
                     valid-color="#3860a7"
                     default-country-code="ET"
-                    :valid= isPhoneNumberValid
+                    :valid="isValidPhone"
                     :errorMessage="errors[0]"
                     v-model="formPhoneNumber"
                     class="form__element form__element--half form__element--half-even"
@@ -1073,30 +1073,6 @@ export default defineComponent({
     VuePhoneNumberInput,
     RegisterMessage,
   },
-  data() {
-    return {
-      formPhoneNumber: '',
-      isValidPhone: false,
-    };
-  },
-  methods: {
-    phoneInputHandler(payload) {
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.form.phoneNumber = this.formPhoneNumber;
-      this.isValidPhone = payload?.isValid;
-    },
-    validPhone()
-    {
-      if(!this.isValidPhone)
-      {
-        return;
-      }
-      else
-      {
-        this.handleFormSubmit();
-      }
-    }
-  },
   setup(props, { root }) {
     let isLoading = ref(false);
     const show = ref(false);
@@ -1105,6 +1081,8 @@ export default defineComponent({
     const { isDarkMode } = useUiState();
     const showToast = inject('showToast');
     const isFormSubmitted = ref(false);
+    const formPhoneNumber = ref('');
+    const isValidPhone = ref(false);
     const {
       load: loadUser,
       register,
@@ -1113,7 +1091,6 @@ export default defineComponent({
       error: userError,
       user,
     } = useUser();
-
     const errorMessage = ref('');
     let isOrganization = ref(false);
     let isIndividual = ref(false);
@@ -1148,7 +1125,11 @@ export default defineComponent({
       ) {
         // if(form.value.company === )
         // showToast("Perfect!")
-
+        if (!isValidPhone.value) {
+          showToast('Please provide a valid phone number');
+          isLoading.value = false;
+          return;
+        }
         let pbody = {
           query: `mutation signUp(
                   $email: String!
@@ -1263,6 +1244,19 @@ export default defineComponent({
         isOrganization.value = false;
       }
     };
+    const phoneInputHandler = (payload) => {
+      formPhoneNumber.value = payload?.formattedNumber;
+      form.value.phoneNumber = formPhoneNumber;
+      isValidPhone.value = payload?.isValid;
+    };
+    // const validPhone = () => {
+    //   if (!isValidPhone.value) {
+    //     showToast('Please provide a valid phone number');
+    //     return;
+    //   } else {
+    //     handleFormSubmit();
+    //   }
+    // };
 
     onBeforeMount(async () => {
       await loadUser();
@@ -1287,6 +1281,10 @@ export default defineComponent({
       checkIndividual,
       isDarkMode,
       show,
+      phoneInputHandler,
+      // validPhone,
+      formPhoneNumber,
+      isValidPhone,
     };
   },
 });
@@ -1342,7 +1340,8 @@ input::-webkit-input-placeholder {
 
 .but {
   position: relative;
-  -webkit-transition-duration: 0.4s; /* Safari */
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
   transition-duration: 0.4s;
   text-decoration: none;
   overflow: hidden;
@@ -1360,14 +1359,12 @@ input::-webkit-input-placeholder {
   opacity: 0;
   transition: all 0.8s;
 }
-
 .but:active:after {
   padding: 0;
   margin: 0;
   opacity: 1;
   transition: 0s;
 }
-
 // .form__element {
 //     background-color: gold;
 //     height: 100%;
