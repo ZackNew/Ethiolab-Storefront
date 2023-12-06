@@ -92,7 +92,7 @@
     </div>
     <MessageSideBar
       v-if="isMessageSideBarOpen"
-      class="block w-[15rem] right-[2%] bottom-[6%] min-h-[70%] fixed z-[500] lg:w-[20rem] lg:right-[2%] lg:bottom-[6%] lg:min-h-[70%] lg:fixed lg:z-[500]"
+      class="block w-[15rem] right-[2%] bottom-[10%] min-h-[70%] fixed z-[500] lg:w-[20rem] lg:right-[2%] lg:bottom-[10%] lg:min-h-[70%] lg:fixed lg:z-[500]"
       @sendMessageToAdmin="sendMessageToAdmin"
       @submitt="gust"
       :messages="messages"

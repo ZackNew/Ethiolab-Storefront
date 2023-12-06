@@ -127,7 +127,8 @@ export default {
     const qTitle = ref(''),
       qEmail = ref(''),
       qBody = ref(''),
-      qPhone = ref('');
+      qPhone = ref(''),
+      formattedMessage = ref('');
     const cities = ['Addis Ababa', 'Adama', 'Mekele', 'Gondar', 'Bahir Dar'];
     const { cart } = useCart();
     const quoteCity = ref(cities[0]);
@@ -140,12 +141,13 @@ export default {
       return /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(
         str
       );
-    }
+    };
     const checkInputs = () => {
       isEmailValid.value = validateEmail(qEmail.value);
       isLocationValid.value = cities.indexOf(quoteCity.value) != -1;
       isPhoneValid.value = telephoneCheck(qPhone.value);
-      isMessageValid.value = qBody.value.length > 0;
+      isMessageValid.value = qBody.value.length > 0 ;
+      formattedMessage.value = qBody.value.length > 0 ? qBody.value.replace(/\n/g, '<br>') : '';
       isSubjectValid.value = qTitle.value.length > 0;
       isCompanyValid.value = qfromName.value.length > 0;
       
@@ -155,6 +157,8 @@ export default {
         isPhoneValid.value &&
         isLocationValid.value &&
         isEmailValid.value &&
+        isMessageValid.value &&
+        formattedMessage.value &&
         isCompanyValid.value
 
       );
@@ -178,9 +182,9 @@ export default {
       cart?.value?.lines.forEach((product) => {
         pIds.push(String(product?.productVariant?.id));
       });
-
+     
       writeQuote({
-        msg: qBody.value,
+        msg: formattedMessage.value,
         subject: qTitle.value,
         fromEmail: qEmail.value,
         fromPhone: qPhone.value,
@@ -212,6 +216,7 @@ export default {
       qPhone,
       cities,
       qfromName,
+      formattedMessage,
     };
   },
 };

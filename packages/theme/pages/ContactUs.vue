@@ -119,7 +119,7 @@
               <ValidationProvider name="companyName" v-slot="{ errors }" slim>
                 <SfInput
                   v-e2e="'customer-firstName'"
-                  v-model="form.customerName"
+                  v-model="form.companyName"
                   :label="$t('Company Name')"
                   name="company_name"
                   required
@@ -466,6 +466,7 @@ export default {
       message: '',
       customerEmail: '',
       customerName: '',
+      companyName: '',
     });
     let formattedMessage = '';
 
@@ -494,16 +495,6 @@ export default {
 
     const sendMessage = async (csrfToken) => {
       isloading.value = true;
-      // sendContactUs({
-      //   phone_number: form.value.phoneNumber,
-      //   first_name: form.value.firstName,
-      //   last_name: form.value.lastName,
-      //   email: form.value.emailAddress,
-      //   message: form.value.message,
-      //   customerName: form.value.customerName,
-      //   customerEmail: form.value.customerEmail,
-      //   csrfToken: form.value.csrfToken,
-      // });
       const formattedMessage = form.value.message.replace(/\n/g, '<br>');
       const body = {
         query: `mutation sendMessage(
@@ -512,6 +503,7 @@ export default {
           $last_name: String!
           $message: String!
           $email: String!
+          $companyName: String!
         ) {
           writeContactUsMessage(
             message: {
@@ -520,6 +512,7 @@ export default {
               lastName: $last_name
               phoneNumber: $phone_number
               message: $message
+              companyName: $companyName
             }
           ) {
             id
@@ -531,6 +524,7 @@ export default {
           last_name: form.value.lastName,
           email: form.value.emailAddress,
           message: formattedMessage,
+          companyName: form.value.companyName,
         },
         csrfToken: root.$store.state.csrfToken.csrfToken,
       };

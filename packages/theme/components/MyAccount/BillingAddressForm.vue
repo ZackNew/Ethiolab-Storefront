@@ -169,7 +169,7 @@ import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { SfInput, SfButton, SfSelect, SfCheckbox } from '@storefront-ui/vue';
 import { required, min, oneOf } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
-import { reactive, computed, watch } from '@vue/composition-api';
+import { reactive, computed, watch ,inject, ref} from '@vue/composition-api';
 import { COUNTRIES } from '~/helpers';
 import '@/helpers';
 
@@ -225,27 +225,23 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      formPhoneNumber: '',
-      isPhoneValid: false,
+  setup(props, { emit }) {
+    const showToast = inject('showToast');
+    const formPhoneNumber = ref('');
+    const isPhoneValid = ref(false);
+    const phoneInputHandler = (payload) => {
+      formPhoneNumber.value = payload?.formattedNumber;
+      form.phone = formPhoneNumber.value;
+      isPhoneValid.value = payload?.isValid;
     };
-  },
-  methods: {
-    phoneInputHandler(payload) {
-      this.formPhoneNumber = payload?.formattedNumber;
-      this.form.phone = this.formPhoneNumber;
-      this.isPhoneValid = payload?.isValid;
-    },
-    validphone(submitForm) {
-      if (!this.isPhoneValid) {
+    const validphone = (submitForm) => {
+      if (!isPhoneValid.value) {
+        showToast('Please enter a valid phone number');
         return;
       } else {
         submitForm();
       }
-    },
-  },
-  setup(props, { emit }) {
+    };
     const form = reactive({
       id: props.address.id,
       firstName: props.address.firstName,
@@ -300,6 +296,11 @@ export default {
       submitForm,
       countries: COUNTRIES,
       statesInSelectedCountry,
+      phoneInputHandler,
+      validphone,
+      formPhoneNumber,
+      isPhoneValid,
+      showToast,
     };
   },
 };
