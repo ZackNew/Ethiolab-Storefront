@@ -219,6 +219,8 @@ export default {
       };
       await axios.post('/api/shop', body, options).then((res) => {
         this.cities = res.data.data.data.shippingAvailableTo;
+        console.log("cities", this.cities);
+        console.log("res", res);
       });
     },
   },
