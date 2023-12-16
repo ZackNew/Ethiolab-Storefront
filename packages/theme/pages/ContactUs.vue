@@ -252,7 +252,7 @@
       >
         <div class="flex">
           <SfStore
-            picture="~/static/Logo.png"
+            picture="~/static/Logo.png" 
             :latlng="[location.latitude, location.longtude]"
             :pictureWidth="82"
             :pictureHeight="112"
