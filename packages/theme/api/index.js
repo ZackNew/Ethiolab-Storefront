@@ -61,7 +61,7 @@ app.post('/shop', async function (req, res) {
           res.status(200).json({ data: resp.data });
         })
         .catch((err) => {
-          res.send({ msg: '' });
+          res.send({ msg: err });
         });
     } catch (err) {
       res.send('');

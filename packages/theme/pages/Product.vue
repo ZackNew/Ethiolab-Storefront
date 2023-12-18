@@ -74,32 +74,36 @@
                 />
               </div>
 
-              <div class="flex mb-5 items-center">
-                <input
-                  min="1"
-                  class="max-w-[60px] h-12 text-center mr-4"
-                  :class="
-                    isDarkMode ? 'bg-[#182533] text-white' : 'bg-[#EBEBEB]'
-                  "
-                  v-model="qty"
-                  type="number"
-                />
-                <SfButton
-                  @click="addToCart($event, 'main')"
-                  class="rounded bg-secondary mr-[2%]"
-                  >Add to Cart</SfButton
-                >
+              <div class="flex mb-5 items-center justify-between">
+                <div class="flex items-center justify-between">
+                  <input
+                    min="1"
+                    class="max-w-[60px] h-12 text-center mr-4"
+                    :class="
+                      isDarkMode ? 'bg-[#182533] text-white' : 'bg-[#EBEBEB]'
+                    "
+                    v-model="qty"
+                    type="number"
+                  />
+                  <SfButton
+                    @click="addToCart($event, 'main')"
+                    class="rounded bg-secondary mr-[2%]"
+                    >Add to Cart</SfButton
+                  >
+                </div>
                 <button @click="addToCompareList" class="hidden md:block">
-                  <p class="text-secondary align-center mt-3 mr-2">
+                  <p class="text-secondary align-center mr-2 text-sm">
                     + Add to Compare List
                   </p>
                 </button>
-                <h1
-                  @click="togglewishlistt"
-                  class="mx-3 my-2 text-center text-xs md:text-sm text-secondary text-extralight"
+                <button
+                  @click="addVariantToWishlist(Svariant)"
+                  class="hidden md:block"
                 >
-                  <button>+ Add to Wishlist</button>
-                </h1>
+                  <p class="text-secondary align-center mr-2 text-sm">
+                    + Add to wishlist
+                  </p>
+                </button>
               </div>
               <div
                 v-if="Svariant.customFields"
@@ -354,63 +358,7 @@ export default {
     // const variantId = ref(null);
     const productId = context.root.$route.params.id;
     const variantId = context.root.$route.params.vid;
-    console.log("variantId",variantId);
     const Svariant = ref(null);
-    const togglewishlistt = () => {
-      if (
-        isInWishlist({
-          product: {
-            _variantId: variantId,
-            _id: productId,
-            name: Svariant.value.name,
-            slug: Svariant.value.name,
-            _categoriesRef: [],
-            _description: '',
-            rating: null,
-            images: Svariant.value.featuredAsset
-              ? [Svariant.value.featuredAsset.preview]
-              : undefined,
-          },
-        })
-      ) {
-        removeItemFromWishlist({
-          product: {
-            _variantId: variantId,
-            _id: productId,
-            name: Svariant.value.name,
-            price: Svariant.value.price,
-            slug: Svariant.value.name,
-            _categoriesRef: [],
-            _description: '',
-            rating: null,
-            images: Svariant.value.featuredAsset
-              ? [Svariant.value.featuredAsset.preview]
-              : undefined,
-          },
-        });
-      } else {
-        addItemToWishlist({
-          product :{
-            _variantId: variantId,
-            name: Svariant.value.name,
-            price: Svariant.value.price,
-            slug: Svariant.value.name,
-            _categoriesRef: [],
-            _description: '',
-            rating: null,
-            images: Svariant.value.featuredAsset
-              ? [Svariant.value.featuredAsset.preview]
-              : undefined,
-             _id: productId,
-          }
-        });
-        console.log("addItemToWishlist",product.value._variantId); 
-        console.log("VaruiantId",product.value); 
-        console.log("VaruihhhhhhhhhhhhhhhhhhhhantId",product.value._id);
-      }     
-      console.log("Logintnnnngngngng",id);
-      console.log("Logintnnnngngngng",vid);
-    };
     //console.log("Productsssssss",product);
     const showToast = inject('showToast');
     const { isDarkMode } = useUiState();
@@ -530,6 +478,29 @@ export default {
       window.history.pushState({}, '', url);
     };
 
+    const addVariantToWishlist = (variant) => {
+      console.log(context.root.$route.params.id);
+      console.log(variant);
+      const product = {
+        _id: context.root.$route.params?.id,
+        _variantId: context.root.$route.params?.vid,
+        _description: variant.customFields.description,
+        _categoriesRef: [''],
+        name: variant.name,
+        images: [variant?.assets[0]?.preview],
+        sku: '',
+        price: {
+          original: variant.price / 100,
+          current: variant.price / 100,
+        },
+        slug: '',
+        rating: 0,
+        options: [],
+      };
+      addItemToWishlist({ product });
+      context.root.$emit('emitWishList');
+    };
+
     const addToCart = (event, type) => {
       loadCart();
       const cartBefore = cart.value;
@@ -588,7 +559,6 @@ export default {
 
     //var reviewKey= ref(0);
     return {
-      togglewishlistt,
       Svariant,
       productId,
       variantId,
@@ -624,14 +594,14 @@ export default {
       removeItemFromWishlist,
       isInWishlist,
       isInCart,
+      addVariantToWishlist,
+      addItemToWishlist,
     };
   },
   methods: {
     async getVariants() {
       const productId = parseInt(this.$route.params.id);
       const variantId = this.$route.params.vid;
-      console.log('Product Id', productId);
-      console.log('Variant Id', variantId);
       const body = {
         query: `query productVariant($id: ID!, $eq: String!) {
                   product(id: $id) {

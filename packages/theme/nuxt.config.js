@@ -32,7 +32,7 @@ export default {
       },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/Favicon.ico' },
       {
         rel: 'preconnect',
         href: 'https://fonts.googleapis.com',

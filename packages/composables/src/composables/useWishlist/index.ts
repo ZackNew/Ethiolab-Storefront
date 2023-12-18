@@ -23,7 +23,7 @@ const params: UseWishlistFactoryParams<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addItem: async (context: Context, { product }) => {
     const wishlist = getWishlist();
-    wishlist?.push(product);
+    if (!wishlist.some((w) => w._id === product._id)) wishlist?.push(product);
     setWishlist(wishlist);
     return wishlist;
   },

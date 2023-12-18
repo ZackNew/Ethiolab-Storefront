@@ -130,6 +130,7 @@ import axios from 'axios';
 import MessageSideBar from '~/components/MessageSideBar.vue';
 import { userGetters } from '@vue-storefront/vendure';
 import { computed, watch } from '@vue/composition-api';
+import { SfButton } from '@storefront-ui/vue';
 
 export default {
   name: 'DefaultLayout',
@@ -149,6 +150,7 @@ export default {
     Toast,
     Top,
     MessageSideBar,
+    SfButton,
   },
   methods: {},
   setup() {

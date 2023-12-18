@@ -426,7 +426,7 @@ export default {
     display: none;
   }
   &__media {
-    background-image: url('~/static/icon.png');
+    background-image: url('~/static/Favicon.png');
     background-repeat: no-repeat; /* This prevents the image from repeating */
     background-size: contain;
     background-position: center;
