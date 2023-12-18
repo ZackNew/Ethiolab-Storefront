@@ -435,6 +435,61 @@
                     <h6 :class="isDarkMode ? 'text-white bg-dark_accent' : ''">
                       Availability: {{ variant.stockLevel }}
                     </h6>
+                    <div v-if="variant.accessories.length > 0">
+                      <div class="mt-[5%] ml-2">
+                        <input
+                          type="checkbox"
+                          v-model="isAccessories"
+                          class="mr-[3%]"
+                        />
+                        <h3 class="text-secondary font-bold text-lg">
+                          accessories
+                        </h3>
+                      </div>
+                      <hr class="mt-4" />
+                      <template v-if="isAccessories">
+                        <div
+                          v-for="(acc, i) in variant.accessories"
+                          :key="`'r' + ${i}`"
+                          class="mt-3 ml-2"
+                        >
+                          <div class="accessories">
+                            <input
+                              @change="accessoryClicked(acc.variants[0].id)"
+                              type="checkbox"
+                              class="mr-[3%]"
+                            />
+                            <nuxt-link :to="`/v/${acc.slug}`">
+                              <img
+                                :src="
+                                  acc.featuredAsset && acc.featuredAsset.preview
+                                "
+                                alt=""
+                                class="w-8 h-8 mr-2"
+                              />
+                            </nuxt-link>
+                            <nuxt-link :to="`/v/${acc.slug}`">
+                              <h4 class="text-secondary font-bold text-base">
+                                {{ acc.name }}
+                              </h4>
+                              <h5>
+                                For an additional
+                                {{
+                                  parseFloat(
+                                    String(acc.variants[0].price).slice(0, -2)
+                                  ).toLocaleString() +
+                                  '.' +
+                                  String(acc.variants[0].price).slice(-2) +
+                                  ' '
+                                }}
+                                ETB
+                              </h5>
+                            </nuxt-link>
+                          </div>
+                          <hr class="mt-2" />
+                        </div>
+                      </template>
+                    </div>
                     <hr
                       :class="isDarkMode ? 'bg-white ' : 'bg-bg_dark'"
                       class="my-4"
@@ -802,7 +857,7 @@ export default {
       return { link: link, documents: documents };
     },
   },
-  setup() {
+  setup(props, context) {
     const showToast = inject('showToast');
     const { user, isAuthenticated, load } = useUser();
     const { isDarkMode } = useUiState();
@@ -861,7 +916,7 @@ export default {
     //       await loadwishlist();
     //       wishlist.value = [...wishlist.value, wishlistProduct];
     //       showToast('Product added to wishlist!');
-          
+
     //       console.log('wishlistvalue', wishlist.value);
     //     })
     //     .catch((error) => {
@@ -869,9 +924,8 @@ export default {
     //     });
     // };
 
-    const addToCart = (e) => {
+    const addToCart = async (e) => {
       //loadCart();
-      const cartBefore = cart.value;
       const quantity =
         Number(e.target.parentElement.parentElement.firstChild.value) ||
         Number(
@@ -881,43 +935,90 @@ export default {
         e.target.parentElement.parentElement.firstChild.id ||
         e.target.parentElement.parentElement.parentElement.firstChild.id;
 
-      addItemToCart({
-        product: {
-          _variantId: variantId,
-        },
-        quantity: quantity,
-      }).then((res) => {
-        if (cart.value.errorCode && cart.value.errorCode != '') {
-          showToast(cart.value.message);
-          setCart(cart.value.order);
-        } else {
-          showToast('Product added to cart!');
-        }
-      });
-      let promises = [];
-      for (let vId of accessoriesToCart.value) {
-        let promise = addItemToCart({
+      if (accessoriesToCart.value.length) {
+        const variants = [];
+        accessoriesToCart.value.forEach((a) =>
+          variants.push({ accessoryId: a, quantity: 1 })
+        );
+        addItemToCart({
           product: {
-            _variantId: vId,
+            _variantId: variantId,
           },
-          quantity: 1,
+          quantity: quantity,
+        }).then((res) => {
+          multipleAddToCart(variants).then((res) => {
+            addItemToCart({
+              product: {
+                _variantId: variantId,
+              },
+              quantity: 0,
+            });
+          });
         });
-        promises.push(promise);
+        // loadCart();
+        // setCart();
+      } else {
+        addItemToCart({
+          product: {
+            _variantId: variantId,
+          },
+          quantity: quantity,
+        }).then((res) => {
+          if (cart.value.errorCode && cart.value.errorCode != '') {
+            showToast(cart.value.message);
+            setCart(cart.value.order);
+          } else {
+            showToast('Product added to cart!');
+          }
+        });
       }
-      Promise.all(promises).then(async () => {
-        setTimeout(async () => {
-          const newCart = await loadCart();
-          setCart(newCart.order);
-        }, 5000);
-      });
     };
+
+    const multipleAddToCart = async (variants) => {
+      const body = {
+        query: `mutation multipleAdd($input: [AccessoriesInput!]) {
+          addAccessoriesToOrder(input: $input) {
+            success
+          }
+        }
+        `,
+        variables: {
+          input: variants,
+        },
+
+        csrfToken: context.root.$store.state.csrfToken.csrfToken,
+      };
+      const token = CryptoJS.AES.encrypt(
+        context.root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios
+        .post('/api/shop', body, options)
+        .then(async (res) => {
+          if (res.data.data.data?.addAccessoriesToOrder?.success) {
+            loadCart();
+            console.log(cart.value);
+            setCart(cart.value);
+            showToast('Products added to cart');
+          }
+        })
+        .catch((err) => '');
+    };
+
     return {
       isInCart,
       addToCart,
-    //  isInWishlist,
-     // addToWishlist,
+      //  isInWishlist,
+      // addToWishlist,
       loadCart,
-    //  loadwishlist,
+      //  loadwishlist,
       isAuthenticated,
       isDarkMode,
       user,
