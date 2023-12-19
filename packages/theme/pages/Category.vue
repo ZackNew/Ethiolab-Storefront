@@ -215,7 +215,7 @@
                 />
                 <div class="w-full overflow-auto no-scrollbar">
                   <p
-                    class="py-4 ml-4 mr-4 text-secondary text-thin"
+                    class="py-4 ml-4 mr-4 text-secondary text-thin prose"
                     v-html="cat.description || `Category Description`"
                   ></p>
                 </div>

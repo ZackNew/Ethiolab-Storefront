@@ -23,7 +23,6 @@
       </ol>
     </nav>
     <div class="grid grid-cols-11 mt-6">
-
       <div class="col-span-3">
         <div
           class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded hidden md:block border-white overflow-auto top-[5%] no-scrollbar"
@@ -99,7 +98,7 @@
           <div class="rounded w-full overflow-auto no-scrollbar">
             <p
               :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
-              class="py-4 ml-4 mr-4 text-thin"
+              class="py-4 ml-4 mr-4 text-thin prose"
               v-html="description"
             ></p>
           </div>

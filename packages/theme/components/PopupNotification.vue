@@ -13,11 +13,11 @@
         <div class="flex outer-container">
           <div class="lg:p-8 mx-3 my-auto">
             <div
-              class="sf-heading__title uppercase tracking-wide text-5xl text-indigo-500 font-semibold text-gray-800"
+              class="sf-heading__title uppercase tracking-wide text-5xl text-indigo-500 font-semibold text-gray-800 prose"
               v-html="popupContent.content.title || 'Title'"
             ></div>
             <p
-              class="sf-heading__description text-justify mt-4 max-w-md text-slate-500"
+              class="sf-heading__description text-justify mt-4 max-w-md text-slate-500 prose"
               v-html="popupContent.content.description || 'kirubel'"
             ></p>
             <div class="flex justify-start">

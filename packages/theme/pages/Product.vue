@@ -107,7 +107,7 @@
               </div>
               <div
                 v-if="Svariant.customFields"
-                class="max-h-[20rem] overflow-hidden"
+                class="max-h-[20rem] overflow-hidden prose"
                 :class="isDarkMode ? 'text-white' : ''"
               >
                 <p
@@ -177,7 +177,7 @@
           "
         >
           <div
-            class="md:col-span-6"
+            class="md:col-span-6 prose"
             v-if="Svariant.customFields && Svariant.customFields.table"
           >
             <h3>Speciﬁcation and Description</h3>
@@ -191,7 +191,7 @@
             v-if="Svariant.customFields && Svariant.customFields.description"
           >
             <h3>More About this Item</h3>
-            <div v-if="Svariant.customFields">
+            <div v-if="Svariant.customFields" class="prose">
               <p
                 v-html="Svariant.customFields.description"
                 class="text-justify w-[100%]"

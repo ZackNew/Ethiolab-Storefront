@@ -37,7 +37,7 @@
           </div>
           <div class="h-3 text-3xl text-left quote">“</div>
           <p
-            class="px-4 text-center testimonies"
+            class="px-4 text-center testimonies prose"
             v-html="testimony.content"
           ></p>
           <div class="h-3 text-3xl text-right quote">”</div>
@@ -64,15 +64,15 @@ export default {
     SfCarousel,
     SfHeading,
     SfDivider,
-    VueSlickCarousel
+    VueSlickCarousel,
   },
   props: {
     testimonials: {
       type: Array,
       default() {
         return [];
-      }
-    }
+      },
+    },
   },
   setup(_, { root }) {
     const tes = ref([]);
@@ -90,7 +90,7 @@ export default {
             person_position
           }
         }`,
-        csrfToken: root.$store.state.csrfToken.csrfToken
+        csrfToken: root.$store.state.csrfToken.csrfToken,
       };
       const token = CryptoJS.AES.encrypt(
         root.$store.state.csrfToken.csrfToken,
@@ -100,8 +100,8 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          berta: token
-        }
+          berta: token,
+        },
       };
       axios
         .post('/api/shop', body, options)
@@ -112,7 +112,7 @@ export default {
               name: testimony.name,
               src: testimony.pic_location,
               content: testimony.msg,
-              title: testimony.person_position
+              title: testimony.person_position,
             };
           });
           tes.value = test;
@@ -123,7 +123,7 @@ export default {
 
     return {
       tes,
-      path
+      path,
     };
   },
   data() {
@@ -135,38 +135,38 @@ export default {
           title: 'Universal Hospital',
           name: 'John Person',
           content:
-            'I bought an ultrasound from Ethio Lab it is the best ultrasound ever. It is ULTRA SOUND'
+            'I bought an ultrasound from Ethio Lab it is the best ultrasound ever. It is ULTRA SOUND',
         },
         {
           title: 'AMIN Diagnostic',
           name: 'Jane Person',
           content:
-            'I bought Magnetic resonance imaging (MRI) from Ethio Lab it is the best MRI ever.Great!!!'
+            'I bought Magnetic resonance imaging (MRI) from Ethio Lab it is the best MRI ever.Great!!!',
         },
         {
           title: 'ARSHO Laboratories',
           name: 'Jack Person',
           content:
-            'I bought a microscope  from Ethio Lab it is the best microscope ever. I can see everything'
+            'I bought a microscope  from Ethio Lab it is the best microscope ever. I can see everything',
         },
         {
           title: 'Universal Hospital',
           name: 'John Person',
           content:
-            'I bought an ultrasound from Ethio Lab it is the best ultrasound ever. It is ULTRA SOUND'
+            'I bought an ultrasound from Ethio Lab it is the best ultrasound ever. It is ULTRA SOUND',
         },
         {
           title: 'AMIN Diagonistic',
           name: 'Jane Person',
           content:
-            'I bought Magnetic resonance imaging (MRI) from Ethio Lab it is the best MRI ever.Great!!!'
+            'I bought Magnetic resonance imaging (MRI) from Ethio Lab it is the best MRI ever.Great!!!',
         },
         {
           title: 'ARSHO Labratories',
           name: 'Jack Person',
           content:
-            'I bought a microscope  from Ethio Lab it is the best microscope ever. I can see everything'
-        }
+            'I bought a microscope  from Ethio Lab it is the best microscope ever. I can see everything',
+        },
       ],
       settings: {
         dots: true,
@@ -185,29 +185,29 @@ export default {
               slidesToShow: 3,
               slidesToScroll: 3,
               infinite: true,
-              dots: true
-            }
+              dots: true,
+            },
           },
           {
             breakpoint: 800,
             settings: {
               slidesToShow: 2,
               slidesToScroll: 2,
-              initialSlide: 2
-            }
+              initialSlide: 2,
+            },
           },
           {
             breakpoint: 480,
             settings: {
               slidesToShow: 1,
-              slidesToScroll: 1
-            }
-          }
-        ]
-      }
+              slidesToScroll: 1,
+            },
+          },
+        ],
+      },
     };
   },
-  methods: {}
+  methods: {},
 };
 </script>
 <style lang="scss" scoped>

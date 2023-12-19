@@ -59,7 +59,7 @@
       </slot>
     </div>
     <slot name="img-tag" /> -->
-    <div class="relative">
+    <div class="relative prose">
       <p v-html="description" class="absolute z-[1]"></p>
       <img :src="lastImage" alt="" class="absolute" />
     </div>

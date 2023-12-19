@@ -89,7 +89,7 @@
           <div class="w-full overflow-auto no-scrollbar">
             <p
               :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
-              class="py-4 ml-4 mr-4 text-thin"
+              class="py-4 ml-4 mr-4 text-thin prose"
               v-html="brand.description"
             ></p>
           </div>

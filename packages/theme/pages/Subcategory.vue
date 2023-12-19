@@ -89,7 +89,7 @@
             :src="categoryImg || '/categories/empty_image.png'"
             alt=""
           />
-          <div class="w-full overflow-auto no-scrollbar">
+          <div class="w-full overflow-auto no-scrollbar prose">
             <p class="py-4 ml-4 mr-4 text-thin" v-html="description"></p>
           </div>
         </div>
@@ -223,7 +223,9 @@
                         slug: product.slug,
                         _categoriesRef: [],
                         _description: '',
-                        images : product.featuredAsset ? [product.featuredAsset.preview] : undefined
+                        images: product.featuredAsset
+                          ? [product.featuredAsset.preview]
+                          : undefined,
                       },
                     })
                       ? addItemToWishlist({
@@ -235,7 +237,9 @@
                             slug: product.slug,
                             _categoriesRef: [],
                             _description: '',
-                            images : product.featuredAsset ? [product.featuredAsset.preview] : undefined
+                            images: product.featuredAsset
+                              ? [product.featuredAsset.preview]
+                              : undefined,
                           },
                         })
                       : removeItemFromWishlist({
@@ -247,7 +251,9 @@
                             slug: product.slug,
                             _categoriesRef: [],
                             _description: '',
-                            images : product.featuredAsset ? [product.featuredAsset.preview] : undefined
+                            images: product.featuredAsset
+                              ? [product.featuredAsset.preview]
+                              : undefined,
                           },
                         })
                   "

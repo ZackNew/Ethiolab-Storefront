@@ -106,14 +106,14 @@
         </div>
       </div>
 
-      <div v-if="this.recentlyViewd.length !==0" class="md:mt-14 mt-3 wrapsm">
+      <div v-if="this.recentlyViewd.length !== 0" class="md:mt-14 mt-3 wrapsm">
         <LazyHydrate when-visible>
           <div class="similar-products my-5 text-center">
             <h1 class="md:text-3xl text-secondary">Recently Viewed Products</h1>
           </div>
         </LazyHydrate>
         <LazyHydrate when-visible>
-          <div v-if="this.recentlyViewd.length !==0">
+          <div v-if="this.recentlyViewd.length !== 0">
             <VueSlickCarousel
               class="carousel-wrapper"
               v-bind="settings"
@@ -158,15 +158,13 @@
                 <RVPCard
                   :title="product.name"
                   :image="
-                      product.images[0] === 'undefined' || product.images[0] === ''
+                    product.images[0] === 'undefined' ||
+                    product.images[0] === ''
                       ? 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=740'
                       : product.images[0]
                   "
                   :regular-price="
-                    String(product.price || product.price.value).slice(
-                      0,
-                      -2
-                    ) +
+                    String(product.price || product.price.value).slice(0, -2) +
                     '.' +
                     String(product.price || product.price.value).slice(-2) +
                     ' ETB'
@@ -292,7 +290,7 @@
                 </p>
                 <div class="h-3 text-3xl text-left quote">“</div>
                 <p
-                  class="px-4 text-center testimonies"
+                  class="px-4 text-center testimonies prose"
                   v-html="testimony.content"
                 ></p>
                 <div class="h-3 text-3xl text-right quote">”</div>
@@ -594,9 +592,7 @@ export default {
     //     price: product.price,
     //   }));
     // });
-    const recentlyViewd = computed(
-      () => root.$store.state.recently.recently
-    );
+    const recentlyViewd = computed(() => root.$store.state.recently.recently);
     loadUser();
     const { writeQuote, load, myQuotes } = useQuote();
 

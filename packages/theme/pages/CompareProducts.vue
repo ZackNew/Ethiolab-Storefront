@@ -18,24 +18,33 @@
       </div> -->
       <div v-if="productsToCompare.length > 0">
         <table class="w-full table-fixed mt-5">
-          <tbody :class="isDarkMode ? 'bg-dark_accent text-dark_gray' : 'bg-[#EBEBEB]'">
+          <tbody
+            :class="
+              isDarkMode ? 'bg-dark_accent text-dark_gray' : 'bg-[#EBEBEB]'
+            "
+          >
             <tr class="border-b-2 align-top">
-              <th scope="row" class="px-4   ">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Images</h2>
               </th>
               <template v-for="product in productsToCompare">
                 <td class="py-4 px-4">
-                  <img :src="product.variantList.featuredAsset
-                    ? product.variantList.featuredAsset.preview
-                    : undefined || product.featuredAsset
-                      ? product.featuredAsset.preview
-                      : ''
-                    " alt="" class="object-cover w-36 h-36" />
+                  <img
+                    :src="
+                      product.variantList.featuredAsset
+                        ? product.variantList.featuredAsset.preview
+                        : undefined || product.featuredAsset
+                        ? product.featuredAsset.preview
+                        : ''
+                    "
+                    alt=""
+                    class="object-cover w-36 h-36"
+                  />
                 </td>
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="   px-4">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Name</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -47,7 +56,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="px-4   ">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">SKU</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -59,7 +68,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="   px-4">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Price</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -75,7 +84,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="   px-4">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Description</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -84,35 +93,55 @@
                     v-html="product.variantList.customFields.description || ''"
                     class="text-justify"
                   ></p> -->
-                  <truncate action-class="text-secondary" clamp="Show more" :length="120" less="Show Less" type="html"
-                    :text="product.variantList.customFields.description || ''" class="text-justify"></truncate>
+                  <truncate
+                    action-class="text-secondary"
+                    clamp="Show more"
+                    :length="120"
+                    less="Show Less"
+                    type="html"
+                    :text="product.variantList.customFields.description || ''"
+                    class="text-justify"
+                  ></truncate>
                 </td>
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="   px-4">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Rating</h2>
               </th>
               <template v-for="product in productsToCompare">
                 <td class="py-4 px-4">
-                  <SfRating class="ssf-product-card__rating" :max="5" :score="product.reviews.items[0]
-                    ? product.reviews.items[0].rating
-                    : 0
-                    " size="4xl" />
+                  <SfRating
+                    class="ssf-product-card__rating"
+                    :max="5"
+                    :score="
+                      product.reviews.items[0]
+                        ? product.reviews.items[0].rating
+                        : 0
+                    "
+                    size="4xl"
+                  />
                 </td>
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="   px-4">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Availability</h2>
               </th>
               <template v-for="product in productsToCompare">
-                <td v-if="product.customFields.is_order_based" class="p-4 text-secondary"><span>ORDER_BASED</span></td>
-                <td v-else class="p-4 text-secondary">{{ product.variantList.stockLevel }}</td>
+                <td
+                  v-if="product.customFields.is_order_based"
+                  class="p-4 text-secondary"
+                >
+                  <span>ORDER_BASED</span>
+                </td>
+                <td v-else class="p-4 text-secondary">
+                  {{ product.variantList.stockLevel }}
+                </td>
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="   px-4">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Accessories</h2>
               </th>
 
@@ -126,7 +155,7 @@
               </template>
             </tr>
             <tr class="align-top">
-              <th scope="row" class="   px-4">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold mt-3 text-left">Weight</h2>
               </th>
               <template v-for="product in productsToCompare">
@@ -138,12 +167,15 @@
               </template>
             </tr>
             <tr class="last-tr align-top">
-              <th scope="row" class="   px-4">
+              <th scope="row" class="px-4">
                 <h2 class="text-lg font-bold my-2 text-left">Specificaton</h2>
               </th>
               <template v-for="product in productsToCompare">
-                <td class="py-4 px-4">
-                  <p v-html="product.variantList.customFields.table" :class="classes.red"></p>
+                <td class="py-4 px-4 prose">
+                  <p
+                    v-html="product.variantList.customFields.table"
+                    :class="classes.red"
+                  ></p>
                 </td>
               </template>
             </tr>
@@ -168,7 +200,7 @@ export default {
   data() {
     return {
       loading: false,
-      productsToCompare: []
+      productsToCompare: [],
     };
   },
   created() {
@@ -182,12 +214,12 @@ export default {
   components: {
     SfRating,
     truncate,
-    Loading
+    Loading,
   },
   setup() {
     const { isDarkMode } = useUiState();
     return {
-      isDarkMode
+      isDarkMode,
     };
   },
   methods: {
@@ -246,7 +278,7 @@ export default {
         }
         `,
         variables: { in: productIds, eq: variantIds },
-        csrfToken: this.$store.state.csrfToken.csrfToken
+        csrfToken: this.$store.state.csrfToken.csrfToken,
         // variables: {
         //   in: ['11', '17'],
         //   eq: ['11', '27', '25', '26', '28'],
@@ -260,8 +292,8 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          berta: token
-        }
+          berta: token,
+        },
       };
       await axios.post('/api/shop', body, options).then((res) => {
         const result = res.data.data.data?.products?.items;
@@ -273,7 +305,7 @@ export default {
               featuredAsset: element?.featuredAsset,
               customFields: element?.customFields,
               reviews: element?.reviews,
-              variantList: element?.variantList?.items[0]
+              variantList: element?.variantList?.items[0],
             });
           } else if (element?.variantList?.items?.length >= 1) {
             element?.variantList?.items.forEach((e) => {
@@ -282,7 +314,7 @@ export default {
                 featuredAsset: element?.featuredAsset,
                 customFields: element?.customFields,
                 reviews: element?.reviews,
-                variantList: e
+                variantList: e,
               });
             });
           }
@@ -290,8 +322,8 @@ export default {
         this.productsToCompare = prod;
       });
       this.loading = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

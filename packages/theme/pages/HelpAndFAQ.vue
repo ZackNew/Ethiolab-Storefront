@@ -13,13 +13,11 @@
           @click:change="changeActive"
           :active="activePage"
           class="faqContentPages overflow-y-auto"
-          
         >
           <SfContentPage
             v-for="(category, i) in categories"
             :key="i"
             :title="category"
-            
           >
             <div v-if="loading">
               <Loading />
@@ -34,24 +32,21 @@
                 class="mb-4 px-4 lg:px-12 py-8 rounded-2xl darkAccordion"
                 :class="isDarkMode ? 'bg-[#182533]' : 'bg-white'"
               >
-                <SfAccordionItem header="Clothing" class="test rounded-2xl"
-                >
+                <SfAccordionItem header="Clothing" class="test rounded-2xl">
                   <template #header="{ isOpen, accordionClick }">
                     <div
                       @click="accordionClick"
                       :style="{ cursor: 'pointer' }"
                       class="flex justify-between text-base"
-                      :class ="isDarkMode ? 'bg-[#182533]' : 'bg-white'"
+                      :class="isDarkMode ? 'bg-[#182533]' : 'bg-white'"
                     >
                       <div class="flex">
-                        <span class="text-xl font-sans font-bold w-auto mr-8"
-                        :class ="isDarkMode ? 'bg-[#182533]' : 'bg-white'">{{
-                          index + 1
-                        }}</span>
-                        <h3
-                          class="text-xl"
-                          v-html="faq.question"
-                        ></h3>
+                        <span
+                          class="text-xl font-sans font-bold w-auto mr-8 prose"
+                          :class="isDarkMode ? 'bg-[#182533]' : 'bg-white'"
+                          >{{ index + 1 }}</span
+                        >
+                        <h3 class="text-xl prose" v-html="faq.question"></h3>
                       </div>
                       <span
                         class="sf-chevron"
@@ -62,7 +57,7 @@
                       </span>
                     </div>
                   </template>
-                  <div class="font-sans mt-3 pl-5 ml-5">
+                  <div class="font-sans mt-3 pl-5 ml-5 prose">
                     <p class="mb-4 text-base" v-html="faq.answer"></p>
                   </div>
                 </SfAccordionItem>
@@ -142,14 +137,17 @@ export default {
         });
         if (this.categories.length > 0) {
           this.activePage = this.categories[0];
-          this.contents = this.FAQs.filter(faq => faq.tags.some(tag => tag.tag === this.categories[0])
+          this.contents = this.FAQs.filter((faq) =>
+            faq.tags.some((tag) => tag.tag === this.categories[0])
           );
         }
       });
     },
     changeActive(title) {
       this.activePage = title;
-      this.contents = this.FAQs.filter(faq => faq.tags.some(tag => tag.tag === title));
+      this.contents = this.FAQs.filter((faq) =>
+        faq.tags.some((tag) => tag.tag === title)
+      );
     },
   },
   setup() {

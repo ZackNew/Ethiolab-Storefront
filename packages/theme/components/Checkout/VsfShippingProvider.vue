@@ -44,7 +44,7 @@
             </div>
           </template>
           <template #description="{ description }">
-            <div class="sf-radio__description shipping__description">
+            <div class="sf-radio__description shipping__description prose">
               <div class="shipping__info" v-html="description"></div>
             </div>
           </template>
@@ -152,7 +152,9 @@ export default {
   },
   computed: {
     filteredMethods() {
-      return this.state ? this.state.filter(method => method.name !== 'self pickup') : [];
+      return this.state
+        ? this.state.filter((method) => method.name !== 'self pickup')
+        : [];
     },
   },
 };

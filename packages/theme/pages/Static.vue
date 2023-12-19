@@ -14,7 +14,7 @@
         :key="key"
         :title="$t(page.name)"
       >
-        <div v-if="page.description">
+        <div v-if="page.description" class="prose">
           <p
             :class="isDarkMode ? 'darkVHtml' : ''"
             v-html="page.description[0]"

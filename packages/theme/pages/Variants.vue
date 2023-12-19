@@ -83,7 +83,7 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
-          <div :class="isDarkMode ? 'text-white' : ''">
+          <div class="prose" :class="isDarkMode ? 'text-white' : ''">
             <p
               class="text-justify my-4 space-y-4"
               :class="classes.red"
