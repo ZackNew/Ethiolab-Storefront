@@ -17,7 +17,7 @@
         <div v-else-if="!hasShippingMethods">
           {{
             $t(
-              'There are no shipping methods available for this country. We are sorry, please try with different country or later.'
+              'There are no shipping methods available for this location. We are sorry, please try with different location or later.'
             )
           }}
         </div>
@@ -45,7 +45,7 @@
           </template>
           <template #description="{ description }">
             <div class="sf-radio__description shipping__description prose">
-              <div class="shipping__info" v-html="description"></div>
+              <div class="shipping__info text-xs" v-html="description"></div>
             </div>
           </template>
         </SfRadio>

@@ -219,6 +219,7 @@ export default {
       };
       await axios.post('/api/shop', body, options).then((res) => {
         this.cities = res.data.data.data.shippingAvailableTo;
+        this.cities.push('other');
       });
     },
   },
@@ -308,7 +309,13 @@ export default {
       shouldDisplayButton.value = true;
     };
 
-    const setCity = (e, token) => {
+    const setCity = async (e, token) => {
+      if (isFormSubmitted.value) {
+        const orderAddress = mapAddressFormToOrderAddress(form.value);
+        await save({ shippingDetails: orderAddress });
+        isFormSubmitted.value = false;
+        shouldDisplayButton.value = false;
+      }
       cookieSetup.value = token;
       if (e.target.value === 'Self Pickup') {
         isSelfPickup.value = true;
