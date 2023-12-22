@@ -14,7 +14,7 @@
             )
           }}
         </div>
-        <div v-else-if="!hasShippingMethods">
+        <div v-else-if="hasNoShippingMethods == 1">
           {{
             $t(
               'There are no shipping methods available for this location. We are sorry, please try with different location or later.'
@@ -130,7 +130,9 @@ export default {
       emit('shippingMethodSelected', shippingMethod);
     };
 
-    const hasShippingMethods = computed(() => state?.value?.length);
+    const hasNoShippingMethods = computed(() => {
+      return state?.value?.length || (state?.value?.length == 1 && state.value[0].name !== 'self pickup')
+    });
 
     onMounted(async () => {
       await props.beforeLoad();
@@ -139,7 +141,7 @@ export default {
 
     return {
       shippingMethods,
-      hasShippingMethods,
+      hasNoShippingMethods,
       getCalculatedPrice,
       selectedShippingMethod,
       selectShippingMethod,
