@@ -48,20 +48,20 @@
                   :color="!isDarkMode ? '#3860a7' : '#ffffff'"
                 />
               </SfButton>
-              <div class="inline-fle sm:flex-col"
+              <div class="sm:flex-col"
                 v-if="!isAuthenticated"
               >
                 <button
                   v-e2e="'app-header-account'"
                   @click="handlelogin"
-                  class=" HeaderLogin pl-3 pr-1  hover:bg-gray-400 text-secondary  font-thin py-2  rounded-l"
+                  class="pl-3 pr-1 text-secondary font-thin py-2 rounded-l"
                 >
                   Login |
                 </button>
                 <button
                   v-e2e="'app-header-account'"
                   @click="handleregister"
-                  class="HeaderLogin pl-1 pr-1  hover:bg-gray-400 text-secondary font-thin py-2  rounded-r"
+                  class="pl-1 pr-1  text-secondary font-thin py-2 rounded-r"
                 >
                   Register
                 </button>
@@ -822,7 +822,4 @@ export default {
     // display: none;
   }
 }
-// .HeaderLogin{
-//   color: #3860A7;
-// }
 </style>
