@@ -37,11 +37,14 @@
             class="p-2 flex justify-between"
             :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
           >
-            <h3 class="text-secondary text-xl">
+            <h3 v-if="product.variantList.items[0].customFields.showprice"  class="text-secondary text-xl">
               <span class="font-semibold mr-1 p-2">Price : </span
               >{{ priceRange }} /
               {{ product.customFields.granularity }}
             </h3>
+            <h3 v-else class="text-secondary text-xl">
+              <span class="font-semibold mr-1 p-2">Unavailable Price : </span
+            ></h3>
             <img
               v-if="product.customFields.is_order_based"
               src="/OB.png"
@@ -234,7 +237,7 @@
               <div class="mt-6">
                 <div class="mx-2 items-center">
                   <div class="whitespace-nowrap mr-4">
-                    <h4 class="text-lg">
+                    <h4 v-if="variant.customFields.showprice"  class="text-lg">
                       {{
                         parseFloat(
                           String(variant.price).slice(0, -2)
@@ -245,9 +248,11 @@
                       }}
                       ETB / {{ product.customFields.granularity }}
                     </h4>
-                  </div>
+                  <h4 v-else class="text-lg">
+                      Unavailable</h4>
+                  </div> 
                   <div>
-                    <div class="flex">
+                    <div v-if="variant.customFields.showprice" class="flex">
                       <input
                         type="number"
                         min="1"
@@ -283,6 +288,18 @@
                         />
                       </button>
                     </div>
+                    <!-- <div v-else class="flex">
+                      <button
+                        :class="
+                          isDarkMode
+                            ? 'bg-[#d3e6fe] text-secondary'
+                            : 'bg-secondary text-white'
+                        "
+                        class="flex border border-secondary rounded-lg px-2 hover:scale-105"
+                      >
+                        <span class="mt-1"> Contact Us </span>
+                      </button>
+                    </div> -->
                     <!-- <button
                       @click="addToWishlist(product, variant.id)"
                       :class="
@@ -736,6 +753,9 @@ export default {
             variantList{
               totalItems
               items{
+                customFields {
+                    showprice
+                  }
                 id
                 sku
                 price

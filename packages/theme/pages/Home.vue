@@ -163,17 +163,34 @@
                       ? 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=740'
                       : product.images[0]
                   "
-                  :regular-price="
-                    String(product.price || product.price.value).slice(0, -2) +
-                    '.' +
-                    String(product.price || product.price.value).slice(-2) +
-                    ' ETB'
-                  "
+                 :regular-price="
+                      (() => {
+                        const index = product.itemsWithShowPrice.findIndex(item => item.showprice);
+                        // if(product.itemsWithShowPrice.every(item => item.showprice === false)) {
+                        //   return 'Unavailable';
+                        // }
+                         if(index !== -1 && product.price && product.price.length > index) {
+                          const price = product.price[index].price || product.price[index].value;
+                          return String(price).slice(0, -2) + '.' + String(price).slice(-2) + ' ETB';
+                        }
+                        else
+                        return 'Unavailable';
+                      })()
+                    "
                   :imageHeight="290"
                   :imageWidth="500"
                   :alt="productGetters.getName(product)"
                   :score-rating="product.rating"
-                  :show-add-to-cart-button="true"
+                  :show-add-to-cart-button="
+                      (()=>{
+                        const index = product.itemsWithShowPrice.findIndex(item => item.showprice);
+                        if(index !== -1)
+                        {
+                          return true;
+                        }
+                        else
+                          return false;
+                      })()"
                   :isInWishlist="product.isInWishlist"
                   :isAddedToCart="isInCart({ product })"
                   :link="localePath(`/v/${productGetters.getSlug(product)}`)"
@@ -593,9 +610,11 @@ export default {
     //   }));
     // });
     const recentlyViewd = computed(() => root.$store.state.recently.recently);
+    console.log("Recently Viewd PRODUCT",recentlyViewd.value);
+    // console.log("Checking The State",root.$store.state);
+    // console.log("Logging",recentlyViewd.value[0].itemsWithShowPrice);
     loadUser();
     const { writeQuote, load, myQuotes } = useQuote();
-
     const heroSection = computed(() =>
       JSON.parse(getCms.value[0]?.content ?? '{}')
     );
@@ -621,9 +640,7 @@ export default {
         return JSON.parse(pro ?? '{}');
       });
     }
-
     const imageUrl = String(process.env.GRAPHQL_API).split('/shop-api')[0];
-
     // const unseen = computed(
     //   () =>
     //     messages.value.filter(
@@ -759,7 +776,6 @@ export default {
     //     });
     //   }
     // };
-
     const onSubscribe = ({ emailAddress, FullName, CompanyName, event }) => {
       const body = {
         query: `mutation MyMutation
@@ -817,7 +833,6 @@ export default {
         }
       });
     };
-
     const toggleWishlist = (index) => {
       products.value[index].isInWishlist = !products.value[index].isInWishlist;
     };
@@ -831,7 +846,6 @@ export default {
     onMounted(() => {
       localStorage.setItem('sort', 'Select Sorting');
     });
-
     // onUnmounted(() => clearInterval(intervalId));
     return {
       productGetters,

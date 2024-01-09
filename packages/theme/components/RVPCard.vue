@@ -209,9 +209,10 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <p v-if="regularPrice" class="text-md mx-auto text-secondary font-bold">
-          {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }}
-        </p>
+        <p v-if="regularPrice === 'Unavailable'" class="text-md mx-auto text-secondary font-bold">
+            Unavailable Price </p>
+        <p v-else-if="regularPrice !== 'Unavailable'" class="text-md mx-auto text-secondary font-bold">
+          {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }} </p>
       </slot>
       <slot name="review" v-bind="{ maxRating, scoreRating }">
         <!--
@@ -238,7 +239,7 @@
         -->
       </slot>
     </div>
-    <slot
+    <slot v-if="showAddToCartButton"
       v-bind="{
         isAddedToCart,
         showAddedToCartBadge,
