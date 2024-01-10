@@ -143,26 +143,33 @@ export default {
   },
   computed: {
     prices() {
-      if (this.product?.variants.length === 1) {
-        const price = String(this.product?.variants[0]?.price);
-        const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
-        return fPrice;
-      }
-      if (this.product?.variants.length > 1) {
-        let items = this.product?.variants;
-        let prices = [];
-        items.forEach((item) => {
-          prices.push(item.price);
-        });
-        const max =
-          String(Math.max(...prices)).slice(0, -2) +
-          '.' +
-          String(Math.max(...prices)).slice(-2);
-        const min =
-          String(Math.min(...prices)).slice(0, -2) +
-          '.' +
-          String(Math.min(...prices)).slice(-2);
-        return [min, max];
+      const showprice = this.product.variants.findIndex(
+        (item) => item.customFields.showprice
+      );
+      if (showprice === -1) {
+        return;
+      } else {
+        if (this.product?.variants.length === 1) {
+          const price = String(this.product?.variants[0]?.price);
+          const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
+          return fPrice;
+        }
+        if (this.product?.variants.length > 1) {
+          let items = this.product?.variants;
+          let prices = [];
+          items.forEach((item) => {
+            item.customFields.showprice && prices.push(item.price);
+          });
+          const max =
+            String(Math.max(...prices)).slice(0, -2) +
+            '.' +
+            String(Math.max(...prices)).slice(-2);
+          const min =
+            String(Math.min(...prices)).slice(0, -2) +
+            '.' +
+            String(Math.min(...prices)).slice(-2);
+          return [min, max];
+        }
       }
     },
   },
@@ -199,7 +206,6 @@ export default {
       toastShower,
       maxPrice,
       minPrice,
-      
     };
   },
 };

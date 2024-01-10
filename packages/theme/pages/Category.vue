@@ -325,7 +325,16 @@
                     "
                     :imageHeight="290"
                     :imageWidth="500"
-                    :regular-price="product.price + ' ETB'"
+                    :regular-price="
+                    (()=> {
+                      const priceIndex = product.itemsWithShowPrice.findIndex(item => item.showprice);
+                      if (priceIndex !== -1) {
+                        return product.price[priceIndex].price + ' ETB';
+                      }
+                      else{
+                      return 'unavailable';}
+                    })()
+                    "
                     :max-rating="5"
                     :score-rating="product.rating ? product.rating : ''"
                     :variantId="product._variantId"
@@ -901,6 +910,13 @@ export default {
               customFields{
                 reviewRating
               }
+              variantList {
+                items {
+                  customFields {
+                    showprice
+                  }
+                }
+              }
             }
           }
         }`,
@@ -926,10 +942,18 @@ export default {
             cref.push(String(x?.id));
           });
           const image = [String(product?.featuredAsset?.preview)];
-          const price =
-            String(product?.variants[0]?.price).slice(0, -2) +
-            '.' +
-            String(product?.variants[0]?.price).slice(-2);
+          const price = product?.variants.map((item) => {
+            return {
+              price: String(item?.price).slice(0, -2) +
+                '.' +
+                String(item?.price).slice(-2),
+            };
+          });
+          const itemsWithShowPrice = product?.variantList?.items.map((item) => {
+                return{
+                  showprice:item?.customFields?.showprice,
+                };
+          });
           const prod = {
             _id: product?.id,
             _variantId: product?.variants[0]?.id,
@@ -942,10 +966,12 @@ export default {
             rating: product?.customFields?.reviewRating,
             isOrderBased: product?.customFields?.is_order_based,
             options: product?.optionGroups,
+            itemsWithShowPrice: itemsWithShowPrice,
           };
-          return prod;
+          return prod ;
         });
         this.allProducts = products;
+        console.log("all products",this.allProducts);
         let newArray = [];
         if (this.allProducts.length >= 10) {
           newArray = this.allProducts.slice(0, 10);

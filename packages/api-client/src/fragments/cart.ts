@@ -69,6 +69,9 @@ export const CartFragment = `
                         name
                     } 
                 }
+                customFields {
+                    showprice
+                  }
             }
             discounts {
                 amount

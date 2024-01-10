@@ -269,7 +269,10 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <p class="text-lg text-secondary">
+        <p v-if="regularPrice === 'unavailable'">
+          unavailable price
+        </p>
+        <p v-else  class="text-lg text-secondary">
           {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }}
         </p>
         <div class="sf-price"></div>

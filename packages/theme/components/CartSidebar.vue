@@ -30,14 +30,17 @@
                   :image="cartGetters.getItemImage(product)"
                   :title="cartGetters.getItemName(product)"
                   :regular-price="
+                  product.productVariant.customFields.showprice
+                    ?
                     cartGetters.getItemPrice(product).regular.toLocaleString() +
                     ' ETB'
+                    : 'Unavailable Price'
                   "
                   :stock="99999"
                   @click:remove="removeFromCart({ product })"
                   class="collected-product"
                 >
-                  <template #configuration>
+                  <!-- <template #configuration>
                     <div class="collected-product__properties">
                       <SfProperty
                         v-for="attribute in cartGetters.getItemOptions(product)"
@@ -46,7 +49,7 @@
                         :value="attribute.value"
                       />
                     </div>
-                  </template>
+                  </template> -->
                   <template #input>
                     <div class="sf-collected-product__quantity-wrapper">
                       <SfQuantitySelector
@@ -86,19 +89,21 @@
                 class="sf-property--full-width sf-property--large my-cart__total-price"
               >
                 <template #value>
-                  <SfPrice
+                  <SfPrice v-if="products.every(
+                     (product) => product.productVariant.customFields.showprice)"
                     :regular="totals.subtotal.toLocaleString() + ' ETB'"
                   />
                 </template>
               </SfProperty>
               <nuxt-link :to="localePath({ name: 'customer' })">
-                <SfButton
+                <SfButton v-if="products.every(
+                    (product) => product.productVariant.customFields.showprice)"
                   v-e2e="'go-to-checkout-btn'"
                   class="sf-button--full-width color-secondary"
                   @click="toggleCartSidebar"
                 >
                   {{ $t('Go to checkout') }}
-                </SfButton>
+                </SfButton> 
               </nuxt-link>
               <SfButton
                 class="sf-button--full-width color-secondary mt-3"
@@ -132,7 +137,7 @@ import {
   SfQuantitySelector,
   SfInput,
 } from '@storefront-ui/vue';
-import { computed, watchEffect, inject } from '@vue/composition-api';
+import { computed, watchEffect, inject ,onMounted } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/vendure';
 import { useUiState } from '~/composables';
 import { ref } from '@vue/composition-api';
