@@ -252,7 +252,7 @@
                       Unavailable</h4>
                   </div> 
                   <div>
-                    <div v-if="variant.customFields.showprice" class="flex">
+                    <div  class="flex">
                       <input
                         type="number"
                         min="1"
@@ -267,14 +267,10 @@
                       />
                       <button
                         @click="addToCart($event)"
-                        :class="
-                          isDarkMode
-                            ? 'bg-[#d3e6fe] text-secondary'
-                            : 'bg-secondary text-white'
-                        "
-                        class="flex border border-secondary rounded-lg px-2 hover:scale-105"
+                        
+                        class="flex rounded-lg px-2 hover:scale-105"
                       >
-                        <span class="mt-1"> Buy </span>
+                        <!-- <span class="mt-1"> Buy </span> -->
                         <SfIcon
                           :icon="
                             isInCart({ product: { _variantId: variant.id } })

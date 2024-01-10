@@ -181,16 +181,7 @@
                   :imageWidth="500"
                   :alt="productGetters.getName(product)"
                   :score-rating="product.rating"
-                  :show-add-to-cart-button="
-                      (()=>{
-                        const index = product.itemsWithShowPrice.findIndex(item => item.showprice);
-                        if(index !== -1)
-                        {
-                          return true;
-                        }
-                        else
-                          return false;
-                      })()"
+                  :show-add-to-cart-button="true"
                   :isInWishlist="product.isInWishlist"
                   :isAddedToCart="isInCart({ product })"
                   :link="localePath(`/v/${productGetters.getSlug(product)}`)"
@@ -610,9 +601,6 @@ export default {
     //   }));
     // });
     const recentlyViewd = computed(() => root.$store.state.recently.recently);
-    console.log("Recently Viewd PRODUCT",recentlyViewd.value);
-    // console.log("Checking The State",root.$store.state);
-    // console.log("Logging",recentlyViewd.value[0].itemsWithShowPrice);
     loadUser();
     const { writeQuote, load, myQuotes } = useQuote();
     const heroSection = computed(() =>

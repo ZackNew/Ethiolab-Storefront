@@ -219,7 +219,7 @@
                         _variantId: product.variants[0].id,
                         _id: product.id,
                         name: product.name,
-                        price: product.variants[0].price,
+                       
                         slug: product.slug,
                         _categoriesRef: [],
                         _description: '',
@@ -554,6 +554,9 @@ export default {
                             variants {
                               id
                               price
+                              customFields {
+                                showprice
+                              }
                             }
                             featuredAsset{
                               preview

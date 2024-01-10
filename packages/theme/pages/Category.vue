@@ -325,7 +325,16 @@
                     "
                     :imageHeight="290"
                     :imageWidth="500"
-                    :regular-price="product.price + ' ETB'"
+                    :regular-price="
+                    (()=> {
+                      const priceIndex = product.itemsWithShowPrice.findIndex(item => item.showprice);
+                      if (priceIndex !== -1) {
+                        return product.price[priceIndex].price + ' ETB';
+                      }
+                      else{
+                      return 'unavailable';}
+                    })()
+                    "
                     :max-rating="5"
                     :score-rating="product.rating ? product.rating : ''"
                     :variantId="product._variantId"
@@ -962,6 +971,7 @@ export default {
           return prod ;
         });
         this.allProducts = products;
+        console.log("all products",this.allProducts);
         let newArray = [];
         if (this.allProducts.length >= 10) {
           newArray = this.allProducts.slice(0, 10);
