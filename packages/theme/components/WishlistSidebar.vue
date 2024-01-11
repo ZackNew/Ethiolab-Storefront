@@ -32,10 +32,7 @@
                 :image="product.images"
                 :title="product.name"
                 :regular-price="
-                  product.price.original &&
-                  String(product.price.original).slice(0, -2) +
-                    '.' +
-                    String(product.price.original).slice(-2)
+                  (product.price.original && product.isShowPrice) ? product.price.original/100 : ''
                 "
                 :stock="99999"
                 image-width="180"
@@ -155,6 +152,9 @@ export default {
                 items {
                   id
                   priceWithTax
+                  customFields{
+                    showprice
+                  }
                 }
               }
             }
@@ -192,6 +192,7 @@ export default {
               original: p.variantList.items[0].priceWithTax,
               current: p.variantList.items[0].priceWithTax,
             },
+            isShowPrice :p.variantList.items[0].customFields.showprice
           });
         });
         products.value = empArray;
