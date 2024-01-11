@@ -325,22 +325,13 @@
                     "
                     :imageHeight="290"
                     :imageWidth="500"
-                    :regular-price="
-                    (()=> {
-                      const priceIndex = product.itemsWithShowPrice.findIndex(item => item.showprice);
-                      if (priceIndex !== -1) {
-                        return product.price[priceIndex].price + ' ETB';
-                      }
-                      else{
-                      return 'unavailable';}
-                    })()
-                    "
+                    :regular-price="getPrice(product)"
                     :max-rating="5"
                     :score-rating="product.rating ? product.rating : ''"
                     :variantId="product._variantId"
                     :show-add-to-cart-button="true"
                     :isOrderBased="product.isOrderBased"
-                    :isInWishlist="isInWishlist({ product })"
+                    :isInWishlist="getPrice(product) !== 'unavailable' ? isInWishlist({ product }) : false"
                     :isAddedToCart="isInCart({ product })"
                     :link="localePath(`/v/${product.slug}`)"
                     @click:wishlist="
@@ -807,8 +798,21 @@ export default {
       toggleFilterSidebar();
       changeFilters(selectedFilters.value);
     };
+    const getpriceIndex =(product) =>{
+      return product.itemsWithShowPrice.findIndex(item => item.showprice);
+    }
+    const getPrice = (product) => {
+      const priceIndex = getpriceIndex(product);
+      if (priceIndex !== -1) {
+        return product.price[priceIndex].price + ' ETB';
+      }
+      else{
+      return 'unavailable';}
+    };
 
     return {
+      getpriceIndex,
+      getPrice,
       adSection,
       adImage,
       isDarkMode,
@@ -971,7 +975,6 @@ export default {
           return prod ;
         });
         this.allProducts = products;
-        console.log("all products",this.allProducts);
         let newArray = [];
         if (this.allProducts.length >= 10) {
           newArray = this.allProducts.slice(0, 10);

@@ -73,13 +73,12 @@
               </th>
               <template v-for="product in productsToCompare">
                 <td class="py-4 px-4">
-                  <h5 class="text-lg text-secondary">
-                    {{
-                      String(product.variantList.priceWithTax).slice(0, -2) +
-                      '.' +
-                      String(product.variantList.priceWithTax).slice(-2)
-                    }}
+                  <h5 v-if="product.variantList.customFields.showprice" class="text-lg text-secondary">
+                    {{ product.variantList.priceWithTax/100 }}
+                    <!-- {{ setprice(product) }} -->
                   </h5>
+                  <h5 v-else class="text-lg text-secondary">
+                    Not Available</h5>
                 </td>
               </template>
             </tr>
@@ -260,6 +259,7 @@ export default {
                     description
                     weight
                     table
+                    showprice
                   }
                   stockLevel
                   options{

@@ -61,7 +61,7 @@
 
     <div
       class="text-center m-3 text-xs md:text-base"
-      v-if="product.variants.length === 1"
+      v-if="product.variants.length === 1 && prices !== undefined"
     >
       <span> </span>{{ parseFloat(prices).toLocaleString() }} ETB
     </div>
@@ -143,10 +143,12 @@ export default {
   },
   computed: {
     prices() {
-      const showprice = this.product.variants.findIndex(
-        (item) => item.customFields.showprice
+      // console.log("Fireeeeeeeeee");
+      // console.log("THisPRODUCT",this.product);
+      const showpriceIndex = this.product.variants.findIndex(
+        (item) => item?.customFields?.showprice
       );
-      if (showprice === -1) {
+      if (showpriceIndex === -1) {
         return;
       } else {
         if (this.product?.variants.length === 1) {
@@ -158,7 +160,7 @@ export default {
           let items = this.product?.variants;
           let prices = [];
           items.forEach((item) => {
-            item.customFields.showprice && prices.push(item.price);
+            item?.customFields?.showprice && prices.push(item.price);
           });
           const max =
             String(Math.max(...prices)).slice(0, -2) +
