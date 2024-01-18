@@ -269,9 +269,9 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <p v-if="regularPrice === 'unavailable'">
-          unavailable price
-        </p>
+        <h5 class="text-secondary" v-if="regularPrice === 'unavailable'">
+          Request Quote
+        </h5>
         <p v-else  class="text-lg text-secondary">
           {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }}
         </p>

@@ -43,7 +43,7 @@
               {{ product.customFields.granularity }}
             </h3>
             <h3 v-else class="text-secondary text-xl">
-              <span class="font-semibold mr-1 p-2">Unavailable Price : </span
+              <span class="font-semibold mr-1 p-2">Request Quote : </span
             ></h3>
             <img
               v-if="product.customFields.is_order_based"
@@ -249,7 +249,7 @@
                       ETB / {{ product.customFields.granularity }}
                     </h4>
                   <h4 v-else class="text-lg">
-                      Unavailable</h4>
+                      Request Quote</h4>
                   </div> 
                   <div>
                     <div  class="flex">
@@ -425,7 +425,7 @@
                   <nuxt-link
                     :to="`/p/${product.id}/${variant.id}/${product.slug}`"
                   >
-                    <h6
+                    <h6 v-if="variant.customFields.showprice"
                       :class="isDarkMode ? 'text-white bg-dark_accent' : ''"
                       class="m-4"
                     >
@@ -438,6 +438,9 @@
                       }}
                       ETB / {{ product.customFields.granularity }}
                     </h6>
+                    <h6 v-else
+                      :class="isDarkMode ? 'text-white bg-dark_accent' : ''"
+                      class="m-4" >Request Quote</h6>
                   </nuxt-link>
                   <div class="m-4">
                     <div v-for="(option, i) in variant.options" :key="i">
@@ -507,7 +510,7 @@
                       :class="isDarkMode ? 'bg-white ' : 'bg-bg_dark'"
                       class="my-4"
                     />
-                    <div class="flex">
+                    <div v-if="variant.customFields.showprice" class="flex">
                       <input
                         :value="toCart"
                         :class="

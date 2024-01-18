@@ -30,41 +30,49 @@
                 class="p-2 flex justify-between mb-2"
                 :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
               >
-                <h4
-                  v-if="Svariant.priceWithoutDiscount != Svariant.price"
-                  class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through"
-                >
-                  {{
-                    parseFloat(
-                      String(Svariant.priceWithoutDiscount).slice(0, -2)
-                    ).toLocaleString() +
-                    '.' +
-                    String(Svariant.priceWithoutDiscount).slice(-2)
-                  }}
-                  ETB / {{ granularity }}
-                </h4>
-                <div class="flex items-end">
-                  <h4 class="font-bold text-secondary mb-3 mr-8">
+                <div v-if="Svariant.customFields.showprice">
+                  <h4
+                    v-if="Svariant.priceWithoutDiscount != Svariant.price"
+                    class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through"
+                  >
                     {{
                       parseFloat(
-                        String(Svariant.price).slice(0, -2)
+                        String(Svariant.priceWithoutDiscount).slice(0, -2)
                       ).toLocaleString() +
                       '.' +
-                      String(Svariant.price).slice(-2) +
-                      ' '
+                      String(Svariant.priceWithoutDiscount).slice(-2)
                     }}
                     ETB / {{ granularity }}
                   </h4>
-                  <h5 class="text-[#828181] mb-3">
-                    {{
-                      parseFloat(
-                        String(Svariant.priceWithTax).slice(0, -2)
-                      ).toLocaleString() +
-                      '.' +
-                      String(Svariant.priceWithTax).slice(-2)
-                    }}
-                    ETB / {{ granularity }} including VAT
-                  </h5>
+                  <div class="flex items-end">
+                    <h4 class="font-bold text-secondary mb-3 mr-8">
+                      {{
+                        parseFloat(
+                          String(Svariant.price).slice(0, -2)
+                        ).toLocaleString() +
+                        '.' +
+                        String(Svariant.price).slice(-2) +
+                        ' '
+                      }}
+                      ETB / {{ granularity }}
+                    </h4>
+                    <h5  class="text-[#828181] mb-3">
+                      {{
+                        parseFloat(
+                          String(Svariant.priceWithTax).slice(0, -2)
+                        ).toLocaleString() +
+                        '.' +
+                        String(Svariant.priceWithTax).slice(-2)
+                      }}
+                      ETB / {{ granularity }} including VAT
+                    </h5>
+                  </div>
+                </div>
+                <div v-else>
+                  <h4
+                    class="font-bold text-secondary mb-3 mr-8">
+                    Add this product to cart and 
+                    request Quote</h4>
                 </div>
                 <img
                   v-if="Svariant.is_order_based"
@@ -479,8 +487,7 @@ export default {
     };
 
     const addVariantToWishlist = (variant) => {
-      console.log(context.root.$route.params.id);
-      console.log(variant);
+      // console.log(context.root.$route.params.id);
       const product = {
         _id: context.root.$route.params?.id,
         _variantId: context.root.$route.params?.vid,
@@ -641,6 +648,7 @@ export default {
                         customFields {
                           description
                           table
+                          showprice
                         }
                         featuredAsset{
                           preview
@@ -676,6 +684,8 @@ export default {
       this.prImage = variant.data.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.data.product?.assets;
       this.Svariant = variant.data.data.data.product?.variantList?.items[0];
+      console.log("Svariant",this.Svariant.customFields.showprice);
+      console.log("ProductId",productId);
       this.VariantAccessories = this.Svariant?.accessories.map((p) => {
         const image = p.featuredAsset ? p.featuredAsset.preview : '';
         const price =
