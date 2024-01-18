@@ -279,6 +279,9 @@ export default {
             variants{
               id
               priceWithTax
+              customFields{
+                showprice
+              }
             }
             collections{
               id
@@ -331,9 +334,11 @@ export default {
               },
               slug: result.slug,
               rating: result?.customFields?.reviewRating,
+              showprice: result?.variants[0]?.customFields?.showprice,
             };
             return prod;
           });
+          console.log("Results", results);
           this.results = results;
         });
 

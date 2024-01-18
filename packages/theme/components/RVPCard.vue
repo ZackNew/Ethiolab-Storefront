@@ -210,7 +210,7 @@
           :special="specialPrice"
         />-->
         <p v-if="regularPrice === 'Unavailable'" class="text-md mx-auto text-secondary font-bold">
-            Unavailable Price </p>
+            Request Quote </p>
         <p v-else-if="regularPrice !== 'Unavailable'" class="text-md mx-auto text-secondary font-bold">
           {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }} </p>
       </slot>

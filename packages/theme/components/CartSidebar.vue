@@ -34,7 +34,7 @@
                     ?
                     cartGetters.getItemPrice(product).regular.toLocaleString() +
                     ' ETB'
-                    : 'Unavailable Price'
+                    : 'Request Quote'
                   "
                   :stock="99999"
                   @click:remove="removeFromCart({ product })"

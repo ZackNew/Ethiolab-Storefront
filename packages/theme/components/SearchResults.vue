@@ -59,6 +59,7 @@
                 hide-text=""
               >
                 <div class="results-listing grid grid-cols-1 md:grid-cols-3">
+                  
                   <div v-for="product in result" :key="product._id">
                     <ProductCard
                       :id="product._id"
@@ -68,7 +69,7 @@
                       :imageHeight="260"
                       :imageWidth="300"
                       :alt="product.name"
-                      :regular-price="product.price.current + ' ETB'"
+                      :regular-price="product.showprice ? product.price.current + ' ETB' : 'unavailable'"
                       :max-rating="5"
                       :score-rating="product.rating"
                       :show-add-to-cart-button="true"
@@ -213,7 +214,9 @@ export default {
   setup(props, { emit }) {
     const showToast = inject('showToast');
     const isSearchOpen = ref(props.visible);
+    console.log("SearchResults", props.result);
     const products = computed(() => props.result?.value?.data?.items);
+    // console.log("SearchProducts", result);
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const {
       addItem: addItemToWishlist,
