@@ -9,7 +9,6 @@
     :persistent="true"
     overlay
   >
-    {{ pId }}
     <div
       style="
         display: flex;
@@ -111,7 +110,7 @@ export default {
   // props: [pId],
   setup(props, context) {
     console.log('))))))))))))))))))))))))))))');
-    console.log("props.pId", props.pId);
+    console.log('props.pId', props.pId);
     // const variantId = context.root.$route.params.vid;
     const qfromName = ref('');
     const validateEmail = (email) => {
@@ -189,7 +188,7 @@ export default {
         descr = user?.value?.emailAddress;
       }
       let pIds = [];
-      if(props.pId) {
+      if (props.pId) {
         pIds = [props.pId];
       } else {
         cart?.value?.lines.forEach((product) => {
