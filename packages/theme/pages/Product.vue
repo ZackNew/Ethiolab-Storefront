@@ -69,10 +69,10 @@
                   </div>
                 </div>
                 <div v-else>
-                  <h4
-                    class="font-bold text-secondary mb-3 mr-8">
-                    Add this product to cart and 
-                    request Quote</h4>
+                  <button @click ="toggleQuoteDialog"
+                    class="font-bold text-secondary text-lg mb-3 mr-8">
+                    Request Quote </button>
+                    <div v-if="RequestStatus"><RequestAQuote  :pId= "rVariantId" /></div>
                 </div>
                 <img
                   v-if="Svariant.is_order_based"
@@ -346,7 +346,7 @@ import { getProductVariantByConfiguration } from '~/helpers';
 import { useUiState } from '~/composables';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-
+import RequestAQuote from '~/components/RequestAQuote';
 export default {
   middleware: ['csrf'],
   name: 'Product',
@@ -355,8 +355,12 @@ export default {
     this.loadings = true;
     this.getVariants();
   },
-
   setup(props, context) {
+    const rVariantId = ref(null);
+    onMounted(()=>{
+      rVariantId.value = context.root.$route.params.vid;
+    });
+    
     const {
       addItem: addItemToWishlist,
       isInWishlist,
@@ -369,7 +373,7 @@ export default {
     const Svariant = ref(null);
     //console.log("Productsssssss",product);
     const showToast = inject('showToast');
-    const { isDarkMode } = useUiState();
+    const { isDarkMode ,toggleQuoteModal,isQuoteModalOpen} = useUiState();
     const qty = ref(1);
     const accQty = ref(1);
 
@@ -563,6 +567,15 @@ export default {
         }
       }
     };
+    const RequestStatus = ref(false);
+    const toggleQuoteDialog = () => {
+      if (!rVariantId) {
+      console.error('variantIdd is undefined');
+      return;
+    }
+      RequestStatus.value = !RequestStatus.value;
+      toggleQuoteModal();
+    };
 
     //var reviewKey= ref(0);
     return {
@@ -603,6 +616,10 @@ export default {
       isInCart,
       addVariantToWishlist,
       addItemToWishlist,
+      toggleQuoteDialog,
+      rVariantId,
+      isQuoteModalOpen,
+      RequestStatus,
     };
   },
   methods: {
@@ -684,8 +701,7 @@ export default {
       this.prImage = variant.data.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.data.product?.assets;
       this.Svariant = variant.data.data.data.product?.variantList?.items[0];
-      console.log("Svariant",this.Svariant.customFields.showprice);
-      console.log("ProductId",productId);
+  
       this.VariantAccessories = this.Svariant?.accessories.map((p) => {
         const image = p.featuredAsset ? p.featuredAsset.preview : '';
         const price =
@@ -833,6 +849,7 @@ export default {
     VueSlickCarousel,
     ProductCard,
     Loading,
+    RequestAQuote
   },
   data() {
     return {

@@ -9,6 +9,7 @@
     :persistent="true"
     overlay
   >
+    {{ pId }}
     <div
       style="
         display: flex;
@@ -44,7 +45,7 @@
         :valid="Boolean(isEmailValid)"
         errorMessage="This is a required field"
       />
-       <SfInput
+      <SfInput
         v-model="qfromName"
         placeholder="Company Name"
         :valid="Boolean(isCompanyValid)"
@@ -102,7 +103,16 @@ export default {
     SfInput,
     SfButton,
   },
+  props: {
+    pId: {
+      type: [String, Number],
+    },
+  },
+  // props: [pId],
   setup(props, context) {
+    console.log('))))))))))))))))))))))))))))');
+    console.log("props.pId", props.pId);
+    // const variantId = context.root.$route.params.vid;
     const qfromName = ref('');
     const validateEmail = (email) => {
       return String(email)
@@ -141,16 +151,17 @@ export default {
       return /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(
         str
       );
-    };
+    }
     const checkInputs = () => {
       isEmailValid.value = validateEmail(qEmail.value);
       isLocationValid.value = cities.indexOf(quoteCity.value) != -1;
       isPhoneValid.value = telephoneCheck(qPhone.value);
-      isMessageValid.value = qBody.value.length > 0 ;
-      formattedMessage.value = qBody.value.length > 0 ? qBody.value.replace(/\n/g, '<br>') : '';
+      isMessageValid.value = qBody.value.length > 0;
+      formattedMessage.value =
+        qBody.value.length > 0 ? qBody.value.replace(/\n/g, '<br>') : '';
       isSubjectValid.value = qTitle.value.length > 0;
       isCompanyValid.value = qfromName.value.length > 0;
-      
+
       return (
         isEmailValid.value &&
         isSubjectValid.value &&
@@ -160,7 +171,6 @@ export default {
         isMessageValid.value &&
         formattedMessage.value &&
         isCompanyValid.value
-
       );
     };
     //  watchEffect(checkInputs);
@@ -179,10 +189,14 @@ export default {
         descr = user?.value?.emailAddress;
       }
       let pIds = [];
-      cart?.value?.lines.forEach((product) => {
-        pIds.push(String(product?.productVariant?.id));
-      });
-     
+      if(props.pId) {
+        pIds = [props.pId];
+      } else {
+        cart?.value?.lines.forEach((product) => {
+          pIds.push(String(product?.productVariant?.id));
+        });
+      }
+
       writeQuote({
         msg: formattedMessage.value,
         subject: qTitle.value,
@@ -217,6 +231,7 @@ export default {
       cities,
       qfromName,
       formattedMessage,
+      // variantId,
     };
   },
 };
