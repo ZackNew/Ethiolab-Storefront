@@ -269,9 +269,12 @@
           :regular="regularPrice"
           :special="specialPrice"
         />-->
-        <h5 class="text-secondary" v-if="regularPrice === 'unavailable'">
+        <RequestAQuote v-if="RequestStatus" :pId="variantId"/>
+        <!-- <h5 class="text-secondary" v-if="regularPrice === 'unavailable'">
           Request Quote
-        </h5>
+        </h5> -->
+        <button v-if="regularPrice ==='unavailable'" @click="toggleQuoteDialog">
+          Request Quote</button>
         <p v-else  class="text-lg text-secondary">
           {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }}
         </p>
@@ -285,6 +288,7 @@ import Toast from '~/components/Toast.vue';
 import { computed, onMounted, inject } from '@vue/composition-api';
 import { useUiState } from '~/composables';
 import { colorsValues as SF_COLORS } from '@storefront-ui/shared/variables/colors';
+import RequestAQuote from '~/components/RequestAQuote.vue';
 import {
   SfPrice,
   SfRating,
@@ -296,6 +300,7 @@ import {
   SfColorPicker,
   SfColor
 } from '@storefront-ui/vue';
+import { ref } from '@vue/composition-api';
 
 export default {
   name: 'ProductCard',
@@ -309,8 +314,9 @@ export default {
     SfButton,
     SfColorPicker,
     SfColor,
-    Toast
-  },
+    Toast,
+    RequestAQuote,
+  },  
   props: {
     id: {
       type: [Number, String],
@@ -416,7 +422,11 @@ export default {
     isOrderBased: {
       type: Boolean,
       default: false
-    }
+    },
+    productID: {
+      type: String,
+      default: null
+    },
   },
   data() {
     return {
@@ -451,13 +461,21 @@ export default {
   },
   setup() {
     const showToast = inject('showToast');
-    const { isDarkMode } = useUiState();
+    const { isDarkMode,toggleQuoteModal } = useUiState();
+    const RequestStatus = ref(false);
+    const toggleQuoteDialog = () => {
+      RequestStatus.value = !RequestStatus.value;
+      toggleQuoteModal();
+    };
     const toastShower = (message) => {
       showToast(message);
     };
     return {
       isDarkMode,
-      toastShower
+      toastShower,
+      toggleQuoteModal,
+      toggleQuoteDialog,  
+      RequestStatus,
     };
   },
   methods: {

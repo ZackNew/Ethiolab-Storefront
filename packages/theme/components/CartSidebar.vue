@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RequestAQuote />
+
     <div id="cart" class="z-[500]">
       <SfSidebar
         v-e2e="'sidebar-cart'"
@@ -10,6 +10,7 @@
         @close="toggleCartSidebar"
       >
         <template #content-top>
+          {{ RequestStatus  }}
           <div class="flex justify-between">
             <SfProperty
               v-if="totalItems"
@@ -122,6 +123,7 @@
         </template>
       </SfSidebar>
     </div>
+    <RequestAQuote v-if="RequestStatus" />
   </div>
 </template>
 <script>
@@ -158,8 +160,9 @@ export default {
     SfQuantitySelector,
   },
   setup(props, { root }) {
-    const { isCartSidebarOpen, toggleQuoteModal, toggleCartSidebar } =
+    const { isCartSidebarOpen, toggleQuoteModal, toggleCartSidebar,isQuoteModalOpen } =
       useUiState();
+    const RequestStatus = ref(false); 
     const { cart, removeItem, updateItemQty, loading, setCart } = useCart();
     const showToast = inject('showToast');
     const { isAuthenticated } = useUser();
@@ -194,6 +197,7 @@ export default {
     };
 
     const toggleQuoteDialog = () => {
+      RequestStatus.value = !RequestStatus.value;
       toggleCartSidebar();
       toggleQuoteModal();
     };
@@ -211,6 +215,8 @@ export default {
       cartGetters,
       removeFromCart,
       updateCartQuty,
+      isQuoteModalOpen,
+      RequestStatus,
     };
   },
 };

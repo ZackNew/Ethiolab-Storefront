@@ -143,8 +143,6 @@ export default {
   },
   computed: {
     prices() {
-      // console.log("Fireeeeeeeeee");
-      // console.log("THisPRODUCT",this.product);
       const showpriceIndex = this.product.variants.findIndex(
         (item) => item?.customFields?.showprice
       );

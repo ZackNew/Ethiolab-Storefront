@@ -192,12 +192,15 @@
                   "
                   @click:add-to-cart="itemsToCart(product, 1)"
                   class="carousel__item__product mr-2"
+                  @click:quote="writeQuotee(product)"
                 />
               </div>
             </VueSlickCarousel>
           </div>
         </LazyHydrate>
       </div>
+      <!---RequestAQuote In RVPCard -->
+      <RequestAQuote v-if="productIdd"  :pId="productIdd" />
       <!-- <top-section></top-section> -->
 
       <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////// -->
@@ -376,6 +379,7 @@ import FeaturedProducts from '../components/FeaturedProducts.vue';
 import axios from 'axios';
 import { subscribe } from 'graphql';
 import CryptoJS from 'crypto-js';
+import RequestAQuote from '~/components/RequestAQuote.vue';
 
 export default {
   name: 'Home',
@@ -448,8 +452,8 @@ export default {
     RVPCard,
     NewCarousel,
     VueSlickCarousel,
-    // MessageSideBar,
-  },
+    RequestAQuote
+},
   methods: {
     async getBestSellers() {
       const pbody = {
@@ -567,7 +571,7 @@ export default {
     const baseUrl = process.env.GRAPHQL_API;
     const path = baseUrl.split('/shop-api')[0] + '/assets/';
     const showToast = inject('showToast');
-    const { toggleNewsletterModal } = useUiState();
+    const { toggleNewsletterModal,toggleQuoteModal } = useUiState();
     const { categories } = useCategory();
     const { getCms } = useCms();
     const {
@@ -601,6 +605,12 @@ export default {
     //   }));
     // });
     const recentlyViewd = computed(() => root.$store.state.recently.recently);
+   // Request Quote Functionality
+    const productIdd = ref('');
+    const writeQuotee =(product) =>{
+      productIdd.value = product._variantId;
+      toggleQuoteModal()
+    }
     loadUser();
     const { writeQuote, load, myQuotes } = useQuote();
     const heroSection = computed(() =>
@@ -870,6 +880,9 @@ export default {
       //handleMessageOpen,
       //handleCancelOrder,
       // getChatMessage,
+      writeQuotee,
+      productIdd,
+      
     };
   },
 };

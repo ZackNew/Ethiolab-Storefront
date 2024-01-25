@@ -183,6 +183,7 @@
       -->
     </div>
     <slot name="title" v-bind="{ title, link }">
+      <!-- <RequestAQuote :pId="productId"/> -->
       <!-- <SfButton
         :link="link"
         class="sf-button--pure ssf-product-card__link mx-3"
@@ -208,11 +209,21 @@
           class="ssf-product-card__price"
           :regular="regularPrice"
           :special="specialPrice"
-        />-->
-        <p v-if="regularPrice === 'Unavailable'" class="text-md mx-auto text-secondary font-bold">
-            Request Quote </p>
-        <p v-else-if="regularPrice !== 'Unavailable'" class="text-md mx-auto text-secondary font-bold">
-          {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }} </p>
+        />-->-
+        <div
+          v-if="regularPrice === 'Unavailable'"
+          class="text-md mx-auto text-secondary font-bold"
+        >
+          <button @click="toggleRequestStatus" class="text-md mx-auto text-secondary font-bold">Request Quote</button>
+          <!-- <p v-if="regularPrice === 'Unavailable'" class="text-md mx-auto text-secondary font-bold">
+            Request Quote </p> -->
+        </div>
+        <p
+          v-else-if="regularPrice !== 'Unavailable'"
+          class="text-md mx-auto text-secondary font-bold"
+        >
+          {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }}
+        </p>
       </slot>
       <slot name="review" v-bind="{ maxRating, scoreRating }">
         <!--
@@ -239,7 +250,8 @@
         -->
       </slot>
     </div>
-    <slot v-if="showAddToCartButton"
+    <slot
+      v-if="showAddToCartButton"
       v-bind="{
         isAddedToCart,
         showAddedToCartBadge,
@@ -259,7 +271,9 @@
   </div>
 </template>
 <script>
+import LazyHydrate from 'vue-lazy-hydration';
 import { colorsValues as SF_COLORS } from '@storefront-ui/shared/variables/colors';
+import { useUiState } from '~/composables';
 import {
   SfPrice,
   SfRating,
@@ -271,6 +285,7 @@ import {
   SfColorPicker,
   SfColor,
 } from '@storefront-ui/vue';
+import { ref } from '@vue/composition-api';
 
 export default {
   name: 'RVPCard',
@@ -284,6 +299,7 @@ export default {
     SfButton,
     SfColorPicker,
     SfColor,
+    LazyHydrate,
   },
   props: {
     image: {
@@ -412,6 +428,14 @@ export default {
     showBadge() {
       return this.colors.length > 5;
     },
+  },
+  setup(props, { emit }) {
+    const RequestStatus = ref(false);
+    const toggleRequestStatus = () => {
+      RequestStatus.value = !RequestStatus.value;
+      emit('click:quote', RequestStatus);
+    };
+    return { toggleRequestStatus, RequestStatus};
   },
   methods: {
     toggleIsInWishlist() {

@@ -37,14 +37,17 @@
             class="p-2 flex justify-between"
             :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
           >
-            <h3 v-if="product.variantList.items[0].customFields.showprice"  class="text-secondary text-xl">
+            <h3
+              v-if="product.variantList.items[0].customFields.showprice"
+              class="text-secondary text-xl"
+            >
               <span class="font-semibold mr-1 p-2">Price : </span
               >{{ priceRange }} /
               {{ product.customFields.granularity }}
             </h3>
             <h3 v-else class="text-secondary text-xl">
-              <span class="font-semibold mr-1 p-2">Request Quote : </span
-            ></h3>
+              <span class="font-semibold mr-1 p-2">Request Quote : </span>
+            </h3>
             <img
               v-if="product.customFields.is_order_based"
               src="/OB.png"
@@ -237,7 +240,7 @@
               <div class="mt-6">
                 <div class="mx-2 items-center">
                   <div class="whitespace-nowrap mr-4">
-                    <h4 v-if="variant.customFields.showprice"  class="text-lg">
+                    <h4 v-if="variant.customFields.showprice" class="text-lg">
                       {{
                         parseFloat(
                           String(variant.price).slice(0, -2)
@@ -247,12 +250,20 @@
                         ' '
                       }}
                       ETB / {{ product.customFields.granularity }}
-                    </h4>
-                  <h4 v-else class="text-lg">
-                      Request Quote</h4>
-                  </div> 
+                 
+                     </h4>
+                    <div v-else>
+                      <button @click ="toggleQuoteDialog"
+                      class="text-base text-secondary">Request Quote</button>
+                      <div v-if="RequestStatus">
+                        <RequestAQuote :pId="variant.id" />
+                      </div>
+                    </div>
+                    <!-- <h4 v-else class="text-lg">
+                      Request Quote</h4> -->
+                  </div>
                   <div>
-                    <div  class="flex">
+                    <div class="flex">
                       <input
                         type="number"
                         min="1"
@@ -267,7 +278,6 @@
                       />
                       <button
                         @click="addToCart($event)"
-                        
                         class="flex rounded-lg px-2 hover:scale-105"
                       >
                         <!-- <span class="mt-1"> Buy </span> -->
@@ -425,7 +435,8 @@
                   <nuxt-link
                     :to="`/p/${product.id}/${variant.id}/${product.slug}`"
                   >
-                    <h6 v-if="variant.customFields.showprice"
+                    <h6
+                      v-if="variant.customFields.showprice"
                       :class="isDarkMode ? 'text-white bg-dark_accent' : ''"
                       class="m-4"
                     >
@@ -438,9 +449,13 @@
                       }}
                       ETB / {{ product.customFields.granularity }}
                     </h6>
-                    <h6 v-else
+                    <h6
+                      v-else
                       :class="isDarkMode ? 'text-white bg-dark_accent' : ''"
-                      class="m-4" >Request Quote</h6>
+                      class="m-4"
+                    >
+                      Request Quote
+                    </h6>
                   </nuxt-link>
                   <div class="m-4">
                     <div v-for="(option, i) in variant.options" :key="i">
@@ -628,6 +643,7 @@ import { ref, inject } from '@vue/composition-api';
 import { useWishlist, useCart, useUser } from '@vue-storefront/vendure';
 import Gallery from '~/components/Gallery.vue';
 import CryptoJS from 'crypto-js';
+import RequestAQuote from '~/components/RequestAQuote.vue';
 export default {
   middleware: ['csrf'],
   components: {
@@ -641,6 +657,7 @@ export default {
     SfReview,
     LazyHydrate,
     Loading,
+    RequestAQuote,
   },
 
   data() {
@@ -879,7 +896,7 @@ export default {
   setup(props, context) {
     const showToast = inject('showToast');
     const { user, isAuthenticated, load } = useUser();
-    const { isDarkMode } = useUiState();
+    const { isDarkMode, toggleQuoteModal,isQuoteModalOpen} = useUiState();
     const {
       load: loadCart,
       addItem: addItemToCart,
@@ -898,6 +915,11 @@ export default {
           1
         );
       }
+    };
+    const RequestStatus = ref(false);
+    const toggleQuoteDialog = () => {
+      RequestStatus.value = !RequestStatus.value;
+      toggleQuoteModal();
     };
     // const {
     //   addItem: addItemToWishlist,
@@ -1043,6 +1065,9 @@ export default {
       user,
       accessoryClicked,
       accessoriesToCart,
+      toggleQuoteDialog,
+      isQuoteModalOpen,
+      RequestStatus,
     };
   },
   async created() {
