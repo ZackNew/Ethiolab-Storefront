@@ -89,7 +89,7 @@
                 class="sf-property--full-width property"
               />
               <SfProperty
-                v-if = " totals.withholding != 0 "
+                v-if="totals.withholding != 0"
                 :name="$t('Withholding Tax')"
                 :value="
                   parseFloat(totals.withholding).toLocaleString() + ' ETB'
@@ -97,11 +97,16 @@
                 class="sf-property--full-width property"
               />
               <SfProperty
-                v-if= " totals.ordermodification != 0 && !isNaN(totals.ordermodification)"
+                v-if="
+                  totals.ordermodification != 0 &&
+                  !isNaN(totals.ordermodification)
+                "
                 :name="$t('Order Modification')"
-                :value="parseFloat(totals.ordermodification).toLocaleString() + ' ETB'"
+                :value="
+                  parseFloat(totals.ordermodification).toLocaleString() + ' ETB'
+                "
                 class="sf-property--full-width property"
-              />  
+              />
             </div>
 
             <SfDivider />
@@ -265,6 +270,17 @@
                   :disabled="!terms"
                 >
                   {{ $t('Pay with Telebirr') }}
+                </SfButton>
+              </div>
+
+              <div v-if="paymentMethod && paymentMethod.name == 'Awash'">
+                <SfButton
+                  v-e2e="'make-an-order'"
+                  class="summary__action-button"
+                  @click="processAwash"
+                  :disabled="!terms"
+                >
+                  {{ $t('Pay with Awash Bank') }}
                 </SfButton>
               </div>
 
@@ -438,6 +454,26 @@
             </div>
           </SfModal>
         </div>
+        <div>
+          <SfModal
+            v-model="modalAwashOpen"
+            title="My title"
+            visible
+            cross
+            overlay
+            persistent
+            @close="awashModalClosed()"
+          >
+            <h3>OrderCode: {{ awashCode }}</h3>
+            <p>
+              Your order is being processed. make your payment using the
+              reference code: {{ awashRefCode }}. in one of awash bank branches
+              or using awash bank mobile app.
+              <p v-if="isAuthenticated">your reference code has been sent
+              to your email.</p>
+            </p>
+          </SfModal>
+        </div>
       </div>
     </div>
   </div>
@@ -473,6 +509,7 @@ import {
   useCart,
   cartGetters,
   usePayment,
+  useUser
 } from '@vue-storefront/vendure';
 import { useBilling } from '@vue-storefront/vendure';
 import { uuid } from 'vue-uuid';
@@ -530,6 +567,7 @@ export default {
     const showToast = inject('showToast');
     const { billing } = useBilling();
     const { cart, setCart, applyCoupon, load: loadCart } = useCart();
+    const { isAuthenticated } = useUser();
     const billingDetails = ref(billing.value || {});
     const withholdingApplied = ref(false);
     const { loading } = useMakeOrder();
@@ -542,7 +580,11 @@ export default {
     const terms = ref(false);
     const paymentMethod = ref(null);
     const modalOpen = ref(false);
+    const modalAwashOpen = ref(false);
+    const awashLoading = ref(false);
     const modalCashOpen = ref(false);
+    const awashRefCode = ref('');
+    const awashCode = ref('');
 
     const time = new Date().getTime();
 
@@ -620,7 +662,6 @@ export default {
       return tax / 100;
     });
 
-    
     const totals = computed(() => {
       return {
         subtotal:
@@ -635,8 +676,7 @@ export default {
           String(cart.value?.subTotalWithTax).slice(0, -2) +
           '.' +
           String(cart.value?.subTotalWithTax).slice(-2),
-        ordermodification:
-          cart.value?.surcharges[0]?.price / 100,
+        ordermodification: cart.value?.surcharges[0]?.price / 100,
       };
     });
 
@@ -687,6 +727,7 @@ export default {
       var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
       paymentDetail.signature = hashInBase64;
       // return commaSeparate(dataToSign);
+      awashCode.value = cart.code;
     });
 
     const updatePaymentMethod = (method) => {
@@ -926,6 +967,43 @@ export default {
       context.root.$router.push('/');
     };
 
+    const processAwash = async () => {
+      awashLoading.value = true;
+      const token = CryptoJS.AES.encrypt(
+        context.root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
+
+      const body = {
+        query: `query getRefe5ZC9KWNYNYrenceCode {
+          getAwashReferenceCode
+        }`,
+        csrfToken: context.root.$store.state.csrfToken.csrfToken,
+      };
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
+      };
+      await axios.post('/api/shop', body, options).then(async (res) => {
+        if (res.data.data?.data?.getAwashReferenceCode) {
+          awashRefCode.value = res.data.data.data.getAwashReferenceCode;
+          awashLoading.value = false;
+          changeState();
+          modalAwashOpen.value = true;
+        } else {
+          showToast('Something went wrong.');
+        }
+      });
+    };
+
+    const awashModalClosed = () => {
+      modalAwashOpen.value = false;
+      window.location.href = '/';
+    };
+
     const handleCancelOrder = async () => {
       const body = {
         query: `mutation cancelOrder {
@@ -995,6 +1073,12 @@ export default {
       changeState,
       addOrRemoveWithholdingTax,
       withholdingApplied,
+      processAwash,
+      awashRefCode,
+      modalAwashOpen,
+      awashModalClosed,
+      awashCode,
+      isAuthenticated
     };
   },
 };

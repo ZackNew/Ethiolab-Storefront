@@ -56,7 +56,7 @@ app.post('/shop', async function (req, res) {
 
     try {
       await axios
-        .post('https://admin.ethiolab.et/shop-api', body, options)
+        .post('http://localhost:3000/shop-api', body, options)
         .then((resp) => {
           res.status(200).json({ data: resp.data });
         })
