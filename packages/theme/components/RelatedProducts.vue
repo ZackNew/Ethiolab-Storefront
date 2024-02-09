@@ -64,27 +64,13 @@
                 v-if="product.price.min === product.price.max"
                 class="text-secondary font-bold mx-3 text-center"
               >
-                {{
-                  parseFloat(
-                    String(product.price.min).slice(0, -2)
-                  ).toLocaleString() +
-                  '.' +
-                  String(product.price.min).slice(-2)
-                }}
+                {{product.price.min/100}}
                 ETB
               </h4>
               <h4 v-else class="text-secondary font-bold text-center">
-                {{
-                  String(product.price.min).slice(0, -2) +
-                  '.' +
-                  String(product.price.min).slice(-2)
-                }}
+                {{product.price.min/100}}
                 ETB -
-                {{
-                  String(product.price.max).slice(0, -2) +
-                  '.' +
-                  String(product.price.max).slice(-2)
-                }}
+                {{product.price.max/100}}
                 ETB
               </h4>
               <div class="mx-auto">

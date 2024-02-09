@@ -109,8 +109,8 @@ export default {
   },
   // props: [pId],
   setup(props, context) {
-    console.log('))))))))))))))))))))))))))))');
-    console.log('props.pId', props.pId);
+    // console.log('))))))))))))))))))))))))))))');
+    // console.log('props.pId', props.pId);
     // const variantId = context.root.$route.params.vid;
     const qfromName = ref('');
     const validateEmail = (email) => {
@@ -174,7 +174,7 @@ export default {
     };
     //  watchEffect(checkInputs);
     const toggleQuotationDialog = () => {
-      toggleCartSidebar();
+      // toggleCartSidebar();
       toggleQuoteModal();
     };
     const sendQuote = () => {

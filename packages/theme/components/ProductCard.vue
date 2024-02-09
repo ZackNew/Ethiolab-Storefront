@@ -464,7 +464,7 @@ export default {
     const { isDarkMode,toggleQuoteModal } = useUiState();
     const RequestStatus = ref(false);
     const toggleQuoteDialog = () => {
-      RequestStatus.value = !RequestStatus.value;
+      RequestStatus.value = true;
       toggleQuoteModal();
     };
     const toastShower = (message) => {
