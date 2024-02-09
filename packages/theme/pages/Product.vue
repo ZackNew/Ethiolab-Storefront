@@ -573,7 +573,7 @@ export default {
       console.error('variantIdd is undefined');
       return;
     }
-      RequestStatus.value = !RequestStatus.value;
+      RequestStatus.value = true;
       toggleQuoteModal();
     };
 
@@ -1136,7 +1136,7 @@ tr:nth-child(even) {
 }
 .red table th,
 .red table td {
-  padding: 12px 15px;
+  padding: 0px 5px;
 }
 .red table th {
   text-align: left;

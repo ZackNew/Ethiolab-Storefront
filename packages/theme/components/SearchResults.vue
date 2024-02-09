@@ -214,9 +214,7 @@ export default {
   setup(props, { emit }) {
     const showToast = inject('showToast');
     const isSearchOpen = ref(props.visible);
-    console.log("SearchResults", props.result);
     const products = computed(() => props.result?.value?.data?.items);
-    // console.log("SearchProducts", result);
     const { addItem: addItemToCart, isInCart, cart } = useCart();
     const {
       addItem: addItemToWishlist,

@@ -222,7 +222,8 @@
           v-else-if="regularPrice !== 'Unavailable'"
           class="text-md mx-auto text-secondary font-bold"
         >
-          {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }}
+          <!-- {{ parseFloat(regularPrice).toLocaleString() + '  ETB' }} -->
+          {{ regularPrice.length > 8 ?  regularPrice.slice(0,-7) + 'ETB' : 0 + 'ETB'}}
         </p>
       </slot>
       <slot name="review" v-bind="{ maxRating, scoreRating }">
@@ -435,7 +436,7 @@ export default {
       RequestStatus.value = !RequestStatus.value;
       emit('click:quote', RequestStatus);
     };
-    return { toggleRequestStatus, RequestStatus};
+    return { toggleRequestStatus, RequestStatus };
   },
   methods: {
     toggleIsInWishlist() {
