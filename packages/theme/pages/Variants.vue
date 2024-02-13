@@ -38,7 +38,7 @@
             :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
           >
             <h3
-              v-if="product.variantList.items[0].customFields.showprice"
+              v-if="showPrice"
               class="text-secondary text-xl"
             >
               <span class="font-semibold mr-1 p-2">Price : </span
@@ -242,12 +242,7 @@
                   <div class="whitespace-nowrap mr-4">
                     <h4 v-if="variant.customFields.showprice" class="text-lg">
                       {{
-                        parseFloat(
-                          String(variant.price).slice(0, -2)
-                        ).toLocaleString() +
-                        '.' +
-                        String(variant.price).slice(-2) +
-                        ' '
+                        variant.price /100 
                       }}
                       ETB / {{ product.customFields.granularity }}
                  
@@ -759,6 +754,7 @@ export default {
             customFields{
               youtube_link
               documentations
+              granularity
             }
             featuredAsset{
               preview
@@ -850,12 +846,14 @@ export default {
     priceRange() {
       if (this.product?.variantList?.totalItems === 1) {
         const price = String(this.product?.variantList?.items[0]?.price);
-        const fPrice = price.slice(0, -2) + '.' + price.slice(-2);
+        const fPrice = price/100;
         return parseFloat(fPrice).toLocaleString() + ' ETB';
       } else if (this.product?.variantList?.totalItems > 1) {
         let prices = [];
         this.product.variantList?.items.forEach((item) => {
+          if(item.customFields.showprice === true){
           prices.push(item.price);
+        }
         });
         const max =
           String(Math.max(...prices)).slice(0, -2) +
@@ -872,6 +870,15 @@ export default {
           parseFloat(max).toLocaleString() +
           ' ETB'
         );
+      }
+    },
+    showPrice (){
+      let index = this.product?.variantList?.items.findIndex((item) => item.customFields.showprice === true);
+      if(index !== -1){
+        return true;
+      }
+      else{
+        return false;
       }
     },
     custom() {
@@ -918,7 +925,7 @@ export default {
     };
     const RequestStatus = ref(false);
     const toggleQuoteDialog = () => {
-      RequestStatus.value = !RequestStatus.value;
+      RequestStatus.value = true;
       toggleQuoteModal();
     };
     // const {
@@ -1045,7 +1052,7 @@ export default {
         .then(async (res) => {
           if (res.data.data.data?.addAccessoriesToOrder?.success) {
             loadCart();
-            console.log(cart.value);
+            // console.log(cart.value);
             setCart(cart.value);
             showToast('Products added to cart');
           }
