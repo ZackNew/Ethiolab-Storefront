@@ -296,12 +296,7 @@
                   *PHONE NUMBER
                 </label>
 
-                <ValidationProvider
-                  name="phoneNumber"
-                  rules="required | digits"
-                  v-slot="{ errors }"
-                  slim
-                >
+                <ValidationProvider name="phoneNumber" v-slot="{ errors }" slim>
                   <!-- <SfInput
                     type="number"
                     v-e2e="'customer-phoneNumber'"
