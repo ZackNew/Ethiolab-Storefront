@@ -37,10 +37,7 @@
             class="p-2 flex justify-between"
             :class="isDarkMode ? 'bg-[#182533]' : 'bg-[#EBEBEB]'"
           >
-            <h3
-              v-if="showPrice"
-              class="text-secondary text-xl"
-            >
+            <h3 v-if="showPrice" class="text-secondary text-xl">
               <span class="font-semibold mr-1 p-2">Price : </span
               >{{ priceRange }} /
               {{ product.customFields.granularity }}
@@ -190,7 +187,7 @@
                 {{ o.group.name }}
               </SfTableHeader>
             </template>
-            <SfTableHeader class="border-r"> Availability </SfTableHeader>
+            <!-- <SfTableHeader class="border-r"> Availability </SfTableHeader> -->
             <SfTableHeader> Price </SfTableHeader>
           </SfTableHeading>
           <SfTableRow
@@ -231,25 +228,26 @@
             >
               <p class="my-4 capitalize">{{ option.name }}</p>
             </SfTableData>
-            <SfTableData class="flex justify-center items-start"
+            <!-- <SfTableData class="flex justify-center items-start"
               ><p class="mt-7">
                 {{ variant.stockLevel }}
               </p>
-            </SfTableData>
+            </SfTableData> -->
             <SfTableData class="justify-center items-start">
               <div class="mt-6">
                 <div class="mx-2 items-center">
                   <div class="whitespace-nowrap mr-4">
                     <h4 v-if="variant.customFields.showprice" class="text-lg">
-                      {{
-                        variant.price /100 
-                      }}
+                      {{ variant.price / 100 }}
                       ETB / {{ product.customFields.granularity }}
-                 
-                     </h4>
+                    </h4>
                     <div v-else>
-                      <button @click ="toggleQuoteDialog"
-                      class="text-base text-secondary">Request Quote</button>
+                      <button
+                        @click="toggleQuoteDialog"
+                        class="text-base text-secondary"
+                      >
+                        Request Quote
+                      </button>
                       <div v-if="RequestStatus">
                         <RequestAQuote :pId="variant.id" />
                       </div>
@@ -846,14 +844,14 @@ export default {
     priceRange() {
       if (this.product?.variantList?.totalItems === 1) {
         const price = String(this.product?.variantList?.items[0]?.price);
-        const fPrice = price/100;
+        const fPrice = price / 100;
         return parseFloat(fPrice).toLocaleString() + ' ETB';
       } else if (this.product?.variantList?.totalItems > 1) {
         let prices = [];
         this.product.variantList?.items.forEach((item) => {
-          if(item.customFields.showprice === true){
-          prices.push(item.price);
-        }
+          if (item.customFields.showprice === true) {
+            prices.push(item.price);
+          }
         });
         const max =
           String(Math.max(...prices)).slice(0, -2) +
@@ -872,12 +870,13 @@ export default {
         );
       }
     },
-    showPrice (){
-      let index = this.product?.variantList?.items.findIndex((item) => item.customFields.showprice === true);
-      if(index !== -1){
+    showPrice() {
+      let index = this.product?.variantList?.items.findIndex(
+        (item) => item.customFields.showprice === true
+      );
+      if (index !== -1) {
         return true;
-      }
-      else{
+      } else {
         return false;
       }
     },
@@ -903,7 +902,7 @@ export default {
   setup(props, context) {
     const showToast = inject('showToast');
     const { user, isAuthenticated, load } = useUser();
-    const { isDarkMode, toggleQuoteModal,isQuoteModalOpen} = useUiState();
+    const { isDarkMode, toggleQuoteModal, isQuoteModalOpen } = useUiState();
     const {
       load: loadCart,
       addItem: addItemToCart,
