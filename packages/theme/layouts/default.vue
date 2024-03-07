@@ -422,18 +422,18 @@ h4 {
   padding: 5px;
   z-index: 500;
 }
-.chatcss {
-  position: fixed;
-  z-index: 500;
-  top: 90vh;
-  left: 95%;
-}
+// .chatcss {
+//   position: fixed;
+//   z-index: 500;
+//   top: 90vh;
+//   left: 95%;
+// }
 .chatIcon {
-  position: fixed;
-  z-index: 600;
-  bottom: 30px;
-  right: 20px;
-  width: 3%;
-  height: 3%;
+  position: fixed !important ;
+  z-index: 600 !important;
+  bottom: 30px !important;
+  right: 20px !important;
+  width: 3% !important;
+  height: 3% !important;
 }
 </style>
