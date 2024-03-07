@@ -701,7 +701,7 @@ export default {
       const variant = await axios.post('/api/shop', body, options);
       this.granularity =
         variant.data.data.data.product?.customFields?.granularity;
-      console.log("THE PRICE",this.granularity);
+      //  console.log("THE PRICE",this.granularity);
       // console.log("The Data from variant",variant.data.data.data.product?.customFields?.);
       this.prImage = variant.data.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.data.product?.assets;
