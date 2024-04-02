@@ -107,7 +107,6 @@
             <SfSearchBar
               :aria-label="$t('Search')"
               :placeholder="$t('Search for items')"
-              :value="term"
               class="search md:w-[29rem] md:h-[2.5rem] rounded-lg border-none md:mr-3"
               :class="
                 isDarkMode
@@ -262,7 +261,12 @@ export default {
       this.loading = true;
       this.debounceInput();
     },
+    sanitization() {
+      return this.searchText.replace(/[^a-zA-Z0-9]/g, '');
+    },
+
     debounceInput: debounce(function async() {
+      let sanitizedInput = this.sanitization(this.searchText);
       if (this.searchText === '') {
         return;
       } else {
@@ -294,7 +298,7 @@ export default {
           }
         }`,
           variables: {
-            text: this.searchText,
+            text: sanitizedInput,
           },
           csrfToken: this.$store.state.csrfToken.csrfToken,
         };
@@ -338,7 +342,6 @@ export default {
             };
             return prod;
           });
-          console.log("Results", results);
           this.results = results;
         });
 
@@ -450,7 +453,9 @@ export default {
     const { cart, load: loadCart } = useCart();
     const { wishlist, load: loadWishlist } = useWishlist();
     const { search, categories } = useCategory();
-    const term = ref(getFacetsFromURL().phrase);
+    const phrase = getFacetsFromURL().phrase;
+    const term = ref((phrase ? phrase : '').replace(/[^a-zA-Z0-9 ]/g, ''));
+    // const term = ref(getFacetsFromURL().phrase);
     const { search: searchTerm, result: searchResult } = useFacet();
     const isSearchOpen = ref(false);
     const searchBarRef = ref(null);
@@ -547,7 +552,6 @@ export default {
       await searchTerm({ term: term.value });
       result.value = searchResult;
     }, 1000);
-
     const isMobile = ref(false);
     onMounted(() => {
       if (
