@@ -191,7 +191,7 @@
             <SfTableHeader> Price </SfTableHeader>
           </SfTableHeading>
           <SfTableRow
-            v-for="variant in product.variantList.items"
+            v-for="variant in sortVariantOptions(product.variantList.items)"
             :key="variant.id"
             class="mb-4"
           >
@@ -812,6 +812,30 @@ export default {
       const productVariant = await axios.post('/api/shop', body, options);
       this.product = productVariant?.data?.data?.data?.product;
       this.loading = false;
+    },
+
+    sortVariantOptions(productVariants) {
+      const desiredOrder = productVariants[0].options.map(
+        (option) => option.group.name
+      );
+
+      // Iterate over each item in the array
+      productVariants.forEach((item) => {
+        // Sort the options based on the desired order
+        item.options.sort((a, b) => {
+          // Find the index of the option groups in the desired order
+          const indexA = desiredOrder.findIndex(
+            (group) => group === a.group.name
+          );
+          const indexB = desiredOrder.findIndex(
+            (group) => group === b.group.name
+          );
+          // Compare the indices to determine the sorting order
+          return indexA - indexB;
+        });
+      });
+
+      return productVariants;
     },
   },
   computed: {
