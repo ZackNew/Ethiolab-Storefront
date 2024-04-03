@@ -36,33 +36,36 @@
                     class="font-bold text-[#b0b0b0] mb-3 mr-8 line-through"
                   >
                     {{
-                      parseFloat(
-                        String(Svariant.priceWithoutDiscount).slice(0, -2)
-                      ).toLocaleString() +
-                      '.' +
-                      String(Svariant.priceWithoutDiscount).slice(-2)
+                      // parseFloat(
+                      //   String(Svariant.priceWithoutDiscount).slice(0, -2)
+                      // ).toLocaleString() +
+                      // '.' +
+                      // String(Svariant.priceWithoutDiscount).slice(-2)
+                      Svariant.priceWithoutDiscount / 100
                     }}
                     ETB / {{ granularity }}
                   </h4>
                   <div class="flex items-end">
                     <h4 class="font-bold text-secondary mb-3 mr-8">
                       {{
-                        parseFloat(
-                          String(Svariant.price).slice(0, -2)
-                        ).toLocaleString() +
-                        '.' +
-                        String(Svariant.price).slice(-2) +
-                        ' '
+                        // parseFloat(
+                        //   String(Svariant.price).slice(0, -2)
+                        // ).toLocaleString() +
+                        // '.' +
+                        // String(Svariant.price).slice(-2) +
+                        // ' '
+                        Svariant.price / 100
                       }}
                       ETB / {{ granularity }}
                     </h4>
                     <h5  class="text-[#828181] mb-3">
                       {{
-                        parseFloat(
-                          String(Svariant.priceWithTax).slice(0, -2)
-                        ).toLocaleString() +
-                        '.' +
-                        String(Svariant.priceWithTax).slice(-2)
+                        // parseFloat(
+                        //   String(Svariant.priceWithTax).slice(0, -2)
+                        // ).toLocaleString() +
+                        // '.' +
+                        // String(Svariant.priceWithTax).slice(-2)
+                        Svariant.priceWithTax / 100
                       }}
                       ETB / {{ granularity }} including VAT
                     </h5>
@@ -698,6 +701,8 @@ export default {
       const variant = await axios.post('/api/shop', body, options);
       this.granularity =
         variant.data.data.data.product?.customFields?.granularity;
+      //  console.log("THE PRICE",this.granularity);
+      // console.log("The Data from variant",variant.data.data.data.product?.customFields?.);
       this.prImage = variant.data.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.data.product?.assets;
       this.Svariant = variant.data.data.data.product?.variantList?.items[0];
