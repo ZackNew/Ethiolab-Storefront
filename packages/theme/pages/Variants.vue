@@ -238,7 +238,7 @@
                 <div class="mx-2 items-center">
                   <div class="whitespace-nowrap mr-4">
                     <h4 v-if="variant.customFields.showprice" class="text-lg">
-                      {{ variant.price / 100 }}
+                      {{ parseFloat(variant.price / 100).toLocaleString() }}
                       ETB / {{ product.customFields.granularity }}
                     </h4>
                     <div v-else>
