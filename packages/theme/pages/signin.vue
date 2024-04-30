@@ -130,7 +130,7 @@
                     "
                     class="text-white w-1/4 h-12 font-bold mb-8 but"
                     type="submit"
-                    :disabled="isLoading"
+                    :disabled="isLoading || manytries"
                   >
                     SIGN IN
                   </button>
@@ -238,6 +238,7 @@ export default defineComponent({
     } = useUser();
     const showToast = inject('showToast');
     let isLoading = ref(false);
+    let manytries = ref(false);
 
     const error = reactive({
       login: null,
@@ -248,7 +249,9 @@ export default defineComponent({
       error.login = null;
       error.register = null;
     };
-
+    let failedAttempts = 0;
+    const maxFailedAttempts = 3;
+    const lockoutTime = 50000;
     const handleForm = (fn) => async () => {
       isLoading.value = true;
       resetErrorValues();
@@ -257,6 +260,18 @@ export default defineComponent({
       const hasUserErrors = userError.value.register || userError.value.login;
 
       if (hasUserErrors) {
+        failedAttempts++;
+        if (failedAttempts >= maxFailedAttempts) {
+          isLoading.value = true;
+          showToast('Too many failed attempts. Please try again later.');
+          manytries.value = true;
+          setTimeout(() => {
+            manytries.value = false;
+            failedAttempts = 0;
+            isLoading.value = false;
+          }, lockoutTime);
+          return;
+        }
         error.login = userError.value.login?.message;
         error.register = userError.value.register?.message;
         if ((userError.value.errorCode = 'INVALID_CREDENTIALS_ERROR')) {
@@ -292,6 +307,7 @@ export default defineComponent({
       isDarkMode,
       show,
       isPassword,
+      manytries,
     };
   },
 });
