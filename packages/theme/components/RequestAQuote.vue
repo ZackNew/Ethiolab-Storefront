@@ -178,7 +178,11 @@ export default {
       toggleQuoteModal();
     };
     const sendQuote = () => {
-      if (!checkInputs()) return;
+      if (!checkInputs())
+      {
+        showToast('Please fill all fields correctly');
+        return;
+      }
 
       //fetch("data: ",qTitle.value, " ", qEmail.value, " ", qBody.value, " ", qPhone.value, quoteCity.value)
 
