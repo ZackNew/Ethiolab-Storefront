@@ -41,7 +41,9 @@
                       // ).toLocaleString() +
                       // '.' +
                       // String(Svariant.priceWithoutDiscount).slice(-2)
-                      Svariant.priceWithoutDiscount / 100
+                      parseFloat(
+                        Svariant.priceWithoutDiscount / 100
+                      ).toLocaleString()
                     }}
                     ETB / {{ granularity }}
                   </h4>
@@ -54,28 +56,33 @@
                         // '.' +
                         // String(Svariant.price).slice(-2) +
                         // ' '
-                        Svariant.price / 100
+                        parseFloat(Svariant.price / 100).toLocaleString()
                       }}
                       ETB / {{ granularity }}
                     </h4>
-                    <h5  class="text-[#828181] mb-3">
+                    <h5 class="text-[#828181] mb-3">
                       {{
                         // parseFloat(
                         //   String(Svariant.priceWithTax).slice(0, -2)
                         // ).toLocaleString() +
                         // '.' +
                         // String(Svariant.priceWithTax).slice(-2)
-                        Svariant.priceWithTax / 100
+                        parseFloat(Svariant.priceWithTax / 100).toLocaleString()
                       }}
                       ETB / {{ granularity }} including VAT
                     </h5>
                   </div>
                 </div>
                 <div v-else>
-                  <button @click ="toggleQuoteDialog"
-                    class="font-bold text-secondary text-lg mb-3 mr-8">
-                    Request Quote </button>
-                    <div v-if="RequestStatus"><RequestAQuote  :pId= "rVariantId" /></div>
+                  <button
+                    @click="toggleQuoteDialog"
+                    class="font-bold text-secondary text-lg mb-3 mr-8"
+                  >
+                    Request Quote
+                  </button>
+                  <div v-if="RequestStatus">
+                    <RequestAQuote :pId="rVariantId" />
+                  </div>
                 </div>
                 <img
                   v-if="Svariant.is_order_based"
@@ -360,10 +367,10 @@ export default {
   },
   setup(props, context) {
     const rVariantId = ref(null);
-    onMounted(()=>{
+    onMounted(() => {
       rVariantId.value = context.root.$route.params.vid;
     });
-    
+
     const {
       addItem: addItemToWishlist,
       isInWishlist,
@@ -376,7 +383,7 @@ export default {
     const Svariant = ref(null);
     //console.log("Productsssssss",product);
     const showToast = inject('showToast');
-    const { isDarkMode ,toggleQuoteModal,isQuoteModalOpen} = useUiState();
+    const { isDarkMode, toggleQuoteModal, isQuoteModalOpen } = useUiState();
     const qty = ref(1);
     const accQty = ref(1);
 
@@ -573,9 +580,9 @@ export default {
     const RequestStatus = ref(false);
     const toggleQuoteDialog = () => {
       if (!rVariantId) {
-      console.error('variantIdd is undefined');
-      return;
-    }
+        console.error('variantIdd is undefined');
+        return;
+      }
       RequestStatus.value = true;
       toggleQuoteModal();
     };
@@ -706,7 +713,7 @@ export default {
       this.prImage = variant.data.data.data.product?.featuredAsset;
       this.prImages = variant.data.data.data.product?.assets;
       this.Svariant = variant.data.data.data.product?.variantList?.items[0];
-  
+
       this.VariantAccessories = this.Svariant?.accessories.map((p) => {
         const image = p.featuredAsset ? p.featuredAsset.preview : '';
         const price =
@@ -854,7 +861,7 @@ export default {
     VueSlickCarousel,
     ProductCard,
     Loading,
-    RequestAQuote
+    RequestAQuote,
   },
   data() {
     return {
