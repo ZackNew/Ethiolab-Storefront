@@ -32,6 +32,17 @@
             />
           </router-link>
         </SfListItem>
+        <SfListItem class="footer-list-item">
+          <router-link
+            :to="{ name: 'policy', query: { initialPage: 'TERMS AND CONDITIONS' } }"
+            exact
+          >
+            <SfMenuItem
+              class="sf-footer__menu-item"
+              :label="$t('Terms and Condition')"
+            />
+          </router-link>
+        </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Customer Support')" class="footer-column">
