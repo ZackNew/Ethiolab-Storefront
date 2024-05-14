@@ -4,20 +4,6 @@
       <Loading />
     </div>
     <div v-if="product !== null">
-      <!-- <nav class="sf-breadcrumbs my-4" aria-label="breadcrumbs">
-        <ol class="sf-breadcrumbs__list">
-          <li class="sf-breadcrumbs__list-item" :aria-current="false">
-            <nuxt-link class="sf-breadcrumbs__breadcrumb font-exrathin" to="/">
-              Home
-            </nuxt-link>
-          </li>
-          <li class="sf-breadcrumbs__list-item" :aria-current="false">
-            <h5 class="text-secondary">
-              {{ product.name }}
-            </h5>
-          </li>
-        </ol>
-      </nav> -->
       <SfBreadcrumbs
         class="breadcrumbs desktop-only mb-5"
         :breadcrumbs="breadcrumbs"
@@ -144,28 +130,6 @@
                   :currentUserHasNoReview="!currentUserHasReview"
                 />
               </div>
-
-              <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
-              <SfTab :title="$t('Read reviews')" :key="reviewKey">
-                <SfReview
-                  v-for="review in reviews"
-                  :key="review.id"
-                  :author="review.authorName"
-                  :date="new Date(review.createdAt).toLocaleString()"
-                  :message="review.summary"
-                  :max-rating="5"
-                  :rating="review.rating"
-                  :char-limit="250"
-                  :read-more-text="$t('Read more')"
-                  :hide-full-text="$t('Read less')"
-                  class="product__review"
-                />
-                <MyReview
-                  :productId="product.id"
-                  :currentUserHasNoReview="!currentUserHasReview"
-                />
-              </SfTab>
-            </SfTabs> -->
             </LazyHydrate>
           </div>
         </div>
@@ -191,7 +155,7 @@
             <SfTableHeader> Price </SfTableHeader>
           </SfTableHeading>
           <SfTableRow
-            v-for="variant in sortVariantOptions(product.variantList.items)"
+            v-for="variant in variantsList"
             :key="variant.id"
             class="mb-4"
           >
@@ -228,11 +192,6 @@
             >
               <p class="my-4 capitalize">{{ option.name }}</p>
             </SfTableData>
-            <!-- <SfTableData class="flex justify-center items-start"
-              ><p class="mt-7">
-                {{ variant.stockLevel }}
-              </p>
-            </SfTableData> -->
             <SfTableData class="justify-center items-start">
               <div class="mt-6">
                 <div class="mx-2 items-center">
@@ -252,8 +211,6 @@
                         <RequestAQuote :pId="variant.id" />
                       </div>
                     </div>
-                    <!-- <h4 v-else class="text-lg">
-                      Request Quote</h4> -->
                   </div>
                   <div>
                     <div class="flex">
@@ -287,57 +244,7 @@
                         />
                       </button>
                     </div>
-                    <!-- <div v-else class="flex">
-                      <button
-                        :class="
-                          isDarkMode
-                            ? 'bg-[#d3e6fe] text-secondary'
-                            : 'bg-secondary text-white'
-                        "
-                        class="flex border border-secondary rounded-lg px-2 hover:scale-105"
-                      >
-                        <span class="mt-1"> Contact Us </span>
-                      </button>
-                    </div> -->
-                    <!-- <button
-                      @click="addToWishlist(product, variant.id)"
-                      :class="
-                        isDarkMode
-                          ? 'bg-white text-secondary'
-                          : 'bg-secondary text-white'
-                      "
-                      class="border border-secondary rounded-lg my-2 mx-2"
-                    >
-                      <span class="mt-1">Add To WishList</span>
-                    </button> -->
                   </div>
-
-                  <!-- <div class="flex my-auto">
-                  <input
-                    :class="
-                      isDarkMode
-                        ? 'text-white bg-dark_accent'
-                        : 'bg-faded_white'
-                    "
-                    class="bg-none rounded-lg w-12 text-center mr-2 h-8"
-                    min="1"
-                    :value="toCart"
-                    type="number"
-                    :id="variant.id"
-                  />
-                  <SfIcon
-                    :icon="
-                      isInCart({ product: { _variantId: variant.id } })
-                        ? 'added_to_cart'
-                        : 'add_to_cart'
-                    "
-                    size="lg"
-                    color="green-primary"
-                    viewBox="0 0 24 24"
-                    :coverage="1"
-                    @click="addToCart($event)"
-                  />
-                </div> -->
                 </div>
                 <div v-if="variant.accessories.length > 0">
                   <div class="mt-[5%] ml-2">
@@ -591,28 +498,6 @@
             :currentUserHasNoReview="!currentUserHasReview"
           />
         </div>
-
-        <!-- <SfTabs :open-tab="1" class="product__tabs max-h-96 overflow-auto">
-              <SfTab :title="$t('Read reviews')" :key="reviewKey">
-                <SfReview
-                  v-for="review in reviews"
-                  :key="review.id"
-                  :author="review.authorName"
-                  :date="new Date(review.createdAt).toLocaleString()"
-                  :message="review.summary"
-                  :max-rating="5"
-                  :rating="review.rating"
-                  :char-limit="250"
-                  :read-more-text="$t('Read more')"
-                  :hide-full-text="$t('Read less')"
-                  class="product__review"
-                />
-                <MyReview
-                  :productId="product.id"
-                  :currentUserHasNoReview="!currentUserHasReview"
-                />
-              </SfTab>
-            </SfTabs> -->
       </LazyHydrate>
     </div>
   </div>
@@ -839,6 +724,9 @@ export default {
     },
   },
   computed: {
+    variantsList() {
+      return this.sortVariantOptions(this.product.variantList.items);
+    },
     breadcrumbs() {
       let bcrumb = [{ text: 'home', link: '/' }];
       this.product.collections.forEach((collection) => {
