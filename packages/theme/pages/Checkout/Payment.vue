@@ -267,7 +267,7 @@
                   v-e2e="'make-an-order'"
                   class="summary__action-button"
                   @click="processTelebirr"
-                  :disabled="!terms"
+                  :disabled="!terms || teleBirrLoading"
                 >
                   {{ $t('Pay with Telebirr') }}
                 </SfButton>
@@ -469,8 +469,9 @@
               Your order is being processed. make your payment using the
               reference code: {{ awashRefCode }}. in one of awash bank branches
               or using awash bank mobile app.
-              <p v-if="isAuthenticated">your reference code has been sent
-              to your email.</p>
+              <span v-if="isAuthenticated"
+                >your reference code has been sent to your email.</span
+              >
             </p>
           </SfModal>
         </div>
@@ -509,7 +510,7 @@ import {
   useCart,
   cartGetters,
   usePayment,
-  useUser
+  useUser,
 } from '@vue-storefront/vendure';
 import { useBilling } from '@vue-storefront/vendure';
 import { uuid } from 'vue-uuid';
@@ -582,6 +583,7 @@ export default {
     const modalOpen = ref(false);
     const modalAwashOpen = ref(false);
     const awashLoading = ref(false);
+    const teleBirrLoading = ref(false);
     const modalCashOpen = ref(false);
     const awashRefCode = ref('');
     const awashCode = ref('');
@@ -847,124 +849,37 @@ export default {
     };
 
     const processTelebirr = async () => {
-      ////////////////////////////////STEP 1//////////////////////////////////////
-      const uniqueId = uuid.v4();
+      teleBirrLoading.value = true;
+      const token = CryptoJS.AES.encrypt(
+        context.root.$store.state.csrfToken.csrfToken,
+        'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
+      ).toString();
 
-      const appKey = '64d1499394ba4c4aa7d8deb1a500b9a0';
-      let signObj = {
-        appId: '4ae7217b4e7149fdac877852e7fd87db',
-        nonce: uniqueId,
-        notifyUrl: 'https://admin.ethiolab.et/telebirr',
-        outTradeNo: `${cart.value?.code}_${uniqueId}`,
-        receiveName: 'Ethiolab',
-        returnUrl: 'http://localhost:3001/checkout/thank-you/',
-        shortCode: '220322',
-        subject: 'Goods Name',
-        timeoutExpress: '30',
-        timestamp: cart?.value?.code?.toString(),
-        totalAmount: paymentDetail.amount,
+      const body = {
+        query: `mutation PAY_WITH_TELEBIRR{
+                  payWithTeleBirr(input:{orderCode:"4767680"}) {
+                    error
+                    msg
+                    data
+                  }
+                }`,
+        csrfToken: context.root.$store.state.csrfToken.csrfToken,
       };
-
-      signObj.appKey = appKey;
-      let StringA = jsonSort(signObj);
-
-      function jsonSort(jsonObj) {
-        let arr = [];
-        for (var key in jsonObj) {
-          arr.push(key);
-        }
-        arr.sort();
-        let str = '';
-        for (var i in arr) {
-          str += arr[i] + '=' + jsonObj[arr[i]] + '&';
-        }
-        return str.substr(0, str.length - 1);
-      }
-
-      ////////////////////////////////STEP 2//////////////////////////////////////
-
-      let StringB = sha256(StringA);
-
-      function sha256(data) {
-        var hash = crypto.createHash('sha256');
-        hash.update(data);
-        return hash.digest('hex');
-      }
-      ////////////////////////////////STEP 3//////////////////////////////////////
-
-      let sign = StringB.toUpperCase();
-
-      ////////////////////////////////STEP 4//////////////////////////////////////
-
-      let jsonObj = {
-        appId: '4ae7217b4e7149fdac877852e7fd87db',
-        nonce: uniqueId,
-        notifyUrl: 'https://admin.ethiolab.et/telebirr',
-        outTradeNo: `${cart.value?.code}_${uniqueId}`,
-        receiveName: 'Ethiolab',
-        returnUrl: 'http://localhost:3001/checkout/thank-you/',
-        shortCode: '220322',
-        subject: 'Goods Name',
-        timeoutExpress: '30',
-        timestamp: cart?.value?.code?.toString(),
-        totalAmount: paymentDetail.amount,
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          berta: token,
+        },
       };
-
-      let ussdjson = JSON.stringify(jsonObj);
-
-      ////////////////////////////////STEP 5//////////////////////////////////////
-
-      let ussd = rsa_encrypt(ussdjson);
-
-      function rsa_encrypt(data) {
-        let publicKey =
-          'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhu+JrZMv17Ah5joHaBWWOl2NOZruM6M0ZMQLpRDfvobwZhK46mDH+b9nej1PnM4mSqQ8TlDIQJ5Y27vIyc2KWksxdLb59+POd3wUv455npMeK2RCBL5KDSam+eets6XoO6dRZv00eWMQ+SOHaK48XlftIUghfeOfZs/LdWK6EksgXaOKQsQzhqOnmsGdJkMe3YMqm10SBuWqkaZcmt+DUUzd2j1rvDr8B8Tu24FkmMbpSKhfRYI3HBIBG1tB6nefXT3A7ouwnuEMqwe1XCHaHWUMErmvr4bs3o3ZzJvEinIi5LX7mTG/+OB/OI4AyAbjrHad77Vb5RyGSFrpCr5TEwIDAQAB';
-        let key = new NodeRSA(getPublicKey(publicKey));
-        key.setOptions({ encryptionScheme: 'pkcs1' });
-        let encryptKey = key.encrypt(data, 'base64');
-        return encryptKey;
-      }
-
-      function insertStr(str, insertStr, sn) {
-        var newstr = '';
-        for (var i = 0; i < str.length; i += sn) {
-          var tmp = str.substring(i, i + sn);
-          newstr += tmp + insertStr;
+      await axios.post('/api/shop', body, options).then(async (res) => {
+        if(res.data.data.data.payWithTeleBirr.data) {
+          let rawRequest = res.data.data.data.payWithTeleBirr.data
+          const baseURL = 'https://developerportal.ethiotelebirr.et:38443/payment/web/paygate'
+          window.open(`${baseURL}/${rawRequest.trim()}`, '_blank', 'noopener,noreferrer');
         }
-        return newstr;
-      }
-
-      function getPublicKey(key) {
-        const result = insertStr(key, '\n', 64);
-        return (
-          '-----BEGIN PUBLIC KEY-----\n' + result + '-----END PUBLIC KEY-----'
-        );
-      }
-
-      ////////////////////////////////STEP 6//////////////////////////////////////
-
-      const appId = '4ae7217b4e7149fdac877852e7fd87db';
-      let requestMessage = { appid: signObj.appId, sign: sign, ussd: ussd };
-
-      ////////////////////////////////STEP 7//////////////////////////////////////
-
-      const api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
-
-      await axios
-        .post('/api/telebirr', requestMessage)
-        .then((res) => {
-          if (res.status == 200 && res.data.data?.code == 200) {
-            // rsp.redirect(res.data.data.toPayUrl);
-            window.location.href = res.data.data.data.toPayUrl;
-          } else {
-          }
-        })
-        .catch((error) => {});
-
-      changeState();
-      await loadCart();
-      setCart();
-      context.root.$router.push('/');
+        teleBirrLoading.value = false
+      });
     };
 
     const processAwash = async () => {
@@ -1078,7 +993,8 @@ export default {
       modalAwashOpen,
       awashModalClosed,
       awashCode,
-      isAuthenticated
+      isAuthenticated,
+      teleBirrLoading
     };
   },
 };
