@@ -854,15 +854,18 @@ export default {
         context.root.$store.state.csrfToken.csrfToken,
         'cWYUsev632rAOX7oz5GQNVX3Yo9S0azY'
       ).toString();
-
+      const code = {orderCode: cart?.value?.code}
       const body = {
-        query: `mutation PAY_WITH_TELEBIRR{
-                  payWithTeleBirr(input:{orderCode:"4767680"}) {
-                    error
-                    msg
-                    data
-                  }
-                }`,
+        query: `mutation payWithTeleBirr($input: teleBirrInput!){
+          payWithTeleBirr(input: $input) {
+            error
+            msg
+            data
+          }
+        }`,
+        variables: {
+          input: code,
+        },
         csrfToken: context.root.$store.state.csrfToken.csrfToken,
       };
       const options = {
@@ -872,14 +875,14 @@ export default {
           berta: token,
         },
       };
-      await axios.post('/api/shop', body, options).then(async (res) => {
-        if(res.data.data.data.payWithTeleBirr.data) {
-          let rawRequest = res.data.data.data.payWithTeleBirr.data
-          const baseURL = 'https://developerportal.ethiotelebirr.et:38443/payment/web/paygate'
-          window.open(`${baseURL}/${rawRequest.trim()}`, '_blank', 'noopener,noreferrer');
-        }
-        teleBirrLoading.value = false
-      });
+      await axios.post('/api/shop', body, options).then((res) => {
+        if(res.data?.data?.data?.payWithTeleBirr?.data) {
+            let rawRequest = res.data.data.data.payWithTeleBirr.data
+            const baseURL = 'https://developerportal.ethiotelebirr.et:38443/payment/web/paygate'
+            window.open(`${baseURL}/${rawRequest.trim()}`, '_blank', 'noopener,noreferrer');
+          }
+          teleBirrLoading.value = false
+      })
     };
 
     const processAwash = async () => {
@@ -994,7 +997,7 @@ export default {
       awashModalClosed,
       awashCode,
       isAuthenticated,
-      teleBirrLoading
+      teleBirrLoading,
     };
   },
 };
