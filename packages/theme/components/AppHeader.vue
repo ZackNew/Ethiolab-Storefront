@@ -2,25 +2,17 @@
   <div class="wrap">
     <div :class="!isDarkMode ? `border-b-4 border-light_accent` : ''">
       <div class="md:mx-14">
-        <SfHeader
-          :class="{
-            'header-on-top': isSearchOpen,
-            'sf-header--has-mobile-navigation': !isMobileMenuOpen,
-          }"
-          :is-nav-visible="isMobileMenuOpen"
-          data-app
-        >
+        <SfHeader :class="{
+          'header-on-top': isSearchOpen,
+          'sf-header--has-mobile-navigation': !isMobileMenuOpen,
+        }" :is-nav-visible="isMobileMenuOpen" data-app>
           <!-- TODO: add mobile view buttons after SFUI team PR 
           ///// deleted at the sfImage alt property because of causing infinite loop ->  :alt="$t('Ethiolab')" 
           -->
           <template #logo>
             <nuxt-link :to="localePath('/')">
               <!-- <SfImage src="/Logo.png" :alt="$t('Ethiolab')" class="sf-header__logo-image"/> -->
-              <SfImage
-                :src="logo || ''"
-                alt="EthioLab"
-                class="sf-header__logo-image object-fill w-56"
-              />
+              <SfImage :src="logo || ''" alt="EthioLab" class="sf-header__logo-image object-fill w-56" />
               <!-- <img :src="logo || ''" alt="" width="400px" /> -->
               <!-- <div class="image-container min-w-[290px]">
                 <div class="background-image" ref="backgroundImage"></div>
@@ -35,110 +27,53 @@
           </template>
           <template #header-icons>
             <div class="sf-header__icons">
-              <SfButton
-                v-if="isAuthenticated"
-                v-e2e="'app-header-account'"
-                aria-label="Open account button"
-                class="sf-button--pure sf-header__action"
-                @click="handleAccountClick"
-              >
-                <SfIcon
-                  :icon="accountIcon"
-                  size="1.7rem"
-                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
-                />
+              <SfButton v-if="isAuthenticated" v-e2e="'app-header-account'" aria-label="Open account button"
+                class="sf-button--pure sf-header__action" @click="handleAccountClick">
+                <SfIcon :icon="accountIcon" size="1.7rem" :color="!isDarkMode ? '#3860a7' : '#ffffff'" />
               </SfButton>
-              <div class="sm:flex-col"
-                v-if="!isAuthenticated"
-              >
-                <button
-                  v-e2e="'app-header-account'"
-                  @click="handlelogin"
-                  class="pl-3 pr-1 text-secondary font-thin py-2 rounded-l"
-                >
+              <div class="sm:flex-col" v-if="!isAuthenticated">
+                <button v-e2e="'app-header-account'" @click="handlelogin"
+                  class="pl-3 pr-1 text-secondary font-thin py-2 rounded-l">
                   Login |
                 </button>
-                <button
-                  v-e2e="'app-header-account'"
-                  @click="handleregister"
-                  class="pl-1 pr-1  text-secondary font-thin py-2 rounded-r"
-                >
+                <button v-e2e="'app-header-account'" @click="handleregister"
+                  class="pl-1 pr-1  text-secondary font-thin py-2 rounded-r">
                   Register
                 </button>
               </div>
-              <SfButton
-                aria-label="Toggle wishlist sidebar"
-                class="sf-button--pure sf-header__action"
-                @click="handleWishlistSidebar"
-              >
-                <SfIcon
-                  class="sf-header__icon"
-                  icon="heart"
-                  size="1.7rem"
-                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
-                />
-                <SfBadge
-                  v-if="wishlistTotalItems"
-                  class="sf-badge--number cart-badge"
-                  >{{ wishlistTotalItems }}</SfBadge
-                >
+              <SfButton aria-label="Toggle wishlist sidebar" class="sf-button--pure sf-header__action"
+                @click="handleWishlistSidebar">
+                <SfIcon class="sf-header__icon" icon="heart" size="1.7rem"
+                  :color="!isDarkMode ? '#3860a7' : '#ffffff'" />
+                <SfBadge v-if="wishlistTotalItems" class="sf-badge--number cart-badge">{{ wishlistTotalItems }}
+                </SfBadge>
               </SfButton>
-              <SfButton
-                v-e2e="'app-header-cart'"
-                aria-label="Toggle cart sidebar"
-                class="sf-button--pure sf-header__action"
-                @click="handleCartSidebar"
-              >
-                <SfIcon
-                  class="sf-header__icon"
-                  icon="empty_cart"
-                  size="1.7rem"
-                  :color="!isDarkMode ? '#3860a7' : '#ffffff'"
-                />
-                <SfBadge
-                  v-if="cartTotalItems"
-                  class="sf-badge--number cart-badge"
-                  >{{ cartTotalItems }}</SfBadge
-                >
+              <SfButton v-e2e="'app-header-cart'" aria-label="Toggle cart sidebar"
+                class="sf-button--pure sf-header__action" @click="handleCartSidebar">
+                <SfIcon class="sf-header__icon" icon="empty_cart" size="1.7rem"
+                  :color="!isDarkMode ? '#3860a7' : '#ffffff'" />
+                <SfBadge v-if="cartTotalItems" class="sf-badge--number cart-badge">{{ cartTotalItems }}</SfBadge>
               </SfButton>
             </div>
           </template>
           <template #navigation>
-            <SfSearchBar
-              :aria-label="$t('Search')"
-              :placeholder="$t('Search for items')"
-              class="search md:w-[29rem] md:h-[2.5rem] rounded-lg border-none md:mr-3"
-              :class="
-                isDarkMode
-                  ? 'bg-[#182f3f] text-white'
-                  : 'bg-light_accent text-black'
-              "
-              @focus="isSearchOpen = true"
-              @blur="isSearchOpen = false"
-              @input="searchInputHandle"
-              @keydown.enter="searchInputHandle"
-              @keydown.esc="closeSearch"
-              v-model="searchText"
-            >
+            <SfSearchBar :aria-label="$t('Search')" :placeholder="$t('Search for items')"
+              class="search md:w-[29rem] md:h-[2.5rem] rounded-lg border-none md:mr-3" :class="isDarkMode
+                ? 'bg-[#182f3f] text-white'
+                : 'bg-light_accent text-black'
+                " @focus="isSearchOpen = true" @blur="isSearchOpen = false" @input="searchInputHandle"
+              @keydown.enter="searchInputHandle" @keydown.esc="closeSearch" v-model="searchText">
               <template #icon>
-                <SfButton
-                  v-if="!!term"
-                  aria-label="Close search"
-                  class="sf-search-bar__button sf-button--pure w-20 rounded-r-xl"
-                  @click="closeOrFocusSearchBar"
-                >
+                <SfButton v-if="!!term" aria-label="Close search"
+                  class="sf-search-bar__button sf-button--pure w-20 rounded-r-xl" @click="closeOrFocusSearchBar">
                   <SfIcon icon="search" color="#ffffff" />
                 </SfButton>
-                <SfButton
-                  v-else
-                  aria-label="Open search"
-                  class="sf-search-bar__button sf-button--pure w-16 rounded-r-xl"
-                  @click="
+                <SfButton v-else aria-label="Open search"
+                  class="sf-search-bar__button sf-button--pure w-16 rounded-r-xl" @click="
                     isSearchOpen
                       ? (isSearchOpen = false)
                       : (isSearchOpen = true)
-                  "
-                >
+                    ">
                   <SfIcon icon="search" color="#ffffff" />
                 </SfButton>
               </template>
@@ -150,14 +85,8 @@
         </SfHeader>
       </div>
     </div>
-    <SearchResults
-      :loading="loading"
-      :result="results"
-      :visible="isSearchOpen"
-      @close="closeSearch"
-      @removeSearchResults="removeSearchResults"
-      class="search-result-container"
-    />
+    <SearchResults :loading="loading" :result="results" :visible="isSearchOpen" @close="closeSearch"
+      @removeSearchResults="removeSearchResults" class="search-result-container" />
     <SfOverlay :visible="isSearchOpen" />
 
     <HeaderNavigation :isMobile="isMobile" />
@@ -262,7 +191,7 @@ export default {
       this.debounceInput();
     },
     sanitization() {
-      return this.searchText.replace(/[^a-zA-Z0-9]/g, '');
+      return this.searchText.replace(/[^a-zA-Z0-9 ]/g, '');
     },
 
     debounceInput: debounce(function async() {
@@ -419,7 +348,7 @@ export default {
     };
     const prodList = ['Stetosocope', 'Microscope']; // useProduct({search: ""}).products.value
     const messageToSend = ref('');
-    const selectedProd = () => {};
+    const selectedProd = () => { };
 
     // const sendMessageToAdmin = async () => {
     //   await loadUser();
@@ -823,6 +752,7 @@ export default {
   top: 0;
   z-index: 1;
 }
+
 .chat-bottom {
   bottom: 0;
   z-index: 1;
