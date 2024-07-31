@@ -1,14 +1,9 @@
 <template>
   <div class="mt-12" id="subcategory">
-    <nav
-      class="sf-breadcrumbs m-4"
-      aria-label="breadcrumbs"
-      :style="
-        !isDarkMode
-          ? 'background-color: #f0f7fc !important'
-          : 'background-color: #0e1621 !important'
-      "
-    >
+    <nav class="sf-breadcrumbs m-4" aria-label="breadcrumbs" :style="!isDarkMode
+      ? 'background-color: #f0f7fc !important'
+      : 'background-color: #0e1621 !important'
+      ">
       <ol class="sf-breadcrumbs__list">
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
           <span class="text-black">
@@ -19,10 +14,7 @@
         </li>
         <li class="sf-breadcrumbs__list-item" :aria-current="false">
           <span class="text-black">
-            <nuxt-link
-              class="sf-breadcrumbs__breadcrumb font-exrathin"
-              :to="`/c/${parent}`"
-            >
+            <nuxt-link class="sf-breadcrumbs__breadcrumb font-exrathin" :to="`/c/${parent}`">
               {{ parent }}
             </nuxt-link>
           </span>
@@ -35,23 +27,14 @@
     <div class="flex mt-6">
       <!-- Side filter search or an Ad -->
       <div class="w-[28%]">
-        <div
-          :style="
-            !isDarkMode
-              ? 'background-color: white'
-              : 'background-color: #182533'
+        <div :style="!isDarkMode
+          ? 'background-color: white'
+          : 'background-color: #182533'
           "
-          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded hidden md:block border-white overflow-auto top-[5%] no-scrollbar"
-        >
+          class="shadow-[3px_3px_10px_0_rgba(0,0,0,0.3)] rounded hidden md:block border-white overflow-auto top-[5%] no-scrollbar">
           <div v-if="products.length > 0">
-            <SubcategoryBrandAccordion
-              @maxAdded="maxInput"
-              @minAdded="minInput"
-              @searchChange="searchBox"
-              @filterClicked="filterProducts"
-              @clearClicked="clearFilters"
-              :filters="filters"
-            />
+            <SubcategoryBrandAccordion @maxAdded="maxInput" @minAdded="minInput" @searchChange="searchBox"
+              @filterClicked="filterProducts" @clearClicked="clearFilters" :filters="filters" />
           </div>
         </div>
         <!-- <div class="p-3 hidden md:block">
@@ -71,57 +54,30 @@
       </div>
       <!-- Subcategory name and description -->
       <div class="ml-6 md:w-[72%] xs:w-[100%]">
-        <h1
-          class="sf-heading__title font-medium text-4xl font-sans text-secondary"
-        >
+        <h1 class="sf-heading__title font-medium text-4xl font-sans text-secondary">
           {{ categoryName }}
         </h1>
-        <div
-          :style="
-            !isDarkMode
-              ? 'background-color: #EfEfEf; color: #3860a7'
-              : 'background-color: #182533; color: white'
-          "
-          class="rounded-md card shadow-lg my-4 flex mr-5 max-h-40"
-        >
-          <img
-            class="rounded-r rounded-xl my-auto max-h-40 min-h-40 max-w-[25%] min-w-[25%]"
-            :src="categoryImg || '/categories/empty_image.png'"
-            alt=""
-          />
+        <div :style="!isDarkMode
+          ? 'background-color: #EfEfEf; color: #3860a7'
+          : 'background-color: #182533; color: white'
+          " class="rounded-md card shadow-lg my-4 flex mr-5 max-h-40">
+          <img class="rounded-r rounded-xl my-auto max-h-40 min-h-40 max-w-[25%] min-w-[25%]"
+            :src="categoryImg || '/categories/empty_image.png'" alt="" />
           <div class="w-full overflow-auto no-scrollbar prose">
             <p class="py-4 ml-4 mr-4 text-thin" v-html="description"></p>
           </div>
         </div>
-        <button
-          class="flex my-5 visible md:invisible text-sm px-2"
-          @click="showFilter = !showFilter"
-        >
-          <SfIcon
-            icon="menu"
-            size="xxs"
-            color="primary"
-            viewBox="0 0 24 24"
-            :coverage="1"
-          />
+        <button class="flex my-5 visible md:invisible text-sm px-2" @click="showFilter = !showFilter">
+          <SfIcon icon="menu" size="xxs" color="primary" viewBox="0 0 24 24" :coverage="1" />
           <p>Filters</p>
         </button>
-        <div
-          class="shadow-xl rounded-lg w-80 h-10rem overflow-auto no-scrollbar"
-          v-if="products.length > 0 && showFilter"
-        >
-          <SubcategoryBrandAccordion
-            @maxAdded="maxInput"
-            @minAdded="minInput"
-            @searchChange="searchBox"
-            @filterClicked="filterProducts"
-            :filters="filters"
-          />
+        <div class="shadow-xl rounded-lg w-80 h-10rem overflow-auto no-scrollbar"
+          v-if="products.length > 0 && showFilter">
+          <SubcategoryBrandAccordion @maxAdded="maxInput" @minAdded="minInput" @searchChange="searchBox"
+            @filterClicked="filterProducts" :filters="filters" />
         </div>
-        <div
-          v-if="filteredSearchedProducts.length === 0 && !loading"
-          class="border border-light_accent shadow-md bg-white rounded-lg w-full"
-        >
+        <div v-if="filteredSearchedProducts.length === 0 && !loading"
+          class="border border-light_accent shadow-md bg-white rounded-lg w-full">
           <div class="justify-end">
             <div class="flex flex-col items-center py-10">
               <img src="~/static/noProduct.png" alt="" />
@@ -131,68 +87,37 @@
           </div>
         </div>
         <div v-else>
-          <div
-            class="flex card mr-5 w-full h-12 text-sm md:text-base"
-            :style="
-              !isDarkMode
-                ? 'background-color: #f0f7fc'
-                : 'background-color: #182533'
-            "
-          >
-            <p
-              class="pt-1 md:pt-3 mx-3"
-              :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'"
-            >
+          <div class="flex card mr-5 w-full h-12 text-sm md:text-base" :style="!isDarkMode
+            ? 'background-color: #f0f7fc'
+            : 'background-color: #182533'
+            ">
+            <p class="pt-1 md:pt-3 mx-3" :style="!isDarkMode ? 'color: #3860a7' : 'color: #ffffff'">
               Number of Results | {{ Object.keys(products).length }}
             </p>
 
             <div class="ml-8">
-              <button
-                id="dropdownDefault"
-                data-dropdown-toggle="dropdown"
+              <button id="dropdownDefault" data-dropdown-toggle="dropdown"
                 class="mt-2 mb-1 text-dark_accent bg-white transform transition duration-200 hover:scale-105 font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 w-48"
-                type="button"
-                @click="open = !open"
-              >
+                type="button" @click="open = !open">
                 Sort Subcategory by
-                <svg
-                  class="ml-2 w-4 h-4"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
+                <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </button>
-              <div
-                v-if="open"
-                id="dropdown"
-                class="inset-0 relative flex flex-col z-10 w-48 bg-white border border-primary transform transition duration-300"
-              >
-                <button
-                  @click="
-                    A_Z = true;
-                    Z_A = false;
-                    open = false;
-                  "
-                  class="hover:bg-light_accent"
-                >
+              <div v-if="open" id="dropdown"
+                class="inset-0 relative flex flex-col z-10 w-48 bg-white border border-primary transform transition duration-300">
+                <button @click="
+                  A_Z = true;
+                Z_A = false;
+                open = false;
+                " class="hover:bg-light_accent">
                   Name from A to Z
                 </button>
-                <button
-                  @click="
-                    A_Z = false;
-                    Z_A = true;
-                    open = false;
-                  "
-                  class="hover:bg-light_accent"
-                >
+                <button @click="
+                  A_Z = false;
+                Z_A = true;
+                open = false;
+                " class="hover:bg-light_accent">
                   Name from Z to A
                 </button>
               </div>
@@ -207,19 +132,28 @@
           <div class="mt-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               <!-- <p>{{product.name}}</p> -->
-              <div
-                v-for="product in filteredSearchedProducts.slice(0, limit)"
-                :key="product._id"
-              >
-                <SubcatBrandCard
-                  :product="product"
-                  @click:wishlist="
-                    !isInWishlist({
+              <div v-for="product in filteredSearchedProducts.slice(0, limit)" :key="product._id">
+                <SubcatBrandCard :product="product" @click:wishlist="
+                  !isInWishlist({
+                    product: {
+                      _variantId: product.variants[0].id,
+                      _id: product.id,
+                      name: product.name,
+
+                      slug: product.slug,
+                      _categoriesRef: [],
+                      _description: '',
+                      images: product.featuredAsset
+                        ? [product.featuredAsset.preview]
+                        : undefined,
+                    },
+                  })
+                    ? addItemToWishlist({
                       product: {
                         _variantId: product.variants[0].id,
                         _id: product.id,
                         name: product.name,
-                       
+                        price: product.variants[0].price,
                         slug: product.slug,
                         _categoriesRef: [],
                         _description: '',
@@ -228,43 +162,25 @@
                           : undefined,
                       },
                     })
-                      ? addItemToWishlist({
-                          product: {
-                            _variantId: product.variants[0].id,
-                            _id: product.id,
-                            name: product.name,
-                            price: product.variants[0].price,
-                            slug: product.slug,
-                            _categoriesRef: [],
-                            _description: '',
-                            images: product.featuredAsset
-                              ? [product.featuredAsset.preview]
-                              : undefined,
-                          },
-                        })
-                      : removeItemFromWishlist({
-                          product: {
-                            _variantId: product.variants[0].id,
-                            _id: product.id,
-                            name: product.name,
-                            price: product.variants[0].price,
-                            slug: product.slug,
-                            _categoriesRef: [],
-                            _description: '',
-                            images: product.featuredAsset
-                              ? [product.featuredAsset.preview]
-                              : undefined,
-                          },
-                        })
-                  "
-                />
+                    : removeItemFromWishlist({
+                      product: {
+                        _variantId: product.variants[0].id,
+                        _id: product.id,
+                        name: product.name,
+                        price: product.variants[0].price,
+                        slug: product.slug,
+                        _categoriesRef: [],
+                        _description: '',
+                        images: product.featuredAsset
+                          ? [product.featuredAsset.preview]
+                          : undefined,
+                      },
+                    })
+                  " />
               </div>
             </div>
-            <button
-              v-if="filteredSearchedProducts.length > limit"
-              class="text-secondary text-left"
-              @click="increaseLimit"
-            >
+            <button v-if="filteredSearchedProducts.length > limit" class="text-secondary text-left"
+              @click="increaseLimit">
               Show More +
             </button>
           </div>
@@ -527,14 +443,14 @@ export default {
           if (
             res.data?.data?.data.collection?.productVariants?.items.length > 0
           ) {
-            const list_of_id = [];
-            res.data?.data?.data.collection?.productVariants.items.forEach(
-              (item) => {
-                if (!list_of_id.includes(item.productId)) {
-                  list_of_id.push(item.productId);
-                }
-              }
-            );
+            const list_of_id = JSON.parse(res.data?.data?.data.collection?.filters[0].args[0].value)
+            // res.data?.data?.data.collection?.productVariants.items.forEach(
+            //   (item) => {
+            //     if (!list_of_id.includes(item.productId)) {
+            //       list_of_id.push(item.productId);
+            //     }
+            //   }
+            // );
 
             const productIdString = JSON.parse(
               res.data?.data?.data.collection?.filters[0]?.args[0].value
@@ -655,16 +571,19 @@ export default {
 <style lang="scss" scoped>
 #subcategory {
   box-sizing: border-box;
+
   @include for-desktop {
     max-width: 1250px;
     margin: 0 auto;
   }
 }
+
 .no-scrollbar::-webkit-scrollbar {
   width: 30px;
   background-color: none;
   width: 7px;
 }
+
 .no-scrollbar::-webkit-scrollbar-thumb {
   background-color: #acacac;
   border-radius: 100px;
